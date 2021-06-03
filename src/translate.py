@@ -14,6 +14,7 @@ from .c_types import (
     TypeMap,
     function_arg_size_align,
     get_primitive_list,
+    parse_function,
     is_struct_type,
 )
 from .error import DecompFailure
@@ -945,10 +946,11 @@ class FuncCall(Expression):
         return f"{self.function.format(fmt)}({args})"
 
 
-@attr.s(frozen=True, eq=True)
+@attr.s(eq=True, hash=True)
 class LocalVar(Expression):
     value: int = attr.ib()
-    type: Type = attr.ib(eq=False)
+    type: Type = attr.ib(eq=False, hash=False)
+    alias: Optional["LocalVar"] = attr.ib(eq=False, hash=False, default=None)
 
     def dependencies(self) -> List[Expression]:
         return []
@@ -2400,10 +2402,10 @@ def array_access_from_add(
             target_size=None,
             field_name=sub_field_name,
             stack_info=stack_info,
-            type=Type.cptr(elem_type, typemap),
+            type=Type.ptr(elem_type),
         )
         offset -= sub_offset
-        target_type = type_from_ctype(elem_type, typemap)
+        target_type = elem_type
 
     # Add .field if necessary
     ret: Expression = ArrayAccess(base, index, type=target_type)
@@ -3340,9 +3342,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                     raise DecompFailure(f"jalr takes 2 arguments, {args.count()} given")
 
             typemap = stack_info.typemap
-            c_fn: Optional[CFunction] = None
-            if typemap and isinstance(fn_target, GlobalSymbol):
-                c_fn = typemap.functions.get(fn_target.symbol_name)
+            c_fn = fn_target.type.parse_function()
 
             func_args: List[Expression] = []
             if typemap and c_fn and c_fn.params is not None:
@@ -3634,6 +3634,7 @@ def resolve_types_late(stack_info: StackInfo) -> None:
     """
     After translating a function, perform a final type-resolution pass.
     """
+    # Use dereferences to determine pointer types
     struct_type_map = stack_info.get_struct_type_map()
     for var, offset_type_map in struct_type_map.items():
         if len(offset_type_map) == 1 and 0 in offset_type_map:
@@ -3642,6 +3643,21 @@ def resolve_types_late(stack_info: StackInfo) -> None:
             # to fill in the type if it does not already have one
             type = offset_type_map[0]
             var.type.unify(Type.ptr(type))
+
+    # Check for overlapping stack variables, which can happen
+    # when a struct is stored on the stack
+    local_vars = sorted(stack_info.local_vars, key=lambda v: v.value)
+    prev_var = None
+    fmt = Formatter()
+    for var in local_vars:
+        if prev_var is not None:
+            prev_end = prev_var.value + prev_var.type.get_size_bits() // 8
+            var_end = var.value + var.type.get_size_bits() // 8
+            if prev_end > var.value:
+                var.alias = prev_var
+            if prev_end >= var_end:
+                continue
+        prev_var = var
 
 
 @attr.s

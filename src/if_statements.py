@@ -809,7 +809,10 @@ def get_function_text(function_info: FunctionInfo, options: Options) -> str:
 
     for local_var in function_info.stack_info.local_vars[::-1]:
         type_decl = local_var.type.to_decl(local_var.format(fmt))
-        function_lines.append(SimpleStatement(1, f"{type_decl};").format(fmt))
+        comment = ""
+        if local_var.alias:
+            comment = f" // overlaps with {local_var.alias.format(fmt)}"
+        function_lines.append(SimpleStatement(1, f"{type_decl};{comment}").format(fmt))
         any_decl = True
 
     # With reused temps (no longer used), we can get duplicate declarations,
