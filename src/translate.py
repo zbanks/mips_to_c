@@ -328,7 +328,7 @@ class StackInfo:
         else:
             # Local variable
             return LocalVar(
-                location, type=self.unique_type_for("stack", location, Type.any_reg())
+                location, type=self.unique_type_for("stack", location, Type.any())
             )
 
     def maybe_get_register_var(self, reg: Register) -> Optional["RegisterVar"]:
