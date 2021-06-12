@@ -122,9 +122,17 @@ class Type:
             y_ctype = resolve_typedefs(y.ctype_ref, typemap)
             if not equal_types(x_ctype, y_ctype):
                 return False
+        # `void *` gets special treatment: it is compatible with any other pointer,
+        # but it does not change the `ptr_to` of the other pointer.
         if x.ptr_to is not None and y.ptr_to is not None:
-            if not x.ptr_to.unify(y.ptr_to, seen=seen):
+            if x.ptr_to.is_void() == y.ptr_to.is_void() and not x.ptr_to.unify(
+                y.ptr_to, seen=seen
+            ):
                 return False
+        if x.ptr_to is not None and x.ptr_to.is_void():
+            return Type(y).unify(Type.ptr())
+        if y.ptr_to is not None and y.ptr_to.is_void():
+            return Type(x).unify(Type.ptr())
         if x.fn_sig is not None and y.fn_sig is not None:
             if not x.fn_sig.unify(y.fn_sig, seen=seen):
                 return False
@@ -517,6 +525,8 @@ def type_from_ctype(ctype: CType, typemap: TypeMap) -> Type:
         names = (
             ["int"] if isinstance(real_ctype.type, ca.Enum) else real_ctype.type.names
         )
+        if names == ["void"]:
+            return Type.void()
         if "double" in names:
             return Type.f64()
         if "float" in names:
