@@ -1507,6 +1507,31 @@ class BlockInfo:
             ]
         )
 
+    def switch_control_expression(self) -> Optional[Expression]:
+        """If the switch_value is in the form `*(&jtbl + x*4)`, return x"""
+        if self.switch_value is None:
+            return None
+        deref = early_unwrap(late_unwrap(self.switch_value))
+        if not isinstance(deref, StructAccess) or deref.offset != 0:
+            return None
+        struct = late_unwrap(deref.struct_var)
+        if isinstance(struct, AddressOf):
+            ref = struct
+            if isinstance(ref.expr, ArrayAccess):
+                return None
+            return ref.expr.index
+        elif isinstance(struct, BinaryOp):
+            add = late_unwrap(deref.struct_var)
+            if not isinstance(add, BinaryOp) or add.op != "+":
+                return None
+            mul = early_unwrap(late_unwrap(add.right))
+            if not isinstance(mul, BinaryOp) or mul.op != "*":
+                return None
+            if not isinstance(mul.right, Literal) or mul.right.value != 4:
+                return None
+            return mul.left
+        return None
+
 
 @attr.s
 class InstrArgs:

@@ -19,6 +19,7 @@ from .translate import (
     BlockInfo,
     CommaConditionExpr,
     Condition,
+    Expression,
     Formatter,
     FunctionInfo,
     Statement as TrStatement,
@@ -39,7 +40,6 @@ class Context:
         factory=lambda: defaultdict(list)
     )
     goto_nodes: Set[Node] = attr.ib(factory=set)
-    loop_nodes: Set[Node] = attr.ib(factory=set)
     emitted_nodes: Set[Node] = attr.ib(factory=set)
     has_warned: bool = attr.ib(default=False)
 
@@ -98,17 +98,26 @@ class IfElseStatement:
 
 @attr.s
 class SwitchStatement:
-    jump: "SimpleStatement" = attr.ib()
+    jump: Union["SimpleStatement", Expression] = attr.ib()
     body: "Body" = attr.ib()
+    index: int = attr.ib(default=0)
 
     def should_write(self) -> bool:
         return True
 
     def format(self, fmt: Formatter) -> str:
-        lines = [
-            self.jump.format(fmt),
-            self.body.format(fmt),
-        ]
+        lines = []
+        comment = f" // switch {self.index}" if self.index > 0 else ""
+        if isinstance(self.jump, SimpleStatement):
+            lines.append(f"{self.jump.format(fmt)}{comment}")
+            lines.append(fmt.indent(0, "{"))
+        else:
+            lines.append(
+                fmt.indent(0, f"switch ({format_expr(self.jump, fmt)}) {{{comment}")
+            )
+        with fmt.indented():
+            lines.append(self.body.format(fmt))
+        lines.append(fmt.indent(0, "}"))
         return "\n".join(lines)
 
 
@@ -255,7 +264,7 @@ class Body:
 
 
 def label_for_node(context: Context, node: Node) -> str:
-    if node in context.loop_nodes:
+    if node.loop:
         return f"loop_{node.block.index}"
     else:
         return f"block_{node.block.index}"
@@ -296,16 +305,38 @@ def emit_goto(context: Context, target: Node, body: Body) -> None:
     body.add_statement(SimpleStatement(f"goto {label};", is_jump=True))
 
 
+def add_labels_for_switch(
+    context: Context, node: SwitchNode, default_node: Optional[Node]
+) -> None:
+    assert node.cases, "jtbl list must not be empty"
+    if node not in context.switch_nodes:
+        if sum(isinstance(n, SwitchNode) for n in context.flow_graph.nodes) == 1:
+            # There is only one switch node, and it is us
+            context.switch_nodes[node] = 0
+        else:
+            context.switch_nodes[node] = len(context.switch_nodes) + 1
+    switch_index = context.switch_nodes[node]
+
+    # Mark which labels we need to emit
+    if default_node is not None:
+        context.case_nodes[default_node].append((switch_index, -1))
+    for index, target in enumerate(node.cases):
+        # (jump table entry 0 is never covered by 'default'; the compiler would
+        # do 'switch (x - 1)' in that case)
+        if target == default_node and index != 0:
+            continue
+        context.case_nodes[target].append((switch_index, index))
+
+
 def switch_jump(context: Context, node: SwitchNode) -> SimpleStatement:
+    switch_index = context.switch_nodes[node]
+
     block_info = node.block.block_info
     assert isinstance(block_info, BlockInfo)
     expr = block_info.switch_value
     assert expr is not None
-    switch_index = context.switch_nodes.get(node, 0)
-    comment = f" // switch {switch_index}" if switch_index else ""
-    return SimpleStatement(
-        f"goto *{format_expr(expr, context.fmt)};{comment}", is_jump=True
-    )
+
+    return SimpleStatement(f"goto *{format_expr(expr, context.fmt)};", is_jump=True)
 
 
 def emit_goto_or_early_return(context: Context, target: Node, body: Body) -> None:
@@ -321,8 +352,8 @@ def emit_goto_or_early_return(context: Context, target: Node, body: Body) -> Non
 
 
 def build_conditional_subgraph(
-    context: Context, start: ConditionalNode, end: Node
-) -> IfElseStatement:
+    context: Context, start: ConditionalNode, end: Node, body: Body
+) -> None:
     """
     Output the subgraph between `start` and `end`, including the branch condition
     in the ConditionalNode `start`.
@@ -356,7 +387,11 @@ def build_conditional_subgraph(
         # the same target as our conditional edge. This case comes up for
         # &&-statements and ||-statements, but also sometimes for regular
         # if-statements (a degenerate case of an &&/|| statement).
-        return get_andor_if_statement(context, start, end)
+        body.add_if_else(get_andor_if_statement(context, start, end))
+        return
+    elif isinstance(fallthrough_node, SwitchNode) and conditional_node is not end:
+        build_switch(context, start, fallthrough_node, end, body)
+        return
     else:
         # This case is the most common. Since we missed the if above, we will
         # assume that taking the conditional edge does not perform any other
@@ -370,7 +405,7 @@ def build_conditional_subgraph(
         if_body = build_flowgraph_between(context, fallthrough_node, end)
         else_body = build_flowgraph_between(context, conditional_node, end)
 
-    return IfElseStatement(if_condition, if_body, else_body)
+    body.add_if_else(IfElseStatement(if_condition, if_body, else_body))
 
 
 def gather_any_comma_conditions(block_info: BlockInfo) -> Condition:
@@ -566,29 +601,56 @@ def emit_return(context: Context, node: ReturnNode, body: Body) -> None:
         body.add_statement(SimpleStatement("return;", is_jump=True))
 
 
-def build_switch_between(
+def build_switch(
     context: Context,
-    start: SwitchNode,
+    cond: Optional[ConditionalNode],
+    switch: SwitchNode,
     end: Node,
-) -> SwitchStatement:
-    """Output the subgraph between `start` and `end`, including the jump
-    in the SwitchStatement `start`, but not including `end`"""
-    body = Body(print_node_comment=context.options.debug)
-    jump = switch_jump(context, start)
-    emitted_cases: Set[Node] = set()
+    body: Body,
+) -> None:
+    default_node: Optional[Node] = None
+    cases = switch.cases[:]
+    if cond is not None:
+        assert cond.fallthrough_edge is switch
+        assert isinstance(cond.block.block_info, BlockInfo)
+        assert cond.block.block_info.branch_condition is not None
+        default_node = cond.conditional_edge
+        cases.append(default_node)
 
-    for case in start.cases:
-        if case in context.emitted_nodes:
-            continue
-        if case == end:
-            # We are not responsible for emitting `end`
-            continue
+        body.add_comment("This is likely the default case for the next switch")
+        if_body = Body(print_node_comment=context.options.debug)
+        emit_goto(context, default_node, if_body)
+        body.add_if_else(
+            IfElseStatement(
+                cond.block.block_info.branch_condition.negated(),
+                if_body=if_body,
+                else_body=None,
+            )
+        )
+        emit_node(context, switch, body)
 
-        body.extend(build_flowgraph_between(context, case, end))
-        # TODO: This could be a `break;` statement
-        if not body.ends_in_jump():
-            emit_goto_or_early_return(context, end, body)
-    return SwitchStatement(jump, body)
+    add_labels_for_switch(context, switch, default_node)
+    switch_index = context.switch_nodes[switch]
+    comment = f" // switch {switch_index}" if switch_index else ""
+
+    assert isinstance(switch.block.block_info, BlockInfo)
+    jump: Optional[Union[Expression, SimpleStatement]]
+    jump = switch.block.block_info.switch_control_expression()
+    if jump is None:
+        body.add_comment(
+            f"XXX cannot unwrap jump: {switch.block.block_info.switch_value}"
+        )
+        jump = switch_jump(context, switch)
+
+    switch_body = Body(print_node_comment=context.options.debug)
+    # TODO: Detect fallthrough, if one case postdominates another
+    for case in cases:
+        if case in context.emitted_nodes or case == end:
+            continue
+        switch_body.extend(build_flowgraph_between(context, case, end))
+        if not switch_body.ends_in_jump():
+            switch_body.add_statement(SimpleStatement("break;", is_jump=True))
+    body.add_switch(SwitchStatement(jump, switch_body, switch_index))
 
 
 def build_flowgraph_between(context: Context, start: Node, end: Node) -> Body:
@@ -635,9 +697,9 @@ def build_flowgraph_between(context: Context, start: Node, end: Node) -> Body:
 
         # For nodes with branches, curr_end is not a direct successor of curr_start
         if isinstance(curr_start, ConditionalNode):
-            body.add_if_else(build_conditional_subgraph(context, curr_start, curr_end))
+            build_conditional_subgraph(context, curr_start, curr_end, body)
         elif isinstance(curr_start, SwitchNode):
-            body.add_switch(build_switch_between(context, curr_start, curr_end))
+            build_switch(context, None, curr_start, curr_end, body)
         else:
             # No branch, but check that we didn't skip any nodes
             if curr_start.children() != {curr_end}:
@@ -679,6 +741,7 @@ def build_naive(context: Context, nodes: List[Node]) -> Body:
             emit_node(context, node, body)
             emit_successor(node.successor, i)
         elif isinstance(node, SwitchNode):
+            add_labels_for_switch(context, node, None)
             emit_node(context, node, body)
             body.add_statement(switch_jump(context, node))
         elif isinstance(node, ConditionalNode):
@@ -706,30 +769,6 @@ def build_body(context: Context, options: Options) -> Body:
     start_node: Node = context.flow_graph.entry_node()
     terminal_node: Node = context.flow_graph.terminal_node()
     is_reducible = context.flow_graph.is_reducible()
-
-    num_switches = len(
-        [node for node in context.flow_graph.nodes if isinstance(node, SwitchNode)]
-    )
-    switch_index = 0
-    for node in context.flow_graph.nodes:
-        if node.loop is not None:
-            context.loop_nodes.add(node)
-        if isinstance(node, SwitchNode):
-            assert node.cases, "jtbl list must not be empty"
-            if num_switches > 1:
-                switch_index += 1
-            context.switch_nodes[node] = switch_index
-            most_common = max(node.cases, key=node.cases.count)
-            has_common = False
-            if node.cases.count(most_common) > 1:
-                context.case_nodes[most_common].append((switch_index, -1))
-                has_common = True
-            for index, target in enumerate(node.cases):
-                # (jump table entry 0 is never covered by 'default'; the compiler would
-                # do 'switch (x - 1)' in that case)
-                if has_common and target == most_common and index != 0:
-                    continue
-                context.case_nodes[target].append((switch_index, index))
 
     if options.debug:
         print("Here's the whole function!\n")
