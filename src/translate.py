@@ -1508,29 +1508,144 @@ class BlockInfo:
         )
 
     def switch_control_expression(self) -> Optional[Expression]:
-        """If the switch_value is in the form `*(&jtbl + x*4)`, return x"""
-        if self.switch_value is None:
+        """
+        If the switch_value is in one of the following forms:
+            *(&jtbl + x*4)
+            *(&jtbl)[x]
+        then, return the Expression representing `x`
+        """
+        # We're willing to be *quite* aggressive while trying to match the expression
+        # We know that
+        unwrap_fn = lambda expr: early_unwrap(late_unwrap(expr))
+        jtbl_name = Match.var(str)
+        control_var = Match.var(Expression)
+        # This matches code when context isn't provided, so typemap is None.
+        # The pointer arith is not turned into an array access
+        m1 = Match.expr(
+            StructAccess,
+            offset=0,
+            struct_var=Match.expr(
+                BinaryOp,
+                left=Match.expr(
+                    AddressOf,
+                    expr=Match.expr(
+                        GlobalSymbol,
+                        symbol_name=jtbl_name,
+                    ),
+                ),
+                op="+",
+                right=Match.expr(
+                    BinaryOp,
+                    left=control_var,
+                    op="*",
+                    right=Match.expr(Literal, value=4),
+                ),
+            ),
+        )
+        # With a typemap, the poitner arith is rewritten as an array access
+        # The pointer arith is not turned into an array access
+        m2 = Match.expr(
+            StructAccess,
+            offset=0,
+            struct_var=Match.expr(
+                AddressOf,
+                expr=Match.expr(
+                    ArrayAccess,
+                    ptr=Match.expr(
+                        AddressOf,
+                        expr=Match.expr(
+                            GlobalSymbol,
+                            symbol_name=jtbl_name,
+                        ),
+                    ),
+                    index=control_var,
+                ),
+            ),
+        )
+        if not (
+            m1.apply(unwrap_fn, self.switch_value)
+            or m2.apply(unwrap_fn, self.switch_value)
+        ):
+            return False
+
+        # Sanity check, these prefixes are copied from `build_graph_from_block`
+        if not jtbl_name.value[:4] in ("jtbl", "jpt_"):
             return None
-        deref = early_unwrap(late_unwrap(self.switch_value))
-        if not isinstance(deref, StructAccess) or deref.offset != 0:
-            return None
-        struct = late_unwrap(deref.struct_var)
-        if isinstance(struct, AddressOf):
-            ref = struct
-            if isinstance(ref.expr, ArrayAccess):
-                return None
-            return ref.expr.index
-        elif isinstance(struct, BinaryOp):
-            add = late_unwrap(deref.struct_var)
-            if not isinstance(add, BinaryOp) or add.op != "+":
-                return None
-            mul = early_unwrap(late_unwrap(add.right))
-            if not isinstance(mul, BinaryOp) or mul.op != "*":
-                return None
-            if not isinstance(mul.right, Literal) or mul.right.value != 4:
-                return None
-            return mul.left
-        return None
+        return control_var.value
+
+
+@attr.s
+class Match:
+    match_class: type = attr.ib()
+    fields: Dict[str, Any] = attr.ib()
+
+    @attr.s
+    class MatchVar:
+        match_class: Optional[type] = attr.ib(default=None)
+        value: Optional[Any] = attr.ib(default=None)
+
+    @classmethod
+    def var(cls, match_class: Optional[type] = None) -> MatchVar:
+        if match_class is Type:
+            raise ValueError("Type matching not supported")
+        return cls.MatchVar(match_class)
+
+    @classmethod
+    def expr(cls, match_class, **fields: Any) -> "Match":
+        # Do runtime type checks, since mypy can't verify this
+        if not issubclass(match_class, Expression):
+            raise ValueError(
+                f"Match only supports Expression subclasses, not {match_class}"
+            )
+
+        attr_fields = attr.fields_dict(match_class)
+        for name, value in fields.items():
+            attribute = attr_fields.get(name)
+            if attribute is None:
+                raise ValueError(f"{match_class.__name__} does not have field '{name}'")
+            if isinstance(value, Type):
+                raise ValueError(
+                    f"{match_class.__name__}.{name} is of Type, which is not supported"
+                )
+            elif isinstance(value, cls.MatchVar):
+                if not issubclass(value.match_class, attribute.type):
+                    raise ValueError(
+                        f"{match_class.__name__}.{name} is of type {attribute.type}, not {value.match_class}"
+                    )
+            elif isinstance(value, Match):
+                if not issubclass(attribute.type, Expression):
+                    raise ValueError(
+                        f"{match_class.__name__}.{name} is of type {attribute.type}, not {Expression}"
+                    )
+            elif not isinstance(value, attribute.type):
+                raise ValueError(
+                    f"{match_class.__name__}.{name} is of type {attribute.type}, not {type(value)}"
+                )
+        return Match(match_class, fields)
+
+    def apply(
+        self, unwrap_fn: Callable[[Expression], Expression], source: Expression
+    ) -> bool:
+        if not issubclass(source.__class__, self.match_class):
+            source = unwrap_fn(source)
+        if not issubclass(source.__class__, self.match_class):
+            return False
+        for name, target_value in self.fields.items():
+            source_value = getattr(source, name)
+            if isinstance(target_value, self.MatchVar):
+                assert isinstance(
+                    source_value, target_value.match_class
+                ), "already checked in Match.expr()"
+                target_value.value = source_value
+            elif isinstance(target_value, Match):
+                assert isinstance(
+                    source_value, Expression
+                ), "already checked in Match.expr()"
+                if not target_value.apply(unwrap_fn, source_value):
+                    return False
+            elif target_value != source_value:
+                return False
+        return True
 
 
 @attr.s

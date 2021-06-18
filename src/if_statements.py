@@ -622,7 +622,7 @@ def build_switch(
         emit_goto(context, default_node, if_body)
         body.add_if_else(
             IfElseStatement(
-                cond.block.block_info.branch_condition.negated(),
+                cond.block.block_info.branch_condition,
                 if_body=if_body,
                 else_body=None,
             )
