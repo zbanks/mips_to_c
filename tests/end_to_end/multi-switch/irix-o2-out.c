@@ -1,6 +1,4 @@
 s32 test(s32 arg0) {
-    u32 temp_t6;
-    u32 temp_t7;
     s32 phi_a0;
     s32 phi_a0_2;
     s32 phi_a0_3;
@@ -8,7 +6,6 @@ s32 test(s32 arg0) {
     s32 phi_a0_5;
 
     if (arg0 >= 0x33) {
-        temp_t6 = arg0 - 0x65;
         if (arg0 >= 0x6C) {
             phi_a0_2 = arg0;
             if (arg0 != 0xC8) {
@@ -20,34 +17,34 @@ block_23:
                 D_410210 = phi_a0;
                 return 2;
             }
-        case 0: // switch 1
-        case 2: // switch 2
+        case 101: // switch 1
+        case 3: // switch 2
             return (phi_a0_2 + 1) ^ phi_a0_2;
         }
         phi_a0_3 = arg0;
         // This is likely the default case for the next switch
-        if (temp_t6 < 7U) {
+        if ((u32) (arg0 - 0x65) >= 7U) {
             goto block_23;
         }
         phi_a0_2 = arg0;
         phi_a0_4 = arg0;
         phi_a0_5 = arg0;
-        switch (temp_t6) { // switch 1
-        case 1: // switch 1
+        switch (arg0) { // switch 1
+        case 102: // switch 1
 block_21:
             phi_a0 = phi_a0_4;
             phi_a0_5 = phi_a0_4;
             if (D_410210 == 0) {
-            case 2: // switch 1
-            case 3: // switch 1
-            case 4: // switch 1
-            case 5: // switch 1
+            case 103: // switch 1
+            case 104: // switch 1
+            case 105: // switch 1
+            case 106: // switch 1
                 phi_a0_3 = phi_a0_5 - 1;
                 goto block_23;
             }
             D_410210 = phi_a0;
             return 2;
-        case 6: // switch 1
+        case 107: // switch 1
             phi_a0 = arg0 + 1;
             D_410210 = phi_a0;
             return 2;
@@ -62,23 +59,22 @@ block_21:
             D_410210 = phi_a0;
             return 2;
         }
-        temp_t7 = arg0 - 1;
         if (arg0 >= -0x31) {
             phi_a0_3 = arg0;
             // This is likely the default case for the next switch
-            if (temp_t7 < 7U) {
+            if ((u32) (arg0 - 1) >= 7U) {
                 goto block_23;
             }
             phi_a0_2 = arg0;
             phi_a0_3 = arg0;
-            switch (temp_t7) { // switch 2
-            case 0: // switch 2
-                return arg0 * arg0;
+            switch (arg0) { // switch 2
             case 1: // switch 2
+                return arg0 * arg0;
+            case 2: // switch 2
                 phi_a0_2 = arg0 - 1;
                 return (phi_a0_2 + 1) ^ phi_a0_2;
-            case 5: // switch 2
             case 6: // switch 2
+            case 7: // switch 2
                 phi_a0_4 = arg0 * 2;
                 goto block_21;
             }

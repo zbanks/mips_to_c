@@ -1325,6 +1325,97 @@ class PhiExpr(Expression):
         return self.get_var_name()
 
 
+@attr.s(frozen=True)
+class SwitchControl(Expression):
+    jump_table: GlobalSymbol = attr.ib()
+    control_expr: Expression = attr.ib()
+    offset: Optional[int] = attr.ib(default=0)
+
+    def dependencies(self) -> List[Expression]:
+        # return [self.control_expr] ?
+        return [self.jump_table, self.control_expr]
+
+    def format(self, fmt: Formatter) -> str:
+        if self.offset:
+            return f"({self.control_expr.format(fmt)} - {self.offset})"
+        return self.control_expr.format(fmt)
+
+    @staticmethod
+    def from_expr(expr: Expression) -> Expression:
+        """
+        If the switch_value is in one of the following forms:
+            *(&jtbl + x*4)
+            *(&jtbl)[x]
+        then, return the Expression representing `x` XXX TODO
+        """
+        unwrap_fn = early_unwrap
+        #jump_table_var = Pattern.var(GlobalSymbol)
+        jump_table_var = Pattern.PatternVar(GlobalSymbol)
+        control_var = Pattern.PatternVar(Expression)
+        # This matches code when context isn't provided, so typemap is None.
+        # The pointer arith is not turned into an array access
+        m1 = Pattern.expr(
+            StructAccess,
+            offset=0,
+            struct_var=Pattern.expr(
+                BinaryOp,
+                left=Pattern.expr(
+                    AddressOf,
+                    expr=jump_table_var,
+                ),
+                op="+",
+                right=Pattern.expr(
+                    BinaryOp,
+                    left=control_var,
+                    op="*",
+                    right=Pattern.expr(Literal, value=4),
+                ),
+            ),
+        )
+        # With a typemap, the poitner arith is rewritten as an array access
+        # The pointer arith is not turned into an array access
+        m2 = Pattern.expr(
+            StructAccess,
+            offset=0,
+            struct_var=Pattern.expr(
+                AddressOf,
+                expr=Pattern.expr(
+                    ArrayAccess,
+                    ptr=Pattern.expr(
+                        AddressOf,
+                        expr=jump_table_var,
+                    ),
+                    index=control_var,
+                ),
+            ),
+        )
+        if not (m1.apply(early_unwrap, expr) or m2.apply(early_unwrap, expr)):
+            return expr
+
+        # Sanity check, these prefixes are copied from `build_graph_from_block`
+        assert isinstance(jump_table_var.value, GlobalSymbol)
+        if not jump_table_var.value.symbol_name[:4] in ("jtbl", "jpt_"):
+            return expr
+
+        control_var2 = Pattern.var(Expression)
+        offset_var = Pattern.var(int)
+        m3 = Pattern.expr(
+            BinaryOp,
+            left=control_var2,
+            op="+",
+            right=Pattern.expr(
+                Literal,
+                value=offset_var,
+            ),
+        )
+        assert control_var.value is not None
+        if m3.apply(early_unwrap, control_var.value):
+            return SwitchControl(
+                jump_table_var.value, control_var2.value, -offset_var.value
+            )
+        return SwitchControl(jump_table_var.value, control_var.value, 0)
+
+
 @attr.s
 class EvalOnceStmt(Statement):
     expr: EvalOnceExpr = attr.ib()
@@ -1507,95 +1598,33 @@ class BlockInfo:
             ]
         )
 
-    def switch_control_expression(self) -> Optional[Expression]:
-        """
-        If the switch_value is in one of the following forms:
-            *(&jtbl + x*4)
-            *(&jtbl)[x]
-        then, return the Expression representing `x`
-        """
-        # We're willing to be *quite* aggressive while trying to match the expression
-        # We know that
-        unwrap_fn = lambda expr: early_unwrap(late_unwrap(expr))
-        jtbl_name = Match.var(str)
-        control_var = Match.var(Expression)
-        # This matches code when context isn't provided, so typemap is None.
-        # The pointer arith is not turned into an array access
-        m1 = Match.expr(
-            StructAccess,
-            offset=0,
-            struct_var=Match.expr(
-                BinaryOp,
-                left=Match.expr(
-                    AddressOf,
-                    expr=Match.expr(
-                        GlobalSymbol,
-                        symbol_name=jtbl_name,
-                    ),
-                ),
-                op="+",
-                right=Match.expr(
-                    BinaryOp,
-                    left=control_var,
-                    op="*",
-                    right=Match.expr(Literal, value=4),
-                ),
-            ),
-        )
-        # With a typemap, the poitner arith is rewritten as an array access
-        # The pointer arith is not turned into an array access
-        m2 = Match.expr(
-            StructAccess,
-            offset=0,
-            struct_var=Match.expr(
-                AddressOf,
-                expr=Match.expr(
-                    ArrayAccess,
-                    ptr=Match.expr(
-                        AddressOf,
-                        expr=Match.expr(
-                            GlobalSymbol,
-                            symbol_name=jtbl_name,
-                        ),
-                    ),
-                    index=control_var,
-                ),
-            ),
-        )
-        if not (
-            m1.apply(unwrap_fn, self.switch_value)
-            or m2.apply(unwrap_fn, self.switch_value)
-        ):
-            return False
 
-        # Sanity check, these prefixes are copied from `build_graph_from_block`
-        if not jtbl_name.value[:4] in ("jtbl", "jpt_"):
-            return None
-        return control_var.value
-
+from typing import TypeVar, Generic
+import typing
+T = TypeVar("T")
 
 @attr.s
-class Match:
+class Pattern:
     match_class: type = attr.ib()
     fields: Dict[str, Any] = attr.ib()
 
     @attr.s
-    class MatchVar:
-        match_class: Optional[type] = attr.ib(default=None)
-        value: Optional[Any] = attr.ib(default=None)
+    class PatternVar(Generic[T]):
+        match_class: typing.Type[T] = attr.ib()
+        value: Optional[T] = attr.ib(default=None, init=False)
 
     @classmethod
-    def var(cls, match_class: Optional[type] = None) -> MatchVar:
+    def var(cls, match_class: typing.Type[T]) -> PatternVar[T]:
         if match_class is Type:
             raise ValueError("Type matching not supported")
-        return cls.MatchVar(match_class)
+        return cls.PatternVar[T](match_class)
 
     @classmethod
-    def expr(cls, match_class, **fields: Any) -> "Match":
+    def expr(cls, match_class: type, **fields: Any) -> "Pattern":
         # Do runtime type checks, since mypy can't verify this
         if not issubclass(match_class, Expression):
             raise ValueError(
-                f"Match only supports Expression subclasses, not {match_class}"
+                f"Pattern only supports Expression subclasses, not {match_class}"
             )
 
         attr_fields = attr.fields_dict(match_class)
@@ -1603,16 +1632,18 @@ class Match:
             attribute = attr_fields.get(name)
             if attribute is None:
                 raise ValueError(f"{match_class.__name__} does not have field '{name}'")
+            if attribute.type is None:
+                raise ValueError(f"{match_class.__name__}.{name} does not have a type")
             if isinstance(value, Type):
                 raise ValueError(
                     f"{match_class.__name__}.{name} is of Type, which is not supported"
                 )
-            elif isinstance(value, cls.MatchVar):
+            elif isinstance(value, cls.PatternVar):
                 if not issubclass(value.match_class, attribute.type):
                     raise ValueError(
                         f"{match_class.__name__}.{name} is of type {attribute.type}, not {value.match_class}"
                     )
-            elif isinstance(value, Match):
+            elif isinstance(value, Pattern):
                 if not issubclass(attribute.type, Expression):
                     raise ValueError(
                         f"{match_class.__name__}.{name} is of type {attribute.type}, not {Expression}"
@@ -1621,7 +1652,7 @@ class Match:
                 raise ValueError(
                     f"{match_class.__name__}.{name} is of type {attribute.type}, not {type(value)}"
                 )
-        return Match(match_class, fields)
+        return Pattern(match_class, fields)
 
     def apply(
         self, unwrap_fn: Callable[[Expression], Expression], source: Expression
@@ -1632,15 +1663,15 @@ class Match:
             return False
         for name, target_value in self.fields.items():
             source_value = getattr(source, name)
-            if isinstance(target_value, self.MatchVar):
+            if isinstance(target_value, self.PatternVar):
                 assert isinstance(
                     source_value, target_value.match_class
-                ), "already checked in Match.expr()"
+                ), "already checked in Pattern.expr()"
                 target_value.value = source_value
-            elif isinstance(target_value, Match):
+            elif isinstance(target_value, Pattern):
                 assert isinstance(
                     source_value, Expression
-                ), "already checked in Match.expr()"
+                ), "already checked in Pattern.expr()"
                 if not target_value.apply(unwrap_fn, source_value):
                     return False
             elif target_value != source_value:
@@ -3716,6 +3747,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
     if branch_condition is not None:
         branch_condition.use()
     if switch_value is not None:
+        switch_value = SwitchControl.from_expr(switch_value)
         switch_value.use()
     return_value: Optional[Expression] = None
     if isinstance(node, ReturnNode):

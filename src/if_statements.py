@@ -23,6 +23,7 @@ from .translate import (
     Formatter,
     FunctionInfo,
     Statement as TrStatement,
+    SwitchControl,
     Type,
     simplify_condition,
     format_expr,
@@ -98,7 +99,7 @@ class IfElseStatement:
 
 @attr.s
 class SwitchStatement:
-    jump: Union["SimpleStatement", Expression] = attr.ib()
+    jump: Union["SimpleStatement", SwitchControl] = attr.ib()
     body: "Body" = attr.ib()
     index: int = attr.ib(default=0)
 
@@ -113,7 +114,10 @@ class SwitchStatement:
             lines.append(fmt.indent(0, "{"))
         else:
             lines.append(
-                fmt.indent(0, f"switch ({format_expr(self.jump, fmt)}) {{{comment}")
+                fmt.indent(
+                    0,
+                    f"switch ({format_expr(self.jump.control_expr, fmt)}) {{{comment}",
+                )
             )
         with fmt.indented():
             lines.append(self.body.format(fmt))
@@ -317,15 +321,21 @@ def add_labels_for_switch(
             context.switch_nodes[node] = len(context.switch_nodes) + 1
     switch_index = context.switch_nodes[node]
 
+    # Determine offset
+    offset = 0
+    switch_control = node.block.block_info.switch_value
+    if isinstance(switch_control, SwitchControl):
+        offset = switch_control.offset
+
     # Mark which labels we need to emit
     if default_node is not None:
         context.case_nodes[default_node].append((switch_index, -1))
     for index, target in enumerate(node.cases):
         # (jump table entry 0 is never covered by 'default'; the compiler would
         # do 'switch (x - 1)' in that case)
-        if target == default_node and index != 0:
+        if target == default_node:  # and index != 0:
             continue
-        context.case_nodes[target].append((switch_index, index))
+        context.case_nodes[target].append((switch_index, index + offset))
 
 
 def switch_jump(context: Context, node: SwitchNode) -> SimpleStatement:
@@ -635,8 +645,9 @@ def build_switch(
 
     assert isinstance(switch.block.block_info, BlockInfo)
     jump: Optional[Union[Expression, SimpleStatement]]
-    jump = switch.block.block_info.switch_control_expression()
-    if jump is None:
+    # jump = switch.block.block_info.switch_control_expression()
+    jump = switch.block.block_info.switch_value
+    if not isinstance(jump, SwitchControl):
         body.add_comment(
             f"XXX cannot unwrap jump: {switch.block.block_info.switch_value}"
         )
