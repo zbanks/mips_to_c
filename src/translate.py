@@ -1329,7 +1329,7 @@ class PhiExpr(Expression):
 class SwitchControl(Expression):
     jump_table: GlobalSymbol = attr.ib()
     control_expr: Expression = attr.ib()
-    offset: Optional[int] = attr.ib(default=0)
+    offset: int = attr.ib(default=0)
 
     def dependencies(self) -> List[Expression]:
         # return [self.control_expr] ?
@@ -1410,6 +1410,9 @@ class SwitchControl(Expression):
         )
         assert control_var.value is not None
         if m3.apply(early_unwrap, control_var.value):
+            assert jump_table_var.value is not None
+            assert control_var2.value is not None
+            assert offset_var.value is not None
             return SwitchControl(
                 jump_table_var.value, control_var2.value, -offset_var.value
             )

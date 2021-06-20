@@ -323,6 +323,7 @@ def add_labels_for_switch(
 
     # Determine offset
     offset = 0
+    assert node.block.block_info is not None
     switch_control = node.block.block_info.switch_value
     if isinstance(switch_control, SwitchControl):
         offset = switch_control.offset
