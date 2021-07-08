@@ -17,6 +17,7 @@ from .translate import (
     InstrProcessingFailure,
     translate_to_ast,
 )
+from .types import TypePool
 
 
 def print_exception(sanitize: bool) -> None:
@@ -88,7 +89,8 @@ def run(options: Options) -> int:
                 functions.append(all_functions[index_or_name])
 
     function_names = set(all_functions.keys())
-    global_info = GlobalInfo(asm_data, function_names, typemap)
+    type_pool = TypePool(typemap)
+    global_info = GlobalInfo(asm_data, function_names, typemap, type_pool)
     function_infos: List[Union[FunctionInfo, Exception]] = []
     for function in functions:
         try:

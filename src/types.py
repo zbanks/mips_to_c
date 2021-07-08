@@ -83,6 +83,7 @@ class Type:
     """
 
     _data: TypeData
+    pool: "TypePool"
 
     def unify(self, other: "Type", *, seen: Optional[Set["TypeData"]] = None) -> bool:
         """
@@ -161,6 +162,9 @@ class Type:
             return self._data
         self._data = self._data.get_representative()
         return self._data
+
+    def make_pointer(self) -> "Type":
+        return self.pool.ptr(self)
 
     def is_float(self) -> bool:
         return self.data().kind == TypeData.K_FLOAT
@@ -259,7 +263,7 @@ class Type:
         # multidimensional arrays.
         # Treat an array of length N as a struct with N (identical) members
         if isinstance(ctype, ca.ArrayDecl):
-            inner_type, dim = ptr_type_from_ctype(ctype, data.typemap)
+            inner_type, dim = ptr_type_from_ctype(ctype, self.pool)
             field_type = inner_type.get_pointer_target()
             if not dim or field_type is None:
                 # Do not support zero-sized arrays
@@ -288,7 +292,7 @@ class Type:
 
             # Choose the first field in a union, or the unexpanded name in a struct
             field = fields[0]
-            field_type = type_from_ctype(field.type, data.typemap, array_decay=False)
+            field_type = type_from_ctype(field.type, self.pool, array_decay=False)
             size, align = field_type.get_size_align_bytes()
             output.append(field_type)
             position = offset + size
@@ -424,119 +428,103 @@ class Type:
         sizestr = str(data.size) if data.size is not None else "?"
         return f"Type({signstr + kindstr + sizestr})"
 
-    @staticmethod
-    def any() -> "Type":
-        return Type(TypeData())
 
-    @staticmethod
-    def any_reg() -> "Type":
-        return Type(TypeData(kind=TypeData.K_ANYREG))
+@dataclass(eq=False)
+class TypePool:
+    typemap: Optional[TypeMap]
 
-    @staticmethod
-    def intish() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT))
+    def type(self, data: TypeData) -> Type:
+        return Type(_data=data, pool=self)
 
-    @staticmethod
-    def intptr() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INTPTR))
+    def any(self) -> Type:
+        return self.type(TypeData())
 
-    @staticmethod
-    def ptr(type: Optional["Type"] = None) -> "Type":
-        return Type(TypeData(kind=TypeData.K_PTR, size=32, ptr_to=type))
+    def any_reg(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_ANYREG))
 
-    @staticmethod
-    def _ctype(ctype: CType, typemap: TypeMap, size: Optional[int]) -> "Type":
-        return Type(
+    def intish(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT))
+
+    def intptr(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INTPTR))
+
+    def ptr(self, type: Optional[Type] = None) -> Type:
+        return self.type(TypeData(kind=TypeData.K_PTR, size=32, ptr_to=type))
+
+    def _ctype(self, ctype: CType, typemap: TypeMap, size: Optional[int]) -> Type:
+        return self.type(
             TypeData(kind=TypeData.K_CTYPE, size=size, ctype_ref=ctype, typemap=typemap)
         )
 
-    @staticmethod
-    def function(fn_sig: Optional["FunctionSignature"] = None) -> "Type":
+    def function(self, fn_sig: Optional["FunctionSignature"] = None) -> Type:
         if fn_sig is None:
-            fn_sig = FunctionSignature()
-        return Type(TypeData(kind=TypeData.K_FN, fn_sig=fn_sig))
+            fn_sig = FunctionSignature(return_type=self.any(), params=[])
+        return self.type(TypeData(kind=TypeData.K_FN, fn_sig=fn_sig))
 
-    @staticmethod
-    def f32() -> "Type":
-        return Type(TypeData(kind=TypeData.K_FLOAT, size=32))
+    def f32(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_FLOAT, size=32))
 
-    @staticmethod
-    def floatish() -> "Type":
-        return Type(TypeData(kind=TypeData.K_FLOAT))
+    def floatish(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_FLOAT))
 
-    @staticmethod
-    def f64() -> "Type":
-        return Type(TypeData(kind=TypeData.K_FLOAT, size=64))
+    def f64(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_FLOAT, size=64))
 
-    @staticmethod
-    def s8() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=8, sign=TypeData.SIGNED))
+    def s8(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=8, sign=TypeData.SIGNED))
 
-    @staticmethod
-    def u8() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=8, sign=TypeData.UNSIGNED))
+    def u8(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=8, sign=TypeData.UNSIGNED))
 
-    @staticmethod
-    def s16() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=16, sign=TypeData.SIGNED))
+    def s16(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=16, sign=TypeData.SIGNED))
 
-    @staticmethod
-    def u16() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=16, sign=TypeData.UNSIGNED))
+    def u16(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=16, sign=TypeData.UNSIGNED))
 
-    @staticmethod
-    def s32() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=32, sign=TypeData.SIGNED))
+    def s32(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=32, sign=TypeData.SIGNED))
 
-    @staticmethod
-    def u32() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=32, sign=TypeData.UNSIGNED))
+    def u32(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=32, sign=TypeData.UNSIGNED))
 
-    @staticmethod
-    def s64() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=64, sign=TypeData.SIGNED))
+    def s64(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=64, sign=TypeData.SIGNED))
 
-    @staticmethod
-    def u64() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=64, sign=TypeData.UNSIGNED))
+    def u64(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=64, sign=TypeData.UNSIGNED))
 
-    @staticmethod
-    def int64() -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=64))
+    def int64(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=64))
 
-    @staticmethod
-    def int_of_size(size: int) -> "Type":
-        return Type(TypeData(kind=TypeData.K_INT, size=size))
+    def int_of_size(self, size: int) -> Type:
+        return self.type(TypeData(kind=TypeData.K_INT, size=size))
 
-    @staticmethod
-    def reg32(*, likely_float: bool) -> "Type":
+    def reg32(self, *, likely_float: bool) -> Type:
         likely = TypeData.K_FLOAT if likely_float else TypeData.K_INTPTR
-        return Type(TypeData(kind=TypeData.K_ANYREG, likely_kind=likely, size=32))
+        return self.type(TypeData(kind=TypeData.K_ANYREG, likely_kind=likely, size=32))
 
-    @staticmethod
-    def reg64(*, likely_float: bool) -> "Type":
+    def reg64(self, *, likely_float: bool) -> Type:
         kind = TypeData.K_FLOAT | TypeData.K_INT
         likely = TypeData.K_FLOAT if likely_float else TypeData.K_INT
-        return Type(TypeData(kind=kind, likely_kind=likely, size=64))
+        return self.type(TypeData(kind=kind, likely_kind=likely, size=64))
 
-    @staticmethod
-    def bool() -> "Type":
-        return Type.intish()
+    def bool(self) -> Type:
+        return self.intish()
 
-    @staticmethod
-    def void() -> "Type":
-        return Type(TypeData(kind=TypeData.K_VOID, size=0))
+    def void(self) -> Type:
+        return self.type(TypeData(kind=TypeData.K_VOID, size=0))
 
 
 @dataclass(eq=False)
 class FunctionParam:
-    type: Type = field(default_factory=Type.any)
+    type: Type  # XXX = field(default_factory=Type.any)
     name: str = ""
 
 
 @dataclass(eq=False)
 class FunctionSignature:
-    return_type: Type = field(default_factory=Type.any)
+    return_type: Type  # XXX = field(default_factory=Type.any)
     params: List[FunctionParam] = field(default_factory=list)
     params_known: bool = False
     is_variadic: bool = False
@@ -598,56 +586,66 @@ class FunctionSignature:
         return can_unify
 
 
-def type_from_ctype(ctype: CType, typemap: TypeMap, array_decay: bool = True) -> Type:
+def type_from_ctype(
+    ctype: CType, type_pool: TypePool, array_decay: bool = True
+) -> Type:
+    typemap = type_pool.typemap
+    assert typemap is not None
     real_ctype = resolve_typedefs(ctype, typemap)
     if isinstance(real_ctype, ca.ArrayDecl):
-        inner_type, dim = ptr_type_from_ctype(real_ctype, typemap)
+        inner_type, dim = ptr_type_from_ctype(real_ctype, type_pool)
         if array_decay:
             return inner_type
         size = inner_type.get_size_bits()
         if size is not None and dim is not None:
             size *= dim
-        return Type._ctype(real_ctype, typemap, size=size)
+        return type_pool._ctype(real_ctype, typemap, size=size)
     if isinstance(real_ctype, ca.PtrDecl):
-        return Type.ptr(type_from_ctype(real_ctype.type, typemap, array_decay=False))
+        return type_from_ctype(
+            real_ctype.type, type_pool, array_decay=False
+        ).make_pointer()
     if isinstance(real_ctype, ca.FuncDecl):
         fn = parse_function(real_ctype)
         assert fn is not None
         fn_sig = FunctionSignature(
-            return_type=Type.void(),
+            return_type=type_pool.void(),
             is_variadic=fn.is_variadic,
         )
         if fn.ret_type is not None:
-            fn_sig.return_type = type_from_ctype(fn.ret_type, typemap)
+            fn_sig.return_type = type_from_ctype(fn.ret_type, type_pool)
         if fn.params is not None:
             fn_sig.params = [
                 FunctionParam(
                     name=param.name or "",
-                    type=type_from_ctype(param.type, typemap),
+                    type=type_from_ctype(param.type, type_pool),
                 )
                 for param in fn.params
             ]
             fn_sig.params_known = True
-        return Type.function(fn_sig)
+        return type_pool.function(fn_sig)
     if isinstance(real_ctype, ca.TypeDecl):
         if isinstance(real_ctype.type, (ca.Struct, ca.Union)):
             struct = parse_struct(real_ctype.type, typemap)
-            return Type._ctype(struct.type, typemap, size=struct.size * 8)
+            return type_pool._ctype(struct.type, typemap, size=struct.size * 8)
         names = (
             ["int"] if isinstance(real_ctype.type, ca.Enum) else real_ctype.type.names
         )
         if "double" in names:
-            return Type.f64()
+            return type_pool.f64()
         if "float" in names:
-            return Type.f32()
+            return type_pool.f32()
         size = 8 * primitive_size(real_ctype.type)
         if not size:
-            return Type._ctype(ctype, typemap, size=None)
+            return type_pool._ctype(ctype, typemap, size=None)
         sign = TypeData.UNSIGNED if "unsigned" in names else TypeData.SIGNED
-        return Type(TypeData(kind=TypeData.K_INT, size=size, sign=sign))
+        return type_pool.type(TypeData(kind=TypeData.K_INT, size=size, sign=sign))
 
 
-def ptr_type_from_ctype(ctype: CType, typemap: TypeMap) -> Tuple[Type, Optional[int]]:
+def ptr_type_from_ctype(
+    ctype: CType, type_pool: TypePool
+) -> Tuple[Type, Optional[int]]:
+    typemap = type_pool.typemap
+    assert typemap is not None
     real_ctype = resolve_typedefs(ctype, typemap)
     if isinstance(real_ctype, ca.ArrayDecl):
         # Array to pointer decay
@@ -658,10 +656,12 @@ def ptr_type_from_ctype(ctype: CType, typemap: TypeMap) -> Tuple[Type, Optional[
         except DecompFailure:
             pass
         return (
-            Type.ptr(type_from_ctype(real_ctype.type, typemap, array_decay=False)),
+            type_from_ctype(
+                real_ctype.type, type_pool, array_decay=False
+            ).make_pointer(),
             dim,
         )
-    return Type.ptr(type_from_ctype(ctype, typemap)), None
+    return type_from_ctype(ctype, type_pool).make_pointer(), None
 
 
 def get_field(
@@ -671,15 +671,15 @@ def get_field(
     the field's array size (or None if the field is not an array)."""
     if target_size is None and offset == 0:
         # We might as well take a pointer to the whole struct
-        target = type.get_pointer_target() or Type.any()
+        target = type.get_pointer_target() or type.pool.any()
         return None, target, type, False
 
     deref_type = type.get_pointer_target()
     if deref_type is None:
-        return None, Type.any(), Type.ptr(), False
+        return None, type.pool.any(), type.pool.ptr(), False
     ctype_and_typemap = deref_type.get_ctype_and_typemap()
     if ctype_and_typemap is None:
-        return None, Type.any(), Type.ptr(), False
+        return None, type.pool.any(), type.pool.ptr(), False
     ctype, typemap = ctype_and_typemap
     ctype = resolve_typedefs(ctype, typemap)
 
@@ -713,10 +713,10 @@ def get_field(
                         field = fields[ind]
                 return (
                     field.name,
-                    type_from_ctype(field.type, typemap),
-                    *ptr_type_from_ctype(field.type, typemap),
+                    type_from_ctype(field.type, type.pool),
+                    *ptr_type_from_ctype(field.type, type.pool),
                 )
-    return None, Type.any(), Type.ptr(), False
+    return None, type.pool.any(), type.pool.ptr(), False
 
 
 def find_substruct_array(
@@ -750,5 +750,5 @@ def find_substruct_array(
                 continue
             size = var_size_align(field_type.type, typemap)[0]
             if size == scale:
-                return field.name, off, type_from_ctype(field_type.type, typemap)
+                return field.name, off, type_from_ctype(field_type.type, type.pool)
     return None

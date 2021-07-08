@@ -584,7 +584,7 @@ def build_conditional_subgraph(
 
 def join_conditions(left: Condition, op: str, right: Condition) -> Condition:
     assert op in ["&&", "||"]
-    return BinaryOp(left, op, right, type=Type.bool())
+    return BinaryOp(left, op, right, type=left.type.pool.bool())
 
 
 def emit_return(context: Context, node: ReturnNode, body: Body) -> None:

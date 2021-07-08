@@ -35,6 +35,7 @@ from .types import (
     FunctionParam,
     FunctionSignature,
     Type,
+    TypePool,
     find_substruct_array,
     get_field,
     ptr_type_from_ctype,
@@ -162,47 +163,47 @@ def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
 
 
 def as_f32(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.f32(), True)
+    return as_type(expr, expr.type.pool.f32(), True)
 
 
 def as_f64(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.f64(), True)
+    return as_type(expr, expr.type.pool.f64(), True)
 
 
 def as_s32(expr: "Expression", *, silent: bool = False) -> "Expression":
-    return as_type(expr, Type.s32(), silent)
+    return as_type(expr, expr.type.pool.s32(), silent)
 
 
 def as_u32(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.u32(), False)
+    return as_type(expr, expr.type.pool.u32(), False)
 
 
 def as_s64(expr: "Expression", *, silent: bool = False) -> "Expression":
-    return as_type(expr, Type.s64(), silent)
+    return as_type(expr, expr.type.pool.s64(), silent)
 
 
 def as_u64(expr: "Expression", *, silent: bool = False) -> "Expression":
-    return as_type(expr, Type.u64(), silent)
+    return as_type(expr, expr.type.pool.u64(), silent)
 
 
 def as_intish(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.intish(), True)
+    return as_type(expr, expr.type.pool.intish(), True)
 
 
 def as_int64(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.int64(), True)
+    return as_type(expr, expr.type.pool.int64(), True)
 
 
 def as_intptr(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.intptr(), True)
+    return as_type(expr, expr.type.pool.intptr(), True)
 
 
 def as_ptr(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.ptr(), True)
+    return as_type(expr, expr.type.pool.ptr(), True)
 
 
 def as_function_ptr(expr: "Expression") -> "Expression":
-    return as_type(expr, Type.ptr(Type.function()), True)
+    return as_type(expr, expr.type.pool.ptr(expr.type.pool.function()), True)
 
 
 @dataclass
@@ -271,16 +272,17 @@ class StackInfo:
 
     def get_argument(self, location: int) -> Tuple["Expression", "PassedInArg"]:
         real_location = location & -4
+        type_pool = self.global_info.type_pool
         arg = PassedInArg(
             real_location,
             copied=True,
             stack_info=self,
-            type=self.unique_type_for("arg", real_location, Type.any_reg()),
+            type=self.unique_type_for("arg", real_location, type_pool.any_reg()),
         )
         if real_location == location - 3:
-            return as_type(arg, Type.int_of_size(8), True), arg
+            return as_type(arg, type_pool.int_of_size(8), True), arg
         if real_location == location - 2:
-            return as_type(arg, Type.int_of_size(16), True), arg
+            return as_type(arg, type_pool.int_of_size(16), True), arg
         return arg, arg
 
     def record_struct_access(self, ptr: "Expression", location: int) -> None:
@@ -297,8 +299,9 @@ class StackInfo:
         return self.unique_type_map[key]
 
     def saved_reg_symbol(self, reg_name: str) -> "GlobalSymbol":
+        type_pool = self.global_info.type_pool
         sym_name = "saved_reg_" + reg_name
-        type = self.unique_type_for("saved_reg", sym_name, Type.any_reg())
+        type = self.unique_type_for("saved_reg", sym_name, type_pool.any_reg())
         return GlobalSymbol(symbol_name=sym_name, type=type)
 
     def should_save(self, expr: "Expression", offset: Optional[int]) -> bool:
@@ -314,28 +317,31 @@ class StackInfo:
 
     def get_stack_var(self, location: int, *, store: bool) -> "Expression":
         # See `get_stack_info` for explanation
+        type_pool = self.global_info.type_pool
         if self.location_above_stack(location):
             ret, arg = self.get_argument(location - self.allocated_stack_size)
             if not store:
                 self.add_argument(arg)
             return ret
         elif self.in_subroutine_arg_region(location):
-            return SubroutineArg(location, type=Type.any_reg())
+            return SubroutineArg(location, type=type_pool.any_reg())
         elif self.in_callee_save_reg_region(location):
             # Some annoying bookkeeping instruction. To avoid
             # further special-casing, just return whatever - it won't matter.
-            return LocalVar(location, type=Type.any_reg())
+            return LocalVar(location, type=type_pool.any_reg())
         else:
             # Local variable
             return LocalVar(
-                location, type=self.unique_type_for("stack", location, Type.any_reg())
+                location,
+                type=self.unique_type_for("stack", location, type_pool.any_reg()),
             )
 
     def maybe_get_register_var(self, reg: Register) -> Optional["RegisterVar"]:
         return self.reg_vars.get(reg)
 
     def add_register_var(self, reg: Register) -> None:
-        type = Type.floatish() if reg.is_float() else Type.intptr()
+        type_pool = self.global_info.type_pool
+        type = type_pool.floatish() if reg.is_float() else type_pool.intptr()
         self.reg_vars[reg] = RegisterVar(reg=reg, type=type)
 
     def use_register_var(self, var: "RegisterVar") -> None:
@@ -606,8 +612,8 @@ class Statement(abc.ABC):
 
 @dataclass(frozen=True, eq=False)
 class ErrorExpr(Condition):
-    desc: Optional[str] = None
-    type: Type = field(default_factory=Type.any_reg)
+    desc: Optional[str]
+    type: Type  # XXX = field(default_factory=Type.any_reg)
 
     def dependencies(self) -> List[Expression]:
         return []
@@ -623,7 +629,7 @@ class ErrorExpr(Condition):
 
 @dataclass(frozen=True, eq=False)
 class SecondF64Half(Expression):
-    type: Type = field(default_factory=Type.any_reg)
+    type: Type  # XXX = field(default_factory=Type.any_reg)
 
     def dependencies(self) -> List[Expression]:
         return []
@@ -642,25 +648,37 @@ class BinaryOp(Condition):
     @staticmethod
     def int(left: Expression, op: str, right: Expression) -> "BinaryOp":
         return BinaryOp(
-            left=as_intish(left), op=op, right=as_intish(right), type=Type.intish()
+            left=as_intish(left),
+            op=op,
+            right=as_intish(right),
+            type=left.type.pool.intish(),
         )
 
     @staticmethod
     def int64(left: Expression, op: str, right: Expression) -> "BinaryOp":
         return BinaryOp(
-            left=as_int64(left), op=op, right=as_int64(right), type=Type.int64()
+            left=as_int64(left),
+            op=op,
+            right=as_int64(right),
+            type=left.type.pool.int64(),
         )
 
     @staticmethod
     def intptr(left: Expression, op: str, right: Expression) -> "BinaryOp":
         return BinaryOp(
-            left=as_intptr(left), op=op, right=as_intptr(right), type=Type.intptr()
+            left=as_intptr(left),
+            op=op,
+            right=as_intptr(right),
+            type=left.type.pool.intptr(),
         )
 
     @staticmethod
     def icmp(left: Expression, op: str, right: Expression) -> "BinaryOp":
         return BinaryOp(
-            left=as_intptr(left), op=op, right=as_intptr(right), type=Type.bool()
+            left=as_intptr(left),
+            op=op,
+            right=as_intptr(right),
+            type=left.type.pool.bool(),
         )
 
     @staticmethod
@@ -669,12 +687,14 @@ class BinaryOp(Condition):
             left=as_s32(left, silent=True),
             op=op,
             right=as_s32(right, silent=True),
-            type=Type.bool(),
+            type=left.type.pool.bool(),
         )
 
     @staticmethod
     def ucmp(left: Expression, op: str, right: Expression) -> "BinaryOp":
-        return BinaryOp(left=as_u32(left), op=op, right=as_u32(right), type=Type.bool())
+        return BinaryOp(
+            left=as_u32(left), op=op, right=as_u32(right), type=left.type.pool.bool()
+        )
 
     @staticmethod
     def fcmp(left: Expression, op: str, right: Expression) -> "BinaryOp":
@@ -682,7 +702,7 @@ class BinaryOp(Condition):
             left=as_f32(left),
             op=op,
             right=as_f32(right),
-            type=Type.bool(),
+            type=left.type.pool.bool(),
         )
 
     @staticmethod
@@ -691,24 +711,32 @@ class BinaryOp(Condition):
             left=as_f64(left),
             op=op,
             right=as_f64(right),
-            type=Type.bool(),
+            type=left.type.pool.bool(),
         )
 
     @staticmethod
     def s32(left: Expression, op: str, right: Expression) -> "BinaryOp":
-        return BinaryOp(left=as_s32(left), op=op, right=as_s32(right), type=Type.s32())
+        return BinaryOp(
+            left=as_s32(left), op=op, right=as_s32(right), type=left.type.pool.s32()
+        )
 
     @staticmethod
     def u32(left: Expression, op: str, right: Expression) -> "BinaryOp":
-        return BinaryOp(left=as_u32(left), op=op, right=as_u32(right), type=Type.u32())
+        return BinaryOp(
+            left=as_u32(left), op=op, right=as_u32(right), type=left.type.pool.u32()
+        )
 
     @staticmethod
     def s64(left: Expression, op: str, right: Expression) -> "BinaryOp":
-        return BinaryOp(left=as_s64(left), op=op, right=as_s64(right), type=Type.s64())
+        return BinaryOp(
+            left=as_s64(left), op=op, right=as_s64(right), type=left.type.pool.s64()
+        )
 
     @staticmethod
     def u64(left: Expression, op: str, right: Expression) -> "BinaryOp":
-        return BinaryOp(left=as_u64(left), op=op, right=as_u64(right), type=Type.u64())
+        return BinaryOp(
+            left=as_u64(left), op=op, right=as_u64(right), type=left.type.pool.u64()
+        )
 
     @staticmethod
     def f32(left: Expression, op: str, right: Expression) -> "BinaryOp":
@@ -716,7 +744,7 @@ class BinaryOp(Condition):
             left=as_f32(left),
             op=op,
             right=as_f32(right),
-            type=Type.f32(),
+            type=left.type.pool.f32(),
         )
 
     @staticmethod
@@ -725,7 +753,7 @@ class BinaryOp(Condition):
             left=as_f64(left),
             op=op,
             right=as_f64(right),
-            type=Type.f64(),
+            type=left.type.pool.f64(),
         )
 
     def is_comparison(self) -> bool:
@@ -745,21 +773,21 @@ class BinaryOp(Condition):
                 left=self.left.negated(),
                 op={"&&": "||", "||": "&&"}[self.op],
                 right=self.right.negated(),
-                type=Type.bool(),
+                type=self.type.pool.bool(),
             )
         if not self.is_comparison() or (
             self.is_floating() and self.op in ["<", ">", "<=", ">="]
         ):
             # Floating-point comparisons cannot be negated in any nice way,
             # due to nans.
-            return UnaryOp("!", self, type=Type.bool())
+            return UnaryOp("!", self, type=self.type.pool.bool())
         return BinaryOp(
             left=self.left,
             op={"==": "!=", "!=": "==", ">": "<=", "<": ">=", ">=": "<", "<=": ">"}[
                 self.op
             ],
             right=self.right,
-            type=Type.bool(),
+            type=self.type.pool.bool(),
         )
 
     def dependencies(self) -> List[Expression]:
@@ -789,7 +817,7 @@ class BinaryOp(Condition):
                 return sub.format(fmt)
             if self.op in ("&", "|"):
                 neg = Literal(value=~self.right.value, type=self.right.type)
-                right = UnaryOp("~", neg, type=Type.any_reg())
+                right = UnaryOp("~", neg, type=self.type.pool.any_reg())
                 expr = BinaryOp(op=self.op, left=self.left, right=right, type=self.type)
                 return expr.format(fmt)
 
@@ -818,7 +846,7 @@ class UnaryOp(Condition):
     def negated(self) -> "Condition":
         if self.op == "!" and isinstance(self.expr, (UnaryOp, BinaryOp)):
             return self.expr
-        return UnaryOp("!", self, type=Type.bool())
+        return UnaryOp("!", self, type=self.type.pool.bool())
 
     def format(self, fmt: Formatter) -> str:
         return f"{self.op}{self.expr.format(fmt)}"
@@ -845,7 +873,10 @@ class ExprCondition(Condition):
 class CommaConditionExpr(Condition):
     statements: List["Statement"]
     condition: "Condition"
-    type: Type = Type.bool()
+    type: Type = field(init=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "type", self.condition.type.pool.bool())
 
     def dependencies(self) -> List[Expression]:
         assert False, "CommaConditionExpr should not be used within translate.py"
@@ -1057,7 +1088,7 @@ class StructAccess(Expression):
             offset_str = (
                 f"0x{format_hex(self.offset)}" if self.offset > 0 else f"{self.offset}"
             )
-            return f"MIPS2C_FIELD({var.format(fmt)}, {Type.ptr(self.type).format(fmt)}, {offset_str})"
+            return f"MIPS2C_FIELD({var.format(fmt)}, {self.type.make_pointer().format(fmt)}, {offset_str})"
         else:
             field_name = "unk" + format_hex(self.offset)
 
@@ -1147,7 +1178,7 @@ class GlobalSymbol(Expression):
 @dataclass(frozen=True, eq=True)
 class Literal(Expression):
     value: int
-    type: Type = field(compare=False, default_factory=Type.any)
+    type: Type = field(compare=False)  # XXX , default_factory=Type.any)
 
     def dependencies(self) -> List[Expression]:
         return []
@@ -1179,7 +1210,7 @@ class Literal(Expression):
 @dataclass(frozen=True, eq=True)
 class AddressOf(Expression):
     expr: Expression
-    type: Type = field(compare=False, default_factory=Type.ptr)
+    type: Type = field(compare=False)
 
     def dependencies(self) -> List[Expression]:
         return [self.expr]
@@ -1202,7 +1233,10 @@ class AddressOf(Expression):
 class Lwl(Expression):
     load_expr: Expression
     key: Tuple[int, object]
-    type: Type = field(compare=False, default_factory=Type.any_reg)
+    type: Type = field(compare=False, init=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "type", self.load_expr.type.pool.any_reg())
 
     def dependencies(self) -> List[Expression]:
         return [self.load_expr]
@@ -1214,7 +1248,10 @@ class Lwl(Expression):
 @dataclass(frozen=True)
 class Load3Bytes(Expression):
     load_expr: Expression
-    type: Type = field(compare=False, default_factory=Type.any_reg)
+    type: Type = field(compare=False, init=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "type", self.load_expr.type.pool.any_reg())
 
     def dependencies(self) -> List[Expression]:
         return [self.load_expr]
@@ -1228,7 +1265,10 @@ class Load3Bytes(Expression):
 @dataclass(frozen=True)
 class UnalignedLoad(Expression):
     load_expr: Expression
-    type: Type = field(compare=False, default_factory=Type.any_reg)
+    type: Type = field(compare=False, init=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "type", self.load_expr.type.pool.any_reg())
 
     def dependencies(self) -> List[Expression]:
         return [self.load_expr]
@@ -1468,11 +1508,14 @@ class RegInfo:
     stack_info: StackInfo = field(repr=False)
 
     def __getitem__(self, key: Register) -> Expression:
+        type_pool = self.stack_info.global_info.type_pool
         if key == Register("zero"):
-            return Literal(0)
+            return Literal(0, type=type_pool.any())
         ret = self.get_raw(key)
         if ret is None:
-            return ErrorExpr(f"Read from unset register {key}")
+            return ErrorExpr(
+                f"Read from unset register {key}", type=type_pool.any_reg()
+            )
         if isinstance(ret, PassedInArg) and not ret.copied:
             # Create a new argument object to better distinguish arguments we
             # are called with from arguments passed to subroutines. Also, unify
@@ -1547,6 +1590,9 @@ class InstrArgs:
     regs: RegInfo = field(repr=False)
     stack_info: StackInfo = field(repr=False)
 
+    def type_pool(self) -> TypePool:
+        return self.stack_info.global_info.type_pool
+
     def raw_arg(self, index: int) -> Argument:
         assert index >= 0
         if index >= len(self.raw_args):
@@ -1591,7 +1637,7 @@ class InstrArgs:
                 "which may be lifted in the future."
             )
         value = ret.value | (other.value << 32)
-        return Literal(value, type=Type.f64())
+        return Literal(value, type=self.type_pool().f64())
 
     def full_imm(self, index: int) -> Expression:
         arg = strip_macros(self.raw_arg(index))
@@ -1601,13 +1647,15 @@ class InstrArgs:
     def imm(self, index: int) -> Expression:
         ret = self.full_imm(index)
         if isinstance(ret, Literal):
-            return Literal(((ret.value + 0x8000) & 0xFFFF) - 0x8000)
+            return Literal(
+                ((ret.value + 0x8000) & 0xFFFF) - 0x8000, type=self.type_pool().any()
+            )
         return ret
 
     def unsigned_imm(self, index: int) -> Expression:
         ret = self.full_imm(index)
         if isinstance(ret, Literal):
-            return Literal(ret.value & 0xFFFF)
+            return Literal(ret.value & 0xFFFF, type=self.type_pool().any())
         return ret
 
     def hi_imm(self, index: int) -> Argument:
@@ -1686,10 +1734,11 @@ def deref(
                 var = base
                 break
 
-    var.type.unify(Type.ptr())
+    type_pool = stack_info.global_info.type_pool
+    var.type.unify(type_pool.ptr())
     stack_info.record_struct_access(var, offset)
     field_name: Optional[str] = None
-    type: Type = stack_info.unique_type_for("struct", (uw_var, offset), Type.any())
+    type: Type = stack_info.unique_type_for("struct", (uw_var, offset), type_pool.any())
 
     # Struct access with type information.
     array_expr = array_access_from_add(
@@ -1711,7 +1760,7 @@ def deref(
             # is *known* to be an array (CType). This could be expanded to support
             # arrays of other types.
             if offset != 0 and target.is_ctype():
-                index = Literal(value=offset // size, type=Type.s32())
+                index = Literal(value=offset // size, type=type_pool.s32())
                 return ArrayAccess(var, index, type=target)
             else:
                 # Don't emit an array access, but at least help type inference along
@@ -1800,7 +1849,11 @@ def simplify_condition(expr: Expression) -> Expression:
     if isinstance(expr, BinaryOp):
         left = simplify_condition(expr.left)
         right = simplify_condition(expr.right)
-        if isinstance(left, BinaryOp) and left.is_comparison() and right == Literal(0):
+        if (
+            isinstance(left, BinaryOp)
+            and left.is_comparison()
+            and right == Literal(0, type=expr.type.pool.any())
+        ):
             if expr.op == "==":
                 return simplify_condition(left.negated())
             if expr.op == "!=":
@@ -1864,7 +1917,7 @@ def elide_casts_for_store(expr: Expression) -> Expression:
         return elide_casts_for_store(uw_expr.expr)
     if isinstance(uw_expr, Literal) and uw_expr.type.is_int():
         # Avoid suffixes for unsigned ints
-        return Literal(uw_expr.value, type=Type.intish())
+        return Literal(uw_expr.value, type=expr.type.pool.intish())
     return uw_expr
 
 
@@ -1931,7 +1984,7 @@ def literal_expr(arg: Argument, stack_info: StackInfo) -> Expression:
     if isinstance(arg, AsmGlobalSymbol):
         return stack_info.global_info.address_of_gsym(arg.symbol_name)
     if isinstance(arg, AsmLiteral):
-        return Literal(arg.value)
+        return Literal(arg.value, type=stack_info.global_info.type_pool.any())
     if isinstance(arg, BinOp):
         lhs = literal_expr(arg.lhs, stack_info)
         rhs = literal_expr(arg.rhs, stack_info)
@@ -1941,9 +1994,9 @@ def literal_expr(arg: Argument, stack_info: StackInfo) -> Expression:
 
 def imm_add_32(expr: Expression) -> Expression:
     if isinstance(expr, Literal):
-        return as_intish(Literal(expr.value + 32))
+        return Literal(expr.value + 32, expr.type.pool.intish())
     else:
-        return BinaryOp.int(expr, "+", Literal(32))
+        return BinaryOp.int(expr, "+", Literal(32, expr.type.pool.any()))
 
 
 def fn_op(fn_name: str, args: List[Expression], type: Type) -> FuncCall:
@@ -1954,14 +2007,14 @@ def fn_op(fn_name: str, args: List[Expression], type: Type) -> FuncCall:
         is_variadic=False,
     )
     return FuncCall(
-        function=GlobalSymbol(symbol_name=fn_name, type=Type.function(fn_sig)),
+        function=GlobalSymbol(symbol_name=fn_name, type=type.pool.function(fn_sig)),
         args=args,
         type=type,
     )
 
 
-def void_fn_op(fn_name: str, args: List[Expression]) -> FuncCall:
-    return fn_op(fn_name, args, Type.any_reg())
+def void_fn_op(fn_name: str, args: List[Expression], type_pool: TypePool) -> FuncCall:
+    return fn_op(fn_name, args, type_pool.any_reg())
 
 
 def load_upper(args: InstrArgs) -> Expression:
@@ -1989,7 +2042,7 @@ def load_upper(args: InstrArgs) -> Expression:
 
     stack_info = args.stack_info
     source = stack_info.global_info.address_of_gsym(sym.symbol_name)
-    imm = Literal(offset)
+    imm = Literal(offset, args.type_pool().any())
     return handle_addi_real(args.reg_ref(0), None, source, imm, stack_info)
 
 
@@ -2012,14 +2065,14 @@ def handle_la(args: InstrArgs) -> Expression:
             )
         )
     var = stack_info.global_info.address_of_gsym(target.sym.symbol_name)
-    return add_imm(var, Literal(target.offset), stack_info)
+    return add_imm(var, Literal(target.offset, args.type_pool().any()), stack_info)
 
 
 def handle_ori(args: InstrArgs) -> Expression:
     imm = args.unsigned_imm(2)
     r = args.reg(1)
     if isinstance(r, Literal) and isinstance(imm, Literal):
-        return Literal(value=(r.value | imm.value))
+        return Literal(value=(r.value | imm.value), type=args.type_pool().any())
     # Regular bitwise OR.
     return BinaryOp.int(left=r, op="|", right=imm)
 
@@ -2032,7 +2085,7 @@ def handle_sltu(args: InstrArgs) -> Expression:
         if isinstance(uw_right, BinaryOp) and uw_right.op == "^":
             # ((a ^ b) != 0) is equivalent to (a != b)
             return BinaryOp.icmp(uw_right.left, "!=", uw_right.right)
-        return BinaryOp.icmp(right, "!=", Literal(0))
+        return BinaryOp.icmp(right, "!=", Literal(0, args.type_pool().any()))
     else:
         left = args.reg(1)
         return BinaryOp.ucmp(left, "<", right)
@@ -2049,9 +2102,9 @@ def handle_sltiu(args: InstrArgs) -> Expression:
             if isinstance(uw_left, BinaryOp) and uw_left.op == "^":
                 # ((a ^ b) == 0) is equivalent to (a == b)
                 return BinaryOp.icmp(uw_left.left, "==", uw_left.right)
-            return BinaryOp.icmp(left, "==", Literal(0))
+            return BinaryOp.icmp(left, "==", Literal(0, args.type_pool().any()))
         else:
-            right = Literal(value)
+            right = Literal(value, args.type_pool().any())
     return BinaryOp.ucmp(left, "<", right)
 
 
@@ -2080,13 +2133,13 @@ def handle_addi_real(
         var = stack_info.get_stack_var(imm.value, store=False)
         if isinstance(var, LocalVar):
             stack_info.add_local_var(var)
-        return AddressOf(var, type=Type.ptr(var.type))
+        return AddressOf(var, type=var.type.make_pointer())
     else:
         return add_imm(source, imm, stack_info)
 
 
 def add_imm(source: Expression, imm: Expression, stack_info: StackInfo) -> Expression:
-    if imm == Literal(0):
+    if imm == Literal(0, type=source.type.pool.any()):
         # addiu $reg1, $reg2, 0 is a move
         # (this happens when replacing %lo(...) by 0)
         return source
@@ -2135,9 +2188,11 @@ def add_imm(source: Expression, imm: Expression, stack_info: StackInfo) -> Expre
                     return BinaryOp(
                         left=source, op="+", right=as_intish(imm), type=source.type
                     )
-        return BinaryOp(left=source, op="+", right=as_intish(imm), type=Type.ptr())
+        return BinaryOp(
+            left=source, op="+", right=as_intish(imm), type=source.type.pool.ptr()
+        )
     elif isinstance(source, Literal) and isinstance(imm, Literal):
-        return Literal(source.value + imm.value)
+        return Literal(source.value + imm.value, type=source.type.pool.any())
     else:
         # Regular binary addition.
         return BinaryOp.intptr(left=source, op="+", right=imm)
@@ -2220,7 +2275,10 @@ def handle_lwr(args: InstrArgs, old_value: Expression) -> Expression:
         left_mem_ref = replace(ref, offset=ref.offset - 2)
         load_expr = deref_unaligned(left_mem_ref, args.regs, args.stack_info)
         return Load3Bytes(load_expr)
-    return ErrorExpr("Unable to handle lwr; missing a corresponding lwl")
+    return ErrorExpr(
+        "Unable to handle lwr; missing a corresponding lwl",
+        type=args.type_pool().any_reg(),
+    )
 
 
 def make_store(args: InstrArgs, type: Type) -> Optional[StoreStmt]:
@@ -2277,14 +2335,18 @@ def handle_sra(args: InstrArgs) -> Expression:
         expr = early_unwrap(lhs)
         pow2 = 1 << shift.value
         if isinstance(expr, BinaryOp) and isinstance(expr.right, Literal):
-            tp = Type.s16() if shift.value == 16 else Type.s8()
+            tp = expr.type.pool.s16() if shift.value == 16 else expr.type.pool.s8()
             rhs = expr.right.value
             if expr.op == "<<" and rhs == shift.value:
                 return as_type(expr.left, tp, silent=False)
             elif expr.op == "*" and rhs % pow2 == 0 and rhs != pow2:
-                mul = BinaryOp.int(expr.left, "*", Literal(value=rhs // pow2))
+                mul = BinaryOp.int(
+                    expr.left,
+                    "*",
+                    Literal(value=rhs // pow2, type=args.type_pool().any()),
+                )
                 return as_type(mul, tp, silent=False)
-    return BinaryOp(as_s32(lhs), ">>", as_intish(shift), type=Type.s32())
+    return BinaryOp(as_s32(lhs), ">>", as_intish(shift), type=lhs.type.pool.s32())
 
 
 def format_f32_imm(num: int) -> str:
@@ -2392,7 +2454,7 @@ def fold_mul_chains(expr: Expression) -> Expression:
     base, num = fold(expr, True, True)
     if num == 1:
         return expr
-    return BinaryOp.int(left=base, op="*", right=Literal(num))
+    return BinaryOp.int(left=base, op="*", right=Literal(num, base.type.pool.any()))
 
 
 def array_access_from_add(
@@ -2451,7 +2513,7 @@ def array_access_from_add(
             target_size=None,
             field_name=sub_field_name,
             stack_info=stack_info,
-            type=Type.ptr(elem_type),
+            type=elem_type.make_pointer(),
         )
         offset -= sub_offset
         target_type = elem_type
@@ -2463,7 +2525,7 @@ def array_access_from_add(
     )
     if offset != 0 or (target_size is not None and target_size != scale):
         ret = StructAccess(
-            struct_var=AddressOf(ret, type=Type.ptr()),
+            struct_var=AddressOf(ret, type=ret.type.pool.ptr()),
             offset=offset,
             target_size=target_size,
             field_name=field_name,
@@ -2480,11 +2542,12 @@ def handle_add(args: InstrArgs) -> Expression:
     lhs = args.reg(1)
     rhs = args.reg(2)
     stack_info = args.stack_info
-    type = Type.intptr()
+    type_pool = lhs.type.pool
+    type = type_pool.intptr()
     if lhs.type.is_pointer():
-        type = Type.ptr()
+        type = type_pool.ptr()
     elif rhs.type.is_pointer():
-        type = Type.ptr()
+        type = type_pool.ptr()
 
     # addiu instructions can sometimes be emitted as addu instead, when the
     # offset is too large.
@@ -2505,14 +2568,14 @@ def handle_add(args: InstrArgs) -> Expression:
 
 def handle_add_float(args: InstrArgs) -> Expression:
     if args.reg_ref(1) == args.reg_ref(2):
-        two = Literal(1 << 30, type=Type.f32())
+        two = Literal(1 << 30, type=args.type_pool().f32())
         return BinaryOp.f32(two, "*", args.reg(1))
     return BinaryOp.f32(args.reg(1), "+", args.reg(2))
 
 
 def handle_add_double(args: InstrArgs) -> Expression:
     if args.reg_ref(1) == args.reg_ref(2):
-        two = Literal(1 << 62, type=Type.f64())
+        two = Literal(1 << 62, type=args.type_pool().f64())
         return BinaryOp.f64(two, "*", args.dreg(1))
     return BinaryOp.f64(args.dreg(1), "+", args.dreg(2))
 
@@ -2526,9 +2589,11 @@ def handle_bgez(args: InstrArgs) -> Condition:
         and isinstance(uw_expr.right, Literal)
     ):
         shift = uw_expr.right.value
-        bitand = BinaryOp.int(uw_expr.left, "&", Literal(1 << (31 - shift)))
-        return UnaryOp("!", bitand, type=Type.bool())
-    return BinaryOp.scmp(expr, ">=", Literal(0))
+        bitand = BinaryOp.int(
+            uw_expr.left, "&", Literal(1 << (31 - shift), type=args.type_pool().any())
+        )
+        return UnaryOp("!", bitand, type=args.type_pool().bool())
+    return BinaryOp.scmp(expr, ">=", Literal(0, type=args.type_pool().any()))
 
 
 def strip_macros(arg: Argument) -> Argument:
@@ -2571,6 +2636,7 @@ def function_abi(
     if not fn_sig.params_known:
         return [], [Register(r) for r in ["f12", "f13", "f14", "a0", "a1", "a2", "a3"]]
 
+    type_pool = fn_sig.return_type.pool
     offset = 0
     only_floats = True
     slots: List[AbiStackSlot] = []
@@ -2583,7 +2649,7 @@ def function_abi(
                 offset=0,
                 reg=Register("a0"),
                 name="__return__",
-                type=Type.ptr(fn_sig.return_type),
+                type=fn_sig.return_type.make_pointer(),
             )
         )
         offset = 4
@@ -2607,7 +2673,10 @@ def function_abi(
                 reg2 = Register("f13" if ind == 0 else "f15")
                 slots.append(
                     AbiStackSlot(
-                        offset=offset + 4, reg=reg2, name=name2, type=Type.any_reg()
+                        offset=offset + 4,
+                        reg=reg2,
+                        name=name2,
+                        type=type_pool.any_reg(),
                     )
                 )
         else:
@@ -2645,26 +2714,36 @@ CASES_IGNORE: InstrSet = {
 }
 CASES_STORE: StoreInstrMap = {
     # Storage instructions
-    "sb": lambda a: make_store(a, type=Type.int_of_size(8)),
-    "sh": lambda a: make_store(a, type=Type.int_of_size(16)),
-    "sw": lambda a: make_store(a, type=Type.reg32(likely_float=False)),
-    "sd": lambda a: make_store(a, type=Type.reg64(likely_float=False)),
+    "sb": lambda a: make_store(a, type=a.type_pool().int_of_size(8)),
+    "sh": lambda a: make_store(a, type=a.type_pool().int_of_size(16)),
+    "sw": lambda a: make_store(a, type=a.type_pool().reg32(likely_float=False)),
+    "sd": lambda a: make_store(a, type=a.type_pool().reg64(likely_float=False)),
     # Unaligned stores
     "swl": lambda a: handle_swl(a),
     "swr": lambda a: handle_swr(a),
     # Floating point storage/conversion
-    "swc1": lambda a: make_store(a, type=Type.reg32(likely_float=True)),
-    "sdc1": lambda a: make_store(a, type=Type.reg64(likely_float=True)),
+    "swc1": lambda a: make_store(a, type=a.type_pool().reg32(likely_float=True)),
+    "sdc1": lambda a: make_store(a, type=a.type_pool().reg64(likely_float=True)),
 }
 CASES_BRANCHES: CmpInstrMap = {
     # Branch instructions/pseudoinstructions
     "beq": lambda a: BinaryOp.icmp(a.reg(0), "==", a.reg(1)),
     "bne": lambda a: BinaryOp.icmp(a.reg(0), "!=", a.reg(1)),
-    "beqz": lambda a: BinaryOp.icmp(a.reg(0), "==", Literal(0)),
-    "bnez": lambda a: BinaryOp.icmp(a.reg(0), "!=", Literal(0)),
-    "blez": lambda a: BinaryOp.scmp(a.reg(0), "<=", Literal(0)),
-    "bgtz": lambda a: BinaryOp.scmp(a.reg(0), ">", Literal(0)),
-    "bltz": lambda a: BinaryOp.scmp(a.reg(0), "<", Literal(0)),
+    "beqz": lambda a: BinaryOp.icmp(
+        a.reg(0), "==", Literal(0, type=a.type_pool().any())
+    ),
+    "bnez": lambda a: BinaryOp.icmp(
+        a.reg(0), "!=", Literal(0, type=a.type_pool().any())
+    ),
+    "blez": lambda a: BinaryOp.scmp(
+        a.reg(0), "<=", Literal(0, type=a.type_pool().any())
+    ),
+    "bgtz": lambda a: BinaryOp.scmp(
+        a.reg(0), ">", Literal(0, type=a.type_pool().any())
+    ),
+    "bltz": lambda a: BinaryOp.scmp(
+        a.reg(0), "<", Literal(0, type=a.type_pool().any())
+    ),
     "bgez": lambda a: handle_bgez(a),
 }
 CASES_FLOAT_BRANCHES: InstrSet = {
@@ -2685,43 +2764,69 @@ CASES_NO_DEST: InstrMap = {
     # Conditional traps (happen with Pascal code sometimes, might as well give a nicer
     # output than MIPS2C_ERROR(...))
     "teq": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.icmp(a.reg(0), "==", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.icmp(a.reg(0), "==", a.reg(1))],
+        a.type_pool(),
     ),
     "tne": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.icmp(a.reg(0), "!=", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.icmp(a.reg(0), "!=", a.reg(1))],
+        a.type_pool(),
     ),
     "tlt": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.scmp(a.reg(0), "<", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.scmp(a.reg(0), "<", a.reg(1))],
+        a.type_pool(),
     ),
     "tltu": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.ucmp(a.reg(0), "<", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.ucmp(a.reg(0), "<", a.reg(1))],
+        a.type_pool(),
     ),
     "tge": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.scmp(a.reg(0), ">=", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.scmp(a.reg(0), ">=", a.reg(1))],
+        a.type_pool(),
     ),
     "tgeu": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.ucmp(a.reg(0), ">=", a.reg(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.ucmp(a.reg(0), ">=", a.reg(1))],
+        a.type_pool(),
     ),
     "teqi": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.icmp(a.reg(0), "==", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.icmp(a.reg(0), "==", a.imm(1))],
+        a.type_pool(),
     ),
     "tnei": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.icmp(a.reg(0), "!=", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.icmp(a.reg(0), "!=", a.imm(1))],
+        a.type_pool(),
     ),
     "tlti": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.scmp(a.reg(0), "<", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.scmp(a.reg(0), "<", a.imm(1))],
+        a.type_pool(),
     ),
     "tltiu": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.ucmp(a.reg(0), "<", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.ucmp(a.reg(0), "<", a.imm(1))],
+        a.type_pool(),
     ),
     "tgei": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.scmp(a.reg(0), ">=", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.scmp(a.reg(0), ">=", a.imm(1))],
+        a.type_pool(),
     ),
     "tgeiu": lambda a: void_fn_op(
-        "MIPS2C_TRAP_IF", [BinaryOp.ucmp(a.reg(0), ">=", a.imm(1))]
+        "MIPS2C_TRAP_IF",
+        [BinaryOp.ucmp(a.reg(0), ">=", a.imm(1))],
+        a.type_pool(),
     ),
-    "break": lambda a: void_fn_op("MIPS2C_BREAK", [a.imm(0)] if a.count() >= 1 else []),
-    "sync": lambda a: void_fn_op("MIPS2C_SYNC", []),
+    "break": lambda a: void_fn_op(
+        "MIPS2C_BREAK", [a.imm(0)] if a.count() >= 1 else [], a.type_pool()
+    ),
+    "sync": lambda a: void_fn_op("MIPS2C_SYNC", [], a.type_pool()),
 }
 CASES_FLOAT_COMP: CmpInstrMap = {
     # Float comparisons that don't raise exception on nan
@@ -2790,19 +2895,19 @@ CASES_HI_LO: PairInstrMap = {
     # GCC uses the high part of multiplication to optimize division/modulo
     # by constant. Output some nonsense to avoid an error.
     "mult": lambda a: (
-        fn_op("MULT_HI", [a.reg(0), a.reg(1)], Type.s32()),
+        fn_op("MULT_HI", [a.reg(0), a.reg(1)], a.type_pool().s32()),
         BinaryOp.int(a.reg(0), "*", a.reg(1)),
     ),
     "multu": lambda a: (
-        fn_op("MULTU_HI", [a.reg(0), a.reg(1)], Type.u32()),
+        fn_op("MULTU_HI", [a.reg(0), a.reg(1)], a.type_pool().u32()),
         BinaryOp.int(a.reg(0), "*", a.reg(1)),
     ),
     "dmult": lambda a: (
-        fn_op("DMULT_HI", [a.reg(0), a.reg(1)], Type.s64()),
+        fn_op("DMULT_HI", [a.reg(0), a.reg(1)], a.type_pool().s64()),
         BinaryOp.int64(a.reg(0), "*", a.reg(1)),
     ),
     "dmultu": lambda a: (
-        fn_op("DMULTU_HI", [a.reg(0), a.reg(1)], Type.u64()),
+        fn_op("DMULTU_HI", [a.reg(0), a.reg(1)], a.type_pool().u64()),
         BinaryOp.int64(a.reg(0), "*", a.reg(1)),
     ),
 }
@@ -2822,10 +2927,10 @@ CASES_DESTINATION_FIRST: InstrMap = {
     "addu": lambda a: handle_add(a),
     "subu": lambda a: fold_mul_chains(BinaryOp.intptr(a.reg(1), "-", a.reg(2))),
     "negu": lambda a: fold_mul_chains(
-        UnaryOp(op="-", expr=as_s32(a.reg(1)), type=Type.s32())
+        UnaryOp(op="-", expr=as_s32(a.reg(1)), type=a.type_pool().s32())
     ),
     "neg": lambda a: fold_mul_chains(
-        UnaryOp(op="-", expr=as_s32(a.reg(1)), type=Type.s32())
+        UnaryOp(op="-", expr=as_s32(a.reg(1)), type=a.type_pool().s32())
     ),
     "div.fictive": lambda a: BinaryOp.s32(a.reg(1), "/", a.full_imm(2)),
     "mod.fictive": lambda a: BinaryOp.s32(a.reg(1), "%", a.full_imm(2)),
@@ -2835,10 +2940,10 @@ CASES_DESTINATION_FIRST: InstrMap = {
     "daddu": lambda a: handle_add(a),
     "dsubu": lambda a: fold_mul_chains(BinaryOp.intptr(a.reg(1), "-", a.reg(2))),
     "dnegu": lambda a: fold_mul_chains(
-        UnaryOp(op="-", expr=as_s64(a.reg(1)), type=Type.s64())
+        UnaryOp(op="-", expr=as_s64(a.reg(1)), type=a.type_pool().s64())
     ),
     "dneg": lambda a: fold_mul_chains(
-        UnaryOp(op="-", expr=as_s64(a.reg(1)), type=Type.s64())
+        UnaryOp(op="-", expr=as_s64(a.reg(1)), type=a.type_pool().s64())
     ),
     # Hi/lo register uses (used after division/multiplication)
     "mfhi": lambda a: a.regs[Register("hi")],
@@ -2846,38 +2951,62 @@ CASES_DESTINATION_FIRST: InstrMap = {
     # Floating point arithmetic
     "add.s": lambda a: handle_add_float(a),
     "sub.s": lambda a: BinaryOp.f32(a.reg(1), "-", a.reg(2)),
-    "neg.s": lambda a: UnaryOp("-", as_f32(a.reg(1)), type=Type.f32()),
-    "abs.s": lambda a: fn_op("fabsf", [as_f32(a.reg(1))], Type.f32()),
-    "sqrt.s": lambda a: fn_op("sqrtf", [as_f32(a.reg(1))], Type.f32()),
+    "neg.s": lambda a: UnaryOp("-", as_f32(a.reg(1)), type=a.type_pool().f32()),
+    "abs.s": lambda a: fn_op("fabsf", [as_f32(a.reg(1))], a.type_pool().f32()),
+    "sqrt.s": lambda a: fn_op("sqrtf", [as_f32(a.reg(1))], a.type_pool().f32()),
     "div.s": lambda a: BinaryOp.f32(a.reg(1), "/", a.reg(2)),
     "mul.s": lambda a: BinaryOp.f32(a.reg(1), "*", a.reg(2)),
     # Double-precision arithmetic
     "add.d": lambda a: handle_add_double(a),
     "sub.d": lambda a: BinaryOp.f64(a.dreg(1), "-", a.dreg(2)),
-    "neg.d": lambda a: UnaryOp("-", as_f64(a.dreg(1)), type=Type.f64()),
-    "abs.d": lambda a: fn_op("fabs", [as_f64(a.dreg(1))], Type.f64()),
-    "sqrt.d": lambda a: fn_op("sqrt", [as_f64(a.dreg(1))], Type.f64()),
+    "neg.d": lambda a: UnaryOp("-", as_f64(a.dreg(1)), type=a.type_pool().f64()),
+    "abs.d": lambda a: fn_op("fabs", [as_f64(a.dreg(1))], a.type_pool().f64()),
+    "sqrt.d": lambda a: fn_op("sqrt", [as_f64(a.dreg(1))], a.type_pool().f64()),
     "div.d": lambda a: BinaryOp.f64(a.dreg(1), "/", a.dreg(2)),
     "mul.d": lambda a: BinaryOp.f64(a.dreg(1), "*", a.dreg(2)),
     # Floating point conversions
-    "cvt.d.s": lambda a: handle_convert(a.reg(1), Type.f64(), Type.f32()),
-    "cvt.d.w": lambda a: handle_convert(a.reg(1), Type.f64(), Type.intish()),
-    "cvt.s.d": lambda a: handle_convert(a.dreg(1), Type.f32(), Type.f64()),
-    "cvt.s.w": lambda a: handle_convert(a.reg(1), Type.f32(), Type.intish()),
-    "cvt.w.d": lambda a: handle_convert(a.dreg(1), Type.s32(), Type.f64()),
-    "cvt.w.s": lambda a: handle_convert(a.reg(1), Type.s32(), Type.f32()),
-    "cvt.s.u.fictive": lambda a: handle_convert(a.reg(1), Type.f32(), Type.u32()),
-    "cvt.u.d.fictive": lambda a: handle_convert(a.dreg(1), Type.u32(), Type.f64()),
-    "cvt.u.s.fictive": lambda a: handle_convert(a.reg(1), Type.u32(), Type.f32()),
-    "trunc.w.s": lambda a: handle_convert(a.reg(1), Type.s32(), Type.f32()),
-    "trunc.w.d": lambda a: handle_convert(a.dreg(1), Type.s32(), Type.f64()),
+    "cvt.d.s": lambda a: handle_convert(
+        a.reg(1), a.type_pool().f64(), a.type_pool().f32()
+    ),
+    "cvt.d.w": lambda a: handle_convert(
+        a.reg(1), a.type_pool().f64(), a.type_pool().intish()
+    ),
+    "cvt.s.d": lambda a: handle_convert(
+        a.dreg(1), a.type_pool().f32(), a.type_pool().f64()
+    ),
+    "cvt.s.w": lambda a: handle_convert(
+        a.reg(1), a.type_pool().f32(), a.type_pool().intish()
+    ),
+    "cvt.w.d": lambda a: handle_convert(
+        a.dreg(1), a.type_pool().s32(), a.type_pool().f64()
+    ),
+    "cvt.w.s": lambda a: handle_convert(
+        a.reg(1), a.type_pool().s32(), a.type_pool().f32()
+    ),
+    "cvt.s.u.fictive": lambda a: handle_convert(
+        a.reg(1), a.type_pool().f32(), a.type_pool().u32()
+    ),
+    "cvt.u.d.fictive": lambda a: handle_convert(
+        a.dreg(1), a.type_pool().u32(), a.type_pool().f64()
+    ),
+    "cvt.u.s.fictive": lambda a: handle_convert(
+        a.reg(1), a.type_pool().u32(), a.type_pool().f32()
+    ),
+    "trunc.w.s": lambda a: handle_convert(
+        a.reg(1), a.type_pool().s32(), a.type_pool().f32()
+    ),
+    "trunc.w.d": lambda a: handle_convert(
+        a.dreg(1), a.type_pool().s32(), a.type_pool().f64()
+    ),
     # Bit arithmetic
     "ori": lambda a: handle_ori(a),
     "and": lambda a: BinaryOp.int(left=a.reg(1), op="&", right=a.reg(2)),
     "or": lambda a: BinaryOp.int(left=a.reg(1), op="|", right=a.reg(2)),
-    "not": lambda a: UnaryOp("~", a.reg(1), type=Type.intish()),
+    "not": lambda a: UnaryOp("~", a.reg(1), type=a.type_pool().intish()),
     "nor": lambda a: UnaryOp(
-        "~", BinaryOp.int(left=a.reg(1), op="|", right=a.reg(2)), type=Type.intish()
+        "~",
+        BinaryOp.int(left=a.reg(1), op="|", right=a.reg(2)),
+        type=a.type_pool().intish(),
     ),
     "xor": lambda a: BinaryOp.int(left=a.reg(1), op="^", right=a.reg(2)),
     "andi": lambda a: BinaryOp.int(left=a.reg(1), op="&", right=a.unsigned_imm(2)),
@@ -2888,14 +3017,23 @@ CASES_DESTINATION_FIRST: InstrMap = {
     ),
     "sllv": lambda a: BinaryOp.int(left=a.reg(1), op="<<", right=as_intish(a.reg(2))),
     "srl": lambda a: BinaryOp(
-        left=as_u32(a.reg(1)), op=">>", right=as_intish(a.imm(2)), type=Type.u32()
+        left=as_u32(a.reg(1)),
+        op=">>",
+        right=as_intish(a.imm(2)),
+        type=a.type_pool().u32(),
     ),
     "srlv": lambda a: BinaryOp(
-        left=as_u32(a.reg(1)), op=">>", right=as_intish(a.reg(2)), type=Type.u32()
+        left=as_u32(a.reg(1)),
+        op=">>",
+        right=as_intish(a.reg(2)),
+        type=a.type_pool().u32(),
     ),
     "sra": lambda a: handle_sra(a),
     "srav": lambda a: BinaryOp(
-        left=as_s32(a.reg(1)), op=">>", right=as_intish(a.reg(2)), type=Type.s32()
+        left=as_s32(a.reg(1)),
+        op=">>",
+        right=as_intish(a.reg(2)),
+        type=a.type_pool().s32(),
     ),
     # 64-bit shifts
     "dsll": lambda a: fold_mul_chains(
@@ -2908,22 +3046,40 @@ CASES_DESTINATION_FIRST: InstrMap = {
         left=a.reg(1), op="<<", right=as_intish(a.reg(2))
     ),
     "dsrl": lambda a: BinaryOp(
-        left=as_u64(a.reg(1)), op=">>", right=as_intish(a.imm(2)), type=Type.u64()
+        left=as_u64(a.reg(1)),
+        op=">>",
+        right=as_intish(a.imm(2)),
+        type=a.type_pool().u64(),
     ),
     "dsrl32": lambda a: BinaryOp(
-        left=as_u64(a.reg(1)), op=">>", right=imm_add_32(a.imm(2)), type=Type.u64()
+        left=as_u64(a.reg(1)),
+        op=">>",
+        right=imm_add_32(a.imm(2)),
+        type=a.type_pool().u64(),
     ),
     "dsrlv": lambda a: BinaryOp(
-        left=as_u64(a.reg(1)), op=">>", right=as_intish(a.reg(2)), type=Type.u64()
+        left=as_u64(a.reg(1)),
+        op=">>",
+        right=as_intish(a.reg(2)),
+        type=a.type_pool().u64(),
     ),
     "dsra": lambda a: BinaryOp(
-        left=as_s64(a.reg(1)), op=">>", right=as_intish(a.imm(2)), type=Type.s64()
+        left=as_s64(a.reg(1)),
+        op=">>",
+        right=as_intish(a.imm(2)),
+        type=a.type_pool().s64(),
     ),
     "dsra32": lambda a: BinaryOp(
-        left=as_s64(a.reg(1)), op=">>", right=imm_add_32(a.imm(2)), type=Type.s64()
+        left=as_s64(a.reg(1)),
+        op=">>",
+        right=imm_add_32(a.imm(2)),
+        type=a.type_pool().s64(),
     ),
     "dsrav": lambda a: BinaryOp(
-        left=as_s64(a.reg(1)), op=">>", right=as_intish(a.reg(2)), type=Type.s64()
+        left=as_s64(a.reg(1)),
+        op=">>",
+        right=as_intish(a.reg(2)),
+        type=a.type_pool().s64(),
     ),
     # Move pseudoinstruction
     "move": lambda a: a.reg(1),
@@ -2932,20 +3088,20 @@ CASES_DESTINATION_FIRST: InstrMap = {
     "mov.s": lambda a: a.reg(1),
     "mov.d": lambda a: as_f64(a.dreg(1)),
     # FCSR get
-    "cfc1": lambda a: ErrorExpr("cfc1"),
+    "cfc1": lambda a: ErrorExpr("cfc1", a.type_pool().any_reg()),
     # Immediates
     "li": lambda a: a.full_imm(1),
     "lui": lambda a: load_upper(a),
     "la": lambda a: handle_la(a),
     # Loading instructions
-    "lb": lambda a: handle_load(a, type=Type.s8()),
-    "lbu": lambda a: handle_load(a, type=Type.u8()),
-    "lh": lambda a: handle_load(a, type=Type.s16()),
-    "lhu": lambda a: handle_load(a, type=Type.u16()),
-    "lw": lambda a: handle_load(a, type=Type.reg32(likely_float=False)),
-    "lwu": lambda a: handle_load(a, type=Type.u32()),
-    "lwc1": lambda a: handle_load(a, type=Type.reg32(likely_float=True)),
-    "ldc1": lambda a: handle_load(a, type=Type.reg64(likely_float=True)),
+    "lb": lambda a: handle_load(a, type=a.type_pool().s8()),
+    "lbu": lambda a: handle_load(a, type=a.type_pool().u8()),
+    "lh": lambda a: handle_load(a, type=a.type_pool().s16()),
+    "lhu": lambda a: handle_load(a, type=a.type_pool().u16()),
+    "lw": lambda a: handle_load(a, type=a.type_pool().reg32(likely_float=False)),
+    "lwu": lambda a: handle_load(a, type=a.type_pool().u32()),
+    "lwc1": lambda a: handle_load(a, type=a.type_pool().reg32(likely_float=True)),
+    "ldc1": lambda a: handle_load(a, type=a.type_pool().reg64(likely_float=True)),
     # Unaligned load for the left part of a register (lwl can technically merge
     # with a pre-existing lwr, but doesn't in practice, so we treat this as a
     # standard destination-first operation)
@@ -3142,6 +3298,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
     switch_value: Optional[Expression] = None
     has_custom_return: bool = False
     has_function_call: bool = False
+    type_pool = stack_info.global_info.type_pool
 
     def eval_once(
         expr: Expression,
@@ -3485,7 +3642,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
 
             if not fn_sig.params_known:
                 while len(func_args) > len(fn_sig.params):
-                    fn_sig.params.append(FunctionParam())
+                    fn_sig.params.append(FunctionParam(type=type_pool.any()))
             for i, (arg_expr, param) in enumerate(zip(func_args, fn_sig.params)):
                 func_args[i] = as_type(arg_expr, param.type, True)
 
@@ -3517,22 +3674,35 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             if not fn_sig.return_type.is_void():
                 regs[Register("f0")] = eval_once(
                     Cast(
-                        expr=call, reinterpret=True, silent=True, type=Type.floatish()
+                        expr=call,
+                        reinterpret=True,
+                        silent=True,
+                        type=type_pool.floatish(),
                     ),
                     emit_exactly_once=False,
                     trivial=False,
                     prefix="f0",
                 )
-                regs[Register("f1")] = SecondF64Half()
+                regs[Register("f1")] = SecondF64Half(type_pool.any_reg())
                 regs[Register("v0")] = eval_once(
-                    Cast(expr=call, reinterpret=True, silent=True, type=Type.intptr()),
+                    Cast(
+                        expr=call,
+                        reinterpret=True,
+                        silent=True,
+                        type=type_pool.intptr(),
+                    ),
                     emit_exactly_once=False,
                     trivial=False,
                     prefix="v0",
                 )
                 regs[Register("v1")] = eval_once(
                     as_u32(
-                        Cast(expr=call, reinterpret=True, silent=False, type=Type.u64())
+                        Cast(
+                            expr=call,
+                            reinterpret=True,
+                            silent=False,
+                            type=type_pool.u64(),
+                        )
                     ),
                     emit_exactly_once=False,
                     trivial=False,
@@ -3573,7 +3743,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 set_reg(target, val)
             mn_parts = mnemonic.split(".")
             if (len(mn_parts) >= 2 and mn_parts[1] == "d") or mnemonic == "ldc1":
-                set_reg(target.other_f64_reg(), SecondF64Half())
+                set_reg(target.other_f64_reg(), SecondF64Half(type_pool.any_reg()))
 
         elif mnemonic in CASES_LWR:
             assert mnemonic == "lwr"
@@ -3583,7 +3753,9 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             set_reg(target, val)
 
         else:
-            expr = ErrorExpr(f"unknown instruction: {instr}")
+            expr = ErrorExpr(
+                f"unknown instruction: {instr}", type=args.type_pool().any_reg()
+            )
             if args.count() >= 1 and isinstance(args.raw_arg(0), Register):
                 reg = args.reg_ref(0)
                 expr = eval_once(
@@ -3632,6 +3804,7 @@ def translate_graph_from_block(
     its appropriate BlockInfo (which contains the AST of its code).
     """
 
+    type_pool = stack_info.global_info.type_pool
     if options.debug:
         print(f"\nNode in question: {node}")
 
@@ -3669,7 +3842,7 @@ def translate_graph_from_block(
             error_stmts,
             None,
             None,
-            ErrorExpr(),
+            ErrorExpr(None, type=type_pool.any_reg()),
             regs,
             has_custom_return=False,
             has_function_call=False,
@@ -3694,7 +3867,10 @@ def translate_graph_from_block(
                     new_contents[reg] = var
                 else:
                     new_contents[reg] = PhiExpr(
-                        reg=reg, node=child, used_phis=used_phis, type=Type.any_reg()
+                        reg=reg,
+                        node=child,
+                        used_phis=used_phis,
+                        type=type_pool.any_reg(),
                     )
             elif reg in new_contents:
                 del new_contents[reg]
@@ -3716,7 +3892,7 @@ def resolve_types_late(stack_info: StackInfo) -> None:
             # Try to unify it with the appropriate pointer type,
             # to fill in the type if it does not already have one
             type = offset_type_map[0]
-            var.type.unify(Type.ptr(type))
+            var.type.unify(type.make_pointer())
 
 
 @dataclass
@@ -3724,6 +3900,7 @@ class GlobalInfo:
     asm_data: AsmData
     local_functions: Set[str]
     typemap: Optional[TypeMap]
+    type_pool: TypePool
     global_symbol_map: Dict[str, GlobalSymbol] = field(default_factory=dict)
 
     def asm_data_value(self, sym_name: str) -> Optional[AsmDataEntry]:
@@ -3735,15 +3912,15 @@ class GlobalInfo:
         else:
             sym = self.global_symbol_map[sym_name] = GlobalSymbol(
                 symbol_name=sym_name,
-                type=Type.any(),
+                type=self.type_pool.any(),
                 asm_data_entry=self.asm_data_value(sym_name),
             )
 
-        type = Type.ptr(sym.type)
+        type = sym.type.make_pointer()
         if self.typemap:
             ctype = self.typemap.var_types.get(sym_name)
             if ctype:
-                ctype_type, dim = ptr_type_from_ctype(ctype, self.typemap)
+                ctype_type, dim = ptr_type_from_ctype(ctype, self.type_pool)
                 sym.array_dim = dim
                 sym.type_in_typemap = True
                 type.unify(ctype_type)
@@ -3813,7 +3990,7 @@ class GlobalInfo:
 
                 value = read_uint(size)
                 if value is not None:
-                    expr = as_type(Literal(value), type, True)
+                    expr = as_type(Literal(value, type=type), type, True)
                     return elide_casts_for_store(expr).format(fmt)
 
             # Type kinds K_FN and K_VOID do not have initializers
@@ -3984,9 +4161,10 @@ def translate_to_ast(
     flow_graph: FlowGraph = build_flowgraph(function, global_info.asm_data)
     stack_info = get_stack_info(function, global_info, flow_graph)
     typemap = global_info.typemap
+    type_pool = global_info.type_pool
 
     initial_regs: Dict[Register, Expression] = {
-        Register("sp"): GlobalSymbol("sp", type=Type.ptr()),
+        Register("sp"): GlobalSymbol("sp", type=type_pool.ptr()),
         **{reg: stack_info.saved_reg_symbol(reg.register_name) for reg in SAVED_REGS},
     }
 
@@ -3995,14 +4173,14 @@ def translate_to_ast(
         return PassedInArg(offset, copied=False, stack_info=stack_info, type=type)
 
     if typemap and function.name in typemap.functions:
-        fn_type = type_from_ctype(typemap.functions[function.name].type, typemap)
+        fn_type = type_from_ctype(typemap.functions[function.name].type, type_pool)
         fn_decl_provided = True
     else:
-        fn_type = Type.function()
+        fn_type = type_pool.function()
         fn_decl_provided = False
     fn_type.unify(global_info.address_of_gsym(function.name).expr.type)
 
-    fn_sig = Type.ptr(fn_type).get_function_pointer_signature()
+    fn_sig = fn_type.make_pointer().get_function_pointer_signature()
     assert fn_sig is not None, "fn_type is known to be a function"
     return_type = fn_sig.return_type
     stack_info.is_variadic = fn_sig.is_variadic
@@ -4015,16 +4193,16 @@ def translate_to_ast(
                 initial_regs[slot.reg] = make_arg(slot.offset, slot.type)
         for reg in possible_regs:
             offset = 4 * int(reg.register_name[1])
-            initial_regs[reg] = make_arg(offset, Type.any_reg())
+            initial_regs[reg] = make_arg(offset, type_pool.any_reg())
     else:
         initial_regs.update(
             {
-                Register("a0"): make_arg(0, Type.intptr()),
-                Register("a1"): make_arg(4, Type.any_reg()),
-                Register("a2"): make_arg(8, Type.any_reg()),
-                Register("a3"): make_arg(12, Type.any_reg()),
-                Register("f12"): make_arg(0, Type.floatish()),
-                Register("f14"): make_arg(4, Type.floatish()),
+                Register("a0"): make_arg(0, type_pool.intptr()),
+                Register("a1"): make_arg(4, type_pool.any_reg()),
+                Register("a2"): make_arg(8, type_pool.any_reg()),
+                Register("a3"): make_arg(12, type_pool.any_reg()),
+                Register("f12"): make_arg(0, type_pool.floatish()),
+                Register("f14"): make_arg(4, type_pool.floatish()),
             }
         )
 
@@ -4080,11 +4258,11 @@ def translate_to_ast(
     else:
         for b in return_blocks:
             b.return_value = None
-        return_type.unify(Type.void())
+        return_type.unify(type_pool.void())
 
     if not fn_sig.params_known:
         while len(fn_sig.params) < len(stack_info.arguments):
-            fn_sig.params.append(FunctionParam())
+            fn_sig.params.append(FunctionParam(type=type_pool.any()))
         for param, arg in zip(fn_sig.params, stack_info.arguments):
             param.type.unify(arg.type)
             if not param.name:
