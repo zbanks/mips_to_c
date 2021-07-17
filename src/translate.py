@@ -3169,12 +3169,19 @@ def assign_phis(used_phis: List[PhiExpr], stack_info: StackInfo) -> None:
         assert phi.num_usages > 0
         assert len(phi.node.parents) >= 2
         exprs = []
+        equivalent_nodes: Dict[Expression, Tuple[Expression, List[Node]]] = {}
         for node in phi.node.parents:
             block_info = get_block_info(node)
-            exprs.append(block_info.final_register_states[phi.reg])
+            expr = block_info.final_register_states.get_raw(phi.reg)
+            assert expr is not None
+            exprs.append(expr)
+            uw_expr = early_unwrap(expr)
+            if uw_expr not in equivalent_nodes:
+                equivalent_nodes[uw_expr] = (expr, [])
+            equivalent_nodes[uw_expr][1].append(node)
 
-        first_uw = early_unwrap(exprs[0])
-        if all(early_unwrap(e) == first_uw for e in exprs[1:]):
+        assert equivalent_nodes
+        if len(equivalent_nodes) == 1:
             # All the phis have the same value (e.g. because we recomputed an
             # expression after a store, or restored a register after a function
             # call). Just use that value instead of introducing a phi node.
@@ -3184,23 +3191,59 @@ def assign_phis(used_phis: List[PhiExpr], stack_info: StackInfo) -> None:
             # eager unwrapping, and/or to emit an EvalOnceExpr at this point
             # (though it's too late for it to be able to participate in the
             # prevent_later_uses machinery).
+            first_uw = list(equivalent_nodes.keys())[0]
             phi.replacement_expr = as_type(first_uw, phi.type, silent=True)
             for e in exprs:
                 e.type.unify(phi.type)
             for _ in range(phi.num_usages):
                 first_uw.use()
         else:
-            for node in phi.node.parents:
-                block_info = get_block_info(node)
-                expr = block_info.final_register_states[phi.reg]
-                if isinstance(expr, PhiExpr):
-                    # Explicitly mark how the expression is used if it's a phi,
-                    # so we can propagate phi sets (to get rid of temporaries).
-                    expr.use(from_phi=phi)
-                else:
-                    expr.use()
-                typed_expr = as_type(expr, phi.type, silent=True)
-                block_info.to_write.append(SetPhiStmt(phi, typed_expr))
+
+            def phi_frontier(nodes: List[Node], uw_expr: Expression) -> List[Node]:
+                for node in nodes:
+                    if node.loop:
+                        if all(node in n.dominators for n in nodes):
+                            return [node]
+                        print(
+                            f"{node!r} is a loop but doesn't dom {nodes} {[node in n.dominators for n in nodes]}"
+                        )
+                        return nodes
+                codominators = sorted(
+                    set.intersection(*(n.dominators for n in nodes)),
+                    key=lambda n: len(n.dominators),
+                )
+                loop_codominators = [n for n in codominators if n.loop]
+                if loop_codominators:
+                    codominators = [
+                        n for n in codominators if loop_codominators[-1] in n.dominators
+                    ]
+                for dom in codominators:
+                    final_register_states = get_block_info(dom).final_register_states
+                    raw = final_register_states.get_raw(phi.reg)
+                    if raw is None:
+                        continue
+                    if early_unwrap(raw) == uw_expr:
+                        return [dom]
+                print(
+                    f"> unable to find codom for setting over {nodes} ({codominators})"
+                )
+                return nodes
+
+            for uw_expr, (_expr, nodes) in equivalent_nodes.items():
+                nodes_to_set = phi_frontier(nodes, uw_expr)
+                for node in nodes_to_set:
+                    block_info = get_block_info(node)
+                    expr = block_info.final_register_states.get_raw(phi.reg)
+                    assert expr is not None
+                    assert early_unwrap(expr) == uw_expr
+                    if isinstance(expr, PhiExpr):
+                        # Explicitly mark how the expression is used if it's a phi,
+                        # so we can propagate phi sets (to get rid of temporaries).
+                        expr.use(from_phi=phi)
+                    else:
+                        expr.use()
+                    typed_expr = as_type(expr, phi.type, silent=True)
+                    block_info.to_write.append(SetPhiStmt(phi, typed_expr))
         i += 1
 
     name_counter: Dict[Register, int] = {}
