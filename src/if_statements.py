@@ -962,8 +962,12 @@ def get_function_text(function_info: FunctionInfo, options: Options) -> str:
 
     fn_name = function_info.stack_info.function.name
     arg_strs = []
-    for arg in function_info.stack_info.arguments:
-        arg_strs.append(arg.type.to_decl(arg.format(fmt), fmt))
+    for i, arg in enumerate(function_info.stack_info.arguments):
+        if i == 0 and function_info.stack_info.replace_first_arg is not None:
+            arg_name, arg_type = function_info.stack_info.replace_first_arg
+            arg_strs.append(arg_type.to_decl(arg_name, fmt))
+        else:
+            arg_strs.append(arg.type.to_decl(arg.format(fmt), fmt))
     if function_info.stack_info.is_variadic:
         arg_strs.append("...")
     arg_str = ", ".join(arg_strs) or "void"
@@ -980,6 +984,14 @@ def get_function_text(function_info: FunctionInfo, options: Options) -> str:
     any_decl = False
 
     with fmt.indented():
+        if function_info.stack_info.replace_first_arg is not None:
+            assert len(function_info.stack_info.arguments) >= 1
+            old_name, old_type = function_info.stack_info.replace_first_arg
+            replaced_arg = function_info.stack_info.arguments[0]
+            lhs = replaced_arg.type.to_decl(replaced_arg.format(fmt), fmt)
+            rhs = f"({old_type.format(fmt)}) {old_name}"
+            function_lines.append(SimpleStatement(f"{lhs} = {rhs};").format(fmt))
+
         for local_var in function_info.stack_info.local_vars[::-1]:
             type_decl = local_var.toplevel_decl(fmt)
             if type_decl is not None:

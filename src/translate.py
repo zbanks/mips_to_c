@@ -237,6 +237,7 @@ class StackInfo:
     nonzero_accesses: Set["Expression"] = field(default_factory=set)
     param_names: Dict[int, str] = field(default_factory=dict)
     stack_pointer_type: Optional[Type] = None
+    replace_first_arg: Optional[Tuple[str, Type]] = None
 
     def temp_var(self, prefix: str) -> str:
         counter = self.temp_name_counter.get(prefix, 0) + 1
@@ -257,6 +258,26 @@ class StackInfo:
         return location >= self.allocated_stack_size
 
     def add_known_param(self, offset: int, name: Optional[str], type: Type) -> None:
+        if offset == 0 and type.is_pointer() and self.replace_first_arg is None:
+            type_target = type.get_pointer_target()
+            namespace = self.function.name.partition("_")[0]
+            self_struct = self.global_info.typepool.get_struct_by_tag_name(namespace, self.global_info.typemap)
+            print(f"> looking up {namespace}: found {self_struct}")
+            if (
+                self_struct is not None
+                and self_struct.fields
+                and type_target is not None
+            ):
+                first_field = self_struct.fields[0]
+                if first_field.offset == 0 and first_field.type.unify(
+                    type_target
+                ):
+                    print(
+                        f"> found match: {self_struct.tag_name}.{first_field.name} == {name}"
+                    )
+                    self.replace_first_arg = (name or "_self", type)
+                    type = Type.ptr(Type.struct(self_struct))
+                    name = "this" if name == "thisx" else "self"
         if name:
             self.param_names[offset] = name
         _, arg = self.get_argument(offset)
