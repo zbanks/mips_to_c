@@ -1130,22 +1130,36 @@ class StructDeclaration:
 
     def format(self, fmt: Formatter) -> str:
         lines = []
+        def add_padding(start: int, end: int, last_field: Optional[self.StructField]) -> None:
+            size = end - start
+            if size <= 0:
+                return
+            comments = []
+
+            if last_field is not None:
+                last_size = last_field.type.get_size_bytes()
+                if last_size is not None and (size % last_size) == 0:
+                    comments.append(f"maybe part of {last_field.name}[{(size // last_size) + 1}]?")
+            lines.append(fmt.with_comments(f"/* 0x{start:04X} */ char pad{start:X}[0x{size:X}];", comments))
+
         with fmt.indented():
             position = 0
+            last_field = None
             for field in self.fields:
-                if position < field.offset:
-                    lines.append(fmt.indent(f"char pad{position:X}[0x{field.offset - position:X}];"))
+                add_padding(position, field.offset, last_field)
 
                 field_decl = f"{field.type.to_decl(field.name, fmt)};"
-                comments = [f"+0x{field.offset:X}"]
+                offset_comment = f"/* 0x{field.offset:04X} */ "
+                #comments = [f"+0x{field.offset:X}"]
+                comments = []
                 if position > field.offset:
                     comments.append("overlap")
                 if not field.known:
                     comments.append("inferred")
-                lines.append(fmt.with_comments(field_decl, comments))
+                lines.append(fmt.with_comments(offset_comment + field_decl, comments))
                 position = field.offset + (field.type.get_size_bytes() or 1)
-            if position < self.size:
-                lines.append(fmt.indent(f"char pad{position:X}[0x{self.size - position:X}];"))
+                last_field = field
+            add_padding(position, self.size, last_field)
 
         decl = f"struct {self.tag_name}" if self.tag_name else "struct"
         head = f"typedef {decl} {{" if self.typedef_name else f"{decl} {{"
