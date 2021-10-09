@@ -1,6 +1,7 @@
 extern s32 D_4100F0;
 
 
+
 ? test(void) {
     s32 temp_t6;
 
@@ -11,3 +12,4 @@ extern s32 D_4100F0;
     }
     return 6;
 }
+

@@ -1,4 +1,5 @@
 
+
 ? test(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 phi_t0;
     s32 phi_t0_2;
@@ -48,3 +49,4 @@ block_53:
     }
     return phi_v1;
 }
+

@@ -1,6 +1,7 @@
 extern ? D_410150;
 
 
+
 void test(s32 arg0) {
     s32 temp_v0;
     s32 phi_v0;
@@ -35,3 +36,4 @@ block_11:
     }
     D_410150.unk10 = 5;
 }
+

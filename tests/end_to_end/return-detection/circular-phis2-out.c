@@ -1,6 +1,7 @@
 ? bar();                                            /* extern */
 
 
+
 void test(void) {
     bar();
     do {
@@ -9,3 +10,4 @@ void test(void) {
         }
     } while ((1 < 1) < 0);
 }
+

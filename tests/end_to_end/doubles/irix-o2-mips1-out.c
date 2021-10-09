@@ -1,6 +1,7 @@
 extern f64 D_410150;
 
 
+
 f64 test(f64 arg0, s32 arg2, f64 arg4) {
     f64 temp_f0;
 
@@ -15,3 +16,4 @@ block_4:
     D_410150 = 0.0;
     return 0.0;
 }
+

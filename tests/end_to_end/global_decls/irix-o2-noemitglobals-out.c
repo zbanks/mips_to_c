@@ -1,4 +1,5 @@
 
+
 s32 test(void) {
     static_int *= 0x1C8;
     extern_float *= 456.0f;
@@ -7,3 +8,4 @@ s32 test(void) {
     *static_bss_array = *static_array + *static_ro_array;
     return static_int;
 }
+

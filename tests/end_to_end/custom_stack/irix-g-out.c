@@ -2,6 +2,7 @@
 s32 test(void *arg0);                               /* static */
 
 
+
 s32 test(void *arg0) {
     s8 sp2F;
     s8 sp2C;
@@ -29,3 +30,4 @@ s32 test(void *arg0) {
     }
     return sp2F + (s16) sp2C + (s32) sp28 + *(s32 *) sp24 + sp1C;
 }
+

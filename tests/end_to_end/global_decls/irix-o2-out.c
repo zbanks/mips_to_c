@@ -19,6 +19,7 @@ s32 static_int;
 s32 static_ro_array[3] = {7, 8, 9};                 /* const */
 
 
+
 s32 test(void) {
     static_int *= 0x1C8;
     extern_float *= 456.0f;
@@ -27,3 +28,4 @@ s32 test(void) {
     *static_bss_array = *static_array + *static_ro_array;
     return static_int;
 }
+

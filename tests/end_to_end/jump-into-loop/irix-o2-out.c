@@ -2,6 +2,7 @@
 s32 test(s32 arg0);                                 /* static */
 
 
+
 s32 test(s32 arg0) {
     s32 temp_t6;
     s32 phi_s0;
@@ -17,3 +18,4 @@ loop_2:
     }
     return temp_t6;
 }
+

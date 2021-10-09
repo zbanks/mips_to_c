@@ -1,6 +1,7 @@
 void *foo();                                        /* extern */
 
 
+
 void test(void) {
     void *sp10C;
     void *temp_ret;
@@ -12,3 +13,4 @@ void test(void) {
     temp_ret->unk3 = 0;
     temp_ret->unk4 = 0;
 }
+

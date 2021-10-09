@@ -167,24 +167,27 @@ def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
     if expr.type.unify(type):
         if silent or isinstance(expr, Literal):
             return expr
-    target_type = type.get_pointer_target()
-    if target_type is not None and target_type.get_size_bytes() is not None and expr.type.is_pointer():
-        size = target_type.get_size_bytes()
-        field_path, field_type, _ = expr.type.get_deref_field(
-            0, target_size=size
-        )
-        if field_path is not None and field_type.unify(target_type):
-            return AddressOf(
-                StructAccess(
-                    struct_var=expr,
-                    offset=0,
-                    target_size=size,
-                    field_path=field_path,
-                    stack_info=None,
-                    type=field_type,
-                ),
-                type=type,
+    else:
+        target_type = type.get_pointer_target()
+        if target_type is not None and target_type.get_size_bytes() is not None and expr.type.is_pointer():
+            size = target_type.get_size_bytes()
+            field_path, field_type, _ = expr.type.get_deref_field(
+                0, target_size=size
             )
+            if field_path is not None and field_type.unify(target_type):
+                expr = AddressOf(
+                    StructAccess(
+                        struct_var=expr,
+                        offset=0,
+                        target_size=size,
+                        field_path=field_path,
+                        stack_info=None,
+                        type=field_type,
+                    ),
+                    type=type,
+                )
+                if silent:
+                    return expr
     return Cast(expr=expr, reinterpret=True, silent=False, type=type)
 
 

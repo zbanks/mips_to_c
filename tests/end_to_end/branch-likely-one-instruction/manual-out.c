@@ -1,4 +1,5 @@
 
+
 s32 test(void) {
     s32 phi_a0;
 
@@ -8,3 +9,4 @@ s32 test(void) {
     }
     return phi_a0;
 }
+

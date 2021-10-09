@@ -1,4 +1,5 @@
 
+
 void test(s32 *arg0, s32 *arg1) {
     s32 temp_v1;
 
@@ -17,3 +18,4 @@ block_4:
     *arg1 -= temp_v1;
     return;
 }
+

@@ -2,6 +2,7 @@
 void test(? *arg0, ? *arg1);                        /* static */
 
 
+
 void test(? *arg0, ? *arg1) {
     ? *temp_a0;
     ? *temp_a1;
@@ -14,3 +15,4 @@ void test(? *arg0, ? *arg1) {
     arg0 = (? *) arg1;
     func_00400090((? *) arg1, arg1);
 }
+

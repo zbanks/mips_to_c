@@ -3,6 +3,7 @@ extern s32 D_410190;
 extern f32 D_410194;
 
 
+
 f32 test(f32 arg0, s32 arg1, f32 arg2, s32 arg3) {
     D_410190 = (s32) arg0;
     D_410194 = (f32) arg1;
@@ -12,3 +13,4 @@ f32 test(f32 arg0, s32 arg1, f32 arg2, s32 arg3) {
     arg2 = (f32) ((f64) arg2 + D_400180);
     return (f32) (arg3 + 3) + arg2;
 }
+

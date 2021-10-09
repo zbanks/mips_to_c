@@ -2,6 +2,7 @@ s32 func_004000D8(s32);                             /* static */
 void test(s32 arg0);                                /* static */
 
 
+
 void test(s32 arg0) {
 loop_1:
     if (arg0 >= 3) {
@@ -9,3 +10,4 @@ loop_1:
     }
     goto loop_1;
 }
+

@@ -1,4 +1,5 @@
 
+
 ? test(s32 arg0) {
     s32 temp_t1;
 
@@ -23,3 +24,4 @@
     *NULL = (s32) (MIPS2C_ERROR(Read from unset register $v1) + 2);
     return MIPS2C_ERROR(unknown instruction: badinstr3 $v0, $t2);
 }
+

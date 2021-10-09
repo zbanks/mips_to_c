@@ -2,6 +2,7 @@
 void test(s32 arg0);                                /* static */
 
 
+
 void test(s32 arg0) {
     if (arg0 == 7) {
         func_004000FC(1);
@@ -13,3 +14,4 @@ void test(s32 arg0) {
         func_004000FC(4);
     }
 }
+

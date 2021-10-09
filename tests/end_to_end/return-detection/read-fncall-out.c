@@ -1,6 +1,7 @@
 ? bar();                                            /* extern */
 
 
+
 void test(void) {
     // Flowgraph is not reducible, falling back to gotos-only mode.
     bar();
@@ -18,3 +19,4 @@ block_3:
     }
     return;
 }
+

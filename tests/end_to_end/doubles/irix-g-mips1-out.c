@@ -1,6 +1,7 @@
 extern f64 D_4101B0;
 
 
+
 f64 test(f64 arg0, s32 arg2, f64 arg4) {
     f64 sp8;
     f32 sp4;
@@ -17,3 +18,4 @@ f64 test(f64 arg0, s32 arg2, f64 arg4) {
     D_4101B0 = sp0;
     return sp0;
 }
+

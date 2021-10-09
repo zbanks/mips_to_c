@@ -1,6 +1,7 @@
 extern s32 D_410250;
 
 
+
 void test(s32 arg0) {
     D_410250 = arg0;
     D_410250 = arg0 * 2;
@@ -25,3 +26,4 @@ void test(s32 arg0) {
     D_410250 = arg0 * 0x15;
     D_410250 = arg0 * 0x16;
 }
+

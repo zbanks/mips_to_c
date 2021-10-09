@@ -3,6 +3,7 @@ extern f64 D_410258;
 extern u32 D_410260;
 
 
+
 void test(void) {
     f64 temp_f18;
     u32 temp_t0;
@@ -19,3 +20,4 @@ void test(void) {
     D_410258 = phi_f18;
     D_410250 = (f32) D_410260;
 }
+

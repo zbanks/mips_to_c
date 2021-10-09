@@ -1,4 +1,5 @@
 
+
 s32 test(s32 arg0) {
     s32 temp_a1;
     s32 temp_t1;
@@ -74,3 +75,4 @@ block_6:
     }
     return phi_v1;
 }
+

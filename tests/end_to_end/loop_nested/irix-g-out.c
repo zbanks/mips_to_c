@@ -1,4 +1,5 @@
 
+
 s32 test(s32 arg0) {
     s32 spC;
     s32 sp8;
@@ -20,3 +21,4 @@ s32 test(s32 arg0) {
     }
     return sp8;
 }
+

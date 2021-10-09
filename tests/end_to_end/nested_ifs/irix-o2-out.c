@@ -2,6 +2,7 @@
 void test(s32 arg0);                                /* static */
 
 
+
 void test(s32 arg0) {
     s32 temp_a1;
 
@@ -17,3 +18,4 @@ void test(s32 arg0) {
     }
     func_004000F0(4);
 }
+

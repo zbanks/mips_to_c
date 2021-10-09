@@ -9,6 +9,7 @@ extern ? D_410190;
 extern s32 D_410198;
 
 
+
 void test(void) {
     ? sp18;
 
@@ -20,3 +21,4 @@ void test(void) {
     D_410190.unk4 = (u8) D_410180.unk4;
     D_410198 = (unaligned s32) D_400178;
 }
+

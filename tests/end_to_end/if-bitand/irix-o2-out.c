@@ -1,6 +1,7 @@
 extern s32 D_410140;
 
 
+
 void test(void) {
     if ((D_410140 & 1) != 0) {
         D_410140 = 0;
@@ -21,3 +22,4 @@ void test(void) {
         D_410140 = 0;
     }
 }
+

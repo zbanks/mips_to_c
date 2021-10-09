@@ -3,6 +3,7 @@ u16 test();                                         /* static */
 extern s32 D_410150;
 
 
+
 u16 test(void) {
     u16 sp1E;
 
@@ -15,3 +16,4 @@ u16 test(void) {
     }
     return func_0040012C(3);
 }
+

@@ -1,4 +1,5 @@
 
+
 s16 test(struct SomeStruct *arg, u8 should, f64 union_arg, ? union_arg_unk4, ...) {
     f64 sp0;
     s8 temp_a1;
@@ -15,3 +16,4 @@ s16 test(struct SomeStruct *arg, u8 should, f64 union_arg, ? union_arg_unk4, ...
     }
     return arg->unk2;
 }
+

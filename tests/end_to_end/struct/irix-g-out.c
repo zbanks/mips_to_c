@@ -1,4 +1,5 @@
 
+
 Blah *test(Blah *b, Blah *b2) {
     s32 sp4;
 
@@ -8,3 +9,4 @@ Blah *test(Blah *b, Blah *b2) {
     b2->b = b->b;
     return b;
 }
+

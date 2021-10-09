@@ -1,4 +1,5 @@
 
+
 void test(f32 arg0) {
     f32 spC;
     f32 sp4;
@@ -9,3 +10,4 @@ void test(f32 arg0) {
     sp4 = spC;
     sp4 = (1.5f - (arg0 * 0.5f * spC * spC)) * spC;
 }
+

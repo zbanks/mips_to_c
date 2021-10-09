@@ -129,9 +129,14 @@ def run(options: Options) -> int:
             return_code = 1
         function_texts.append(text)
 
-    global_decls = global_info.global_decls(fmt)
-    if options.emit_globals and global_decls:
-        print(global_decls)
+    try:
+        global_decls = global_info.global_decls(fmt)
+        if options.emit_globals and global_decls:
+            print(global_decls)
+    except Exception as e:
+        print("failed to write global decls")
+        print_exception(sanitize=options.sanitize_tracebacks)
+
 
     print(global_info.typepool.inferred_type_declarations(fmt))
     print()

@@ -1,6 +1,7 @@
 extern s32 D_410150;
 
 
+
 s32 test(s32 arg0) {
     s32 phi_a0;
     s32 phi_a0_2;
@@ -31,3 +32,4 @@ s32 test(s32 arg0) {
         return 2;
     }
 }
+

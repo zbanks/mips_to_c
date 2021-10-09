@@ -5,6 +5,7 @@ extern s32 D_410170;
 extern ? D_410178;
 
 
+
 s32 test(s32 arg0, ? arg1) {
     s32 sp2C;
     s32 sp28;
@@ -26,3 +27,4 @@ s32 test(s32 arg0, ? arg1) {
     *(&D_410178 + arg0) = 5;
     return sp28;
 }
+

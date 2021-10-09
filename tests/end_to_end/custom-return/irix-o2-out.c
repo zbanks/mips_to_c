@@ -3,6 +3,7 @@ s32 test();                                         /* static */
 extern s32 D_410120;
 
 
+
 s32 test(void) {
     s32 temp_v0;
 
@@ -15,3 +16,4 @@ s32 test(void) {
     }
     return func_0040010C(3);
 }
+

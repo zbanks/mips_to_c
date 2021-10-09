@@ -1,6 +1,7 @@
 extern s32 D_410210;
 
 
+
 s32 test(s32 arg0) {
     s32 phi_a0;
     s32 phi_a0_2;
@@ -79,3 +80,4 @@ block_23:
         }
     }
 }
+

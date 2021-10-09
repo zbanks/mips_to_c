@@ -1,4 +1,5 @@
 
+
 f32 test(f32 arg0) {
     f32 spC;
     f32 sp8;
@@ -14,3 +15,4 @@ f32 test(f32 arg0) {
     sp4 *= sp0 - (sp8 * sp4 * sp4);
     return sp4;
 }
+

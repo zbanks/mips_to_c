@@ -1,6 +1,7 @@
 extern s32 D_4101D0;
 
 
+
 void test(s32 arg0) {
     switch (arg0) { // switch 1
     case 1: // switch 1
@@ -44,3 +45,4 @@ void test(s32 arg0) {
         return;
     }
 }
+

@@ -989,7 +989,7 @@ def get_function_text(function_info: FunctionInfo, options: Options) -> str:
             old_name, old_type = function_info.stack_info.replace_first_arg
             replaced_arg = function_info.stack_info.arguments[0]
             lhs = replaced_arg.type.to_decl(replaced_arg.format(fmt), fmt)
-            rhs = f"({old_type.format(fmt)}) {old_name}"
+            rhs = f"({replaced_arg.type.format(fmt)}) {old_name}"
             function_lines.append(SimpleStatement(f"{lhs} = {rhs};").format(fmt))
 
         for local_var in function_info.stack_info.local_vars[::-1]:

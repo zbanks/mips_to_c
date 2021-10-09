@@ -1,6 +1,7 @@
 extern f32 D_410120;
 
 
+
 void test(void) {
     s32 temp_cond;
     s32 temp_cond_2;
@@ -16,3 +17,4 @@ void test(void) {
         D_410120 = 7.0f;
     }
 }
+

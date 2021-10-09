@@ -1,4 +1,5 @@
 
+
 s32 test(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 temp_v0;
     s32 temp_v1;
@@ -90,3 +91,4 @@ loop_29:
     }
     return phi_v1;
 }
+

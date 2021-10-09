@@ -7,6 +7,7 @@ extern s32 D_41014C;
 extern ? D_410150;
 
 
+
 void test(void) {
     D_410150.unk0 = (s32) D_410140;
     D_410150.unk4 = (s32) D_410141;
@@ -15,3 +16,4 @@ void test(void) {
     D_410150.unk10 = (s32) D_410148;
     D_410150.unk14 = (s32) D_41014C;
 }
+

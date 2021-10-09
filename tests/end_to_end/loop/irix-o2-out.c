@@ -1,4 +1,5 @@
 
+
 void test(s8 *arg0, s32 arg1) {
     s32 temp_a3;
     s32 temp_v0;
@@ -43,3 +44,4 @@ block_5:
         }
     }
 }
+

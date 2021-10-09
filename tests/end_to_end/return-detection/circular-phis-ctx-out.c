@@ -1,6 +1,7 @@
 ? bar();                                            /* extern */
 
 
+
 s32 test(void) {
     s32 phi_v0;
 
@@ -14,3 +15,4 @@ s32 test(void) {
     } while ((phi_v0 > 1) < 0);
     return phi_v0;
 }
+

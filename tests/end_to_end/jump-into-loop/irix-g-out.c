@@ -2,6 +2,7 @@
 s32 test(s32 arg0);                                 /* static */
 
 
+
 s32 test(s32 arg0) {
 loop_3:
     func_0040010C(arg0);
@@ -13,3 +14,4 @@ loop_3:
     }
     return arg0;
 }
+

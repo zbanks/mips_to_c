@@ -4,6 +4,7 @@ void test();                                        /* static */
 extern s32 D_410100;
 
 
+
 void test(void) {
     s32 temp_v0;
 
@@ -11,3 +12,4 @@ void test(void) {
     D_410100 = 1;
     func_004000EC(temp_v0);
 }
+

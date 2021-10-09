@@ -1,4 +1,5 @@
 
+
 f32 test(shape_t *s) {
     s32 temp_v0;
 
@@ -14,3 +15,4 @@ f32 test(shape_t *s) {
     }
     return s->origin.x + s->unkC;
 }
+

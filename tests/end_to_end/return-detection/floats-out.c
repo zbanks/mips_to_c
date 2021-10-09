@@ -1,6 +1,7 @@
 f32 bar();                                          /* extern */
 
 
+
 f32 test(void) {
     f32 temp_f0;
     f32 phi_f0;
@@ -24,3 +25,4 @@ block_3:
     }
     return phi_f0;
 }
+

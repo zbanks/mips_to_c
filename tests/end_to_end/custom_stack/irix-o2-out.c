@@ -1,6 +1,7 @@
 ? func_00400090(s8 *);                              /* static */
 
 
+
 s32 test(struct Vec *v) {
     s8 a;
     s16 b;
@@ -28,3 +29,4 @@ s32 test(struct Vec *v) {
     }
     return a + b + c + d->x + e.y;
 }
+
