@@ -1110,7 +1110,7 @@ class StructDeclaration:
                 # TODO: This is a hack; MM should annotate bootstrapped structs with UNK_TYPE1
                 if (
                     offset != 0
-                    and len(struct.fields) <= 3
+                    and len(struct.fields) <= 4
                     and len(fields) == 1
                     and field.name.startswith("unk_")
                 ):
@@ -1147,7 +1147,7 @@ class StructDeclaration:
 
             if last_field is not None:
                 last_size = last_field.type.get_size_bytes()
-                if last_size is not None and (size % last_size) == 0:
+                if last_size and (size % last_size) == 0:
                     comments.append(
                         f"maybe part of {last_field.name}[{(size // last_size) + 1}]?"
                     )
