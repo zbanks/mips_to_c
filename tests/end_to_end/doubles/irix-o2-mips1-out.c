@@ -1,6 +1,6 @@
 extern f64 D_410150;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 f64 test(f64 arg0, s32 arg2, f64 arg4) {
     f64 temp_f0;
 

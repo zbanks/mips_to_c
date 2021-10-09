@@ -1,6 +1,4 @@
-struct _mips2c_stack_test {
-    char pad0[0x8];
-};                                                  /* size 0x8 */
+
 s16 test(struct SomeStruct *arg, u8 should, ? union_arg, ? union_arg_unk4, ...) {
     s8 temp_t6;
 

@@ -2,7 +2,7 @@ extern f32 D_410230;
 extern f64 D_410238;
 extern u32 D_410240;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 void test(void) {
     f32 temp_f8;
     f64 temp_f18;

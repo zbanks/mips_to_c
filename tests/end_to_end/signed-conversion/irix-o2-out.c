@@ -1,6 +1,6 @@
 extern s32 D_410110;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 void test(s8 arg0) {
     s8 temp_v0;
 

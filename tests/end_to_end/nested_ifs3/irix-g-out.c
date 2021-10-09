@@ -1,9 +1,7 @@
 ? func_0040011C(?);                                 /* static */
 void test(s32 arg0);                                /* static */
 
-struct _mips2c_stack_test {
-    char pad0[0x18];
-};                                                  /* size 0x18 */
+
 void test(s32 arg0) {
     if (arg0 == 7) {
         func_0040011C(1);

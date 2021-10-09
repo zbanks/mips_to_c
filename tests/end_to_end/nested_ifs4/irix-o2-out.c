@@ -1,9 +1,7 @@
 ? func_00400114(?, s32);                            /* static */
 void test(s32 arg0);                                /* static */
 
-struct _mips2c_stack_test {
-    char pad0[0x18];
-};                                                  /* size 0x18 */
+
 void test(s32 arg0) {
     s32 temp_a1;
 

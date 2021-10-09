@@ -1,9 +1,4 @@
-struct _mips2c_stack_test {
-    char pad0[0x4];
-    s32 sp4;                                        /* +0x4; inferred */
-    s32 sp8;                                        /* +0x8; inferred */
-    s32 spC;                                        /* +0xC; inferred */
-};                                                  /* size 0x10 */
+
 s32 test(s32 arg0) {
     s32 spC;
     s32 sp8;

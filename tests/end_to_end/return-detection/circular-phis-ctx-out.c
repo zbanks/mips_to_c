@@ -1,8 +1,6 @@
 ? bar();                                            /* extern */
 
-struct _mips2c_stack_test {
-    char pad0[0x30];
-};                                                  /* size 0x30 */
+
 s32 test(void) {
     s32 phi_v0;
 

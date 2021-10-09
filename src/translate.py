@@ -257,26 +257,36 @@ class StackInfo:
     def location_above_stack(self, location: int) -> bool:
         return location >= self.allocated_stack_size
 
+    #def set_first_arg_from_namespace(self) -> bool:
+    #    namespace = self.function.name.partition("_")[0]
+    #    self_struct = self.global_info.typepool.get_struct_by_tag_name(namespace, self.global_info.typemap)
+    #    if (
+    #        self_struct is not None
+    #        and self_struct.fields
+    #    ):
+    #        struct_ptr = Type.ptr(Type.struct(self_struct))
+    #        first_field = self_struct.fields[0]
+    #        if first_field.offset == 0:
+    #            self.replace_first_arg = ("thisx", Type.ptr(first_field.type))
+    #            type = Type.ptr(Type.struct(self_struct))
+    #            name = "this"
+    #            self.add_known_param(0, name, type)
+
     def add_known_param(self, offset: int, name: Optional[str], type: Type) -> None:
         if offset == 0 and type.is_pointer() and self.replace_first_arg is None:
             type_target = type.get_pointer_target()
             namespace = self.function.name.partition("_")[0]
             self_struct = self.global_info.typepool.get_struct_by_tag_name(namespace, self.global_info.typemap)
-            print(f"> looking up {namespace}: found {self_struct}")
             if (
                 self_struct is not None
-                and self_struct.fields
                 and type_target is not None
+                and type_target.get_size_bytes() is not None
             ):
-                first_field = self_struct.fields[0]
-                if first_field.offset == 0 and first_field.type.unify(
-                    type_target
-                ):
-                    print(
-                        f"> found match: {self_struct.tag_name}.{first_field.name} == {name}"
-                    )
+                self_struct_type = Type.struct(self_struct)
+                _, first_type, _ = self_struct_type.get_field(0, target_size=type_target.get_size_bytes())
+                if first_type.unify(type_target):
                     self.replace_first_arg = (name or "_self", type)
-                    type = Type.ptr(Type.struct(self_struct))
+                    type = Type.ptr(self_struct_type)
                     name = "this" if name == "thisx" else "self"
         if name:
             self.param_names[offset] = name
@@ -4408,6 +4418,7 @@ def translate_to_ast(
         start_regs[Register("a3")] = make_arg(12, Type.any_reg())
         start_regs[Register("f12")] = make_arg(0, Type.floatish())
         start_regs[Register("f14")] = make_arg(4, Type.floatish())
+        #stack_info.set_first_arg_from_namespace()
 
     if options.reg_vars == ["saved"]:
         reg_vars = SAVED_REGS

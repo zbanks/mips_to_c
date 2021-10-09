@@ -191,6 +191,21 @@ def is_struct_type(type: CType, typemap: TypeMap) -> bool:
         return False
     return isinstance(type.type, (ca.Struct, ca.Union))
 
+def is_unk_type(type: CType, typemap: TypeMap) -> bool:
+    while True:
+        if (
+            isinstance(type, TypeDecl)
+            and isinstance(type.type, IdentifierType)
+            and len(type.type.names) == 1
+            and type.type.names[0] in typemap.typedefs
+        ):
+            if type.type.names[0].startswith("UNK_"):
+                return True
+            type = typemap.typedefs[type.type.names[0]]
+        elif isinstance(type, (PtrDecl, ArrayDecl)):
+            type = type.type
+        else:
+            return False
 
 def get_primitive_list(type: CType, typemap: TypeMap) -> Optional[List[str]]:
     type = resolve_typedefs(type, typemap)

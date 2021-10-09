@@ -3,7 +3,7 @@ extern f64 D_410138;
 extern f64 D_410140;
 extern ? *D_410148;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 void test(void) {
     D_410130 = 1.2f;
     D_410138 = 13.0;

@@ -1,6 +1,6 @@
 extern ? D_410150;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 void test(s32 arg0) {
     s32 temp_v0;
     s32 phi_v0;

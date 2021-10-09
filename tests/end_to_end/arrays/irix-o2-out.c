@@ -1,9 +1,7 @@
 extern ? D_400120;
 extern ? D_410130;
 
-struct _mips2c_stack_test {
-    char pad0[0x8];
-};                                                  /* size 0x8 */
+
 s32 test(s32 arg0, s32 arg1, s32 arg2) {
     s32 temp_v1;
 

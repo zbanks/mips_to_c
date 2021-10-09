@@ -1,4 +1,4 @@
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 s32 test(s32 arg2) {
     s32 temp_a2;
 

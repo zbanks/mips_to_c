@@ -9,6 +9,7 @@ from .c_types import (
     Struct,
     StructUnion as CStructUnion,
     TypeMap,
+    is_unk_type,
     parse_constant_int,
     parse_function,
     parse_struct,
@@ -93,7 +94,10 @@ class TypePool:
     def inferred_type_declarations(self, fmt: Formatter) -> str:
         decls = []
         for struct in sorted(self.structs, key=lambda s: s.tag_name or s.typedef_name or ""):
-            if struct.is_hidden or any(not f.known and f.type.is_concrete() for f in struct.fields):
+            if struct.is_hidden:
+                # TODO: CLI arg for *always* showing stack structs
+                continue
+            if any(not f.known and f.type.is_concrete() for f in struct.fields):
                 decls.append(struct.format(fmt))
         return "\n\n".join(decls)
 
@@ -566,7 +570,8 @@ class Type:
                     output.append(upto - position)
 
             for field in data.struct.fields:
-                assert field.offset >= position, "overlapping fields"
+                if field.offset < position:
+                    return None
 
                 add_padding(field.offset)
                 field_size = field.type.get_size_bytes()
@@ -1099,6 +1104,8 @@ class StructDeclaration:
 
         for offset, fields in sorted(struct.fields.items()):
             for field in fields:
+                if is_unk_type(field.type, typemap):
+                    continue
                 field_type = Type.ctype(field.type, typemap, typepool)
                 assert field.size == field_type.get_size_bytes(), (
                     field.size,
@@ -1106,8 +1113,6 @@ class StructDeclaration:
                     field.name,
                     field_type,
                 )
-                if field.name.startswith("unk"):
-                    continue
                 decl.fields.append(
                     StructDeclaration.StructField(
                         type=field_type,

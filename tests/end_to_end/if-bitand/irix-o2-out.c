@@ -1,6 +1,6 @@
 extern s32 D_410140;
 
-struct _mips2c_stack_test {};                       /* size 0x0 */
+
 void test(void) {
     if ((D_410140 & 1) != 0) {
         D_410140 = 0;

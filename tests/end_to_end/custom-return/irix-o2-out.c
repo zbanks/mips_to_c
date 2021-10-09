@@ -2,9 +2,7 @@ s32 func_0040010C(?);                               /* static */
 s32 test();                                         /* static */
 extern s32 D_410120;
 
-struct _mips2c_stack_test {
-    char pad0[0x18];
-};                                                  /* size 0x18 */
+
 s32 test(void) {
     s32 temp_v0;
 

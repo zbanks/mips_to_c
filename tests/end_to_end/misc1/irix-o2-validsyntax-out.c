@@ -4,12 +4,7 @@ s32 test(s32 arg0, MIPS2C_UNK arg1);                /* static */
 extern s32 D_410170;
 extern MIPS2C_UNK D_410178;
 
-struct _mips2c_stack_test {
-    char pad0[0x24];
-    s32 sp24;                                       /* +0x24; inferred */
-    s32 sp28;                                       /* +0x28; inferred */
-    s32 sp2C;                                       /* +0x2C; inferred */
-};                                                  /* size 0x30 */
+
 s32 test(s32 arg0, MIPS2C_UNK arg1) {
     s32 sp2C;
     s32 sp28;

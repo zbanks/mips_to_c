@@ -1,12 +1,7 @@
 s32 func_00400090(s32);                             /* static */
 s32 test(s32 arg0, s32 arg1, s32 arg2, s32 arg3);   /* static */
 
-struct _mips2c_stack_test {
-    char pad0[0x1C];
-    s32 sp1C;                                       /* +0x1C; inferred */
-    s32 sp20;                                       /* +0x20; inferred */
-    s32 sp24;                                       /* +0x24; inferred */
-};                                                  /* size 0x28 */
+
 s32 test(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 sp24;
     s32 sp20;

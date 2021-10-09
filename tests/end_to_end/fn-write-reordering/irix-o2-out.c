@@ -3,9 +3,7 @@ s32 func_004000E4();                                /* static */
 void test();                                        /* static */
 extern s32 D_410100;
 
-struct _mips2c_stack_test {
-    char pad0[0x18];
-};                                                  /* size 0x18 */
+
 void test(void) {
     s32 temp_v0;
 

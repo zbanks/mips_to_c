@@ -1,10 +1,6 @@
 extern f64 D_4101B0;
 
-struct _mips2c_stack_test {
-    f64 sp0;                                        /* +0x0; inferred */
-    f32 sp4;                                        /* +0x4; overlap; inferred */
-    f64 sp8;                                        /* +0x8; inferred */
-};                                                  /* size 0x10 */
+
 f64 test(f64 arg0, s32 arg2, f64 arg4) {
     f64 sp8;
     f32 sp4;

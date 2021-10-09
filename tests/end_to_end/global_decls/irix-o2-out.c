@@ -18,9 +18,7 @@ s32 static_bss_array[3];
 s32 static_int;
 s32 static_ro_array[3] = {7, 8, 9};                 /* const */
 
-struct _mips2c_stack_test {
-    char pad0[0x18];
-};                                                  /* size 0x18 */
+
 s32 test(void) {
     static_int *= 0x1C8;
     extern_float *= 456.0f;
