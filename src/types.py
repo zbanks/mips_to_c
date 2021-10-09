@@ -93,14 +93,15 @@ class TypePool:
 
     def inferred_type_declarations(self, fmt: Formatter) -> str:
         decls = []
-        for struct in sorted(self.structs, key=lambda s: s.tag_name or s.typedef_name or ""):
+        for struct in sorted(
+            self.structs, key=lambda s: s.tag_name or s.typedef_name or ""
+        ):
             if struct.is_hidden:
                 # TODO: CLI arg for *always* showing stack structs
                 continue
             if any(not f.known and f.type.is_concrete() for f in struct.fields):
                 decls.append(struct.format(fmt))
         return "\n\n".join(decls)
-
 
 
 @dataclass(eq=False)
@@ -275,14 +276,14 @@ class Type:
         elif data.kind == TypeData.K_VOID:
             return True
         elif data.kind == TypeData.K_ARRAY:
-            if data.ptr_to is None: # or data.array_dim is None:
+            if data.ptr_to is None:  # or data.array_dim is None:
                 return False
             return data.ptr_to.is_concrete(seen=seen)
         elif data.kind == TypeData.K_STRUCT:
             return data.struct is not None
-            #if data.struct is None:
+            # if data.struct is None:
             #    return False
-            #return all([f.type.is_concrete(seen=seen) for f in data.struct.fields])
+            # return all([f.type.is_concrete(seen=seen) for f in data.struct.fields])
         return False
 
     def is_float(self) -> bool:
@@ -1107,7 +1108,12 @@ class StructDeclaration:
                 if is_unk_type(field.type, typemap):
                     continue
                 # TODO: This is a hack; MM should annotate bootstrapped structs with UNK_TYPE1
-                if offset != 0 and len(struct.fields) <= 3 and len(fields) == 1 and field.name.startswith("unk_"):
+                if (
+                    offset != 0
+                    and len(struct.fields) <= 3
+                    and len(fields) == 1
+                    and field.name.startswith("unk_")
+                ):
                     continue
                 field_type = Type.ctype(field.type, typemap, typepool)
                 assert field.size == field_type.get_size_bytes(), (
@@ -1130,7 +1136,10 @@ class StructDeclaration:
 
     def format(self, fmt: Formatter) -> str:
         lines = []
-        def add_padding(start: int, end: int, last_field: Optional[self.StructField]) -> None:
+
+        def add_padding(
+            start: int, end: int, last_field: Optional[StructDeclaration.StructField]
+        ) -> None:
             size = end - start
             if size <= 0:
                 return
@@ -1139,8 +1148,14 @@ class StructDeclaration:
             if last_field is not None:
                 last_size = last_field.type.get_size_bytes()
                 if last_size is not None and (size % last_size) == 0:
-                    comments.append(f"maybe part of {last_field.name}[{(size // last_size) + 1}]?")
-            lines.append(fmt.with_comments(f"/* 0x{start:04X} */ char pad{start:X}[0x{size:X}];", comments))
+                    comments.append(
+                        f"maybe part of {last_field.name}[{(size // last_size) + 1}]?"
+                    )
+            lines.append(
+                fmt.with_comments(
+                    f"/* 0x{start:04X} */ char pad{start:X}[0x{size:X}];", comments
+                )
+            )
 
         with fmt.indented():
             position = 0
@@ -1150,7 +1165,7 @@ class StructDeclaration:
 
                 field_decl = f"{field.type.to_decl(field.name, fmt)};"
                 offset_comment = f"/* 0x{field.offset:04X} */ "
-                #comments = [f"+0x{field.offset:X}"]
+                # comments = [f"+0x{field.offset:X}"]
                 comments = []
                 if position > field.offset:
                     comments.append("overlap")
@@ -1166,5 +1181,8 @@ class StructDeclaration:
         tail = f"}} {self.typedef_name};" if self.typedef_name else f"}};"
         if self.size == 0:
             return fmt.with_comments(head + tail, [f"size 0x0"])
-        return "\n".join([fmt.indent(head)] + lines + [fmt.with_comments(tail, [f"size 0x{self.size:X}"])])
-
+        return "\n".join(
+            [fmt.indent(head)]
+            + lines
+            + [fmt.with_comments(tail, [f"size 0x{self.size:X}"])]
+        )

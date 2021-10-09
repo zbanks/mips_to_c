@@ -137,7 +137,6 @@ def run(options: Options) -> int:
         print("failed to write global decls")
         print_exception(sanitize=options.sanitize_tracebacks)
 
-
     print(global_info.typepool.inferred_type_declarations(fmt))
     print()
 

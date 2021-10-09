@@ -169,11 +169,13 @@ def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
             return expr
     else:
         target_type = type.get_pointer_target()
-        if target_type is not None and target_type.get_size_bytes() is not None and expr.type.is_pointer():
+        if (
+            target_type is not None
+            and target_type.get_size_bytes() is not None
+            and expr.type.is_pointer()
+        ):
             size = target_type.get_size_bytes()
-            field_path, field_type, _ = expr.type.get_deref_field(
-                0, target_size=size
-            )
+            field_path, field_type, _ = expr.type.get_deref_field(0, target_size=size)
             if field_path is not None and field_type.unify(target_type):
                 expr = AddressOf(
                     StructAccess(
@@ -278,7 +280,7 @@ class StackInfo:
     def location_above_stack(self, location: int) -> bool:
         return location >= self.allocated_stack_size
 
-    #def set_first_arg_from_namespace(self) -> bool:
+    # def set_first_arg_from_namespace(self) -> bool:
     #    namespace = self.function.name.partition("_")[0]
     #    self_struct = self.global_info.typepool.get_struct_by_tag_name(namespace, self.global_info.typemap)
     #    if (
@@ -297,14 +299,18 @@ class StackInfo:
         if offset == 0 and type.is_pointer() and self.replace_first_arg is None:
             type_target = type.get_pointer_target()
             namespace = self.function.name.partition("_")[0]
-            self_struct = self.global_info.typepool.get_struct_by_tag_name(namespace, self.global_info.typemap)
+            self_struct = self.global_info.typepool.get_struct_by_tag_name(
+                namespace, self.global_info.typemap
+            )
             if (
                 self_struct is not None
                 and type_target is not None
                 and type_target.get_size_bytes() is not None
             ):
                 self_struct_type = Type.struct(self_struct)
-                _, first_type, _ = self_struct_type.get_field(0, target_size=type_target.get_size_bytes())
+                _, first_type, _ = self_struct_type.get_field(
+                    0, target_size=type_target.get_size_bytes()
+                )
                 if first_type.unify(type_target):
                     self.replace_first_arg = (name or "_self", type)
                     type = Type.ptr(self_struct_type)
@@ -578,7 +584,10 @@ def get_stack_info(
             )
     else:
         stack_struct = StructDeclaration.unknown_of_size(
-            typepool=global_info.typepool, size=info.allocated_stack_size, align=4, tag_name=stack_struct_name
+            typepool=global_info.typepool,
+            size=info.allocated_stack_size,
+            align=4,
+            tag_name=stack_struct_name,
         )
     # Mark the struct as "hidden" so we never try to use a reference to the struct itself
     stack_struct.is_hidden = True
@@ -1210,7 +1219,9 @@ class StructAccess(Expression):
 
     def format(self, fmt: Formatter) -> str:
         var = late_unwrap(self.struct_var)
-        has_nonzero_access = self.stack_info is not None and self.stack_info.has_nonzero_access(var)
+        has_nonzero_access = (
+            self.stack_info is not None and self.stack_info.has_nonzero_access(var)
+        )
 
         field_path = self.late_field_path()
 
@@ -4376,7 +4387,11 @@ class GlobalInfo:
                 lines.append(
                     (
                         sort_order,
-                        fmt.with_comments(f"{qualifier}{sym.type.to_decl(name, fmt)}{value};", comments) + "\n",
+                        fmt.with_comments(
+                            f"{qualifier}{sym.type.to_decl(name, fmt)}{value};",
+                            comments,
+                        )
+                        + "\n",
                     )
                 )
         lines.sort()
@@ -4439,7 +4454,7 @@ def translate_to_ast(
         start_regs[Register("a3")] = make_arg(12, Type.any_reg())
         start_regs[Register("f12")] = make_arg(0, Type.floatish())
         start_regs[Register("f14")] = make_arg(4, Type.floatish())
-        #stack_info.set_first_arg_from_namespace()
+        # stack_info.set_first_arg_from_namespace()
 
     if options.reg_vars == ["saved"]:
         reg_vars = SAVED_REGS

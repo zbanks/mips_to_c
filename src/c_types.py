@@ -191,6 +191,7 @@ def is_struct_type(type: CType, typemap: TypeMap) -> bool:
         return False
     return isinstance(type.type, (ca.Struct, ca.Union))
 
+
 def is_unk_type(type: CType, typemap: TypeMap) -> bool:
     while True:
         if (
@@ -206,6 +207,7 @@ def is_unk_type(type: CType, typemap: TypeMap) -> bool:
             type = type.type
         else:
             return False
+
 
 def get_primitive_list(type: CType, typemap: TypeMap) -> Optional[List[str]]:
     type = resolve_typedefs(type, typemap)
