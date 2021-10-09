@@ -134,9 +134,11 @@ def run(options: Options) -> int:
         print(global_decls)
 
     print(global_info.typepool.inferred_type_declarations(fmt))
+    print()
 
     for text in function_texts:
         print(text)
+        print()
 
     return return_code
 

@@ -1106,6 +1106,9 @@ class StructDeclaration:
             for field in fields:
                 if is_unk_type(field.type, typemap):
                     continue
+                # TODO: This is a hack; MM should annotate bootstrapped structs with UNK_TYPE1
+                if offset != 0 and len(struct.fields) == 2 and len(fields) == 1 and field.name.startswith("unk_"):
+                    continue
                 field_type = Type.ctype(field.type, typemap, typepool)
                 assert field.size == field_type.get_size_bytes(), (
                     field.size,

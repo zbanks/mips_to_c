@@ -167,6 +167,24 @@ def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
     if expr.type.unify(type):
         if silent or isinstance(expr, Literal):
             return expr
+    target_type = type.get_pointer_target()
+    if target_type is not None and target_type.get_size_bytes() is not None and expr.type.is_pointer():
+        size = target_type.get_size_bytes()
+        field_path, field_type, _ = expr.type.get_deref_field(
+            0, target_size=size
+        )
+        if field_path is not None and field_type.unify(target_type):
+            return AddressOf(
+                StructAccess(
+                    struct_var=expr,
+                    offset=0,
+                    target_size=size,
+                    field_path=field_path,
+                    stack_info=None,
+                    type=field_type,
+                ),
+                type=type,
+            )
     return Cast(expr=expr, reinterpret=True, silent=False, type=type)
 
 
@@ -1107,7 +1125,7 @@ class StructAccess(Expression):
     offset: int
     target_size: Optional[int]
     field_path: Optional[AccessPath] = field(compare=False)
-    stack_info: StackInfo = field(compare=False, repr=False)
+    stack_info: Optional[StackInfo] = field(compare=False, repr=False)
     type: Type = field(compare=False)
     checked_late_field_path: bool = field(default=False, compare=False)
 
@@ -1179,7 +1197,7 @@ class StructAccess(Expression):
         if self.offset == 0:
             var = late_unwrap(self.struct_var)
             if (
-                not self.stack_info.has_nonzero_access(var)
+                (self.stack_info is None or not self.stack_info.has_nonzero_access(var))
                 and isinstance(var, AddressOf)
                 and isinstance(var.expr, GlobalSymbol)
                 and var.expr.type_in_typemap
@@ -1189,7 +1207,7 @@ class StructAccess(Expression):
 
     def format(self, fmt: Formatter) -> str:
         var = late_unwrap(self.struct_var)
-        has_nonzero_access = self.stack_info.has_nonzero_access(var)
+        has_nonzero_access = self.stack_info is not None and self.stack_info.has_nonzero_access(var)
 
         field_path = self.late_field_path()
 
