@@ -1,0 +1,86 @@
+struct _mips2c_stack_osSetIntMask {};               /* size 0x0 */
+
+extern s32 D_A430000C;
+s32 __OSGlobalIntMask = 0x3FFF01;
+u16 D_800991A0[64] = {
+    0x555,
+    0x556,
+    0x559,
+    0x55A,
+    0x565,
+    0x566,
+    0x569,
+    0x56A,
+    0x595,
+    0x596,
+    0x599,
+    0x59A,
+    0x5A5,
+    0x5A6,
+    0x5A9,
+    0x5AA,
+    0x655,
+    0x656,
+    0x659,
+    0x65A,
+    0x665,
+    0x666,
+    0x669,
+    0x66A,
+    0x695,
+    0x696,
+    0x699,
+    0x69A,
+    0x6A5,
+    0x6A6,
+    0x6A9,
+    0x6AA,
+    0x955,
+    0x956,
+    0x959,
+    0x95A,
+    0x965,
+    0x966,
+    0x969,
+    0x96A,
+    0x995,
+    0x996,
+    0x999,
+    0x99A,
+    0x9A5,
+    0x9A6,
+    0x9A9,
+    0x9AA,
+    0xA55,
+    0xA56,
+    0xA59,
+    0xA5A,
+    0xA65,
+    0xA66,
+    0xA69,
+    0xA6A,
+    0xA95,
+    0xA96,
+    0xA99,
+    0xA9A,
+    0xAA5,
+    0xAA6,
+    0xAA9,
+    0xAAA,
+}; /* const */
+
+u32 osSetIntMask(u32 im) {
+    s32 temp_t2;
+    s32 temp_t3;
+    s32 phi_t2;
+
+    temp_t3 = __OSGlobalIntMask;
+    temp_t2 = D_A430000C;
+    phi_t2 = temp_t2;
+    if (temp_t2 != 0) {
+        phi_t2 = temp_t2 | ((((u32) temp_t3 >> 0x10) ^ -1) & 0x3F);
+    }
+    D_A430000C = (s32) *(D_800991A0 + ((u32) (im & 0x3F0000 & temp_t3) >> 0xF));
+    MIPS2C_ERROR(unknown instruction: mtc0 $t4, Status);
+    return (MIPS2C_ERROR(unknown instruction: mfc0 $t4, Status) & 0xFF01) | ((temp_t3 ^ -1) & 0xFF00) | (phi_t2 << 0x10);
+}
