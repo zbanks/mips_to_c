@@ -526,7 +526,7 @@ def get_stack_info(
             )
     else:
         stack_struct = StructDeclaration.unknown_of_size(
-            size=info.allocated_stack_size, align=4, tag_name=stack_struct_name
+            typepool=global_info.typepool, size=info.allocated_stack_size, align=4, tag_name=stack_struct_name
         )
     # Mark the struct as "hidden" so we never try to use a reference to the struct itself
     stack_struct.is_hidden = True
@@ -4324,7 +4324,7 @@ class GlobalInfo:
                 lines.append(
                     (
                         sort_order,
-                        f"{qualifier}{sym.type.to_decl(name, fmt)}{value};{comment}\n",
+                        fmt.with_comments(f"{qualifier}{sym.type.to_decl(name, fmt)}{value};", comments) + "\n",
                     )
                 )
         lines.sort()

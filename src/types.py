@@ -90,6 +90,14 @@ class TypePool:
             ), f"Duplicate tag: {tag_name}"
             self.structs_by_tag_name[tag_name] = struct
 
+    def inferred_type_declarations(self, fmt: Formatter) -> str:
+        decls = []
+        for struct in sorted(self.structs, key=lambda s: s.tag_name or s.typedef_name or ""):
+            if struct.is_hidden or any(not f.known and f.type.is_concrete() for f in struct.fields):
+                decls.append(struct.format(fmt))
+        return "\n\n".join(decls)
+
+
 
 @dataclass(eq=False)
 class TypeData:
@@ -234,6 +242,44 @@ class Type:
             return self._data
         self._data = self._data.get_representative()
         return self._data
+
+    def is_concrete(self, *, seen: Optional[Set["TypeData"]] = None) -> bool:
+        data = self.data()
+        if seen is None:
+            seen = {data}
+        elif data in seen:
+            return True
+        else:
+            seen.add(data)
+
+        if data.size_bits is None and data.kind != TypeData.K_FN:
+            return False
+        if data.kind == TypeData.K_INT:
+            return data.sign in (TypeData.SIGNED, TypeData.UNSIGNED)
+        elif data.kind == TypeData.K_PTR:
+            if data.ptr_to is None:
+                return False
+            return data.ptr_to.is_concrete(seen=seen)
+        elif data.kind == TypeData.K_FLOAT:
+            return True
+        elif data.kind == TypeData.K_FN:
+            if data.fn_sig is None:
+                return False
+            if not data.fn_sig.return_type.is_concrete(seen=seen):
+                return False
+            return all([p.type.is_concrete(seen=seen) for p in data.fn_sig.params])
+        elif data.kind == TypeData.K_VOID:
+            return True
+        elif data.kind == TypeData.K_ARRAY:
+            if data.ptr_to is None: # or data.array_dim is None:
+                return False
+            return data.ptr_to.is_concrete(seen=seen)
+        elif data.kind == TypeData.K_STRUCT:
+            return data.struct is not None
+            #if data.struct is None:
+            #    return False
+            #return all([f.type.is_concrete(seen=seen) for f in data.struct.fields])
+        return False
 
     def is_float(self) -> bool:
         return self.data().kind == TypeData.K_FLOAT
@@ -440,7 +486,7 @@ class Type:
             elif exact:
                 # Try to insert a new field into the struct at the given offset
                 # TODO Loosen this to Type.any()
-                field_type = Type.any_reg()
+                field_type = Type.any()
                 field_name = f"{data.struct.field_prefix}{offset:X}"
                 new_field = data.struct.try_add_field(field_type, offset, field_name)
                 if new_field is not None:
@@ -997,16 +1043,18 @@ class StructDeclaration:
 
     @staticmethod
     def unknown_of_size(
-        size: int, align: int, tag_name: Optional[str] = None
+        typepool: TypePool, size: int, align: int, tag_name: str
     ) -> "StructDeclaration":
         """
         Return an StructDeclaration of a given size, but without any known fields
         """
-        return StructDeclaration(
+        decl = StructDeclaration(
             size=size,
             align=align,
             tag_name=tag_name,
         )
+        typepool.add_struct(decl, tag_name)
+        return decl
 
     @staticmethod
     def from_ctype(
@@ -1058,6 +1106,8 @@ class StructDeclaration:
                     field.name,
                     field_type,
                 )
+                if field.name.startswith("unk"):
+                    continue
                 decl.fields.append(
                     StructDeclaration.StructField(
                         type=field_type,
@@ -1069,3 +1119,30 @@ class StructDeclaration:
         assert decl.fields == sorted(decl.fields, key=lambda f: f.offset)
 
         return decl
+
+    def format(self, fmt: Formatter) -> str:
+        lines = []
+        with fmt.indented():
+            position = 0
+            for field in self.fields:
+                if position < field.offset:
+                    lines.append(fmt.indent(f"char pad{position:X}[0x{field.offset - position:X}];"))
+
+                field_decl = f"{field.type.to_decl(field.name, fmt)};"
+                comments = [f"+0x{field.offset:X}"]
+                if position > field.offset:
+                    comments.append("overlap")
+                if not field.known:
+                    comments.append("inferred")
+                lines.append(fmt.with_comments(field_decl, comments))
+                position = field.offset + (field.type.get_size_bytes() or 1)
+            if position < self.size:
+                lines.append(fmt.indent(f"char pad{position:X}[0x{self.size - position:X}];"))
+
+        decl = f"struct {self.tag_name}" if self.tag_name else "struct"
+        head = f"typedef {decl} {{" if self.typedef_name else f"{decl} {{"
+        tail = f"}} {self.typedef_name};" if self.typedef_name else f"}};"
+        if self.size == 0:
+            return fmt.with_comments(head + tail, [f"size 0x0"])
+        return "\n".join([fmt.indent(head)] + lines + [fmt.with_comments(tail, [f"size 0x{self.size:X}"])])
+

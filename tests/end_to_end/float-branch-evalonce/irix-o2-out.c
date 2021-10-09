@@ -1,5 +1,6 @@
 extern f32 D_410120;
 
+struct _mips2c_stack_test {};                       /* size 0x0 */
 void test(void) {
     s32 temp_cond;
     s32 temp_cond_2;

@@ -1,3 +1,4 @@
+struct _mips2c_stack_test {};                       /* size 0x0 */
 ? test(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 phi_t0;
     s32 phi_t0_2;

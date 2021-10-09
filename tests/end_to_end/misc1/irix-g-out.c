@@ -1,9 +1,15 @@
-s32 func_00400174(?, ?, s32, s32, s32); // static
-? func_0040019C(s32, s32, s32); // static
-s32 test(s32 arg0, s32 arg1); // static
+s32 func_00400174(?, ?, s32, s32, s32);             /* static */
+? func_0040019C(s32, s32, s32);                     /* static */
+s32 test(s32 arg0, s32 arg1);                       /* static */
 extern s32 D_4101C0;
 extern ? D_4101C8;
 
+struct _mips2c_stack_test {
+    char pad0[0x24];
+    s32 sp24;                                       /* +0x24; inferred */
+    s32 sp28;                                       /* +0x28; inferred */
+    s32 sp2C;                                       /* +0x2C; inferred */
+};                                                  /* size 0x30 */
 s32 test(s32 arg0, s32 arg1) {
     s32 sp2C;
     s32 sp28;

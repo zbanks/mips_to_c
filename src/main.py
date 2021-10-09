@@ -102,24 +102,19 @@ def run(options: Options) -> int:
         return 0
 
     fmt = options.formatter()
-    global_decls = global_info.global_decls(fmt)
-    if options.emit_globals and global_decls:
-        print(global_decls)
 
+    function_texts = []
     return_code = 0
     for index, (function, function_info) in enumerate(zip(functions, function_infos)):
-        if index != 0:
-            print()
+        text = ""
         try:
             if options.print_assembly:
-                print(function)
-                print()
+                text += f"{function}\n"
 
             if isinstance(function_info, Exception):
                 raise function_info
 
-            function_text = get_function_text(function_info, options)
-            print(function_text)
+            text += get_function_text(function_info, options)
         except DecompFailure as e:
             print("/*")
             print(f"Failed to decompile function {function.name}:\n")
@@ -132,6 +127,16 @@ def run(options: Options) -> int:
             print_exception(sanitize=options.sanitize_tracebacks)
             print("*/")
             return_code = 1
+        function_texts.append(text)
+
+    global_decls = global_info.global_decls(fmt)
+    if options.emit_globals and global_decls:
+        print(global_decls)
+
+    print(global_info.typepool.inferred_type_declarations(fmt))
+
+    for text in function_texts:
+        print(text)
 
     return return_code
 
@@ -342,6 +347,7 @@ def parse_flags(flags: List[str]) -> Options:
         pointer_style_left=args.pointer_style == "left",
         unknown_underscore=args.unknown_underscore,
         hex_case=args.hex_case,
+        oneline_comments=False,
     )
     filenames = args.filename
 

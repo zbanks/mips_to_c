@@ -1,5 +1,9 @@
 extern f64 D_410180;
 
+struct _mips2c_stack_test {
+    f64 sp0;                                        /* +0x0; inferred */
+    f64 sp8;                                        /* +0x8; inferred */
+};                                                  /* size 0x10 */
 f64 test(f64 arg0, s32 arg2, f64 arg4) {
     f64 sp8;
     f64 sp0;

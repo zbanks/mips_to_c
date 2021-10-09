@@ -1,5 +1,8 @@
-void test(s32 arg0, s32 *arg1); // static
+void test(s32 arg0, s32 *arg1);                     /* static */
 
+struct _mips2c_stack_test {
+    char pad0[0x28];
+};                                                  /* size 0x28 */
 void test(s32 arg0, s32 *arg1) {
     s32 temp_s0;
     s32 temp_s1;

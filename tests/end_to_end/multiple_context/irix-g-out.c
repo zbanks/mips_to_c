@@ -1,3 +1,9 @@
+struct _mips2c_stack_test {
+    char pad0[0x4];
+    shape_t *sp4;                                   /* +0x4; inferred */
+    shape_t *sp8;                                   /* +0x8; inferred */
+    shape_t *spC;                                   /* +0xC; inferred */
+};                                                  /* size 0x10 */
 f32 test(shape_t *s) {
     shape_t *spC;
     shape_t *sp8;

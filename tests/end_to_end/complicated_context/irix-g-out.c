@@ -1,3 +1,6 @@
+struct _mips2c_stack_test {
+    f64 sp0;                                        /* +0x0; inferred */
+};                                                  /* size 0x8 */
 s16 test(struct SomeStruct *arg, u8 should, f64 union_arg, ? union_arg_unk4, ...) {
     f64 sp0;
     s8 temp_a1;

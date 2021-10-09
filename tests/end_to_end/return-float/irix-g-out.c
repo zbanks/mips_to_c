@@ -1,3 +1,6 @@
+struct _mips2c_stack_test {
+    char pad0[0x8];
+};                                                  /* size 0x8 */
 f32 test(f32 arg0) {
     f32 phi_f14;
 

@@ -12,6 +12,7 @@ class CodingStyle:
     pointer_style_left: bool
     unknown_underscore: bool
     hex_case: bool
+    oneline_comments: bool
 
 
 @dataclass
@@ -53,6 +54,7 @@ DEFAULT_CODING_STYLE: CodingStyle = CodingStyle(
     pointer_style_left=False,
     unknown_underscore=False,
     hex_case=False,
+    oneline_comments=False,
 )
 
 
@@ -65,6 +67,7 @@ class Formatter:
     debug: bool = False
     valid_syntax: bool = False
     line_length: int = 80
+    comment_column: int = 52
 
     def indent(self, line: str, indent: int = 0) -> str:
         return self.indent_step * max(indent + self.extra_indent, 0) + line
@@ -95,3 +98,14 @@ class Formatter:
         output += "}"
 
         return output
+
+    def with_comments(self, line: str, comments: List[str]) -> str:
+        base = self.indent(line)
+        if not comments:
+            return base
+        padding = max(1, self.comment_column - len(base)) * " "
+        if self.coding_style.oneline_comments:
+            comment = f"// {'; '.join(comments)}"
+        else:
+            comment = f"/* {'; '.join(comments)} */"
+        return f"{base}{padding}{comment}"

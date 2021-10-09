@@ -1,6 +1,9 @@
 extern ? D_400130;
 extern ? D_410140;
 
+struct _mips2c_stack_test {
+    char pad0[0x8];
+};                                                  /* size 0x8 */
 s32 test(s32 arg0, s32 arg1, s32 arg2) {
     sp->unk0 = (s32) D_400130.unk0;
     sp->unk4 = (u16) D_400130.unk4;

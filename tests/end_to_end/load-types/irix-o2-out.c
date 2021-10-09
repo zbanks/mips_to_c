@@ -6,6 +6,7 @@ extern s32 D_410118;
 extern s32 D_41011C;
 extern ? D_410120;
 
+struct _mips2c_stack_test {};                       /* size 0x0 */
 void test(void) {
     D_410120.unk0 = (s32) D_410110;
     D_410120.unk4 = (s32) D_410111;

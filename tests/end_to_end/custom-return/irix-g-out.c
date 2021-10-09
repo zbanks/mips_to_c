@@ -1,7 +1,11 @@
-u16 func_0040012C(?); // static
-u16 test(); // static
+u16 func_0040012C(?);                               /* static */
+u16 test();                                         /* static */
 extern s32 D_410150;
 
+struct _mips2c_stack_test {
+    char pad0[0x1E];
+    u16 sp1E;                                       /* +0x1E; inferred */
+};                                                  /* size 0x20 */
 u16 test(void) {
     u16 sp1E;
 
