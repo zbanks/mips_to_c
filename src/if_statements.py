@@ -988,7 +988,10 @@ def get_function_text(function_info: FunctionInfo, options: Options) -> str:
     any_decl = False
 
     with fmt.indented():
-        for local_var in function_info.stack_info.local_vars[::-1]:
+        local_vars = function_info.stack_info.local_vars
+        if not options.stack_order_low_to_high:
+            local_vars.reverse()
+        for local_var in local_vars:
             type_decl = local_var.type.to_decl(local_var.format(fmt), fmt)
             function_lines.append(SimpleStatement(f"{type_decl};").format(fmt))
             any_decl = True

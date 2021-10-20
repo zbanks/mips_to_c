@@ -263,6 +263,13 @@ def parse_flags(flags: List[str]) -> Options:
         default=52,
     )
     group.add_argument(
+        "--stack-order",
+        dest="stack_order",
+        help='Order of variables on the stack. "high" for high-to-low (IDO), "low" for low-to-high (GCC).',
+        choices=["high", "low"],
+        default="high",
+    )
+    group.add_argument(
         "--dump-typemap",
         dest="dump_typemap",
         action="store_true",
@@ -404,6 +411,7 @@ def parse_flags(flags: List[str]) -> Options:
         sanitize_tracebacks=args.sanitize_tracebacks,
         valid_syntax=args.valid_syntax,
         emit_globals=args.emit_globals,
+        stack_order_low_to_high=args.stack_order == "low",
     )
 
 

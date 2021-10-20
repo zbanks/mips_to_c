@@ -44,6 +44,8 @@ if "source" in form:
         cmd.append("--no-emit-globals")
     if "visualize" in form:
         cmd.append("--visualize")
+    if "stacklow" in form:
+        cmd.append("--stack-order=low")
 
     comment_style = form.getfirst("comment_style", "multiline")
     if "oneline" in comment_style:
@@ -226,6 +228,7 @@ label {
     <label><input type="checkbox" name="leftptr">* to the left</label>
     <label><input type="checkbox" name="globals" checked>Global declarations</label>
     <label><input type="checkbox" name="noifs">Use gotos for everything</label> (to use a goto for a single branch, add "# GOTO" to the asm)
+    <label><input type="checkbox" name="stacklow">Stack low-to-high (GCC)</label>
     <label><input type="checkbox" name="usesidebar">Output sidebar</label>
     <label><input type="checkbox" name="dark">Dark mode</label>
   </div>
@@ -307,7 +310,7 @@ contextEl.addEventListener("change", function() {
     localStorage.mips_to_c_saved_context = contextEl.value;
 });
 document.getElementById("options").addEventListener("change", function(event) {
-    var shouldSave = ["usesidebar", "allman", "leftptr", "globals", "nocasts", "noandor", "dark", "regvarsselect", "regvars", "comment_style"];
+    var shouldSave = ["usesidebar", "allman", "leftptr", "globals", "nocasts", "noandor", "dark", "regvarsselect", "regvars", "comment_style", "stacklow"];
     var options = {};
     for (var key of shouldSave) {
         var el = document.getElementsByName(key)[0];

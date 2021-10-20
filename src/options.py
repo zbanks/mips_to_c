@@ -39,6 +39,7 @@ class Options:
     sanitize_tracebacks: bool
     valid_syntax: bool
     emit_globals: bool
+    stack_order_low_to_high: bool
 
     def formatter(self) -> "Formatter":
         return Formatter(
