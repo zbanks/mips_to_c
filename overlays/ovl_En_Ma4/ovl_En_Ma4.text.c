@@ -240,15 +240,15 @@ void func_80ABDD9C(Actor *arg0, GlobalContext *arg1) {
     s16 phi_a3;
 
     temp_v1 = arg1->actorCtx.actorList[2].first;
-    if ((arg0->unk_1D8 == 0) && ((temp_v0 = arg0->unk_14C, (&D_06007328 == temp_v0)) || (&D_06002A8C == temp_v0) || (&D_06015B7C == temp_v0))) {
+    if ((arg0->unk_1D8 == 0) && ((temp_v0 = arg0[1].home.pos.x, (&D_06007328 == temp_v0)) || (&D_06002A8C == temp_v0) || (&D_06015B7C == temp_v0))) {
         phi_a3 = 1;
     } else {
         phi_a3 = 0;
-        if ((arg0->unk_332 == 2) && (EnMa4_DialogueHandler != arg0->unk_188)) {
+        if ((arg0->unk_332 == 2) && (EnMa4_DialogueHandler != arg0[1].focus.pos.z)) {
             phi_a3 = 1;
         }
     }
-    arg0->unk_1F0 = (s32) temp_v1->world.pos.x;
+    arg0[1].colChkInfo.displacement.z = temp_v1->world.pos.x;
     arg0->unk_1F4 = (f32) temp_v1->world.pos.y;
     arg0->unk_1F8 = (s32) temp_v1->world.pos.z;
     arg0->unk_1F4 = (f32) (arg0->unk_1F4 - -10.0f);
@@ -550,7 +550,7 @@ void EnMa4_HandlePlayerChoice(EnMa4 *this, GlobalContext *globalCtx) {
                 func_8019F208();
                 func_801518B0(globalCtx, 0x334EU, (Actor *) this);
                 this->textId = 0x334E;
-                if ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0) {
+                if ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0) {
                     func_80151BB4(globalCtx, 0x1CU);
                 }
                 func_80151BB4(globalCtx, 5U);
@@ -720,7 +720,7 @@ block_30:
                 globalCtx = globalCtx;
                 EnMa4_SetFaceExpression(this, 0, 0);
                 temp_a0 = globalCtx;
-                if ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0) {
+                if ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0) {
                     func_801518B0(globalCtx, 0x334CU, (Actor *) this);
                     this->textId = 0x334C;
                     return;
@@ -733,7 +733,7 @@ block_30:
                 return;
             case 13144:
                 temp_a0_2 = globalCtx;
-                if ((gSaveContext.playerForm != 4) || ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) == 0)) {
+                if ((gSaveContext.playerForm != 4) || ((gBitFlags[14] & gSaveContext.inventory.questItems) == 0)) {
                     globalCtx = globalCtx;
                     func_801518B0(temp_a0_2, 0x335CU, (Actor *) this);
                     this->textId = 0x335C;
@@ -781,7 +781,7 @@ void EnMa4_DialogueHandler(EnMa4 *this, GlobalContext *globalCtx) {
     case 6:
         temp_a0 = globalCtx;
         globalCtx = globalCtx;
-        if ((func_80147624(temp_a0) != 0) && ((globalCtx->msgCtx.unk120B1 == 0) || ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) == 0))) {
+        if ((func_80147624(temp_a0) != 0) && ((globalCtx->msgCtx.unk120B1 == 0) || ((gBitFlags[18] & gSaveContext.inventory.questItems) == 0))) {
             EnMa4_SetupWait(this);
         }
         break;
@@ -810,7 +810,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(Actor *arg0, GlobalContext *arg1
     arg1 = arg1;
     if (func_800B84D0(arg0, temp_a1) != 0) {
         func_801518B0(arg1, 0x336EU, arg0);
-        arg0->unk_188 = EnMa4_HorsebackGameTalking;
+        arg0[1].focus.pos.z = (bitwise f32) EnMa4_HorsebackGameTalking;
         return;
     }
     if ((gSaveContext.unk_3DE0[4] == 0) && ((u32) *(&gSaveContext + 0x3E04) < 0x2CECU)) {
@@ -852,7 +852,7 @@ void EnMa4_HorsebackGameWait(EnMa4 *this, GlobalContext *globalCtx) {
     s16 temp_v0_2;
 
     temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0->unk_A74 = (s32) (temp_v0->unk_A74 | 0x400);
+    temp_v0[8].targetArrowOffset = (bitwise f32) ((bitwise s32) temp_v0[8].targetArrowOffset | 0x400);
     EnMa4_HorsebackGameCheckPlayerInteractions();
     temp_v0_2 = this->poppedBalloonCounter;
     if (D_80AC0258 != temp_v0_2) {
@@ -1238,13 +1238,13 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg
 
     if (arg1 == 0xE) {
         sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E0;
-        sp4.unk_4 = (u16) arg5->unk_1E4;
+        (&sp4)[2] = arg5->unk_1E4;
         arg4->x += sp6;
         arg4->z += sp4;
     }
     if (arg1 == 0xD) {
         sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E6;
-        sp4.unk_4 = (u16) arg5->unk_1EA;
+        (&sp4)[2] = (s16) arg5->unk_1EA;
         arg4->x -= sp6;
         arg4->z -= sp4;
     }
@@ -1263,7 +1263,7 @@ void EnMa4_PostLimbDraw(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *a
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp28, arg4 + 0x3C);
         return;
     }
-    if ((arg1 == 0x13) && (arg4->unk_33A == 1)) {
+    if ((arg1 == 0x13) && (arg4[2].colChkInfo.cylHeight == 1)) {
         temp_a0 = *arg0;
         temp_v1 = temp_a0->unk_2B0;
         temp_a0->unk_2B0 = (void *) (temp_v1 + 8);
@@ -1289,13 +1289,13 @@ void EnMa4_Draw(Actor *thisx, GlobalContext *globalCtx) {
     phi_a3 = temp_a3;
     if (this->type == 2) {
         temp_v0 = temp_a3->polyOpa.p;
-        temp_a3->polyOpa.p = temp_v0 + 8;
+        temp_a3->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp38 = temp_a3;
         sp30 = temp_v0;
         sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_a3->polyOpa.p;
-        temp_a3->polyOpa.p = temp_v0_2 + 8;
+        temp_a3->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06000A20;
         temp_v0_2->words.w0 = 0xDE000000;
         phi_a3 = globalCtx->state.gfxCtx;
@@ -1303,12 +1303,12 @@ void EnMa4_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp38 = globalCtx->state.gfxCtx;
     func_8012C28C(phi_a3);
     temp_v0_3 = globalCtx->state.gfxCtx->polyOpa.p;
-    globalCtx->state.gfxCtx->polyOpa.p = temp_v0_3 + 8;
+    globalCtx->state.gfxCtx->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     temp_a0 = *(&D_80AC00E8 + (this->eyeTexIndex * 4));
     temp_v0_3->words.w1 = (temp_a0 & 0xFFFFFF) + gSegments[(u32) (temp_a0 * 0x10) >> 0x1C] + 0x80000000;
     temp_v0_4 = globalCtx->state.gfxCtx->polyOpa.p;
-    globalCtx->state.gfxCtx->polyOpa.p = temp_v0_4 + 8;
+    globalCtx->state.gfxCtx->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060024;
     temp_a0_2 = *(&D_80AC00FC + (this->mouthTexIndex * 4));
     temp_v0_4->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;

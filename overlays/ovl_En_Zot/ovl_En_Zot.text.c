@@ -1125,7 +1125,7 @@ void func_80B97CC8(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0;
     arg0 = arg0;
     if (func_800B84D0(temp_a0, arg1) != 0) {
-        arg0->unk_2F8 = func_80B97C40;
+        arg0[2].speedXZ = (bitwise f32) func_80B97C40;
         func_801518B0(arg1, 0x128BU, arg0);
         return;
     }
@@ -1347,15 +1347,15 @@ void func_80B98348(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     arg0->unk_2F2 = (u16) (arg0->unk_2F2 | 8);
-    Math_SmoothStepToS(arg0 + 0x2C4, 0, 6, 0x1838, (s16) 0x64);
+    Math_SmoothStepToS((s16 *) &arg0[2].focus, 0, 6, 0x1838, (s16) 0x64);
     Math_SmoothStepToS(arg0 + 0x2CA, 0, 6, 0x1838, (s16) 0x64);
     if ((s32) (s16) (arg0->yawTowardsPlayer - arg0->shape.rot.y) > 0) {
         Math_SmoothStepToS(arg0 + 0x2C6, 0x3000, 6, 0x1838, (s16) 0x64);
-        Math_SmoothStepToS(arg0 + 0x2CC, 0x1000, 6, 0x1838, (s16) 0x64);
+        Math_SmoothStepToS((s16 *) &arg0[2].focus.pos.z, 0x1000, 6, 0x1838, (s16) 0x64);
         return;
     }
     Math_SmoothStepToS(arg0 + 0x2C6, -0x3000, 6, 0x1838, (s16) 0x64);
-    Math_SmoothStepToS(arg0 + 0x2CC, -0x1000, 6, 0x1838, (s16) 0x64);
+    Math_SmoothStepToS((s16 *) &arg0[2].focus.pos.z, -0x1000, 6, 0x1838, (s16) 0x64);
 }
 
 void func_80B9849C(Actor *arg0, GlobalContext *arg1) {
@@ -1366,7 +1366,7 @@ void func_80B9849C(Actor *arg0, GlobalContext *arg1) {
         } else {
             func_801518B0(arg1, 0x12B0U, arg0);
         }
-        arg0->unk_2F8 = func_80B98728;
+        arg0[2].speedXZ = (bitwise f32) func_80B98728;
         return;
     }
     func_800B8500(arg0, arg1, 1000.0f, 1000.0f, -1);
@@ -1376,7 +1376,7 @@ void func_80B9854C(Actor *arg0, Actor *arg1) {
     func_80B98348(arg1);
     if (Actor_HasParent(arg0, (GlobalContext *) arg1) != 0) {
         arg0->parent = NULL;
-        arg0->unk_2F8 = func_80B9849C;
+        arg0[2].speedXZ = (bitwise f32) func_80B9849C;
         arg0->flags |= 0x10000;
         func_800B8500(arg0, (GlobalContext *) arg1, 1000.0f, 1000.0f, -1);
         return;
@@ -1396,22 +1396,22 @@ void func_80B985EC(Actor *arg0, GlobalContext *arg1) {
         if (temp_v0 > 0) {
             sp1C = temp_v0;
             func_801477B4(arg1);
-            if ((temp_v0 == 0x13) && ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) != 0) && (func_8013A4C4(4) != 0)) {
+            if ((temp_v0 == 0x13) && ((gBitFlags[25] & gSaveContext.inventory.questItems) != 0) && (func_8013A4C4(4) != 0)) {
                 if ((func_8013A4C4(5) != 0) && (func_8013A4C4(6) != 0)) {
                     sp18->textId = 0x12AE;
                 } else {
                     sp18->textId = 0x12AC;
                 }
-                gSaveContext.inventory.questItems &= -1 - *(gBitFlags + 0x64);
+                gSaveContext.inventory.questItems &= -1 - gBitFlags[25];
             } else {
                 sp18->textId = 0x12AB;
             }
-            arg0->unk_2F8 = func_80B98728;
+            arg0[2].speedXZ = (bitwise f32) func_80B98728;
             return;
         }
         if (temp_v0 < 0) {
             func_80151938(arg1, 0x12ABU);
-            arg0->unk_2F8 = func_80B98728;
+            arg0[2].speedXZ = (bitwise f32) func_80B98728;
         }
         /* Duplicate return node #14. Try simplifying control flow for better match */
     }
@@ -1470,7 +1470,7 @@ void func_80B98728(Actor *arg0, GlobalContext *arg1) {
             case 4778:
                 arg0 = arg0;
                 func_80151938(arg1, 0xFFU);
-                arg0->unk_2F8 = func_80B985EC;
+                arg0[2].speedXZ = (bitwise f32) func_80B985EC;
                 return;
             case 4756:
                 if (((s32) gSaveContext.day % 5) == 3) {
@@ -1482,7 +1482,7 @@ void func_80B98728(Actor *arg0, GlobalContext *arg1) {
             case 4779:
                 arg0 = arg0;
                 func_801477B4(arg1);
-                arg0->unk_2F8 = (void (*)(Actor *, GlobalContext *)) func_80B98998;
+                arg0[2].speedXZ = (bitwise f32) func_80B98998;
                 return;
             case 4780:
                 temp_a0_3 = arg1;
@@ -1490,7 +1490,7 @@ void func_80B98728(Actor *arg0, GlobalContext *arg1) {
                 arg1 = arg1;
                 func_801477B4(temp_a0_3);
                 arg0->unk_2D4 = 2;
-                arg0->unk_2F8 = (void (*)(Actor *, GlobalContext *)) func_80B9854C;
+                arg0[2].speedXZ = (bitwise f32) func_80B9854C;
                 func_80B9854C(arg0, (Actor *) arg1);
                 return;
             case 4783:
@@ -1499,13 +1499,13 @@ void func_80B98728(Actor *arg0, GlobalContext *arg1) {
                 arg1 = arg1;
                 func_801477B4(temp_a0_4);
                 arg0->unk_2D4 = 4;
-                arg0->unk_2F8 = (void (*)(Actor *, GlobalContext *)) func_80B9854C;
+                arg0[2].speedXZ = (bitwise f32) func_80B9854C;
                 func_80B9854C(arg0, (Actor *) arg1);
                 return;
             default:
                 arg0 = arg0;
                 func_801477B4(arg1);
-                arg0->unk_2F8 = (void (*)(Actor *, GlobalContext *)) func_80B98998;
+                arg0[2].speedXZ = (bitwise f32) func_80B98998;
                 arg0->flags &= 0xFFFEFFFF;
                 /* Duplicate return node #22. Try simplifying control flow for better match */
                 return;
@@ -1617,11 +1617,11 @@ void func_80B98BF4(Actor *arg0, GlobalContext *arg1) {
         arg0->flags &= 0xFFFEFFFF;
         if ((gSaveContext.weekEventReg[41] & 0x20) != 0) {
             func_801518B0(arg1, 0x12B7U, arg0);
-            arg0->unk_2F8 = func_80B98AD0;
+            arg0[2].speedXZ = (bitwise f32) func_80B98AD0;
             return;
         }
         func_801518B0(arg1, 0x12B9U, arg0);
-        arg0->unk_2F8 = func_80B98AD0;
+        arg0[2].speedXZ = (bitwise f32) func_80B98AD0;
         return;
     }
     func_800B8614(arg0, arg1, 120.0f);
@@ -1710,7 +1710,7 @@ void func_80B98E10(Actor *arg0, GlobalContext *arg1) {
 void func_80B98F30(Actor *arg0, GlobalContext *arg1) {
     if (Actor_HasParent(arg0, arg1) != 0) {
         arg0->parent = NULL;
-        arg0->unk_2F8 = func_80B990A4;
+        arg0[2].speedXZ = (bitwise f32) func_80B990A4;
         return;
     }
     func_800B8A1C(arg0, arg1, 2, 10000.0f, 50.0f);
@@ -1736,12 +1736,12 @@ void func_80B98F94(Actor *arg0, GlobalContext *arg1) {
             return;
         case 4798:
             func_801477B4(arg1);
-            arg0->unk_2F8 = func_80B98F30;
+            arg0[2].speedXZ = func_80B98F30;
             func_80B98F30(arg0, arg1);
             return;
         default:
             func_801477B4(arg1);
-            arg0->unk_2F8 = (void (*)(Actor *, GlobalContext *)) func_80B990A4;
+            arg0[2].speedXZ = (bitwise f32) func_80B990A4;
             /* Duplicate return node #10. Try simplifying control flow for better match */
             return;
         }
@@ -1931,17 +1931,17 @@ void EnZot_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp44 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0 + 8;
+    sp44->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0xFF;
     temp_v0->words.w0 = 0xFB000000;
     temp_v0_2 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0_2 + 8;
+    sp44->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp44 = sp44;
     sp38 = temp_v0_2;
     sp38->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_2EC * 4))->unk_4C);
     temp_v0_3 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0_3 + 8;
+    sp44->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060030;
     sp34 = temp_v0_3;
     sp34->words.w1 = func_80B99580(globalCtx->state.gfxCtx);

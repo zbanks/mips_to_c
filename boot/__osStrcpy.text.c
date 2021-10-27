@@ -17,7 +17,7 @@ s8 *__osStrcpy(s8 *dst, s8 *src) {
     if (temp_v0 != 0) {
         do {
             *phi_v1 = phi_v0;
-            temp_v0_2 = phi_a1->unk_1;
+            temp_v0_2 = phi_a1[1];
             temp_v1 = phi_v1 + 1;
             phi_v0 = temp_v0_2;
             phi_v1 = temp_v1;

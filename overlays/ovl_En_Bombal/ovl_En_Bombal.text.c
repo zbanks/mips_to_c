@@ -221,10 +221,10 @@ loop_1:
     if (phi_s0->unk_0 == 0) {
         phi_s0->unk_0 = 1U;
         phi_s0->unk_4 = (s32) arg1->unk_0;
-        phi_s0->unk_8 = (s32) arg1->unk_4;
+        phi_s0->unk_8 = (s32) arg1[1];
         phi_s0->unk_16 = arg2;
         phi_s0->unk_14 = 0xFF;
-        phi_s0->unk_C = (s32) arg1->unk_8;
+        phi_s0->unk_C = (s32) arg1[2];
         phi_s0->unk_24 = (f32) ((Rand_ZeroOne() - 0.5f) * 10.0f);
         phi_s0->unk_28 = (f32) ((Rand_ZeroOne() - 0.5f) * 10.0f);
         phi_s0->unk_2C = (f32) ((Rand_ZeroOne() - 0.5f) * 10.0f);
@@ -334,23 +334,23 @@ void func_80C06208(EnBombal *arg0, GlobalContext *arg1) {
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0x14U);
             temp_v0 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0 + 8;
+            temp_s0->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDB060020;
             temp_v0->words.w1 = Lib_SegmentedToVirtual((void *) &D_04079B10);
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = (u32) D_0407AB10;
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0;
             temp_v0_3->words.w0 = 0xE7000000;
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = -1;
             temp_v0_4->words.w0 = 0xFA000000;
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xFB000000;
             temp_v0_5->words.w1 = (phi_s2->unk_14 & 0xFF) | 0xFAB4FF00;
             SysMatrix_InsertMatrix(arg1 + 0x187FC, 1);
@@ -362,11 +362,11 @@ void func_80C06208(EnBombal *arg0, GlobalContext *arg1) {
             }
             SysMatrix_InsertZRotation_f(phi_f6 * 20.0f * 0.017453292f, 1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
             temp_v0_7 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_7 + 8;
+            temp_s0->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) D_0407AB58;
             temp_v0_7->words.w0 = 0xDE000000;
         }

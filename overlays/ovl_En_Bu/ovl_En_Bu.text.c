@@ -48,12 +48,12 @@ void EnBu_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
     Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) this->displayListPtr;
 }

@@ -788,21 +788,21 @@ void func_80143B0C(GlobalContext *globalCtx) {
     phi_v1 = &gSaveContext.unk_14;
     phi_a2 = &gSaveContext.daysElapsed;
     do {
-        phi_v1->unk_3F6C = (s32) (phi_a0->unk_0 & phi_v1->unk_3F6C);
-        phi_v1->unk_3F70 = (s32) (phi_a0->unk_4 & phi_v1->unk_3F70);
-        phi_v1->unk_3F74 = 0;
-        phi_v1->unk_3F68 = (s32) (phi_a0->unk_8 & phi_v1->unk_3F68);
-        phi_v1->unk_3F78 = (s32) (phi_a0->unk_C & phi_v1->unk_3F78);
-        phi_a2->unk_10C = 0;
-        phi_a2->unk_110 = 0;
-        phi_v1->unk_3F80 = (s32) (phi_a0->unk_10 & phi_v1->unk_3F80);
-        phi_v1->unk_3F84 = (s32) (phi_a0->unk_14 & phi_v1->unk_3F84);
-        phi_v1->unk_3F88 = 0;
-        phi_v1->unk_3F7C = (s32) (phi_a0->unk_18 & phi_v1->unk_3F7C);
+        phi_v1[4059] &= phi_a0->unk_0;
+        phi_v1[4060] &= phi_a0->unk_4;
+        phi_v1[4061] = 0;
+        phi_v1[4058] &= phi_a0->unk_8;
+        phi_v1[4062] &= phi_a0->unk_C;
+        phi_a2[67] = 0;
+        phi_a2[68] = 0;
+        phi_v1[4064] &= phi_a0->unk_10;
+        phi_v1[4065] &= phi_a0->unk_14;
+        phi_v1[4066] = 0;
+        phi_v1[4063] &= phi_a0->unk_18;
         temp_a2 = phi_a2 + 0x38;
-        phi_v1->unk_3F8C = (s32) (phi_a0->unk_1C & phi_v1->unk_3F8C);
-        temp_a2->unk_F4 = 0;
-        temp_a2->unk_F0 = 0;
+        phi_v1[4067] &= phi_a0->unk_1C;
+        temp_a2[61] = 0;
+        temp_a2[60] = 0;
         temp_v1 = phi_v1 + 0x28;
         phi_a0 += 0x20;
         phi_v1 = temp_v1;
@@ -815,11 +815,11 @@ void func_80143B0C(GlobalContext *globalCtx) {
         do {
             temp_a2_2 = phi_a2_2 + 0x1C;
             temp_v1_2 = phi_v1_2 + 0x14;
-            temp_v1_2->unk_3F54 = 0;
-            temp_v1_2->unk_3F58 = 0;
-            temp_v1_2->unk_3F5C = 0;
-            temp_v1_2->unk_3F60 = 0;
-            temp_v1_2->unk_3F64 = 0;
+            temp_v1_2[4053] = 0;
+            temp_v1_2[4054] = 0;
+            temp_v1_2[4055] = 0;
+            temp_v1_2[4056] = 0;
+            temp_v1_2[4057] = 0;
             phi_v1_2 = temp_v1_2;
             phi_a2_2 = (u32 *) temp_a2_2;
             phi_a2_3 = temp_a2_2;
@@ -832,7 +832,7 @@ void func_80143B0C(GlobalContext *globalCtx) {
         phi_s0 = (SaveContext *) temp_s0_2;
     } while (temp_s0_2 < (u32) (&gSaveContext + 0x1B));
     if ((gSaveContext.weekEventReg[84] & 0x20) != 0) {
-        func_801149A0(0x35, gItemSlots[0x35], phi_a2_3);
+        func_801149A0(0x35, gItemSlots[53], phi_a2_3);
     }
     phi_a1 = 0;
     phi_a1_2 = 0;
@@ -954,7 +954,7 @@ loop_13:
         temp_s0_4 = phi_s0_3 + 1;
         phi_s0_3 = temp_s0_4;
     } while ((u32) temp_s0_4 < (u32) &gSaveContext.day);
-    gSaveContext.inventory.questItems &= -1 - *(gBitFlags + 0x64);
+    gSaveContext.inventory.questItems &= -1 - gBitFlags[25];
     if ((s32) gSaveContext.health < 0x30) {
         gSaveContext.health = 0x30;
     }
@@ -1001,13 +1001,13 @@ loop_13:
     temp_v0_10 = (u32) (temp_a2_5 & 0xFF000000) >> 0x18;
     phi_v0_6 = temp_v0_10;
     if ((temp_v0_10 == 0x10U) || (((u32) (temp_a2_5 & 0xFF0000) >> 0x10) == 0x10U)) {
-        gSaveContext.inventory.items[gItemSlots[0x10]] = 0x10;
+        gSaveContext.inventory.items[gItemSlots[16]] = 0x10;
         phi_v0_6 = (u32) (gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18;
     }
     phi_a2_4 = gSaveContext.roomInf[126][5];
     if (phi_v0_6 == 0x12U) {
 loop_85:
-        temp_v0_11 = &gSaveContext + gItemSlots[0x12] + phi_a1_3;
+        temp_v0_11 = &gSaveContext + gItemSlots[18] + phi_a1_3;
         if (temp_v0_11->unk_70 == 0xFF) {
             temp_v0_11->unk_70 = 0x12U;
             phi_a2_4 = gSaveContext.roomInf[126][5];
@@ -1022,7 +1022,7 @@ loop_85:
     phi_a2_5 = phi_a2_4;
     if (((u32) (phi_a2_4 & 0xFF0000) >> 0x10) == 0x12U) {
 loop_90:
-        temp_v0_12 = &gSaveContext + gItemSlots[0x12] + phi_a1_4;
+        temp_v0_12 = &gSaveContext + gItemSlots[18] + phi_a1_4;
         if (temp_v0_12->unk_70 == 0xFF) {
             temp_v0_12->unk_70 = 0x12U;
             phi_a2_5 = gSaveContext.roomInf[126][5];
@@ -1965,7 +1965,7 @@ void func_801457CC(GameState *gamestate, SramContext *param_2) {
                     temp_t8_2->unk_24460 = (s16) gSaveContext.day;
                     sp40->unk_4468 = (u8) gSaveContext.isOwlSave;
                     temp_t8_2->unk_2446C = (s16) gSaveContext.rupees;
-                    sp40->unk_4474 = (s8) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+                    sp40->unk_4474 = (s8) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]);
                     phi_v0 = 0;
                     do {
                         temp_v1_4 = (phi_v1_4 + 1) & 0xFFFF;
@@ -1982,7 +1982,7 @@ void func_801457CC(GameState *gamestate, SramContext *param_2) {
                     sp40->unk_447C = (s8) ((u32) (gSaveContext.inventory.questItems & 0xF0000000) >> 0x1C);
                 }
                 if (sp6E == 1) {
-                    Lib_MemCpy((void *) (param_2->flashReadBuff + 0x2000), (void *) &gSaveContext, 0x100CU);
+                    Lib_MemCpy((void *) &param_2->flashReadBuff[2048], (void *) &gSaveContext, 0x100CU);
                     func_80146EBC(param_2, *sp60, *(&D_801C6818 + sp64));
                 } else if (sp6E == 0) {
                     temp_s7_2 = gSaveContext.checksum;
@@ -2000,7 +2000,7 @@ void func_801457CC(GameState *gamestate, SramContext *param_2) {
                     if (((u8) gSaveContext.newf[0] != 0x5A) || ((u8) gSaveContext.newf[1] != 0x45) || ((u8) gSaveContext.newf[2] != 0x4C) || ((u8) gSaveContext.newf[3] != 0x44) || ((u8) gSaveContext.newf[4] != 0x41) || ((u8) gSaveContext.newf[5] != 0x33) || (phi_s2_3 != phi_v1_6) || (phi_s2_3 != temp_s7_2)) {
                         func_80185968((void *) param_2->flashReadBuff, *sp60, *sp5C);
                         Lib_MemCpy((void *) &gSaveContext, (void *) param_2->flashReadBuff, 0x100CU);
-                        Lib_MemCpy((void *) (param_2->flashReadBuff + 0x2000), (void *) &gSaveContext, 0x100CU);
+                        Lib_MemCpy((void *) &param_2->flashReadBuff[2048], (void *) &gSaveContext, 0x100CU);
                         func_80146EBC(param_2, *sp60, *(&D_801C6818 + sp64));
                     }
                 }
@@ -2069,7 +2069,7 @@ void func_801457CC(GameState *gamestate, SramContext *param_2) {
                         temp_t6_2->unk_24460 = (s16) gSaveContext.day;
                         sp40->unk_4468 = (u8) gSaveContext.isOwlSave;
                         temp_t6_2->unk_2446C = (s16) gSaveContext.rupees;
-                        sp40->unk_4474 = (s8) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+                        sp40->unk_4474 = (s8) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]);
                         phi_v0_2 = 0;
                         do {
                             temp_v1_8 = (phi_v1_9 + 1) & 0xFFFF;
@@ -2116,7 +2116,7 @@ void func_801457CC(GameState *gamestate, SramContext *param_2) {
                     bzero((void *) param_2->flashReadBuff, 0x4000);
                     Lib_MemCpy((void *) &gSaveContext, (void *) param_2->flashReadBuff, *(&D_801C6870 + sp64));
                     func_80146EBC(param_2, *sp60, *sp5C);
-                    func_80146EBC(param_2, temp_s3_2->unk_4, temp_s4_2->unk_4);
+                    func_80146EBC(param_2, temp_s3_2[1], temp_s4_2[1]);
                 }
             } else {
                 if (phi_s2 != 0) {
@@ -2212,7 +2212,7 @@ void func_80146628(void *arg0, SramContext *arg1) {
             (arg0 + (arg0->unk_244A6 * 2))->unk_24464 = (s16) gSaveContext.day;
             (arg0 + arg0->unk_244A6)->unk_2446A = (u8) gSaveContext.isOwlSave;
             (arg0 + (arg0->unk_244A6 * 2))->unk_24470 = (s16) gSaveContext.rupees;
-            (arg0 + arg0->unk_244A6)->unk_24476 = (s8) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+            (arg0 + arg0->unk_244A6)->unk_24476 = (s8) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]);
             phi_v0 = 0;
             phi_t0_3 = 0;
             do {
@@ -2254,7 +2254,7 @@ void func_80146628(void *arg0, SramContext *arg1) {
         (arg0 + (arg0->unk_244A6 * 2))->unk_24460 = (s16) gSaveContext.day;
         (arg0 + arg0->unk_244A6)->unk_24468 = (u8) gSaveContext.isOwlSave;
         (arg0 + (arg0->unk_244A6 * 2))->unk_2446C = (s16) gSaveContext.rupees;
-        (arg0 + arg0->unk_244A6)->unk_24474 = (s8) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+        (arg0 + arg0->unk_244A6)->unk_24474 = (s8) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]);
         phi_v0_2 = 0;
         do {
             temp_v1_4 = (phi_v1_4 + 1) & 0xFFFF;
@@ -2345,7 +2345,7 @@ void func_80146AA0(void *arg0, void *arg1) {
         (arg0 + (temp_t0->unk_4480 * 2))->unk_24460 = (s16) gSaveContext.day;
         (arg0 + temp_t0->unk_4480)->unk_24468 = (u8) gSaveContext.isOwlSave;
         (arg0 + (temp_t0->unk_4480 * 2))->unk_2446C = (s16) gSaveContext.rupees;
-        (arg0 + temp_t0->unk_4480)->unk_24474 = (s8) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+        (arg0 + temp_t0->unk_4480)->unk_24474 = (s8) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]);
         phi_a0_2 = 0;
         do {
             temp_v1_4 = (phi_v1_4 + 1) & 0xFFFF;

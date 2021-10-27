@@ -128,7 +128,7 @@ void func_80C09ED0(ColliderTrisInit *arg0, Vec3f *arg1, ActorShape *arg2, Collid
 loop_3:
             SysMatrix_MultiplyVector3fByState(arg0->elements + phi_s2 + phi_s1 + 0x18, phi_s0);
             Math_Vec3f_Sum(phi_s0, arg1, phi_s0);
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             phi_s1 += 0xC;
             phi_s0 = temp_s0;
             if (temp_s0 != &sp78) {
@@ -286,33 +286,33 @@ void BgAstrBombwall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     BgAstrBombwall *this = (BgAstrBombwall *) thisx;
 
     temp_a3 = globalCtx->state.gfxCtx;
-    temp_t0 = sSetupDL + 0x4B0;
+    temp_t0 = &sSetupDL[150];
     temp_v1 = temp_a3->polyOpa.p;
     temp_v1->words.w1 = (u32) temp_t0;
     temp_v1->words.w0 = 0xDE000000;
-    temp_v1->unk_8 = 0xDA380003;
+    temp_v1[1].words.w0 = 0xDA380003;
     temp_a0 = globalCtx->state.gfxCtx;
     sp1C = temp_t0;
     sp50 = temp_a3;
     globalCtx = globalCtx;
     sp54 = temp_v1;
-    temp_v1->unk_C = Matrix_NewMtx(temp_a0);
-    temp_v1->unk_14 = 0x400000;
-    temp_v1->unk_10 = 0xD9FFFFFF;
-    temp_v1->unk_1C = &D_06002380;
-    temp_v1->unk_18 = 0xDE000000U;
-    temp_a3->polyOpa.p = temp_v1 + 0x20;
+    temp_v1[1].words.w1 = Matrix_NewMtx(temp_a0);
+    temp_v1[2].words.w1 = 0x400000;
+    temp_v1[2].words.w0 = 0xD9FFFFFF;
+    temp_v1[3].words.w1 = (u32) &D_06002380;
+    temp_v1[3].words.w0 = 0xDE000000;
+    temp_a3->polyOpa.p = &temp_v1[4];
     temp_t1 = globalCtx->state.gfxCtx;
     temp_a1 = temp_t1->polyXlu.p;
     temp_a1->words.w0 = 0xDE000000;
     temp_a1->words.w1 = (u32) temp_t0;
-    temp_a1->unk_8 = 0xDA380003;
+    temp_a1[1].words.w0 = 0xDA380003;
     sp34 = temp_t1;
     sp38 = temp_a1;
-    temp_a1->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_a1->unk_14 = 0x400000;
-    temp_a1->unk_10 = 0xD9FFFFFF;
-    temp_a1->unk_1C = &D_060022E0;
-    temp_a1->unk_18 = 0xDE000000;
-    temp_t1->polyXlu.p = temp_a1 + 0x20;
+    temp_a1[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_a1[2].words.w1 = 0x400000;
+    temp_a1[2].words.w0 = 0xD9FFFFFF;
+    temp_a1[3].words.w1 = (u32) &D_060022E0;
+    temp_a1[3].words.w0 = 0xDE000000;
+    temp_t1->polyXlu.p = &temp_a1[4];
 }

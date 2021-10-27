@@ -130,5 +130,5 @@ void __osViSwapContext(void) {
         temp_t2_2->unk_-4 = (s32) temp_t3->unk_-4;
         phi_t3 = temp_t3;
         phi_t2 = temp_t2_2;
-    } while (temp_t3 != (temp_s0 + 0x30));
+    } while (temp_t3 != &temp_s0[1]);
 }

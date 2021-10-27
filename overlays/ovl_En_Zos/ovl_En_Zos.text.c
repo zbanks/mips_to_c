@@ -885,13 +885,13 @@ void EnZos_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_StatePush();
     Matrix_RotateY((s16) (this->actor.home.rot.y - this->actor.shape.rot.y), 1U);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -974.4f, 1);
-    temp_s0->unk_8 = 0xDA380003;
-    temp_s0->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_s0->unk_14 = &D_060136E0;
-    temp_s0->unk_10 = 0xDE000000;
-    temp_s0->unk_1C = &D_06013088;
-    temp_s0->unk_18 = 0xDE000000;
-    temp_s2->polyOpa.p = temp_s0 + 0x20;
+    temp_s0[1].words.w0 = 0xDA380003;
+    temp_s0[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s0[2].words.w1 = (u32) &D_060136E0;
+    temp_s0[2].words.w0 = 0xDE000000;
+    temp_s0[3].words.w1 = (u32) &D_06013088;
+    temp_s0[3].words.w0 = 0xDE000000;
+    temp_s2->polyOpa.p = &temp_s0[4];
     SysMatrix_StatePop();
     SkelAnime_DrawSV(globalCtx, this->unk_21C.skeleton, this->unk_21C.limbDrawTbl, (s32) this->unk_21C.dListCount, func_80BBC4E4, func_80BBC500, (Actor *) this);
     if ((this->unk_2B6 & 0x40) != 0) {

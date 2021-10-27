@@ -198,7 +198,7 @@ void func_80B93B44(EnZog *arg0, s16);               /* static */
 void func_80B93BA8(EnZog *arg0, s16 arg1);          /* static */
 s32 func_80B93BE0(EnZog *arg0, GlobalContext *arg1); /* static */
 void func_80B93D2C(EnZog *arg0, GlobalContext *arg1); /* static */
-void func_80B93DE8(PosRot *arg0, GlobalContext *arg1, s32 arg2); /* static */
+void func_80B93DE8(f32 *arg0, GlobalContext *arg1, s32 arg2); /* static */
 s32 func_80B93EA0(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80B943EC(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80B954C4(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4); /* static */
@@ -277,8 +277,8 @@ void func_80B93310(Actor *arg0, Lights *arg1, GlobalContext *arg2) {
         }
         sp28 = temp_a1;
         Math_Vec3f_Copy((Vec3f *) &sp34, temp_a1);
-        temp_f2 = arg0->focus.pos.x - arg0->unk_2F0;
-        temp_f12 = arg0->focus.pos.z - arg0->unk_2F8;
+        temp_f2 = arg0->focus.pos.x - arg0[2].velocity.y;
+        temp_f12 = arg0->focus.pos.z - arg0[2].speedXZ;
         temp_f0 = sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12));
         phi_f14 = temp_f0;
         if (temp_f0 < 12.0f) {
@@ -366,7 +366,7 @@ void EnZog_Init(Actor *thisx, GlobalContext *globalCtx) {
     SkelAnime_ChangeAnimDefaultStop(sp50, &D_0600FC0C);
     Collider_InitAndSetCylinder(globalCtx, &this->unk_144, (Actor *) this, &D_80B95880);
     this->actor.colChkInfo.mass = 0xFF;
-    if (((this->actor.params & 0xF) != 2) && (gSaveContext.inventory.items[gItemSlots[0x34]] == 0x34) && ((globalCtx->csCtx.unk_12 != 2) || (gSaveContext.sceneSetupIndex != 0) || (globalCtx->sceneNum != 0x37))) {
+    if (((this->actor.params & 0xF) != 2) && (gSaveContext.inventory.items[gItemSlots[52]] == 0x34) && ((globalCtx->csCtx.unk_12 != 2) || (gSaveContext.sceneSetupIndex != 0) || (globalCtx->sceneNum != 0x37))) {
         Actor_MarkForDeath((Actor *) this);
         return;
     }
@@ -552,10 +552,10 @@ s32 func_80B93BE0(EnZog *arg0, GlobalContext *arg1) {
     temp_v1_2 = Lib_SegmentedToVirtual(temp_v1->unk_4) + (arg0->unk_2EC * 6);
     if ((arg0->unk_30A & 1) != 0) {
         arg0->actor.world.pos.x = (f32) temp_v1_2->unk_0;
-        arg0->actor.world.pos.z = (f32) temp_v1_2->unk_4;
+        arg0->actor.world.pos.z = (f32) temp_v1_2[2];
         return 1;
     }
-    temp_v0 = Math_Atan2S((f32) temp_v1_2->unk_6 - arg0->actor.world.pos.x, (f32) temp_v1_2->unk_A - arg0->actor.world.pos.z);
+    temp_v0 = Math_Atan2S((f32) temp_v1_2[3] - arg0->actor.world.pos.x, (f32) temp_v1_2[5] - arg0->actor.world.pos.z);
     temp_a0 = arg0->actor.world.rot.y;
     phi_a1 = temp_v0 - temp_a0;
     phi_v1 = temp_v0;
@@ -597,14 +597,14 @@ void func_80B93D2C(EnZog *arg0, GlobalContext *arg1) {
     }
 }
 
-void func_80B93DE8(PosRot *arg0, GlobalContext *arg1, s32 arg2) {
+void func_80B93DE8(f32 *arg0, GlobalContext *arg1, s32 arg2) {
     f32 sp34;
     f32 sp30;
     f32 sp2C;
 
-    sp2C = randPlusMinusPoint5Scaled(30.0f) + arg0->pos.x;
-    sp30 = arg0->pos.y + 3.0f;
-    sp34 = randPlusMinusPoint5Scaled(30.0f) + arg0->pos.z;
+    sp2C = randPlusMinusPoint5Scaled(30.0f) + arg0->unk_0;
+    sp30 = arg0[1] + 3.0f;
+    sp34 = randPlusMinusPoint5Scaled(30.0f) + arg0[2];
     EffectSsKiraKira_SpawnDispersed(arg1, (Vec3f *) &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, (s16) 0x3E8, arg2);
 }
 
@@ -695,9 +695,9 @@ s32 func_80B93EA0(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_322 = 0;
                 }
                 if ((s32) arg0->unk_322 > 0) {
-                    func_80B93DE8(arg0 + 0x2F0, arg1, 0x14);
-                    func_80B93DE8(&arg0->world, arg1, 0x14);
-                    func_80B93DE8(&arg0->focus, arg1, 0x14);
+                    func_80B93DE8(&arg0[2].velocity.y, arg1, 0x14);
+                    func_80B93DE8((f32 *) &arg0->world, arg1, 0x14);
+                    func_80B93DE8((f32 *) &arg0->focus, arg1, 0x14);
                 }
                 goto block_33;
             }
@@ -1308,23 +1308,23 @@ void EnZog_Draw(Actor *thisx, GlobalContext *globalCtx) {
     if ((this->unk_30A & 8) != 0) {
         if ((s32) this->unk_322 >= 0x81) {
             temp_a0 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_a0 + 8;
+            temp_a2->polyXlu.p = &temp_a0[1];
             func_8012C2B4(temp_a0);
             Scene_SetRenderModeXlu(globalCtx, 2, 2U);
         } else {
             temp_a0_2 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_a0_2 + 8;
+            temp_a2->polyXlu.p = &temp_a0_2[1];
             func_8012C304(temp_a0_2);
             Scene_SetRenderModeXlu(globalCtx, 1, 2U);
         }
         temp_s0 = temp_a2->polyXlu.p;
         temp_s0->words.w0 = 0xDB060020;
         temp_s0->words.w1 = Lib_SegmentedToVirtual(D_80B958AC[this->unk_31C]);
-        temp_s0->unk_8 = 0xDB060024;
-        temp_s0->unk_C = Lib_SegmentedToVirtual(D_80B958B8[this->unk_31E]);
-        temp_s0->unk_10 = 0xFB000000;
-        temp_v0 = temp_s0 + 0x18;
-        temp_s0->unk_14 = (s32) (this->unk_322 & 0xFF);
+        temp_s0[1].words.w0 = 0xDB060024;
+        temp_s0[1].words.w1 = Lib_SegmentedToVirtual(D_80B958B8[this->unk_31E]);
+        temp_s0[2].words.w0 = 0xFB000000;
+        temp_v0 = &temp_s0[3];
+        temp_s0[2].words.w1 = this->unk_322 & 0xFF;
         temp_a2->polyXlu.p = temp_v0;
         temp_a2->polyXlu.p = SkelAnime_DrawSV2(globalCtx, this->unk_190.skeleton, this->unk_190.limbDrawTbl, (s32) this->unk_190.dListCount, NULL, func_80B95598, (Actor *) this, temp_v0);
         return;
@@ -1334,10 +1334,10 @@ void EnZog_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0_2 = temp_a2->polyOpa.p;
     temp_s0_2->words.w0 = 0xDB060020;
     temp_s0_2->words.w1 = Lib_SegmentedToVirtual(D_80B958AC[this->unk_31C]);
-    temp_s0_2->unk_8 = 0xDB060024;
-    temp_s0_2->unk_C = Lib_SegmentedToVirtual(D_80B958B8[this->unk_31E]);
-    temp_s0_2->unk_14 = 0xFF;
-    temp_s0_2->unk_10 = 0xFB000000;
-    temp_a2->polyOpa.p = temp_s0_2 + 0x18;
+    temp_s0_2[1].words.w0 = 0xDB060024;
+    temp_s0_2[1].words.w1 = Lib_SegmentedToVirtual(D_80B958B8[this->unk_31E]);
+    temp_s0_2[2].words.w1 = 0xFF;
+    temp_s0_2[2].words.w0 = 0xFB000000;
+    temp_a2->polyOpa.p = &temp_s0_2[3];
     SkelAnime_DrawSV(globalCtx, this->unk_190.skeleton, this->unk_190.limbDrawTbl, (s32) this->unk_190.dListCount, NULL, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80B954C4, (Actor *) this);
 }

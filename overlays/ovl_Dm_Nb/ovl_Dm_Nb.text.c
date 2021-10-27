@@ -37,8 +37,8 @@ s32 func_80C1DED0(Actor *arg0, s32 arg1) {
     s32 phi_v1;
 
     phi_v1 = 0;
-    if (arg1 != arg0->unk_1F0) {
-        arg0->unk_1F0 = arg1;
+    if (arg1 != arg0[1].colChkInfo.displacement.z) {
+        arg0[1].colChkInfo.displacement.z = arg1;
         phi_v1 = func_8013BC6C(arg0 + 0x144, &D_80C1E200, arg1);
     }
     return phi_v1;
@@ -64,7 +64,7 @@ void func_80C1DF18(Actor *arg0, GlobalContext *arg1) {
         if (arg0->unk_1F8 == 0) {
             arg0->unk_1EC = 0xFFU;
             arg0->unk_1F8 = 1;
-            arg0->unk_1F4 = (s32) arg0->unk_1F0;
+            arg0->unk_1F4 = (s32) arg0[1].colChkInfo.displacement.z;
         }
         arg0 = arg0;
         if (func_800EE29C(arg1, 0x232U) != 0) {

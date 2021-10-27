@@ -200,7 +200,7 @@ block_9:
     }
     arg0 = temp_a2;
     temp_v0_2 = func_80ADFCA0(arg1, temp_a2);
-    arg0->unk_1D8 = temp_v0_2;
+    arg0[1].xyzDistToPlayerSq = (bitwise f32) temp_v0_2;
     arg0->unk_220 = 0;
     if (temp_v0_2 == 0) {
         Actor_MarkForDeath(arg0);
@@ -339,7 +339,7 @@ block_19:
             return;
         case 4232:                                  /* switch 2 */
             gSaveContext.weekEventReg[26] |= 1;
-            if (gSaveContext.inventory.items[gItemSlots[0x34]] == 0x34) {
+            if (gSaveContext.inventory.items[gItemSlots[52]] == 0x34) {
                 func_801477B4(arg1);
                 SkelAnime_ChangeAnimTransitionRepeat(arg0 + 0x190, &D_060092FC, -10.0f);
                 arg0->actionFunc = func_80AE0304;
@@ -388,7 +388,7 @@ void func_80AE0418(Actor *arg0, GlobalContext *arg1) {
 
 void func_80AE0460(Actor *arg0, GlobalContext *arg1) {
     if (Actor_HasParent(arg0, arg1) != 0) {
-        arg0->unk_1D8->unk_18 = 0;
+        arg0[1].xyzDistToPlayerSq->unk_18 = 0;
         arg0->unk_1D4 = func_80AE0418;
         return;
     }
@@ -427,7 +427,7 @@ void func_80AE04FC(Actor *arg0, GlobalContext *arg1) {
             func_801477B4(arg1);
             arg0->unk_1D4 = func_80AE0704;
             if (temp_v0 == 0x13) {
-                if ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) != 0) {
+                if ((gBitFlags[25] & gSaveContext.inventory.questItems) != 0) {
                     sp20 = temp_v1;
                     if (func_8013A4C4(9) != 0) {
                         temp_v1->textId = 0x107B;
@@ -456,7 +456,7 @@ void func_80AE04FC(Actor *arg0, GlobalContext *arg1) {
         }
         if (temp_v0 < 0) {
             func_80151938(arg1, 0x1078U);
-            SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_06001198, -10.0f);
+            SkelAnime_ChangeAnimTransitionRepeat(arg0[1].xyzDistToPlayerSq + 0x190, &D_06001198, -10.0f);
             arg0->unk_1D4 = func_80AE0704;
         }
         /* Duplicate return node #17. Try simplifying control flow for better match */
@@ -472,7 +472,7 @@ void func_80AE0698(Actor *arg0, GlobalContext *arg1) {
     arg0->focus.pos.y = arg0->world.pos.y;
     arg0->focus.pos.z = arg0->world.pos.z;
     ActorCutscene_Stop((s16) arg0->cutscene);
-    arg0->unk_1D8->unk_18 = 0;
+    arg0[1].xyzDistToPlayerSq->unk_18 = 0;
 }
 
 void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
@@ -480,18 +480,18 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
     void *sp2C;
     GlobalContext *temp_a0;
     GlobalContext *temp_a0_2;
+    f32 temp_v1_2;
     u16 temp_v0;
     u16 temp_v1;
     u8 temp_v0_2;
     void *temp_v0_3;
-    void *temp_v1_2;
 
     sp3C = arg1->actorCtx.actorList[2].first;
     temp_v0 = arg0->unk_220;
     if (((temp_v0 & 8) != 0) && (arg1->msgCtx.unk11F04 == 0x1078)) {
         arg0->unk_220 = (u16) (temp_v0 & 0xFFF7);
         arg1 = arg1;
-        SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_06001198, -10.0f);
+        SkelAnime_ChangeAnimTransitionRepeat(arg0[1].xyzDistToPlayerSq + 0x190, &D_06001198, -10.0f);
     }
     arg1 = arg1;
     temp_v0_2 = func_80152498(arg1 + 0x4908);
@@ -511,7 +511,7 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
                     }
                     arg0->unk_220 = (u16) (arg0->unk_220 | 2);
                     gSaveContext.weekEventReg[25] |= 0x40;
-                    arg0->unk_1D8->unk_18 = 1;
+                    arg0[1].xyzDistToPlayerSq->unk_18 = 1;
                     arg0->unk_220 = (u16) (arg0->unk_220 | 4);
                     break;
                 case 4207:
@@ -524,7 +524,7 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
                 case 4217:
                     arg1 = arg1;
                     sp2C = temp_v0_3;
-                    SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_06000964, -10.0f);
+                    SkelAnime_ChangeAnimTransitionRepeat(arg0[1].xyzDistToPlayerSq + 0x190, &D_06000964, -10.0f);
                     func_80151938(arg1, (temp_v0_3->unk_680C + 1) & 0xFFFF);
                     break;
                 case 4218:
@@ -534,7 +534,7 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
                 case 4216:
                     sp3C->unk_A87 = 0;
                     func_80151938(arg1, (temp_v0_3->unk_680C + 1) & 0xFFFF);
-                    SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_060092FC, -10.0f);
+                    SkelAnime_ChangeAnimTransitionRepeat(arg0[1].xyzDistToPlayerSq + 0x190, &D_060092FC, -10.0f);
                     break;
                 case 4220:
                     arg1 = arg1;
@@ -551,7 +551,7 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
                         arg0->focus.pos.z = arg0->world.pos.z;
                         ActorCutscene_Stop((s16) arg0->cutscene);
                         arg0->flags &= -0x101;
-                        gSaveContext.inventory.questItems = (-1 - *(gBitFlags + 0x64)) & gSaveContext.inventory.questItems;
+                        gSaveContext.inventory.questItems = (-1 - gBitFlags[25]) & gSaveContext.inventory.questItems;
                     } else {
                         func_80151938(arg1, 0x10A8U);
                     }
@@ -564,13 +564,13 @@ void func_80AE0704(Actor *arg0, GlobalContext *arg1) {
                 case 4219:
                     sp3C->unk_A87 = 0;
                     func_80151938(arg1, (temp_v0_3->unk_680C + 1) & 0xFFFF);
-                    SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_060092FC, -10.0f);
+                    SkelAnime_ChangeAnimTransitionRepeat((bitwise s32) arg0[1].xyzDistToPlayerSq + 0x190, &D_060092FC, -10.0f);
                     break;
                 case 4215:
                 case 4262:
                 case 4264:
                     arg1 = arg1;
-                    SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_060092FC, -10.0f);
+                    SkelAnime_ChangeAnimTransitionRepeat((bitwise s32) arg0[1].xyzDistToPlayerSq + 0x190, &D_060092FC, -10.0f);
                     func_80AE0698(arg0, arg1);
                     arg0->flags &= -0x101;
 block_30:
@@ -595,12 +595,12 @@ block_30:
                         func_80AE0698(arg0, arg1);
                     } else {
                         func_80151938(arg1, 0x10A7U);
-                        SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_06000964, -10.0f);
+                        SkelAnime_ChangeAnimTransitionRepeat((bitwise s32) arg0[1].xyzDistToPlayerSq + 0x190, &D_06000964, -10.0f);
                     }
                     break;
                 case 4263:
                     arg1 = arg1;
-                    SkelAnime_ChangeAnimTransitionRepeat(arg0->unk_1D8 + 0x190, &D_060092FC, -10.0f);
+                    SkelAnime_ChangeAnimTransitionRepeat((bitwise s32) arg0[1].xyzDistToPlayerSq + 0x190, &D_060092FC, -10.0f);
                     func_80AE0698(arg0, arg1);
                     break;
                 case 4240:
@@ -615,11 +615,11 @@ block_30:
         }
     }
     if ((arg0->unk_220 & 2) != 0) {
-        temp_v1_2 = arg0->unk_1D8;
-        if (temp_v1_2 != 0) {
+        temp_v1_2 = arg0[1].xyzDistToPlayerSq;
+        if ((bitwise s32) temp_v1_2 != 0) {
             Math_SmoothStepToF((f32 *) &arg0->focus, temp_v1_2->unk_3C, 0.8f, 100.0f, 5.0f);
-            Math_SmoothStepToF(&arg0->focus.pos.y, arg0->unk_1D8->unk_40, 0.8f, 100.0f, 5.0f);
-            Math_SmoothStepToF(&arg0->focus.pos.z, arg0->unk_1D8->unk_44, 0.8f, 100.0f, 5.0f);
+            Math_SmoothStepToF(&arg0->focus.pos.y, arg0[1].xyzDistToPlayerSq->unk_40, 0.8f, 100.0f, 5.0f);
+            Math_SmoothStepToF(&arg0->focus.pos.z, arg0[1].xyzDistToPlayerSq->unk_44, 0.8f, 100.0f, 5.0f);
         }
     }
     if ((arg0->unk_220 & 4) != 0) {
@@ -650,7 +650,7 @@ void func_80AE0C88(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_1D4 = func_80AE0704;
         if ((temp_v0 == 0x108A) || (temp_v0 == 0x1091)) {
             arg0->unk_220 = (u16) (arg0->unk_220 | 4);
-            arg0->unk_1D8->unk_18 = 1;
+            arg0[1].xyzDistToPlayerSq->unk_18 = 1;
             return;
         }
         /* Duplicate return node #6. Try simplifying control flow for better match */
@@ -766,13 +766,13 @@ void EnTsn_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp3C = sp3C;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80AE11C8 + (this->unk_22E * 4)));
     temp_v0_2 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0_2 + 8;
+    sp3C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp30 = temp_v0_2;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80AE11C8 + (this->unk_22E * 4)));

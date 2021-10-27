@@ -593,11 +593,11 @@ loop_4:
         temp_t4->unk_C = (s32) temp_t5->unk_C;
         temp_t4->unk_10 = (s32) temp_t5->unk_10;
         temp_t4->unk_14 = (s32) temp_t5->unk_14;
-        phi_a3 = temp_a1 + 0x18;
+        phi_a3 = &temp_a1[1];
         phi_a1 = temp_a1;
-        phi_t0 = temp_a1 + 0x30;
-        phi_a2 = temp_a1 + 0x48;
-        phi_t3 = temp_a1 + 0x60;
+        phi_t0 = &temp_a1[2];
+        phi_a2 = &temp_a1[3];
+        phi_t3 = &temp_a1[4];
         phi_v1 = 3;
         do {
             temp_v1_2 = phi_v1 + 4;
@@ -675,7 +675,7 @@ loop_4:
     }
     temp_a1_4 = &params->elements[1];
     temp_t2_2 = &params->elements[1];
-    phi_a3_2 = temp_a1_4 + 0x18;
+    phi_a3_2 = &temp_a1_4[1];
     phi_a1_3 = temp_a1_4;
     if ((s32) params->elemDuration < params->elements[0].timer) {
         temp_a2_5 = params->elemDuration;
@@ -685,7 +685,7 @@ loop_4:
         params->unk_C = (s32) temp_t2_2->unk_C;
         params->unk_10 = (s32) temp_t2_2->unk_10;
         params->unk_14 = (s32) temp_t2_2->unk_14;
-        phi_t0_2 = temp_a1_4 + 0x30;
+        phi_t0_2 = &temp_a1_4[2];
         phi_v0 = 0x18;
         if (params->elements[0].timer >= (s32) temp_a2_5) {
             params->elements[0].timer = (s32) temp_a2_5;
@@ -714,8 +714,8 @@ loop_4:
             temp_a2_7 = params->elemDuration;
             phi_a3_2 = temp_a3_2;
             phi_t0_2 = temp_t0_2;
-            if (phi_a1_3->unk_1C >= (s32) temp_a2_7) {
-                phi_a1_3->unk_1C = (s32) temp_a2_7;
+            if (phi_a1_3[1].timer >= (s32) temp_a2_7) {
+                phi_a1_3[1].timer = (s32) temp_a2_7;
             }
             temp_a1_5 = phi_a1_3 + 0x30;
             phi_a1_3 = temp_a1_5;
@@ -832,32 +832,32 @@ void func_800A8DE8(EffectBlure *arg0, s32 arg1, f32 arg2, s16 *arg3, s16 *arg4, 
     case 1:
         temp_s0 = arg0 + (arg1 * 0x18);
         arg3->unk_0 = func_800B09D0(temp_s0->unk_8, temp_s0->unk_E, arg2);
-        arg3->unk_2 = func_800B09D0(temp_s0->unk_A, temp_s0->unk_10, arg2);
-        arg3->unk_4 = func_800B09D0(temp_s0->unk_C, temp_s0->unk_12, arg2);
+        arg3[1] = func_800B09D0(temp_s0->unk_A, temp_s0->unk_10, arg2);
+        arg3[2] = func_800B09D0(temp_s0->unk_C, temp_s0->unk_12, arg2);
         arg4->unk_0 = temp_s0->unk_E;
-        arg4->unk_2 = (s16) temp_s0->unk_10;
+        arg4[1] = temp_s0->unk_10;
         phi_t1 = temp_s0->unk_12;
 block_7:
-        arg4->unk_4 = phi_t1;
+        arg4[2] = phi_t1;
         break;
     case 2:
         temp_s0_2 = arg0 + (arg1 * 0x18);
         arg3->unk_0 = temp_s0_2->unk_8;
-        arg3->unk_2 = (s16) temp_s0_2->unk_A;
-        arg3->unk_4 = (s16) temp_s0_2->unk_C;
+        arg3[1] = temp_s0_2->unk_A;
+        arg3[2] = temp_s0_2->unk_C;
         arg4->unk_0 = func_800B09D0(temp_s0_2->unk_E, temp_s0_2->unk_8, arg2);
-        arg4->unk_2 = func_800B09D0(temp_s0_2->unk_10, temp_s0_2->unk_A, arg2);
-        arg4->unk_4 = func_800B09D0(temp_s0_2->unk_12, temp_s0_2->unk_C, arg2);
+        arg4[1] = func_800B09D0(temp_s0_2->unk_10, temp_s0_2->unk_A, arg2);
+        arg4[2] = func_800B09D0(temp_s0_2->unk_12, temp_s0_2->unk_C, arg2);
         break;
     case 3:
         temp_f20 = arg2 * 0.5f;
         temp_s0_3 = arg0 + (arg1 * 0x18);
         arg3->unk_0 = func_800B09D0(temp_s0_3->unk_8, temp_s0_3->unk_E, temp_f20);
-        arg3->unk_2 = func_800B09D0(temp_s0_3->unk_A, temp_s0_3->unk_10, temp_f20);
-        arg3->unk_4 = func_800B09D0(temp_s0_3->unk_C, temp_s0_3->unk_12, temp_f20);
+        arg3[1] = func_800B09D0(temp_s0_3->unk_A, temp_s0_3->unk_10, temp_f20);
+        arg3[2] = func_800B09D0(temp_s0_3->unk_C, temp_s0_3->unk_12, temp_f20);
         arg4->unk_0 = func_800B09D0(temp_s0_3->unk_E, temp_s0_3->unk_8, temp_f20);
-        arg4->unk_2 = func_800B09D0(temp_s0_3->unk_10, temp_s0_3->unk_A, temp_f20);
-        arg4->unk_4 = func_800B09D0(temp_s0_3->unk_12, temp_s0_3->unk_C, temp_f20);
+        arg4[1] = func_800B09D0(temp_s0_3->unk_10, temp_s0_3->unk_A, temp_f20);
+        arg4[2] = func_800B09D0(temp_s0_3->unk_12, temp_s0_3->unk_C, temp_f20);
         phi_f20 = 2.0f * temp_f20;
         break;
     case 4:
@@ -868,42 +868,42 @@ block_7:
         sp34 = temp_s0_4->unk_C - temp_s0_4->unk_12;
         temp_f0 = arg0->mode4Param - 1.0f;
         arg3->unk_0 = (s16) (s32) (((f32) sp30 * 0.5f * temp_f0 * arg2) + (f32) temp_s0_4->unk_8);
-        arg3->unk_2 = (s16) (s32) (((f32) sp32 * 0.5f * temp_f0 * arg2) + (f32) temp_s0_4->unk_A);
-        arg3->unk_4 = (s16) (s32) (((f32) sp34 * 0.5f * temp_f0 * arg2) + (f32) temp_s0_4->unk_C);
+        arg3[1] = (s16) (s32) (((f32) sp32 * 0.5f * temp_f0 * arg2) + (f32) temp_s0_4->unk_A);
+        arg3[2] = (s16) (s32) (((f32) sp34 * 0.5f * temp_f0 * arg2) + (f32) temp_s0_4->unk_C);
         arg4->unk_0 = (s16) (s32) ((f32) temp_s0_4->unk_E - ((f32) temp_t3 * 0.5f * temp_f0 * arg2));
-        arg4->unk_2 = (s16) (s32) ((f32) temp_s0_4->unk_10 - ((f32) sp32 * 0.5f * temp_f0 * arg2));
-        arg4->unk_4 = (s16) (s32) ((f32) temp_s0_4->unk_12 - ((f32) sp34 * 0.5f * temp_f0 * arg2));
+        arg4[1] = (s16) (s32) ((f32) temp_s0_4->unk_10 - ((f32) sp32 * 0.5f * temp_f0 * arg2));
+        arg4[2] = (s16) (s32) ((f32) temp_s0_4->unk_12 - ((f32) sp34 * 0.5f * temp_f0 * arg2));
         break;
     default:
         temp_s0_5 = arg0 + (arg1 * 0x18);
         arg3->unk_0 = temp_s0_5->unk_8;
-        arg3->unk_2 = (s16) temp_s0_5->unk_A;
-        arg3->unk_4 = (s16) temp_s0_5->unk_C;
+        arg3[1] = temp_s0_5->unk_A;
+        arg3[2] = temp_s0_5->unk_C;
         arg4->unk_0 = temp_s0_5->unk_E;
-        arg4->unk_2 = (s16) temp_s0_5->unk_10;
+        arg4[1] = temp_s0_5->unk_10;
         phi_t1 = temp_s0_5->unk_12;
         goto block_7;
     }
     if ((arg0->flags & 0x10) != 0) {
-        arg5->unk_3 = 0xFFU;
-        arg5->unk_2 = 0xFFU;
-        arg5->unk_1 = 0xFFU;
+        arg5[3] = 0xFF;
+        arg5[2] = 0xFF;
+        arg5[1] = 0xFF;
         arg5->unk_0 = 0xFF;
         arg6->unk_0 = 0xFF;
-        arg6->unk_1 = 0xFFU;
-        arg6->unk_2 = 0xFFU;
+        arg6[1] = 0xFF;
+        arg6[2] = 0xFF;
         phi_v0 = 0xFFU;
     } else {
         arg5->unk_0 = func_800B0A24(arg0->p1StartColor.r, arg0->p1EndColor.r, phi_f20);
-        arg5->unk_1 = func_800B0A24(arg0->p1StartColor.g, arg0->p1EndColor.g, phi_f20);
-        arg5->unk_2 = func_800B0A24(arg0->p1StartColor.b, arg0->p1EndColor.b, phi_f20);
-        arg5->unk_3 = func_800B0A24(arg0->p1StartColor.a, arg0->p1EndColor.a, phi_f20);
+        arg5[1] = func_800B0A24(arg0->p1StartColor.g, arg0->p1EndColor.g, phi_f20);
+        arg5[2] = func_800B0A24(arg0->p1StartColor.b, arg0->p1EndColor.b, phi_f20);
+        arg5[3] = func_800B0A24(arg0->p1StartColor.a, arg0->p1EndColor.a, phi_f20);
         arg6->unk_0 = func_800B0A24(arg0->p2StartColor.r, arg0->p2EndColor.r, phi_f20);
-        arg6->unk_1 = func_800B0A24(arg0->p2StartColor.g, arg0->p2EndColor.g, phi_f20);
-        arg6->unk_2 = func_800B0A24(arg0->p2StartColor.b, arg0->p2EndColor.b, phi_f20);
+        arg6[1] = func_800B0A24(arg0->p2StartColor.g, arg0->p2EndColor.g, phi_f20);
+        arg6[2] = func_800B0A24(arg0->p2StartColor.b, arg0->p2EndColor.b, phi_f20);
         phi_v0 = func_800B0A24(arg0->p2StartColor.a, arg0->p2EndColor.a, phi_f20);
     }
-    arg6->unk_3 = phi_v0;
+    arg6[3] = phi_v0;
 }
 
 void func_800A92FC(EffectBlure *arg0, GraphicsContext *arg1) {
@@ -937,20 +937,20 @@ void func_800A9330(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
     if (temp_s0 != 0) {
         temp_s0->texture.cmd = (unaligned s32) D_801AE240.unk_0;
         temp_s0->tri.tri.flag = (unaligned s32) D_801AE240.unk_4;
-        temp_s0->unk_8 = (unaligned s32) D_801AE240.unk_8;
-        temp_s0->unk_C = (unaligned s32) D_801AE240.unk_C;
-        temp_s0->unk_10 = (unaligned s32) D_801AE240.unk_0;
-        temp_s0->unk_14 = (unaligned s32) D_801AE240.unk_4;
-        temp_s0->unk_18 = (unaligned s32) D_801AE240.unk_8;
-        temp_s0->unk_1C = (unaligned s32) D_801AE240.unk_C;
-        temp_s0->unk_20 = (unaligned s32) D_801AE240.unk_0;
-        temp_s0->unk_24 = (unaligned s32) D_801AE240.unk_4;
-        temp_s0->unk_28 = (unaligned s32) D_801AE240.unk_8;
-        temp_s0->unk_2C = (unaligned s32) D_801AE240.unk_C;
-        temp_s0->unk_30 = (unaligned s32) D_801AE240.unk_0;
-        temp_s0->unk_34 = (unaligned s32) D_801AE240.unk_4;
-        temp_s0->unk_38 = (unaligned s32) D_801AE240.unk_8;
-        temp_s0->unk_3C = (unaligned s32) D_801AE240.unk_C;
+        temp_s0[1].texture.cmd = (unaligned s32) D_801AE240.unk_8;
+        temp_s0[1].tri.tri.flag = (unaligned s32) D_801AE240.unk_C;
+        temp_s0[2].texture.cmd = (unaligned s32) D_801AE240.unk_0;
+        temp_s0[2].tri.tri.flag = (unaligned s32) D_801AE240.unk_4;
+        temp_s0[3].texture.cmd = (unaligned s32) D_801AE240.unk_8;
+        temp_s0[3].tri.tri.flag = (unaligned s32) D_801AE240.unk_C;
+        temp_s0[4].texture.cmd = (unaligned s32) D_801AE240.unk_0;
+        temp_s0[4].tri.tri.flag = (unaligned s32) D_801AE240.unk_4;
+        temp_s0[5].texture.cmd = (unaligned s32) D_801AE240.unk_8;
+        temp_s0[5].tri.tri.flag = (unaligned s32) D_801AE240.unk_C;
+        temp_s0[6].texture.cmd = (unaligned s32) D_801AE240.unk_0;
+        temp_s0[6].tri.tri.flag = (unaligned s32) D_801AE240.unk_4;
+        temp_s0[7].texture.cmd = (unaligned s32) D_801AE240.unk_8;
+        temp_s0[7].tri.tri.flag = (unaligned s32) D_801AE240.unk_C;
         func_800A8DE8(arg0, arg2, (f32) arg1->elements[0].timer / (f32) arg0->elemDuration, &sp84, &sp7C, &sp74, &sp70);
         temp_a0 = &sp58;
         sp58 = (f32) sp7C;
@@ -962,10 +962,10 @@ void func_800A9330(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
         temp_s0->unk_0 = (s16) (s32) sp4C;
         temp_s0->unk_2 = (s16) (s32) sp50;
         temp_s0->texture.s = (u16) (s32) sp54;
-        temp_s0->unk_C = sp70;
-        temp_s0->unk_D = sp71;
-        temp_s0->unk_E = sp72;
-        temp_s0->unk_F = sp73;
+        temp_s0[1].tri.tri.flag = sp70;
+        temp_s0[1].tri.tri.v[0] = sp71;
+        temp_s0[1].tri.tri.v[1] = sp72;
+        temp_s0[1].tri.tri.v[2] = sp73;
         sp58 = (f32) sp84;
         sp5C = (f32) sp86;
         sp60 = (f32) sp88;
@@ -973,11 +973,11 @@ void func_800A9330(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
         Math_Vec3f_Scale((Vec3f *) &sp4C, 10.0f);
         temp_s0->unk_10 = (s16) (s32) sp4C;
         temp_s0->unk_12 = (s16) (s32) sp50;
-        temp_s0->unk_14 = (s16) (s32) sp54;
-        temp_s0->unk_1C = sp74;
-        temp_s0->unk_1D = sp75;
-        temp_s0->unk_1E = sp76;
-        temp_s0->unk_1F = sp77;
+        temp_s0[2].texture.s = (u16) (s32) sp54;
+        temp_s0[3].tri.tri.flag = sp74;
+        temp_s0[3].tri.tri.v[0] = sp75;
+        temp_s0[3].tri.tri.v[1] = sp76;
+        temp_s0[3].tri.tri.v[2] = sp77;
         temp_t8 = arg0->elemDuration;
         temp_f16 = (f32) temp_t8;
         phi_f16 = temp_f16;
@@ -994,11 +994,11 @@ void func_800A9330(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
         temp_a0_4 = &sp58;
         temp_s0->unk_20 = (s16) (s32) sp4C;
         temp_s0->unk_22 = (s16) (s32) sp50;
-        temp_s0->unk_24 = (s16) (s32) sp54;
-        temp_s0->unk_2C = sp74;
-        temp_s0->unk_2D = sp75;
-        temp_s0->unk_2E = sp76;
-        temp_s0->unk_2F = sp77;
+        temp_s0[4].texture.s = (u16) (s32) sp54;
+        temp_s0[5].tri.tri.flag = sp74;
+        temp_s0[5].tri.tri.v[0] = sp75;
+        temp_s0[5].tri.tri.v[1] = sp76;
+        temp_s0[5].tri.tri.v[2] = sp77;
         sp58 = (f32) sp7C;
         sp5C = (f32) sp7E;
         sp60 = (f32) sp80;
@@ -1006,11 +1006,11 @@ void func_800A9330(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
         Math_Vec3f_Scale((Vec3f *) &sp4C, 10.0f);
         temp_s0->unk_30 = (s16) (s32) sp4C;
         temp_s0->unk_32 = (s16) (s32) sp50;
-        temp_s0->unk_34 = (s16) (s32) sp54;
-        temp_s0->unk_3C = sp70;
-        temp_s0->unk_3D = sp71;
-        temp_s0->unk_3E = sp72;
-        temp_s0->unk_3F = sp73;
+        temp_s0[6].texture.s = (u16) (s32) sp54;
+        temp_s0[7].tri.tri.flag = sp70;
+        temp_s0[7].tri.tri.v[0] = sp71;
+        temp_s0[7].tri.tri.v[1] = sp72;
+        temp_s0[7].tri.tri.v[2] = sp73;
         temp_v1 = arg3->polyXlu.p;
         arg3->polyXlu.p = temp_v1 + 8;
         temp_v1->words.w1 = temp_s0;
@@ -1138,26 +1138,26 @@ void func_800A9804(EffectBlure *arg0, EffectBlure *arg1, s32 arg2, GraphicsConte
         Color_RGBA8_Copy((Color_RGBA8 *) &sp13C, (Color_RGBA8 *) &sp198);
         temp_s0->texture.cmd = (unaligned s32) D_801AE250.unk_0;
         temp_s0->tri.tri.flag = (unaligned s32) D_801AE250.unk_4;
-        temp_s0->unk_8 = (unaligned s32) D_801AE250.unk_8;
-        temp_s0->unk_C = (unaligned s32) D_801AE250.unk_C;
-        temp_s0->unk_10 = (unaligned s32) D_801AE250.unk_0;
-        temp_s0->unk_14 = (unaligned s32) D_801AE250.unk_4;
-        temp_s0->unk_18 = (unaligned s32) D_801AE250.unk_8;
-        temp_s0->unk_1C = (unaligned s32) D_801AE250.unk_C;
+        temp_s0[1].texture.cmd = (unaligned s32) D_801AE250.unk_8;
+        temp_s0[1].tri.tri.flag = (unaligned s32) D_801AE250.unk_C;
+        temp_s0[2].texture.cmd = (unaligned s32) D_801AE250.unk_0;
+        temp_s0[2].tri.tri.flag = (unaligned s32) D_801AE250.unk_4;
+        temp_s0[3].texture.cmd = (unaligned s32) D_801AE250.unk_8;
+        temp_s0[3].tri.tri.flag = (unaligned s32) D_801AE250.unk_C;
         temp_s0->unk_0 = (s16) (s32) func_80086814(sp150);
         temp_s0->unk_2 = (s16) (s32) func_80086814(sp154);
         temp_s0->texture.s = (u16) (s32) func_80086814(sp158);
-        temp_s0->unk_C = sp140;
-        temp_s0->unk_D = sp141;
-        temp_s0->unk_E = sp142;
-        temp_s0->unk_F = sp143;
+        temp_s0[1].tri.tri.flag = sp140;
+        temp_s0[1].tri.tri.v[0] = sp141;
+        temp_s0[1].tri.tri.v[1] = sp142;
+        temp_s0[1].tri.tri.v[2] = sp143;
         temp_s0->unk_10 = (s16) (s32) func_80086814(sp144);
         temp_s0->unk_12 = (s16) (s32) func_80086814(sp148);
-        temp_s0->unk_14 = (s16) (s32) func_80086814(sp14C);
-        temp_s0->unk_1C = sp13C;
-        temp_s0->unk_1D = sp13D;
-        temp_s0->unk_1E = sp13E;
-        temp_s0->unk_1F = sp13F;
+        temp_s0[2].texture.s = (u16) (s32) func_80086814(sp14C);
+        temp_s0[3].tri.tri.flag = sp13C;
+        temp_s0[3].tri.tri.v[0] = sp13D;
+        temp_s0[3].tri.tri.v[1] = sp13E;
+        temp_s0[3].tri.tri.v[2] = sp13F;
         phi_s4 = 3;
         phi_s3 = 1;
         phi_s1 = temp_s0 + 0x20;
@@ -1292,7 +1292,7 @@ void func_800AA190(EffectBlure *arg0, GraphicsContext *arg1) {
         temp_v0_3 = SkinMatrix_MtxFToNewMtx(arg1, (MtxF *) &sp4C);
         if (temp_v0_3 != 0) {
             temp_a0 = arg1->polyXlu.p;
-            arg1->polyXlu.p = temp_a0 + 8;
+            arg1->polyXlu.p = &temp_a0[1];
             temp_a0->words.w1 = (u32) temp_v0_3;
             temp_a0->words.w0 = 0xDA380003;
             phi_s0_2 = arg0;
@@ -1352,67 +1352,67 @@ void func_800AA498(void *arg0, void *arg1, ? arg2) {
     arg0 = arg0;
     arg0->unk_2C0 = Gfx_CallSetupDL(temp_a0, 0x26U);
     temp_v0_2 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_2 + 8);
+    arg0->unk_2C0 = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0x100000;
     temp_v0_2->words.w0 = 0xE3000A01;
     temp_v0_3 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_3 + 8);
+    arg0->unk_2C0 = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE3001001;
     temp_v0_4 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_4 + 8);
+    arg0->unk_2C0 = &temp_v0_4[1];
     temp_v0_4->words.w1 = -1;
     temp_v0_4->words.w0 = 0xD7000002;
     temp_v0_5 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_5 + 8);
+    arg0->unk_2C0 = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFD900000;
     temp_v0_5->words.w1 = (u32) &D_04014570;
     temp_v0_6 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_6 + 8);
+    arg0->unk_2C0 = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xF5900000;
     temp_v0_6->words.w1 = 0x7014260;
     temp_v0_7 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_7 + 8);
+    arg0->unk_2C0 = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0;
     temp_v0_7->words.w0 = 0xE6000000;
     temp_v0_8 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_8 + 8);
+    arg0->unk_2C0 = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0x73FF100;
     temp_v0_8->words.w0 = 0xF3000000;
     temp_v0_9 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_9 + 8);
+    arg0->unk_2C0 = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0;
     temp_v0_9->words.w0 = 0xE7000000;
     temp_v0_10 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_10 + 8);
+    arg0->unk_2C0 = &temp_v0_10[1];
     temp_v0_10->words.w1 = 0x14260;
     temp_v0_10->words.w0 = 0xF5881000;
     temp_v0_11 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_11 + 8);
+    arg0->unk_2C0 = &temp_v0_11[1];
     temp_v0_11->words.w0 = 0xF2000000;
     temp_v0_11->words.w1 = 0xFC07C;
     temp_v0_12 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_12 + 8);
+    arg0->unk_2C0 = &temp_v0_12[1];
     temp_v0_12->words.w0 = 0xFC171660;
     temp_v0_12->words.w1 = 0x35FCFF78;
     temp_v0_13 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_13 + 8);
+    arg0->unk_2C0 = &temp_v0_13[1];
     temp_v0_13->words.w0 = 0xE200001C;
     temp_v0_13->words.w1 = 0xC184B50;
     temp_v0_14 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_14 + 8);
+    arg0->unk_2C0 = &temp_v0_14[1];
     temp_v0_14->words.w1 = 0;
     temp_v0_14->words.w0 = 0xD9F0FFFF;
     temp_v0_15 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_15 + 8);
+    arg0->unk_2C0 = &temp_v0_15[1];
     temp_v0_15->words.w0 = 0xD9FFFFFF;
     temp_v0_15->words.w1 = 0x200005;
     temp_v0_16 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_16 + 8);
+    arg0->unk_2C0 = &temp_v0_16[1];
     temp_v0_16->words.w1 = 0;
     temp_v0_16->words.w0 = 0xE7000000;
     temp_v0_17 = arg0->unk_2C0;
-    arg0->unk_2C0 = (Gfx *) (temp_v0_17 + 8);
+    arg0->unk_2C0 = &temp_v0_17[1];
     temp_v0_17->words.w0 = 0xFB000000;
     temp_v0_17->words.w1 = (arg1->unk_1A6 << 0x18) | (arg1->unk_1A7 << 0x10) | (arg1->unk_1A8 << 8) | arg1->unk_1A9;
 }
@@ -1494,19 +1494,19 @@ loop_2:
             temp_v0_3 = SkinMatrix_MtxFToNewMtx(arg0, (MtxF *) &sp90);
             if (temp_v0_3 != 0) {
                 temp_v1_5 = arg0->polyXlu.p;
-                arg0->polyXlu.p = temp_v1_5 + 8;
+                arg0->polyXlu.p = &temp_v1_5[1];
                 temp_v1_5->words.w1 = (u32) temp_v0_3;
                 temp_v1_5->words.w0 = 0xDA380003;
                 temp_v1_6 = arg0->polyXlu.p;
-                arg0->polyXlu.p = temp_v1_6 + 8;
+                arg0->polyXlu.p = &temp_v1_6[1];
                 temp_v1_6->words.w1 = phi_s5;
                 temp_v1_6->words.w0 = 0x1004008;
                 temp_v1_7 = arg0->polyXlu.p;
-                arg0->polyXlu.p = temp_v1_7 + 8;
+                arg0->polyXlu.p = &temp_v1_7[1];
                 temp_v1_7->words.w1 = 0x604;
                 temp_v1_7->words.w0 = 0x6000206;
                 temp_v1_8 = arg0->polyXlu.p;
-                arg0->polyXlu.p = temp_v1_8 + 8;
+                arg0->polyXlu.p = &temp_v1_8[1];
                 temp_v1_8->words.w1 = (u32) &D_801D1DE0;
                 temp_v1_8->words.w0 = 0xDA380003;
                 goto block_10;
@@ -1561,8 +1561,8 @@ void func_800AABE0(EffectBlure *arg0, GraphicsContext *arg1) {
             temp_s2->texture.cmd = (unaligned s32) D_801AE26C.unk_0;
             temp_s2->tri.tri.flag = (unaligned s32) D_801AE26C.unk_4;
             temp_v0 = temp_s2 + 0x40;
-            temp_s2->unk_8 = (unaligned s32) D_801AE26C.unk_8;
-            temp_s2->unk_C = (unaligned s32) D_801AE26C.unk_C;
+            temp_s2[1].texture.cmd = (unaligned s32) D_801AE26C.unk_8;
+            temp_s2[1].tri.tri.flag = (unaligned s32) D_801AE26C.unk_C;
             temp_v0->unk_-30 = (unaligned s32) D_801AE27C.unk_0;
             temp_v0->unk_-2C = (unaligned s32) D_801AE27C.unk_4;
             temp_v0->unk_-28 = (unaligned s32) D_801AE27C.unk_8;
@@ -1701,14 +1701,14 @@ void EffectBlure_Draw(EffectBlure *params, GraphicsContext *gfxCtx) {
     s32 phi_t7;
 
     temp_a2 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_a2 + 8;
+    gfxCtx->polyXlu.p = &temp_a2[1];
     temp_a2->words.w0 = 0xDA380003;
     temp_a2->words.w1 = (u32) &D_801D1DE0;
     if (params->numElements != 0) {
         if (params->flags == 0) {
             func_8012C560(gfxCtx);
             temp_a2_2 = gfxCtx->polyXlu.p;
-            gfxCtx->polyXlu.p = temp_a2_2 + 8;
+            gfxCtx->polyXlu.p = &temp_a2_2[1];
             temp_a2_2->words.w1 = 0;
             temp_a2_2->words.w0 = 0xE7000000;
             temp_v0 = gfxCtx->polyOpa.d - 0x200;
@@ -1793,7 +1793,7 @@ block_16:
                     } while (temp_s4 < (s32) params->numElements);
                 }
                 temp_a2_3 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a2_3 + 8;
+                gfxCtx->polyXlu.p = &temp_a2_3[1];
                 temp_a2_3->words.w0 = 0x1020040;
                 temp_a2_3->words.w1 = (u32) sp40;
                 phi_s1_2 = params;
@@ -1815,7 +1815,7 @@ block_16:
                                 temp_a2_4 = gfxCtx->polyXlu.p;
                                 temp_v1 = ((temp_a1 - 4) & 0xFF) << 0x10;
                                 temp_a0 = (temp_a1 + 2) & 0xFF;
-                                gfxCtx->polyXlu.p = temp_a2_4 + 8;
+                                gfxCtx->polyXlu.p = &temp_a2_4[1];
                                 temp_a2_4->words.w0 = temp_v1 | (((temp_a1 - 2) & 0xFF) << 8) | temp_a0 | 0x7000000;
                                 temp_a2_4->words.w1 = temp_v1 | (temp_a0 << 8) | (temp_a1 & 0xFF);
                                 if (params->unkFlag == 1) {

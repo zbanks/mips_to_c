@@ -174,7 +174,7 @@ s32 func_80AABF74(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     f32 sp1C;
 
     if (arg1 == 6) {
-        sp28 = ((Math_SinS((s16) (arg5->unk_262 << 0xC)) * 0.1f) + 1.0f) * 0.012f * (arg5->unk_58 * 124.99999f);
+        sp28 = ((Math_SinS((s16) (arg5[101].z << 0xC)) * 0.1f) + 1.0f) * 0.012f * (arg5->unk_58 * 124.99999f);
         SysMatrix_MultiplyVector3fByState(&D_80AAC4F0, (Vec3f *) &sp1C);
         SysMatrix_InsertTranslation(sp1C, sp20, sp24, 0);
         Matrix_Scale(sp28, sp28, sp28, 1);
@@ -212,26 +212,26 @@ void DmChar04_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_a0 = 0x1FF - temp_a0_3;
     }
     temp_v0 = sp54->polyXlu.p;
-    sp54->polyXlu.p = temp_v0 + 8;
+    sp54->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) temp_a2;
     temp_v0->words.w0 = 0xDB060020;
-    temp_v0_2 = temp_a2 + 8;
+    temp_v0_2 = &temp_a2[1];
     temp_a2->words.w0 = 0xE7000000;
     temp_a2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xFA000001;
-    temp_v0_3 = temp_v0_2 + 8;
+    temp_v0_3 = &temp_v0_2[1];
     temp_v0_2->words.w1 = ((u32) this->unk_240 << 0x18) | (((u32) this->unk_244 & 0xFF) << 0x10) | (((u32) this->unk_248 & 0xFF) << 8) | ((u32) (this->unk_24C * 1.0f) & 0xFF);
     temp_v0_3->words.w0 = 0xE200001C;
     temp_v0_3->words.w1 = 0xC184B50;
-    temp_v0_4 = temp_v0_3 + 8;
+    temp_v0_4 = &temp_v0_3[1];
     temp_v0_4->words.w0 = 0xDF000000;
     temp_v0_4->words.w1 = 0;
     temp_v0_5 = sp54->polyXlu.p;
-    sp54->polyXlu.p = temp_v0_5 + 8;
+    sp54->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFB000000;
     temp_v0_5->words.w1 = ((s32) this->unk_250 << 0x18) | (((s32) this->unk_254 & 0xFF) << 0x10) | (((s32) this->unk_258 & 0xFF) << 8) | ((s32) ((f32) phi_a0 * 1.0f) & 0xFF);
     temp_v0_6 = sp54->polyXlu.p;
-    sp54->polyXlu.p = temp_v0_6 + 8;
+    sp54->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0x40;
     temp_v0_6->words.w0 = 0xE3001803;
     temp_t8 = sp54->polyXlu.p;

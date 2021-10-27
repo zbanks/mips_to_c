@@ -266,7 +266,7 @@ void func_800F29A0(GraphicsContext **arg0, s32 arg1, void *arg2, s32 (*arg3)(Gra
                 sp4C = temp_v0_3;
                 sp4C->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_4 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_4 + 8;
+                temp_s0->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = temp_a1_2;
                 temp_v0_4->words.w0 = 0xDE000000;
             }
@@ -274,26 +274,26 @@ void func_800F29A0(GraphicsContext **arg0, s32 arg1, void *arg2, s32 (*arg3)(Gra
             temp_a1_3 = sp84->unk_4;
             if (temp_a1_3 != 0) {
                 temp_v0_5 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_5 + 8;
+                temp_s0->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDA380003;
                 sp58 = temp_a1_3;
                 sp40 = temp_v0_5;
                 sp40->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_6 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_6 + 8;
+                temp_s0->polyOpa.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = temp_a1_3;
                 temp_v0_6->words.w0 = 0xDE000000;
             }
             temp_a1_4 = sp84->unk_8;
             if (temp_a1_4 != 0) {
                 temp_v0_7 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_7 + 8;
+                temp_s0->polyXlu.p = &temp_v0_7[1];
                 temp_v0_7->words.w0 = 0xDA380003;
                 sp58 = temp_a1_4;
                 sp38 = temp_v0_7;
                 sp38->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_8 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_8 + 8;
+                temp_s0->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w1 = temp_a1_4;
                 temp_v0_8->words.w0 = 0xDE000000;
             }

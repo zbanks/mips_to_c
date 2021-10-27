@@ -389,7 +389,7 @@ void func_80BE0664(EnTab *arg0) {
 s32 func_80BE06DC(Actor *arg0, GlobalContext *arg1) {
     s32 sp1C;
     Actor *temp_a0;
-    u16 *temp_a0_2;
+    f32 *temp_a0_2;
     s32 phi_v1;
 
     temp_a0 = arg0;
@@ -399,13 +399,13 @@ s32 func_80BE06DC(Actor *arg0, GlobalContext *arg1) {
         arg0 = arg0;
         phi_v1 = sp1C;
         if (func_800B84D0(temp_a0, arg1) != 0) {
-            temp_a0_2 = arg0 + 0x2FC;
+            temp_a0_2 = &arg0[2].gravity;
             arg0 = arg0;
-            func_8013AED4(temp_a0_2, 0U, 7U);
+            func_8013AED4((u16 *) temp_a0_2, 0U, 7U);
             arg0->unk_320 = 0;
-            arg0->unk_328 = 0;
+            arg0[2].colChkInfo.damageTable = NULL;
             arg0->unk_2FC = (u16) (arg0->unk_2FC | 8);
-            arg0->unk_188 = func_80BE1348;
+            arg0[1].focus.pos.z = (bitwise f32) func_80BE1348;
             arg0->child = arg1->actorCtx.actorList[2].first;
             phi_v1 = 1;
         }
@@ -588,7 +588,7 @@ void *func_80BE0A98(Vec3s *arg0, GlobalContext *arg1) {
     sp20 = (s32) temp_v1;
     SysMatrix_InsertTranslation(arg0->unk_308, 0.0f, 0.0f, 1);
     phi_v0 = arg1 + 0x10000;
-    if ((arg0 == sp24->unk_A88) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0->unk_334 == (void *)3))) {
+    if ((arg0 == sp24[8].velocity.y) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0->unk_334 == (void *)3))) {
         if ((arg1->state.frames & 1) == 0) {
             if (arg0->unk_304 != 0.0f) {
                 phi_v0 = (void *)3;
@@ -975,13 +975,13 @@ void func_80BE1704(GlobalContext *arg0, s32 arg1, Actor *arg2) {
         phi_v0 = 0;
     }
     if (arg1 == 9) {
-        func_8013AD9C((s16) (arg2->unk_312 + arg2->unk_316 + 0x4000), (s16) (arg2->unk_314 + arg2->unk_318 + arg2->shape.rot.y + 0x4000), arg2 + 0x1E8, arg2 + 0x200, phi_v0, phi_v1);
+        func_8013AD9C((s16) (arg2->unk_312 + arg2->unk_316 + 0x4000), (s16) (arg2->unk_314 + arg2[2].bgCheckFlags + arg2->shape.rot.y + 0x4000), arg2 + 0x1E8, arg2 + 0x200, phi_v0, phi_v1);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_1E8, arg2->unk_1EC, arg2->unk_1F0, 0);
+        SysMatrix_InsertTranslation(arg2[1].colChkInfo.displacement.x, arg2[1].colChkInfo.displacement.y, arg2[1].colChkInfo.displacement.z, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-        Matrix_RotateY(arg2->unk_202, 1U);
-        SysMatrix_InsertXRotation_s(arg2->unk_200, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_204, 1);
+        Matrix_RotateY(arg2[1].shape.rot.y, 1U);
+        SysMatrix_InsertXRotation_s(arg2[1].shape.rot.x, 1);
+        SysMatrix_InsertZRotation_s(arg2[1].shape.rot.z, 1);
         SysMatrix_StatePush();
     }
 }
@@ -998,7 +998,7 @@ void EnTab_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp38 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = sp38->polyOpa.p;
-        sp38->polyOpa.p = temp_v0 + 8;
+        sp38->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp30 = temp_v0;
         sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80BE1B24 + (this->unk_31E * 4)));

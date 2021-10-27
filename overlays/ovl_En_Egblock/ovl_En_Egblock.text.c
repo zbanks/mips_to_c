@@ -152,21 +152,21 @@ void EnEgblock_Draw(Actor *thisx, GlobalContext *globalCtx) {
     if (this->unk_1AC != 1) {
         temp_v1 = globalCtx->state.gfxCtx;
         temp_v0 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_v0 + 8;
+        temp_v1->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = temp_v1;
         sp1C = temp_v0;
         sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_v0_2 + 8;
+        temp_v1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = -1;
         temp_v0_2->words.w0 = 0xFA000080;
         temp_v0_3 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_v0_3 + 8;
+        temp_v1->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = -1;
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_4 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_v0_4 + 8;
+        temp_v1->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_06001698;
         temp_v0_4->words.w0 = 0xDE000000;
     }
@@ -317,25 +317,25 @@ void func_80ABAE64(EnEgblock *arg0, GlobalContext *arg1) {
             SysMatrix_InsertXRotation_s(phi_s0->unk_30, 1);
             SysMatrix_InsertZRotation_s(phi_s0->unk_34, 1);
             temp_v0_2 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_2 + 8;
+            temp_s2->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDA380003;
             temp_v0_2->words.w1 = Matrix_NewMtx(temp_s2);
             temp_v0_3 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_3 + 8;
+            temp_s2->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = -1;
             temp_v0_3->words.w0 = 0xFA000080;
             temp_v0_4 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_4 + 8;
+            temp_s2->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFB000000;
             temp_v0_4->words.w1 = (phi_s0->unk_10 & 0xFF) | ~0xFF;
             if (phi_s0->unk_14 == 0) {
                 temp_v0_5 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_5 + 8;
+                temp_s2->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = (u32) &D_06001918;
                 temp_v0_5->words.w0 = 0xDE000000;
             } else {
                 temp_v0_6 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_6 + 8;
+                temp_s2->polyOpa.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = (u32) &D_06001BF8;
                 temp_v0_6->words.w0 = 0xDE000000;
             }

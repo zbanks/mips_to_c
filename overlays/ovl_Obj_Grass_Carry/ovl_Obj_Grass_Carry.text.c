@@ -258,7 +258,7 @@ void func_809AB3D8(ObjGrassCarry *arg0, GlobalContext *arg1) {
 }
 
 void func_809AB428(Actor *arg0) {
-    arg0->unk_19C = func_809AB43C;
+    arg0[1].scale.x = func_809AB43C;
 }
 
 void func_809AB43C(void *arg0, ? arg1) {
@@ -326,7 +326,7 @@ void func_809AB4A8(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_809AB5FC(Actor *arg0) {
-    arg0->unk_19C = func_809AB610;
+    arg0[1].scale.x = func_809AB610;
 }
 
 void func_809AB610(Actor *arg0, GlobalContext *arg1) {
@@ -353,7 +353,7 @@ void func_809AB610(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_809AB6FC(Actor *arg0) {
-    arg0->unk_19C = func_809AB77C;
+    arg0[1].scale.x = func_809AB77C;
     D_809ABBFC = -0xBB8;
     D_809ABC04 = (s16) (s32) ((Rand_ZeroOne() - 0.5f) * 1600.0f);
     D_809ABC00 = 0;
@@ -435,7 +435,7 @@ void func_809AB77C(Actor *arg0, GlobalContext *arg1) {
     arg0->shape.rot.y += D_809ABC08;
     func_809AAF18(arg0);
     func_809AAF58(arg0, arg1);
-    temp_s0_2 = arg0 + 0x144;
+    temp_s0_2 = &arg0[1];
     Collider_UpdateCylinder(arg0, (ColliderCylinder *) temp_s0_2);
     temp_s1_2 = &arg1->colChkCtx;
     CollisionCheck_SetAT(arg1, temp_s1_2, (Collider *) temp_s0_2);

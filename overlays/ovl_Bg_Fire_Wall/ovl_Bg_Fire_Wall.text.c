@@ -200,14 +200,14 @@ void func_809AC7F8(Actor *arg0, GlobalContext *arg1) {
         phi_f0 = sp38;
     }
     sp38 = phi_f0;
-    temp_f0 = arg0->unk_150;
+    temp_f0 = arg0[1].home.pos.y;
     if (temp_f0 == 0.0f) {
         if (sp40 > 0.0f) {
             sp40 = -25.0f;
-            arg0->unk_150 = -1.0f;
+            arg0[1].home.pos.y = -1.0f;
         } else {
             sp40 = 25.0f;
-            arg0->unk_150 = 1.0f;
+            arg0[1].home.pos.y = 1.0f;
         }
     } else {
         sp40 = temp_f0 * 25.0f;
@@ -281,25 +281,25 @@ void func_809ACB28(Actor *arg0, GraphicsContext **arg1) {
     temp_s0 = *arg1;
     temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0x14U);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_809ACC94 + (arg0->unk_148 * 4)));
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0xFFFF0096;
     temp_v0_2->words.w0 = 0xFA000001;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = 0xFF0000FF;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDA380003;
     sp24 = temp_v0_4;
     sp24->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_06000040;
     temp_v0_5->words.w0 = 0xDE000000;
 }

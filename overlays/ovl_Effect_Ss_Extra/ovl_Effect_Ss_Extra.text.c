@@ -25,14 +25,14 @@ s32 EffectSsExtra_Init(GlobalContext *globalCtx, u32 index, EffectSs *this, void
     ObjectContext *sp1C;
     ObjectContext *temp_a0;
     s32 temp_v0;
-    void *temp_v1;
+    u32 temp_v1;
 
     temp_a0 = &globalCtx->objectCtx;
     sp1C = temp_a0;
     temp_v0 = Object_GetIndex(temp_a0, 0xE7);
     if ((temp_v0 >= 0) && (sp24 = temp_v0, this = this, initParamsx = initParamsx, (Object_IsLoaded(temp_a0, temp_v0) != 0))) {
-        temp_v1 = gSegments->unk_18;
-        gSegments->unk_18 = (void *) (globalCtx->objectCtx.status[sp24].segment + 0x80000000);
+        temp_v1 = gSegments[6];
+        gSegments[6] = (u32) (globalCtx->objectCtx.status[sp24].segment + 0x80000000);
         this->pos.x = initParamsx->unk_0;
         this->pos.y = initParamsx->unk_4;
         this->pos.z = initParamsx->unk_8;
@@ -49,7 +49,7 @@ s32 EffectSsExtra_Init(GlobalContext *globalCtx, u32 index, EffectSs *this, void
         this->regs[1] = 5;
         this->regs[0] = (s16) sp24;
         this->regs[3] = initParamsx->unk_24;
-        gSegments->unk_18 = temp_v1;
+        gSegments[6] = temp_v1;
         return 1;
     }
     return 0;
@@ -68,9 +68,9 @@ void EffectSsExtra_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     sp40 = (f32) this->regs[3] / 100.0f;
     temp_a1 = globalCtx->objectCtx.status[this->regs[0]].segment;
     temp_s0 = globalCtx->state.gfxCtx;
-    *(gSegments + 0x18) = (u32) (temp_a1 + 0x80000000);
+    gSegments[6] = (u32) (temp_a1 + 0x80000000);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) temp_a1;
     temp_v0->words.w0 = 0xDB060018;
     SysMatrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, 0);
@@ -78,16 +78,16 @@ void EffectSsExtra_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp2C = temp_v0_2;
     sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     temp_v0_3->words.w1 = Lib_SegmentedToVirtual(*(&D_809808F0 + (this->regs[2] * 4)));
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_06000DC0;
 }

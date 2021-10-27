@@ -165,7 +165,7 @@ void GameState_Draw(GameState *gamestate, GraphicsContext *gfxCtx) {
     sp38 = temp_a0;
     sp3C = Graph_GfxPlusOne(temp_a0);
     temp_v1 = gfxCtx->overlay.p;
-    gfxCtx->overlay.p = temp_v1 + 8;
+    gfxCtx->overlay.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDE000000;
     temp_v1->words.w1 = (u32) sp3C;
     temp_v0 = gGameInfo;
@@ -178,7 +178,7 @@ void GameState_Draw(GameState *gamestate, GraphicsContext *gfxCtx) {
         phi_v0->data[96] = 0;
     }
     temp_t2 = sp3C;
-    sp3C = temp_t2 + 8;
+    sp3C = &temp_t2[1];
     temp_t2->words.w1 = 0;
     temp_t2->words.w0 = 0xDF000000;
     Graph_BranchDlist(sp38, sp3C);
@@ -199,27 +199,27 @@ void Game_ResetSegments(GraphicsContext *gfxCtx) {
     Gfx *temp_v1_6;
 
     temp_v1 = gfxCtx->polyOpa.p;
-    gfxCtx->polyOpa.p = temp_v1 + 8;
+    gfxCtx->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xDB060000;
     temp_v1_2 = gfxCtx->polyOpa.p;
-    gfxCtx->polyOpa.p = temp_v1_2 + 8;
+    gfxCtx->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB06003C;
     temp_v1_2->words.w1 = (u32) gfxCtx->framebuffer;
     temp_v1_3 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_v1_3 + 8;
+    gfxCtx->polyXlu.p = &temp_v1_3[1];
     temp_v1_3->words.w1 = 0;
     temp_v1_3->words.w0 = 0xDB060000;
     temp_v1_4 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_v1_4 + 8;
+    gfxCtx->polyXlu.p = &temp_v1_4[1];
     temp_v1_4->words.w0 = 0xDB06003C;
     temp_v1_4->words.w1 = (u32) gfxCtx->framebuffer;
     temp_v1_5 = gfxCtx->overlay.p;
-    gfxCtx->overlay.p = temp_v1_5 + 8;
+    gfxCtx->overlay.p = &temp_v1_5[1];
     temp_v1_5->words.w1 = 0;
     temp_v1_5->words.w0 = 0xDB060000;
     temp_v1_6 = gfxCtx->overlay.p;
-    gfxCtx->overlay.p = temp_v1_6 + 8;
+    gfxCtx->overlay.p = &temp_v1_6[1];
     temp_v1_6->words.w0 = 0xDB06003C;
     temp_v1_6->words.w1 = (u32) gfxCtx->framebuffer;
 }
@@ -238,7 +238,7 @@ void func_801736DC(GraphicsContext *gfxCtx) {
     temp_v0 = Graph_GfxPlusOne(temp_a3);
     temp_a0 = gfxCtx->overlay.p;
     temp_a1 = temp_v0 + 8;
-    gfxCtx->overlay.p = temp_a0 + 8;
+    gfxCtx->overlay.p = &temp_a0[1];
     temp_a0->words.w1 = (u32) temp_v0;
     temp_a0->words.w0 = 0xDE000000;
     temp_v0->words.w0 = 0xDF000000;

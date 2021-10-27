@@ -326,7 +326,7 @@ void EnMinislime_AddIceShardEffect(Actor *arg0) {
             phi_s0->unk_20 = (f32) ((Rand_ZeroFloat(6.0f) + 2.0f) * 0.001f);
             phi_s3 = (s16) (phi_s3 + 0x1999);
             phi_s0 += 0x24;
-            phi_s4 += 0x24;
+            phi_s4 = &phi_s4[3];
             phi_s5 = temp_s5_2;
         } while (temp_s5_2 < sp70);
     }

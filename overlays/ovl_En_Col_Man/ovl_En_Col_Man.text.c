@@ -287,12 +287,12 @@ void func_80AFE414(Actor *arg0, GlobalContext *arg1) {
     func_8012C2DC(temp_a0);
     func_800B8118(arg0, arg1, 0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) D_0405AAB0;
     temp_v0_2->words.w0 = 0xDE000000;
 }
@@ -313,17 +313,17 @@ void func_80AFE4AC(Actor *arg0, GlobalContext *arg1) {
     temp_s0->polyOpa.p = temp_v0;
     temp_s0->polyOpa.p = func_8012C724(temp_v0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp28 = temp_v0_2;
     sp28->words.w1 = Lib_SegmentedToVirtual((void *) &D_0405E6F0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp24 = temp_v0_3;
     sp24->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) D_0405F6F0;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -341,21 +341,21 @@ void func_80AFE584(Actor *arg0, GraphicsContext **arg1) {
     func_8012C28C(*arg1);
     temp_v1 = *arg1;
     temp_v0 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0 + 8;
+    temp_v1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v1;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_2 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0_2 + 8;
+    temp_v1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = -1;
     temp_v0_2->words.w0 = 0xFA000080;
     temp_v0_3 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0_3 + 8;
+    temp_v1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = -1;
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_4 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0_4 + 8;
+    temp_v1->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_0406AB30;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -375,17 +375,17 @@ void func_80AFE650(Actor *arg0, GlobalContext *arg1) {
     temp_s0->polyOpa.p = temp_v0;
     temp_s0->polyOpa.p = func_8012C724(temp_v0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp24 = temp_v0_2;
     sp24->words.w1 = Lib_SegmentedToVirtual((void *) &D_0405CEF0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) D_0405F6F0;
     temp_v0_4->words.w0 = 0xDE000000;
 }

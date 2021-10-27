@@ -356,15 +356,15 @@ void func_8099B0CC(EnCrow *this, GlobalContext *globalCtx) {
 void func_8099B318(Actor *arg0, GlobalContext *arg1) {
     if (arg0->unk_18C == 0xA) {
         arg0->unk_18C = 0U;
-        arg0->unk_290 = 0.0f;
+        arg0[2].home.pos.x = 0.0f;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x260), 4, 2, 0.2f, 0.2f);
     }
 }
 
 void func_8099B384(Actor *arg0, GlobalContext *arg1) {
     f32 temp_f6;
+    f32 temp_v0_2;
     u8 temp_v0;
-    void *temp_v0_2;
 
     temp_f6 = arg0->speedXZ * Math_CosS(arg0->world.rot.x);
     arg0->velocity.y = 0.0f;
@@ -378,19 +378,19 @@ void func_8099B384(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 3) {
         arg0->unk_18C = 0xA;
-        arg0->unk_290 = 1.0f;
-        arg0->unk_298 = 0.75f;
-        arg0->unk_294 = 0.5f;
+        arg0[2].home.pos.x = 1.0f;
+        arg0[2].home.pos.z = 0.75f;
+        arg0[2].home.pos.y = 0.5f;
     } else if (temp_v0 == 4) {
-        temp_v0_2 = arg0->unk_21C;
+        temp_v0_2 = arg0[1].shape.feetPos[0].y;
         arg0->unk_18C = 0x14;
-        arg0->unk_290 = 4.0f;
-        arg0->unk_294 = 0.5f;
+        arg0[2].home.pos.x = 4.0f;
+        arg0[2].home.pos.y = 0.5f;
         Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) temp_v0_2->unk_E, (f32) temp_v0_2->unk_10, (f32) temp_v0_2->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
     } else if (temp_v0 == 2) {
         arg0->unk_18C = 0;
-        arg0->unk_290 = 4.0f;
-        arg0->unk_294 = 0.5f;
+        arg0[2].home.pos.x = 4.0f;
+        arg0[2].home.pos.y = 0.5f;
     }
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x28);
     if ((arg0->flags & 0x8000) != 0) {
@@ -398,7 +398,7 @@ void func_8099B384(Actor *arg0, GlobalContext *arg1) {
     }
     arg0->flags |= 0x10;
     arg0->unk_211 = (u8) (arg0->unk_211 & 0xFFFE);
-    arg0->unk_188 = func_8099B584;
+    arg0[1].focus.pos.z = (bitwise f32) func_8099B584;
 }
 
 void func_8099B584(EnCrow *this, GlobalContext *globalCtx) {
@@ -459,9 +459,9 @@ void func_8099B6C4(EnCrow *this, GlobalContext *globalCtx) {
 }
 
 void func_8099B778(Actor *arg0) {
-    arg0->unk_18E = 0x64;
-    arg0->unk_190 = -0x1000;
-    arg0->unk_192 = (s16) (arg0->yawTowardsPlayer + 0x8000);
+    arg0[1].focus.rot.y = 0x64;
+    arg0[1].focus.rot.z = -0x1000;
+    arg0[1].focus.unk_12 = arg0->yawTowardsPlayer + 0x8000;
     arg0->speedXZ = 3.5f;
     arg0->unk_160 = 2.0f;
     if (arg0->colChkInfo.damageEffect == 1) {
@@ -470,7 +470,7 @@ void func_8099B778(Actor *arg0) {
         func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
     }
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_188 = func_8099B838;
+    arg0[1].focus.pos.z = (bitwise f32) func_8099B838;
 }
 
 void func_8099B838(EnCrow *this, GlobalContext *globalCtx) {
@@ -560,7 +560,7 @@ void func_8099BAB4(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0;
     if ((temp_v0 & 2) != 0) {
         arg0->unk_211 = (u8) (temp_v0 & 0xFFFD);
-        temp_a1 = arg0->unk_21C;
+        temp_a1 = arg0[1].shape.feetPos[0].y;
         arg0 = arg0;
         func_800BE258(temp_a0, temp_a1);
         temp_v0_2 = arg0->colChkInfo.damageEffect;
@@ -571,8 +571,8 @@ void func_8099BAB4(Actor *arg0, GlobalContext *arg1) {
         temp_a1_2 = arg0;
         if (temp_v0_2 == 5) {
             arg0->unk_18C = 0x1F;
-            arg0->unk_290 = 2.0f;
-            arg0->unk_294 = 0.5f;
+            arg0[2].home.pos.x = 2.0f;
+            arg0[2].home.pos.y = 0.5f;
             func_8099B778(arg0, temp_a1_2, arg0);
             return;
         }

@@ -163,20 +163,20 @@ s32 func_80BFD30C(Actor *arg0, s32 arg1) {
     phi_v1 = 0;
     phi_t0 = 0;
     if ((arg1 == 0) || (arg1 == 1)) {
-        temp_v0 = arg0->unk_250;
+        temp_v0 = arg0[1].prevPos.y;
         if ((temp_v0 != 0) && (temp_v0 != 1)) {
             goto block_6;
         }
-    } else if (arg1 != arg0->unk_250) {
+    } else if (arg1 != arg0[1].prevPos.y) {
 block_6:
         phi_v1 = 1;
     }
     temp_a0 = arg0 + 0x144;
     if (phi_v1 != 0) {
-        arg0->unk_250 = arg1;
+        arg0[1].prevPos.y = arg1;
         arg0 = arg0;
         temp_t0 = func_8013BC6C(temp_a0, D_80BFDF80, arg1);
-        arg0->unk_238 = (f32) arg0->unk_160;
+        arg0[1].projectedPos.z = arg0->unk_160;
         phi_t0 = temp_t0;
     }
     return phi_t0;
@@ -197,22 +197,22 @@ void func_80BFD3A4(EnBjt *arg0, GlobalContext *arg1) {
 ? func_80BFD434(s8 arg0) {
     switch (arg0) {
     case 45:
-        func_801149A0(0x2F, gItemSlots[0x2F]);
+        func_801149A0(0x2F, gItemSlots[47]);
         break;
     case 47:
-        func_801149A0(0x2A, gItemSlots[0x2A]);
+        func_801149A0(0x2A, gItemSlots[42]);
         break;
     case 48:
-        func_801149A0(0x2B, gItemSlots[0x2B]);
+        func_801149A0(0x2B, gItemSlots[43]);
         break;
     case 49:
-        func_801149A0(0x2C, gItemSlots[0x2C]);
+        func_801149A0(0x2C, gItemSlots[44]);
         break;
     case 43:
-        func_801149A0(0x29, gItemSlots[0x29]);
+        func_801149A0(0x29, gItemSlots[41]);
         break;
     case 51:
-        func_801149A0(0x2E, gItemSlots[0x2E]);
+        func_801149A0(0x2E, gItemSlots[46]);
         break;
     }
     return 0;
@@ -224,9 +224,9 @@ s32 func_80BFD4FC(Actor *arg0) {
     u16 temp_t0;
 
     sp24 = 0;
-    if (arg0->unk_248 == 0) {
+    if (arg0[1].uncullZoneDownward == 0) {
         Audio_PlayActorSound2(arg0, 0x28D0U);
-        arg0->unk_248 = 1;
+        arg0[1].uncullZoneDownward = 1e-45.0f;
     }
     Math_ApproachF((f32 *) &arg0->scale, 0.017f, 0.21f, 0.3f);
     if ((0.017f - arg0->scale.x) < 0.00017000001f) {
@@ -237,7 +237,7 @@ s32 func_80BFD4FC(Actor *arg0) {
         sp24 = 1;
     }
     temp_f0 = (arg0->scale.x / 0.017f) * 4.0f;
-    arg0->unk_23C = temp_f0;
+    arg0[1].projectedW = temp_f0;
     arg0->world.pos.y = arg0->home.pos.y + temp_f0;
     Actor_SetScale(arg0, arg0->scale.x);
     return sp24;
@@ -248,9 +248,9 @@ s32 func_80BFD5E4(Actor *arg0) {
     f32 temp_f0;
 
     sp24 = 0;
-    if (arg0->unk_248 == 0) {
+    if (arg0[1].uncullZoneDownward == 0) {
         Audio_PlayActorSound2(arg0, 0x28D1U);
-        arg0->unk_248 = 1;
+        arg0[1].uncullZoneDownward = 1e-45.0f;
     }
     Math_ApproachF((f32 *) &arg0->scale, 0.0f, 0.21f, 0.3f);
     if (arg0->scale.x < 0.00017000001f) {
@@ -259,7 +259,7 @@ s32 func_80BFD5E4(Actor *arg0) {
         sp24 = 1;
     }
     temp_f0 = (arg0->scale.x / 0.017f) * 4.0f;
-    arg0->unk_23C = temp_f0;
+    arg0[1].projectedW = temp_f0;
     arg0->world.pos.y = arg0->home.pos.y + temp_f0;
     Actor_SetScale(arg0, arg0->scale.x);
     return sp24;
@@ -293,15 +293,15 @@ block_7:
             temp_v0_2 = func_80123810(arg1);
             if ((temp_v0_2 == 0x2B) || (temp_v0_2 == 0x2D) || (temp_v0_2 == 0x2F) || (temp_v0_2 == 0x30) || (temp_v0_2 == 0x31) || (temp_v0_2 == 0x33)) {
                 func_80BFD30C(arg0, 1);
-                arg0->unk_248 = 0;
+                arg0[1].uncullZoneDownward = 0.0f;
                 arg0->unk_240 = (u16) ((s16) arg0->unk_240 + 1);
                 sp20 = 1;
             } else if (temp_v0_2 < 0) {
-                arg0->unk_248 = 0;
+                arg0[1].uncullZoneDownward = 0.0f;
                 arg0->unk_240 = (u16) ((s16) arg0->unk_240 + 1);
                 sp20 = 3;
             } else if (temp_v0_2 != 0) {
-                arg0->unk_248 = 0;
+                arg0[1].uncullZoneDownward = 0.0f;
                 arg0->unk_240 = (u16) ((s16) arg0->unk_240 + 1);
                 sp20 = 2;
             }
@@ -330,7 +330,7 @@ block_7:
         }
         if (phi_v1 == 0) {
             func_80BFD30C(arg0, 5);
-            arg0->unk_248 = 0;
+            arg0[1].uncullZoneDownward = 0.0f;
             arg0->unk_240 = (u16) ((s16) arg0->unk_240 + 1);
         } else if (arg0->unk_242 == 0xA) {
             Audio_PlayActorSound2(arg0, 0x2897U);
@@ -354,7 +354,7 @@ block_7:
 s32 func_80BFD8F0(Actor *arg0, GlobalContext *arg1) {
     s32 sp1C;
     Actor *temp_a0;
-    u16 *temp_a0_2;
+    f32 *temp_a0_2;
     s32 phi_v1;
 
     temp_a0 = arg0;
@@ -364,13 +364,13 @@ s32 func_80BFD8F0(Actor *arg0, GlobalContext *arg1) {
         arg0 = arg0;
         phi_v1 = sp1C;
         if (func_800B84D0(temp_a0, arg1) != 0) {
-            temp_a0_2 = arg0 + 0x234;
+            temp_a0_2 = &arg0[1].projectedPos.y;
             arg0->unk_234 = (u16) (arg0->unk_234 | 8);
             arg0 = arg0;
-            func_8013AED4(temp_a0_2, 0U, 7U);
-            arg0->unk_24C = func_80BFD6BC;
+            func_8013AED4((u16 *) temp_a0_2, 0U, 7U);
+            arg0[1].prevPos.x = (bitwise f32) func_80BFD6BC;
             arg0->unk_240 = 0;
-            arg0->unk_188 = func_80BFDA48;
+            arg0[1].focus.pos.z = (bitwise f32) func_80BFDA48;
             phi_v1 = 1;
         }
     }

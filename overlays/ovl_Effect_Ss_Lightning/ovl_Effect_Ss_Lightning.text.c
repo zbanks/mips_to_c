@@ -120,8 +120,8 @@ void func_8097A794(GlobalContext *arg0, f32 *arg1, s32 arg2, s32 *arg3) {
         phi_t9 = temp_t9;
     } while (temp_t6 != (arg3 + 0x60));
     sp18.unk_0 = (s32) arg1->unk_0;
-    sp18.unk_4 = (s32) arg1->unk_4;
-    sp18.unk_8 = (s32) arg1->unk_8;
+    sp18.unk_4 = (s32) arg1[1];
+    sp18.unk_8 = (s32) arg1[2];
     sp68 += -1;
     sp6C = (s16) arg2;
     sp74 = sp6E;
@@ -167,30 +167,30 @@ void EffectSsLightning_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this)
     SkinMatrix_MtxFMtxFMult((MtxF *) &sp94, (MtxF *) &spD4, (MtxF *) &sp54);
     SkinMatrix_MtxFMtxFMult((MtxF *) &sp54, (MtxF *) &sp114, (MtxF *) &sp194);
     temp_v1 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1 + 8;
+    temp_s1->polyXlu.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDA380003;
     temp_v1->words.w1 = (u32) &D_801D1DE0;
     temp_v0_2 = SkinMatrix_MtxFToNewMtx(temp_s1, (MtxF *) &sp194);
     if (temp_v0_2 != 0) {
         temp_v1_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_2 + 8;
+        temp_s1->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = (u32) temp_v0_2;
         temp_v1_2->words.w0 = 0xDA380003;
         func_8012C9BC(temp_s1);
         temp_v1_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_3 + 8;
+        temp_s1->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xDB060020;
         temp_v1_3->words.w1 = (u32) D_8097AC80[sp48];
         temp_v1_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_4 + 8;
+        temp_s1->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xFA000000;
         temp_v1_4->words.w1 = (this->regs[3] & 0xFF) | (this->regs[0] << 0x18) | ((this->regs[1] & 0xFF) << 0x10) | ((this->regs[2] & 0xFF) << 8);
         temp_v1_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_5 + 8;
+        temp_s1->polyXlu.p = &temp_v1_5[1];
         temp_v1_5->words.w0 = 0xFB000000;
         temp_v1_5->words.w1 = (this->regs[7] & 0xFF) | (this->regs[4] << 0x18) | ((this->regs[5] & 0xFF) << 0x10) | ((this->regs[6] & 0xFF) << 8);
         temp_v1_6 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_6 + 8;
+        temp_s1->polyXlu.p = &temp_v1_6[1];
         temp_v1_6->words.w0 = 0xDE000000;
         temp_v1_6->words.w1 = (u32) this->gfx;
     }

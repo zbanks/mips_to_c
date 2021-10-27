@@ -18,7 +18,7 @@ struct _mips2c_stack_func_80A2CF50 {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80A2CF7C {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ void *sp20;                          /* inferred */
+    /* 0x20 */ f32 sp20;                            /* inferred */
     /* 0x24 */ Actor *sp24;                         /* inferred */
 };                                                  /* size = 0x28 */
 
@@ -133,16 +133,16 @@ s16 func_80A2CF50(void *arg0) {
 
 void func_80A2CF7C(ElfMsg3 *arg0, GlobalContext *arg1) {
     Actor *sp24;
-    void *sp20;
+    f32 sp20;
     Actor *temp_v1;
     f32 temp_f0;
     f32 temp_f2;
-    void *temp_v0;
+    f32 temp_v0;
 
     temp_v1 = arg1->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A80;
+    temp_v0 = temp_v1[8].scale.z;
     sp20 = temp_v0;
-    if ((temp_v0 != 0) && (fabsf(temp_v1->world.pos.x - arg0->actor.world.pos.x) < (100.0f * arg0->actor.scale.x)) && (temp_f0 = temp_v1->world.pos.y, temp_f2 = arg0->actor.world.pos.y, (temp_f2 <= temp_f0)) && ((temp_f0 - temp_f2) < (100.0f * arg0->actor.scale.y)) && (fabsf(temp_v1->world.pos.z - arg0->actor.world.pos.z) < (100.0f * arg0->actor.scale.z))) {
+    if (((bitwise s32) temp_v0 != 0) && (fabsf(temp_v1->world.pos.x - arg0->actor.world.pos.x) < (100.0f * arg0->actor.scale.x)) && (temp_f0 = temp_v1->world.pos.y, temp_f2 = arg0->actor.world.pos.y, (temp_f2 <= temp_f0)) && ((temp_f0 - temp_f2) < (100.0f * arg0->actor.scale.y)) && (fabsf(temp_v1->world.pos.z - arg0->actor.world.pos.z) < (100.0f * arg0->actor.scale.z))) {
         sp24 = temp_v1;
         temp_v1->unk_A84 = func_80A2CF50((bitwise void *) 100.0f, arg0);
         ActorCutscene_SetIntentToPlay(0x7C);

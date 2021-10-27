@@ -60,7 +60,7 @@ struct _mips2c_stack_func_80B76188 {
 
 struct _mips2c_stack_func_80B761FC {
     /* 0x00 */ char pad_0[0x28];
-    /* 0x28 */ Collider *sp28;                      /* inferred */
+    /* 0x28 */ Vec3s *sp28;                         /* inferred */
     /* 0x2C */ CollisionCheckContext *sp2C;         /* inferred */
 };                                                  /* size = 0x30 */
 
@@ -302,23 +302,23 @@ void func_80B76188(Actor *arg0) {
 
 ? func_80B761FC(Actor *arg0, GlobalContext *arg1) {
     CollisionCheckContext *sp2C;
-    Collider *sp28;
-    Collider *temp_a2;
+    Vec3s *sp28;
     CollisionCheckContext *temp_a1;
+    Vec3s *temp_a2;
     u8 temp_v0;
     void *temp_v1;
 
     temp_v0 = arg0->unk_19D;
-    arg0->unk_1D4 = (s16) (s32) arg0->world.pos.x;
+    arg0[1].bgCheckFlags = (u16) (s32) arg0->world.pos.x;
     arg0->unk_1D8 = (s16) (s32) arg0->world.pos.z;
-    arg0->unk_1D6 = (s16) (s32) (arg0->world.pos.y + 16.0f);
+    arg0[1].yawTowardsPlayer = (s16) (s32) (arg0->world.pos.y + 16.0f);
     if (((temp_v0 & 2) != 0) && (arg0->colChkInfo.damageEffect == 0xF) && (temp_v1 = arg0->child, ((temp_v1->unk_159 & 2) == 0)) && (temp_v1->colChkInfo.damageEffect != 0xF)) {
         arg0->unk_19D = (u8) (temp_v0 & 0xFFFD);
-        if (arg0->unk_3A4 == 0) {
-            arg0->unk_3A4 = 1U;
+        if (arg0[2].colorFilterTimer == 0) {
+            arg0[2].colorFilterTimer = 1;
             Audio_PlayActorSound2(arg0, 0x3AD4U);
         } else {
-            arg0->unk_3A4 = 0U;
+            arg0[2].colorFilterTimer = 0;
             Audio_PlayActorSound2(arg0, 0x3AD5U);
         }
         arg1->interfaceCtx.unk_25E = 1;
@@ -330,12 +330,12 @@ void func_80B76188(Actor *arg0) {
     } else {
         arg0->unk_38E = 0;
     }
-    temp_a2 = arg0 + 0x18C;
+    temp_a2 = &arg0[1].focus.rot;
     temp_a1 = arg1 + 0x18884;
     sp2C = temp_a1;
     sp28 = temp_a2;
-    CollisionCheck_SetOC(arg1, temp_a1, temp_a2);
-    CollisionCheck_SetAC(arg1, temp_a1, temp_a2);
+    CollisionCheck_SetOC(arg1, temp_a1, (Collider *) temp_a2);
+    CollisionCheck_SetAC(arg1, temp_a1, (Collider *) temp_a2);
     return 0;
 }
 
@@ -406,10 +406,10 @@ f32 func_80B76540(u8 *arg0, s32 arg1, Vec3f *arg2, s16 *arg3) {
     if (arg0 != 0) {
         temp_v1 = (arg1 * 6) + Lib_SegmentedToVirtual(arg0->unk_4);
         sp20 = (f32) temp_v1->unk_0;
-        sp24 = (f32) temp_v1->unk_2;
-        sp28 = (f32) temp_v1->unk_4;
+        sp24 = (f32) temp_v1[1];
+        sp28 = (f32) temp_v1[2];
     }
-    arg3->unk_2 = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
+    arg3[1] = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
     arg3->unk_0 = Math_Vec3f_Pitch(arg2, (Vec3f *) &sp20);
     return sp24 - arg2->y;
 }
@@ -539,7 +539,7 @@ void func_80B76980(Actor *arg0, GlobalContext *arg1) {
         func_801518B0(arg1, 0x87FU, temp_a2);
         gSaveContext.eventInf[3] |= 0x40;
         gSaveContext.eventInf[4] |= 1;
-        temp_v1->unk_A74 = (s32) (temp_v1->unk_A74 & ~0x400);
+        temp_v1[8].targetArrowOffset &= -0x401;
         arg0->unk_144 = func_80B76BB8;
         arg0->speedXZ = 0.0f;
         return;
@@ -565,7 +565,7 @@ void func_80B76A64(EnTruMt *this, GlobalContext *globalCtx) {
     sp3C = globalCtx->actorCtx.actorList[2].first;
     func_80B76924(this);
     func_80B76980((Actor *) this, globalCtx);
-    sp3C->unk_A74 = (s32) (sp3C->unk_A74 | 0x400);
+    sp3C[8].targetArrowOffset = (bitwise f32) ((bitwise s32) sp3C[8].targetArrowOffset | 0x400);
     temp_a0 = this->unk_368;
     if (temp_a0 != 0) {
         func_80B76540(temp_a0, this->unk_36C, (Vec3f *) &this->actor.world, &sp34);
@@ -621,7 +621,7 @@ void func_80B76C38(EnTruMt *this, GlobalContext *globalCtx) {
     sp1C = globalCtx->actorCtx.actorList[2].first;
     func_80B76924(this);
     func_80B76980((Actor *) this, globalCtx);
-    sp1C->unk_A74 = (s32) (sp1C->unk_A74 | 0x400);
+    sp1C[8].targetArrowOffset = (bitwise f32) ((bitwise s32) sp1C[8].targetArrowOffset | 0x400);
 }
 
 void EnTruMt_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -700,13 +700,13 @@ void func_80B76ED4(s16 arg0, s16 arg1, void *arg2, s16 *arg3, s32 arg4) {
         sp6A += arg1;
         sp68 = temp_a1;
         Math_SmoothStepToS(arg3, temp_a1, 4, 0x1FFE, (s16) 1);
-        Math_SmoothStepToS(arg3 + 2, sp6A, 4, 0x1FFE, (s16) 1);
-        Math_SmoothStepToS(arg3 + 4, sp6C, 4, 0x1FFE, (s16) 1);
+        Math_SmoothStepToS(&arg3[1], sp6A, 4, 0x1FFE, (s16) 1);
+        Math_SmoothStepToS(&arg3[2], sp6C, 4, 0x1FFE, (s16) 1);
         return;
     }
     arg3->unk_0 = sp68;
-    arg3->unk_2 = sp6A;
-    arg3->unk_4 = sp6C;
+    arg3[1] = sp6A;
+    arg3[2] = sp6C;
 }
 
 s32 func_80B77008(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
@@ -737,29 +737,29 @@ void func_80B77078(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
         if ((arg4->unk_328 & 0x10) != 0) {
             phi_v0 = 1;
         }
-        func_80B76ED4(arg4->unk_348, arg4->unk_34A, arg4 + 0x33C, arg4 + 0x336, phi_v0);
+        func_80B76ED4(arg4[2].shape.rot.z, arg4[2].shape.face, arg4 + 0x33C, arg4 + 0x336, phi_v0);
         SysMatrix_InsertTranslation(arg4->unk_33C, arg4->unk_340, arg4->unk_344, 0);
         Matrix_Scale(arg4->scale.x, arg4->scale.y, arg4->scale.z, 1);
-        Matrix_RotateY(arg4->unk_338, 1U);
+        Matrix_RotateY(arg4[2].colChkInfo.cylRadius, 1U);
         SysMatrix_InsertXRotation_s(arg4->unk_336, 1);
-        SysMatrix_InsertZRotation_s(arg4->unk_33A, 1);
+        SysMatrix_InsertZRotation_s(arg4[2].colChkInfo.cylHeight, 1);
     }
     if (arg1 == 0xE) {
         func_8012C28C(arg0->state.gfxCtx);
         sp4C = arg0->state.gfxCtx;
         SysMatrix_MultiplyVector3fByState(&D_80B77668, arg4 + 0x370);
-        SysMatrix_InsertTranslation(arg4->unk_370, arg4->unk_374, arg4->unk_378, 0);
+        SysMatrix_InsertTranslation(arg4[2].shape.feetPos[1].z, arg4[2].projectedPos.x, arg4[2].projectedPos.y, 0);
         Matrix_RotateY((s16) (func_800DFCDC((arg0 + (arg0->activeCamera * 4))->unk_800) + 0x8000), 1U);
         SysMatrix_InsertZRotation_s(arg4->unk_392, 1);
         SysMatrix_InsertXRotation_s(arg4->unk_38E, 1);
         Matrix_Scale(0.008f, 0.008f, 0.008f, 1);
         temp_v0 = sp4C->polyOpa.p;
-        sp4C->polyOpa.p = temp_v0 + 8;
+        sp4C->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp44 = temp_v0;
         sp44->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
         temp_v0_2 = sp4C->polyOpa.p;
-        sp4C->polyOpa.p = temp_v0_2 + 8;
+        sp4C->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_060004C8;
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v1 = arg4->child;
@@ -789,9 +789,9 @@ void func_80B77354(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 0x15) {
         SysMatrix_InsertTranslation(arg2->unk_33C, arg2->unk_340, arg2->unk_344, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-        Matrix_RotateY(arg2->unk_338, 1U);
+        Matrix_RotateY(arg2[2].colChkInfo.cylRadius, 1U);
         SysMatrix_InsertXRotation_s(arg2->unk_336, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_33A, 1);
+        SysMatrix_InsertZRotation_s(arg2[2].colChkInfo.cylHeight, 1);
     }
 }
 
@@ -812,13 +812,13 @@ void EnTruMt_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp44 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0 + 8;
+    sp44->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp44 = sp44;
     sp3C = temp_v0;
     sp3C->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_34C * 4))->unk_48);
     temp_v0_2 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0_2 + 8;
+    sp44->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp38 = temp_v0_2;
     sp38->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_34C * 4))->unk_48);

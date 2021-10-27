@@ -273,17 +273,17 @@ void EnTg_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp44 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0 + 8;
+    sp44->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0;
     temp_v0->words.w0 = 0xE7000000;
     temp_v0_2 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0_2 + 8;
+    sp44->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp44 = sp44;
     sp38 = temp_v0_2;
     sp38->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0, 0x32, 0xA0, 0);
     temp_v0_3 = sp44->polyOpa.p;
-    sp44->polyOpa.p = temp_v0_3 + 8;
+    sp44->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060024;
     sp34 = temp_v0_3;
     sp34->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0);
@@ -340,7 +340,7 @@ loop_2:
         arg1 = phi_a1_2;
         arg1->unk_14 = (f32) (arg1->unk_14 + (4.0f * Math_SinS(arg0->unk_BE)));
         temp_f8 = 4.0f * Math_CosS(arg0->unk_BE);
-        arg1->unk_1 = 0x10;
+        arg1[1] = 0x10;
         arg1->unk_1C = (f32) (arg1->unk_1C + temp_f8);
     }
 }
@@ -419,7 +419,7 @@ void func_8099000C(GlobalContext *arg0, ? *arg1, s32 arg2) {
             if (phi_s2->unk_0 == 1) {
                 if (phi_s7 == 0) {
                     temp_v0_2 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_2 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_2[1];
                     temp_v0_2->words.w1 = (u32) &D_0600B0A0;
                     temp_v0_2->words.w0 = 0xDE000000;
                     phi_s7 = 1;
@@ -429,15 +429,15 @@ void func_8099000C(GlobalContext *arg0, ? *arg1, s32 arg2) {
                 temp_f12 = phi_s2->unk_4;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_v0_3 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_3 + 8;
+                temp_s1->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDB060020;
                 temp_v0_3->words.w1 = Lib_SegmentedToVirtual((void *) &D_0405E6F0);
                 temp_v0_4 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_4 + 8;
+                temp_s1->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDA380003;
                 temp_v0_4->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                 temp_v0_5 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_5 + 8;
+                temp_s1->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = (u32) &D_0600B0E0;
                 temp_v0_5->words.w0 = 0xDE000000;
             }

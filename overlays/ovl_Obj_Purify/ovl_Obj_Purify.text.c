@@ -169,11 +169,11 @@ void func_80A84EC0(Actor *arg0, GlobalContext *arg1) {
     s32 sp24;
     s16 temp_v0;
 
-    if (Object_IsLoaded(arg1 + 0x17D88, (s32) arg0->unk_166) != 0) {
+    if (Object_IsLoaded(arg1 + 0x17D88, (s32) arg0[1].unk_22) != 0) {
         temp_v0 = arg0->params;
         sp28 = ((s32) temp_v0 >> 0xC) & 1;
         sp24 = temp_v0 & 0xF;
-        arg0->objBankIndex = (s8) arg0->unk_166;
+        arg0->objBankIndex = (s8) arg0[1].unk_22;
         Actor_SetObjectSegment(arg1, arg0);
         if (sp28 == 1) {
             BgCheck3_LoadMesh(arg1, (DynaPolyActor *) arg0, *(&D_80A854A0 + (sp24 * 0x28)));
@@ -288,24 +288,24 @@ void func_80A851C8(Actor *arg0, GlobalContext *arg1) {
     if (sp40 != 0) {
         func_8012C28C(arg1->state.gfxCtx);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         sp2C = temp_v0_2;
         sp2C->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = sp40;
     }
     if (sp3C != 0) {
         func_8012C2DC(arg1->state.gfxCtx);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         sp24 = temp_v0_4;
         sp24->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = sp3C;
     }
@@ -342,12 +342,12 @@ void func_80A85304(void *arg0, GlobalContext *arg1) {
         AnimatedMat_Draw(arg1, Lib_SegmentedToVirtual(temp_s3->unk_18));
         func_80A84CD0((arg0 + temp_s0)->unk_168);
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_2 = temp_s1->polyXlu.p;
         temp_s2 = phi_s2 + 4;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = temp_s3->unk_10;
         phi_s2 = temp_s2;

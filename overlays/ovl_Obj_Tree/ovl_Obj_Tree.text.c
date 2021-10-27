@@ -158,9 +158,9 @@ void func_80B9A220(ObjTree *arg0, GlobalContext *arg1) {
 void func_80B9A230(Actor *arg0) {
     arg0->unk_1B4 = 0;
     arg0->unk_1B2 = 0x18E3;
-    arg0->unk_1AC = 546.0f;
+    arg0[1].velocity.y = 546.0f;
     Audio_PlayActorSound2(arg0, 0x2877U);
-    arg0->unk_1A8 = func_80B9A27C;
+    arg0[1].velocity.x = (bitwise f32) func_80B9A27C;
 }
 
 void func_80B9A27C(ObjTree *arg0, ? arg1) {
@@ -229,22 +229,22 @@ void ObjTree_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp28 = temp_v0;
     sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000680;
     temp_v0_2->words.w0 = 0xDE000000;
     SysMatrix_InsertRotation(sp36, 0, sp34, 1);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_060007C8;
     temp_v0_4->words.w0 = 0xDE000000;
 }

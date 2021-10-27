@@ -1,3 +1,67 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ s16 unk_3A;                         /* inferred */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct BgSinkaiKabe {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 unk_144;                        /* inferred */
@@ -85,10 +149,10 @@ void BgSinkaiKabe_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->unk_160 = temp_v0_2;
         if (temp_v0_2 != 0) {
             temp_v0_2->unk_2C0 = (s16) this->unk_164;
-            temp_v0_2->unk_2C2 = (s16) this->unk_166;
+            temp_v0_2[2].unk_3A = this->unk_166;
             temp_v0_2->cutscene = this->actor.cutscene;
-            Math_Vec3f_Copy(temp_v0_2 + 0x260, (Vec3f *) sp54);
-            temp_v0_2->unk_250 = (s32) this->unk_16C;
+            Math_Vec3f_Copy((Vec3f *) &temp_v0_2[1].colorFilterTimer, (Vec3f *) sp54);
+            temp_v0_2[1].prevPos.y = (bitwise f32) this->unk_16C;
         }
     } else {
         temp_v0_3 = this->actor.params;
@@ -126,7 +190,7 @@ void func_80B6DA20(BgSinkaiKabe *arg0, GlobalContext *arg1) {
     phi_a2 = temp_a2;
     if (temp_a2 != 0) {
         if (temp_a2->update != 0) {
-            if (temp_a2->unk_2BA == 0) {
+            if (temp_a2[2].world.rot.y == 0) {
                 temp_f0 = arg0->actor.xzDistToPlayer;
                 if (!(temp_f0 < 500.0f)) {
                     temp_v0 = arg0->actor.yawTowardsPlayer - arg0->actor.world.rot.y;
@@ -140,7 +204,7 @@ void func_80B6DA20(BgSinkaiKabe *arg0, GlobalContext *arg1) {
                 } else {
 block_8:
                     if (fabsf(arg0->actor.world.pos.y - arg1->actorCtx.actorList[2].first->world.pos.y) < 400.0f) {
-                        temp_a2->unk_2BA = 1;
+                        temp_a2[2].world.rot.y = 1;
                         phi_a2 = arg0->unk_160;
                     }
                 }

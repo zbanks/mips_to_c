@@ -651,11 +651,11 @@ s32 func_80183DE0(void *arg0) {
     } else {
         phi_s2 = arg0->unk_28;
     }
-    temp_a0 = arg0->unk_1C->unk_C;
+    temp_a0 = arg0->unk_1C[3];
     arg0 = arg0;
     sp7C = Lib_SegmentedToVirtual(temp_a0);
-    sp74 = Lib_SegmentedToVirtual(arg0->unk_1C->unk_8);
-    sp78 = Lib_SegmentedToVirtual(arg0->unk_1C->unk_4);
+    sp74 = Lib_SegmentedToVirtual(arg0->unk_1C[2]);
+    sp78 = Lib_SegmentedToVirtual(arg0->unk_1C[1]);
     temp_v0 = Lib_SegmentedToVirtual(*arg0->unk_1C);
     sp9C = 0;
     phi_v1 = temp_v0;
@@ -815,14 +815,14 @@ void func_8018410C(void **arg0, void *arg1, s32 *arg2, s32 (*arg3)(void **, void
                 temp_v0_3->unk_0 = 0xDE000000;
                 temp_v0_3->unk_4 = sp9C;
             }
-            *arg6 += 0x40;
+            *arg6 = &(*arg6)[1];
         } else if (temp_s0 != 0) {
             temp_v0_4 = (*arg0)->unk_2B0;
             (*arg0)->unk_2B0 = (void *) (temp_v0_4 + 8);
             temp_v0_4->unk_0 = 0xDA380003;
             temp_v0_4->unk_4 = (RSPMatrix *) *arg6;
             SysMatrix_GetStateAsRSPMatrix(*arg6);
-            *arg6 += 0x40;
+            *arg6 = &(*arg6)[1];
         }
     }
     if (arg4 != 0) {
@@ -1051,11 +1051,11 @@ s32 func_80184C48(void *arg0) {
     } else {
         phi_s1 = arg0->unk_24;
     }
-    temp_a0 = arg0->unk_1C->unk_C;
+    temp_a0 = arg0->unk_1C[3];
     arg0 = arg0;
     sp68 = Lib_SegmentedToVirtual(temp_a0);
-    sp60 = Lib_SegmentedToVirtual(arg0->unk_1C->unk_8);
-    sp64 = Lib_SegmentedToVirtual(arg0->unk_1C->unk_4);
+    sp60 = Lib_SegmentedToVirtual(arg0->unk_1C[2]);
+    sp64 = Lib_SegmentedToVirtual(arg0->unk_1C[1]);
     phi_t0 = Lib_SegmentedToVirtual(*arg0->unk_1C);
     phi_s2 = 0x20U;
     phi_s3 = 0;
@@ -1243,14 +1243,14 @@ void func_801850A0(void **arg0, void *arg1, s32 *arg2, s32 (*arg3)(void **, void
                 temp_v0_2->unk_0 = 0xDE000000;
                 temp_v0_2->unk_4 = sp84;
             }
-            *arg6 += 0x40;
+            *arg6 = &(*arg6)[1];
         } else if (temp_s1 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*arg6);
             temp_v0_3 = temp_s0->unk_2B0;
             temp_s0->unk_2B0 = (void *) (temp_v0_3 + 8);
             temp_v0_3->unk_0 = 0xDA380003;
             temp_v0_3->unk_4 = (RSPMatrix *) *arg6;
-            *arg6 += 0x40;
+            *arg6 = &(*arg6)[1];
         }
     }
     if (arg4 != 0) {
@@ -1338,9 +1338,9 @@ void func_80185460(void *arg0, s32 arg1, s16 *arg2) {
     s32 phi_s3_6;
     s32 phi_s4_6;
 
-    sp5C = Lib_SegmentedToVirtual(arg0->unk_1C->unk_C);
-    temp_fp = Lib_SegmentedToVirtual(arg0->unk_1C->unk_8);
-    sp58 = Lib_SegmentedToVirtual(arg0->unk_1C->unk_4);
+    sp5C = Lib_SegmentedToVirtual(arg0->unk_1C[3]);
+    temp_fp = Lib_SegmentedToVirtual(arg0->unk_1C[2]);
+    sp58 = Lib_SegmentedToVirtual(arg0->unk_1C[1]);
     temp_v1 = Lib_SegmentedToVirtual(*arg0->unk_1C);
     phi_v1_2 = temp_v1;
     phi_s5_2 = 0;

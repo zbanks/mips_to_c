@@ -302,7 +302,7 @@ loop_6:
     this->unk_1A3 = phi_s0_2->unk_2;
     temp_a0 = &globalCtx->objectCtx;
     sp38 = temp_a0;
-    temp_v0_3 = Object_GetIndex(temp_a0, phi_s0_2->unk_4);
+    temp_v0_3 = Object_GetIndex(temp_a0, phi_s0_2[2]);
     phi_v0_3 = (s8) temp_v0_3;
     phi_s0_3 = phi_s0_2;
     if ((temp_v0_3 < 0) && (temp_v0_4 = Object_GetIndex(temp_a0, *D_8086788A), phi_v0_3 = (s8) temp_v0_4, phi_s0_3 = &D_80867886, (temp_v0_4 != 0))) {
@@ -447,7 +447,7 @@ void func_80866B20(EnDoor *arg0, GlobalContext *arg1) {
                 } else {
                     sp64->unk_37D = (s8) (s32) -1.0f;
                 }
-                sp64->unk_380 = arg0;
+                sp64[2].projectedW = (bitwise f32) arg0;
                 if (arg0->unk_1A6 != 0) {
                     if ((s32) gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex] <= 0) {
                         sp64->unk_37C = -1;
@@ -695,12 +695,12 @@ void EnDoor_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if (temp_v0 != 0) {
             if ((s32) temp_v0 > 0) {
                 temp_v1 = sp28->polyOpa.p;
-                sp28->polyOpa.p = temp_v1 + 8;
+                sp28->polyOpa.p = &temp_v1[1];
                 temp_v1->words.w0 = 0xDE000000;
                 temp_v1->words.w1 = (u32) &D_04020D00;
             } else {
                 temp_v1_2 = sp28->polyOpa.p;
-                sp28->polyOpa.p = temp_v1_2 + 8;
+                sp28->polyOpa.p = &temp_v1_2[1];
                 temp_v1_2->words.w1 = (u32) &D_04020BB8;
                 temp_v1_2->words.w0 = 0xDE000000;
             }

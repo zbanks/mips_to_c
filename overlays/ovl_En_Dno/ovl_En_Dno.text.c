@@ -153,7 +153,7 @@ struct _mips2c_stack_func_80A732C8 {
 
 struct _mips2c_stack_func_80A73408 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ SkelAnime *sp24;                     /* inferred */
+    /* 0x24 */ u32 *sp24;                           /* inferred */
     /* 0x28 */ char pad_28[0x4];
     /* 0x2C */ u32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x3];
@@ -304,14 +304,14 @@ void func_80A715DC(EnDno *arg0, GlobalContext *arg1) {
         if (temp_v0 != 0) {
             if ((temp_v0->params & 0xF) == 0) {
                 temp_s1 = &temp_v0->home;
-                if ((temp_v0->unk_170 & 1) == 0) {
+                if (((bitwise s32) temp_v0[1].world.pos.z & 1) == 0) {
                     temp_s2 = arg0 + 0x24;
                     if (func_8013E5CC((Vec3f *) temp_s1, &temp_v0->home.rot, &D_80A73B2C, arg0 + 0x108, temp_s2, (Vec3f *) &sp88) != 0) {
                         Math_Vec3f_Diff(temp_s2, (Vec3f *) temp_s1, (Vec3f *) &sp7C);
                         Matrix_RotateY((s16) ((s32) temp_v0->home.rot.y * -1), 0U);
                         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp7C, (Vec3f *) &sp70);
                         if ((fabsf(sp70) < 100.0f) && (sp74 >= -10.0f) && (sp74 <= 180.0f) && (sp78 < 0.0f)) {
-                            temp_v0->unk_170 = (s32) (temp_v0->unk_170 | 1);
+                            temp_v0[1].world.pos.z = (bitwise f32) ((bitwise s32) temp_v0[1].world.pos.z | 1);
                         }
                     }
                 }
@@ -374,7 +374,7 @@ block_5:
         Collider_InitCylinder(globalCtx, temp_s0);
         Collider_SetCylinder(globalCtx, temp_s0, (Actor *) this, &D_80A73B00);
         Actor_UpdateBgCheckInfo(globalCtx, (Actor *) this, 0.0f, 0.0f, 0.0f, 4U);
-        SkelAnime_ChangeAnim(sp38, (AnimationHeader *) D_80A739A0->unk_E0, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(D_80A739A0->unk_E0), (u8) (s32) D_80A739A0->unk_E8, D_80A739A0->unk_EC);
+        SkelAnime_ChangeAnim(sp38, (AnimationHeader *) D_80A739A0[14].animationSeg, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(D_80A739A0[14].animationSeg), (u8) (s32) D_80A739A0[14].mode, D_80A739A0[14].transitionRate);
         temp_v0_2 = ((s32) this->actor.params >> 0xE) & 3;
         this->unk_3BE = 0x3E93;
         this->unk_3B0 = 0;
@@ -440,7 +440,7 @@ void func_80A71B58(EnDno *this, GlobalContext *globalCtx) {
 void func_80A71B68(EnDno *this, GlobalContext *globalCtx) {
     this->unk_452 = 0;
     this->actor.textId = 0;
-    if ((*(gBitFlags + 0x18) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[6] & gSaveContext.inventory.questItems) != 0) {
         if ((gSaveContext.weekEventReg[27] & 1) != 0) {
             if ((this->unk_3B0 & 0x20) == 0) {
                 func_8013E1C8(&this->skelAnime, (struct_80B8E1A8 []) D_80A739A0, 6, &this->unk_32C);
@@ -506,7 +506,7 @@ block_9:
 }
 
 void func_80A71E54(EnDno *this, GlobalContext *globalCtx) {
-    if ((*(gBitFlags + 0x18) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[6] & gSaveContext.inventory.questItems) != 0) {
         if ((gSaveContext.weekEventReg[27] & 1) != 0) {
             this->unk_464 = 0x811;
         } else {
@@ -845,7 +845,7 @@ void func_80A725F8(EnDno *this, GlobalContext *globalCtx) {
             return;
         case 2050:                                  /* switch 2 */
             if (func_80147624(globalCtx) != 0) {
-                if (gSaveContext.inventory.items[gItemSlots[0x48]] == 0x48) {
+                if (gSaveContext.inventory.items[gItemSlots[72]] == 0x48) {
                     this->unk_458 = 4;
                 } else {
                     this->unk_458 = 0x8E;
@@ -1034,7 +1034,7 @@ s32 func_80A72FAC(GlobalContext *arg0, EnDno_ActorUnkStruct *arg1) {
     temp_s0->velocity.x = Math_SinS(temp_s0->world.rot.y) * sp24;
     temp_s0->velocity.y = Math_SinS((s16) ((s32) temp_s0->world.rot.x * -1)) * temp_s0->speedXZ;
     temp_s0->velocity.z = Math_CosS(temp_s0->world.rot.y) * temp_f6;
-    temp_s0->unk_334 = (f32) (temp_s0->unk_334 + ((temp_s0->velocity.x * sp20) + temp_s0->colChkInfo.displacement.x));
+    temp_s0[2].colChkInfo.displacement.z += (temp_s0->velocity.x * sp20) + temp_s0->colChkInfo.displacement.x;
     temp_s0->unk_338 = (f32) (temp_s0->unk_338 + ((temp_s0->velocity.y * sp20) + temp_s0->colChkInfo.displacement.y));
     temp_s0->unk_33C = (f32) (temp_s0->unk_33C + ((temp_s0->velocity.z * sp20) + temp_s0->colChkInfo.displacement.z));
     return 0;
@@ -1150,10 +1150,10 @@ void func_80A732C8(EnDno *this, GlobalContext *globalCtx) {
 void func_80A73408(Actor *arg0, GlobalContext *arg1) {
     u8 sp33;
     u32 sp2C;
-    SkelAnime *sp24;
-    SkelAnime *temp_a0;
+    u32 *sp24;
     s32 temp_t8;
     u16 temp_v1;
+    u32 *temp_a0;
     u32 temp_v0;
     s32 phi_a2;
 
@@ -1179,10 +1179,10 @@ void func_80A73408(Actor *arg0, GlobalContext *arg1) {
         }
         func_800EDF24(arg0, arg1, sp2C);
     }
-    temp_a0 = arg0 + 0x148;
+    temp_a0 = &arg0[1].flags;
     sp24 = temp_a0;
-    if ((func_801378B8(temp_a0, arg0->unk_158) != 0) && (arg0->unk_32C == 0x11)) {
-        func_8013E1C8(temp_a0, (struct_80B8E1A8 []) D_80A739A0, 0x12, arg0 + 0x32C);
+    if ((func_801378B8((SkelAnime *) temp_a0, arg0->unk_158) != 0) && ((bitwise s32) arg0[2].colChkInfo.displacement.x == 0x11)) {
+        func_8013E1C8((SkelAnime *) temp_a0, (struct_80B8E1A8 []) D_80A739A0, 0x12, (s32 *) &arg0[2].colChkInfo.displacement);
     }
 }
 
@@ -1233,7 +1233,7 @@ void func_80A73654(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
 
     phi_v0 = 0;
     if (*dList != 0) {
-        temp_t9 = actor->unk_452;
+        temp_t9 = (u16) actor[3].wallYaw;
         switch (temp_t9) {
         case 0:
             if ((limbIndex != 0x19) && (limbIndex != 0x1A) && (limbIndex != 0xD) && (limbIndex != 0xF) && (limbIndex != 0x10) && (limbIndex != 0xE)) {
@@ -1268,17 +1268,17 @@ block_24:
         sp74 = temp_a0;
         func_8012C28C(temp_a0);
         if (limbIndex == 0xD) {
-            temp_f12 = actor->unk_454;
+            temp_f12 = actor[3].floorHeight;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
-            SysMatrix_InsertXRotation_s(actor->unk_45C, 1);
+            SysMatrix_InsertXRotation_s((s16) actor[3].bgCheckFlags, 1);
         }
         temp_v1 = sp74->polyOpa.p;
         temp_v1->words.w0 = 0xDA380003;
         sp94 = temp_v1;
         temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_v1->unk_8 = 0xDE000000;
-        temp_v1->unk_C = (Gfx *) *dList;
-        sp74->polyOpa.p = temp_v1 + 0x10;
+        temp_v1[1].words.w0 = 0xDE000000;
+        temp_v1[1].words.w1 = (u32) *dList;
+        sp74->polyOpa.p = &temp_v1[2];
     }
     if (((actor->unk_3B0 & 1) != 0) && (limbIndex == 0x1A)) {
         temp_s0 = globalCtx->state.gfxCtx;
@@ -1293,16 +1293,16 @@ block_24:
         temp_v1_2->words.w0 = 0xDA380003;
         sp90 = temp_v1_2;
         temp_v1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_v1_2->unk_8 = 0xDB060020;
+        temp_v1_2[1].words.w0 = 0xDB060020;
         sp90 = temp_v1_2;
-        temp_v1_2->unk_C = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, (s32) sp64 * -0x14, 0x20, 0x80);
-        temp_v1_2->unk_14 = 0xFFFF00FF;
-        temp_v1_2->unk_10 = 0xFA008080;
-        temp_v1_2->unk_1C = 0xFF000000;
-        temp_v1_2->unk_18 = 0xFB000000;
-        temp_v1_2->unk_20 = 0xDE000000;
-        temp_v1_2->unk_24 = D_0407D590;
-        temp_s0->polyXlu.p = temp_v1_2 + 0x28;
+        temp_v1_2[1].words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, (s32) sp64 * -0x14, 0x20, 0x80);
+        temp_v1_2[2].words.w1 = 0xFFFF00FF;
+        temp_v1_2[2].words.w0 = 0xFA008080;
+        temp_v1_2[3].words.w1 = 0xFF000000;
+        temp_v1_2[3].words.w0 = 0xFB000000;
+        temp_v1_2[4].words.w0 = 0xDE000000;
+        temp_v1_2[4].words.w1 = (u32) D_0407D590;
+        temp_s0->polyXlu.p = &temp_v1_2[5];
         SysMatrix_StatePop();
     }
 }

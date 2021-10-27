@@ -162,7 +162,7 @@ struct _mips2c_stack_func_80AF5FE4 {
 void func_80AF4608(EnWdhand *arg0, ? *arg1);        /* static */
 void func_80AF4670(Actor *arg0, void *arg1, s16 *arg2, s16 *arg3); /* static */
 void func_80AF46F0(Actor *arg0, s32 arg1, s32 arg2, ? *arg3); /* static */
-void func_80AF488C(void *arg0, PosRot *arg1);       /* static */
+void func_80AF488C(Sphere16 *arg0, PosRot *arg1);   /* static */
 s16 func_80AF48D0(EnWdhand *arg0, s32 arg1);        /* static */
 void func_80AF4964(EnWdhand *arg0);                 /* static */
 void func_80AF4A88(EnWdhand *arg0, void *arg1);     /* static */
@@ -367,7 +367,7 @@ void func_80AF46F0(Actor *arg0, s32 arg1, s32 arg2, ? *arg3) {
         Matrix_RotateY((s16) ((s32) temp_v1->unk_1F4 * -1), 1U);
     }
     if (arg1 == 3) {
-        temp_f0 = arg0->unk_20C;
+        temp_f0 = arg0[1].shape.shadowDraw;
         if (temp_f0 > 1.0f) {
             if (temp_f0 > 1.5f) {
                 phi_f12 = 1.5f;
@@ -378,8 +378,8 @@ void func_80AF46F0(Actor *arg0, s32 arg1, s32 arg2, ? *arg3) {
         }
     } else {
         temp_f2 = (arg0 + (arg1 * 4))->unk_210;
-        if ((temp_f2 < 1.0f) || (arg0->unk_20C > 1.0f)) {
-            temp_f0_2 = arg0->unk_20C;
+        if ((temp_f2 < 1.0f) || (arg0[1].shape.shadowDraw > 1.0f)) {
+            temp_f0_2 = arg0[1].shape.shadowDraw;
             if (temp_f2 < 0.1f) {
                 Matrix_Scale(0.0f, temp_f2 * temp_f0_2, 0.0f, 1);
             } else {
@@ -392,10 +392,10 @@ void func_80AF46F0(Actor *arg0, s32 arg1, s32 arg2, ? *arg3) {
     sp24->mf[3][2] = arg3->unk_8;
 }
 
-void func_80AF488C(void *arg0, PosRot *arg1) {
-    arg0->unk_0 = (s16) (s32) arg1->pos.x;
-    arg0->unk_2 = (s16) (s32) arg1->pos.y;
-    arg0->unk_4 = (s16) (s32) arg1->pos.z;
+void func_80AF488C(Sphere16 *arg0, PosRot *arg1) {
+    arg0->center.x = (s16) (s32) arg1->pos.x;
+    arg0->center.y = (s16) (s32) arg1->pos.y;
+    arg0->center.z = (s16) (s32) arg1->pos.z;
 }
 
 s16 func_80AF48D0(EnWdhand *arg0, s32 arg1) {
@@ -546,9 +546,9 @@ void func_80AF4C64(Actor *arg0, GlobalContext *arg1) {
         phi_s4 = arg0;
         phi_s2 = arg0 + 0x1F2;
         phi_s1 = 0;
-        phi_s3 = arg0 + 0x1F4;
+        phi_s3 = &arg0[1].colChkInfo.cylRadius;
         do {
-            temp_v0 = sp68 - phi_s4->unk_1F4;
+            temp_v0 = sp68 - phi_s4[1].colChkInfo.cylRadius;
             phi_v1 = (s32) temp_v0;
             if ((s32) temp_v0 < 0) {
                 phi_v1 = -(s32) temp_v0;
@@ -565,9 +565,9 @@ void func_80AF4C64(Actor *arg0, GlobalContext *arg1) {
             temp_s0_3 = phi_s0 & phi_v0;
             temp_s1 = phi_s1 + 1;
             phi_s4 += 6;
-            phi_s2 += 6;
+            phi_s2 = &phi_s2[3];
             phi_s1 = temp_s1;
-            phi_s3 += 6;
+            phi_s3 = &phi_s3[3];
             phi_s0_2 = temp_s0_3;
         } while (temp_s1 != 4);
         if (((arg0->unk_284 & 2) != 0) && (arg1->grabPlayer(arg1, sp74) != 0)) {
@@ -596,8 +596,8 @@ void func_80AF4ED0(Actor *arg0) {
     temp_t9 = temp_t8 & 0xFFFD;
     arg0->unk_284 = temp_t8;
     arg0->unk_284 = temp_t9;
-    arg0->unk_1E8 = func_80AF4F30;
-    arg0->unk_20C = 1.5f;
+    arg0[1].colChkInfo.displacement.x = func_80AF4F30;
+    arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x3FC00000;
 }
 
 void func_80AF4F30(Actor *arg0, ? arg1) {
@@ -623,7 +623,7 @@ void func_80AF4F6C(Actor *arg0) {
         phi_s0 = temp_s0;
     } while (temp_s0 != 4);
     arg0->unk_1F0 = 0x50;
-    arg0->unk_1E8 = func_80AF4FF8;
+    arg0[1].colChkInfo.displacement.x = func_80AF4FF8;
 }
 
 void func_80AF4FF8(EnWdhand *arg0, ? arg1) {
@@ -652,7 +652,7 @@ void func_80AF4FF8(EnWdhand *arg0, ? arg1) {
         }
         temp_s0 = phi_s0 + 1;
         phi_s0 = temp_s0;
-        phi_s2 += 6;
+        phi_s2 = &phi_s2[3];
         phi_s3 += 0x14;
         phi_s1 += 6;
     } while (temp_s0 != 4);
@@ -692,9 +692,9 @@ void func_80AF5130(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_1F0 = 0x50;
     sp2C->parent = arg0;
     SysMatrix_TransposeXYZ(arg0 + 0x21C);
-    arg0->unk_20C = 1.5f;
+    arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x3FC00000;
     Audio_PlayActorSound2(arg0, 0x39FCU);
-    arg0->unk_1E8 = func_80AF520C;
+    arg0[1].colChkInfo.displacement.x = (bitwise f32) func_80AF520C;
 }
 
 void func_80AF520C(Actor *arg0, GlobalContext *arg1) {
@@ -725,19 +725,19 @@ void func_80AF520C(Actor *arg0, GlobalContext *arg1) {
     phi_s3 = 0;
     do {
         if ((s32) arg0->unk_1F0 < 0x4C) {
-            phi_s0->unk_1F2 = (s16) (s32) (sin_rad((f32) phi_s2 * 0.3926991f) * (f32) phi_s0->unk_1F6);
+            phi_s0->unk_1F2 = (s16) (s32) (sin_rad((f32) phi_s2 * 0.3926991f) * (f32) phi_s0[1].colChkInfo.cylHeight);
         } else {
-            Math_ScaledStepToS(phi_s0 + 0x1F2, (s16) (s32) (sin_rad((f32) phi_s2 * 0.3926991f) * (f32) phi_s0->unk_1F6), 0x400);
+            Math_ScaledStepToS(phi_s0 + 0x1F2, (s16) (s32) (sin_rad((f32) phi_s2 * 0.3926991f) * (f32) phi_s0[1].colChkInfo.cylHeight), 0x400);
         }
         if ((phi_s2 & 0xF) == 0) {
             if (phi_s2 == 0x10) {
-                phi_s0->unk_1F4 = 0;
+                phi_s0[1].colChkInfo.cylRadius = 0;
             } else if (phi_s3 != 0) {
-                phi_s0->unk_1F4 = (s16) ((s32) randPlusMinusPoint5Scaled(12288.0f) + phi_s0->unk_1EE);
+                phi_s0[1].colChkInfo.cylRadius = (s32) randPlusMinusPoint5Scaled(12288.0f) + phi_s0->unk_1EE;
             } else {
-                arg0->unk_1F4 = (s16) (arg0->unk_1F4 + (s32) randPlusMinusPoint5Scaled(12288.0f));
+                arg0[1].colChkInfo.cylRadius += (s32) randPlusMinusPoint5Scaled(12288.0f);
             }
-            phi_s0->unk_1F6 = Rand_S16Offset(0x2000, 0x1000);
+            phi_s0[1].colChkInfo.cylHeight = Rand_S16Offset(0x2000, 0x1000);
         }
         temp_s3 = phi_s3 + 6;
         phi_s2 += 2;
@@ -774,7 +774,7 @@ block_16:
         } while (temp_s1 != 3);
         func_80AF46F0(arg0, 3, 1, &sp68);
         func_8018219C(SysMatrix_GetCurrentState(), sp7C + 0xBC, 0);
-        temp_f0 = arg0->unk_20C;
+        temp_f0 = arg0[1].shape.shadowDraw;
         if (temp_f0 > 1.0f) {
             if (temp_f0 > 1.5f) {
                 phi_f2 = 1.5f;
@@ -830,7 +830,7 @@ void func_80AF56A0(Actor *arg0) {
     temp_t7 = arg0->flags & ~1;
     arg0->flags = temp_t7;
     arg0->flags = temp_t7 | 0x10;
-    phi_v0 = arg0->unk_290;
+    phi_v0 = arg0[2].home.pos.x;
     phi_s0 = 0;
     phi_s0_3 = 0;
 loop_1:
@@ -864,7 +864,7 @@ loop_1:
     arg0->velocity.x = 2.0f * Math_SinS(arg0->world.rot.z);
     arg0->velocity.z = 2.0f * Math_CosS(arg0->world.rot.z);
     arg0->unk_1F0 = 5;
-    arg0->unk_1E8 = func_80AF5820;
+    arg0[1].colChkInfo.displacement.x = (bitwise f32) func_80AF5820;
 }
 
 void func_80AF5820(Actor *arg0, ? arg1) {
@@ -899,19 +899,19 @@ void func_80AF5820(Actor *arg0, ? arg1) {
     s32 phi_s2;
     s32 phi_a1;
     Actor *phi_a3;
-    void *phi_s1;
+    u16 *phi_s1;
     s32 phi_s2_2;
     s32 phi_s7;
     f32 *phi_s1_2;
     s32 phi_s0;
     Actor *phi_a3_2;
 
-    temp_s0 = arg0->unk_290;
+    temp_s0 = arg0[2].home.pos.x;
     temp_s0_2 = temp_s0 + 0x1B0;
-    spA0 = (arg0->unk_268 - (f32) temp_s0->unk_1B0) * 0.5f;
-    temp_f10 = (arg0->unk_26C - (f32) temp_s0_2->unk_2) * 0.5f;
+    spA0 = (arg0[1].child - (f32) temp_s0->unk_1B0) * 0.5f;
+    temp_f10 = (arg0[1].prev - (f32) temp_s0_2->unk_2) * 0.5f;
     spA4 = temp_f10;
-    temp_f16 = arg0->unk_270;
+    temp_f16 = arg0[1].next;
     arg0 = arg0;
     spA8 = (temp_f16 - (f32) temp_s0_2->unk_4) * 0.5f;
     SysMatrix_InsertXRotation_s(0x100, 0);
@@ -963,7 +963,7 @@ void func_80AF5820(Actor *arg0, ? arg1) {
                 if (phi_s2 != 0) {
                     temp_s0_5->unk_1F4 = (s16) ((s32) randPlusMinusPoint5Scaled(12288.0f) + temp_s0_5->unk_1EE);
                 } else {
-                    arg0->unk_1F4 = (s16) (arg0->unk_1F4 + (s32) randPlusMinusPoint5Scaled(12288.0f));
+                    arg0[1].colChkInfo.cylRadius += (s32) randPlusMinusPoint5Scaled(12288.0f);
                 }
                 temp_s0_5->unk_1F6 = Rand_S16Offset((s16) ((phi_s2 << 8) + 0xC00), 0x800);
             }
@@ -978,7 +978,7 @@ void func_80AF5820(Actor *arg0, ? arg1) {
     if ((phi_a1 < 0) && ((s32) phi_a3->unk_1EE >= 3)) {
         if (Math_StepToF(phi_a3 + 0x58, 0.0f, 0.001f) != 0) {
             temp_s3 = &sp70;
-            phi_s1 = arg0 + 0x25C;
+            phi_s1 = &arg0[1].freezeTimer;
             phi_s7 = 0;
             do {
 loop_27:
@@ -1011,7 +1011,7 @@ loop_27:
         D_80AF6518 = Rand_ZeroOne() + 1.0f;
         EffectSsDtBubble_SpawnColorProfile(arg1, phi_s1_2, &D_80AF6514, &D_80AF6520, Rand_S16Offset(0x28, 0x28), 0x19, 2, 1);
         temp_s0_7 = phi_s0 + 0xC;
-        phi_s1_2 += 0xC;
+        phi_s1_2 = &phi_s1_2[3];
         phi_s0 = temp_s0_7;
     } while (temp_s0_7 != 0x18);
 }
@@ -1040,7 +1040,7 @@ void func_80AF5E3C(Actor *arg0, GlobalContext *arg1) {
             temp_v0->shape.rot.z = 0;
             func_800B8D50(arg1, arg0, arg0->speedXZ, arg0->world.rot.y, arg0->velocity.y, 0U);
         } else {
-            SysMatrix_TransposeXYZ(arg0 + 0x21C);
+            SysMatrix_TransposeXYZ((MtxF *) &arg0[1].shape.feetPos[0].y);
         }
         func_80AF56A0(arg0);
     }
@@ -1069,9 +1069,9 @@ void func_80AF5FE4(Actor *arg0, s32 arg1, ? *arg2) {
     SysMatrix_GetStateTranslationAndScaledY(575.0f, (Vec3f *) arg2);
     temp_v0 = arg1 << 7;
     sp24 = temp_v0;
-    func_80AF488C(arg0->unk_290 + temp_v0 + 0x30, (PosRot *) arg2);
+    func_80AF488C((bitwise s32) arg0[2].home.pos.x + temp_v0 + 0x30, (PosRot *) arg2);
     SysMatrix_GetStateTranslationAndScaledY(1725.0f, (Vec3f *) arg2);
-    func_80AF488C(arg0->unk_290 + sp24 + 0x70, (PosRot *) arg2);
+    func_80AF488C((bitwise s32) arg0[2].home.pos.x + sp24 + 0x70, (PosRot *) arg2);
     SysMatrix_GetStateTranslationAndScaledY(2300.0f, (Vec3f *) arg2);
 }
 
@@ -1104,15 +1104,15 @@ void EnWdhand_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_v0 = globalCtx->state.gfxCtx;
     temp_s2 = temp_v0->polyOpa.p;
-    temp_s2->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s2->words.w1 = (u32) &sSetupDL[150];
     temp_s2->words.w0 = 0xDE000000;
-    temp_s2->unk_8 = 0xDA380003;
+    temp_s2[1].words.w0 = 0xDA380003;
     sp80 = temp_v0;
-    temp_s2->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_s2->unk_14 = &D_060014C0;
-    temp_s2->unk_10 = 0xDE000000U;
+    temp_s2[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s2[2].words.w1 = (u32) &D_060014C0;
+    temp_s2[2].words.w0 = 0xDE000000;
     SysMatrix_GetStateTranslationAndScaledY(300.0f, (Vec3f *) &sp90);
-    temp_s2_2 = temp_s2 + 0x18;
+    temp_s2_2 = &temp_s2[3];
     temp_v0_2 = this->unk_1EC + 1;
     phi_s1 = 0;
     phi_s2 = temp_s2_2;
@@ -1181,7 +1181,7 @@ void EnWdhand_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     Math_Vec3f_Copy((Vec3f *) &this->actor.focus, (Vec3f *) &sp90);
     SysMatrix_GetStateTranslationAndScaledY(1000.0f, (Vec3f *) &sp90);
-    func_80AF488C(this->unk_274.elements + 0x1B0, (PosRot *) &sp90);
+    func_80AF488C(&this->unk_274.elements[6].dim.worldSphere, (PosRot *) &sp90);
     sp80->polyOpa.p = phi_s2_3;
     SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, NULL, NULL, (Actor *) this);
 }

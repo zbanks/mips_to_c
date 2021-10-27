@@ -417,16 +417,16 @@ void func_80A43F60(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_148 = 0xA;
         arg0->unk_15C = 1.0f;
         arg0->unk_158 = 0.67499995f;
-        arg0->unk_154 = 0.45f;
+        arg0[1].home.pos.z = 0.45f;
     } else if (temp_v0 == 4) {
         arg0->unk_148 = 0x14;
         arg0->unk_15C = 4.0f;
-        arg0->unk_154 = 0.45f;
+        arg0[1].home.pos.z = 0.45f;
         Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0->unk_1AA, (f32) arg0->unk_1AC, (f32) arg0->unk_1AE, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
     } else if (temp_v0 == 2) {
         arg0->unk_148 = 0;
         arg0->unk_15C = 4.0f;
-        arg0->unk_154 = 0.45f;
+        arg0[1].home.pos.z = 0.45f;
     }
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x28);
     if ((arg0->flags & 0x8000) != 0) {
@@ -545,7 +545,7 @@ void func_80A443D8(Actor *arg0, GlobalContext *arg1) {
             temp_a0->unk_14C = 0x28;
             temp_a0->unk_148 = 0x20;
             temp_a0->unk_15C = 2.0f;
-            temp_a0->unk_154 = 0.45f;
+            temp_a0[1].home.pos.z = 0.45f;
             func_80A44294(temp_a0);
             return;
         }
@@ -653,18 +653,18 @@ void EnBat_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_a1 = globalCtx->state.gfxCtx;
         temp_v1 = temp_a1->polyOpa.p;
         temp_v1->words.w0 = 0xDE000000;
-        temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-        temp_v1->unk_8 = 0xDA380003;
+        temp_v1->words.w1 = (u32) &sSetupDL[150];
+        temp_v1[1].words.w0 = 0xDA380003;
         sp54 = temp_a1;
         sp58 = temp_v1;
-        temp_v1->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_v1->unk_14 = &D_060000A0;
-        temp_v1->unk_10 = 0xDE000000;
-        temp_v1->unk_1C = &D_060000C8;
-        temp_v1->unk_18 = 0xDE000000;
-        temp_v1->unk_20 = 0xDE000000;
-        temp_v1->unk_24 = (s32) *(&D_80A44A64 + (this->unk_152 * 4));
-        temp_a1->polyOpa.p = temp_v1 + 0x28;
+        temp_v1[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_v1[2].words.w1 = (u32) &D_060000A0;
+        temp_v1[2].words.w0 = 0xDE000000;
+        temp_v1[3].words.w1 = (u32) &D_060000C8;
+        temp_v1[3].words.w0 = 0xDE000000;
+        temp_v1[4].words.w0 = 0xDE000000;
+        temp_v1[4].words.w1 = *(&D_80A44A64 + (this->unk_152 * 4));
+        temp_a1->polyOpa.p = &temp_v1[5];
     }
     temp_a0 = &this->unk_160;
     if (this->unk_15C > 0.0f) {

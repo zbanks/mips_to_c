@@ -1,5 +1,19 @@
 CRASHED
 
+typedef struct {
+    /* 0x00 */ Actor *actor;
+    /* 0x04 */ Actor *at;
+    /* 0x08 */ Actor *ac;
+    /* 0x0C */ Actor *oc;
+    /* 0x10 */ u8 atFlags;
+    /* 0x11 */ u8 acFlags;
+    /* 0x12 */ u8 ocFlags1;
+    /* 0x13 */ u8 ocFlags2;
+    /* 0x14 */ u8 colType;
+    /* 0x15 */ u8 shape;
+    /* 0x16 */ Vec3s unk_16;                        /* inferred */
+} Collider;                                         /* size = 0x18 */
+
 struct _mips2c_stack_Collider_DestroyBase {};       /* size 0x0 */
 
 struct _mips2c_stack_Collider_DestroyBump {};       /* size 0x0 */
@@ -402,8 +416,8 @@ struct _mips2c_stack_CollisionCheck_AC_CylVsJntSph {
 
 struct _mips2c_stack_CollisionCheck_AC_CylVsQuad {
     /* 0x00 */ char pad_0[0x30];
-    /* 0x30 */ Vec3f *sp30;                         /* inferred */
-    /* 0x34 */ Vec3f *sp34;                         /* inferred */
+    /* 0x30 */ u8 *sp30;                            /* inferred */
+    /* 0x34 */ Actor **sp34;                        /* inferred */
     /* 0x38 */ Collider *sp38;                      /* inferred */
     /* 0x3C */ Collider *sp3C;                      /* inferred */
     /* 0x40 */ ? sp40;                              /* inferred */
@@ -519,8 +533,8 @@ struct _mips2c_stack_CollisionCheck_AC_JntSphVsTris {
 
 struct _mips2c_stack_CollisionCheck_AC_QuadVsCyl {
     /* 0x00 */ char pad_0[0x30];
-    /* 0x30 */ Vec3f *sp30;                         /* inferred */
-    /* 0x34 */ Vec3f *sp34;                         /* inferred */
+    /* 0x30 */ Actor **sp30;                        /* inferred */
+    /* 0x34 */ u8 *sp34;                            /* inferred */
     /* 0x38 */ Collider *sp38;                      /* inferred */
     /* 0x3C */ Collider *sp3C;                      /* inferred */
     /* 0x40 */ ? sp40;                              /* inferred */
@@ -556,8 +570,8 @@ struct _mips2c_stack_CollisionCheck_AC_QuadVsQuad {
 
 struct _mips2c_stack_CollisionCheck_AC_QuadVsSphere {
     /* 0x00 */ char pad_0[0x34];
-    /* 0x34 */ Vec3f *sp34;                         /* inferred */
-    /* 0x38 */ Vec3f *sp38;                         /* inferred */
+    /* 0x34 */ Actor **sp34;                        /* inferred */
+    /* 0x38 */ u8 *sp38;                            /* inferred */
     /* 0x3C */ Collider *sp3C;                      /* inferred */
     /* 0x40 */ Collider *sp40;                      /* inferred */
     /* 0x44 */ ? sp44;                              /* inferred */
@@ -615,8 +629,8 @@ struct _mips2c_stack_CollisionCheck_AC_SphereVsJntSph {
 
 struct _mips2c_stack_CollisionCheck_AC_SphereVsQuad {
     /* 0x00 */ char pad_0[0x34];
-    /* 0x34 */ Vec3f *sp34;                         /* inferred */
-    /* 0x38 */ Vec3f *sp38;                         /* inferred */
+    /* 0x34 */ u8 *sp34;                            /* inferred */
+    /* 0x38 */ Actor **sp38;                        /* inferred */
     /* 0x3C */ Collider *sp3C;                      /* inferred */
     /* 0x40 */ Collider *sp40;                      /* inferred */
     /* 0x44 */ ? sp44;                              /* inferred */
@@ -1130,7 +1144,7 @@ f32 damageMultipliers[16] = {
     1.0f,
 };
 CollisionCheckInfo defaultColChkInfo = {NULL, {0.0f, 0.0f, 0.0f}, 0xA, 0xA, 0, 0xFF, 8, 0, 0, 0, 0};
-Collider defaultCollider = {NULL, NULL, NULL, NULL, 0, 0, 0, 0, 3, 5};
+Collider defaultCollider;                           /* unable to generate initializer */
 ColliderBump defaultColliderBump = {0xF7CFFFFF, 0, 0, {0, 0, 0}};
 Cylinder16 defaultColliderCylinderDim = {0, 0, 0, {0, 0, 0}};
 ColliderInfo defaultColliderInfo = {{0, 0, 0}, {0xF7CFFFFF, 0, 0, {0, 0, 0}}, 0, 0, 0, 0, NULL, NULL, NULL, NULL};
@@ -1625,7 +1639,7 @@ s32 Collider_FreeJntSph(GlobalContext *globalCtx, ColliderJntSph *collider) {
     if ((u32) temp_a0 < (u32) &temp_a0[collider->count]) {
         do {
             Collider_DestroyJntSphElement(globalCtx, phi_s0);
-            temp_s0 = phi_s0 + 0x40;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while ((u32) temp_s0 < (u32) &collider->elements[collider->count]);
     }
@@ -1648,7 +1662,7 @@ s32 Collider_DestroyJntSph(GlobalContext *globalCtx, ColliderJntSph *collider) {
     if ((u32) temp_s0 < (u32) &temp_s0[collider->count]) {
         do {
             Collider_DestroyJntSphElement(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
         } while ((u32) temp_s0_2 < (u32) &collider->elements[collider->count]);
     }
@@ -1679,9 +1693,9 @@ s32 Collider_SetJntSphToActor(GlobalContext *globalCtx, ColliderJntSph *collider
         do {
             Collider_InitJntSphElement(globalCtx, phi_s0);
             Collider_SetJntSphElement(globalCtx, phi_s0, phi_s1);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-            phi_s1 += 0x24;
+            phi_s1 = &phi_s1[1];
         } while ((u32) temp_s0_2 < (u32) &collider->elements[collider->count]);
     }
     return 1;
@@ -1709,9 +1723,9 @@ s32 Collider_SetJntSphAllocType1(GlobalContext *globalCtx, ColliderJntSph *spher
         do {
             Collider_InitJntSphElement(globalCtx, phi_s0);
             Collider_SetJntSphElement(globalCtx, phi_s0, phi_s1);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-            phi_s1 += 0x24;
+            phi_s1 = &phi_s1[1];
         } while ((u32) temp_s0_2 < (u32) &sphereGroup->elements[sphereGroup->count]);
     }
     return 1;
@@ -1733,9 +1747,9 @@ s32 Collider_SetJntSph(GlobalContext *globalCtx, ColliderJntSph *sphereGroup, Ac
         do {
             Collider_InitJntSphElement(globalCtx, phi_s0);
             Collider_SetJntSphElement(globalCtx, phi_s0, phi_s1);
-            temp_s0 = phi_s0 + 0x40;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
-            phi_s1 += 0x24;
+            phi_s1 = &phi_s1[1];
         } while ((u32) temp_s0 < (u32) &sphereGroup->elements[sphereGroup->count]);
     }
     return 1;
@@ -1748,55 +1762,55 @@ s32 Collider_InitAndSetJntSph(GlobalContext *globalCtx, ColliderJntSph *sphereGr
 }
 
 s32 Collider_ResetJntSphAT(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderJntSphElement *temp_s0_2;
-    u32 temp_s0;
     ColliderJntSphElement *phi_s0;
 
     Collider_ResetATBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderJntSphElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 << 6))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor << 6))) {
         do {
             Collider_ResetJntSphElementAT(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 << 6)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor << 6)));
     }
     return 1;
 }
 
 s32 Collider_ResetJntSphAC(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderJntSphElement *temp_s0_2;
-    u32 temp_s0;
     ColliderJntSphElement *phi_s0;
 
     Collider_ResetACBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderJntSphElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 << 6))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor << 6))) {
         do {
             Collider_ResetJntSphElementAC(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 << 6)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor << 6)));
     }
     return 1;
 }
 
 s32 Collider_ResetJntSphOC(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderJntSphElement *temp_s0_2;
-    u32 temp_s0;
     ColliderJntSphElement *phi_s0;
 
     Collider_ResetOCBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderJntSphElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 << 6))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor << 6))) {
         do {
             Collider_ResetJntSphElementOC(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x40;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 << 6)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor << 6)));
     }
     return 1;
 }
@@ -1862,19 +1876,19 @@ s32 Collider_InitAndSetCylinder(GlobalContext *globalCtx, ColliderCylinder *coll
 
 s32 Collider_ResetCylinderAT(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetATBase(globalCtx, collider);
-    Collider_ResetATInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetATInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
 s32 Collider_ResetCylinderAC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetACBase(globalCtx, collider);
-    Collider_ResetACInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetACInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
 s32 Collider_ResetCylinderOC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetOCBase(globalCtx, collider);
-    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
@@ -1987,7 +2001,7 @@ s32 Collider_FreeTris(GlobalContext *globalCtx, ColliderTris *tris) {
     if ((u32) temp_a0 < (u32) &temp_a0[tris->count]) {
         do {
             Collider_DestroyTrisElement(globalCtx, phi_s0);
-            temp_s0 = phi_s0 + 0x5C;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while ((u32) temp_s0 < (u32) &tris->elements[tris->count]);
     }
@@ -2010,7 +2024,7 @@ s32 Collider_DestroyTris(GlobalContext *globalCtx, ColliderTris *tris) {
     if ((u32) temp_s0 < (u32) &temp_s0[tris->count]) {
         do {
             Collider_DestroyTrisElement(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x5C;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
         } while ((u32) temp_s0_2 < (u32) &tris->elements[tris->count]);
     }
@@ -2043,9 +2057,9 @@ s32 Collider_SetTrisAllocType1(GlobalContext *globalCtx, ColliderTris *tris, Act
         do {
             Collider_InitTrisElement(globalCtx, phi_s0);
             Collider_SetTrisElement(globalCtx, phi_s0, phi_s1);
-            temp_s0_2 = phi_s0 + 0x5C;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-            phi_s1 += 0x3C;
+            phi_s1 = &phi_s1[1];
         } while ((u32) temp_s0_2 < (u32) &tris->elements[tris->count]);
     }
     return 1;
@@ -2067,9 +2081,9 @@ s32 Collider_SetTris(GlobalContext *globalCtx, ColliderTris *triGroup, Actor *ac
         do {
             Collider_InitTrisElement(globalCtx, phi_s0);
             Collider_SetTrisElement(globalCtx, phi_s0, phi_s1);
-            temp_s0 = phi_s0 + 0x5C;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
-            phi_s1 += 0x3C;
+            phi_s1 = &phi_s1[1];
         } while ((u32) temp_s0 < (u32) &triGroup->elements[triGroup->count]);
     }
     return 1;
@@ -2082,55 +2096,55 @@ s32 Collider_InitAndSetTris(GlobalContext *globalCtx, ColliderTris *tris, Actor 
 }
 
 s32 Collider_ResetTrisAT(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderTrisElement *temp_s0_2;
-    u32 temp_s0;
     ColliderTrisElement *phi_s0;
 
     Collider_ResetATBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderTrisElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 * 0x5C))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor * 0x5C))) {
         do {
             Collider_ResetTrisElementAT(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x5C;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 * 0x5C)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor * 0x5C)));
     }
     return 1;
 }
 
 s32 Collider_ResetTrisAC(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderTrisElement *temp_s0_2;
-    u32 temp_s0;
     ColliderTrisElement *phi_s0;
 
     Collider_ResetACBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderTrisElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 * 0x5C))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor * 0x5C))) {
         do {
             Collider_ResetTrisElementAC(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x5C;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 * 0x5C)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor * 0x5C)));
     }
     return 1;
 }
 
 s32 Collider_ResetTrisOC(GlobalContext *globalCtx, Collider *collider) {
+    Actor *temp_s0;
     ColliderTrisElement *temp_s0_2;
-    u32 temp_s0;
     ColliderTrisElement *phi_s0;
 
     Collider_ResetOCBase(globalCtx, collider);
-    temp_s0 = collider->unk_1C;
+    temp_s0 = collider[1].at;
     phi_s0 = (ColliderTrisElement *) temp_s0;
-    if (temp_s0 < (u32) (temp_s0 + (collider->unk_18 * 0x5C))) {
+    if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) collider[1].actor * 0x5C))) {
         do {
             Collider_ResetTrisElementOC(globalCtx, phi_s0);
-            temp_s0_2 = phi_s0 + 0x5C;
+            temp_s0_2 = &phi_s0[1];
             phi_s0 = temp_s0_2;
-        } while ((u32) temp_s0_2 < (u32) (collider->unk_1C + (collider->unk_18 * 0x5C)));
+        } while ((u32) temp_s0_2 < (u32) (collider[1].at + ((s32) collider[1].actor * 0x5C)));
     }
     return 1;
 }
@@ -2227,20 +2241,20 @@ s32 Collider_InitAndSetQuad(GlobalContext *globalCtx, ColliderQuad *collider, Ac
 
 s32 Collider_ResetQuadAT(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetATBase(globalCtx, collider);
-    Collider_ResetATInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
-    Collider_ResetQuadACDist(globalCtx, collider + 0x40);
+    Collider_ResetATInfo(globalCtx, (ColliderInfo *) &collider[1]);
+    Collider_ResetQuadACDist(globalCtx, (ColliderQuadDim *) &collider[2].atFlags);
     return 1;
 }
 
 s32 Collider_ResetQuadAC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetACBase(globalCtx, collider);
-    Collider_ResetACInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetACInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
 s32 Collider_ResetQuadOC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetOCBase(globalCtx, collider);
-    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
@@ -2305,19 +2319,19 @@ s32 Collider_InitAndSetSphere(GlobalContext *globalCtx, ColliderSphere *collider
 
 s32 Collider_ResetSphereAT(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetATBase(globalCtx, collider);
-    Collider_ResetATInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetATInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
 s32 Collider_ResetSphereAC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetACBase(globalCtx, collider);
-    Collider_ResetACInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetACInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
 s32 Collider_ResetSphereOC(GlobalContext *globalCtx, Collider *collider) {
     Collider_ResetOCBase(globalCtx, collider);
-    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) (collider + 0x18));
+    Collider_ResetOCInfo(globalCtx, (ColliderInfo *) &collider[1]);
     return 1;
 }
 
@@ -2921,32 +2935,32 @@ void CollisionCheck_AC_JntSphVsJntSph(GlobalContext *globalCtx, CollisionCheckCo
     f32 sp78;
     f32 sp6C;
     f32 sp60;
-    ColliderInfo *temp_s2_2;
-    ColliderInfo *temp_s3;
-    Sphere16 *temp_s0;
-    Sphere16 *temp_s1;
+    Actor *temp_s2;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s2_2;
+    Collider **temp_s3;
+    ColliderBump *temp_s0;
+    ColliderBump *temp_s1;
     f32 temp_f0;
-    s32 temp_v1;
-    u32 temp_s2;
-    u32 temp_v0;
     ColliderInfo *phi_s3;
     ColliderInfo *phi_s2;
 
     sp9C = colAT;
-    temp_v1 = colAT->unk_18;
-    if (temp_v1 > 0) {
-        temp_v0 = colAT->unk_1C;
-        if ((temp_v0 != 0) && (colAC->unk_18 > 0) && (colAC->unk_1C != 0)) {
+    temp_v1 = colAT[1].actor;
+    if ((s32) temp_v1 > 0) {
+        temp_v0 = colAT[1].at;
+        if ((temp_v0 != 0) && ((s32) colAC[1].actor > 0) && (colAC[1].at != 0)) {
             phi_s3 = (ColliderInfo *) temp_v0;
-            if (temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) {
+            if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) {
 loop_6:
-                if ((CollisionCheck_SkipTouch(phi_s3) == 0) && (temp_s2 = colAC->unk_1C, phi_s2 = (ColliderInfo *) temp_s2, ((temp_s2 < (u32) (temp_s2 + (colAC->unk_18 << 6))) != 0))) {
+                if ((CollisionCheck_SkipTouch(phi_s3) == 0) && (temp_s2 = colAC[1].at, phi_s2 = (ColliderInfo *) temp_s2, (((u32) temp_s2 < (u32) (temp_s2 + ((s32) colAC[1].actor << 6))) != 0))) {
 loop_8:
-                    if ((CollisionCheck_SkipBump(phi_s2) == 0) && (temp_s0 = phi_s3 + 0x30, (CollisionCheck_NoSharedFlags(phi_s3, phi_s2) == 0)) && (temp_s1 = phi_s2 + 0x30, (Math3D_ColSphereSphereIntersectAndDistance(temp_s0, temp_s1, &sp8C, &sp88) != 0))) {
+                    if ((CollisionCheck_SkipBump(phi_s2) == 0) && (temp_s0 = &phi_s3[1].bumper, (CollisionCheck_NoSharedFlags(phi_s3, phi_s2) == 0)) && (temp_s1 = &phi_s2[1].bumper, (Math3D_ColSphereSphereIntersectAndDistance((Sphere16 *) temp_s0, (Sphere16 *) temp_s1, &sp8C, &sp88) != 0))) {
                         Math_Vec3s_ToVec3f((Vec3f *) &sp6C, (Vec3s *) temp_s0);
                         Math_Vec3s_ToVec3f((Vec3f *) &sp60, (Vec3s *) temp_s1);
                         if (!(fabsf(sp88) < 0.008f)) {
-                            temp_f0 = (f32) phi_s2->unk_36 / sp88;
+                            temp_f0 = (f32) phi_s2[1].bumper.hitPos.x / sp88;
                             sp78 = ((sp6C - sp60) * temp_f0) + sp60;
                             sp7C = ((sp70 - sp64) * temp_f0) + sp64;
                             sp80 = ((sp74 - sp68) * temp_f0) + sp68;
@@ -2959,18 +2973,18 @@ loop_8:
                         }
                     } else {
 block_15:
-                        temp_s2_2 = phi_s2 + 0x40;
-                        phi_s2 = temp_s2_2;
-                        if ((u32) temp_s2_2 >= (u32) (colAC->unk_1C + (colAC->unk_18 << 6))) {
+                        temp_s2_2 = &phi_s2[1].atHit;
+                        phi_s2 = (ColliderInfo *) temp_s2_2;
+                        if ((u32) temp_s2_2 >= (u32) (colAC[1].at + ((s32) colAC[1].actor << 6))) {
                             goto block_16;
                         }
                         goto loop_8;
                     }
                 } else {
 block_16:
-                    temp_s3 = phi_s3 + 0x40;
-                    phi_s3 = temp_s3;
-                    if ((u32) temp_s3 < (u32) (sp9C->unk_1C + (sp9C->unk_18 << 6))) {
+                    temp_s3 = &phi_s3[1].atHit;
+                    phi_s3 = (ColliderInfo *) temp_s3;
+                    if ((u32) temp_s3 < (u32) (sp9C[1].at + ((s32) sp9C[1].actor << 6))) {
                         goto loop_6;
                     }
                 }
@@ -2987,18 +3001,18 @@ void CollisionCheck_AC_JntSphVsCyl(GlobalContext *globalCtx, CollisionCheckConte
     f32 sp70;
     f32 sp64;
     f32 sp58;
+    Actor *temp_s1;
+    Collider **temp_s1_2;
     Collider *temp_s6;
-    ColliderInfo *temp_s1_2;
-    Sphere16 *temp_s0;
+    ColliderBump *temp_s0;
     f32 temp_f0;
-    u32 temp_s1;
     ColliderInfo *phi_s1;
 
-    if ((colAT->unk_18 > 0) && (colAT->unk_1C != 0) && ((s32) colAC->unk_40 > 0) && (temp_s6 = colAC + 0x18, ((s32) colAC->unk_42 > 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s6) == 0) && (temp_s1 = colAT->unk_1C, phi_s1 = (ColliderInfo *) temp_s1, ((temp_s1 < (u32) (temp_s1 + (colAT->unk_18 << 6))) != 0))) {
+    if (((s32) colAT[1].actor > 0) && (colAT[1].at != 0) && ((s32) colAC->unk_40 > 0) && (temp_s6 = &colAC[1], ((s32) colAC->unk_42 > 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s6) == 0) && (temp_s1 = colAT[1].at, phi_s1 = (ColliderInfo *) temp_s1, (((u32) temp_s1 < (u32) (temp_s1 + ((s32) colAT[1].actor << 6))) != 0))) {
 loop_6:
-        if ((CollisionCheck_SkipTouch(phi_s1) == 0) && (temp_s0 = phi_s1 + 0x30, (CollisionCheck_NoSharedFlags(phi_s1, (ColliderInfo *) temp_s6) == 0)) && (Math3D_ColSphereCylinderDistanceAndAmount(temp_s0, colAC + 0x40, &sp80, &sp7C) != 0)) {
+        if ((CollisionCheck_SkipTouch(phi_s1) == 0) && (temp_s0 = &phi_s1[1].bumper, (CollisionCheck_NoSharedFlags(phi_s1, (ColliderInfo *) temp_s6) == 0)) && (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_s0, (Cylinder16 *) &colAC[2].atFlags, &sp80, &sp7C) != 0)) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp64, (Vec3s *) temp_s0);
-            Math_Vec3s_ToVec3f((Vec3f *) &sp58, colAC + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp58, &colAC[2].unk_16);
             if (!(fabsf(sp7C) < 0.008f)) {
                 temp_f0 = (f32) colAC->unk_40 / sp7C;
                 if (temp_f0 <= 1.0f) {
@@ -3014,9 +3028,9 @@ loop_6:
             CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s1, (Vec3f *) &sp64, colAC, (ColliderInfo *) temp_s6, (Vec3f *) &sp58, (Vec3f *) &sp70);
             return;
         }
-        temp_s1_2 = phi_s1 + 0x40;
-        phi_s1 = temp_s1_2;
-        if ((u32) temp_s1_2 >= (u32) (colAT->unk_1C + (colAT->unk_18 << 6))) {
+        temp_s1_2 = &phi_s1[1].atHit;
+        phi_s1 = (ColliderInfo *) temp_s1_2;
+        if ((u32) temp_s1_2 >= (u32) (colAT[1].at + ((s32) colAT[1].actor << 6))) {
             /* Duplicate return node #16. Try simplifying control flow for better match */
             return;
         }
@@ -3028,37 +3042,37 @@ void CollisionCheck_AC_JntSphVsTris(GlobalContext *globalCtx, CollisionCheckCont
     ? sp6C;
     ? sp60;
     ? sp54;
-    ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s2;
-    Sphere16 *temp_s1;
-    s32 temp_v1;
-    u32 temp_s0;
-    u32 temp_v0;
+    Actor *temp_s0;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s2;
+    ColliderBump *temp_s1;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s2;
     ColliderInfo *phi_s0;
 
-    temp_v1 = colAT->unk_18;
-    if ((temp_v1 > 0) && (temp_v0 = colAT->unk_1C, (temp_v0 != 0)) && (colAC->unk_18 > 0) && (colAC->unk_1C != 0) && (phi_s2 = (ColliderInfo *) temp_v0, ((temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) != 0))) {
+    temp_v1 = colAT[1].actor;
+    if (((s32) temp_v1 > 0) && (temp_v0 = colAT[1].at, (temp_v0 != 0)) && ((s32) colAC[1].actor > 0) && (colAC[1].at != 0) && (phi_s2 = (ColliderInfo *) temp_v0, (((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) != 0))) {
 loop_6:
-        if ((CollisionCheck_SkipTouch(phi_s2) == 0) && (temp_s0 = colAC->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAC->unk_18 * 0x5C))) != 0))) {
+        if ((CollisionCheck_SkipTouch(phi_s2) == 0) && (temp_s0 = colAC[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAC[1].actor * 0x5C))) != 0))) {
 loop_8:
-            if ((CollisionCheck_SkipBump(phi_s0) == 0) && (temp_s1 = phi_s2 + 0x30, (CollisionCheck_NoSharedFlags(phi_s2, phi_s0) == 0)) && (Math3D_ColSphereTri(temp_s1, (TriNorm *) (phi_s0 + 0x28), (Vec3f *) &sp6C) != 0)) {
+            if ((CollisionCheck_SkipBump(phi_s0) == 0) && (temp_s1 = &phi_s2[1].bumper, (CollisionCheck_NoSharedFlags(phi_s2, phi_s0) == 0)) && (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) &phi_s0[1], (Vec3f *) &sp6C) != 0)) {
                 Math_Vec3s_ToVec3f((Vec3f *) &sp60, (Vec3s *) temp_s1);
                 CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp54);
                 CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s2, (Vec3f *) &sp60, colAC, phi_s0, (Vec3f *) &sp54, (Vec3f *) &sp6C);
                 return;
             }
-            temp_s0_2 = phi_s0 + 0x5C;
-            phi_s0 = temp_s0_2;
-            if ((u32) temp_s0_2 >= (u32) (colAC->unk_1C + (colAC->unk_18 * 0x5C))) {
+            temp_s0_2 = &phi_s0[2].bumper.effect;
+            phi_s0 = (ColliderInfo *) temp_s0_2;
+            if ((u32) temp_s0_2 >= (u32) (colAC[1].at + ((s32) colAC[1].actor * 0x5C))) {
                 goto block_13;
             }
             goto loop_8;
         }
 block_13:
-        temp_s2 = phi_s2 + 0x40;
-        phi_s2 = temp_s2;
-        if ((u32) temp_s2 >= (u32) (colAT->unk_1C + (colAT->unk_18 << 6))) {
+        temp_s2 = &phi_s2[1].atHit;
+        phi_s2 = (ColliderInfo *) temp_s2;
+        if ((u32) temp_s2 >= (u32) (colAT[1].at + ((s32) colAT[1].actor << 6))) {
             /* Duplicate return node #14. Try simplifying control flow for better match */
             return;
         }
@@ -3070,25 +3084,25 @@ void CollisionCheck_AC_JntSphVsQuad(GlobalContext *globalCtx, CollisionCheckCont
     ? sp74;
     ? sp64;
     ? sp58;
+    Actor **temp_s0;
+    Actor *temp_s0_2;
+    Collider **temp_s0_3;
     Collider *temp_s7;
-    ColliderInfo *temp_s0_3;
-    Sphere16 *temp_s1_2;
-    Vec3f *temp_s0;
-    Vec3f *temp_s1;
-    u32 temp_s0_2;
+    ColliderBump *temp_s1_2;
+    u8 *temp_s1;
     ColliderInfo *phi_s0;
 
-    if ((colAT->unk_18 > 0) && (temp_s7 = colAC + 0x18, (colAT->unk_1C != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s7) == 0) && (temp_s1 = colAC + 0x58, temp_s0 = colAC + 0x4C, Math3D_TriSetCoords(&D_801EF590, temp_s1, colAC + 0x64, temp_s0), Math3D_TriSetCoords(&D_801EF5C8, temp_s0, colAC + 0x40, temp_s1), temp_s0_2 = colAT->unk_1C, phi_s0 = (ColliderInfo *) temp_s0_2, ((temp_s0_2 < (u32) (temp_s0_2 + (colAT->unk_18 << 6))) != 0))) {
+    if (((s32) colAT[1].actor > 0) && (temp_s7 = &colAC[1], (colAT[1].at != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s7) == 0) && (temp_s1 = &colAC[3].atFlags, temp_s0 = &colAC[3].at, Math3D_TriSetCoords(&D_801EF590, (Vec3f *) temp_s1, (Vec3f *) &colAC[4].at, (Vec3f *) temp_s0), Math3D_TriSetCoords(&D_801EF5C8, (Vec3f *) temp_s0, (Vec3f *) &colAC[2].atFlags, (Vec3f *) temp_s1), temp_s0_2 = colAT[1].at, phi_s0 = (ColliderInfo *) temp_s0_2, (((u32) temp_s0_2 < (u32) (temp_s0_2 + ((s32) colAT[1].actor << 6))) != 0))) {
 loop_4:
-        if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (temp_s1_2 = phi_s0 + 0x30, (CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s7) == 0)) && ((Math3D_ColSphereTri(temp_s1_2, &D_801EF590, (Vec3f *) &sp74) != 0) || (Math3D_ColSphereTri(temp_s1_2, &D_801EF5C8, (Vec3f *) &sp74) != 0))) {
+        if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (temp_s1_2 = &phi_s0[1].bumper, (CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s7) == 0)) && ((Math3D_ColSphereTri((Sphere16 *) temp_s1_2, &D_801EF590, (Vec3f *) &sp74) != 0) || (Math3D_ColSphereTri((Sphere16 *) temp_s1_2, &D_801EF5C8, (Vec3f *) &sp74) != 0))) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp64, (Vec3s *) temp_s1_2);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAC, (Vec3f *) &sp58);
             CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp64, colAC, (ColliderInfo *) temp_s7, (Vec3f *) &sp58, (Vec3f *) &sp74);
             return;
         }
-        temp_s0_3 = phi_s0 + 0x40;
-        phi_s0 = temp_s0_3;
-        if ((u32) temp_s0_3 >= (u32) (colAT->unk_1C + (colAT->unk_18 << 6))) {
+        temp_s0_3 = &phi_s0[1].atHit;
+        phi_s0 = (ColliderInfo *) temp_s0_3;
+        if ((u32) temp_s0_3 >= (u32) (colAT[1].at + ((s32) colAT[1].actor << 6))) {
             /* Duplicate return node #10. Try simplifying control flow for better match */
             return;
         }
@@ -3104,26 +3118,26 @@ void CollisionCheck_AC_JntSphVsSphere(GlobalContext *globalCtx, CollisionCheckCo
     f32 sp7C;
     f32 sp70;
     f32 sp64;
+    Actor *temp_s2;
+    Collider **temp_s2_2;
     Collider *temp_s1;
     Collider *temp_s7;
-    ColliderInfo *temp_s2_2;
-    Sphere16 *temp_s0;
+    ColliderBump *temp_s0;
     f32 temp_f0;
-    u32 temp_s2;
     ColliderInfo *phi_s2;
 
-    if (colAT->unk_18 > 0) {
-        temp_s7 = colAC + 0x18;
-        if ((colAT->unk_1C != 0) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s7) == 0)) {
-            temp_s2 = colAT->unk_1C;
+    if ((s32) colAT[1].actor > 0) {
+        temp_s7 = &colAC[1];
+        if ((colAT[1].at != 0) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s7) == 0)) {
+            temp_s2 = colAT[1].at;
             phi_s2 = (ColliderInfo *) temp_s2;
-            if (temp_s2 < (u32) (temp_s2 + (colAT->unk_18 << 6))) {
+            if ((u32) temp_s2 < (u32) (temp_s2 + ((s32) colAT[1].actor << 6))) {
                 do {
                     if (CollisionCheck_SkipTouch(phi_s2) == 0) {
-                        temp_s0 = phi_s2 + 0x30;
+                        temp_s0 = &phi_s2[1].bumper;
                         if (CollisionCheck_NoSharedFlags(phi_s2, (ColliderInfo *) temp_s7) == 0) {
-                            temp_s1 = colAC + 0x48;
-                            if (Math3D_ColSphereSphereIntersectAndDistance(temp_s0, (Sphere16 *) temp_s1, &sp90, &sp8C) != 0) {
+                            temp_s1 = &colAC[3];
+                            if (Math3D_ColSphereSphereIntersectAndDistance((Sphere16 *) temp_s0, (Sphere16 *) temp_s1, &sp90, &sp8C) != 0) {
                                 Math_Vec3s_ToVec3f((Vec3f *) &sp70, (Vec3s *) temp_s0);
                                 Math_Vec3s_ToVec3f((Vec3f *) &sp64, (Vec3s *) temp_s1);
                                 if (!(fabsf(sp8C) < 0.008f)) {
@@ -3138,9 +3152,9 @@ void CollisionCheck_AC_JntSphVsSphere(GlobalContext *globalCtx, CollisionCheckCo
                             }
                         }
                     }
-                    temp_s2_2 = phi_s2 + 0x40;
-                    phi_s2 = temp_s2_2;
-                } while ((u32) temp_s2_2 < (u32) (colAT->unk_1C + (colAT->unk_18 << 6)));
+                    temp_s2_2 = &phi_s2[1].atHit;
+                    phi_s2 = (ColliderInfo *) temp_s2_2;
+                } while ((u32) temp_s2_2 < (u32) (colAT[1].at + ((s32) colAT[1].actor << 6)));
             }
         }
     }
@@ -3154,25 +3168,25 @@ void CollisionCheck_AC_CylVsJntSph(GlobalContext *globalCtx, CollisionCheckConte
     f32 sp88;
     f32 sp7C;
     f32 sp70;
+    Actor *temp_s1;
+    Collider **temp_s1_2;
     Collider *temp_s7;
-    ColliderInfo *temp_s1_2;
-    Sphere16 *temp_s0;
+    ColliderBump *temp_s0;
     f32 temp_f0;
-    u32 temp_s1;
     ColliderInfo *phi_s1;
 
-    if ((colAC->unk_18 > 0) && (colAC->unk_1C != 0) && ((s32) colAT->unk_40 > 0)) {
-        temp_s7 = colAT + 0x18;
+    if (((s32) colAC[1].actor > 0) && (colAC[1].at != 0) && ((s32) colAT->unk_40 > 0)) {
+        temp_s7 = &colAT[1];
         if (((s32) colAT->unk_42 > 0) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s7) == 0)) {
-            temp_s1 = colAC->unk_1C;
+            temp_s1 = colAC[1].at;
             phi_s1 = (ColliderInfo *) temp_s1;
-            if (temp_s1 < (u32) (temp_s1 + (colAC->unk_18 << 6))) {
+            if ((u32) temp_s1 < (u32) (temp_s1 + ((s32) colAC[1].actor << 6))) {
 loop_7:
-                if ((CollisionCheck_SkipBump(phi_s1) == 0) && (temp_s0 = phi_s1 + 0x30, (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s7, phi_s1) == 0)) && (Math3D_ColSphereCylinderDistanceAndAmount(temp_s0, colAT + 0x40, &sp9C, &sp98) != 0)) {
-                    Math_Vec3s_ToVec3f((Vec3f *) &sp7C, colAT + 0x46);
+                if ((CollisionCheck_SkipBump(phi_s1) == 0) && (temp_s0 = &phi_s1[1].bumper, (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s7, phi_s1) == 0)) && (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_s0, (Cylinder16 *) &colAT[2].atFlags, &sp9C, &sp98) != 0)) {
+                    Math_Vec3s_ToVec3f((Vec3f *) &sp7C, &colAT[2].unk_16);
                     Math_Vec3s_ToVec3f((Vec3f *) &sp70, (Vec3s *) temp_s0);
                     if (!(fabsf(sp98) < 0.008f)) {
-                        temp_f0 = (f32) phi_s1->unk_36 / sp98;
+                        temp_f0 = (f32) phi_s1[1].bumper.hitPos.x / sp98;
                         if (temp_f0 <= 1.0f) {
                             sp88 = ((sp7C - sp70) * temp_f0) + sp70;
                             sp8C = ((sp80 - sp74) * temp_f0) + sp74;
@@ -3189,9 +3203,9 @@ loop_7:
                     }
                 } else {
 block_16:
-                    temp_s1_2 = phi_s1 + 0x40;
-                    phi_s1 = temp_s1_2;
-                    if ((u32) temp_s1_2 < (u32) (colAC->unk_1C + (colAC->unk_18 << 6))) {
+                    temp_s1_2 = &phi_s1[1].atHit;
+                    phi_s1 = (ColliderInfo *) temp_s1_2;
+                    if ((u32) temp_s1_2 < (u32) (colAC[1].at + ((s32) colAC[1].actor << 6))) {
                         goto loop_7;
                     }
                 }
@@ -3223,15 +3237,15 @@ void CollisionCheck_AC_CylVsCyl(GlobalContext *globalCtx, CollisionCheckContext 
     f32 phi_f0;
 
     if (((s32) colAT->unk_40 > 0) && ((s32) colAT->unk_42 > 0) && ((s32) colAC->unk_40 > 0)) {
-        temp_a0 = colAC + 0x18;
+        temp_a0 = &colAC[1];
         if ((s32) colAC->unk_42 > 0) {
             sp30 = temp_a0;
-            temp_a0_2 = colAT + 0x18;
+            temp_a0_2 = &colAT[1];
             if (CollisionCheck_SkipBump((ColliderInfo *) temp_a0) == 0) {
                 sp34 = temp_a0_2;
-                if ((CollisionCheck_SkipTouch((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_a0_2, (ColliderInfo *) sp30) == 0) && (Math3D_ColCylinderCylinderAmountAndDistance(colAT + 0x40, colAC + 0x40, &sp6C, &sp68) != 0)) {
-                    Math_Vec3s_ToVec3f((Vec3f *) &sp50, colAT + 0x46);
-                    temp_a1 = colAC + 0x46;
+                if ((CollisionCheck_SkipTouch((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_a0_2, (ColliderInfo *) sp30) == 0) && (Math3D_ColCylinderCylinderAmountAndDistance((Cylinder16 *) &colAT[2].atFlags, (Cylinder16 *) &colAC[2].atFlags, &sp6C, &sp68) != 0)) {
+                    Math_Vec3s_ToVec3f((Vec3f *) &sp50, &colAT[2].unk_16);
+                    temp_a1 = &colAC[2].unk_16;
                     sp38 = temp_a1;
                     Math_Vec3s_ToVec3f((Vec3f *) &sp44, temp_a1);
                     if (!(fabsf(sp68) < 0.008f)) {
@@ -3249,8 +3263,8 @@ void CollisionCheck_AC_CylVsCyl(GlobalContext *globalCtx, CollisionCheckContext 
 block_12:
                             sp60 = phi_f0;
                         }
-                        temp_f0_3 = (f32) colAC->unk_46;
-                        sp5C = (((f32) colAT->unk_46 - temp_f0_3) * temp_f12) + temp_f0_3;
+                        temp_f0_3 = (f32) colAC[2].unk_16.x;
+                        sp5C = (((f32) colAT[2].unk_16.x - temp_f0_3) * temp_f12) + temp_f0_3;
                         temp_f2 = (f32) colAC->unk_4A;
                         sp64 = (((f32) colAT->unk_4A - temp_f2) * temp_f12) + temp_f2;
                     } else {
@@ -3267,22 +3281,22 @@ void CollisionCheck_AC_CylVsTris(GlobalContext *globalCtx, CollisionCheckContext
     ? sp60;
     ? sp54;
     ? sp48;
+    Actor *temp_s0;
     Collider *temp_s4;
-    ColliderInfo *temp_s0_2;
-    u32 temp_s0;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s0;
 
-    if (((s32) colAT->unk_40 > 0) && ((s32) colAT->unk_42 > 0) && (colAC->unk_18 > 0) && (temp_s4 = colAT + 0x18, (colAC->unk_1C != 0)) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s4) == 0) && (temp_s0 = colAC->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAC->unk_18 * 0x5C))) != 0))) {
+    if (((s32) colAT->unk_40 > 0) && ((s32) colAT->unk_42 > 0) && ((s32) colAC[1].actor > 0) && (temp_s4 = &colAT[1], (colAC[1].at != 0)) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s4) == 0) && (temp_s0 = colAC[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAC[1].actor * 0x5C))) != 0))) {
 loop_6:
-        if ((CollisionCheck_SkipBump(phi_s0) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s4, phi_s0) == 0) && (Math3D_ColCylinderTri(colAT + 0x40, (TriNorm *) (phi_s0 + 0x28), (Vec3f *) &sp60) != 0)) {
-            Math_Vec3s_ToVec3f((Vec3f *) &sp54, colAT + 0x46);
+        if ((CollisionCheck_SkipBump(phi_s0) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s4, phi_s0) == 0) && (Math3D_ColCylinderTri((Cylinder16 *) &colAT[2].atFlags, (TriNorm *) &phi_s0[1], (Vec3f *) &sp60) != 0)) {
+            Math_Vec3s_ToVec3f((Vec3f *) &sp54, &colAT[2].unk_16);
             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp48);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) temp_s4, (Vec3f *) &sp54, colAC, phi_s0, (Vec3f *) &sp48, (Vec3f *) &sp60);
             return;
         }
-        temp_s0_2 = phi_s0 + 0x5C;
-        phi_s0 = temp_s0_2;
-        if ((u32) temp_s0_2 >= (u32) (colAC->unk_1C + (colAC->unk_18 * 0x5C))) {
+        temp_s0_2 = &phi_s0[2].bumper.effect;
+        phi_s0 = (ColliderInfo *) temp_s0_2;
+        if ((u32) temp_s0_2 >= (u32) (colAC[1].at + ((s32) colAC[1].actor * 0x5C))) {
             /* Duplicate return node #11. Try simplifying control flow for better match */
             return;
         }
@@ -3297,31 +3311,31 @@ void CollisionCheck_AC_CylVsQuad(GlobalContext *globalCtx, CollisionCheckContext
     ? sp40;
     Collider *sp3C;
     Collider *sp38;
-    Vec3f *sp34;
-    Vec3f *sp30;
+    Actor **sp34;
+    u8 *sp30;
+    Actor **temp_a3;
     Collider *temp_a0;
     Collider *temp_a0_2;
-    Vec3f *temp_a0_3;
-    Vec3f *temp_a1;
-    Vec3f *temp_a3;
+    u8 *temp_a0_3;
+    u8 *temp_a1;
 
-    if (((s32) colAT->unk_42 > 0) && (temp_a0 = colAT + 0x18, ((s32) colAT->unk_40 > 0)) && (sp3C = temp_a0, temp_a0_2 = colAC + 0x18, (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0)) && (sp38 = temp_a0_2, (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0)) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp3C, (ColliderInfo *) sp38) == 0)) {
-        temp_a1 = colAC + 0x58;
-        temp_a3 = colAC + 0x4C;
+    if (((s32) colAT->unk_42 > 0) && (temp_a0 = &colAT[1], ((s32) colAT->unk_40 > 0)) && (sp3C = temp_a0, temp_a0_2 = &colAC[1], (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0)) && (sp38 = temp_a0_2, (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0)) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp3C, (ColliderInfo *) sp38) == 0)) {
+        temp_a1 = &colAC[3].atFlags;
+        temp_a3 = &colAC[3].at;
         sp34 = temp_a3;
         sp30 = temp_a1;
-        Math3D_TriSetCoords(&D_801EF600, temp_a1, colAC + 0x64, temp_a3);
-        Math3D_TriSetCoords(&D_801EF638, sp34, colAC + 0x40, sp30);
-        temp_a0_3 = colAT + 0x40;
-        sp34 = temp_a0_3;
+        Math3D_TriSetCoords(&D_801EF600, (Vec3f *) temp_a1, (Vec3f *) &colAC[4].at, (Vec3f *) temp_a3);
+        Math3D_TriSetCoords(&D_801EF638, (Vec3f *) sp34, (Vec3f *) &colAC[2].atFlags, (Vec3f *) sp30);
+        temp_a0_3 = &colAT[2].atFlags;
+        sp34 = (Actor **) temp_a0_3;
         if (Math3D_ColCylinderTri((Cylinder16 *) temp_a0_3, &D_801EF600, &D_801EDE00) != 0) {
-            Math_Vec3s_ToVec3f((Vec3f *) &sp64, colAT + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp64, &colAT[2].unk_16);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAC, (Vec3f *) &sp58);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp3C, (Vec3f *) &sp64, colAC, (ColliderInfo *) sp38, (Vec3f *) &sp58, &D_801EDE00);
             return;
         }
         if (Math3D_ColCylinderTri((Cylinder16 *) temp_a0_3, &D_801EF638, &D_801EDE00) != 0) {
-            Math_Vec3s_ToVec3f((Vec3f *) &sp4C, colAT + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp4C, &colAT[2].unk_16);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAC, (Vec3f *) &sp40);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp3C, (Vec3f *) &sp4C, colAC, (ColliderInfo *) sp38, (Vec3f *) &sp40, &D_801EDE00);
         }
@@ -3346,18 +3360,18 @@ void CollisionCheck_AC_CylVsSphere(GlobalContext *globalCtx, CollisionCheckConte
     f32 temp_f0;
 
     if ((s32) colAT->unk_40 > 0) {
-        temp_a0 = colAT + 0x18;
+        temp_a0 = &colAT[1];
         if ((s32) colAT->unk_42 > 0) {
             sp3C = temp_a0;
-            temp_a0_2 = colAC + 0x18;
+            temp_a0_2 = &colAC[1];
             if (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) {
                 sp38 = temp_a0_2;
                 if (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) {
-                    temp_a0_3 = colAC + 0x48;
+                    temp_a0_3 = &colAC[3];
                     if (CollisionCheck_NoSharedFlags((ColliderInfo *) sp3C, (ColliderInfo *) sp38) == 0) {
                         sp34 = temp_a0_3;
-                        if (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_a0_3, colAT + 0x40, &sp6C, &sp68) != 0) {
-                            Math_Vec3s_ToVec3f((Vec3f *) &sp50, colAT + 0x46);
+                        if (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_a0_3, (Cylinder16 *) &colAT[2].atFlags, &sp6C, &sp68) != 0) {
+                            Math_Vec3s_ToVec3f((Vec3f *) &sp50, &colAT[2].unk_16);
                             Math_Vec3s_ToVec3f((Vec3f *) &sp44, (Vec3s *) sp34);
                             if (!(fabsf(sp68) < 0.008f)) {
                                 temp_f0 = (f32) colAC->unk_4E / sp68;
@@ -3385,38 +3399,38 @@ void CollisionCheck_AC_TrisVsJntSph(GlobalContext *globalCtx, CollisionCheckCont
     ? sp74;
     ? sp68;
     ? sp5C;
-    ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s2;
-    Sphere16 *temp_s1;
-    s32 temp_v1;
-    u32 temp_s0;
-    u32 temp_v0;
+    Actor *temp_s0;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s2;
+    ColliderBump *temp_s1;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s2;
     ColliderInfo *phi_s0;
 
     sp84 = colAC;
-    temp_v1 = colAC->unk_18;
-    if (temp_v1 > 0) {
-        temp_v0 = colAC->unk_1C;
-        if ((temp_v0 != 0) && (colAT->unk_18 > 0) && (colAT->unk_1C != 0)) {
+    temp_v1 = colAC[1].actor;
+    if ((s32) temp_v1 > 0) {
+        temp_v0 = colAC[1].at;
+        if ((temp_v0 != 0) && ((s32) colAT[1].actor > 0) && (colAT[1].at != 0)) {
             phi_s2 = (ColliderInfo *) temp_v0;
-            if (temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) {
+            if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) {
 loop_6:
-                if ((CollisionCheck_SkipBump(phi_s2) == 0) && (temp_s0 = colAT->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAT->unk_18 * 0x5C))) != 0))) {
+                if ((CollisionCheck_SkipBump(phi_s2) == 0) && (temp_s0 = colAT[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAT[1].actor * 0x5C))) != 0))) {
 loop_8:
-                    if ((CollisionCheck_SkipTouch(phi_s0) != 0) || (temp_s1 = phi_s2 + 0x30, (CollisionCheck_NoSharedFlags(phi_s0, phi_s2) != 0)) || (Math3D_ColSphereTri(temp_s1, (TriNorm *) (phi_s0 + 0x28), (Vec3f *) &sp74) == 0) || (Math_Vec3s_ToVec3f((Vec3f *) &sp5C, (Vec3s *) temp_s1), CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp68), CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp68, colAC, phi_s2, (Vec3f *) &sp5C, (Vec3f *) &sp74), ((colAC->ocFlags2 & 0x40) != 0))) {
-                        temp_s0_2 = phi_s0 + 0x5C;
-                        phi_s0 = temp_s0_2;
-                        if ((u32) temp_s0_2 >= (u32) (colAT->unk_1C + (colAT->unk_18 * 0x5C))) {
+                    if ((CollisionCheck_SkipTouch(phi_s0) != 0) || (temp_s1 = &phi_s2[1].bumper, (CollisionCheck_NoSharedFlags(phi_s0, phi_s2) != 0)) || (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) &phi_s0[1], (Vec3f *) &sp74) == 0) || (Math_Vec3s_ToVec3f((Vec3f *) &sp5C, (Vec3s *) temp_s1), CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp68), CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp68, colAC, phi_s2, (Vec3f *) &sp5C, (Vec3f *) &sp74), ((colAC->ocFlags2 & 0x40) != 0))) {
+                        temp_s0_2 = &phi_s0[2].bumper.effect;
+                        phi_s0 = (ColliderInfo *) temp_s0_2;
+                        if ((u32) temp_s0_2 >= (u32) (colAT[1].at + ((s32) colAT[1].actor * 0x5C))) {
                             goto block_13;
                         }
                         goto loop_8;
                     }
                 } else {
 block_13:
-                    temp_s2 = phi_s2 + 0x40;
-                    phi_s2 = temp_s2;
-                    if ((u32) temp_s2 < (u32) (sp84->unk_1C + (sp84->unk_18 << 6))) {
+                    temp_s2 = &phi_s2[1].atHit;
+                    phi_s2 = (ColliderInfo *) temp_s2;
+                    if ((u32) temp_s2 < (u32) (sp84[1].at + ((s32) sp84[1].actor << 6))) {
                         goto loop_6;
                     }
                 }
@@ -3428,22 +3442,22 @@ block_13:
 void CollisionCheck_AC_TrisVsCyl(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *colAT, Collider *colAC) {
     ? sp58;
     ? sp4C;
+    Actor *temp_s0;
     Collider *temp_s4;
-    ColliderInfo *temp_s0_2;
-    u32 temp_s0;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s0;
 
-    if (((s32) colAC->unk_40 > 0) && ((s32) colAC->unk_42 > 0) && (colAT->unk_18 > 0) && (temp_s4 = colAC + 0x18, (colAT->unk_1C != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s4) == 0) && (temp_s0 = colAT->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAT->unk_18 * 0x5C))) != 0))) {
+    if (((s32) colAC->unk_40 > 0) && ((s32) colAC->unk_42 > 0) && ((s32) colAT[1].actor > 0) && (temp_s4 = &colAC[1], (colAT[1].at != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s4) == 0) && (temp_s0 = colAT[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAT[1].actor * 0x5C))) != 0))) {
 loop_6:
-        if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s4) == 0) && (Math3D_ColCylinderTri(colAC + 0x40, (TriNorm *) (phi_s0 + 0x28), &D_801EDE10) != 0)) {
+        if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s4) == 0) && (Math3D_ColCylinderTri((Cylinder16 *) &colAC[2].atFlags, (TriNorm *) &phi_s0[1], &D_801EDE10) != 0)) {
             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp58);
-            Math_Vec3s_ToVec3f((Vec3f *) &sp4C, colAC + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp4C, &colAC[2].unk_16);
             CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp58, colAC, (ColliderInfo *) temp_s4, (Vec3f *) &sp4C, &D_801EDE10);
             return;
         }
-        temp_s0_2 = phi_s0 + 0x5C;
-        phi_s0 = temp_s0_2;
-        if ((u32) temp_s0_2 >= (u32) (colAT->unk_1C + (colAT->unk_18 * 0x5C))) {
+        temp_s0_2 = &phi_s0[2].bumper.effect;
+        phi_s0 = (ColliderInfo *) temp_s0_2;
+        if ((u32) temp_s0_2 >= (u32) (colAT[1].at + ((s32) colAT[1].actor * 0x5C))) {
             /* Duplicate return node #11. Try simplifying control flow for better match */
             return;
         }
@@ -3454,36 +3468,36 @@ loop_6:
 void CollisionCheck_AC_TrisVsTris(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *colAT, Collider *colAC) {
     ? sp5C;
     ? sp50;
-    ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s1;
-    s32 temp_v1;
-    u32 temp_s0;
-    u32 temp_v0;
+    Actor *temp_s0;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    u8 *temp_s0_2;
+    u8 *temp_s1;
     ColliderInfo *phi_s1;
     ColliderInfo *phi_s0;
 
-    temp_v1 = colAC->unk_18;
-    if ((temp_v1 > 0) && (temp_v0 = colAC->unk_1C, (temp_v0 != 0)) && (colAT->unk_18 > 0) && (colAT->unk_1C != 0) && (phi_s1 = (ColliderInfo *) temp_v0, ((temp_v0 < (u32) (temp_v0 + (temp_v1 * 0x5C))) != 0))) {
+    temp_v1 = colAC[1].actor;
+    if (((s32) temp_v1 > 0) && (temp_v0 = colAC[1].at, (temp_v0 != 0)) && ((s32) colAT[1].actor > 0) && (colAT[1].at != 0) && (phi_s1 = (ColliderInfo *) temp_v0, (((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 * 0x5C))) != 0))) {
 loop_6:
-        if ((CollisionCheck_SkipBump(phi_s1) == 0) && (temp_s0 = colAT->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAT->unk_18 * 0x5C))) != 0))) {
+        if ((CollisionCheck_SkipBump(phi_s1) == 0) && (temp_s0 = colAT[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAT[1].actor * 0x5C))) != 0))) {
 loop_8:
-            if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (CollisionCheck_NoSharedFlags(phi_s0, phi_s1) == 0) && (Math3d_ColTriTri((TriNorm *) (phi_s0 + 0x28), (TriNorm *) (phi_s1 + 0x28), &D_801EDE20) != 0)) {
+            if ((CollisionCheck_SkipTouch(phi_s0) == 0) && (CollisionCheck_NoSharedFlags(phi_s0, phi_s1) == 0) && (Math3d_ColTriTri((TriNorm *) &phi_s0[1], (TriNorm *) &phi_s1[1], &D_801EDE20) != 0)) {
                 CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp5C);
                 CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s1, (Vec3f *) &sp50);
                 CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp5C, colAC, phi_s1, (Vec3f *) &sp50, &D_801EDE20);
                 return;
             }
-            temp_s0_2 = phi_s0 + 0x5C;
-            phi_s0 = temp_s0_2;
-            if ((u32) temp_s0_2 >= (u32) (colAT->unk_1C + (colAT->unk_18 * 0x5C))) {
+            temp_s0_2 = &phi_s0[2].bumper.effect;
+            phi_s0 = (ColliderInfo *) temp_s0_2;
+            if ((u32) temp_s0_2 >= (u32) (colAT[1].at + ((s32) colAT[1].actor * 0x5C))) {
                 goto block_13;
             }
             goto loop_8;
         }
 block_13:
-        temp_s1 = phi_s1 + 0x5C;
-        phi_s1 = temp_s1;
-        if ((u32) temp_s1 >= (u32) (colAC->unk_1C + (colAC->unk_18 * 0x5C))) {
+        temp_s1 = &phi_s1[2].bumper.effect;
+        phi_s1 = (ColliderInfo *) temp_s1;
+        if ((u32) temp_s1 >= (u32) (colAC[1].at + ((s32) colAC[1].actor * 0x5C))) {
             /* Duplicate return node #14. Try simplifying control flow for better match */
             return;
         }
@@ -3494,25 +3508,25 @@ block_13:
 void CollisionCheck_AC_TrisVsQuad(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *colAT, Collider *colAC) {
     ? sp68;
     ? sp5C;
+    Actor **temp_s0;
+    Actor *temp_s1_2;
     Collider *temp_fp;
     ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s1_3;
-    Vec3f *temp_s0;
-    Vec3f *temp_s1;
-    u32 temp_s1_2;
+    u8 *temp_s1;
+    u8 *temp_s1_3;
     ColliderInfo *phi_s1;
 
-    if ((colAT->unk_18 > 0) && (temp_fp = colAC + 0x18, (colAT->unk_1C != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_fp) == 0) && (temp_s1 = colAC + 0x58, temp_s0 = colAC + 0x4C, Math3D_TriSetCoords(&D_801EDE40, temp_s1, colAC + 0x64, temp_s0), Math3D_TriSetCoords(&D_801EDE78, temp_s0, colAC + 0x40, temp_s1), temp_s1_2 = colAT->unk_1C, phi_s1 = (ColliderInfo *) temp_s1_2, ((temp_s1_2 < (u32) (temp_s1_2 + (colAT->unk_18 * 0x5C))) != 0))) {
+    if (((s32) colAT[1].actor > 0) && (temp_fp = &colAC[1], (colAT[1].at != 0)) && (CollisionCheck_SkipBump((ColliderInfo *) temp_fp) == 0) && (temp_s1 = &colAC[3].atFlags, temp_s0 = &colAC[3].at, Math3D_TriSetCoords(&D_801EDE40, (Vec3f *) temp_s1, (Vec3f *) &colAC[4].at, (Vec3f *) temp_s0), Math3D_TriSetCoords(&D_801EDE78, (Vec3f *) temp_s0, (Vec3f *) &colAC[2].atFlags, (Vec3f *) temp_s1), temp_s1_2 = colAT[1].at, phi_s1 = (ColliderInfo *) temp_s1_2, (((u32) temp_s1_2 < (u32) (temp_s1_2 + ((s32) colAT[1].actor * 0x5C))) != 0))) {
 loop_4:
-        if ((CollisionCheck_SkipTouch(phi_s1) == 0) && (CollisionCheck_NoSharedFlags(phi_s1, (ColliderInfo *) temp_fp) == 0) && ((temp_s0_2 = phi_s1 + 0x28, (Math3d_ColTriTri(&D_801EDE40, (TriNorm *) temp_s0_2, &D_801EDE30) != 0)) || (Math3d_ColTriTri(&D_801EDE78, (TriNorm *) temp_s0_2, &D_801EDE30) != 0))) {
+        if ((CollisionCheck_SkipTouch(phi_s1) == 0) && (CollisionCheck_NoSharedFlags(phi_s1, (ColliderInfo *) temp_fp) == 0) && ((temp_s0_2 = &phi_s1[1], (Math3d_ColTriTri(&D_801EDE40, (TriNorm *) temp_s0_2, &D_801EDE30) != 0)) || (Math3d_ColTriTri(&D_801EDE78, (TriNorm *) temp_s0_2, &D_801EDE30) != 0))) {
             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s1, (Vec3f *) &sp68);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAC, (Vec3f *) &sp5C);
             CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s1, (Vec3f *) &sp68, colAC, (ColliderInfo *) temp_fp, (Vec3f *) &sp5C, &D_801EDE30);
             return;
         }
-        temp_s1_3 = phi_s1 + 0x5C;
-        phi_s1 = temp_s1_3;
-        if ((u32) temp_s1_3 >= (u32) (colAT->unk_1C + (colAT->unk_18 * 0x5C))) {
+        temp_s1_3 = &phi_s1[2].bumper.effect;
+        phi_s1 = (ColliderInfo *) temp_s1_3;
+        if ((u32) temp_s1_3 >= (u32) (colAT[1].at + ((s32) colAT[1].actor * 0x5C))) {
             /* Duplicate return node #10. Try simplifying control flow for better match */
             return;
         }
@@ -3524,30 +3538,34 @@ void CollisionCheck_AC_TrisVsSphere(GlobalContext *globalCtx, CollisionCheckCont
     ? sp70;
     ? sp64;
     ? sp58;
+    Actor *temp_s0;
+    Actor *temp_t2;
+    Actor *temp_t8;
     Collider *temp_s1;
     Collider *temp_s6;
-    ColliderInfo *temp_s0_2;
-    u32 temp_s0;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s0;
 
-    if (colAT->unk_18 > 0) {
-        temp_s6 = colAC + 0x18;
-        if ((colAT->unk_1C != 0) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s6) == 0)) {
-            temp_s0 = colAT->unk_1C;
+    if ((s32) colAT[1].actor > 0) {
+        temp_s6 = &colAC[1];
+        if ((colAT[1].at != 0) && (CollisionCheck_SkipBump((ColliderInfo *) temp_s6) == 0)) {
+            temp_t8 = colAT[1].actor;
+            temp_s0 = colAT[1].at;
             phi_s0 = (ColliderInfo *) temp_s0;
-            if (temp_s0 < (u32) (temp_s0 + (colAT->unk_18 * 0x5C))) {
+            if ((u32) temp_s0 < (u32) (temp_s0 + ((((((s32) temp_t8 * 4) - temp_t8) * 8) - temp_t8) * 4))) {
                 do {
                     if (CollisionCheck_SkipTouch(phi_s0) == 0) {
-                        temp_s1 = colAC + 0x48;
-                        if ((CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s6) == 0) && (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) (phi_s0 + 0x28), (Vec3f *) &sp70) != 0)) {
+                        temp_s1 = &colAC[3];
+                        if ((CollisionCheck_NoSharedFlags(phi_s0, (ColliderInfo *) temp_s6) == 0) && (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) &phi_s0[1], (Vec3f *) &sp70) != 0)) {
                             Math_Vec3s_ToVec3f((Vec3f *) &sp58, (Vec3s *) temp_s1);
                             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp64);
                             CollisionCheck_SetATvsAC(globalCtx, colAT, phi_s0, (Vec3f *) &sp64, colAC, (ColliderInfo *) temp_s6, (Vec3f *) &sp58, (Vec3f *) &sp70);
                         }
                     }
-                    temp_s0_2 = phi_s0 + 0x5C;
-                    phi_s0 = temp_s0_2;
-                } while ((u32) temp_s0_2 < (u32) (colAT->unk_1C + (colAT->unk_18 * 0x5C)));
+                    temp_t2 = colAT[1].actor;
+                    temp_s0_2 = &phi_s0[2].bumper.effect;
+                    phi_s0 = (ColliderInfo *) temp_s0_2;
+                } while ((u32) temp_s0_2 < (u32) (colAT[1].at + ((((((s32) temp_t2 * 4) - temp_t2) * 8) - temp_t2) * 4)));
             }
         }
     }
@@ -3557,29 +3575,29 @@ void CollisionCheck_AC_QuadVsJntSph(GlobalContext *globalCtx, CollisionCheckCont
     ? sp80;
     ? sp6C;
     ? sp60;
+    Actor **temp_s1;
+    Actor *temp_s1_2;
+    Collider **temp_s1_3;
     Collider *temp_s7;
-    ColliderInfo *temp_s1_3;
-    Sphere16 *temp_s0_2;
-    Vec3f *temp_s0;
-    Vec3f *temp_s1;
-    u32 temp_s1_2;
+    ColliderBump *temp_s0_2;
+    u8 *temp_s0;
     ColliderInfo *phi_s1;
 
-    if (colAC->unk_18 > 0) {
-        temp_s7 = colAT + 0x18;
-        if ((colAC->unk_1C != 0) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s7) == 0)) {
-            temp_s0 = colAT + 0x58;
-            temp_s1 = colAT + 0x4C;
-            Math3D_TriSetCoords(&D_801EDEC8, temp_s0, colAT + 0x64, temp_s1);
-            Math3D_TriSetCoords(&D_801EDF00, temp_s0, temp_s1, colAT + 0x40);
-            temp_s1_2 = colAC->unk_1C;
+    if ((s32) colAC[1].actor > 0) {
+        temp_s7 = &colAT[1];
+        if ((colAC[1].at != 0) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s7) == 0)) {
+            temp_s0 = &colAT[3].atFlags;
+            temp_s1 = &colAT[3].at;
+            Math3D_TriSetCoords(&D_801EDEC8, (Vec3f *) temp_s0, (Vec3f *) &colAT[4].at, (Vec3f *) temp_s1);
+            Math3D_TriSetCoords(&D_801EDF00, (Vec3f *) temp_s0, (Vec3f *) temp_s1, (Vec3f *) &colAT[2].atFlags);
+            temp_s1_2 = colAC[1].at;
             phi_s1 = (ColliderInfo *) temp_s1_2;
-            if (temp_s1_2 < (u32) (temp_s1_2 + (colAC->unk_18 << 6))) {
+            if ((u32) temp_s1_2 < (u32) (temp_s1_2 + ((s32) colAC[1].actor << 6))) {
 loop_5:
-                if ((CollisionCheck_SkipBump(phi_s1) != 0) || (temp_s0_2 = phi_s1 + 0x30, (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s7, phi_s1) != 0)) || ((Math3D_ColSphereTri(temp_s0_2, &D_801EDEC8, (Vec3f *) &sp80) == 0) && (Math3D_ColSphereTri(temp_s0_2, &D_801EDF00, (Vec3f *) &sp80) == 0)) || (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, (Vec3f *) &sp80) == 0) || (Math_Vec3s_ToVec3f((Vec3f *) &sp60, (Vec3s *) temp_s0_2), CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp6C), CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) temp_s7, (Vec3f *) &sp6C, colAC, phi_s1, (Vec3f *) &sp60, (Vec3f *) &sp80), ((colAC->ocFlags2 & 0x40) != 0))) {
-                    temp_s1_3 = phi_s1 + 0x40;
-                    phi_s1 = temp_s1_3;
-                    if ((u32) temp_s1_3 < (u32) (colAC->unk_1C + (colAC->unk_18 << 6))) {
+                if ((CollisionCheck_SkipBump(phi_s1) != 0) || (temp_s0_2 = &phi_s1[1].bumper, (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s7, phi_s1) != 0)) || ((Math3D_ColSphereTri((Sphere16 *) temp_s0_2, &D_801EDEC8, (Vec3f *) &sp80) == 0) && (Math3D_ColSphereTri((Sphere16 *) temp_s0_2, &D_801EDF00, (Vec3f *) &sp80) == 0)) || (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, (Vec3f *) &sp80) == 0) || (Math_Vec3s_ToVec3f((Vec3f *) &sp60, (Vec3s *) temp_s0_2), CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp6C), CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) temp_s7, (Vec3f *) &sp6C, colAC, phi_s1, (Vec3f *) &sp60, (Vec3f *) &sp80), ((colAC->ocFlags2 & 0x40) != 0))) {
+                    temp_s1_3 = &phi_s1[1].atHit;
+                    phi_s1 = (ColliderInfo *) temp_s1_3;
+                    if ((u32) temp_s1_3 < (u32) (colAC[1].at + ((s32) colAC[1].actor << 6))) {
                         goto loop_5;
                     }
                 }
@@ -3595,32 +3613,32 @@ void CollisionCheck_AC_QuadVsCyl(GlobalContext *globalCtx, CollisionCheckContext
     ? sp40;
     Collider *sp3C;
     Collider *sp38;
-    Vec3f *sp34;
-    Vec3f *sp30;
+    u8 *sp34;
+    Actor **sp30;
+    Actor **temp_a3;
     Collider *temp_a0;
     Collider *temp_a0_2;
-    Vec3f *temp_a0_3;
-    Vec3f *temp_a1;
-    Vec3f *temp_a3;
+    u8 *temp_a0_3;
+    u8 *temp_a1;
 
-    if (((s32) colAC->unk_42 > 0) && (temp_a0 = colAC + 0x18, ((s32) colAC->unk_40 > 0)) && (sp38 = temp_a0, temp_a0_2 = colAT + 0x18, (CollisionCheck_SkipBump((ColliderInfo *) temp_a0) == 0)) && (sp3C = temp_a0_2, (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0_2) == 0)) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_a0_2, (ColliderInfo *) sp38) == 0)) {
-        temp_a1 = colAT + 0x58;
-        temp_a3 = colAT + 0x4C;
+    if (((s32) colAC->unk_42 > 0) && (temp_a0 = &colAC[1], ((s32) colAC->unk_40 > 0)) && (sp38 = temp_a0, temp_a0_2 = &colAT[1], (CollisionCheck_SkipBump((ColliderInfo *) temp_a0) == 0)) && (sp3C = temp_a0_2, (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0_2) == 0)) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_a0_2, (ColliderInfo *) sp38) == 0)) {
+        temp_a1 = &colAT[3].atFlags;
+        temp_a3 = &colAT[3].at;
         sp30 = temp_a3;
         sp34 = temp_a1;
-        Math3D_TriSetCoords(&D_801EDF58, temp_a1, colAT + 0x64, temp_a3);
-        Math3D_TriSetCoords(&D_801EDF90, temp_a1, sp30, colAT + 0x40);
-        temp_a0_3 = colAC + 0x40;
+        Math3D_TriSetCoords(&D_801EDF58, (Vec3f *) temp_a1, (Vec3f *) &colAT[4].at, (Vec3f *) temp_a3);
+        Math3D_TriSetCoords(&D_801EDF90, (Vec3f *) temp_a1, (Vec3f *) sp30, (Vec3f *) &colAT[2].atFlags);
+        temp_a0_3 = &colAC[2].atFlags;
         sp34 = temp_a0_3;
         if ((Math3D_ColCylinderTri((Cylinder16 *) temp_a0_3, &D_801EDF58, &D_801EDFE0) != 0) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, &D_801EDFE0) != 0)) {
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp64);
-            Math_Vec3s_ToVec3f((Vec3f *) &sp58, colAC + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp58, &colAC[2].unk_16);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp3C, (Vec3f *) &sp64, colAC, (ColliderInfo *) sp38, (Vec3f *) &sp58, &D_801EDFE0);
             return;
         }
         if ((Math3D_ColCylinderTri((Cylinder16 *) sp34, &D_801EDF90, &D_801EDFE0) != 0) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, &D_801EDFE0) != 0)) {
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp4C);
-            Math_Vec3s_ToVec3f((Vec3f *) &sp40, colAC + 0x46);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp40, &colAC[2].unk_16);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp3C, (Vec3f *) &sp4C, colAC, (ColliderInfo *) sp38, (Vec3f *) &sp40, &D_801EDFE0);
         }
         /* Duplicate return node #11. Try simplifying control flow for better match */
@@ -3630,25 +3648,25 @@ void CollisionCheck_AC_QuadVsCyl(GlobalContext *globalCtx, CollisionCheckContext
 void CollisionCheck_AC_QuadVsTris(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *colAT, Collider *colAC) {
     ? sp68;
     ? sp5C;
+    Actor **temp_s0;
+    Actor *temp_s1_2;
     Collider *temp_s6;
     ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s1_3;
-    Vec3f *temp_s0;
-    Vec3f *temp_s1;
-    u32 temp_s1_2;
+    u8 *temp_s1;
+    u8 *temp_s1_3;
     ColliderInfo *phi_s1;
 
-    if ((colAC->unk_18 > 0) && (temp_s6 = colAT + 0x18, (colAC->unk_1C != 0)) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s6) == 0) && (temp_s1 = colAT + 0x58, temp_s0 = colAT + 0x4C, Math3D_TriSetCoords(&D_801EE000, temp_s1, colAT + 0x64, temp_s0), Math3D_TriSetCoords(&D_801EE038, temp_s0, colAT + 0x40, temp_s1), temp_s1_2 = colAC->unk_1C, phi_s1 = (ColliderInfo *) temp_s1_2, ((temp_s1_2 < (u32) (temp_s1_2 + (colAC->unk_18 * 0x5C))) != 0))) {
+    if (((s32) colAC[1].actor > 0) && (temp_s6 = &colAT[1], (colAC[1].at != 0)) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s6) == 0) && (temp_s1 = &colAT[3].atFlags, temp_s0 = &colAT[3].at, Math3D_TriSetCoords(&D_801EE000, (Vec3f *) temp_s1, (Vec3f *) &colAT[4].at, (Vec3f *) temp_s0), Math3D_TriSetCoords(&D_801EE038, (Vec3f *) temp_s0, (Vec3f *) &colAT[2].atFlags, (Vec3f *) temp_s1), temp_s1_2 = colAC[1].at, phi_s1 = (ColliderInfo *) temp_s1_2, (((u32) temp_s1_2 < (u32) (temp_s1_2 + ((s32) colAC[1].actor * 0x5C))) != 0))) {
 loop_4:
-        if ((CollisionCheck_SkipBump(phi_s1) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s6, phi_s1) == 0) && ((temp_s0_2 = phi_s1 + 0x28, (Math3d_ColTriTri(&D_801EE000, (TriNorm *) temp_s0_2, &D_801EDFF0) != 0)) || (Math3d_ColTriTri(&D_801EE038, (TriNorm *) temp_s0_2, &D_801EDFF0) != 0)) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, &D_801EDFF0) != 0)) {
+        if ((CollisionCheck_SkipBump(phi_s1) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s6, phi_s1) == 0) && ((temp_s0_2 = &phi_s1[1], (Math3d_ColTriTri(&D_801EE000, (TriNorm *) temp_s0_2, &D_801EDFF0) != 0)) || (Math3d_ColTriTri(&D_801EE038, (TriNorm *) temp_s0_2, &D_801EDFF0) != 0)) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, &D_801EDFF0) != 0)) {
             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s1, (Vec3f *) &sp5C);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp68);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) temp_s6, (Vec3f *) &sp68, colAC, phi_s1, (Vec3f *) &sp5C, &D_801EDFF0);
             return;
         }
-        temp_s1_3 = phi_s1 + 0x5C;
-        phi_s1 = temp_s1_3;
-        if ((u32) temp_s1_3 >= (u32) (colAC->unk_1C + (colAC->unk_18 * 0x5C))) {
+        temp_s1_3 = &phi_s1[2].bumper.effect;
+        phi_s1 = (ColliderInfo *) temp_s1_3;
+        if ((u32) temp_s1_3 >= (u32) (colAC[1].at + ((s32) colAC[1].actor * 0x5C))) {
             /* Duplicate return node #11. Try simplifying control flow for better match */
             return;
         }
@@ -3661,29 +3679,29 @@ void CollisionCheck_AC_QuadVsQuad(GlobalContext *globalCtx, CollisionCheckContex
     ? sp58;
     Collider *sp54;
     Collider *sp48;
+    Actor **temp_s1;
+    Actor **temp_s1_2;
     Collider *temp_a0;
     Collider *temp_a0_2;
     TriNorm *temp_s0_3;
     TriNorm *temp_s2;
-    Vec3f *temp_s0;
-    Vec3f *temp_s0_2;
-    Vec3f *temp_s1;
-    Vec3f *temp_s1_2;
+    u8 *temp_s0;
+    u8 *temp_s0_2;
     TriNorm *phi_s0;
     TriNorm *phi_s2;
 
-    temp_a0 = colAT + 0x18;
+    temp_a0 = &colAT[1];
     sp54 = temp_a0;
-    temp_a0_2 = colAC + 0x18;
+    temp_a0_2 = &colAC[1];
     if ((CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) && (sp48 = temp_a0_2, (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0)) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp54, (ColliderInfo *) sp48) == 0)) {
-        temp_s0 = colAT + 0x58;
-        temp_s1 = colAT + 0x4C;
-        Math3D_TriSetCoords(D_801EE0E8, temp_s0, colAT + 0x64, temp_s1);
-        Math3D_TriSetCoords(&D_801EE11C, temp_s0, temp_s1, colAT + 0x40);
-        temp_s0_2 = colAC + 0x58;
-        temp_s1_2 = colAC + 0x4C;
-        Math3D_TriSetCoords(D_801EE070, temp_s0_2, colAC + 0x64, temp_s1_2);
-        Math3D_TriSetCoords(&D_801EE0A4, temp_s0_2, temp_s1_2, colAC + 0x40);
+        temp_s0 = &colAT[3].atFlags;
+        temp_s1 = &colAT[3].at;
+        Math3D_TriSetCoords(D_801EE0E8, (Vec3f *) temp_s0, (Vec3f *) &colAT[4].at, (Vec3f *) temp_s1);
+        Math3D_TriSetCoords(&D_801EE11C, (Vec3f *) temp_s0, (Vec3f *) temp_s1, (Vec3f *) &colAT[2].atFlags);
+        temp_s0_2 = &colAC[3].atFlags;
+        temp_s1_2 = &colAC[3].at;
+        Math3D_TriSetCoords(D_801EE070, (Vec3f *) temp_s0_2, (Vec3f *) &colAC[4].at, (Vec3f *) temp_s1_2);
+        Math3D_TriSetCoords(&D_801EE0A4, (Vec3f *) temp_s0_2, (Vec3f *) temp_s1_2, (Vec3f *) &colAC[2].atFlags);
         phi_s2 = D_801EE070;
 loop_4:
         phi_s0 = D_801EE0E8;
@@ -3694,10 +3712,10 @@ loop_5:
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp54, (Vec3f *) &sp64, colAC, (ColliderInfo *) sp48, (Vec3f *) &sp58, &D_801EE0D8);
             return;
         }
-        temp_s0_3 = phi_s0 + 0x34;
+        temp_s0_3 = &phi_s0[1];
         phi_s0 = temp_s0_3;
         if (temp_s0_3 == &D_801EE150) {
-            temp_s2 = phi_s2 + 0x34;
+            temp_s2 = &phi_s2[1];
             phi_s2 = temp_s2;
             if (temp_s2 == &D_801EE0D8) {
                 /* Duplicate return node #10. Try simplifying control flow for better match */
@@ -3715,20 +3733,20 @@ void CollisionCheck_AC_QuadVsSphere(GlobalContext *globalCtx, CollisionCheckCont
     ? sp44;
     Collider *sp40;
     Collider *sp3C;
-    Vec3f *sp38;
-    Vec3f *sp34;
+    u8 *sp38;
+    Actor **sp34;
+    Actor **temp_a3;
     Collider *temp_a0;
     Collider *temp_a0_2;
     Collider *temp_a0_3;
-    Vec3f *temp_a1;
-    Vec3f *temp_a3;
+    u8 *temp_a1;
 
-    temp_a0 = colAT + 0x18;
+    temp_a0 = &colAT[1];
     sp40 = temp_a0;
-    temp_a0_2 = colAC + 0x18;
+    temp_a0_2 = &colAC[1];
     if (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) {
         sp3C = temp_a0_2;
-        if ((CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp40, (ColliderInfo *) sp3C) == 0) && ((temp_a1 = colAT + 0x58, temp_a3 = colAT + 0x4C, sp34 = temp_a3, sp38 = temp_a1, Math3D_TriSetCoords(&D_801EE150, temp_a1, colAT + 0x64, temp_a3), Math3D_TriSetCoords(&D_801EE188, temp_a1, sp34, colAT + 0x40), temp_a0_3 = colAC + 0x48, sp38 = (Vec3f *) temp_a0_3, (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE150, (Vec3f *) &sp60) != 0)) || (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE188, (Vec3f *) &sp60) != 0)) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, (Vec3f *) &sp60) != 0)) {
+        if ((CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp40, (ColliderInfo *) sp3C) == 0) && ((temp_a1 = &colAT[3].atFlags, temp_a3 = &colAT[3].at, sp34 = temp_a3, sp38 = temp_a1, Math3D_TriSetCoords(&D_801EE150, (Vec3f *) temp_a1, (Vec3f *) &colAT[4].at, (Vec3f *) temp_a3), Math3D_TriSetCoords(&D_801EE188, (Vec3f *) temp_a1, (Vec3f *) sp34, (Vec3f *) &colAT[2].atFlags), temp_a0_3 = &colAC[3], sp38 = (u8 *) temp_a0_3, (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE150, (Vec3f *) &sp60) != 0)) || (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE188, (Vec3f *) &sp60) != 0)) && (Collider_QuadSetNearestAC(globalCtx, (ColliderQuad *) colAT, (Vec3f *) &sp60) != 0)) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp44, (Vec3s *) sp38);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAT, (Vec3f *) &sp50);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp40, (Vec3f *) &sp50, colAC, (ColliderInfo *) sp3C, (Vec3f *) &sp44, (Vec3f *) &sp60);
@@ -3744,30 +3762,30 @@ void CollisionCheck_AC_SphereVsJntSph(GlobalContext *globalCtx, CollisionCheckCo
     f32 sp7C;
     f32 sp70;
     f32 sp64;
+    Actor *temp_s2;
+    Collider **temp_s2_2;
     Collider *temp_s1;
     Collider *temp_s7;
-    ColliderInfo *temp_s2_2;
-    Sphere16 *temp_s0;
+    ColliderBump *temp_s0;
     f32 temp_f0;
-    u32 temp_s2;
     ColliderInfo *phi_s2;
 
-    if (colAC->unk_18 > 0) {
-        temp_s7 = colAT + 0x18;
-        if ((colAC->unk_1C != 0) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s7) == 0)) {
-            temp_s2 = colAC->unk_1C;
+    if ((s32) colAC[1].actor > 0) {
+        temp_s7 = &colAT[1];
+        if ((colAC[1].at != 0) && (CollisionCheck_SkipTouch((ColliderInfo *) temp_s7) == 0)) {
+            temp_s2 = colAC[1].at;
             phi_s2 = (ColliderInfo *) temp_s2;
-            if (temp_s2 < (u32) (temp_s2 + (colAC->unk_18 << 6))) {
+            if ((u32) temp_s2 < (u32) (temp_s2 + ((s32) colAC[1].actor << 6))) {
                 do {
                     if (CollisionCheck_SkipBump(phi_s2) == 0) {
-                        temp_s1 = colAT + 0x48;
+                        temp_s1 = &colAT[3];
                         if (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s7, phi_s2) == 0) {
-                            temp_s0 = phi_s2 + 0x30;
-                            if (Math3D_ColSphereSphereIntersectAndDistance((Sphere16 *) temp_s1, temp_s0, &sp90, &sp8C) != 0) {
+                            temp_s0 = &phi_s2[1].bumper;
+                            if (Math3D_ColSphereSphereIntersectAndDistance((Sphere16 *) temp_s1, (Sphere16 *) temp_s0, &sp90, &sp8C) != 0) {
                                 Math_Vec3s_ToVec3f((Vec3f *) &sp70, (Vec3s *) temp_s1);
                                 Math_Vec3s_ToVec3f((Vec3f *) &sp64, (Vec3s *) temp_s0);
                                 if (!(fabsf(sp8C) < 0.008f)) {
-                                    temp_f0 = (f32) phi_s2->unk_36 / sp8C;
+                                    temp_f0 = (f32) phi_s2[1].bumper.hitPos.x / sp8C;
                                     sp7C = ((sp70 - sp64) * temp_f0) + sp64;
                                     sp80 = ((sp74 - sp68) * temp_f0) + sp68;
                                     sp84 = ((sp78 - sp6C) * temp_f0) + sp6C;
@@ -3778,9 +3796,9 @@ void CollisionCheck_AC_SphereVsJntSph(GlobalContext *globalCtx, CollisionCheckCo
                             }
                         }
                     }
-                    temp_s2_2 = phi_s2 + 0x40;
-                    phi_s2 = temp_s2_2;
-                } while ((u32) temp_s2_2 < (u32) (colAC->unk_1C + (colAC->unk_18 << 6)));
+                    temp_s2_2 = &phi_s2[1].atHit;
+                    phi_s2 = (ColliderInfo *) temp_s2_2;
+                } while ((u32) temp_s2_2 < (u32) (colAC[1].at + ((s32) colAC[1].actor << 6)));
             }
         }
     }
@@ -3802,18 +3820,18 @@ void CollisionCheck_AC_SphereVsCylinder(GlobalContext *globalCtx, CollisionCheck
     Collider *temp_a0_3;
     f32 temp_f0;
 
-    temp_a0 = colAT + 0x18;
+    temp_a0 = &colAT[1];
     sp3C = temp_a0;
-    temp_a0_2 = colAC + 0x18;
+    temp_a0_2 = &colAC[1];
     if (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) {
         sp38 = temp_a0_2;
         if (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) {
-            temp_a0_3 = colAT + 0x48;
+            temp_a0_3 = &colAT[3];
             if (CollisionCheck_NoSharedFlags((ColliderInfo *) sp3C, (ColliderInfo *) sp38) == 0) {
                 sp34 = temp_a0_3;
-                if (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_a0_3, colAC + 0x40, &sp6C, &sp68) != 0) {
+                if (Math3D_ColSphereCylinderDistanceAndAmount((Sphere16 *) temp_a0_3, (Cylinder16 *) &colAC[2].atFlags, &sp6C, &sp68) != 0) {
                     Math_Vec3s_ToVec3f((Vec3f *) &sp50, (Vec3s *) sp34);
-                    Math_Vec3s_ToVec3f((Vec3f *) &sp44, colAC + 0x46);
+                    Math_Vec3s_ToVec3f((Vec3f *) &sp44, &colAC[2].unk_16);
                     if (!(fabsf(sp68) < 0.008f)) {
                         temp_f0 = (f32) colAC->unk_40 / sp68;
                         if (temp_f0 <= 1.0f) {
@@ -3837,24 +3855,24 @@ void CollisionCheck_AC_SphereVsTris(GlobalContext *globalCtx, CollisionCheckCont
     ? sp68;
     ? sp5C;
     ? sp50;
+    Actor *temp_s0;
     Collider *temp_s1;
     Collider *temp_s5;
-    ColliderInfo *temp_s0_2;
-    u32 temp_s0;
+    u8 *temp_s0_2;
     ColliderInfo *phi_s0;
 
-    temp_s5 = colAT + 0x18;
-    if ((CollisionCheck_SkipTouch((ColliderInfo *) temp_s5) == 0) && (temp_s0 = colAC->unk_1C, phi_s0 = (ColliderInfo *) temp_s0, ((temp_s0 < (u32) (temp_s0 + (colAC->unk_18 * 0x5C))) != 0))) {
+    temp_s5 = &colAT[1];
+    if ((CollisionCheck_SkipTouch((ColliderInfo *) temp_s5) == 0) && (temp_s0 = colAC[1].at, phi_s0 = (ColliderInfo *) temp_s0, (((u32) temp_s0 < (u32) (temp_s0 + ((s32) colAC[1].actor * 0x5C))) != 0))) {
 loop_2:
-        if ((CollisionCheck_SkipBump(phi_s0) == 0) && (temp_s1 = colAT + 0x48, (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s5, phi_s0) == 0)) && (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) (phi_s0 + 0x28), (Vec3f *) &sp68) != 0)) {
+        if ((CollisionCheck_SkipBump(phi_s0) == 0) && (temp_s1 = &colAT[3], (CollisionCheck_NoSharedFlags((ColliderInfo *) temp_s5, phi_s0) == 0)) && (Math3D_ColSphereTri((Sphere16 *) temp_s1, (TriNorm *) &phi_s0[1], (Vec3f *) &sp68) != 0)) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp5C, (Vec3s *) temp_s1);
             CollisionCheck_TrisAvgPoint((ColliderTrisElement *) phi_s0, (Vec3f *) &sp50);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) temp_s5, (Vec3f *) &sp5C, colAC, phi_s0, (Vec3f *) &sp50, (Vec3f *) &sp68);
             return;
         }
-        temp_s0_2 = phi_s0 + 0x5C;
-        phi_s0 = temp_s0_2;
-        if ((u32) temp_s0_2 >= (u32) (colAC->unk_1C + (colAC->unk_18 * 0x5C))) {
+        temp_s0_2 = &phi_s0[2].bumper.effect;
+        phi_s0 = (ColliderInfo *) temp_s0_2;
+        if ((u32) temp_s0_2 >= (u32) (colAC[1].at + ((s32) colAC[1].actor * 0x5C))) {
             /* Duplicate return node #7. Try simplifying control flow for better match */
             return;
         }
@@ -3868,20 +3886,20 @@ void CollisionCheck_AC_SphereVsQuad(GlobalContext *globalCtx, CollisionCheckCont
     ? sp44;
     Collider *sp40;
     Collider *sp3C;
-    Vec3f *sp38;
-    Vec3f *sp34;
+    Actor **sp38;
+    u8 *sp34;
+    Actor **temp_a3;
     Collider *temp_a0;
     Collider *temp_a0_2;
     Collider *temp_a0_3;
-    Vec3f *temp_a1;
-    Vec3f *temp_a3;
+    u8 *temp_a1;
 
-    temp_a0 = colAT + 0x18;
+    temp_a0 = &colAT[1];
     sp40 = temp_a0;
-    temp_a0_2 = colAC + 0x18;
+    temp_a0_2 = &colAC[1];
     if (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) {
         sp3C = temp_a0_2;
-        if ((CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp40, (ColliderInfo *) sp3C) == 0) && ((temp_a1 = colAC + 0x58, temp_a3 = colAC + 0x4C, sp38 = temp_a3, sp34 = temp_a1, Math3D_TriSetCoords(&D_801EE6C8, temp_a1, colAC + 0x64, temp_a3), Math3D_TriSetCoords(&D_801EE700, sp38, colAC + 0x40, sp34), temp_a0_3 = colAT + 0x48, sp38 = (Vec3f *) temp_a0_3, (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE6C8, (Vec3f *) &sp60) != 0)) || (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE700, (Vec3f *) &sp60) != 0))) {
+        if ((CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) && (CollisionCheck_NoSharedFlags((ColliderInfo *) sp40, (ColliderInfo *) sp3C) == 0) && ((temp_a1 = &colAC[3].atFlags, temp_a3 = &colAC[3].at, sp38 = temp_a3, sp34 = temp_a1, Math3D_TriSetCoords(&D_801EE6C8, (Vec3f *) temp_a1, (Vec3f *) &colAC[4].at, (Vec3f *) temp_a3), Math3D_TriSetCoords(&D_801EE700, (Vec3f *) sp38, (Vec3f *) &colAC[2].atFlags, (Vec3f *) sp34), temp_a0_3 = &colAT[3], sp38 = (Actor **) temp_a0_3, (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE6C8, (Vec3f *) &sp60) != 0)) || (Math3D_ColSphereTri((Sphere16 *) temp_a0_3, &D_801EE700, (Vec3f *) &sp60) != 0))) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp50, (Vec3s *) sp38);
             CollisionCheck_QuadAvgPoint((ColliderQuad *) colAC, (Vec3f *) &sp44);
             CollisionCheck_SetATvsAC(globalCtx, colAT, (ColliderInfo *) sp40, (Vec3f *) &sp50, colAC, (ColliderInfo *) sp3C, (Vec3f *) &sp44, (Vec3f *) &sp60);
@@ -3907,15 +3925,15 @@ void CollisionCheck_AC_SphereVsSphere(GlobalContext *globalCtx, CollisionCheckCo
     Collider *temp_a1;
     f32 temp_f0;
 
-    temp_a0 = colAT + 0x18;
+    temp_a0 = &colAT[1];
     sp3C = temp_a0;
-    temp_a0_2 = colAC + 0x18;
+    temp_a0_2 = &colAC[1];
     if (CollisionCheck_SkipTouch((ColliderInfo *) temp_a0) == 0) {
         sp38 = temp_a0_2;
         if (CollisionCheck_SkipBump((ColliderInfo *) temp_a0_2) == 0) {
-            temp_a0_3 = colAT + 0x48;
+            temp_a0_3 = &colAT[3];
             if (CollisionCheck_NoSharedFlags((ColliderInfo *) sp3C, (ColliderInfo *) sp38) == 0) {
-                temp_a1 = colAC + 0x48;
+                temp_a1 = &colAC[3];
                 sp34 = temp_a1;
                 sp30 = temp_a0_3;
                 if (Math3D_ColSphereSphereIntersectAndDistance((Sphere16 *) temp_a0_3, (Sphere16 *) temp_a1, &sp6C, &sp68) != 0) {
@@ -3939,15 +3957,15 @@ void CollisionCheck_AC_SphereVsSphere(GlobalContext *globalCtx, CollisionCheckCo
 void CollisionCheck_SetJntSphHitFX(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
     ColliderInfo *sp30;
     ? sp24;
-    ColliderInfo *temp_v0_2;
+    Actor *temp_v0;
+    Collider **temp_v0_2;
     ColliderInfo *temp_v1;
     ColliderInfo *temp_v1_2;
-    u32 temp_v0;
     ColliderInfo *phi_v0;
 
-    temp_v0 = collider->unk_1C;
+    temp_v0 = collider[1].at;
     phi_v0 = (ColliderInfo *) temp_v0;
-    if (temp_v0 < (u32) (temp_v0 + (collider->unk_18 << 6))) {
+    if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) collider[1].actor << 6))) {
 loop_1:
         if (((phi_v0->bumperFlags & 0x80) != 0) && (temp_v1 = phi_v0->acHitInfo, (temp_v1 != 0)) && ((temp_v1->toucherFlags & 0x40) == 0)) {
             sp30 = phi_v0;
@@ -3958,9 +3976,9 @@ loop_1:
             temp_v1_2->toucherFlags |= 0x40;
             return;
         }
-        temp_v0_2 = phi_v0 + 0x40;
-        phi_v0 = temp_v0_2;
-        if ((u32) temp_v0_2 >= (u32) (collider->unk_1C + (collider->unk_18 << 6))) {
+        temp_v0_2 = &phi_v0[1].atHit;
+        phi_v0 = (ColliderInfo *) temp_v0_2;
+        if ((u32) temp_v0_2 >= (u32) (collider[1].at + ((s32) collider[1].actor << 6))) {
             /* Duplicate return node #6. Try simplifying control flow for better match */
             return;
         }
@@ -3970,20 +3988,20 @@ loop_1:
 
 void CollisionCheck_SetCylHitFX(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
     ? sp28;
-    ColliderInfo *temp_v0;
-    ColliderInfo *temp_v0_2;
+    Actor *temp_v0;
+    Actor *temp_v0_2;
     Vec3s *temp_a1;
 
     if ((collider->unk_2E & 0x80) != 0) {
-        temp_v0 = collider->unk_3C;
+        temp_v0 = collider[2].oc;
         if (temp_v0 != 0) {
             temp_a1 = collider + 0x26;
-            if ((temp_v0->toucherFlags & 0x40) == 0) {
+            if ((temp_v0->unk_15 & 0x40) == 0) {
                 collider = collider;
                 Math_Vec3s_ToVec3f((Vec3f *) &sp28, temp_a1);
-                CollisionCheck_HitEffects(globalCtx, collider->unk_34, collider->unk_3C, collider, (ColliderInfo *) (collider + 0x18), (Vec3f *) &sp28);
-                temp_v0_2 = collider->unk_3C;
-                temp_v0_2->toucherFlags |= 0x40;
+                CollisionCheck_HitEffects(globalCtx, (Collider *) collider[2].at, (ColliderInfo *) collider[2].oc, collider, (ColliderInfo *) &collider[1], (Vec3f *) &sp28);
+                temp_v0_2 = collider[2].oc;
+                temp_v0_2->unk_15 = (u8) (temp_v0_2->unk_15 | 0x40);
             }
         }
     }
@@ -3992,15 +4010,15 @@ void CollisionCheck_SetCylHitFX(GlobalContext *globalCtx, CollisionCheckContext 
 void CollisionCheck_SetTrisHitFX(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
     ColliderInfo *sp30;
     ? sp24;
-    ColliderInfo *temp_v0_2;
+    Actor *temp_v0;
     ColliderInfo *temp_v1;
     ColliderInfo *temp_v1_2;
-    u32 temp_v0;
+    u8 *temp_v0_2;
     ColliderInfo *phi_v0;
 
-    temp_v0 = collider->unk_1C;
+    temp_v0 = collider[1].at;
     phi_v0 = (ColliderInfo *) temp_v0;
-    if (temp_v0 < (u32) (temp_v0 + (collider->unk_18 * 0x5C))) {
+    if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) collider[1].actor * 0x5C))) {
 loop_1:
         if (((phi_v0->bumperFlags & 0x80) != 0) && (temp_v1 = phi_v0->acHitInfo, (temp_v1 != 0)) && ((temp_v1->toucherFlags & 0x40) == 0)) {
             sp30 = phi_v0;
@@ -4010,9 +4028,9 @@ loop_1:
             temp_v1_2->toucherFlags |= 0x40;
             return;
         }
-        temp_v0_2 = phi_v0 + 0x5C;
-        phi_v0 = temp_v0_2;
-        if ((u32) temp_v0_2 >= (u32) (collider->unk_1C + (collider->unk_18 * 0x5C))) {
+        temp_v0_2 = &phi_v0[2].bumper.effect;
+        phi_v0 = (ColliderInfo *) temp_v0_2;
+        if ((u32) temp_v0_2 >= (u32) (collider[1].at + ((s32) collider[1].actor * 0x5C))) {
             /* Duplicate return node #6. Try simplifying control flow for better match */
             return;
         }
@@ -4022,20 +4040,20 @@ loop_1:
 
 void CollisionCheck_SetQuadHitFX(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
     ? sp28;
-    ColliderInfo *temp_v0;
-    ColliderInfo *temp_v0_2;
+    Actor *temp_v0;
+    Actor *temp_v0_2;
     Vec3s *temp_a1;
 
     if ((collider->unk_2E & 0x80) != 0) {
-        temp_v0 = collider->unk_3C;
+        temp_v0 = collider[2].oc;
         if (temp_v0 != 0) {
             temp_a1 = collider + 0x26;
-            if ((temp_v0->toucherFlags & 0x40) == 0) {
+            if ((temp_v0->unk_15 & 0x40) == 0) {
                 collider = collider;
                 Math_Vec3s_ToVec3f((Vec3f *) &sp28, temp_a1);
-                CollisionCheck_HitEffects(globalCtx, collider->unk_34, collider->unk_3C, collider, (ColliderInfo *) (collider + 0x18), (Vec3f *) &sp28);
-                temp_v0_2 = collider->unk_3C;
-                temp_v0_2->toucherFlags |= 0x40;
+                CollisionCheck_HitEffects(globalCtx, (Collider *) collider[2].at, (ColliderInfo *) collider[2].oc, collider, (ColliderInfo *) &collider[1], (Vec3f *) &sp28);
+                temp_v0_2 = collider[2].oc;
+                temp_v0_2->unk_15 = (u8) (temp_v0_2->unk_15 | 0x40);
             }
         }
     }
@@ -4043,20 +4061,20 @@ void CollisionCheck_SetQuadHitFX(GlobalContext *globalCtx, CollisionCheckContext
 
 void CollisionCheck_SetSphereHitFX(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
     ? sp28;
-    ColliderInfo *temp_v0;
-    ColliderInfo *temp_v0_2;
+    Actor *temp_v0;
+    Actor *temp_v0_2;
     Vec3s *temp_a1;
 
     if ((collider->unk_2E & 0x80) != 0) {
-        temp_v0 = collider->unk_3C;
+        temp_v0 = collider[2].oc;
         if (temp_v0 != 0) {
             temp_a1 = collider + 0x26;
-            if ((temp_v0->toucherFlags & 0x40) == 0) {
+            if ((temp_v0->unk_15 & 0x40) == 0) {
                 collider = collider;
                 Math_Vec3s_ToVec3f((Vec3f *) &sp28, temp_a1);
-                CollisionCheck_HitEffects(globalCtx, collider->unk_34, collider->unk_3C, collider, (ColliderInfo *) (collider + 0x18), (Vec3f *) &sp28);
-                temp_v0_2 = collider->unk_3C;
-                temp_v0_2->toucherFlags |= 0x40;
+                CollisionCheck_HitEffects(globalCtx, (Collider *) collider[2].at, (ColliderInfo *) collider[2].oc, collider, (ColliderInfo *) &collider[1], (Vec3f *) &sp28);
+                temp_v0_2 = collider[2].oc;
+                temp_v0_2->unk_15 = (u8) (temp_v0_2->unk_15 | 0x40);
             }
         }
     }
@@ -4298,53 +4316,53 @@ void CollisionCheck_OC_JntSphVsJntSph(GlobalContext *globalCtx, CollisionCheckCo
     f32 sp74;
     ? sp68;
     ? sp5C;
-    ColliderInfo *temp_s0_2;
-    ColliderInfo *temp_s4;
+    Actor *temp_s0;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s0_2;
+    Collider **temp_s4;
     Sphere16 *temp_s1;
     Sphere16 *temp_s2;
-    s32 temp_v1;
-    u32 temp_s0;
-    u32 temp_v0;
     ColliderInfo *phi_s4;
     ColliderInfo *phi_s0;
     u32 phi_v0;
     u32 phi_v0_2;
 
     sp84 = l;
-    temp_v1 = l->unk_18;
-    if (temp_v1 > 0) {
-        temp_v0 = l->unk_1C;
-        if ((temp_v0 != 0) && (r->unk_18 > 0) && (r->unk_1C != 0) && ((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0)) {
+    temp_v1 = l[1].actor;
+    if ((s32) temp_v1 > 0) {
+        temp_v0 = l[1].at;
+        if ((temp_v0 != 0) && ((s32) r[1].actor > 0) && (r[1].at != 0) && ((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0)) {
             phi_s4 = (ColliderInfo *) temp_v0;
-            if (temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) {
+            if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) {
                 do {
                     if ((phi_s4->ocElemFlags & 1) == 0) {
-                        phi_v0_2 = sp84->unk_1C + (sp84->unk_18 << 6);
+                        phi_v0_2 = (u32) (sp84[1].at + ((s32) sp84[1].actor << 6));
                     } else {
-                        temp_s0 = r->unk_1C;
+                        temp_s0 = r[1].at;
                         phi_s0 = (ColliderInfo *) temp_s0;
-                        if (temp_s0 < (u32) (temp_s0 + (r->unk_18 << 6))) {
+                        if ((u32) temp_s0 < (u32) (temp_s0 + ((s32) r[1].actor << 6))) {
                             do {
                                 temp_s1 = phi_s4 + 0x30;
                                 temp_s2 = phi_s0 + 0x30;
                                 if ((phi_s0->ocElemFlags & 1) == 0) {
-                                    phi_v0 = r->unk_1C + (r->unk_18 << 6);
+                                    phi_v0 = (u32) (r[1].at + ((s32) r[1].actor << 6));
                                 } else {
                                     if (Math3D_ColSphereSphereIntersect(temp_s1, temp_s2, &sp74) != 0) {
                                         Math_Vec3s_ToVec3f((Vec3f *) &sp68, (Vec3s *) temp_s1);
                                         Math_Vec3s_ToVec3f((Vec3f *) &sp5C, (Vec3s *) temp_s2);
                                         CollisionCheck_SetOCvsOC(globalCtx, l, phi_s4, (Vec3f *) &sp68, r, phi_s0, (Vec3f *) &sp5C, sp74);
                                     }
-                                    phi_v0 = r->unk_1C + (r->unk_18 << 6);
+                                    phi_v0 = (u32) (r[1].at + ((s32) r[1].actor << 6));
                                 }
-                                temp_s0_2 = phi_s0 + 0x40;
-                                phi_s0 = temp_s0_2;
+                                temp_s0_2 = &phi_s0[1].atHit;
+                                phi_s0 = (ColliderInfo *) temp_s0_2;
                             } while ((u32) temp_s0_2 < phi_v0);
                         }
-                        phi_v0_2 = sp84->unk_1C + (sp84->unk_18 << 6);
+                        phi_v0_2 = (u32) (sp84[1].at + ((s32) sp84[1].actor << 6));
                     }
-                    temp_s4 = phi_s4 + 0x40;
-                    phi_s4 = temp_s4;
+                    temp_s4 = &phi_s4[1].atHit;
+                    phi_s4 = (ColliderInfo *) temp_s4;
                 } while ((u32) temp_s4 < phi_v0_2);
             }
         }
@@ -4355,33 +4373,37 @@ void CollisionCheck_OC_JntSphVsCyl(GlobalContext *globalCtx, CollisionCheckConte
     f32 sp78;
     ? sp6C;
     ? sp60;
-    ColliderInfo *temp_s0;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s0;
+    Collider *temp_s3;
     Sphere16 *temp_s1;
-    s32 temp_v1;
-    u32 temp_v0;
+    Vec3s *temp_s4;
     ColliderInfo *phi_s0;
     u32 phi_v0;
 
-    temp_v1 = l->unk_18;
-    if (temp_v1 > 0) {
-        temp_v0 = l->unk_1C;
+    temp_v1 = l[1].actor;
+    if ((s32) temp_v1 > 0) {
+        temp_v0 = l[1].at;
         if ((temp_v0 != 0) && ((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0) && ((r->unk_2F & 1) != 0)) {
             phi_s0 = (ColliderInfo *) temp_v0;
-            if (temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) {
+            if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) {
                 do {
                     temp_s1 = phi_s0 + 0x30;
                     if ((phi_s0->ocElemFlags & 1) == 0) {
-                        phi_v0 = l->unk_1C + (l->unk_18 << 6);
+                        phi_v0 = (u32) (l[1].at + ((s32) l[1].actor << 6));
                     } else {
-                        if (Math3D_ColSphereCylinderDistance(temp_s1, r + 0x40, &sp78) != 0) {
+                        if (Math3D_ColSphereCylinderDistance(temp_s1, (Cylinder16 *) &r[2].atFlags, &sp78) != 0) {
+                            temp_s3 = &r[1];
+                            temp_s4 = &r[2].unk_16;
                             Math_Vec3s_ToVec3f((Vec3f *) &sp6C, (Vec3s *) temp_s1);
-                            Math_Vec3s_ToVec3f((Vec3f *) &sp60, r + 0x46);
-                            CollisionCheck_SetOCvsOC(globalCtx, l, phi_s0, (Vec3f *) &sp6C, r, (ColliderInfo *) (r + 0x18), (Vec3f *) &sp60, sp78);
+                            Math_Vec3s_ToVec3f((Vec3f *) &sp60, temp_s4);
+                            CollisionCheck_SetOCvsOC(globalCtx, l, phi_s0, (Vec3f *) &sp6C, r, (ColliderInfo *) temp_s3, (Vec3f *) &sp60, sp78);
                         }
-                        phi_v0 = l->unk_1C + (l->unk_18 << 6);
+                        phi_v0 = (u32) (l[1].at + ((s32) l[1].actor << 6));
                     }
-                    temp_s0 = phi_s0 + 0x40;
-                    phi_s0 = temp_s0;
+                    temp_s0 = &phi_s0[1].atHit;
+                    phi_s0 = (ColliderInfo *) temp_s0;
                 } while ((u32) temp_s0 < phi_v0);
             }
         }
@@ -4392,35 +4414,37 @@ void CollisionCheck_OC_JntSphVsSphere(GlobalContext *globalCtx, CollisionCheckCo
     f32 sp78;
     ? sp6C;
     ? sp60;
+    Actor *temp_v0;
+    Actor *temp_v1;
+    Collider **temp_s0;
     Collider *temp_s2;
-    ColliderInfo *temp_s0;
+    Collider *temp_s4;
     Sphere16 *temp_s1;
-    s32 temp_v1;
-    u32 temp_v0;
     ColliderInfo *phi_s0;
     u32 phi_v0;
 
-    temp_v1 = l->unk_18;
-    if (temp_v1 > 0) {
-        temp_v0 = l->unk_1C;
+    temp_v1 = l[1].actor;
+    if ((s32) temp_v1 > 0) {
+        temp_v0 = l[1].at;
         if ((temp_v0 != 0) && ((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0) && ((r->unk_2F & 1) != 0)) {
             phi_s0 = (ColliderInfo *) temp_v0;
-            if (temp_v0 < (u32) (temp_v0 + (temp_v1 << 6))) {
+            if ((u32) temp_v0 < (u32) (temp_v0 + ((s32) temp_v1 << 6))) {
                 do {
                     temp_s1 = phi_s0 + 0x30;
-                    temp_s2 = r + 0x48;
+                    temp_s2 = &r[3];
                     if ((phi_s0->ocElemFlags & 1) == 0) {
-                        phi_v0 = l->unk_1C + (l->unk_18 << 6);
+                        phi_v0 = (u32) (l[1].at + ((s32) l[1].actor << 6));
                     } else {
                         if (Math3D_ColSphereSphereIntersect(temp_s1, (Sphere16 *) temp_s2, &sp78) != 0) {
+                            temp_s4 = &r[1];
                             Math_Vec3s_ToVec3f((Vec3f *) &sp6C, (Vec3s *) temp_s1);
                             Math_Vec3s_ToVec3f((Vec3f *) &sp60, (Vec3s *) temp_s2);
-                            CollisionCheck_SetOCvsOC(globalCtx, l, phi_s0, (Vec3f *) &sp6C, r, (ColliderInfo *) (r + 0x18), (Vec3f *) &sp60, sp78);
+                            CollisionCheck_SetOCvsOC(globalCtx, l, phi_s0, (Vec3f *) &sp6C, r, (ColliderInfo *) temp_s4, (Vec3f *) &sp60, sp78);
                         }
-                        phi_v0 = l->unk_1C + (l->unk_18 << 6);
+                        phi_v0 = (u32) (l[1].at + ((s32) l[1].actor << 6));
                     }
-                    temp_s0 = phi_s0 + 0x40;
-                    phi_s0 = temp_s0;
+                    temp_s0 = &phi_s0[1].atHit;
+                    phi_s0 = (ColliderInfo *) temp_s0;
                 } while ((u32) temp_s0 < phi_v0);
             }
         }
@@ -4436,10 +4460,10 @@ void CollisionCheck_OC_CylVsCyl(GlobalContext *globalCtx, CollisionCheckContext 
     ? sp40;
     ? sp34;
 
-    if (((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0) && ((l->unk_2F & 1) != 0) && ((r->unk_2F & 1) != 0) && (Math3D_ColCylinderCylinderAmount(l + 0x40, r + 0x40, &sp4C) != 0)) {
-        Math_Vec3s_ToVec3f((Vec3f *) &sp40, l + 0x46);
-        Math_Vec3s_ToVec3f((Vec3f *) &sp34, r + 0x46);
-        CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) (l + 0x18), (Vec3f *) &sp40, r, (ColliderInfo *) (r + 0x18), (Vec3f *) &sp34, sp4C);
+    if (((l->ocFlags1 & 1) != 0) && ((r->ocFlags1 & 1) != 0) && ((l->unk_2F & 1) != 0) && ((r->unk_2F & 1) != 0) && (Math3D_ColCylinderCylinderAmount((Cylinder16 *) &l[2].atFlags, (Cylinder16 *) &r[2].atFlags, &sp4C) != 0)) {
+        Math_Vec3s_ToVec3f((Vec3f *) &sp40, &l[2].unk_16);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp34, &r[2].unk_16);
+        CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) &l[1], (Vec3f *) &sp40, r, (ColliderInfo *) &r[1], (Vec3f *) &sp34, sp4C);
     }
 }
 
@@ -4451,13 +4475,13 @@ void CollisionCheck_OC_CylVsSphere(GlobalContext *globalCtx, CollisionCheckConte
     Collider *temp_a0;
 
     if (((l->ocFlags1 & 1) != 0) && ((l->unk_2F & 1) != 0) && ((r->ocFlags1 & 1) != 0)) {
-        temp_a0 = r + 0x48;
+        temp_a0 = &r[3];
         if ((r->unk_2F & 1) != 0) {
             sp30 = temp_a0;
-            if (Math3D_ColSphereCylinderDistance((Sphere16 *) temp_a0, l + 0x40, &sp4C) != 0) {
-                Math_Vec3s_ToVec3f((Vec3f *) &sp40, l + 0x46);
+            if (Math3D_ColSphereCylinderDistance((Sphere16 *) temp_a0, (Cylinder16 *) &l[2].atFlags, &sp4C) != 0) {
+                Math_Vec3s_ToVec3f((Vec3f *) &sp40, &l[2].unk_16);
                 Math_Vec3s_ToVec3f((Vec3f *) &sp34, (Vec3s *) sp30);
-                CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) (l + 0x18), (Vec3f *) &sp40, r, (ColliderInfo *) (r + 0x18), (Vec3f *) &sp34, sp4C);
+                CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) &l[1], (Vec3f *) &sp40, r, (ColliderInfo *) &r[1], (Vec3f *) &sp34, sp4C);
             }
         }
     }
@@ -4481,15 +4505,15 @@ void CollisionCheck_OC_SphereVsSphere(GlobalContext *globalCtx, CollisionCheckCo
     Collider *temp_a3;
 
     if (((l->ocFlags1 & 1) != 0) && ((l->unk_2F & 1) != 0) && ((r->ocFlags1 & 1) != 0)) {
-        temp_a3 = l + 0x48;
-        temp_a1 = r + 0x48;
+        temp_a3 = &l[3];
+        temp_a1 = &r[3];
         if ((r->unk_2F & 1) != 0) {
             sp38 = temp_a1;
             sp34 = temp_a3;
             if (Math3D_ColSphereSphereIntersect((Sphere16 *) temp_a3, (Sphere16 *) temp_a1, &sp54) != 0) {
                 Math_Vec3s_ToVec3f((Vec3f *) &sp48, (Vec3s *) temp_a3);
                 Math_Vec3s_ToVec3f((Vec3f *) &sp3C, (Vec3s *) sp38);
-                CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) (l + 0x18), (Vec3f *) &sp48, r, (ColliderInfo *) (r + 0x18), (Vec3f *) &sp3C, sp54);
+                CollisionCheck_SetOCvsOC(globalCtx, l, (ColliderInfo *) &l[1], (Vec3f *) &sp48, r, (ColliderInfo *) &r[1], (Vec3f *) &sp3C, sp54);
             }
         }
     }
@@ -4693,28 +4717,28 @@ block_14:
 }
 
 void CollisionCheck_ApplyDamageJntSph(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
+    Actor *temp_v0;
     s32 temp_s0;
-    s32 temp_v0;
     s32 phi_s1;
     s32 phi_s0;
 
-    temp_v0 = collider->unk_18;
-    if ((temp_v0 > 0) && (collider->unk_1C != 0)) {
+    temp_v0 = collider[1].actor;
+    if (((s32) temp_v0 > 0) && (collider[1].at != 0)) {
         phi_s0 = 0;
-        if (temp_v0 > 0) {
+        if ((s32) temp_v0 > 0) {
             phi_s1 = 0;
             do {
-                CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, collider->unk_1C + phi_s1);
+                CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, collider[1].at + phi_s1);
                 temp_s0 = phi_s0 + 1;
                 phi_s1 += 0x40;
                 phi_s0 = temp_s0;
-            } while (temp_s0 < collider->unk_18);
+            } while (temp_s0 < (s32) collider[1].actor);
         }
     }
 }
 
 void CollisionCheck_ApplyDamageCyl(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
-    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) (collider + 0x18));
+    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) &collider[1]);
 }
 
 void CollisionCheck_ApplyDamageTris(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
@@ -4724,22 +4748,22 @@ void CollisionCheck_ApplyDamageTris(GlobalContext *globalCtx, CollisionCheckCont
 
     phi_s1 = 0;
     phi_s0 = 0;
-    if (collider->unk_18 > 0) {
+    if ((s32) collider[1].actor > 0) {
         do {
-            CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, collider->unk_1C + phi_s1);
+            CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, collider[1].at + phi_s1);
             temp_s0 = phi_s0 + 1;
             phi_s1 += 0x5C;
             phi_s0 = temp_s0;
-        } while (temp_s0 < collider->unk_18);
+        } while (temp_s0 < (s32) collider[1].actor);
     }
 }
 
 void CollisionCheck_ApplyDamageQuad(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
-    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) (collider + 0x18));
+    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) &collider[1]);
 }
 
 void CollisionCheck_ApplyDamageSphere(GlobalContext *globalCtx, CollisionCheckContext *colCtxt, Collider *collider) {
-    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) (collider + 0x18));
+    CollisionCheck_ApplyDamage(globalCtx, colCtxt, collider, (ColliderInfo *) &collider[1]);
 }
 
 void CollisionCheck_Damage(GlobalContext *globalCtx, CollisionCheckContext *colCtxt) {
@@ -4779,9 +4803,9 @@ s32 CollisionCheck_LineOC_JntSph(GlobalContext *globalCtx, CollisionCheckContext
     s32 phi_s0;
 
     phi_s0 = 0;
-    if (collider->unk_18 > 0) {
+    if ((s32) collider[1].actor > 0) {
 loop_2:
-        temp_v0 = collider->unk_1C + phi_s0;
+        temp_v0 = collider[1].at + phi_s0;
         if ((temp_v0->unk_17 & 1) == 0) {
             goto block_7;
         }
@@ -4797,7 +4821,7 @@ loop_2:
 block_7:
         temp_s0 = phi_s0 + 0x40;
         phi_s0 = temp_s0;
-        if (temp_s0 >= (collider->unk_18 << 6)) {
+        if (temp_s0 >= ((s32) collider[1].actor << 6)) {
             goto block_8;
         }
         goto loop_2;
@@ -4810,7 +4834,7 @@ s32 CollisionCheck_LineOC_Cyl(GlobalContext *globalCtx, CollisionCheckContext *c
     if ((collider->unk_2F & 1) == 0) {
         goto block_4;
     }
-    if (func_8017E350(collider + 0x40, a, b, &D_801EDF38, &D_801EDF48) != 0) {
+    if (func_8017E350((void *) &collider[2].atFlags, a, b, &D_801EDF38, &D_801EDF48) != 0) {
         return 1;
     }
 block_4:
@@ -4827,7 +4851,7 @@ s32 CollisionCheck_LineOC_Sphere(GlobalContext *globalCtx, CollisionCheckContext
     D_801EDFD4.unk_0 = (f32) b->x;
     D_801EDFD4.unk_4 = (f32) b->y;
     D_801EDFD4.unk_8 = (f32) b->z;
-    if (Math3D_ColSphereLineSeg((Sphere16 *) (collider + 0x48), &D_801EDFC8) != 0) {
+    if (Math3D_ColSphereLineSeg((Sphere16 *) &collider[3], &D_801EDFC8) != 0) {
         return 1;
     }
 block_4:
@@ -5387,23 +5411,23 @@ block_59:
         }
         if ((phi_a0 != 0) && (phi_a0_2 != 0)) {
             out1->x = sp6C.unk_0;
-            out1->y = sp6C.unk_4;
-            out1->z = sp6C.unk_8;
+            out1->y = (&sp6C)[1];
+            out1->z = (&sp6C)[2];
             out2->x = sp60.unk_0;
-            out2->y = sp60.unk_4;
-            out2->z = sp60.unk_8;
+            out2->y = (&sp60)[1];
+            out2->z = (&sp60)[2];
             return 2;
         }
         if (phi_a0 != 0) {
             out1->x = sp6C.unk_0;
-            out1->y = sp6C.unk_4;
-            out1->z = sp6C.unk_8;
+            out1->y = (&sp6C)[1];
+            out1->z = (&sp6C)[2];
             return 1;
         }
         if (phi_a0_2 != 0) {
             out1->x = sp60.unk_0;
-            out1->y = sp60.unk_4;
-            out1->z = sp60.unk_8;
+            out1->y = (&sp60)[1];
+            out1->z = (&sp60)[2];
             return 1;
         }
         goto block_37;

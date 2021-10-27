@@ -536,7 +536,7 @@ struct _mips2c_stack_func_80B47BAC {
 
 struct _mips2c_stack_func_80B47D30 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ ColliderCylinder *sp20;              /* inferred */
+    /* 0x20 */ s16 *sp20;                           /* inferred */
     /* 0x24 */ char pad_24[0x14];
 };                                                  /* size = 0x38 */
 
@@ -603,7 +603,7 @@ struct _mips2c_stack_func_80B48620 {
 
 struct _mips2c_stack_func_80B4873C {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ void *sp20;                          /* inferred */
+    /* 0x20 */ f32 *sp20;                           /* inferred */
     /* 0x24 */ char pad_24[0xC];
 };                                                  /* size = 0x30 */
 
@@ -644,7 +644,7 @@ struct _mips2c_stack_func_80B48FB0 {
 
 struct _mips2c_stack_func_80B490F0 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ ColliderCylinder *sp24;              /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ s32 sp28;                            /* inferred */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];
@@ -748,7 +748,7 @@ struct _mips2c_stack_func_80B4A168 {
 
 struct _mips2c_stack_func_80B4A1B8 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ ColliderCylinder *sp24;              /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ s32 sp28;                            /* inferred */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];
@@ -808,7 +808,7 @@ struct _mips2c_stack_func_80B4AB8C {
 
 struct _mips2c_stack_func_80B4ABDC {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ ColliderCylinder *sp24;              /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ s32 sp28;                            /* inferred */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];
@@ -859,7 +859,7 @@ struct _mips2c_stack_func_80B4B0C4 {
 
 struct _mips2c_stack_func_80B4B218 {
     /* 0x00 */ char pad_0[0x28];
-    /* 0x28 */ ColliderCylinder *sp28;              /* inferred */
+    /* 0x28 */ s16 *sp28;                           /* inferred */
     /* 0x2C */ char pad_2C[0x8];                    /* maybe part of sp28[3]? */
     /* 0x34 */ Actor *sp34;                         /* inferred */
     /* 0x38 */ s32 sp38;                            /* inferred */
@@ -918,7 +918,7 @@ struct _mips2c_stack_func_80B4BA30 {
 
 struct _mips2c_stack_func_80B4BA84 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ ColliderCylinder *sp20;              /* inferred */
+    /* 0x20 */ s16 *sp20;                           /* inferred */
     /* 0x24 */ char pad_24[0x8];                    /* maybe part of sp20[3]? */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x4];
@@ -977,7 +977,7 @@ struct _mips2c_stack_func_80B4C568 {
 
 struct _mips2c_stack_func_80B4C5C0 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ ColliderCylinder *sp24;              /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ s32 sp28;                            /* inferred */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];
@@ -1035,7 +1035,7 @@ struct _mips2c_stack_func_80B4CFFC {
 
 struct _mips2c_stack_func_80B4D054 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ ColliderCylinder *sp24;              /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ s32 sp28;                            /* inferred */
     /* 0x2C */ s32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];
@@ -1224,9 +1224,9 @@ void func_80B457A0(EnInvadepoh *arg0, EnInvadepoh *); /* static */
 Actor *func_80B458D8();                             /* static */
 s8 func_80B45980(unkstructInvadepoh1 *arg0, s32 arg1, EnInvadePohStruct *, s8); /* static */
 void func_80B459E8(EnInvadePohStruct *arg0, unkstructInvadepoh4 *arg1); /* static */
-void func_80B45BB8(void *arg0);                     /* static */
-void func_80B45C04(Actor *arg0, ? *arg1, s32 arg2, ? *arg3, s32 arg4, Vec3s *arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9); /* static */
-void func_80B45CE0(void *arg0);                     /* static */
+void func_80B45BB8(f32 *arg0);                      /* static */
+void func_80B45C04(f32 *arg0, ? *arg1, s32 arg2, ? *arg3, s32 arg4, Vec3s *arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9); /* static */
+void func_80B45CE0(f32 *arg0);                      /* static */
 void func_80B45EC8(EnInvadepoh *arg0, GlobalContext *arg1, s32 arg2); /* static */
 ? func_80B46118(Vec3f *arg0);                       /* static */
 s32 func_80B461DC();                                /* static */
@@ -1488,7 +1488,7 @@ void func_80B43BC8(Actor *arg0, s8 *arg1, void *arg2) {
 
     temp_s5 = arg0->unk_308;
     temp_s1 = arg0->unk_30C;
-    temp_f22 = 1.0f / arg0->unk_310;
+    temp_f22 = 1.0f / arg0[2].floorHeight;
     phi_s0 = temp_s1 + 6;
     phi_s1 = temp_s1;
     phi_f20 = 0.0f;
@@ -1502,10 +1502,10 @@ loop_2:
         sp78 = (f32) (phi_s0->unk_4 - phi_s1->unk_4);
         temp_f14 = phi_f20 + Math3D_Vec3fMagnitude((Vec3f *) temp_a0);
         temp_f12 = temp_f14 * temp_f22;
-        if (arg0->unk_320 <= temp_f12) {
+        if (arg0[2].xzDistToPlayer <= temp_f12) {
             temp_f6 = temp_f12 - phi_f24;
             *arg1 = phi_s2;
-            temp_f0 = (arg0->unk_320 - phi_f24) / temp_f6;
+            temp_f0 = (arg0[2].xzDistToPlayer - phi_f24) / temp_f6;
             arg2->unk_0 = (f32) ((temp_f0 * sp70) + (f32) phi_s1->unk_0);
             arg2->unk_4 = (f32) ((temp_f0 * sp74) + (f32) phi_s1->unk_2);
             arg2->unk_8 = (f32) ((temp_f0 * sp78) + (f32) phi_s1->unk_4);
@@ -1545,7 +1545,7 @@ void func_80B43DD4(EnInvadepoh *arg0, s16 arg1, s16 arg2) {
     if (arg0->endPoint != temp_v0) {
         arg0 = arg0;
         Math_Vec3s_ToVec3f((Vec3f *) &sp30, temp_a1);
-        Math_Vec3s_ToVec3f((Vec3f *) &sp24, sp40 + 6);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp24, &sp40[1]);
         Math_ScaledStepToS(arg0 + 0xBE, (s16) (Math_Vec3f_Yaw((Vec3f *) &sp30, (Vec3f *) &sp24) + arg2), arg1);
     }
 }
@@ -1562,7 +1562,7 @@ void func_80B43E6C(EnInvadepoh *arg0, s16 arg1, s16 arg2, s16 arg3) {
     sp48 = temp_t9;
     if (arg0->endPoint != temp_v0) {
         Math_Vec3s_ToVec3f((Vec3f *) &sp38, temp_t9);
-        Math_Vec3s_ToVec3f((Vec3f *) &sp2C, sp48 + 6);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp2C, &sp48[1]);
         Math_SmoothStepToS(arg0 + 0xBE, Math_Vec3f_Yaw((Vec3f *) &sp38, (Vec3f *) &sp2C), arg1, arg2, (s16) (s32) arg3);
     }
 }
@@ -1581,7 +1581,7 @@ void func_80B43F0C(Actor *arg0) {
     temp_a1 = temp_t6 + (temp_t7 * 6);
     sp38 = temp_a1;
     Math_Vec3s_ToVec3f((Vec3f *) &sp28, temp_a1);
-    Math_Vec3s_ToVec3f((Vec3f *) &sp1C, sp38 + 6);
+    Math_Vec3s_ToVec3f((Vec3f *) &sp1C, &sp38[1]);
     arg0->shape.rot.y = Math_Vec3f_Yaw((Vec3f *) &sp28, (Vec3f *) &sp1C);
 }
 
@@ -1600,7 +1600,7 @@ f32 EnInvadepoh_GetTotalPathDistance(Actor *arg0) {
     temp_s0 = arg0->unk_30C;
     temp_s4 = arg0->unk_308 + 1;
     Math_Vec3s_ToVec3f((Vec3f *) &sp48, temp_s0);
-    phi_s0 = temp_s0 + 6;
+    phi_s0 = &temp_s0[1];
     phi_s1 = 1;
     phi_f20 = 0.0f;
     phi_f20_2 = 0.0f;
@@ -1610,7 +1610,7 @@ f32 EnInvadepoh_GetTotalPathDistance(Actor *arg0) {
             Math_Vec3s_ToVec3f((Vec3f *) &sp48, phi_s0);
             temp_s1 = phi_s1 + 1;
             temp_f20 = phi_f20_2 + Math3D_Distance((Vec3f *) &sp54, (Vec3f *) &sp48);
-            phi_s0 += 6;
+            phi_s0 = &phi_s0[1];
             phi_s1 = temp_s1;
             phi_f20 = temp_f20;
             phi_f20_2 = temp_f20;
@@ -1718,7 +1718,7 @@ s8 func_80B44234(Actor *arg0, Vec3f *arg1) {
                 phi_s4_2 = phi_s0;
             }
             temp_s0 = phi_s0 + 1;
-            phi_s1 += 6;
+            phi_s1 = &phi_s1[1];
             phi_s0 = temp_s0;
             phi_s4 = phi_s4_2;
         } while (temp_s0 != temp_s3);
@@ -1778,9 +1778,9 @@ void func_80B443A0(Actor *arg0) {
 
     temp_s1 = arg0->unk_30C;
     temp_s5 = arg0->unk_308;
-    temp_f26 = 1.0f / arg0->unk_310;
+    temp_f26 = 1.0f / arg0[2].floorHeight;
     Math_Vec3s_ToVec3f((Vec3f *) &sp64, temp_s1);
-    phi_s1 = temp_s1 + 6;
+    phi_s1 = &temp_s1[1];
     phi_f20 = 0.0f;
     phi_s0 = arg0 + 0x37C;
     phi_s2 = 1;
@@ -1793,7 +1793,7 @@ void func_80B443A0(Actor *arg0) {
             temp_f2 = temp_f20 * temp_f26;
             temp_cond = temp_f2 < 0.0f;
             *phi_s0 = temp_f2;
-            phi_s1 += 6;
+            phi_s1 = &phi_s1[1];
             phi_s2 = temp_s2;
             if (temp_cond) {
                 *phi_s0 = 0.0f;
@@ -1808,7 +1808,7 @@ void func_80B443A0(Actor *arg0) {
 
 void func_80B444BC(Actor *arg0) {
     func_80B44024(arg0);
-    arg0->unk_310 = EnInvadepoh_GetTotalPathDistance(arg0);
+    arg0[2].floorHeight = EnInvadepoh_GetTotalPathDistance(arg0);
     func_80B443A0(arg0);
 }
 
@@ -1825,7 +1825,7 @@ void func_80B44514(EnInvadepoh *arg0) {
 
 void func_80B44540(Actor *arg0) {
     func_80B44024(arg0);
-    arg0->unk_310 = EnInvadepoh_GetTotalPathDistance(arg0);
+    arg0[2].floorHeight = EnInvadepoh_GetTotalPathDistance(arg0);
 }
 
 void func_80B44570(EnInvadepoh *arg0) {
@@ -1894,7 +1894,7 @@ void func_80B44690(EnInvadepoh *arg0) {
 
 void func_80B446D0(Actor *arg0) {
     func_80B44024(arg0);
-    arg0->unk_310 = EnInvadepoh_GetTotalPathDistance(arg0);
+    arg0[2].floorHeight = EnInvadepoh_GetTotalPathDistance(arg0);
 }
 
 void func_80B44700(EnInvadepoh *arg0) {
@@ -1977,7 +1977,7 @@ void func_80B447C0(Actor *arg0, GlobalContext *arg1) {
         Math_Vec3s_ToVec3f(temp_a2, temp_a3);
         phi_a2 = temp_a2;
     } else {
-        temp_f0 = arg0->unk_320;
+        temp_f0 = arg0[2].xzDistToPlayer;
         temp_f16 = 1.0f / temp_f18;
         sp60 = temp_a3;
         temp_f14 = phi_f2 - temp_f0;
@@ -1986,10 +1986,10 @@ void func_80B447C0(Actor *arg0, GlobalContext *arg1) {
         sp34 = temp_f12;
         sp2C = temp_f16;
         Math_Vec3s_ToVec3f((Vec3f *) &sp50, temp_a3);
-        Math_Vec3s_ToVec3f((Vec3f *) &sp44, temp_a3 + 6);
-        arg0->unk_314 = (f32) (((sp50 * temp_f14) + (sp44 * temp_f12)) * temp_f16);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp44, &temp_a3[1]);
+        arg0[2].yDistToWater = ((sp50 * temp_f14) + (sp44 * temp_f12)) * temp_f16;
         arg0->unk_318 = (f32) (((sp54 * temp_f14) + (sp48 * temp_f12)) * temp_f16);
-        arg0->unk_31C = (f32) (((sp58 * temp_f14) + (sp4C * temp_f12)) * temp_f16);
+        arg0[2].xyzDistToPlayerSq = ((sp58 * temp_f14) + (sp4C * temp_f12)) * temp_f16;
         phi_a2 = arg0 + 0x314;
     }
     Math_Vec3f_Copy(arg0 + 0x24, phi_a2);
@@ -2407,8 +2407,8 @@ void EnInvadepoh_SetSysMatrix(f32 *arg0) {
 
     temp_v0 = SysMatrix_GetCurrentState();
     temp_v0->mf[3][0] = arg0->unk_0;
-    temp_v0->mf[3][1] = arg0->unk_4;
-    temp_v0->mf[3][2] = arg0->unk_8;
+    temp_v0->mf[3][1] = arg0[1];
+    temp_v0->mf[3][2] = arg0[2];
 }
 
 s32 func_80B45550(EnInvadepoh *arg0, GlobalContext *arg1, f32 arg2, s32 arg3) {
@@ -2536,13 +2536,13 @@ loop_1:
     if ((phi_v0->unk_0 & 2) != 0) {
         return (&D_80B50320)[phi_v1];
     }
-    if ((phi_v0->unk_1 & 2) != 0) {
+    if ((phi_v0[1] & 2) != 0) {
         return *(&D_80B50324 + (phi_v1 * 4));
     }
-    if ((phi_v0->unk_2 & 2) != 0) {
+    if ((phi_v0[2] & 2) != 0) {
         return *(&D_80B50328 + (phi_v1 * 4));
     }
-    if ((phi_v0->unk_3 & 2) != 0) {
+    if ((phi_v0[3] & 2) != 0) {
         return *(&D_80B5032C + (phi_v1 * 4));
     }
     temp_v1 = phi_v1 + 4;
@@ -2656,45 +2656,45 @@ void func_80B45B1C(EnInvadePohStruct *s, unkstructInvadepoh4 **u) {
     func_80B459E8(s, u[func_80B45980(temp_a0, (s32) temp_a1, temp_a2, temp_a3)]);
 }
 
-void func_80B45BB8(void *arg0) {
+void func_80B45BB8(f32 *arg0) {
     s32 temp_a1;
 
     temp_a1 = arg0->unk_0;
-    if ((temp_a1 != 0) && (arg0->unk_8 != 0)) {
+    if ((temp_a1 != 0) && (arg0[2] != 0)) {
         *(&D_80B4EC0C + (arg0->unk_4 * 4))(temp_a1);
     }
 }
 
-void func_80B45C04(Actor *arg0, ? *arg1, s32 arg2, ? *arg3, s32 arg4, Vec3s *arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
+void func_80B45C04(f32 *arg0, ? *arg1, s32 arg2, ? *arg3, s32 arg4, Vec3s *arg5, s16 arg6, f32 arg7, f32 arg8, f32 arg9) {
     void *temp_v0;
     void *temp_v0_2;
 
     Math_Vec3s_Copy(arg0 + 0x26, arg5);
     arg0->unk_2C = arg6;
-    arg0->unk_30 = arg7;
-    arg0->unk_38 = arg8;
-    arg0->focus.pos.x = arg9;
+    arg0[12] = arg7;
+    arg0[14] = arg8;
+    arg0[15] = arg9;
     if (arg1 != 0) {
         temp_v0 = *(arg1 + (arg2 * 4));
         arg0->unk_0 = arg1;
         arg0->unk_C = 0;
         arg0->unk_E = 0;
-        arg0->home.pos.x = temp_v0;
+        arg0[2] = temp_v0;
         arg0->unk_4 = (s8) temp_v0->unk_0;
         arg0->unk_F = (s8) **temp_v0->unk_4;
     }
     if (arg3 != 0) {
         temp_v0_2 = *(arg3 + (arg4 * 4));
-        arg0->home.pos.z = arg3;
-        arg0->params = 0;
-        arg0->objBankIndex = 0;
-        arg0->unk_18 = temp_v0_2;
+        arg0[4] = arg3;
+        arg0->unk_1C = 0;
+        arg0->unk_1E = 0;
+        arg0[6] = temp_v0_2;
         arg0->unk_14 = (s8) temp_v0_2->unk_0;
-        arg0->targetMode = **temp_v0_2->unk_4;
+        arg0->unk_1F = (s8) **temp_v0_2->unk_4;
     }
 }
 
-void func_80B45CE0(void *arg0) {
+void func_80B45CE0(f32 *arg0) {
     ? sp3C;
     s16 sp38;
     s16 sp36;
@@ -2715,7 +2715,7 @@ void func_80B45CE0(void *arg0) {
     sp36 = arg0->unk_28 - arg0->unk_22;
     sp38 = arg0->unk_2A - arg0->unk_24;
     Math_Vec3s_ToVec3f((Vec3f *) &sp3C, (Vec3s *) temp_a1);
-    Math_Vec3f_Scale((Vec3f *) &sp3C, arg0->unk_30);
+    Math_Vec3f_Scale((Vec3f *) &sp3C, arg0[12]);
     Math_Vec3f_ToVec3s((Vec3s *) &sp34, (Vec3f *) &sp3C);
     if ((s32) sp34 < 0) {
         sp34 = (s32) sp34 * -1;
@@ -2741,11 +2741,11 @@ void func_80B45CE0(void *arg0) {
     Math_ScaledStepToS(arg0 + 0x20, arg0->unk_26, sp34);
     Math_ScaledStepToS(arg0 + 0x22, arg0->unk_28, sp36);
     Math_ScaledStepToS(arg0 + 0x24, arg0->unk_2A, sp38);
-    Math_StepToF(arg0 + 0x34, arg0->unk_38, arg0->unk_3C);
+    Math_StepToF(arg0 + 0x34, arg0[14], arg0[15]);
     temp_a1_2 = arg0->unk_42;
     temp_v0_2 = arg0->unk_40;
     if (temp_a1_2 != temp_v0_2) {
-        temp_f16 = (s32) ((f32) (s16) (temp_a1_2 - temp_v0_2) * arg0->unk_44);
+        temp_f16 = (s32) ((f32) (s16) (temp_a1_2 - temp_v0_2) * arg0[17]);
         phi_a2 = (s32) (s16) temp_f16;
         if ((s32) (s16) temp_f16 < 0) {
             phi_a2 = (s32) (s16) ((s32) (s16) temp_f16 * -1);
@@ -3361,11 +3361,11 @@ void func_80B47064(EnInvadepoh *this) {
 
 void func_80B47084(EnInvadepoh *this, GlobalContext *globalCtx) {
     if (ActorCutscene_GetCanPlayNext(D_80B50406) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields(D_80B50404.unk_2, (Actor *) this);
+        ActorCutscene_StartAndSetUnkLinkFields((&D_80B50404)[1], (Actor *) this);
         func_80B470E0(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(D_80B50404.unk_2);
+    ActorCutscene_SetIntentToPlay((&D_80B50404)[1]);
 }
 
 void func_80B470E0(EnInvadepoh *this) {
@@ -3467,7 +3467,7 @@ void func_80B47380(Actor *arg0) {
     arg0->unk_38B = 0;
     arg0->unk_38C = 0;
     arg0->unk_38D = 0;
-    arg0->unk_2EC = func_80B473E4;
+    arg0[2].velocity.x = func_80B473E4;
 }
 
 void func_80B473E4(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -3603,7 +3603,7 @@ void func_80B47830(Actor *arg0) {
     arg0->unk_2F0 = 8;
     arg0->unk_2F2 = 0;
     arg0->flags |= 0x80000000;
-    arg0->unk_2EC = func_80B478F4;
+    arg0[2].velocity.x = (bitwise f32) func_80B478F4;
 }
 
 void func_80B478F4(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -3701,8 +3701,8 @@ void func_80B47BAC(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B45080();
         thisx->update = func_80B47D30;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06004E50, &D_06001D80, thisx + 0x188, thisx + 0x212, 0xE);
-        thisx->unk_15C = (f32) ((f32) (thisx->params & 7) * thisx->unk_154 * 0.125f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06004E50, &D_06001D80, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0xE);
+        thisx->unk_15C = (f32) ((f32) (thisx->params & 7) * thisx[1].home.pos.z * 0.125f);
         func_80B444BC(thisx, globalCtx);
         func_80B442E4((EnInvadepoh *) thisx);
         func_80B447C0(thisx, globalCtx);
@@ -3714,7 +3714,7 @@ void func_80B47BAC(Actor *thisx, GlobalContext *globalCtx) {
             return;
         }
         if (temp_v1 == 2) {
-            if (thisx->unk_320 >= 0.0001f) {
+            if (thisx[2].xzDistToPlayer >= 0.0001f) {
                 func_80B4770C((EnInvadepoh *) thisx);
                 return;
             }
@@ -3727,11 +3727,11 @@ void func_80B47BAC(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80B47D30(Actor *thisx, GlobalContext *globalCtx) {
-    ColliderCylinder *sp20;
-    ? (*temp_v0)(Actor *, GlobalContext *);
-    ColliderCylinder *temp_a1;
+    s16 *sp20;
     f32 temp_f0;
     f32 temp_f0_2;
+    f32 temp_v0;
+    s16 *temp_a1;
     u8 temp_v0_3;
     u8 temp_v0_4;
     u8 temp_v0_5;
@@ -3740,15 +3740,15 @@ void func_80B47D30(Actor *thisx, GlobalContext *globalCtx) {
     f32 phi_f2_2;
 
     if (D_80B4E940 == 3) {
-        temp_v0 = thisx->unk_2EC;
-        if ((func_80B477B4 == temp_v0) || (func_80B47600 == temp_v0)) {
+        temp_v0 = thisx[2].velocity.x;
+        if ((func_80B477B4 == (bitwise s32) temp_v0) || (func_80B47600 == (bitwise s32) temp_v0)) {
             thisx->speedXZ = 0.0f;
             thisx->velocity.y = 0.0f;
             thisx->gravity = 0.0f;
             func_80B47830(thisx);
             goto block_20;
         }
-        if ((func_80B474DC == temp_v0) || (func_80B473E4 == temp_v0)) {
+        if ((func_80B474DC == (bitwise s32) temp_v0) || (func_80B473E4 == (bitwise s32) temp_v0)) {
             Actor_MarkForDeath(thisx);
             return;
         }
@@ -3785,13 +3785,13 @@ void func_80B47D30(Actor *thisx, GlobalContext *globalCtx) {
         func_80B47830(thisx);
     }
 block_20:
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if (thisx->draw != 0) {
-        thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
+        thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
     }
-    temp_a1 = thisx + 0x2A0;
+    temp_a1 = &thisx[2].home.rot.z;
     sp20 = temp_a1;
-    Collider_UpdateCylinder(thisx, temp_a1);
+    Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a1);
     temp_v0_3 = thisx->unk_2B0;
     if ((temp_v0_3 & 1) != 0) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, (Collider *) sp20);
@@ -3821,9 +3821,9 @@ void func_80B47FA8(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         thisx->update = func_80B48060;
         thisx->draw = func_80B4E158;
-        temp_a1 = thisx + 0x144;
+        temp_a1 = &thisx[1];
         sp34 = temp_a1;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06004010, NULL, thisx + 0x188, thisx + 0x212, 6);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06004010, NULL, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 6);
         SkelAnime_ChangeAnimDefaultRepeat((SkelAnime *) sp34, &D_06004264);
     }
 }
@@ -3839,7 +3839,7 @@ void func_80B48060(Actor *thisx, GlobalContext *globalCtx) {
         return;
     }
     sp6C = thisx->params & 7;
-    SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
     temp_a0 = &thisx->shape;
     sp24 = temp_a0;
     Math_ScaledStepToS((s16 *) temp_a0, *(&D_80B4EDC0 + (sp6C * 2)), 0x32);
@@ -3865,9 +3865,9 @@ void func_80B481C4(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         thisx->update = func_80B4827C;
         thisx->draw = func_80B4E1B0;
-        temp_a1 = thisx + 0x144;
+        temp_a1 = &thisx[1];
         sp34 = temp_a1;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06004C30, NULL, thisx + 0x188, thisx + 0x212, 6);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06004C30, NULL, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 6);
         SkelAnime_ChangeAnimDefaultRepeat((SkelAnime *) sp34, &D_06004E98);
     }
 }
@@ -3877,7 +3877,7 @@ void func_80B4827C(Actor *thisx, GlobalContext *globalCtx) {
         Actor_MarkForDeath(thisx);
         return;
     }
-    SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
 }
 
 void func_80B482D4(Actor *arg0) {
@@ -3888,7 +3888,7 @@ void func_80B482D4(Actor *arg0) {
     arg0 = temp_a3;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a3 + 0x144, &D_06002A8C, -10.0f);
     arg0->draw = NULL;
-    arg0->unk_2EC = func_80B48324;
+    arg0[2].velocity.x = func_80B48324;
 }
 
 void func_80B48324(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -3997,27 +3997,27 @@ void func_80B48620(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44F58();
         thisx->update = func_80B4873C;
-        temp_a1 = thisx + 0x144;
+        temp_a1 = &thisx[1];
         sp38 = temp_a1;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06013928, &D_06009E58, thisx + 0x188, thisx + 0x212, 0x17);
-        func_80B45C04(thisx + 0x324, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, (s16) 0x1388, 0.05f, 0.3f, 0.12f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06013928, &D_06009E58, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, (s16) 0x1388, 0.05f, 0.3f, 0.12f);
         SkelAnime_ChangeAnimDefaultRepeat((SkelAnime *) sp38, &D_06009E58);
         func_80B482D4(thisx);
     }
 }
 
 void func_80B4873C(Actor *thisx, GlobalContext *globalCtx) {
-    void *sp20;
+    f32 *sp20;
+    f32 *temp_a0;
     s16 temp_v0;
-    void *temp_a0;
 
     if (thisx->parent == 0) {
         Actor_MarkForDeath(thisx);
         return;
     }
-    thisx->unk_2EC(thisx);
-    SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-    temp_a0 = thisx + 0x324;
+    (bitwise ? (*)(Actor *)) thisx[2].velocity.x(thisx);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+    temp_a0 = &thisx[2].yDistToPlayer;
     sp20 = temp_a0;
     func_80B45CE0(temp_a0);
     temp_v0 = temp_a0->unk_40;
@@ -4207,7 +4207,7 @@ void func_80B48DE4(Actor *arg0) {
     temp_v0 = arg0 + 0x324;
     temp_v0->unk_2C = 0x4B0;
     temp_v0->unk_30 = 0.05f;
-    arg0->unk_2EC = func_80B48E4C;
+    arg0[2].velocity.x = func_80B48E4C;
 }
 
 void func_80B48E4C(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -4253,8 +4253,8 @@ void func_80B48FB0(Actor *thisx, GlobalContext *globalCtx) {
         thisx->update = func_80B490F0;
         thisx->draw = func_80B4E324;
         thisx->textId = 0x3330;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06013928, &D_06009E58, thisx + 0x188, thisx + 0x212, 0x17);
-        func_80B45C04(thisx + 0x324, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06013928, &D_06009E58, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EA90, 6, &D_80B4EB00, 2, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
         func_80B444F4(thisx, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(thisx, 0);
         func_800B4AEC(globalCtx, thisx, 50.0f);
@@ -4266,8 +4266,8 @@ void func_80B48FB0(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B490F0(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp2C;
     s32 sp28;
-    ColliderCylinder *sp24;
-    ColliderCylinder *temp_a2;
+    s16 *sp24;
+    s16 *temp_a2;
     s32 temp_v0;
 
     sp2C = (thisx->flags & 0x40) == 0x40;
@@ -4277,16 +4277,16 @@ void func_80B490F0(Actor *thisx, GlobalContext *globalCtx) {
         func_80151BB4(globalCtx, 5U);
         func_80B48DE4(thisx);
     }
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if (sp2C != 0) {
-        SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-        func_80B45CE0(thisx + 0x324);
-        if ((func_80B48E4C != thisx->unk_2EC) && (sp28 == 0) && (thisx->isTargeted != 0)) {
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        if ((func_80B48E4C != (bitwise s32) thisx[2].velocity.x) && (sp28 == 0) && (thisx->isTargeted != 0)) {
             func_800B8614(thisx, globalCtx, 100.0f);
         }
-        temp_a2 = thisx + 0x2A0;
+        temp_a2 = &thisx[2].home.rot.z;
         sp24 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -4536,9 +4536,9 @@ void func_80B49A00(EnInvadepoh *this, GlobalContext *globalCtx) {
 }
 
 void func_80B49B1C(Actor *thisx, GlobalContext *globalCtx) {
-    thisx->unk_2EC(thisx);
+    (bitwise ? (*)(Actor *)) thisx[2].velocity.x(thisx);
     thisx->unk_3A8 = (s16) (thisx->unk_3A8 + thisx->unk_3AA);
-    Math_StepToF(thisx + 0x39C, thisx->unk_3A0, thisx->unk_3A4);
+    Math_StepToF((f32 *) &thisx[2].isTargeted, thisx->unk_3A0, thisx->unk_3A4);
     Actor_SetScale(thisx, 0.27f * ((Math_SinS(thisx->unk_3A8) * thisx->unk_39C) + 1.0f));
     Math_StepToS(thisx + 0x306, 0x258, 8);
     thisx->world.rot.y += thisx->unk_306;
@@ -4598,10 +4598,10 @@ void func_80B49DA0(Actor *arg0) {
     temp_a3 = arg0;
     temp_a3->unk_350 = 0x7D0;
     temp_a3->unk_370 = 0;
-    temp_a3->unk_354 = 0.08f;
+    temp_a3[2].shape.shadowScale = 0.08f;
     arg0 = temp_a3;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a3 + 0x144, &D_06009E58, -10.0f);
-    arg0->unk_2EC = func_80B49DFC;
+    arg0[2].velocity.x = func_80B49DFC;
 }
 
 void func_80B49DFC(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -4651,8 +4651,8 @@ void func_80B49F88(Actor *thisx, GlobalContext *globalCtx) {
         thisx->objBankIndex = thisx->unk_2F4;
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44F58();
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06013928, &D_06014088, thisx + 0x188, thisx + 0x212, 0x17);
-        func_80B45C04(thisx + 0x324, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06013928, &D_06014088, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
         func_80B44540(thisx, globalCtx);
         func_80B44570((EnInvadepoh *) thisx);
         func_80B44C24(thisx, globalCtx);
@@ -4697,8 +4697,8 @@ void func_80B4A168(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4A1B8(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp2C;
     s32 sp28;
-    ColliderCylinder *sp24;
-    ColliderCylinder *temp_a2;
+    s16 *sp24;
+    s16 *temp_a2;
     s32 temp_v0;
 
     sp2C = (thisx->flags & 0x40) == 0x40;
@@ -4708,16 +4708,16 @@ void func_80B4A1B8(Actor *thisx, GlobalContext *globalCtx) {
         func_80151BB4(globalCtx, 5U);
         func_80B49DA0(thisx);
     }
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if ((sp2C != 0) && (thisx->update != 0)) {
-        SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-        func_80B45CE0(thisx + 0x324);
-        if ((func_80B49DFC != thisx->unk_2EC) && (sp28 == 0) && (thisx->isTargeted != 0)) {
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        if ((func_80B49DFC != (bitwise s32) thisx[2].velocity.x) && (sp28 == 0) && (thisx->isTargeted != 0)) {
             func_800B8614(thisx, globalCtx, 350.0f);
         }
-        temp_a2 = thisx + 0x2A0;
+        temp_a2 = &thisx[2].home.rot.z;
         sp24 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -4879,10 +4879,10 @@ void func_80B4A7C0(Actor *arg0) {
     temp_a3 = arg0;
     temp_a3->unk_350 = 0x7D0;
     temp_a3->unk_370 = 0;
-    temp_a3->unk_354 = 0.08f;
+    temp_a3[2].shape.shadowScale = 0.08f;
     arg0 = temp_a3;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a3 + 0x144, &D_06009E58, 0.0f);
-    arg0->unk_2EC = func_80B4A81C;
+    arg0[2].velocity.x = func_80B4A81C;
 }
 
 void func_80B4A81C(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -4937,8 +4937,8 @@ void func_80B4A9C8(Actor *thisx, GlobalContext *globalCtx) {
         thisx->objBankIndex = thisx->unk_2F4;
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44F58();
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06013928, &D_06014088, thisx + 0x188, thisx + 0x212, 0x17);
-        func_80B45C04(thisx + 0x324, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06013928, &D_06014088, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EA90, 1, &D_80B4EB00, 1, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
         func_80B44620(thisx, globalCtx);
         if ((sp38 < 0x1800) || (sp38 >= 0x4000)) {
             thisx->unk_309 = 0;
@@ -4980,8 +4980,8 @@ void func_80B4AB8C(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4ABDC(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp2C;
     s32 sp28;
-    ColliderCylinder *sp24;
-    ColliderCylinder *temp_a2;
+    s16 *sp24;
+    s16 *temp_a2;
     s32 temp_v0;
 
     sp2C = (thisx->flags & 0x40) == 0x40;
@@ -4991,22 +4991,22 @@ void func_80B4ABDC(Actor *thisx, GlobalContext *globalCtx) {
         func_80151BB4(globalCtx, 5U);
         func_80B4A7C0(thisx);
     }
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if (sp2C != 0) {
-        thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-        func_80B45CE0(thisx + 0x324);
-        if ((func_80B4A81C != thisx->unk_2EC) && (sp28 == 0) && (thisx->isTargeted != 0)) {
+        thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        if ((func_80B4A81C != (bitwise s32) thisx[2].velocity.x) && (sp28 == 0) && (thisx->isTargeted != 0)) {
             func_800B8614(thisx, globalCtx, 100.0f);
         }
-        temp_a2 = thisx + 0x2A0;
+        temp_a2 = &thisx[2].home.rot.z;
         sp24 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
 
 void func_80B4ACDC(Actor *arg0) {
-    arg0->unk_2EC = func_80B4ACF0;
+    arg0[2].velocity.x = func_80B4ACF0;
 }
 
 void func_80B4ACF0(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -5129,20 +5129,20 @@ void func_80B4B048(EnInvadepoh *this, GlobalContext *globalCtx) {
 
 void func_80B4B0C4(Actor *thisx, GlobalContext *globalCtx) {
     Actor *sp38;
-    Actor *temp_a0;
     Actor *temp_a1;
+    f32 *temp_a0;
 
     if (Object_IsLoaded(&globalCtx->objectCtx, (s32) thisx->unk_2F4) != 0) {
         thisx->objBankIndex = thisx->unk_2F4;
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44F58();
         thisx->update = func_80B4B218;
-        temp_a1 = thisx + 0x144;
+        temp_a1 = &thisx[1];
         sp38 = temp_a1;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06013928, &D_06014088, thisx + 0x188, thisx + 0x212, 0x17);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) temp_a1, &D_06013928, &D_06014088, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
         SkelAnime_ChangeAnimTransitionRepeat((SkelAnime *) sp38, &D_06009E58, 0.0f);
-        temp_a0 = thisx + 0x324;
-        sp38 = temp_a0;
+        temp_a0 = &thisx[2].yDistToPlayer;
+        sp38 = (Actor *) temp_a0;
         func_80B45C04(temp_a0, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, (s16) 0x7D0, 0.08f, 0.3f, 0.03f);
         sp38->unk_2C = 0x7D0;
         sp38->unk_30 = 0.08f;
@@ -5155,51 +5155,44 @@ void func_80B4B0C4(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4B218(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp38;
     Actor *sp34;
-    ColliderCylinder *sp28;
-    ColliderCylinder *temp_a2;
+    s16 *sp28;
+    s16 *temp_a2;
     s16 temp_v1;
     s32 temp_f10;
-    void *temp_a0;
-    void *temp_a0_2;
     s16 phi_v0;
-    void *phi_a0;
     s16 phi_v0_2;
 
     sp38 = (thisx->flags & 0x40) == 0x40;
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if ((sp38 != 0) && (thisx->update != 0)) {
-        SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
         sp34 = globalCtx->actorCtx.actorList[2].first;
-        Math_StepToS(thisx + 0x370, 0x7D0, 0x28);
+        Math_StepToS((s16 *) &thisx[2].shape.feetPos[1].z, 0x7D0, 0x28);
         Math_SmoothStepToS(&thisx->shape.rot.y, thisx->yawTowardsPlayer, 6, thisx->unk_370, (s16) 0x28);
-        temp_a0 = thisx + 0x324;
         temp_v1 = (s32) ((f32) Math_Vec3f_Pitch((Vec3f *) &thisx->focus, (Vec3f *) &sp34->focus) * 0.9f) - thisx->shape.rot.x;
-        phi_a0 = temp_a0;
         if ((s32) temp_v1 < -0xBB8) {
-            temp_a0_2 = thisx + 0x324;
-            temp_a0_2->unk_26 = -0xBB8;
-            phi_a0 = temp_a0_2;
+            thisx[2].yDistToPlayer.unk_26 = -0xBB8;
         } else {
             phi_v0 = temp_v1;
             if ((s32) temp_v1 >= 0xBB9) {
                 phi_v0 = 0xBB8;
             }
-            temp_a0->unk_26 = phi_v0;
+            thisx[2].yDistToPlayer.unk_26 = phi_v0;
         }
         temp_f10 = (s32) ((f32) (s16) (thisx->yawTowardsPlayer - thisx->shape.rot.y) * 0.7f);
         if ((s32) (s16) temp_f10 < -0x1F40) {
-            phi_a0->unk_28 = -0x1F40;
+            thisx[2].yDistToPlayer.unk_28 = -0x1F40;
         } else {
             phi_v0_2 = (s16) temp_f10;
             if ((s32) (s16) temp_f10 >= 0x1F41) {
                 phi_v0_2 = 0x1F40;
             }
-            phi_a0->unk_28 = phi_v0_2;
+            thisx[2].yDistToPlayer.unk_28 = phi_v0_2;
         }
-        func_80B45CE0(phi_a0);
-        temp_a2 = thisx + 0x2A0;
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        temp_a2 = &thisx[2].home.rot.z;
         sp28 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -5328,13 +5321,13 @@ void func_80B4B8BC(Actor *thisx, GlobalContext *globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, (s32) thisx->unk_2F4) != 0) {
         thisx->objBankIndex = thisx->unk_2F4;
         Actor_SetObjectSegment(globalCtx, thisx);
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_060080F0, &D_060021C8, thisx + 0x188, thisx + 0x212, 0xD);
-        func_80B45C04(thisx + 0x324, NULL, 0, NULL, 0, &D_801D15BC, (s16) 0xBB8, 0.1f, 0.0f, 0.0f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_060080F0, &D_060021C8, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0xD);
+        func_80B45C04(&thisx[2].yDistToPlayer, NULL, 0, NULL, 0, &D_801D15BC, (s16) 0xBB8, 0.1f, 0.0f, 0.0f);
         func_80B44664(thisx, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(thisx, 0);
         func_800B4AEC(globalCtx, thisx, 50.0f);
         func_80B4516C((EnInvadepoh *) thisx);
-        Math_Vec3f_Copy(thisx + 0x314, (Vec3f *) &thisx->world);
+        Math_Vec3f_Copy((Vec3f *) &thisx[2].yDistToWater, (Vec3f *) &thisx->world);
         temp_v0 = D_80B4E940;
         if (temp_v0 == 2) {
             thisx->update = func_80B4BA84;
@@ -5364,9 +5357,9 @@ void func_80B4BA30(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4BA84(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp34;
     s32 sp2C;
-    ColliderCylinder *sp20;
+    s16 *sp20;
     Actor *temp_v0;
-    ColliderCylinder *temp_a2;
+    s16 *temp_a2;
     s32 temp_v0_3;
     s32 temp_v1_2;
     s8 temp_v0_2;
@@ -5400,13 +5393,13 @@ void func_80B4BA84(Actor *thisx, GlobalContext *globalCtx) {
             }
         }
     }
-    thisx->unk_2EC(thisx, globalCtx);
-    thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
+    thisx->unk_29C = SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
     if ((sp34 != 0) && (thisx->update != 0)) {
-        func_80B45CE0(thisx + 0x324);
-        temp_a2 = thisx + 0x2A0;
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        temp_a2 = &thisx[2].home.rot.z;
         sp20 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -5533,11 +5526,11 @@ void func_80B4BFFC(Actor *arg0) {
 
     temp_a3 = arg0;
     temp_a3->unk_350 = 0x7D0;
-    temp_a3->unk_354 = 0.08f;
+    temp_a3[2].shape.shadowScale = 0.08f;
     arg0 = temp_a3;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a3 + 0x144, &D_0600A174, -6.0f);
     arg0->unk_370 = 0;
-    arg0->unk_2EC = func_80B4C058;
+    arg0[2].velocity.x = func_80B4C058;
 }
 
 void func_80B4C058(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -5638,18 +5631,18 @@ void func_80B4C3A0(Actor *thisx, GlobalContext *globalCtx) {
         sp38 = (s32) temp_v0;
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44FEC();
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06015C28, &D_06016720, thisx + 0x188, thisx + 0x212, 0x16);
-        func_80B45C04(thisx + 0x324, &D_80B4EBDC, 1, &D_80B4EC08, 0, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06015C28, &D_06016720, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x16);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EBDC, 1, &D_80B4EC08, 0, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
         thisx->textId = 0x33CD;
         if ((s32) temp_v0 < 0xD5A0) {
             thisx->unk_304 = -0x8000;
-            thisx->unk_2F8 = 40.0f;
+            thisx[2].speedXZ = 40.0f;
         } else if ((s32) temp_v0 >= 0xD7D4) {
             thisx->unk_304 = -0x4800;
-            thisx->unk_2F8 = 20.0f;
+            thisx[2].speedXZ = 20.0f;
         } else {
             thisx->unk_304 = -0x8000;
-            thisx->unk_2F8 = 40.0f;
+            thisx[2].speedXZ = 40.0f;
         }
         if (((s32) temp_v0 >= 0x4000) && ((s32) temp_v0 < 0xD573)) {
             thisx->update = func_80B4C568;
@@ -5681,8 +5674,8 @@ void func_80B4C568(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4C5C0(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp2C;
     s32 sp28;
-    ColliderCylinder *sp24;
-    ColliderCylinder *temp_a2;
+    s16 *sp24;
+    s16 *temp_a2;
     s32 temp_v0;
 
     sp2C = (thisx->flags & 0x40) == 0x40;
@@ -5692,16 +5685,16 @@ void func_80B4C5C0(Actor *thisx, GlobalContext *globalCtx) {
         func_80151BB4(globalCtx, 6U);
         func_80B4BFFC(thisx);
     }
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if ((sp2C != 0) && (thisx->update != 0)) {
-        SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-        func_80B45CE0(thisx + 0x324);
-        if ((func_80B4C058 != thisx->unk_2EC) && (sp28 == 0) && (thisx->isTargeted != 0)) {
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        if ((func_80B4C058 != (bitwise s32) thisx[2].velocity.x) && (sp28 == 0) && (thisx->isTargeted != 0)) {
             func_800B8614(thisx, globalCtx, 350.0f);
         }
-        temp_a2 = thisx + 0x2A0;
+        temp_a2 = &thisx[2].home.rot.z;
         sp24 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -5753,7 +5746,7 @@ void func_80B4C730(EnInvadepoh *this, GlobalContext *globalCtx) {
     }
     sp2C = phi_a2 * 6;
     Math_Vec3s_ToVec3f((Vec3f *) &sp4C, &this->pathPoints[phi_a2]);
-    Math_Vec3s_ToVec3f((Vec3f *) &sp40, &this->pathPoints[phi_a2] + 6);
+    Math_Vec3s_ToVec3f((Vec3f *) &sp40, &(&this->pathPoints[phi_a2])[1]);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw((Vec3f *) &sp4C, (Vec3f *) &sp40), 5, 0x7D0, (s16) 0x64);
     temp_v1_2 = this->pathIndex;
     if ((temp_v1_2 == 0) || (this->endPoint == (temp_v1_2 + 1))) {
@@ -5816,11 +5809,11 @@ void func_80B4CAB0(Actor *arg0) {
 
     temp_a3 = arg0;
     temp_a3->unk_350 = 0xFA0;
-    temp_a3->unk_354 = 0.08f;
+    temp_a3[2].shape.shadowScale = 0.08f;
     arg0 = temp_a3;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a3 + 0x144, &D_06009E58, -10.0f);
     arg0->unk_370 = 0;
-    arg0->unk_2EC = func_80B4CB0C;
+    arg0[2].velocity.x = func_80B4CB0C;
 }
 
 void func_80B4CB0C(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -5919,8 +5912,8 @@ void func_80B4CE54(Actor *thisx, GlobalContext *globalCtx) {
         thisx->objBankIndex = thisx->unk_2F4;
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B44F58();
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06013928, &D_06014088, thisx + 0x188, thisx + 0x212, 0x17);
-        func_80B45C04(thisx + 0x324, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06013928, &D_06014088, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0x17);
+        func_80B45C04(&thisx[2].yDistToPlayer, &D_80B4EA90, 1, &D_80B4EB00, 3, &D_801D15BC, (s16) 0x64, 0.03f, 0.3f, 0.03f);
         func_80B446D0(thisx, globalCtx);
         thisx->world.rot.y = thisx->shape.rot.y;
         func_80B44700((EnInvadepoh *) thisx);
@@ -5958,8 +5951,8 @@ void func_80B4CFFC(Actor *thisx, GlobalContext *globalCtx) {
 void func_80B4D054(Actor *thisx, GlobalContext *globalCtx) {
     s32 sp2C;
     s32 sp28;
-    ColliderCylinder *sp24;
-    ColliderCylinder *temp_a2;
+    s16 *sp24;
+    s16 *temp_a2;
     s32 temp_v0;
 
     sp2C = (thisx->flags & 0x40) == 0x40;
@@ -5969,16 +5962,16 @@ void func_80B4D054(Actor *thisx, GlobalContext *globalCtx) {
         func_80151BB4(globalCtx, 5U);
         func_80B4CAB0(thisx);
     }
-    thisx->unk_2EC(thisx, globalCtx);
+    (bitwise ? (*)(Actor *, GlobalContext *)) thisx[2].velocity.x(thisx, globalCtx);
     if ((sp2C != 0) && (thisx->update != 0)) {
-        SkelAnime_FrameUpdateMatrix((SkelAnime *) (thisx + 0x144));
-        func_80B45CE0(thisx + 0x324);
-        if ((func_80B4CB0C != thisx->unk_2EC) && (sp28 == 0) && (thisx->isTargeted != 0)) {
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1]);
+        func_80B45CE0(&thisx[2].yDistToPlayer);
+        if ((func_80B4CB0C != (bitwise s32) thisx[2].velocity.x) && (sp28 == 0) && (thisx->isTargeted != 0)) {
             func_800B8614(thisx, globalCtx, 350.0f);
         }
-        temp_a2 = thisx + 0x2A0;
+        temp_a2 = &thisx[2].home.rot.z;
         sp24 = temp_a2;
-        Collider_UpdateCylinder(thisx, temp_a2);
+        Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);
     }
 }
@@ -6000,9 +5993,9 @@ void func_80B4D15C(Actor *arg0) {
     arg0->unk_38C = 0;
     arg0->unk_38D = 0xFF;
     temp_v0 = (temp_v1 * 8) + &D_80B4EE0C;
-    arg0->unk_15C = (f32) ((f32) (arg0->params & 7) * arg0->unk_154 * 0.25f);
+    arg0->unk_15C = (f32) ((f32) (arg0->params & 7) * arg0[1].home.pos.z * 0.25f);
     arg0->unk_304 = (s16) (temp_v1 * 0x5555);
-    arg0->unk_300 = (f32) temp_v0->unk_0;
+    arg0[2].minVelocityY = temp_v0->unk_0;
     sp20 = temp_v0;
     temp_f8 = Math_SinS(arg0->unk_304) * 80.0f;
     arg0->world.pos.y = arg0->home.pos.y;
@@ -6011,7 +6004,7 @@ void func_80B4D15C(Actor *arg0) {
     arg0->shape.rot.y = arg0->unk_304 + 0x4000;
     arg0->world.pos.z = temp_f6 + arg0->home.pos.z;
     arg0->unk_370 = (s16) temp_v0->unk_4;
-    arg0->unk_2EC = func_80B4D290;
+    arg0[2].velocity.x = func_80B4D290;
     arg0->velocity.y = 0.0f;
     arg0->unk_372 = (s16) temp_v0->unk_6;
 }
@@ -6059,9 +6052,9 @@ void func_80B4D3E4(Actor *arg0) {
     arg0->unk_306 = 0x190;
     arg0->unk_304 = 0;
     arg0->unk_2F0 = 0xC8;
-    arg0->unk_2EC = func_80B4D480;
+    arg0[2].velocity.x = func_80B4D480;
     arg0->velocity.y = 0.0f;
-    arg0->unk_15C = (f32) ((f32) (arg0->params & 7) * arg0->unk_154 * 0.25f);
+    arg0->unk_15C = (f32) ((f32) (arg0->params & 7) * arg0[1].home.pos.z * 0.25f);
 }
 
 void func_80B4D480(EnInvadepoh *this, GlobalContext *globalCtx) {
@@ -6122,7 +6115,7 @@ void func_80B4D670(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         func_80B45080();
         thisx->update = func_80B4D760;
-        SkelAnime_InitSV(globalCtx, (SkelAnime *) (thisx + 0x144), &D_06004E50, &D_06001674, thisx + 0x188, thisx + 0x212, 0xE);
+        SkelAnime_InitSV(globalCtx, (SkelAnime *) &thisx[1], &D_06004E50, &D_06001674, (Vec3s *) &thisx[1].focus.pos.z, thisx + 0x212, 0xE);
         if (sp34 < 3) {
             func_80B453F4(thisx, globalCtx, sp34);
             func_80B4D15C(thisx);
@@ -6140,8 +6133,8 @@ void func_80B4D760(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a2 = thisx;
     thisx = temp_a2;
-    temp_a2->unk_2EC(temp_a2, temp_a2);
-    temp_a0 = thisx + 0x144;
+    (bitwise ? (*)(Actor *, Actor *)) temp_a2[2].velocity.x(temp_a2, temp_a2);
+    temp_a0 = &thisx[1];
     if (thisx->update != 0) {
         thisx = thisx;
         SkelAnime_FrameUpdateMatrix((SkelAnime *) temp_a0);
@@ -6172,33 +6165,33 @@ void func_80B4D7B8(GraphicsContext **arg0) {
     phi_s3 = 0;
     do {
         if ((s32) phi_s2->unk_1 > 0) {
-            temp_v0 = arg0->unk_18840;
+            temp_v0 = arg0[25104];
             temp_s5 = (temp_v0 + (phi_s3 * 0x10)) & 0x7F;
             temp_s6 = (temp_v0 * -0xF) & 0xFF;
             SysMatrix_InsertTranslation(phi_s2->unk_4, phi_s2->unk_8, phi_s2->unk_C, 0);
             Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = 0;
             temp_v0_2->words.w0 = 0xE7000000;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFA008080;
             temp_v0_3->words.w1 = phi_s2->unk_2 | ~0x55FF;
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = 0xFF320000;
             temp_v0_4->words.w0 = 0xFB000000;
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDB060020;
             temp_v0_5->words.w1 = Gfx_TwoTexScroll(arg0->unk_0, 0, temp_s5, 0U, 0x20, 0x40, 1, 0U, temp_s6, 0x20, 0x40);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(arg0->unk_0);
             temp_v0_7 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_7 + 8;
+            temp_s0->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) D_0402E510;
             temp_v0_7->words.w0 = 0xDE000000;
         }
@@ -6280,18 +6273,18 @@ void func_80B4DB14(Actor *thisx, GlobalContext *globalCtx) {
             AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 0, 1U);
             temp_v1 = spCC->polyOpa.p;
-            spCC->polyOpa.p = temp_v1 + 8;
+            spCC->polyOpa.p = &temp_v1[1];
             temp_v1->words.w1 = 0xFF;
             temp_v1->words.w0 = 0xFB000000;
-            spCC->polyOpa.p = SkelAnime_DrawSV2(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_80B4D9D8, func_80B4D9F4, thisx, spCC->polyOpa.p);
+            spCC->polyOpa.p = SkelAnime_DrawSV2(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_80B4D9D8, func_80B4D9F4, thisx, spCC->polyOpa.p);
         } else {
             AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) D_80B50400);
             Scene_SetRenderModeXlu(globalCtx, 1, 2U);
             temp_v0 = spCC->polyXlu.p;
-            spCC->polyXlu.p = temp_v0 + 8;
+            spCC->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xFB000000;
             temp_v0->words.w1 = (u32) thisx->unk_389;
-            spCC->polyXlu.p = SkelAnime_DrawSV2(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_80B4D9D8, func_80B4D9F4, thisx, spCC->polyXlu.p);
+            spCC->polyXlu.p = SkelAnime_DrawSV2(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_80B4D9D8, func_80B4D9F4, thisx, spCC->polyXlu.p);
         }
         if (thisx->unk_38D != 0) {
             AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) D_80B503FC);
@@ -6299,45 +6292,45 @@ void func_80B4DB14(Actor *thisx, GlobalContext *globalCtx) {
             temp_v1_2 = temp_a2->polyXlu.p;
             temp_v1_2->words.w0 = 0xE7000000;
             temp_v1_2->words.w1 = 0;
-            temp_v1_3 = temp_v1_2 + 8;
+            temp_v1_3 = &temp_v1_2[1];
             temp_v1_3->words.w0 = 0xFA0000FF;
             temp_v1_3->words.w1 = 0xF0B4643C;
-            temp_v1_4 = temp_v1_3 + 8;
+            temp_v1_4 = &temp_v1_3[1];
             temp_v1_4->words.w0 = 0xFB000000;
-            temp_v1_5 = temp_v1_4 + 8;
+            temp_v1_5 = &temp_v1_4[1];
             temp_v1_4->words.w1 = ((u32) ((f32) thisx->unk_38D * 0.5882353f) & 0xFF) | ~0xFF;
             spBC = temp_v1_5;
             spB8 = temp_a2;
             SysMatrix_InsertMatrix(&D_80B502A0, 0);
             temp_v1_5->words.w0 = 0xDA380003;
-            temp_v1_6 = temp_v1_5 + 8;
+            temp_v1_6 = &temp_v1_5[1];
             spBC = temp_v1_6;
             temp_v1_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v1_6->words.w0 = 0xDE000000;
             temp_v1_6->words.w1 = (u32) &D_06000080;
-            temp_v1_7 = temp_v1_6 + 8;
+            temp_v1_7 = &temp_v1_6[1];
             spBC = temp_v1_7;
             sp4C = &D_06000080;
             SysMatrix_InsertMatrix(&D_80B502E0, 0);
             temp_v1_7->words.w0 = 0xDA380003;
-            temp_v1_8 = temp_v1_7 + 8;
+            temp_v1_8 = &temp_v1_7[1];
             spBC = temp_v1_8;
             sp4C = &D_06000080;
             temp_v1_7->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v1_8->words.w0 = 0xDE000000;
             temp_v1_8->words.w1 = (u32) &D_06000080;
-            spB8->polyXlu.p = temp_v1_8 + 8;
+            spB8->polyXlu.p = &temp_v1_8[1];
         }
     }
     if (thisx->unk_38C != 0) {
         SysMatrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y + 68.0f, thisx->world.pos.z, (Vec3s *) &thisx->shape);
-        Matrix_Scale(thisx->unk_390, thisx->unk_394, thisx->unk_398, 1);
+        Matrix_Scale(thisx[2].prevPos.x, thisx[2].prevPos.y, thisx[2].prevPos.z, 1);
         temp_v0_2 = spCC->polyXlu.p;
-        spCC->polyXlu.p = temp_v0_2 + 8;
+        spCC->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = spCC->polyXlu.p;
-        spCC->polyXlu.p = temp_v0_3 + 8;
+        spCC->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = (u32) &D_06000720;
     }
@@ -6347,10 +6340,10 @@ void func_80B4DB14(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0_5 = func_8012C868(temp_v0_4->polyXlu.p);
         temp_v0_5->words.w1 = 0x80;
         temp_v0_5->words.w0 = 0xE3001803;
-        temp_s0 = temp_v0_5 + 8;
+        temp_s0 = &temp_v0_5[1];
         temp_s0->words.w0 = 0xFCFF97FF;
         temp_s0->words.w1 = 0xFF2DFEFF;
-        temp_s0_2 = temp_s0 + 8;
+        temp_s0_2 = &temp_s0[1];
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 0);
         SysMatrix_GetStateTranslationAndScaledZ(60.0f, (Vec3f *) &sp80);
         sp74 = thisx->world.pos.x + sp80;
@@ -6359,21 +6352,21 @@ void func_80B4DB14(Actor *thisx, GlobalContext *globalCtx) {
         sp7C = thisx->world.pos.z + sp88;
         SysMatrix_InsertTranslation(sp74, temp_f14, sp7C, 0);
         Matrix_Scale(0.25f, 0.25f, 0.25f, 1);
-        temp_s0_3 = temp_s0_2 + 8;
+        temp_s0_3 = &temp_s0_2[1];
         temp_s0_2->words.w0 = 0xDE000000;
         temp_s0_2->words.w1 = (u32) D_04029CB0;
         temp_s0_3->words.w1 = ((s32) ((f32) thisx->unk_389 * 0.39215687f) & 0xFF) | 0xF0B46400;
         temp_s0_3->words.w0 = 0xFA000000;
-        temp_s0_4 = temp_s0_3 + 8;
+        temp_s0_4 = &temp_s0_3[1];
         temp_s0_4->words.w0 = 0xDA380003;
         sp54 = temp_s0_4;
-        temp_s0_5 = temp_s0_4 + 8;
+        temp_s0_5 = &temp_s0_4[1];
         temp_s0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_s0_5->words.w1 = (u32) D_04029CF0;
         temp_s0_5->words.w0 = 0xDE000000;
-        sp6C->polyXlu.p = temp_s0_5 + 8;
+        sp6C->polyXlu.p = &temp_s0_5[1];
         if (((s32) thisx->unk_389 >= 0x81) && (func_80B456A8(globalCtx, (Vec3f *) &sp74) != 0)) {
-            func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, (bitwise Vec3f) sp74.unk_0, sp74.unk_4, sp74.unk_8, (s8) 10.0f, (s8) 9.0f, 0, 0);
+            func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, (bitwise Vec3f) sp74.unk_0, (&sp74)[1], (&sp74)[2], (s8) 10.0f, (s8) 9.0f, 0, 0);
         }
     }
     SysMatrix_StatePop();
@@ -6388,21 +6381,21 @@ s32 func_80B4E120(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, s16 *a
 
 void func_80B4E158(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_80B4E120, NULL, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_80B4E120, NULL, thisx);
 }
 
 void func_80B4E1B0(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, NULL, NULL, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, NULL, NULL, thisx);
 }
 
 s32 func_80B4E200(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0xE) {
-        arg4->x += arg5->unk_346;
-        arg4->y += arg5->unk_348;
-        arg4->z += arg5->unk_344;
+        arg4->x += arg5[2].shape.rot.y;
+        arg4->y += arg5[2].shape.rot.z;
+        arg4->z += arg5[2].shape.rot.x;
     } else if (arg1 == 0xD) {
-        arg4->x += (s32) (arg5->unk_358 * (f32) arg5->unk_346);
+        arg4->x += (s32) (arg5->unk_358 * (f32) arg5[2].shape.rot.y);
         arg4->z += arg5->unk_364;
     }
     return 0;
@@ -6435,14 +6428,14 @@ void func_80B4E324(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060024;
-    temp_v1->words.w1 = (u32) D_80B4E958[thisx->unk_343];
+    temp_v1->words.w1 = (u32) D_80B4E958[(s8) thisx[2].colChkInfo.acHitEffect];
     temp_v1_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1_2 + 8;
+    sp30->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060020;
     temp_v1_2->words.w1 = (u32) D_80B4E944[thisx->unk_333];
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_80B4E200, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80B4E2AC, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_80B4E200, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80B4E2AC, thisx);
 }
 
 void func_80B4E3F0(Actor *thisx, GlobalContext *globalCtx) {
@@ -6477,33 +6470,33 @@ void func_80B4E3F0(Actor *thisx, GlobalContext *globalCtx) {
     sp58 = temp_a0_3;
     func_8012C2DC(temp_a0_3);
     temp_v0 = sp58->polyXlu.p;
-    sp58->polyXlu.p = temp_v0 + 8;
+    sp58->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp58 = sp58;
     sp50 = temp_v0;
     sp50->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp58->polyXlu.p;
-    sp58->polyXlu.p = temp_v0_2 + 8;
+    sp58->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA00FF80;
     temp_v0_2->words.w1 = 0xFFFF00B4;
     temp_v0_3 = sp58->polyXlu.p;
-    sp58->polyXlu.p = temp_v0_3 + 8;
+    sp58->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0xFF320000;
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_4 = sp58->polyXlu.p;
-    sp58->polyXlu.p = temp_v0_4 + 8;
+    sp58->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) D_04023210;
     if (func_80B456A8(globalCtx, (Vec3f *) &sp5C) != 0) {
-        func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, (bitwise Vec3f) sp5C.unk_0, sp5C.unk_4, sp5C.unk_8, (s8) 20.0f, (s8) 9.0f, 0, 0);
+        func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, (bitwise Vec3f) sp5C.unk_0, (&sp5C)[1], (&sp5C)[2], (s8) 20.0f, (s8) 9.0f, 0, 0);
     }
 }
 
 s32 func_80B4E5B0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if ((arg1 == 5) || (arg1 == 6) || (arg1 == 7)) {
-        arg4->x += arg5->unk_344;
-        arg4->y += arg5->unk_346;
-        arg4->z += arg5->unk_348;
+        arg4->x += arg5[2].shape.rot.x;
+        arg4->y += arg5[2].shape.rot.y;
+        arg4->z += arg5[2].shape.rot.z;
     }
     return 0;
 }
@@ -6523,19 +6516,19 @@ void func_80B4E660(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v1 + 8;
+    sp28->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = -0x3800;
     temp_v1->words.w0 = 0xFB000000;
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_80B4E5B0, func_80B4E61C, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_80B4E5B0, func_80B4E61C, thisx);
 }
 
 s32 func_80B4E6E4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 9) {
-        arg4->x += arg5->unk_346;
-        arg4->y += arg5->unk_348;
-        arg4->z += arg5->unk_344;
+        arg4->x += arg5[2].shape.rot.y;
+        arg4->y += arg5[2].shape.rot.z;
+        arg4->z += arg5[2].shape.rot.x;
     } else if (arg1 == 2) {
-        arg4->x += (s32) (arg5->unk_358 * (f32) arg5->unk_346);
+        arg4->x += (s32) (arg5->unk_358 * (f32) arg5[2].shape.rot.y);
     }
     return 0;
 }
@@ -6556,12 +6549,12 @@ void func_80B4E7BC(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060024;
-    temp_v1->words.w1 = (u32) D_80B4E984[thisx->unk_343];
+    temp_v1->words.w1 = (u32) D_80B4E984[(s8) thisx[2].colChkInfo.acHitEffect];
     temp_v1_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1_2 + 8;
+    sp30->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060020;
     temp_v1_2->words.w1 = (u32) D_80B4E96C[thisx->unk_333];
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_80B4E6E4, func_80B4E784, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_80B4E6E4, func_80B4E784, thisx);
 }

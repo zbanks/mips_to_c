@@ -77,16 +77,16 @@ void EffectSsDeadDs_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     spC0 = (f32) this->regs[0] * 0.01f;
     func_8012C974(temp_a0);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA000000;
     temp_v0->words.w1 = this->regs[5] & 0xFF;
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xFB000000;
     sp68.unk_0 = this->pos.x;
-    sp68.unk_4 = (f32) this->pos.y;
-    sp68.unk_8 = (f32) this->pos.z;
+    (&sp68)[1] = this->pos.y;
+    (&sp68)[2] = this->pos.z;
     if (this->regs[1] == 0) {
         sp40 = sp68 - this->velocity.x;
         temp_a0_2 = &globalCtx->colCtx;
@@ -118,15 +118,15 @@ void EffectSsDeadDs_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     SysMatrix_RotateStateAroundXAxis(1.57f);
     Matrix_Scale(spC0, spC0, spC0, 1);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_4 + 8;
+    temp_s1->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xFCFF97FF;
     temp_v0_4->words.w1 = 0xFF2DFEFF;
     temp_v0_5 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_5 + 8;
+    temp_s1->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDE000000;
     temp_v0_5->words.w1 = (u32) &D_04054940;
 }

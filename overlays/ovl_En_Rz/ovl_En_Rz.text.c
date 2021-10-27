@@ -300,7 +300,7 @@ void func_80BFB780(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     }
     sp28 = temp_a1;
     Math_Vec3f_Copy((Vec3f *) &sp34, (Vec3f *) temp_a1);
-    Math_Vec3f_Copy((Vec3f *) sp28, actor + 0x414);
+    Math_Vec3f_Copy((Vec3f *) sp28, (Vec3f *) &actor[3].focus.rot);
     func_800B4AEC(globalCtx, actor, 50.0f);
     temp_f0 = actor->floorHeight;
     if (sp38 < temp_f0) {
@@ -539,7 +539,7 @@ block_14:
 s32 func_80BFBFAC(Actor *arg0, GlobalContext *arg1) {
     if (arg0->cutscene == -1) {
         func_801518B0(arg1, 0x2925U, arg0);
-        arg0->unk_430 = func_80BFC078;
+        arg0[3].velocity.x = (bitwise f32) func_80BFC078;
         goto block_7;
     }
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -868,19 +868,19 @@ void EnRz_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     if (this->unk_422 == 4) {
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060024;
         sp38 = temp_v0;
         sp38->words.w1 = Lib_SegmentedToVirtual(D_80BFCCF0);
     } else if ((this->unk_420 & 2) != 0) {
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060024;
         sp34 = temp_v0_2;
         sp34->words.w1 = Lib_SegmentedToVirtual(D_80BFCCEC);
     } else {
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDB060024;
         sp30 = temp_v0_3;
         sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80BFCCE0 + (this->unk_410 * 4)));

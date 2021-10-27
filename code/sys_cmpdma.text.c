@@ -79,10 +79,10 @@ u16 *get_zbuffer();                                 /* static */
 static u16 **D_801FBB90;
 static u16 **D_801FBB94;
 static s32 D_801FBB98;
-static u16 (*D_801FBB9C)[320];
+static u32 *D_801FBB9C;
 static u32 *D_801FBBA0;
 static s32 D_801FBBB0;
-static u16 (*D_801FBBB4)[320];
+static u32 *D_801FBBB4;
 static u32 *D_801FBBB8;
 static u16 *D_801FBBBC;
 static u16 **D_801FBBC0;
@@ -107,7 +107,7 @@ u16 **sys_cfb_wbufl;
 u16 *sys_cfb_zbufl;
 
 void func_80178750(void) {
-    gFramebuffers->unk_4 = (u16 (*)[320]) D_801FBB9C;
+    gFramebuffers[1] = D_801FBB9C;
     gFramebuffers->unk_0 = D_801FBBA0;
     gZBufferPtr = sys_cfb_zbufl;
     D_801FBB90 = sys_cfb_wbufl;
@@ -127,7 +127,7 @@ void func_80178818(void) {
     s16 temp_v0;
     s16 temp_v1;
 
-    gFramebuffers->unk_4 = (u16 (*)[320]) D_801FBBB4;
+    gFramebuffers[1] = D_801FBBB4;
     gFramebuffers->unk_0 = D_801FBBB8;
     gZBufferPtr = D_801FBBBC;
     D_801FBB90 = D_801FBBC0;
@@ -151,16 +151,16 @@ void func_80178818(void) {
 }
 
 void func_80178978(void) {
-    D_801FBB9C = gFramebuffer1;
+    D_801FBB9C = (u32 *) gFramebuffer1;
     D_801FBBA0 = (u32 *) gFramebuffer0;
-    D_801FBBB4 = gFramebuffer1;
+    D_801FBBB4 = (u32 *) gFramebuffer1;
     D_801FBBB8 = (u32 *) D_80780000;
     func_80178750();
 }
 
 void func_801789D4(void) {
     gFramebuffers->unk_0 = NULL;
-    gFramebuffers->unk_4 = 0;
+    gFramebuffers[1] = NULL;
 }
 
 u32 *get_framebuffer(s32 index) {

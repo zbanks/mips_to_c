@@ -174,7 +174,7 @@ void ObjTokeiTobira_Update(Actor *thisx, GlobalContext *globalCtx) {
                         phi_v0 = this->actor.parent;
                     }
                     if (phi_v0 != 0) {
-                        phi_v0->unk_168 = 1;
+                        phi_v0[1].world.pos.x = 1e-45.0f;
                     }
                 }
             }

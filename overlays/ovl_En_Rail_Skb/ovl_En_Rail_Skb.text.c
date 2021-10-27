@@ -32,6 +32,13 @@ typedef struct EnRailSkb {
     /* 0x403 */ u8 unk_403;                         /* inferred */
 } EnRailSkb;                                        /* size = 0x404 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ u8 unk_12;                           /* inferred */
+    /* 0x13 */ char pad_13[0x1];
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnRailSkb_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -383,24 +390,24 @@ void func_80B708C0(Actor *arg0, GlobalContext *arg1) {
     f32 sp74;
     f32 sp70;
     f32 *temp_a1;
+    f32 temp_a2;
+    f32 temp_v1_2;
     s16 temp_v0_2;
     s32 temp_lo;
     s32 temp_s0_2;
     s32 temp_v1;
-    s32 temp_v1_2;
     u8 *temp_s0;
     u8 temp_t2;
-    void *temp_a2;
     void *temp_v0;
     s32 phi_s0;
     s32 phi_a3;
 
     temp_s0 = arg1->setupPathList + ((((s32) arg0->params >> 8) & 0xFF) * 8);
     temp_v1 = D_80B7348C;
-    arg0->unk_230 = Lib_SegmentedToVirtual(temp_s0->unk_4);
-    arg0->unk_2E0 = temp_v1;
+    arg0[1].projectedPos.x = Lib_SegmentedToVirtual(temp_s0->unk_4);
+    arg0[2].scale.x = temp_v1;
     temp_t2 = temp_s0->unk_0;
-    arg0->unk_2E8 = (s32) temp_t2;
+    arg0[2].scale.z = (bitwise f32) temp_t2;
     if (temp_v1 == 0) {
         phi_s0 = 1;
         if ((s32) temp_t2 >= 2) {
@@ -409,7 +416,7 @@ loop_3:
             Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x212, 0.0f, 0.0f, 0.0f, (s16) 0, (s16) 0, (s16) 0, (s32) arg0->params);
             temp_s0_2 = phi_s0 + 1;
             phi_s0 = temp_s0_2;
-            if (temp_s0_2 < arg0->unk_2E8) {
+            if (temp_s0_2 < (bitwise s32) arg0[2].scale.z) {
                 if (temp_s0_2 != 0xA) {
                     goto loop_3;
                 }
@@ -417,21 +424,21 @@ loop_3:
         }
         D_80B7348C = 0;
     }
-    temp_v1_2 = arg0->unk_2E0;
-    temp_a2 = arg0->unk_230;
-    temp_v0 = temp_a2 + (temp_v1_2 * 6);
+    temp_v1_2 = arg0[2].scale.x;
+    temp_a2 = arg0[1].projectedPos.x;
+    temp_v0 = (bitwise s32) temp_a2 + ((bitwise s32) temp_v1_2 * 6);
     arg0->world.pos.x = (f32) temp_v0->unk_0;
     arg0->world.pos.y = (f32) temp_v0->unk_2;
     arg0->world.pos.z = (f32) temp_v0->unk_4;
     phi_a3 = 0;
-    if (temp_v1_2 < (arg0->unk_2E8 - 1)) {
-        phi_a3 = temp_v1_2 + 1;
+    if ((bitwise s32) temp_v1_2 < ((bitwise s32) arg0[2].scale.z - 1)) {
+        phi_a3 = (bitwise s32) temp_v1_2 + 1;
     }
     temp_lo = phi_a3 * 6;
     temp_a1 = &sp70;
-    sp70 = (f32) *(temp_a2 + temp_lo);
-    sp74 = (f32) (arg0->unk_230 + temp_lo)->unk_2;
-    sp78 = (f32) (arg0->unk_230 + temp_lo)->unk_4;
+    sp70 = (f32) *((bitwise s32) temp_a2 + temp_lo);
+    sp74 = (f32) ((bitwise s32) arg0[1].projectedPos.x + temp_lo)->unk_2;
+    sp78 = (f32) ((bitwise s32) arg0[1].projectedPos.x + temp_lo)->unk_4;
     temp_v0_2 = Math_Vec3f_Yaw((Vec3f *) &arg0->world, (Vec3f *) temp_a1);
     arg0->shape.rot.y = temp_v0_2;
     arg0->world.rot.y = temp_v0_2;
@@ -468,11 +475,11 @@ s32 func_80B70B04(Actor *arg0, f32 arg1, s32 arg2, f32 arg3) {
     temp_s5 = &sp58;
     sp54 = 1;
     sp4C = 0;
-    sp60 = (f32) arg0->unk_230->unk_4 - arg3;
-    sp64 = (f32) arg0->unk_230->unk_0 - arg1;
-    sp58 = (f32) arg0->unk_230->unk_A - arg3;
-    sp5C = (f32) arg0->unk_230->unk_6 - arg1;
-    temp_s3 = func_80B70AB4((bitwise s32) temp_s4->unk_0, temp_s4->unk_4, temp_s5->unk_0, temp_s5->unk_4);
+    sp60 = (f32) arg0[1].projectedPos.x->unk_4 - arg3;
+    sp64 = (f32) arg0[1].projectedPos.x->unk_0 - arg1;
+    sp58 = (f32) arg0[1].projectedPos.x->unk_A - arg3;
+    sp5C = (f32) arg0[1].projectedPos.x->unk_6 - arg1;
+    temp_s3 = func_80B70AB4((bitwise s32) temp_s4->unk_0, temp_s4[1], temp_s5->unk_0, temp_s5[1]);
     phi_s0 = 1;
     phi_s2 = sp4C * 6;
 loop_1:
@@ -481,17 +488,17 @@ loop_1:
     phi_s2 = temp_s2;
     phi_v0 = 0;
     phi_s0_2 = temp_s0;
-    if (phi_s0 < (arg0->unk_2E8 - 1)) {
+    if (phi_s0 < (arg0[2].scale.z - 1)) {
         phi_v0 = temp_s0 * 6;
     } else {
         phi_s0_2 = 0;
     }
-    sp60 = (f32) (arg0->unk_230 + temp_s2)->unk_4 - arg3;
-    sp64 = (f32) *(arg0->unk_230 + temp_s2) - arg1;
-    sp58 = (f32) (arg0->unk_230 + phi_v0)->unk_4 - arg3;
-    sp5C = (f32) *(arg0->unk_230 + phi_v0) - arg1;
+    sp60 = (f32) (arg0[1].projectedPos.x + temp_s2)->unk_4 - arg3;
+    sp64 = (f32) *(arg0[1].projectedPos.x + temp_s2) - arg1;
+    sp58 = (f32) (arg0[1].projectedPos.x + phi_v0)->unk_4 - arg3;
+    sp5C = (f32) *(arg0[1].projectedPos.x + phi_v0) - arg1;
     phi_s0 = phi_s0_2;
-    if (func_80B70AB4((bitwise s32) temp_s4->unk_0, temp_s4->unk_4, temp_s5->unk_0, temp_s5->unk_4) != temp_s3) {
+    if (func_80B70AB4((bitwise s32) temp_s4->unk_0, temp_s4[1], temp_s5->unk_0, temp_s5[1]) != temp_s3) {
         sp54 = 0;
     } else if (phi_s0_2 != 0) {
         goto loop_1;
@@ -513,7 +520,7 @@ loop_1:
                 Actor_MarkForDeath(arg0);
                 return;
             }
-            arg0->unk_22C = phi_s0;
+            arg0[1].shape.feetPos[1].z = (bitwise f32) phi_s0;
             return;
         }
         temp_s0_2 = phi_s0->next;
@@ -604,7 +611,7 @@ void func_80B70FF8(EnRailSkb *this, GlobalContext *globalCtx) {
 
 void func_80B710AC(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_228 = func_80B710E4;
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80B710E4;
 }
 
 void func_80B710E4(EnRailSkb *this, GlobalContext *globalCtx) {
@@ -615,7 +622,7 @@ void func_80B710E4(EnRailSkb *this, GlobalContext *globalCtx) {
 
 void func_80B71114(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_228 = func_80B7114C;
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80B7114C;
 }
 
 void func_80B7114C(EnRailSkb *this, GlobalContext *globalCtx) {
@@ -684,8 +691,8 @@ void func_80B71314(EnRailSkb *this, GlobalContext *globalCtx) {
 
 void func_80B71354(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x3831U);
-    func_800BDC5C(arg0 + 0x1E4, (ActorAnimationEntry []) D_80B732D0, 2);
-    arg0->unk_228 = func_80B713A4;
+    func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo, (ActorAnimationEntry []) D_80B732D0, 2);
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80B713A4;
 }
 
 void func_80B713A4(EnRailSkb *this, GlobalContext *globalCtx) {
@@ -736,7 +743,7 @@ void func_80B7151C(Actor *arg0) {
 
     temp_a3 = arg0;
     temp_a3->colChkInfo.health = 2;
-    temp_a3->unk_402 = 0;
+    temp_a3[3].world.unk_12 = 0;
     temp_a3->flags |= 1;
     temp_a3->shape.yOffset = -5000.0f;
     arg0 = temp_a3;
@@ -744,8 +751,8 @@ void func_80B7151C(Actor *arg0) {
     arg0->draw = EnRailSkb_Draw;
     arg0->shape.shadowAlpha = 0;
     arg0->shape.rot.y = arg0->world.rot.y;
-    func_800BDC5C(arg0 + 0x1E4, (ActorAnimationEntry []) D_80B732D0, 1);
-    arg0->unk_228 = func_80B715AC;
+    func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo, (ActorAnimationEntry []) D_80B732D0, 1);
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80B715AC;
 }
 
 void func_80B715AC(EnRailSkb *this, GlobalContext *globalCtx) {
@@ -873,8 +880,8 @@ void func_80B71954(EnRailSkb *this, GlobalContext *globalCtx) {
 
 void func_80B71A08(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x3831U);
-    func_800BDC5C(arg0 + 0x1E4, (ActorAnimationEntry []) D_80B732D0, 2);
-    arg0->unk_228 = func_80B71A58;
+    func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo, (ActorAnimationEntry []) D_80B732D0, 2);
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80B71A58;
 }
 
 void func_80B71A58(EnRailSkb *this, GlobalContext *globalCtx) {
@@ -1089,12 +1096,12 @@ void func_80B72100(Actor *arg0, GlobalContext *arg1) {
         if (arg1->msgCtx.choiceIndex == 0) {
             func_8019F208();
             func_801518B0(arg1, 0x13F1U, arg0);
-            arg0->unk_400 = 0x13F1;
+            arg0[3].world.rot.z = 0x13F1;
             return;
         }
         func_8019F208();
         func_801518B0(arg1, 0x13F3U, arg0);
-        arg0->unk_400 = 0x13F3;
+        arg0[3].world.rot.z = 0x13F3;
         /* Duplicate return node #4. Try simplifying control flow for better match */
     }
 }
@@ -1109,22 +1116,22 @@ void func_80B72190(Actor *arg0, GlobalContext *arg1) {
     PosRot *temp_a0_2;
     SkelAnime *temp_a0;
     f32 *temp_a1;
+    f32 temp_v0;
+    f32 temp_v0_2;
+    f32 temp_v0_3;
     s16 temp_t8;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
 
     temp_a0 = arg0 + 0x1E4;
-    if ((func_80B714D8 != arg0->unk_228) && ((sp2C = temp_a0, (func_801378B8(temp_a0, 8.0f) != 0)) || (func_801378B8(temp_a0, 15.0f) != 0))) {
+    if ((func_80B714D8 != arg0[1].shape.feetPos[1].y) && ((sp2C = temp_a0, (func_801378B8(temp_a0, 8.0f) != 0)) || (func_801378B8(temp_a0, 15.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x3830U);
     }
     temp_v1 = arg0->parent;
-    temp_v0 = arg0->unk_228;
+    temp_v0 = arg0[1].shape.feetPos[1].y;
     if (temp_v1 == 0) {
         temp_t8 = arg0->unk_3F6;
         arg0->unk_3F6 = 1;
         arg0->unk_3F4 = temp_t8;
-        if ((func_80B713A4 == temp_v0) || (func_80B710E4 == temp_v0) || (func_80B7114C == temp_v0) || (func_80B7123C == temp_v0) || (func_80B717E0 == temp_v0)) {
+        if ((func_80B713A4 == (bitwise s32) temp_v0) || (func_80B710E4 == (bitwise s32) temp_v0) || (func_80B7114C == (bitwise s32) temp_v0) || (func_80B7123C == (bitwise s32) temp_v0) || (func_80B717E0 == (bitwise s32) temp_v0)) {
             arg0->unk_3F6 = 0;
         }
         if (arg0->unk_3F4 == 0) {
@@ -1132,28 +1139,28 @@ void func_80B72190(Actor *arg0, GlobalContext *arg1) {
         }
         goto block_20;
     }
-    if ((func_80B713A4 == temp_v0) || (func_80B710E4 == temp_v0) || (func_80B7114C == temp_v0) || (func_80B7123C == temp_v0) || (func_80B717E0 == temp_v0)) {
+    if ((func_80B713A4 == (bitwise s32) temp_v0) || (func_80B710E4 == (bitwise s32) temp_v0) || (func_80B7114C == (bitwise s32) temp_v0) || (func_80B7123C == (bitwise s32) temp_v0) || (func_80B717E0 == (bitwise s32) temp_v0)) {
         temp_v1->unk_3F6 = 0;
     }
     if (temp_v1->unk_3F4 != 0) {
 block_20:
-        temp_v0_2 = arg0->unk_228;
-        if ((func_80B71EA8 != temp_v0_2) && (func_80B71954 != temp_v0_2) && (func_80B71A58 != temp_v0_2) && (func_80B71BB8 != temp_v0_2)) {
+        temp_v0_2 = arg0[1].shape.feetPos[1].y;
+        if ((func_80B71EA8 != (bitwise s32) temp_v0_2) && (func_80B71954 != (bitwise s32) temp_v0_2) && (func_80B71A58 != (bitwise s32) temp_v0_2) && (func_80B71BB8 != (bitwise s32) temp_v0_2)) {
             temp_a0_2 = &arg0->world;
             temp_a1 = &sp38;
-            sp38 = (f32) *(arg0->unk_230 + (arg0->unk_2E0 * 6));
-            sp3C = (f32) (arg0->unk_230 + (arg0->unk_2E0 * 6))->unk_2;
+            sp38 = (f32) *((bitwise s32) arg0[1].projectedPos.x + ((bitwise s32) arg0[2].scale.x * 6));
+            sp3C = (f32) ((bitwise s32) arg0[1].projectedPos.x + ((bitwise s32) arg0[2].scale.x * 6))->unk_2;
             sp2C = (SkelAnime *) temp_a0_2;
-            sp40 = (f32) (arg0->unk_230 + (arg0->unk_2E0 * 6))->unk_4;
+            sp40 = (f32) ((bitwise s32) arg0[1].projectedPos.x + ((bitwise s32) arg0[2].scale.x * 6))->unk_4;
             sp32 = Math_Vec3f_Yaw((Vec3f *) temp_a0_2, (Vec3f *) temp_a1);
             if (Math_Vec3f_DistXZ((Vec3f *) temp_a0_2, (Vec3f *) &sp38) > 100.0f) {
                 Math_SmoothStepToS(&arg0->world.rot.y, sp32, 0xA, 0x3000, (s16) 0x100);
             } else {
-                temp_v0_3 = arg0->unk_2E0;
-                if (temp_v0_3 < (arg0->unk_2E8 - 1)) {
-                    arg0->unk_2E0 = (s32) (temp_v0_3 + 1);
+                temp_v0_3 = arg0[2].scale.x;
+                if ((bitwise s32) temp_v0_3 < ((bitwise s32) arg0[2].scale.z - 1)) {
+                    arg0[2].scale.x = (bitwise f32) ((bitwise s32) temp_v0_3 + 1);
                 } else {
-                    arg0->unk_2E0 = 0;
+                    arg0[2].scale.x = 0.0f;
                 }
             }
             Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
@@ -1187,14 +1194,14 @@ void func_80B72430(EnRailSkb *arg0, GlobalContext *arg1, s32 arg2) {
     s32 temp_a0;
 
     sp5C.unk_0 = arg0->actor.world.pos.x;
-    sp5C.unk_4 = (s32) arg0->actor.world.pos.y;
-    sp5C.unk_8 = (s32) arg0->actor.world.pos.z;
+    (&sp5C)[1] = arg0->actor.world.pos.y;
+    (&sp5C)[2] = arg0->actor.world.pos.z;
     sp50.unk_0 = (s32) D_80B73498.unk_0;
     sp50.unk_4 = (s32) D_80B73498.unk_4;
     sp50.unk_8 = (s32) D_80B73498.unk_8;
     sp44.unk_0 = D_80B734A4.unk_0;
-    sp44.unk_4 = (s32) D_80B734A4.unk_4;
-    sp44.unk_8 = (s32) D_80B734A4.unk_8;
+    (&sp44)[1] = D_80B734A4.unk_4;
+    (&sp44)[2] = D_80B734A4.unk_8;
     if ((arg1->gameplayFrames & arg2) == 0) {
         temp_v0 = Rand_Next();
         temp_a0 = temp_v0 << 0x10;
@@ -1263,7 +1270,7 @@ void func_80B726B4(EnRailSkb *arg0, GlobalContext *arg1) {
             sp8C = Math_CosS(temp_s1) * 3.0f;
             sp88 = (Rand_ZeroOne() * 4.0f) + 4.0f;
             EffectSsEnIce_Spawn(arg1, phi_s0, 0.6f, (Vec3f *) temp_s5, &D_80B734B8, &D_80B734B0, &D_80B734B4, 0x1E);
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while (temp_s0 != ((phi_s4 * 0xC) + arg0 + 0x234));
     }
@@ -1423,7 +1430,7 @@ block_14:
                     arg0->unk_402 |= 1;
                     /* fallthrough */
                 case 15:                            /* switch 2 */
-                    temp_v0_3 = sp3C->unk_ADA;
+                    temp_v0_3 = sp3C[8].colChkInfo.atHitEffect;
                     if ((temp_v0_3 == 4) || (temp_v0_3 == 0xB) || (temp_v0_3 == 0x16) || (temp_v0_3 == 0x17)) {
                         arg0->unk_402 |= 1;
                     }
@@ -1508,7 +1515,7 @@ s32 func_80B72E88(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         sp24.unk_8 = (s32) D_80B734C4.unk_8;
         arg1 = arg1;
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp24, arg5 + 0x3C);
-    } else if ((arg1 == 0xC) && (arg5->unk_3FA == 1)) {
+    } else if ((arg1 == 0xC) && (arg5[169].z == 1)) {
         arg1 = arg1;
         SysMatrix_InsertZRotation_s(0x71C, 1);
     }
@@ -1519,30 +1526,34 @@ s32 func_80B72E88(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 }
 
 void func_80B7302C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) {
+    f32 temp_t1;
+    f32 temp_t5;
     u8 temp_v0;
     u8 temp_v0_2;
 
-    if ((arg4->unk_402 & 0x80) == 0) {
+    if ((arg4[3].world.unk_12 & 0x80) == 0) {
         arg2 = arg2;
         Collider_UpdateSpheres(arg1, arg4 + 0x144);
-        if ((arg1 == 0xB) && (temp_v0 = arg4->unk_402, ((temp_v0 & 1) != 0)) && ((temp_v0 & 2) == 0)) {
+        if ((arg1 == 0xB) && (temp_v0 = arg4[3].world.unk_12, ((temp_v0 & 1) != 0)) && ((temp_v0 & 2) == 0)) {
             func_800BBCEC(arg4, arg0, 1, arg2);
-            arg4->unk_402 = (u8) (arg4->unk_402 | 2);
+            arg4[3].world.unk_12 |= 2;
         } else {
-            temp_v0_2 = arg4->unk_402;
+            temp_v0_2 = arg4[3].world.unk_12;
             if (((temp_v0_2 & 0x40) != 0) && ((arg1 != 0xB) || ((temp_v0_2 & 1) == 0)) && (arg1 != 0xC)) {
                 func_800BBCEC(arg4, arg0, 1, arg2);
             }
         }
         if (arg4->unk_3F0 != 0) {
             if ((arg1 == 2) || (arg1 == 4) || (arg1 == 5) || (arg1 == 6) || (arg1 == 7) || (arg1 == 8) || (arg1 == 9) || (arg1 == 0xD) || (arg1 == 0xE) || (arg1 == 0xF) || (arg1 == 0x10) || (arg1 == 0x11) || (arg1 == 0x12)) {
-                SysMatrix_GetStateTranslation(arg4 + (arg4->unk_2DC * 0xC) + 0x234);
-                arg4->unk_2DC = (s32) (arg4->unk_2DC + 1);
+                temp_t5 = arg4[2].targetArrowOffset;
+                SysMatrix_GetStateTranslation(arg4 + ((((bitwise s32) temp_t5 * 4) - (bitwise s32) temp_t5) * 4) + 0x234);
+                arg4[2].targetArrowOffset = (bitwise f32) ((bitwise s32) arg4[2].targetArrowOffset + 1);
                 return;
             }
-            if ((arg1 == 0xB) && ((arg4->unk_402 & 2) == 0)) {
-                SysMatrix_MultiplyVector3fByState(&D_80B734D0, arg4 + (arg4->unk_2DC * 0xC) + 0x234);
-                arg4->unk_2DC = (s32) (arg4->unk_2DC + 1);
+            if ((arg1 == 0xB) && ((arg4[3].world.unk_12 & 2) == 0)) {
+                temp_t1 = arg4[2].targetArrowOffset;
+                SysMatrix_MultiplyVector3fByState(&D_80B734D0, arg4 + ((((bitwise s32) temp_t1 * 4) - (bitwise s32) temp_t1) * 4) + 0x234);
+                arg4[2].targetArrowOffset = (bitwise f32) ((bitwise s32) arg4[2].targetArrowOffset + 1);
             }
             /* Duplicate return node #28. Try simplifying control flow for better match */
             return;

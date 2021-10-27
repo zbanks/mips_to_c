@@ -710,9 +710,9 @@ f32 Math3D_Normalize(Vec3f *vec) {
         return 0;
     }
     Math_Vec3f_Copy(&D_801FBD98, D_801FBD80);
-    D_801FBDA4.x = ((D_801FBD80 + 0xC)->x * 100.0f) + D_801FBD80->x;
-    D_801FBDA4.y = (*(D_801FBD80 + 0x10) * 100.0f) + D_801FBD80->y;
-    D_801FBDA4.z = (*(D_801FBD80 + 0x14) * 100.0f) + D_801FBD80->z;
+    D_801FBDA4.x = (D_801FBD80[1].x * 100.0f) + D_801FBD80->x;
+    D_801FBDA4.y = (D_801FBD80[1].y * 100.0f) + D_801FBD80->y;
+    D_801FBDA4.z = (D_801FBD80[1].z * 100.0f) + D_801FBD80->z;
     if (func_80179798(&D_801FBD98, &D_801FBDA4, arg8, arg9, argA, &sp34) == 0) {
         return 0;
     }
@@ -840,11 +840,11 @@ f32 func_80179A44(Vec3f *arg0, Vec3f *arg1, Vec3f *arg2) {
         Math_Vec3f_Copy(arg2, arg1);
     }
     temp_f0_2 = arg0->x;
-    temp_f2 = arg0->unk_C;
-    temp_f12 = (((arg1->x - temp_f0_2) * temp_f2) + ((arg1->y - arg0->y) * arg0->unk_10) + ((arg1->z - arg0->z) * arg0->unk_14)) / temp_f14;
+    temp_f2 = arg0[1].x;
+    temp_f12 = (((arg1->x - temp_f0_2) * temp_f2) + ((arg1->y - arg0->y) * arg0[1].y) + ((arg1->z - arg0->z) * arg0[1].z)) / temp_f14;
     arg2->x = (temp_f2 * temp_f12) + temp_f0_2;
-    arg2->y = (arg0->unk_10 * temp_f12) + arg0->y;
-    arg2->z = (arg0->unk_14 * temp_f12) + arg0->z;
+    arg2->y = (arg0[1].y * temp_f12) + arg0->y;
+    arg2->z = (arg0[1].z * temp_f12) + arg0->z;
     return temp_f12;
 }
 
@@ -876,13 +876,13 @@ s32 func_80179B94(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f3
     sp58 = arg5;
     sp54 = arg4;
     Math3D_CrossProduct((Vec3f *) &sp60, (Vec3f *) temp_a1, arg8 + 0xC);
-    sp44 = arg8->unk_C;
+    sp44 = arg8[3];
     temp_f14 = fabsf(sp44);
-    if ((temp_f14 < 0.008f) && (fabsf(arg8->unk_10) < 0.008f) && (fabsf(arg8->unk_14) < 0.008f)) {
+    if ((temp_f14 < 0.008f) && (fabsf(arg8[4]) < 0.008f) && (fabsf(arg8[5]) < 0.008f)) {
         return 0;
     }
-    temp_f16 = arg8->unk_10;
-    temp_f18 = arg8->unk_14;
+    temp_f16 = arg8[4];
+    temp_f18 = arg8[5];
     temp_f12 = fabsf(temp_f16);
     temp_f0 = fabsf(temp_f18);
     if ((temp_f12 <= temp_f14) && (temp_f0 <= temp_f14)) {
@@ -890,10 +890,10 @@ s32 func_80179B94(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f3
         arg8->unk_0 = 0.0f;
     } else if ((temp_f14 <= temp_f12) && (temp_f0 <= temp_f12)) {
         func_80179B34(arg2, arg0, arg6, arg4, temp_f16, arg3, arg7, arg8 + 8, arg8);
-        arg8->unk_4 = 0.0f;
+        arg8[1] = 0.0f;
     } else {
         func_80179B34(arg0, arg1, arg4, arg5, temp_f18, arg3, arg7, arg8, arg8 + 4);
-        arg8->unk_8 = 0.0f;
+        arg8[2] = 0.0f;
     }
     return 1;
 }
@@ -1014,8 +1014,8 @@ s32 func_8017A09C(f32 *arg0, f32 *arg1, TriNorm *arg2, f32 arg3, f32 arg4, f32 a
     if ((arg3 < (phi_f12_2 - arg5)) || ((phi_f14_2 + arg5) < arg3)) {
         return 0;
     }
-    temp_f2_2 = arg0->unk_4;
-    temp_f16 = arg1->unk_4;
+    temp_f2_2 = arg0[1];
+    temp_f16 = arg1[1];
     if (temp_f2_2 < temp_f16) {
         phi_f12_3 = temp_f2_2;
         phi_f14_3 = temp_f16;
@@ -1053,8 +1053,8 @@ s32 func_8017A1D0(f32 *arg0, f32 *arg1, TriNorm *arg2, f32 arg3, f32 arg4, f32 a
     f32 phi_f12_4;
     f32 phi_f14_4;
 
-    temp_f0 = arg0->unk_8;
-    temp_f2 = arg1->unk_8;
+    temp_f0 = arg0[2];
+    temp_f2 = arg1[2];
     if (temp_f0 < temp_f2) {
         phi_f12 = temp_f0;
         phi_f14 = temp_f2;
@@ -1073,8 +1073,8 @@ s32 func_8017A1D0(f32 *arg0, f32 *arg1, TriNorm *arg2, f32 arg3, f32 arg4, f32 a
     if ((arg4 < (phi_f12_2 - arg5)) || ((phi_f14_2 + arg5) < arg4)) {
         return 0;
     }
-    temp_f0_3 = arg0->unk_4;
-    temp_f16 = arg1->unk_4;
+    temp_f0_3 = arg0[1];
+    temp_f16 = arg1[1];
     if (temp_f0_3 < temp_f16) {
         phi_f12_3 = temp_f0_3;
         phi_f14_3 = temp_f16;
@@ -1132,8 +1132,8 @@ s32 func_8017A304(f32 *arg0, f32 *arg1, Vec3f *arg2, f32 arg3, f32 arg4, f32 arg
     if ((arg4 < (phi_f12_2 - arg5)) || ((phi_f14_2 + arg5) < arg4)) {
         return 0;
     }
-    temp_f0_3 = arg0->unk_8;
-    temp_f16 = arg1->unk_8;
+    temp_f0_3 = arg0[2];
+    temp_f16 = arg1[2];
     if (temp_f0_3 < temp_f16) {
         phi_f12_3 = temp_f0_3;
         phi_f14_3 = temp_f16;
@@ -1303,15 +1303,15 @@ f32 Math3D_DistanceS(Vec3s *s, Vec3f *f) {
 }
 
 f32 func_8017A7B8(f32 *param_1, f32 *param_2, f32 param_3, f32 param_4) {
-    return ((param_1->unk_0 - param_3) * (param_2->unk_4 - param_4)) - ((param_1->unk_4 - param_4) * (param_2->unk_0 - param_3));
+    return ((param_1->unk_0 - param_3) * (param_2[1] - param_4)) - ((param_1[1] - param_4) * (param_2->unk_0 - param_3));
 }
 
 f32 func_8017A7F8(f32 *param_1, f32 *param_2, f32 param_3, f32 param_4) {
-    return ((param_1->unk_4 - param_3) * (param_2->unk_8 - param_4)) - ((param_1->unk_8 - param_4) * (param_2->unk_4 - param_3));
+    return ((param_1[1] - param_3) * (param_2[2] - param_4)) - ((param_1[2] - param_4) * (param_2[1] - param_3));
 }
 
 f32 func_8017A838(f32 *param_1, f32 *param_2, f32 param_3, f32 param_4) {
-    return ((param_1->unk_8 - param_3) * (param_2->unk_0 - param_4)) - ((param_1->unk_0 - param_4) * (param_2->unk_8 - param_3));
+    return ((param_1[2] - param_3) * (param_2->unk_0 - param_4)) - ((param_1->unk_0 - param_4) * (param_2[2] - param_3));
 }
 
 void Math3D_CrossProduct(Vec3f *a, Vec3f *b, Vec3f *res) {
@@ -1814,9 +1814,9 @@ s32 func_8017BAD0(f32 *arg0, f32 *arg1, f32 *arg2, Vec3f *arg3, f32 arg4, f32 ar
         goto block_25;
     }
     temp_f20 = arg6 * arg6;
-    temp_f12 = arg0->unk_8 - (bitwise f32) arg3;
+    temp_f12 = arg0[2] - (bitwise f32) arg3;
     temp_f14 = arg0->unk_0 - arg4;
-    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = temp_a1->unk_8 - (bitwise f32) arg3, temp_f18 = temp_a1->unk_0 - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2->unk_8 - (bitwise f32) arg3, temp_f2 = arg2->unk_0 - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
+    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = temp_a1[2] - (bitwise f32) arg3, temp_f18 = temp_a1->unk_0 - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2[2] - (bitwise f32) arg3, temp_f2 = arg2->unk_0 - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
         return 1;
     }
     temp_f10 = (temp_f12 * temp_f18) - (temp_f14 * temp_f16);
@@ -1952,10 +1952,10 @@ s32 func_8017C1F0(f32 *arg0, f32 *arg1, f32 *arg2, f32 arg3, f32 arg4, f32 arg5,
     f32 temp_f6_3;
     f32 temp_f8;
 
-    temp_f12 = arg0->unk_8 - arg3;
+    temp_f12 = arg0[2] - arg3;
     temp_f14 = arg0->unk_0 - arg4;
     temp_f20 = arg6 * arg6;
-    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = arg1->unk_8 - arg3, temp_f18 = arg1->unk_0 - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2->unk_8 - arg3, temp_f2 = arg2->unk_0 - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
+    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = arg1[2] - arg3, temp_f18 = arg1->unk_0 - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2[2] - arg3, temp_f2 = arg2->unk_0 - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
         return 1;
     }
     temp_f6 = (temp_f12 * temp_f18) - (temp_f14 * temp_f16);
@@ -2024,9 +2024,9 @@ s32 func_8017C540(f32 *arg0, f32 *arg1, f32 *arg2, TriNorm *arg3, f32 arg4, f32 
         goto block_25;
     }
     temp_f20 = arg6 * arg6;
-    temp_f12 = arg0->unk_4 - (bitwise f32) arg3;
-    temp_f14 = arg0->unk_8 - arg4;
-    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = temp_a1->unk_4 - (bitwise f32) arg3, temp_f18 = temp_a1->unk_8 - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2->unk_4 - (bitwise f32) arg3, temp_f2 = arg2->unk_8 - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
+    temp_f12 = arg0[1] - (bitwise f32) arg3;
+    temp_f14 = arg0[2] - arg4;
+    if ((((temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < temp_f20) || (temp_f16 = temp_a1[1] - (bitwise f32) arg3, temp_f18 = temp_a1[2] - arg4, (((temp_f16 * temp_f16) + (temp_f18 * temp_f18)) < temp_f20)) || (temp_f0 = arg2[1] - (bitwise f32) arg3, temp_f2 = arg2[2] - arg4, (((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f20))) {
         return 1;
     }
     temp_f10 = (temp_f12 * temp_f18) - (temp_f14 * temp_f16);
@@ -2165,10 +2165,10 @@ s32 func_8017CB7C(f32 *arg0, f32 *arg1, f32 *arg2, TriNorm *arg3, f32 arg4, f32 
     }
     temp_f24 = arg6 * arg6;
     temp_f16 = arg0->unk_0;
-    temp_f18 = arg0->unk_4;
+    temp_f18 = arg0[1];
     temp_f0 = (bitwise f32) arg3 - temp_f16;
     temp_f2 = arg4 - temp_f18;
-    if ((((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f24) || (temp_f12 = temp_a1->unk_0, temp_f14 = temp_a1->unk_4, temp_f0_2 = (bitwise f32) arg3 - temp_f12, sp54 = temp_f12, sp50 = temp_f14, temp_f2_2 = arg4 - temp_f14, (((temp_f0_2 * temp_f0_2) + (temp_f2_2 * temp_f2_2)) < temp_f24)) || (temp_f12_2 = arg2->unk_0, temp_f14_2 = arg2->unk_4, temp_f0_3 = (bitwise f32) arg3 - temp_f12_2, sp4C = temp_f12_2, sp48 = temp_f14_2, temp_f2_3 = arg4 - temp_f14_2, (((temp_f0_3 * temp_f0_3) + (temp_f2_3 * temp_f2_3)) < temp_f24))) {
+    if ((((temp_f0 * temp_f0) + (temp_f2 * temp_f2)) < temp_f24) || (temp_f12 = temp_a1->unk_0, temp_f14 = temp_a1[1], temp_f0_2 = (bitwise f32) arg3 - temp_f12, sp54 = temp_f12, sp50 = temp_f14, temp_f2_2 = arg4 - temp_f14, (((temp_f0_2 * temp_f0_2) + (temp_f2_2 * temp_f2_2)) < temp_f24)) || (temp_f12_2 = arg2->unk_0, temp_f14_2 = arg2[1], temp_f0_3 = (bitwise f32) arg3 - temp_f12_2, sp4C = temp_f12_2, sp48 = temp_f14_2, temp_f2_3 = arg4 - temp_f14_2, (((temp_f0_3 * temp_f0_3) + (temp_f2_3 * temp_f2_3)) < temp_f24))) {
         return 1;
     }
     temp_f2_4 = temp_f16 - (bitwise f32) arg3;
@@ -2422,9 +2422,9 @@ s32 func_8017D814(f32 arg0, f32 arg1, f32 *arg2, f32 *arg3, f32 *arg4) {
     s32 phi_v1;
 
     temp_f18 = arg2->unk_0;
-    spC = arg2->unk_4;
+    spC = arg2[1];
     temp_f2 = arg3->unk_0 - temp_f18;
-    temp_f16 = arg3->unk_4 - spC;
+    temp_f16 = arg3[1] - spC;
     temp_f8 = (temp_f2 * temp_f2) + (temp_f16 * temp_f16);
     temp_f0 = fabsf(temp_f8);
     sp8 = temp_f8;
@@ -2467,10 +2467,10 @@ s32 func_8017D91C(f32 arg0, f32 arg1, f32 *arg2, f32 *arg3, f32 *arg4) {
     f32 temp_f8_2;
     s32 phi_v1;
 
-    temp_f18 = arg2->unk_4;
-    spC = arg2->unk_8;
-    temp_f2 = arg3->unk_4 - temp_f18;
-    temp_f16 = arg3->unk_8 - spC;
+    temp_f18 = arg2[1];
+    spC = arg2[2];
+    temp_f2 = arg3[1] - temp_f18;
+    temp_f16 = arg3[2] - spC;
     temp_f8 = (temp_f2 * temp_f2) + (temp_f16 * temp_f16);
     temp_f0 = fabsf(temp_f8);
     sp8 = temp_f8;
@@ -2513,9 +2513,9 @@ s32 func_8017DA24(f32 arg0, f32 arg1, f32 *arg2, f32 *arg3, f32 *arg4) {
     f32 temp_f8_2;
     s32 phi_v1;
 
-    temp_f18 = arg2->unk_8;
+    temp_f18 = arg2[2];
     spC = arg2->unk_0;
-    temp_f2 = arg3->unk_8 - temp_f18;
+    temp_f2 = arg3[2] - temp_f18;
     temp_f16 = arg3->unk_0 - spC;
     temp_f8 = (temp_f2 * temp_f2) + (temp_f16 * temp_f16);
     temp_f0 = fabsf(temp_f8);

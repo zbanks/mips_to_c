@@ -151,11 +151,11 @@ void func_809437C8(Actor *arg0) {
     s16 temp_a1;
     void *temp_a2;
 
-    if (arg0->unk_288 != -1) {
+    if (arg0[2].id != -1) {
         temp_a0 = arg0->unk_258;
         temp_a2 = arg0 + 0x26C;
         if (temp_a0 != 0) {
-            temp_a1 = arg0->unk_25C;
+            temp_a1 = arg0[1].freezeTimer;
             arg0 = arg0;
             if (func_8013D68C(temp_a0, temp_a1, temp_a2) == 0) {
                 Actor_MarkForDeath(arg0);
@@ -328,7 +328,7 @@ void EnDaiku_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80943E18(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0xF) {
         arg4->x += arg5->unk_260;
-        arg4->z += arg5->unk_25E;
+        arg4->z += arg5[1].colorFilterParams;
     }
     return 0;
 }
@@ -343,9 +343,9 @@ void func_80943E60(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) 
         temp_a0 = temp_v0->unk_2B0;
         temp_v0->unk_2B0 = (void *) (temp_a0 + 8);
         temp_a0->unk_0 = 0xDE000000;
-        temp_a0->unk_4 = (s32) *(&D_809440D4 + (arg4->unk_278 * 4));
+        temp_a0->unk_4 = (s32) *(&D_809440D4 + (arg4[1].destroy * 4));
     }
-    if ((arg4->unk_278 == 3) && (arg1 == 8)) {
+    if ((arg4[1].destroy == 3) && (arg1 == 8)) {
         temp_a0_2 = temp_v0->unk_2B0;
         temp_v0->unk_2B0 = (void *) (temp_a0_2 + 8);
         temp_a0_2->unk_4 = &D_06008EC8;
@@ -371,31 +371,31 @@ void EnDaiku_Draw(Actor *thisx, GlobalContext *globalCtx) {
     switch (temp_t7) {
     case 0:
         temp_v0 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0 + 8;
+        sp30->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFB000000;
         temp_v0->words.w1 = 0xAA0A46FF;
         break;
     case 1:
         temp_v0_2 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_2 + 8;
+        sp30->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFB000000;
         temp_v0_2->words.w1 = 0xAAC8FFFF;
         break;
     case 2:
         temp_v0_3 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_3 + 8;
+        sp30->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = 0xE646FF;
         break;
     case 3:
         temp_v0_4 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_4 + 8;
+        sp30->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFB000000;
         temp_v0_4->words.w1 = 0xC80096FF;
         break;
     case 4:
         temp_v0_5 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_5 + 8;
+        sp30->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFB000000;
         temp_v0_5->words.w1 = 0xC80000FF;
         break;

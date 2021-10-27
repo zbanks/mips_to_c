@@ -92,7 +92,7 @@ extern CollisionHeader D_06000988;
 static Vec3f D_80B40780 = {0.0f, 0.0f, 0.0f};
 
 void func_80B40080(Actor *arg0) {
-    arg0->unk_17E = 1;
+    arg0[1].unk_3A = 1;
     arg0->unk_15C = func_80B400C8;
 }
 
@@ -149,7 +149,7 @@ void func_80B401F8(Actor *arg0, GlobalContext *arg1) {
     }
     temp_v0 = arg1->actorCtx.actorList[2].first;
     sp3C = temp_v0;
-    Math_Vec3f_DistXYZAndStoreDiff(arg0 + 0x168, (Vec3f *) &temp_v0->world, (Vec3f *) &sp30);
+    Math_Vec3f_DistXYZAndStoreDiff((Vec3f *) &arg0[1].world, (Vec3f *) &temp_v0->world, (Vec3f *) &sp30);
     if ((sp30 >= 0.0f) && (sp30 <= arg0->unk_174) && (sp38 >= 0.0f) && (sp38 <= arg0->unk_178) && (fabsf(sp34) < 100.0f) && (temp_v0->yDistToWater > 12.0f)) {
         func_800B8A1C(arg0, arg1, 0xBA, arg0->xzDistToPlayer, fabsf(arg0->yDistToPlayer));
     }
@@ -264,16 +264,16 @@ void BgGoronOyu_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000968));
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000158;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_06000080;
     temp_v0_3->words.w0 = 0xDE000000;
 }

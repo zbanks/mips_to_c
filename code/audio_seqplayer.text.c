@@ -183,21 +183,21 @@ s32 func_801956C0(u8, s32, void *, s32);            /* extern */
 ? func_80195EE0(s32 *);                             /* extern */
 ? func_80196040(s32 *, u8);                         /* extern */
 void *func_801965F0(void *);                        /* extern */
-? func_80196BC8(s32 *);                             /* extern */
+? func_80196BC8(void *);                            /* extern */
 ? func_80197048(void *);                            /* extern */
 ? func_80197138(void *);                            /* extern */
 s8 func_801974D0(s32 arg1, s32);                    /* static */
-u8 func_80197538(s32 *arg0, u8 **arg1, s32 arg2, s8 arg3); /* static */
+u8 func_80197538(void *arg0, u8 **arg1, s32 arg2, s8 arg3); /* static */
 void func_80197714(? *arg0);                        /* static */
 s32 func_80197880(s32 *arg0, s32 arg1);             /* static */
 void func_801979D8(void *arg0);                     /* static */
 void func_80197A54(u8 *arg0, s32 arg1);             /* static */
 void func_80197AA4(u8 *arg0);                       /* static */
-void func_80197B14(s32 *arg0, s32 arg1);            /* static */
+void func_80197B14(void *arg0, s32 arg1);           /* static */
 void func_80197C0C(void *arg0, ? arg1);             /* static */
-void func_80197C8C(s32 *arg0, s32 arg1, u8 *arg2);  /* static */
+void func_80197C8C(s32 arg0, s32 arg1, u8 *arg2);   /* static */
 void func_80197D24(u8 *arg0);                       /* static */
-void func_80197D4C(s32 *arg0);                      /* static */
+void func_80197D4C(void *arg0);                     /* static */
 void func_80197E08(? *arg0, ? *arg1, void *);       /* static */
 void *func_80197E48(? *arg0, void *, void *);       /* static */
 void func_80197E88();                               /* static */
@@ -214,9 +214,9 @@ void func_801990F4(s32 *arg0, u8 arg1);             /* static */
 s8 func_80199124(void *arg0, u8 arg1, void **arg2, void *arg3); /* static */
 void func_80199198(u8 *arg0, u8 arg1);              /* static */
 void func_80199244(s32 *arg0, u8 arg1);             /* static */
-void func_8019A0BC(s32 *arg0);                      /* static */
+void func_8019A0BC(void *arg0);                     /* static */
 void func_8019AA3C(s32 arg0);                       /* static */
-void func_8019AAF0(s32 *arg0);                      /* static */
+void func_8019AAF0(void *arg0);                     /* static */
 void func_8019AB40(? *arg0);                        /* static */
 void func_8019AC10(s32 arg0);                       /* static */
 void func_8019ACEC(? *arg0);                        /* static */
@@ -264,7 +264,7 @@ s8 func_801974D0(s32 arg1) {
     return phi_v1;
 }
 
-u8 func_80197538(s32 *arg0, u8 **arg1, s32 arg2, s8 arg3) {
+u8 func_80197538(void *arg0, u8 **arg1, s32 arg2, s8 arg3) {
     u8 temp_v0;
     u8 temp_v0_2;
     u8 temp_v1;
@@ -444,10 +444,10 @@ s32 func_80197880(s32 *arg0, s32 arg1) {
 block_4:
     temp_v1 = (arg0 + temp_t7)->unk_54;
     temp_v1->unk_60 = arg0;
-    temp_v1->unk_28 = (s32) arg0->unk_80;
+    temp_v1->unk_28 = (s32) arg0[32];
     temp_v1->unk_28 = 0;
     temp_t4 = temp_v1->unk_0 | 0x80;
-    temp_v1->unk_2C = (s32) arg0->unk_84;
+    temp_v1->unk_2C = (s32) arg0[33];
     temp_t6 = temp_t4 & 0xBF;
     temp_t8 = temp_t6 & 0xDF;
     temp_v1->unk_0 = temp_t4;
@@ -539,7 +539,7 @@ void func_80197AA4(u8 *arg0) {
     *arg0 &= 0xFF7F;
 }
 
-void func_80197B14(s32 *arg0, s32 arg1) {
+void func_80197B14(void *arg0, s32 arg1) {
     s32 temp_v0;
     s32 temp_v1;
     s32 temp_v1_2;
@@ -606,7 +606,7 @@ void func_80197C0C(void *arg0, ? arg1) {
     } while (temp_s0 != 0x40);
 }
 
-void func_80197C8C(s32 *arg0, s32 arg1, u8 *arg2) {
+void func_80197C8C(s32 arg0, s32 arg1, u8 *arg2) {
     s32 temp_s0;
     u8 *temp_s2;
     u8 temp_t1;
@@ -615,7 +615,7 @@ void func_80197C8C(s32 *arg0, s32 arg1, u8 *arg2) {
     s32 phi_s0;
 
     temp_s2 = (arg0 + ((arg1 & 0xFF) * 4))->unk_38;
-    temp_s2->unk_7C = 0;
+    temp_s2[124] = 0;
     temp_s2->unk_64 = arg2;
     temp_t1 = temp_s2->unk_0 | 0x80;
     temp_t2 = temp_t1 & 0xBF;
@@ -639,7 +639,7 @@ void func_80197D24(u8 *arg0) {
     func_80197D4C();
 }
 
-void func_80197D4C(s32 *arg0) {
+void func_80197D4C(void *arg0) {
     s8 temp_t1;
     u8 temp_v0;
 
@@ -865,7 +865,6 @@ block_5:
 }
 
 s32 func_8019825C(void *arg0) {
-    s32 *temp_s3;
     s32 temp_a1;
     s32 temp_s0;
     s32 temp_s0_2;
@@ -879,6 +878,7 @@ s32 func_8019825C(void *arg0) {
     u8 temp_a1_2;
     u8 temp_a1_3;
     u8 temp_a1_4;
+    void *temp_s3;
     void *temp_s4;
     s8 phi_s0;
 
@@ -916,7 +916,7 @@ loop_1:
         case 202:
             temp_v1_2 = *temp_s2;
             temp_a1_2 = *temp_v1_2;
-            *temp_s2 = temp_v1_2 + 1;
+            *temp_s2 = &temp_v1_2[1];
             if (temp_v0 == 0xC1) {
                 arg0->unk_4C = (f32) ((f32) (temp_a1_2 * temp_a1_2) / 16129.0f);
             } else {
@@ -927,7 +927,7 @@ loop_1:
         case 201:
             temp_v1_3 = *temp_s2;
             temp_a1_3 = *temp_v1_3;
-            *temp_s2 = temp_v1_3 + 1;
+            *temp_s2 = &temp_v1_3[1];
             if (temp_v0 == 0xC9) {
                 arg0->unk_3 = temp_a1_3;
             } else {
@@ -979,7 +979,7 @@ loop_1:
             arg0->unk_5 = phi_s0;
             if ((arg0->unk_30 & 0x80) != 0) {
                 arg0->unk_20 = (s16) **temp_s2;
-                *temp_s2 += 1;
+                *temp_s2 = &(*temp_s2)[1];
             } else {
                 arg0->unk_20 = func_80197F74(temp_s2);
             }
@@ -1377,7 +1377,7 @@ u8 func_80198CE0(void *arg0, s32 arg1) {
                 sp3A = temp_v0;
                 temp_v1_2 = *temp_a0_3;
                 temp_a3_2 = *temp_v1_2;
-                *temp_a0_3 = temp_v1_2 + 1;
+                *temp_a0_3 = &temp_v1_2[1];
                 arg0->unk_3 = 0U;
                 arg0->unk_26 = temp_v0;
                 phi_a3 = (s32) temp_a3_2;
@@ -1393,10 +1393,10 @@ u8 func_80198CE0(void *arg0, s32 arg1) {
             sp3A = temp_v0_2;
             temp_v1_3 = *temp_a0_4;
             temp_a3_3 = *temp_v1_3;
-            temp_t9 = temp_v1_3 + 1;
+            temp_t9 = &temp_v1_3[1];
             *temp_a0_4 = temp_t9;
             arg0->unk_3 = (u8) *temp_t9;
-            *temp_a0_4 += 1;
+            *temp_a0_4 = &(*temp_a0_4)[1];
             arg0->unk_26 = temp_v0_2;
             phi_a3 = (s32) temp_a3_3;
             phi_a2 = arg0;
@@ -1554,7 +1554,7 @@ block_8:
 }
 
 void func_80199244(s32 *arg0, u8 arg1) {
-    arg0->unk_30 = (f32) ((f32) (arg1 & 0xFF) / 127.0f);
+    arg0[12] = (f32) (arg1 & 0xFF) / 127.0f;
 }
 
 void func_80199268(s32 *param_1) {
@@ -1563,8 +1563,6 @@ void func_80199268(s32 *param_1) {
     s16 temp_v0_4;
     s32 *temp_s0_2;
     s32 *temp_s6;
-    s32 *temp_s7;
-    s32 *temp_v0_12;
     s32 temp_a0;
     s32 temp_a0_3;
     s32 temp_a1;
@@ -1573,8 +1571,10 @@ void func_80199268(s32 *param_1) {
     s32 temp_s1_3;
     s32 temp_s2;
     s32 temp_s4;
+    s32 temp_s7;
     s32 temp_v0;
     s32 temp_v0_10;
+    s32 temp_v0_12;
     s32 temp_v0_3;
     s32 temp_v0_5;
     s32 temp_v0_8;
@@ -1621,10 +1621,10 @@ void func_80199268(s32 *param_1) {
     if ((param_1->unk_0 * 4) < 0) {
         goto block_159;
     }
-    temp_s7 = param_1->unk_50;
+    temp_s7 = param_1[20];
     if (((temp_s7->unk_0 * 4) >= 0) || ((param_1->unk_3 & 0x80) == 0)) {
         temp_v1 = param_1->unk_20;
-        temp_s6 = param_1 + 0x64;
+        temp_s6 = &param_1[25];
         if ((s32) temp_v1 >= 2) {
             param_1->unk_20 = (u16) (temp_v1 - 1);
         } else {
@@ -1652,7 +1652,7 @@ loop_7:
                     } while ((u32) temp_s0 < (u32) (((temp_a1 & 0xFF) * 4) + &sp70));
                 }
                 if (temp_s2 >= 0xF2) {
-                    temp_v0_2 = func_80197538(temp_s7, (u8 **) temp_s6, temp_s2, (s8) sp70);
+                    temp_v0_2 = func_80197538((void *) temp_s7, (u8 **) temp_s6, temp_s2, (s8) sp70);
                     if (temp_v0_2 != 0) {
                         if (temp_v0_2 == -1) {
                             func_80197AA4((u8 *) param_1);
@@ -1668,20 +1668,20 @@ loop_7:
                         param_1->unk_0 = (s8) ((u8) param_1->unk_0 | 0x20);
                         break;
                     case 241:                       /* switch 1 */
-                        temp_s0_2 = param_1 + 0x88;
+                        temp_s0_2 = &param_1[34];
                         func_80195EE0(temp_s0_2);
                         func_80196040(temp_s0_2, unksp73);
                         goto loop_7;
                     case 240:                       /* switch 1 */
-                        func_80195EE0(param_1 + 0x88);
+                        func_80195EE0(&param_1[34]);
                         goto loop_7;
                     case 194:                       /* switch 1 */
-                        param_1->unk_40 = (s32) (temp_s7->unk_18 + unksp72);
+                        param_1[16] = temp_s7->unk_18 + unksp72;
                         goto loop_7;
                     case 197:                       /* switch 1 */
                         temp_v1_3 = temp_s6->unk_19;
                         if (temp_v1_3 != -1) {
-                            temp_s0_3 = param_1->unk_40 + (temp_v1_3 * 2);
+                            temp_s0_3 = param_1[16] + (temp_v1_3 * 2);
                             temp_s6->unk_0 = temp_s7->unk_18 + ((temp_s0_3->unk_1 + (temp_s0_3->unk_0 << 8)) & 0xFFFF);
                         }
                         goto loop_7;
@@ -1712,19 +1712,19 @@ loop_7:
                         goto loop_7;
                     case 224:                       /* switch 1 */
                         param_1->unk_1 = (u8) (param_1->unk_1 | 0x40);
-                        param_1->unk_2C = (f32) ((f32) unksp73 * 0.0078125f);
+                        param_1[11] = (bitwise s32) ((f32) unksp73 * 0.0078125f);
                         goto loop_7;
                     case 222:                       /* switch 1 */
                         param_1->unk_1 = (u8) (param_1->unk_1 | 0x80);
-                        param_1->unk_3C = (f32) ((f32) unksp72 / 32768.0f);
+                        param_1[15] = (bitwise s32) ((f32) unksp72 / 32768.0f);
                         goto loop_7;
                     case 211:                       /* switch 1 */
                         param_1->unk_1 = (u8) (param_1->unk_1 | 0x80);
-                        param_1->unk_3C = (f32) *(&D_801D4DB4 + (((unksp73 + 0x80) & 0xFF) * 4));
+                        param_1[15] = *(&D_801D4DB4 + (((unksp73 + 0x80) & 0xFF) * 4));
                         goto loop_7;
                     case 238:                       /* switch 1 */
                         param_1->unk_1 = (u8) (param_1->unk_1 | 0x80);
-                        param_1->unk_3C = (f32) *(&D_801D51B4 + (((unksp73 + 0x80) & 0xFF) * 4));
+                        param_1[15] = *(&D_801D51B4 + (((unksp73 + 0x80) & 0xFF) * 4));
                         goto loop_7;
                     case 221:                       /* switch 1 */
                         param_1->unk_1 = (u8) (param_1->unk_1 | 0x20);
@@ -1738,7 +1738,7 @@ loop_7:
                         param_1->unk_28 = (s16) unksp73;
                         goto loop_7;
                     case 218:                       /* switch 1 */
-                        param_1->unk_84 = (s32) (temp_s7->unk_18 + unksp72);
+                        param_1[33] = temp_s7->unk_18 + unksp72;
                         goto loop_7;
                     case 217:                       /* switch 1 */
                         param_1->unk_80 = unksp73;
@@ -1833,8 +1833,8 @@ loop_7:
                     case 228:                       /* switch 1 */
                         temp_v1_4 = temp_s6->unk_19;
                         if (temp_v1_4 != -1) {
-                            temp_s6[temp_s6->unk_18].unk_4 = (s32) temp_s6->unk_0;
-                            temp_s0_4 = param_1->unk_40 + (temp_v1_4 * 2);
+                            (&temp_s6[temp_s6->unk_18])[1] = temp_s6->unk_0;
+                            temp_s0_4 = param_1[16] + (temp_v1_4 * 2);
                             temp_s6->unk_18 = (u8) (temp_s6->unk_18 + 1);
                             temp_s6->unk_0 = temp_s7->unk_18 + ((temp_s0_4->unk_1 + (temp_s0_4->unk_0 << 8)) & 0xFFFF);
                         }
@@ -1874,7 +1874,7 @@ loop_7:
                         param_1->unk_16 = 0;
                         param_1->unk_12 = 0;
                         param_1->unk_1A = 0;
-                        param_1->unk_D4 = 0;
+                        param_1[53] = 0;
                         param_1->unk_C = 0U;
                         param_1->unk_81 = 0U;
                         param_1->unk_D = 0;
@@ -1882,9 +1882,9 @@ loop_7:
                         param_1->unk_F = 0;
                         param_1->unk_22 = 0;
                         param_1->unk_9 = 0U;
-                        param_1->unk_DC = 0U;
-                        param_1->unk_E0 = 0;
-                        param_1->unk_3C = 1.0f;
+                        param_1[55] = 0;
+                        param_1[56] = 0;
+                        param_1[15] = 0x3F800000;
                         goto loop_7;
                     case 233:                       /* switch 1 */
                         func_801990F4(param_1, unksp73);
@@ -1893,13 +1893,13 @@ loop_7:
                         param_1->unk_C = unksp73;
                         goto loop_7;
                     case 176:                       /* switch 1 */
-                        param_1->unk_D4 = (s32) (temp_s7->unk_18 + unksp72);
+                        param_1[53] = temp_s7->unk_18 + unksp72;
                         goto loop_7;
                     case 177:                       /* switch 1 */
-                        param_1->unk_D4 = 0;
+                        param_1[53] = 0;
                         goto loop_7;
                     case 179:                       /* switch 1 */
-                        temp_a0 = param_1->unk_D4;
+                        temp_a0 = param_1[53];
                         if (temp_a0 != 0) {
                             func_8018C994(temp_a0, ((s32) unksp73 >> 4) & 0xF & 0xFF, unksp73 & 0xF & 0xFF);
                         }
@@ -1908,13 +1908,13 @@ loop_7:
                         param_1->unk_24 = (u16) *(temp_s7->unk_18 + (unksp72 + (temp_s6->unk_19 * 2)));
                         goto loop_7;
                     case 180:                       /* switch 1 */
-                        param_1->unk_40 = (s32) (temp_s7->unk_18 + param_1->unk_24);
+                        param_1[16] = temp_s7->unk_18 + param_1->unk_24;
                         goto loop_7;
                     case 181:                       /* switch 1 */
-                        param_1->unk_24 = (u16) *(param_1->unk_40 + (temp_s6->unk_19 * 2));
+                        param_1->unk_24 = (u16) *(param_1[16] + (temp_s6->unk_19 * 2));
                         goto loop_7;
                     case 182:                       /* switch 1 */
-                        temp_s6->unk_19 = (s8) *(param_1->unk_40 + temp_s6->unk_19);
+                        temp_s6->unk_19 = (s8) *(param_1[16] + temp_s6->unk_19);
                         goto loop_7;
                     case 183:                       /* switch 1 */
                         if (sp70 == 0) {
@@ -1956,7 +1956,7 @@ loop_7:
                         param_1->unk_24 = (u16) (param_1->unk_24 + sp70);
                         goto loop_7;
                     case 189:                       /* switch 1 */
-                        param_1->unk_DC = sp70;
+                        param_1[55] = (s32) sp70;
                         goto loop_7;
                     case 190:                       /* switch 1 */
                         if (sp70 < 5U) {
@@ -1976,7 +1976,7 @@ loop_7:
                         } else {
                             phi_s1 = param_1->unk_24;
                         }
-                        temp_v0_10 = param_1->unk_D0;
+                        temp_v0_10 = param_1[52];
                         if (temp_v0_10 != 0) {
                             if ((temp_s2 == 0xA0) || (temp_s2 == 0xA1)) {
                                 temp_s6->unk_19 = (s8) *(temp_v0_10 + phi_s1);
@@ -2021,7 +2021,7 @@ loop_7:
                     }
                     switch (temp_v1_7) {            /* switch 2 */
                     case 128:                       /* switch 2 */
-                        temp_v0_12 = param_1[phi_s4].unk_54;
+                        temp_v0_12 = (&param_1[phi_s4])[21];
                         if (temp_v0_12 != 0) {
                             temp_s6->unk_19 = (s8) ((u32) (*temp_v0_12 * 2) >> 0x1F);
                         } else {
@@ -2031,7 +2031,7 @@ loop_7:
                     case 136:                       /* switch 2 */
                         temp_s1_3 = func_80197F3C((s32) temp_s6, temp_a1_2) & 0xFFFF;
                         if (func_80197880(param_1, phi_s4) == 0) {
-                            param_1[phi_s4].unk_54->unk_64 = (s32) (temp_s7->unk_18 + temp_s1_3);
+                            (&param_1[phi_s4])[21]->unk_64 = (s32) (temp_s7->unk_18 + temp_s1_3);
                         }
                         break;
                     case 144:                       /* switch 2 */
@@ -2039,8 +2039,8 @@ loop_7:
                         break;
                     case 152:                       /* switch 2 */
                         if ((temp_s6->unk_19 != -1) && (func_80197880(param_1, phi_s4) != -1)) {
-                            temp_s0_8 = param_1->unk_40 + (temp_s6->unk_19 * 2);
-                            param_1[phi_s4].unk_54->unk_64 = (s32) (temp_s7->unk_18 + ((temp_s0_8->unk_1 + (temp_s0_8->unk_0 << 8)) & 0xFFFF));
+                            temp_s0_8 = param_1[16] + (temp_s6->unk_19 * 2);
+                            (&param_1[phi_s4])[21]->unk_64 = (s32) (temp_s7->unk_18 + ((temp_s0_8->unk_1 + (temp_s0_8->unk_0 << 8)) & 0xFFFF));
                         }
                         break;
                     case 112:                       /* switch 2 */
@@ -2049,7 +2049,7 @@ loop_7:
                     case 120:                       /* switch 2 */
                         temp_s0_9 = func_80197F3C((s32) temp_s6, temp_a1_2);
                         if (func_80197880(param_1, phi_s4) == 0) {
-                            param_1[phi_s4].unk_54->unk_64 = (s32) (temp_s6->unk_0 + temp_s0_9);
+                            (&param_1[phi_s4])[21]->unk_64 = (s32) (temp_s6->unk_0 + temp_s0_9);
                         }
                         break;
                     }
@@ -2107,7 +2107,7 @@ block_159:
         phi_s1_2 = param_1;
         phi_s0_2 = 0;
         do {
-            temp_a0_4 = phi_s1_2->unk_54;
+            temp_a0_4 = phi_s1_2[21];
             if (temp_a0_4 != 0) {
                 func_80197FB4(temp_a0_4);
             }
@@ -2118,7 +2118,7 @@ block_159:
     }
 }
 
-void func_8019A0BC(s32 *arg0) {
+void func_8019A0BC(void *arg0) {
     u8 sp6E;
     s32 sp28;
     f32 temp_f16;
@@ -2175,9 +2175,9 @@ void func_8019A0BC(s32 *arg0) {
     s16 phi_v1;
     s32 phi_s0;
     s32 phi_t0;
-    s32 *phi_v1_2;
+    void *phi_v1_2;
     s32 phi_t1;
-    s32 *phi_s1;
+    void *phi_s1;
     s32 phi_s0_2;
 
     if (((u32) arg0->unk_0 >> 0x1F) != 0) {
@@ -2360,7 +2360,7 @@ block_42:
                     case 205:                       /* switch 1 */
                         temp_a1 = temp_s1->unk_19;
                         if ((temp_a1 != -1) && (temp_a0_4 = temp_s1->unk_18, temp_t5 = func_80197F3C((s32) temp_s1) & 0xFFFF, (temp_a0_4 != 3))) {
-                            temp_s1[temp_a0_4].unk_4 = (u8 *) temp_s1->unk_0;
+                            (&temp_s1[temp_a0_4])[1] = temp_s1->unk_0;
                             temp_v0_9 = arg0->unk_18 + (temp_t5 + (temp_a1 * 2));
                             temp_s1->unk_18 = (u8) (temp_s1->unk_18 + 1);
                             temp_s1->unk_0 = arg0->unk_18 + ((temp_v0_9->unk_1 + (temp_v0_9->unk_0 << 8)) & 0xFFFF);
@@ -2458,13 +2458,13 @@ block_42:
                             }
                             break;
                         case 64:                    /* switch 2 */
-                            func_80197AA4(arg0[temp_s0 & 0xF].unk_38);
+                            func_80197AA4((arg0 + ((temp_s0 & 0xF) * 4))->unk_38);
                             break;
                         case 144:                   /* switch 2 */
-                            func_80197C8C(arg0, temp_s0 & 0xF, arg0->unk_18 + (func_80197F3C((s32) temp_s1) & 0xFFFF));
+                            func_80197C8C((s32) arg0, temp_s0 & 0xF, arg0->unk_18 + (func_80197F3C((s32) temp_s1) & 0xFFFF));
                             break;
                         case 160:                   /* switch 2 */
-                            func_80197C8C(arg0, temp_s0 & 0xF, &temp_s1->unk_0[func_80197F3C((s32) temp_s1)]);
+                            func_80197C8C((s32) arg0, temp_s0 & 0xF, &temp_s1->unk_0[func_80197F3C((s32) temp_s1)]);
                             break;
                         case 176:                   /* switch 2 */
                             temp_s0_5 = func_80197F28((s32) temp_s1) & 0xFF;
@@ -2476,7 +2476,7 @@ block_42:
                             goto block_92;
                         }
                     } else if (temp_v0_5 == 0) {
-                        temp_s1->unk_19 = (s8) (((u32) *arg0[temp_a0_7 & 0xFF].unk_38 >> 0x1F) ^ 1);
+                        temp_s1->unk_19 = (s8) (((u32) *(arg0 + ((temp_a0_7 & 0xFF) * 4))->unk_38 >> 0x1F) ^ 1);
                     } else {
                     default:                        /* switch 2 */
                     default:                        /* switch 1 */
@@ -2495,8 +2495,8 @@ block_92:
 
 void func_8019AA3C(s32 arg0) {
     s16 temp_v0;
-    s32 *temp_s0;
     u32 temp_s2;
+    void *temp_s0;
     ? *phi_s1;
     u32 phi_s2;
     u32 phi_v0;
@@ -2522,7 +2522,7 @@ void func_8019AA3C(s32 arg0) {
     func_80194F84();
 }
 
-void func_8019AAF0(s32 *arg0) {
+void func_8019AAF0(void *arg0) {
     s32 temp_t8;
 
     if (arg0->unk_DC > 0) {

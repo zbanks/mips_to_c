@@ -193,7 +193,7 @@ void EnElfgrp_Init(Actor *thisx, GlobalContext *globalCtx) {
                         if (temp_v0_2 != 4) {
                             return;
                         }
-                        if (gSaveContext.inventory.items[gItemSlots->unk_10] == 0x10) {
+                        if (gSaveContext.inventory.items[gItemSlots[16]] == 0x10) {
                             func_80A396B0(this, 1, phi_a2);
                             return;
                         }
@@ -242,11 +242,11 @@ void EnElfgrp_Init(Actor *thisx, GlobalContext *globalCtx) {
             this->actionFunc = func_80A3A600;
             return;
         }
-        if (gSaveContext.inventory.items[gItemSlots->unk_40] == 0x40) {
+        if (gSaveContext.inventory.items[gItemSlots[64]] == 0x40) {
             func_80A396B0(this, 4);
             return;
         }
-        if (gSaveContext.inventory.items[gItemSlots->unk_32] != 0x32) {
+        if (gSaveContext.inventory.items[gItemSlots[50]] != 0x32) {
             func_80A396B0(this, 5);
             return;
         }
@@ -257,8 +257,8 @@ void EnElfgrp_Init(Actor *thisx, GlobalContext *globalCtx) {
     if ((gSaveContext.weekEventReg[8] & 0x80) != 0) {
         func_80A39DC8(this, globalCtx, 0x18, 0);
         this->actionFunc = func_80A3A398;
-        if (gSaveContext.inventory.items[gItemSlots->unk_32] == 0x32) {
-            if (gSaveContext.inventory.items[gItemSlots->unk_40] == 0x40) {
+        if (gSaveContext.inventory.items[gItemSlots[50]] == 0x32) {
+            if (gSaveContext.inventory.items[gItemSlots[64]] == 0x40) {
                 func_80A396B0(this, 2);
                 return;
             }
@@ -364,14 +364,14 @@ void func_80A39DC8(EnElfgrp *arg0, GlobalContext *arg1, s32 arg2, s32 arg3) {
     }
     if (arg3 == 0) {
         sp6C.unk_0 = arg0->actor.world.pos.x;
-        sp6C.unk_4 = (s32) arg0->actor.world.pos.y;
-        sp6C.unk_8 = (s32) arg0->actor.world.pos.z;
+        (&sp6C)[1] = arg0->actor.world.pos.y;
+        (&sp6C)[2] = arg0->actor.world.pos.z;
         sp70 += 20.0f;
         phi_s3 = ((arg0->unk_147 & 7) << 6) | 1;
     } else {
         sp6C.unk_0 = temp_v0->world.pos.x;
-        sp6C.unk_4 = (f32) temp_v0->world.pos.y;
-        sp6C.unk_8 = (f32) temp_v0->world.pos.z;
+        (&sp6C)[1] = temp_v0->world.pos.y;
+        (&sp6C)[2] = temp_v0->world.pos.z;
         sp70 += 20.0f;
         phi_s3 = ((arg0->unk_147 & 7) << 6) | 8;
     }
@@ -443,7 +443,7 @@ loop_2:
             if (phi_v1 >= 0x64) {
                 return phi_v1;
             }
-            phi_v0->unk_220 = phi_v1;
+            phi_v0[1].shape.feetPos[0].z = phi_v1;
             phi_v1_3 = phi_v1 + 5;
             goto block_10;
         }
@@ -494,7 +494,7 @@ void func_80A3A0F4(Actor *arg0, GlobalContext *arg1) {
     s32 temp_v0;
     s32 phi_v0;
 
-    if (arg0->unk_144 == 0xA) {
+    if (arg0[1].id == 0xA) {
         play_sound(0x4834U);
         temp_v0 = arg0->params & 0xF;
         if (temp_v0 < 4) {
@@ -503,13 +503,13 @@ void func_80A3A0F4(Actor *arg0, GlobalContext *arg1) {
             Actor_Spawn(&arg1->actorCtx, arg1, 0x48, arg0->world.pos.x, arg0->world.pos.y + 30.0f, arg0->world.pos.z, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         }
     }
-    phi_v0 = (s32) arg0->unk_144;
-    if (((s32) arg0->unk_144 >= 0xB) && ((arg0->unk_14A & 1) != 0)) {
+    phi_v0 = (s32) arg0[1].id;
+    if (((s32) arg0[1].id >= 0xB) && ((arg0->unk_14A & 1) != 0)) {
         func_800B9010(arg0, 0x2188U);
-        phi_v0 = (s32) arg0->unk_144;
+        phi_v0 = (s32) arg0[1].id;
     }
     if (phi_v0 == 0) {
-        arg0->unk_14C = func_80A3A0AC;
+        arg0[1].home.pos.x = (bitwise f32) func_80A3A0AC;
     }
 }
 
@@ -519,11 +519,11 @@ void func_80A3A210(Actor *arg0, void *arg1) {
 
     temp_a2 = arg0;
     phi_a2 = temp_a2;
-    if (temp_a2->unk_144 == 0) {
-        temp_a2->unk_14C = func_80A3A0F4;
+    if (temp_a2[1].id == 0) {
+        temp_a2[1].home.pos.x = func_80A3A0F4;
         arg0 = temp_a2;
         func_80A3A044(arg1, temp_a2);
-        arg0->unk_144 = 0x1E;
+        arg0[1].id = 0x1E;
         phi_a2 = arg0;
     }
     if ((phi_a2->unk_14A & 1) != 0) {
@@ -545,20 +545,20 @@ void func_80A3A274(Actor *arg0, GlobalContext *arg1) {
                 return;
             }
             func_80A39F50(arg1);
-            arg0->unk_14C = func_80A3A210;
-            arg0->unk_144 = 0x5A;
+            arg0[1].home.pos.x = (bitwise f32) func_80A3A210;
+            arg0[1].id = 0x5A;
             /* Duplicate return node #12. Try simplifying control flow for better match */
             return;
         }
         if ((arg0->unk_14A & 1) == 0) {
-            temp_a1 = arg0->unk_147;
+            temp_a1 = (u8) arg0[1].room;
             if (temp_a1 == 0) {
                 func_80A39DC8((EnElfgrp *) arg0, arg1, 1, 1);
             } else {
                 func_80A39DC8((EnElfgrp *) arg0, arg1, func_80A39BD0(arg1, temp_a1, 1, 1), 1);
             }
             arg0->unk_14A = (u16) (arg0->unk_14A | 1);
-            func_80A39CD4(arg1, (s32) arg0->unk_147, 0x19);
+            func_80A39CD4(arg1, (s32) (u8) arg0[1].room, 0x19);
             return;
         }
         /* Duplicate return node #12. Try simplifying control flow for better match */
@@ -647,7 +647,7 @@ void func_80A3A610(Actor *arg0, void *arg1) {
     Actor *phi_a2;
 
     temp_a2 = arg0;
-    temp_v1 = temp_a2->unk_144;
+    temp_v1 = temp_a2[1].id;
     phi_v1 = (s32) temp_v1;
     phi_a2 = temp_a2;
     if (temp_v1 == 0x3C) {
@@ -655,7 +655,7 @@ void func_80A3A610(Actor *arg0, void *arg1) {
         arg0 = temp_a2;
         Parameter_AddMagic(arg1, (s16) (gSaveContext.unk_3F30 + (gSaveContext.doubleMagic * 0x30) + 0x30), temp_a2, arg1);
         gSaveContext.healthAccumulator = 0x140;
-        phi_v1 = (s32) arg0->unk_144;
+        phi_v1 = (s32) arg0[1].id;
         phi_a2 = arg0;
     }
     if (phi_v1 > 0) {
@@ -666,7 +666,7 @@ void func_80A3A610(Actor *arg0, void *arg1) {
     }
     arg1->unk_1CCC->unk_118 = 0;
     arg1->unk_1CCC->unk_A6C = (s32) (arg1->unk_1CCC->unk_A6C & 0xDFFFFFFF);
-    phi_a2->unk_14C = func_80A3A600;
+    phi_a2[1].home.pos.x = (bitwise f32) func_80A3A600;
     phi_a2->unk_14A = (u16) (phi_a2->unk_14A | 8);
 }
 
@@ -685,8 +685,8 @@ void func_80A3A6F4(Actor *arg0, GlobalContext *arg1) {
         temp_v1->freezeTimer = 0x64;
         temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C | 0x20000000);
         arg0 = temp_a2_2;
-        arg0->unk_144 = func_80A39FBC(arg1, arg1, temp_a2_2);
-        arg0->unk_14C = func_80A3A610;
+        arg0[1].id = func_80A39FBC(arg1, arg1, temp_a2_2);
+        arg0[1].home.pos.x = (bitwise f32) func_80A3A610;
         arg0->unk_14A = (u16) (arg0->unk_14A & 0xFFF7);
     }
 }
@@ -704,8 +704,8 @@ void func_80A3A77C(Actor *arg0, GlobalContext *arg1) {
     temp_a2 = arg0;
     if (func_800B867C(temp_a0, arg1) != 0) {
         arg0 = temp_a2;
-        arg0->unk_144 = func_80A39FBC(arg1, arg1, temp_a2);
-        arg0->unk_14C = func_80A3A610;
+        arg0[1].id = func_80A39FBC(arg1, arg1, temp_a2);
+        arg0[1].home.pos.x = (bitwise f32) func_80A3A610;
         arg0->unk_14A = (u16) (arg0->unk_14A & 0xFFF7);
     }
 }

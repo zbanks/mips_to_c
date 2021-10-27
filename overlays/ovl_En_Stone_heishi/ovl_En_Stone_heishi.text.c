@@ -447,13 +447,13 @@ void func_80BC9A2C(EnStoneheishi *this, GlobalContext *globalCtx) {
 
 void func_80BC9C88(Actor *arg0, GlobalContext *arg1) {
     func_801477B4(arg1);
-    if (gSaveContext.inventory.items[gItemSlots[0x45]] == 0x45) {
+    if (gSaveContext.inventory.items[gItemSlots[69]] == 0x45) {
         func_800B8A1C(arg0, arg1, 2, 300.0f, 300.0f);
     } else {
         func_800B8A1C(arg0, arg1, 0x8B, 300.0f, 300.0f);
     }
     arg0->unk_270 = 4;
-    arg0->unk_254 = func_80BC9D28;
+    arg0[1].prevPos.z = (bitwise f32) func_80BC9D28;
 }
 
 void func_80BC9D28(EnStoneheishi *this, GlobalContext *globalCtx) {
@@ -468,7 +468,7 @@ void func_80BC9D28(EnStoneheishi *this, GlobalContext *globalCtx) {
         this->actionFunc = func_80BC9E50;
         return;
     }
-    if (gSaveContext.inventory.items[gItemSlots[0x45]] == 0x45) {
+    if (gSaveContext.inventory.items[gItemSlots[69]] == 0x45) {
         func_800B8A1C((Actor *) this, globalCtx, 2, 300.0f, 300.0f);
         return;
     }
@@ -527,9 +527,9 @@ void EnStoneheishi_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80BCA0AC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0x10) {
-        arg4->x += arg5->unk_25A;
+        arg4->x += arg5[1].textId;
         arg4->y += arg5->unk_258;
-        arg4->z += arg5->unk_25C;
+        arg4->z += arg5[1].freezeTimer;
     }
     return 0;
 }
@@ -543,7 +543,6 @@ void func_80BCA104(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
     void *temp_s0_3;
     void *temp_s0_4;
     Gfx *phi_s0;
-    Gfx *phi_s0_2;
 
     if ((arg1 == 0xC) && (arg4->unk_276 != 0)) {
         temp_s0 = func_8012C2B4(*arg5);
@@ -553,34 +552,32 @@ void func_80BCA104(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         SysMatrix_InsertTranslation(320.0f, 210.0f, 440.0f, 1);
         temp_s0->words.w0 = 0xE7000000;
         temp_s0->words.w1 = 0;
-        temp_s0_2 = temp_s0 + 8;
+        temp_s0_2 = &temp_s0[1];
         Matrix_RotateY(-0x1770, 1U);
         SysMatrix_InsertXRotation_s(0x7D0, 1);
         SysMatrix_InsertZRotation_s(-0x7530, 1);
         temp_v0 = arg4->unk_276;
-        phi_s0_2 = temp_s0_2;
+        phi_s0 = temp_s0_2;
         if (temp_v0 != 2) {
             if (temp_v0 == 3) {
                 temp_s0_2->words.w1 = 0xC800;
                 temp_s0_2->words.w0 = 0xFB000000;
-                phi_s0 = temp_s0_2 + 8;
             } else {
                 temp_s0_2->words.w1 = 0xC8000000;
                 temp_s0_2->words.w0 = 0xFB000000;
-                phi_s0 = temp_s0_2 + 8;
             }
-            phi_s0->words.w0 = 0xDA380003;
-            temp_s0_3 = phi_s0 + 8;
-            sp28 = phi_s0;
-            phi_s0->words.w1 = Matrix_NewMtx(*arg0);
+            temp_s0_2[1].words.w0 = 0xDA380003;
+            temp_s0_3 = &temp_s0_2[1] + 8;
+            sp28 = &temp_s0_2[1];
+            temp_s0_2[1].words.w1 = Matrix_NewMtx(*arg0);
             temp_s0_3->unk_4 = &D_06000768;
             temp_s0_3->unk_0 = 0xDE000000;
-            phi_s0_2 = temp_s0_3 + 8;
+            phi_s0 = temp_s0_3 + 8;
         }
-        phi_s0_2->words.w0 = 0xDA380003;
-        temp_s0_4 = phi_s0_2 + 8;
-        sp20 = phi_s0_2;
-        phi_s0_2->words.w1 = Matrix_NewMtx(*arg0);
+        phi_s0->words.w0 = 0xDA380003;
+        temp_s0_4 = phi_s0 + 8;
+        sp20 = phi_s0;
+        phi_s0->words.w1 = Matrix_NewMtx(*arg0);
         temp_s0_4->unk_4 = &D_06000630;
         temp_s0_4->unk_0 = 0xDE000000;
         *arg5 = temp_s0_4 + 8;

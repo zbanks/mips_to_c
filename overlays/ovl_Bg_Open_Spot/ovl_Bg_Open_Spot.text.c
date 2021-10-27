@@ -69,21 +69,21 @@ void func_80ACB2B0(Actor *this, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0 + 8;
+    sp24->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0_2 + 8;
+    sp24->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0x40;
     temp_v0_2->words.w0 = 0xE3001801;
     temp_v0_3 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0_3 + 8;
+    sp24->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_06001A60;
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_4 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0_4 + 8;
+    sp24->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06001B40;
     temp_v0_4->words.w0 = 0xDE000000;
 }

@@ -172,7 +172,7 @@ void func_800E9F78(GraphicsContext *gfxCtx) {
         temp_v0 = Graph_GfxPlusOne(temp_a0);
         temp_a1 = temp_v0;
         temp_a0_2 = gfxCtx->unk1B8.p;
-        gfxCtx->unk1B8.p = temp_a0_2 + 8;
+        gfxCtx->unk1B8.p = &temp_a0_2[1];
         temp_a0_2->words.w1 = (u32) temp_v0;
         temp_a0_2->words.w0 = 0xDE000000;
         GfxPrint_Open((GfxPrint *) &sp30, temp_a1);
@@ -188,7 +188,7 @@ void func_800E9F78(GraphicsContext *gfxCtx) {
         }
         temp_v0_3 = GfxPrint_Close((GfxPrint *) &sp30);
         temp_v0_3->words.w0 = 0xDF000000;
-        temp_a1_2 = temp_v0_3 + 8;
+        temp_a1_2 = &temp_v0_3[1];
         temp_v0_3->words.w1 = 0;
         sp64 = temp_a1_2;
         Graph_BranchDlist(sp60, temp_a1_2);

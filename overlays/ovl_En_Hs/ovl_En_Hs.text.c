@@ -118,7 +118,7 @@ void func_80952C50(EnHs *arg0, GlobalContext *arg1) {
     do {
         Math_Vec3f_Copy(phi_s1, arg1->actorCtx.actorList[2].first + 0x24);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0xF0);
     arg0->actor.home.rot.x = 0;
@@ -153,7 +153,7 @@ void EnHs_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80952DFC(GlobalContext *arg0) {
-    if (gSaveContext.inventory.items[gItemSlots[0x39]] == 0x39) {
+    if (gSaveContext.inventory.items[gItemSlots[57]] == 0x39) {
         func_80151BB4(arg0, 0x2EU);
     }
     func_80151BB4(arg0, 0x10U);
@@ -208,7 +208,7 @@ void func_80952F00(EnHs *arg0, GlobalContext *arg1) {
     do {
         func_80952E50(phi_s1, subroutine_arg1, phi_s2->unk_4, phi_s2->unk_8, phi_f20);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s2 += 0xC;
         phi_s0 = temp_s0;
     } while (temp_s0 != 0xF0);
@@ -241,7 +241,7 @@ void func_80953098(EnHs *this, GlobalContext *globalCtx) {
         return;
     }
     this->unk_2A0 |= 8;
-    if (gSaveContext.inventory.items[gItemSlots[0x39]] == 0x39) {
+    if (gSaveContext.inventory.items[gItemSlots[57]] == 0x39) {
         func_800B8A1C((Actor *) this, globalCtx, 4, 10000.0f, 50.0f);
         return;
     }
@@ -324,13 +324,13 @@ void func_809533A0(Actor *arg0, GlobalContext *arg1) {
     u16 phi_a1;
 
     temp_a0 = arg1;
-    if ((arg1->curSpawn == 1) && (temp_v0 = arg0->unk_2A0, phi_a1 = 0x33F7U, ((temp_v0 & 0x20) == 0))) {
-        arg0->unk_2A0 = (u16) (temp_v0 | 0x20);
+    if ((arg1->curSpawn == 1) && (temp_v0 = arg0[2].home.rot.z, phi_a1 = 0x33F7U, ((temp_v0 & 0x20) == 0))) {
+        arg0[2].home.rot.z = temp_v0 | 0x20;
     } else {
-        temp_v0_2 = arg0->unk_2A0;
+        temp_v0_2 = arg0[2].home.rot.z;
         phi_a1 = 0x33F9U;
         if ((temp_v0_2 & 0x10) != 0) {
-            arg0->unk_2A0 = (u16) (temp_v0_2 & 0xFFEF);
+            arg0[2].home.rot.z = temp_v0_2 & 0xFFEF;
         } else {
             phi_a1 = 0x33F5U;
             if ((gSaveContext.weekEventReg[25] & 8) != 0) {

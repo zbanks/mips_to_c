@@ -216,7 +216,7 @@ void func_809C0AB4(EnWarptag *this, GlobalContext *globalCtx) {
     temp_s1->world.pos.z = this->actor.world.pos.z + (temp_f14 * phi_f2);
     sp34 = globalCtx + 0x18000;
     if (Math_StepToS(&this->unk_15E, 0x2710, 0xC8) != 0) {
-        temp_s1->unk_A74 = (s32) (temp_s1->unk_A74 | 1);
+        temp_s1[8].targetArrowOffset = (bitwise f32) ((bitwise s32) temp_s1[8].targetArrowOffset | 1);
         temp_s1->gravity = -0.5f;
         if (this->actor.yDistToPlayer < -80.0f) {
             temp_t4 = this->actor.params & 0x3F;
@@ -296,12 +296,12 @@ void func_809C0F3C(Actor *this, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual((void *) &D_05023008));
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_05021EF0;
     temp_v0_2->words.w0 = 0xDE000000;
 }

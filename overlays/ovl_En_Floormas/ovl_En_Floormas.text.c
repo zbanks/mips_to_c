@@ -20,6 +20,12 @@ typedef struct EnFloormas {
     /* 0x354 */ ColliderCylinder unk_354;           /* inferred */
 } EnFloormas;                                       /* size = 0x3A0 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnFloormas_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -452,8 +458,8 @@ void EnFloormas_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 void func_808D08D0(Actor *arg0) {
     arg0->unk_368 = 0xC;
     arg0->unk_365 = (u8) (arg0->unk_365 | 4);
-    arg0->unk_374 = (s32) (arg0->unk_374 & 0xFFFF7FFF);
-    arg0->unk_190 = 0x28;
+    arg0[2].projectedPos.x &= 0xFFFF7FFF;
+    arg0[1].focus.rot.z = 0x28;
 }
 
 void func_808D0908(EnFloormas *arg0) {
@@ -481,12 +487,12 @@ void func_808D0930(Actor *arg0, GlobalContext *arg1) {
 
 void func_808D09CC(Actor *arg0) {
     arg0->unk_18C = 0xA;
-    arg0->unk_2C8 = 0.55f;
+    arg0[2].focus.pos.y = 0.55f;
     arg0->unk_368 = 3;
-    arg0->unk_18E = 0x50;
+    arg0[1].focus.rot.y = 0x50;
     arg0->flags &= -0x601;
-    arg0->unk_2CC = 0.82500005f;
-    arg0->unk_2C4 = 1.0f;
+    arg0[2].focus.pos.z = 0.82500005f;
+    arg0[2].focus.pos.x = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
 
@@ -496,7 +502,7 @@ void func_808D0A48(Actor *arg0, GlobalContext *arg1) {
     if (arg0->unk_18C == 0xA) {
         arg0->unk_18C = 0U;
         arg0->unk_368 = 0;
-        arg0->unk_2C4 = 0.0f;
+        arg0[2].focus.pos.x = 0.0f;
         temp_f0 = arg0->scale.x;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x2D0), 0xB, 2, temp_f0 * 30.000002f, temp_f0 * 20.0f);
         if (arg0->scale.x > 0.009f) {
@@ -721,7 +727,7 @@ void func_808D1380(Actor *arg0, GlobalContext *arg1) {
     func_808D08D0(arg0);
     func_800BBDAC(arg1, arg0, arg0 + 0x24, 15.0f, 6, 20.0f, (s16) 0x12C, (s16) 0x64, (u8) 1);
     Audio_PlayActorSound2(arg0, 0x3930U);
-    arg0->unk_188 = func_808D1458;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D1458;
 }
 
 void func_808D1458(EnFloormas *this, GlobalContext *globalCtx) {
@@ -856,7 +862,7 @@ void func_808D19D4(Actor *arg0) {
     u32 temp_t7_2;
 
     arg0->colorFilterTimer = 0;
-    arg0->unk_2C4 = 0.0f;
+    arg0[2].focus.pos.x = 0.0f;
     Actor_SetScale(arg0, 0.004f);
     temp_t7 = arg0->flags | 0x10;
     arg0->flags = temp_t7;
@@ -871,14 +877,14 @@ void func_808D19D4(Actor *arg0) {
     arg0->world.pos.y = temp_v0->world.pos.y;
     arg0->params = 0x10;
     arg0->world.pos.z = temp_v0->world.pos.z;
-    SkelAnime_ChangeAnim((SkelAnime *) (arg0 + 0x144), &D_060019CC, 1.0f, 41.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060019CC), (u8) 2, 0.0f);
+    SkelAnime_ChangeAnim((SkelAnime *) &arg0[1], &D_060019CC, 1.0f, 41.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060019CC), (u8) 2, 0.0f);
     temp_t5 = arg0->flags & ~0x400;
     temp_t7_2 = temp_t5 | 0x200;
     arg0->unk_394 = (s16) (s32) ((f32) D_808D38A0.dim.radius * 0.6f);
     arg0->flags = temp_t5;
     arg0->flags = temp_t7_2;
     arg0->colChkInfo.health = 1;
-    arg0->unk_188 = func_808D1B44;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D1B44;
     arg0->speedXZ = 4.0f;
     arg0->velocity.y = 7.0f;
     arg0->unk_396 = (s16) (s32) ((f32) D_808D38A0.dim.height * 0.6f);
@@ -1008,7 +1014,7 @@ void func_808D1ED4(Actor *arg0, GlobalContext *arg1) {
     sp3C = arg0->world.pos.z;
     func_800B3030(arg1, (Vec3f *) &sp34, &D_801D15B0, &D_801D15B0, (s16) 0x96, (s16) -0xA, 2);
     Audio_PlaySoundAtPosition(arg1, arg0 + 0x24, 0xB, 0x3878U);
-    arg0->unk_188 = func_808D1F7C;
+    arg0[1].focus.pos.z = func_808D1F7C;
 }
 
 void func_808D1F7C(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1099,7 +1105,7 @@ void func_808D217C(Actor *arg0, Actor *arg1) {
     arg0->home.pos.z = Math_CosS(arg0->shape.rot.y) * temp_v0->unk_8;
     Math_Vec3f_Sum(arg1 + 0x24, (Vec3f *) &arg0->home, (Vec3f *) &arg0->world);
     arg0->shape.rot.x = -0x4CE0;
-    arg0->unk_188 = func_808D22C8;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D22C8;
 }
 
 void func_808D22C8(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1107,8 +1113,8 @@ void func_808D22C8(EnFloormas *this, GlobalContext *globalCtx) {
     Actor *temp_a0;
     Actor *temp_a1;
     Actor *temp_a3;
-    s32 temp_v1;
-    s32 temp_v1_2;
+    f32 temp_v1;
+    f32 temp_v1_2;
 
     temp_a3 = globalCtx->actorCtx.actorList[2].first;
     sp24 = temp_a3;
@@ -1127,9 +1133,9 @@ void func_808D22C8(EnFloormas *this, GlobalContext *globalCtx) {
     Math_Vec3f_Sum((Vec3f *) &temp_a3->world, (Vec3f *) &this->actor.home, (Vec3f *) &this->actor.world);
     if (((temp_a3->unk_A70 & 0x80) == 0) || ((s32) temp_a3->unk_D5C < 0)) {
         temp_a0 = this->actor.parent;
-        temp_v1 = temp_a0->unk_188;
+        temp_v1 = temp_a0[1].focus.pos.z;
         temp_a1 = this->actor.child;
-        if (((func_808D22C8 == temp_v1) || (func_808D2AA8 == temp_v1)) && ((temp_v1_2 = temp_a1->unk_188, (func_808D22C8 == temp_v1_2)) || (func_808D2AA8 == temp_v1_2))) {
+        if (((func_808D22C8 == (bitwise s32) temp_v1) || (func_808D2AA8 == (bitwise s32) temp_v1)) && ((temp_v1_2 = temp_a1[1].focus.pos.z, (func_808D22C8 == (bitwise s32) temp_v1_2)) || (func_808D2AA8 == (bitwise s32) temp_v1_2))) {
             temp_a0->params = 0x20;
             temp_a1->params = 0x20;
             this->actor.params = 0x40;
@@ -1202,12 +1208,12 @@ void func_808D2700(Actor *arg0) {
     temp_a0 = arg0 + 0x144;
     arg0 = arg0;
     SkelAnime_ChangeAnimDefaultStop(temp_a0, &D_06009DB0);
-    arg0->unk_18E = 0;
-    arg0->unk_194 = 0x5DC;
+    arg0[1].focus.rot.y = 0;
+    arg0[1].sfx = 0x5DC;
     arg0->params = 0x40;
     arg0->speedXZ = 0.0f;
     func_808D08D0(arg0);
-    arg0->unk_188 = func_808D2764;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D2764;
 }
 
 void func_808D2764(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1220,9 +1226,9 @@ void func_808D2764(EnFloormas *this, GlobalContext *globalCtx) {
     Actor *temp_a3;
     SkelAnime *temp_a0_2;
     f32 temp_f2;
+    f32 temp_v1;
+    f32 temp_v1_2;
     s16 temp_v0;
-    s32 temp_v1;
-    s32 temp_v1_2;
     u32 temp_t0;
     s32 phi_a2;
     f32 phi_f12;
@@ -1237,26 +1243,26 @@ void func_808D2764(EnFloormas *this, GlobalContext *globalCtx) {
     temp_a0 = this->actor.parent;
     temp_a3 = this->actor.child;
     if (this->unk_194 == 0) {
-        if (func_808D2AA8 != temp_a0->unk_188) {
+        if (func_808D2AA8 != (bitwise s32) temp_a0[1].focus.pos.z) {
             sp28 = func_808D2AA8;
             sp34 = 0;
             sp38 = temp_a3;
             func_808D1ED4(temp_a0, globalCtx, 0, temp_a3);
         }
         phi_a2 = 0;
-        if (func_808D2AA8 != this->actor.child->unk_188) {
+        if (func_808D2AA8 != this->actor.child[1].focus.pos.z) {
             sp34 = 0;
             func_808D1ED4(this->actor.child, globalCtx, 0, this->actor.child);
             phi_a2 = 0;
         }
     } else {
-        temp_v1 = temp_a0->unk_188;
-        if ((func_808D2AA8 != temp_v1) && (func_808D1F7C != temp_v1)) {
+        temp_v1 = temp_a0[1].focus.pos.z;
+        if ((func_808D2AA8 != (bitwise s32) temp_v1) && (func_808D1F7C != (bitwise s32) temp_v1)) {
             phi_a2_2 = 1;
         }
-        temp_v1_2 = temp_a3->unk_188;
+        temp_v1_2 = temp_a3[1].focus.pos.z;
         phi_a2 = phi_a2_2;
-        if ((func_808D2AA8 != temp_v1_2) && (func_808D1F7C != temp_v1_2)) {
+        if ((func_808D2AA8 != (bitwise s32) temp_v1_2) && (func_808D1F7C != (bitwise s32) temp_v1_2)) {
             phi_a2 = phi_a2_2 + 1;
         }
     }
@@ -1314,9 +1320,9 @@ void func_808D2A20(Actor *arg0) {
 
     temp_a1 = arg0;
     temp_a2 = temp_a1->parent;
-    temp_a1->unk_2C4 = 0.0f;
+    temp_a1[2].focus.pos.x = 0.0f;
     temp_a3 = temp_a1->child;
-    if ((func_808D2AA8 == temp_a2->unk_188) && (temp_a0 = temp_a2, (func_808D2AA8 == temp_a3->unk_188))) {
+    if ((func_808D2AA8 == temp_a2[1].focus.pos.z) && (temp_a0 = temp_a2, (func_808D2AA8 == temp_a3[1].focus.pos.z))) {
         arg0 = temp_a1;
         sp18 = temp_a3;
         func_808D2AB8(temp_a0, temp_a1, temp_a2, temp_a3);
@@ -1325,7 +1331,7 @@ void func_808D2A20(Actor *arg0) {
         return;
     }
     temp_a1->draw = NULL;
-    temp_a1->unk_188 = func_808D2AA8;
+    temp_a1[1].focus.pos.z = (bitwise f32) func_808D2AA8;
     temp_a1->flags &= -0x12;
 }
 
@@ -1337,7 +1343,7 @@ void func_808D2AB8(Actor *arg0) {
     arg0->unk_364 = (u8) (arg0->unk_364 & ~3);
     arg0->unk_365 = (u8) (arg0->unk_365 & ~3);
     arg0->unk_366 = (u8) (arg0->unk_366 & ~3);
-    arg0->unk_188 = func_808D2AF4;
+    arg0[1].focus.pos.z = func_808D2AF4;
 }
 
 void func_808D2AF4(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1355,17 +1361,17 @@ void func_808D2B18(Actor *arg0) {
     arg0->velocity.y = 5.5f;
     if (arg0->params == 0x40) {
         temp_a0 = arg0->parent;
-        if ((func_808D2AA8 != temp_a0->unk_188) && ((s32) temp_a0->colChkInfo.health > 0)) {
+        if ((func_808D2AA8 != (bitwise s32) temp_a0[1].focus.pos.z) && ((s32) temp_a0->colChkInfo.health > 0)) {
             func_808D2700((EnFloormas *) temp_a0);
         } else {
             temp_a0_2 = arg0->child;
-            if ((func_808D2AA8 != temp_a0_2->unk_188) && ((s32) temp_a0_2->colChkInfo.health > 0)) {
+            if ((func_808D2AA8 != (bitwise s32) temp_a0_2[1].focus.pos.z) && ((s32) temp_a0_2->colChkInfo.health > 0)) {
                 func_808D2700((EnFloormas *) temp_a0_2);
             }
         }
         arg0->params = 0x20;
     }
-    arg0->unk_188 = func_808D2C08;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D2C08;
 }
 
 void func_808D2C08(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1415,7 +1421,7 @@ void func_808D2D6C(Actor *arg0) {
         arg0->velocity.y = 0.0f;
     }
     func_800BE504(arg0, arg0 + 0x354);
-    arg0->unk_188 = func_808D2DC0;
+    arg0[1].focus.pos.z = (bitwise f32) func_808D2DC0;
 }
 
 void func_808D2DC0(EnFloormas *this, GlobalContext *globalCtx) {
@@ -1443,16 +1449,16 @@ void func_808D2E34(Actor *arg0, GlobalContext *arg1) {
     s32 phi_v0;
 
     temp_v0 = arg0->unk_365;
-    if (((temp_v0 & 2) != 0) && ((arg0->unk_365 = (u8) (temp_v0 & 0xFFFD), func_800BE258(arg0, arg0 + 0x36C), (arg0->unk_18C != 0xA)) || ((*arg0->unk_390 & 0xDB0B3) == 0))) {
+    if (((temp_v0 & 2) != 0) && ((arg0->unk_365 = (u8) (temp_v0 & 0xFFFD), func_800BE258(arg0, arg0 + 0x36C), (arg0->unk_18C != 0xA)) || ((*arg0[2].prevPos.x & 0xDB0B3) == 0))) {
         if (arg0->colChkInfo.damageEffect == 0xE) {
             func_808D0908((EnFloormas *) arg0);
             arg0->colorFilterTimer = 0;
             arg0->colChkInfo.damage = 4;
-            arg0->unk_192 = -0x640;
+            arg0[1].focus.unk_12 = -0x640;
             arg0->gravity = -1.0f;
-            arg0->unk_2C4 = 4.0f;
+            arg0[2].focus.pos.x = 4.0f;
             arg0->unk_18C = 0x14U;
-            arg0->unk_2C8 = 0.55f;
+            arg0[2].focus.pos.y = 0.55f;
         }
         if (arg0->unk_368 != 0xC) {
             if (Actor_ApplyDamage(arg0) == 0) {
@@ -1472,37 +1478,37 @@ void func_808D2E34(Actor *arg0, GlobalContext *arg1) {
                 if (temp_v0_2 == 3) {
                     func_808D09CC(arg0);
                     if (arg0->colChkInfo.health == 0) {
-                        arg0->unk_18E = 3;
+                        arg0[1].focus.rot.y = 3;
                         arg0->unk_365 = (u8) (arg0->unk_365 & 0xFFFE);
                     }
                     func_808D2D6C(arg0);
                     return;
                 }
                 if (temp_v0_2 == 1) {
-                    arg0->unk_18E = 0x28;
+                    arg0[1].focus.rot.y = 0x28;
                     func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
                     Audio_PlayActorSound2(arg0, 0x389EU);
                     func_808D2D6C(arg0);
                     return;
                 }
                 if (temp_v0_2 == 5) {
-                    arg0->unk_18E = 0x28;
+                    arg0[1].focus.rot.y = 0x28;
                     func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
                     Audio_PlayActorSound2(arg0, 0x389EU);
                     arg0->unk_18C = 0x1FU;
-                    arg0->unk_2C8 = 0.55f;
-                    arg0->unk_2C4 = 2.0f;
+                    arg0[2].focus.pos.y = 0.55f;
+                    arg0[2].focus.pos.x = 2.0f;
                     func_808D2D6C(arg0);
                     return;
                 }
                 if (temp_v0_2 == 2) {
-                    arg0->unk_2C4 = 4.0f;
+                    arg0[2].focus.pos.x = 4.0f;
                     arg0->unk_18C = 0U;
-                    arg0->unk_2C8 = 0.55f;
+                    arg0[2].focus.pos.y = 0.55f;
                 } else if (temp_v0_2 == 4) {
-                    arg0->unk_2C4 = 4.0f;
+                    arg0[2].focus.pos.x = 4.0f;
                     arg0->unk_18C = 0x14U;
-                    arg0->unk_2C8 = 0.55f;
+                    arg0[2].focus.pos.y = 0.55f;
                     phi_v0 = 3;
                     if (arg0->scale.x > 0.009f) {
                         phi_v0 = 4;
@@ -1614,7 +1620,7 @@ void EnFloormas_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_808D3488(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 1) {
-        arg3->z += (f32) arg5->unk_192;
+        arg3->z += (f32) arg5[67].x;
     }
     return 0;
 }
@@ -1648,11 +1654,11 @@ void func_808D34C4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         *arg5 = temp_v0_2 + 8;
         *temp_v0_2 = 0xDA380003;
         sp20 = temp_v0_2;
-        sp20->unk_4 = Matrix_NewMtx(*arg0);
+        sp20[1] = Matrix_NewMtx(*arg0);
         temp_v0_3 = *arg5;
         *arg5 = temp_v0_3 + 8;
-        temp_v0_3->unk_4 = &D_06008688;
-        temp_v0_3->unk_0 = 0xDE000000;
+        temp_v0_3[1] = &D_06008688;
+        temp_v0_3->unk_0 = (Mtx *)0xDE000000;
         SysMatrix_StatePop();
     }
 }
@@ -1686,12 +1692,12 @@ void func_808D3754(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C2DC(temp_a0);
     if (thisx->unk_368 == 0xC) {
-        func_800AE5E4(globalCtx, &D_808D3958, (s16) ((s32) thisx->unk_190 % 0x28), 0x28);
+        func_800AE5E4(globalCtx, &D_808D3958, (s16) ((s32) thisx[1].focus.rot.z % 0x28), 0x28);
     }
-    sp30->polyXlu.p = SkelAnime_DrawSV2(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_808D3488, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *, Gfx **)) func_808D34C4, thisx, sp30->polyXlu.p);
+    sp30->polyXlu.p = SkelAnime_DrawSV2(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_808D3488, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *, Gfx **)) func_808D34C4, thisx, sp30->polyXlu.p);
     if (thisx->unk_368 == 0xC) {
         func_800AE8EC(globalCtx);
     }
     temp_f0 = thisx->scale.x;
-    func_800BE680(globalCtx, thisx, (Vec3f []) (thisx + 0x2D0), 0xB, thisx->unk_2C8 * temp_f0 * 100.0f, thisx->unk_2CC * temp_f0 * 100.0f, thisx->unk_2C4, (u8) (s32) thisx->unk_18C);
+    func_800BE680(globalCtx, thisx, (Vec3f []) (Vec3f *) &thisx[2].focus.rot, 0xB, thisx[2].focus.pos.y * temp_f0 * 100.0f, thisx[2].focus.pos.z * temp_f0 * 100.0f, thisx[2].focus.pos.x, (u8) (s32) thisx->unk_18C);
 }

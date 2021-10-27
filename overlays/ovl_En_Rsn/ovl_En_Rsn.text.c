@@ -75,7 +75,7 @@ void EnRsn_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 EnRsn_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 0xE) {
-        SysMatrix_InsertXRotation_s(arg5->unk_1DA, 1);
+        SysMatrix_InsertXRotation_s(arg5[79].x, 1);
     }
     return 0;
 }
@@ -102,7 +102,7 @@ void EnRsn_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v0 + 8;
+    sp30->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp28 = temp_v0;
     sp28->words.w1 = Lib_SegmentedToVirtual(&D_06005458);

@@ -19,12 +19,12 @@ loop_1:
     sp4 = temp_t9;
     sp0 = (sp8 + 0xA0100000)->unk_-4;
     *(sp8 + 0xA0000000) = *(sp8 + 0xA0000000) ^ -1;
-    spC->unk_FFFFC = (s32) (spC->unk_FFFFC ^ -1);
-    if ((spC->unk_0 != (temp_t9 ^ -1)) || (spC->unk_FFFFC != (sp0 ^ -1))) {
+    spC[262143] ^= -1;
+    if ((spC->unk_0 != (temp_t9 ^ -1)) || (spC[262143] != (sp0 ^ -1))) {
 
     } else {
         spC->unk_0 = sp4;
-        spC->unk_FFFFC = sp0;
+        spC[262143] = sp0;
         sp8 += 0x100000;
         if (sp8 < 0x800000U) {
             goto loop_1;

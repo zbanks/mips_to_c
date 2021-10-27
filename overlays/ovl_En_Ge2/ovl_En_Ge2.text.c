@@ -474,11 +474,11 @@ s32 func_80B8BA40(Actor *arg0) {
     void *temp_v1;
     s32 phi_v0;
 
-    temp_v1 = arg0->unk_2F0;
+    temp_v1 = arg0[2].velocity.y;
     if (temp_v1 == 0) {
         return 1;
     }
-    Math_Vec3s_ToVec3f((Vec3f *) &sp30, Lib_SegmentedToVirtual(temp_v1->unk_4) + (arg0->unk_2F4 * 6));
+    Math_Vec3s_ToVec3f((Vec3f *) &sp30, Lib_SegmentedToVirtual(temp_v1->unk_4) + (arg0[2].velocity.z * 6));
     temp_a0 = arg0 + 0x24;
     sp28 = temp_a0;
     sp2E = Math_Vec3f_Yaw(temp_a0, (Vec3f *) &sp30);
@@ -638,7 +638,7 @@ void func_80B8C0B0(EnGe2 *this, GlobalContext *globalCtx) {
 }
 
 void func_80B8C13C(Actor *arg0, GlobalContext *arg1) {
-    s32 *temp_v0;
+    f32 temp_v0;
     f32 phi_f0;
 
     if (gSaveContext.isNight != 0) {
@@ -647,43 +647,43 @@ void func_80B8C13C(Actor *arg0, GlobalContext *arg1) {
         phi_f0 = 280.0f;
     }
     if (arg1->actorCtx.actorList[2].first->unk_394 == 0x1A) {
-        arg0->unk_308 = func_80B8BF04;
+        arg0[2].floorPoly = func_80B8BF04;
         arg0->speedXZ = 0.0f;
         SkelAnime_ChangeAnim(arg0 + 0x194, (AnimationHeader *) &D_06009D1C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06009D1C), (u8) 0, -8.0f);
         arg0->unk_2F8 = (u16) (arg0->unk_2F8 | 0x20);
         return;
     }
     if ((gSaveContext.weekEventReg[80] & 8) != 0) {
-        arg0->unk_308 = func_80B8BCEC;
+        arg0[2].floorPoly = func_80B8BCEC;
         arg0->speedXZ = 0.0f;
         SkelAnime_ChangeAnim(arg0 + 0x194, (AnimationHeader *) &D_06009D1C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06009D1C), (u8) 0, -8.0f);
         return;
     }
-    if (func_80B8B5AC(arg1, arg0, arg0 + 0x3C, arg0->shape.rot.y, (s16) 0x1800, phi_f0, arg0->unk_2FC) != 0) {
+    if (func_80B8B5AC(arg1, arg0, arg0 + 0x3C, arg0->shape.rot.y, (s16) 0x1800, phi_f0, arg0[2].gravity) != 0) {
         if (((arg0->params & 0x1F) != 0x1F) && (func_801690CC(arg1) == 0)) {
             arg0->speedXZ = 0.0f;
             func_800B7298(arg1, arg0, 0x1AU);
             func_801000A4(0x482CU);
             func_801518B0(arg1, 0x1194U, arg0);
-            arg0->unk_308 = func_80B8BF04;
-            SkelAnime_ChangeAnim(arg0 + 0x194, (AnimationHeader *) &D_06009D1C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06009D1C), (u8) 0, -8.0f);
+            arg0[2].floorPoly = (CollisionPoly *) func_80B8BF04;
+            SkelAnime_ChangeAnim((SkelAnime *) &arg0[1].sfx, (AnimationHeader *) &D_06009D1C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06009D1C), (u8) 0, -8.0f);
             return;
         }
         /* Duplicate return node #18. Try simplifying control flow for better match */
         return;
     }
     if ((arg0->unk_159 & 2) != 0) {
-        temp_v0 = arg0->unk_184;
-        if ((temp_v0 != 0) && ((*temp_v0 & 1) != 0)) {
+        temp_v0 = arg0[1].focus.pos.y;
+        if (((bitwise s32) temp_v0 != 0) && ((*temp_v0 & 1) != 0)) {
             func_800BCB70(arg0, 0, 0x78, 0, (s16) 0x190);
-            arg0->unk_308 = func_80B8C048;
+            arg0[2].floorPoly = (CollisionPoly *) func_80B8C048;
             arg0->unk_2F8 = (u16) (arg0->unk_2F8 | 4);
             arg0->speedXZ = 0.0f;
             return;
         }
-        SkelAnime_ChangeAnim(arg0 + 0x194, (AnimationHeader *) &D_06001664, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06001664), (u8) 2, -8.0f);
+        SkelAnime_ChangeAnim((SkelAnime *) &arg0[1].sfx, (AnimationHeader *) &D_06001664, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06001664), (u8) 2, -8.0f);
         arg0->unk_300 = 0xC8;
-        arg0->unk_308 = func_80B8C0B0;
+        arg0[2].floorPoly = (CollisionPoly *) func_80B8C0B0;
         arg0->speedXZ = 0.0f;
         Audio_PlayActorSound2(arg0, 0x399AU);
         arg0->flags &= -2;
@@ -691,7 +691,7 @@ void func_80B8C13C(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if (arg0->home.rot.x == 0) {
-        CollisionCheck_SetAC(arg1, &arg1->colChkCtx, arg0 + 0x148);
+        CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) &arg0[1].flags);
     }
 }
 
@@ -941,7 +941,7 @@ void EnGe2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp34 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v1 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v1 + 8;
+    sp34->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80B8CE98 + (this->unk_2E0 * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;

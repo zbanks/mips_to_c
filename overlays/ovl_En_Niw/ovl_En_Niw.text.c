@@ -1060,20 +1060,20 @@ void EnNiw_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 EnNiw_LimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor) {
     if (limbIndex == 0xD) {
-        rot->y += (s32) actor->unk_2E0;
+        rot->y += (s32) actor[2].scale.x;
     }
     if (limbIndex == 0xF) {
-        rot->y += (s32) actor->unk_2E4;
+        rot->y += (s32) actor[2].scale.y;
     }
     if (limbIndex == 0xB) {
-        rot->x += (s32) actor->unk_2DC;
+        rot->x += (s32) actor[2].targetArrowOffset;
         rot->y += (s32) actor->unk_2D8;
         rot->z += (s32) actor->unk_2D4;
     }
     if (limbIndex == 7) {
         rot->x += (s32) actor->unk_2D0;
-        rot->y += (s32) actor->unk_2CC;
-        rot->z += (s32) actor->unk_2C8;
+        rot->y += (s32) actor[2].focus.pos.z;
+        rot->z += (s32) actor[2].focus.pos.y;
     }
     return 0;
 }
@@ -1188,7 +1188,7 @@ void EnNiw_DrawFeathers(EnNiw *this, GlobalContext *globalCtx) {
             temp_s0 = &globalCtx->mf_187FC;
             if (phi_s4 == 0) {
                 temp_v0 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0 + 8;
+                temp_s2->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_060023B0;
                 temp_v0->words.w0 = 0xDE000000;
                 phi_s4 = (phi_s4 + 1) & 0xFF;
@@ -1200,11 +1200,11 @@ void EnNiw_DrawFeathers(EnNiw *this, GlobalContext *globalCtx) {
             SysMatrix_InsertZRotation_f(phi_s1->zRot, 1);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, 1);
             temp_v0_2 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_2 + 8;
+            temp_s2->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDA380003;
             temp_v0_2->words.w1 = Matrix_NewMtx(temp_s2);
             temp_v0_3 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_3 + 8;
+            temp_s2->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (u32) &D_06002428;
             temp_v0_3->words.w0 = 0xDE000000;
         }

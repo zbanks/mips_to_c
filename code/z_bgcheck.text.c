@@ -1571,8 +1571,8 @@ f32 func_800C01B8(CollisionPoly *param_1, Vec3f *param_2) {
 
 void BgCheck_CreateTriNormFromPolygon(Vec3s *arg0, TriNorm *arg1, Vec3f *arg2) {
     BgCheck_CreateVec3fFromVertex(((arg0->y & 0x1FFF) * 6) + arg1, arg2);
-    BgCheck_CreateVec3fFromVertex(((arg0->z & 0x1FFF) * 6) + arg1, arg2 + 0xC);
-    BgCheck_CreateVec3fFromVertex((arg0->unk_6 * 6) + arg1, arg2 + 0x18);
+    BgCheck_CreateVec3fFromVertex(((arg0->z & 0x1FFF) * 6) + arg1, &arg2[1]);
+    BgCheck_CreateVec3fFromVertex((arg0[1].x * 6) + arg1, &arg2[2]);
 }
 
 void func_800C02C0(CollisionPoly *poly, s32 index, CollisionContext *colCtx, TriNorm *tri) {
@@ -1621,13 +1621,13 @@ s32 func_800C0474(CollisionPoly *arg0, s32 arg1, ?32 arg2, ?32 arg3, f32 *arg4, 
     D_801EDA18.y = (f32) temp_v0->unk_2;
     D_801EDA18.z = (f32) temp_v0->unk_4;
     temp_v0_2 = ((arg0->vtxData[1] & 0x1FFF) * 6) + arg1;
-    D_801EDA18.unk_C = (f32) temp_v0_2->unk_0;
-    D_801EDA18.unk_10 = (f32) temp_v0_2->unk_2;
-    D_801EDA18.unk_14 = (f32) temp_v0_2->unk_4;
+    (&D_801EDA18)[1].x = (f32) temp_v0_2->unk_0;
+    (&D_801EDA18)[1].y = (f32) temp_v0_2->unk_2;
+    (&D_801EDA18)[1].z = (f32) temp_v0_2->unk_4;
     temp_v0_3 = (arg0->vtxData[2] * 6) + arg1;
-    D_801EDA18.unk_18 = (f32) temp_v0_3->unk_0;
-    D_801EDA18.unk_1C = (f32) temp_v0_3->unk_2;
-    D_801EDA18.unk_20 = (f32) temp_v0_3->unk_4;
+    (&D_801EDA18)[2].x = (f32) temp_v0_3->unk_0;
+    (&D_801EDA18)[2].y = (f32) temp_v0_3->unk_2;
+    (&D_801EDA18)[2].z = (f32) temp_v0_3->unk_4;
     if (func_8017A304(&D_801EDA18, &D_801EDA24, &D_801EDA30, arg3, arg2, arg5) == 0) {
         return 0;
     }
@@ -1646,7 +1646,7 @@ void func_800C06A8(Vec3s *arg0, f32 arg2, CollisionPoly *arg3, s32 arg4) {
 
     BgCheck_CreateTriNormFromPolygon(arg0, (TriNorm *) &D_801EDA80);
     BgCheck_PolygonGetNormal((CollisionPoly *) arg0, &sp3C, &sp38, &sp34);
-    func_8017C850(&D_801EDA80, &D_801EDA8C, &D_801EDA98, sp3C, sp38, sp34, (f32) arg0->unk_E, arg2, arg3, arg4);
+    func_8017C850(&D_801EDA80, &D_801EDA8C, &D_801EDA98, sp3C, sp38, sp34, (f32) arg0[2].y, arg2, arg3, arg4);
 }
 
 void func_800C074C(Vec3s *arg0, f32 arg2, CollisionPoly *arg3, s32 arg4) {
@@ -1656,7 +1656,7 @@ void func_800C074C(Vec3s *arg0, f32 arg2, CollisionPoly *arg3, s32 arg4) {
 
     BgCheck_CreateTriNormFromPolygon(arg0, (TriNorm *) &D_801EDB48);
     BgCheck_PolygonGetNormal((CollisionPoly *) arg0, &sp3C, &sp38, &sp34);
-    func_8017CEF0(&D_801EDB48, &D_801EDB54, &D_801EDB60, sp3C, sp38, sp34, (f32) arg0->unk_E, arg2, arg3, arg4);
+    func_8017CEF0(&D_801EDB48, &D_801EDB54, &D_801EDB60, sp3C, sp38, sp34, (f32) arg0[2].y, arg2, arg3, arg4);
 }
 
 s32 func_800C07F0(CollisionPoly **arg0) {
@@ -1685,24 +1685,24 @@ s32 func_800C07F0(CollisionPoly **arg0) {
     temp_t8 = arg0->unk_0;
     temp_f8 = D_801EDBA4;
     sp38 = temp_t8;
-    temp_v0 = arg0->unk_8;
-    temp_v1 = arg0->unk_C;
+    temp_v0 = arg0[2];
+    temp_v1 = arg0[3];
     temp_f12 = (f32) temp_t8->normal.x;
     temp_f14 = (f32) temp_t8->normal.y;
     temp_f16 = (f32) temp_t8->normal.z;
     temp_f18 = temp_f8 + (((temp_f12 * temp_v0->x) + (temp_f14 * temp_v0->y) + (temp_f16 * temp_v0->z)) * 0.00003051851f);
     temp_f12_2 = temp_f8 + (((temp_f12 * temp_v1->x) + (temp_f14 * temp_v1->y) + (temp_f16 * temp_v1->z)) * 0.00003051851f);
     phi_f14 = 0.0f;
-    if (((temp_f18 >= 0.0f) && (temp_f12_2 >= 0.0f)) || ((temp_f18 < 0.0f) && (temp_f12_2 < 0.0f)) || ((arg0->unk_14 != 0) && (temp_f18 < 0.0f) && (temp_f12_2 > 0.0f)) || (temp_f2 = temp_f18 - temp_f12_2, (fabsf(temp_f2) < 0.008f))) {
+    if (((temp_f18 >= 0.0f) && (temp_f12_2 >= 0.0f)) || ((temp_f18 < 0.0f) && (temp_f12_2 < 0.0f)) || ((arg0[5] != 0) && (temp_f18 < 0.0f) && (temp_f12_2 > 0.0f)) || (temp_f2 = temp_f18 - temp_f12_2, (fabsf(temp_f2) < 0.008f))) {
         goto block_16;
     }
     sp34 = temp_f2;
     sp4C = temp_f18;
     BgCheck_PolygonGetNormal(sp38, &D_801EDB98, &D_801EDB9C, &D_801EDBA0);
-    BgCheck_CreateTriNormFromPolygon((Vec3s *) arg0->unk_0, arg0->unk_4, &D_801EDB70);
-    Math3D_Lerp(arg0->unk_8, arg0->unk_C, temp_f18 / temp_f2, arg0->unk_10);
+    BgCheck_CreateTriNormFromPolygon((Vec3s *) arg0->unk_0, arg0[1], &D_801EDB70);
+    Math3D_Lerp(arg0[2], arg0[3], temp_f18 / temp_f2, arg0[4]);
     temp_f6 = D_801EDB98;
-    if (((fabsf(temp_f6) > 0.5f) && (temp_v0_2 = arg0->unk_10, (func_8017C540(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_2->y, temp_v0_2->z, 0.0f, arg0->unk_18, temp_f6) != 0))) || ((temp_f8_2 = D_801EDB9C, phi_f14 = 0.0f, (fabsf(temp_f8_2) > 0.5f)) && (temp_v0_3 = arg0->unk_10, (func_8017BAD0(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_3->z, temp_v0_3->x, 0.0f, arg0->unk_18, temp_f8_2) != 0))) || ((temp_f10 = D_801EDBA0, (fabsf(temp_f10) > 0.5f)) && (temp_v0_4 = arg0->unk_10, (func_8017CB7C(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_4->x, temp_v0_4->y, phi_f14, arg0->unk_18, temp_f10) != 0)))) {
+    if (((fabsf(temp_f6) > 0.5f) && (temp_v0_2 = arg0[4], (func_8017C540(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_2->y, temp_v0_2->z, 0.0f, arg0[6], temp_f6) != 0))) || ((temp_f8_2 = D_801EDB9C, phi_f14 = 0.0f, (fabsf(temp_f8_2) > 0.5f)) && (temp_v0_3 = arg0[4], (func_8017BAD0(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_3->z, temp_v0_3->x, 0.0f, arg0[6], temp_f8_2) != 0))) || ((temp_f10 = D_801EDBA0, (fabsf(temp_f10) > 0.5f)) && (temp_v0_4 = arg0[4], (func_8017CB7C(&D_801EDB70, &D_801EDB7C, &D_801EDB88, temp_v0_4->x, temp_v0_4->y, phi_f14, arg0[6], temp_f10) != 0)))) {
         return 1;
     }
 block_16:
@@ -1836,9 +1836,9 @@ loop_3:
         }
     } else {
         temp_a1_2 = phi_a2->vtxList;
-        temp_f0 = arg4->unk_4;
+        temp_f0 = arg4[1];
         if (!(temp_f0 < (f32) (temp_a1_2 + ((temp_v0_2 & 0x1FFF) * 6))->unk_2) || !(temp_f0 < (f32) (temp_a1_2 + ((temp_a0 & 0x1FFF) * 6))->unk_2) || !(temp_f0 < (f32) (temp_a1_2 + (temp_s0->vtxData[2] * 6))->unk_2)) {
-            if ((func_800C0474(temp_s0, temp_a1_2, arg4->unk_0, arg4->unk_8, &sp80, arg6) != 0) && (sp80 < arg4->unk_4) && (phi_f20 < sp80)) {
+            if ((func_800C0474(temp_s0, temp_a1_2, arg4->unk_0, arg4[2], &sp80, arg6) != 0) && (sp80 < arg4[1]) && (phi_f20 < sp80)) {
                 *arg3 = temp_s0;
                 phi_f20_3 = sp80;
             }
@@ -1884,7 +1884,7 @@ f32 func_800C10FC(CollisionPoly **arg0, CollisionContext *arg1, u16 arg2, Collis
         if ((arg5 & 0x10) != 0) {
             phi_v0_2 = 1;
         }
-        phi_f2_3 = func_800C0E74(arg1, arg2, (u16 *) (arg0 + 4), arg3, (bitwise CollisionPoly **) arg4, phi_f2_2, (CollisionContext *) arg6, phi_v0_2, (void *) arg8, arg5);
+        phi_f2_3 = func_800C0E74(arg1, arg2, (u16 *) &arg0[1], arg3, (bitwise CollisionPoly **) arg4, phi_f2_2, (CollisionContext *) arg6, phi_v0_2, (void *) arg8, arg5);
     }
     return phi_f2_3;
 }
@@ -1979,8 +1979,8 @@ s32 func_800C12A4(void *arg0, CollisionContext *arg1, u16 arg2, f32 *arg3, f32 *
         return 0;
     }
     sp104.unk_0 = arg5->unk_0;
-    sp104.unk_4 = (f32) arg5->unk_4;
-    sp104.unk_8 = (s32) arg5->unk_8;
+    (&sp104)[1] = arg5->unk_4;
+    (&sp104)[2] = arg5->unk_8;
     temp_v0 = arg1->colHeader;
     spE8 = temp_v0->polyList;
     temp_s3 = temp_v0->vtxList;
@@ -2255,30 +2255,30 @@ s32 func_800C1D7C(void **arg0) {
     s32 phi_fp_2;
     s32 phi_fp_3;
 
-    temp_v1 = *arg0->unk_4;
+    temp_v1 = *arg0[1];
     phi_fp_2 = 0;
     if (temp_v1 == 0xFFFF) {
         return 0;
     }
-    temp_a0 = arg0->unk_8;
+    temp_a0 = arg0[2];
     temp_v0 = temp_a0->unk_0;
     temp_s6 = &sp50;
     sp54 = temp_v0->unk_10;
-    sp58 = arg0->unk_10;
+    sp58 = arg0[4];
     sp60 = &sp7C;
-    sp5C = arg0->unk_14;
-    sp64 = (arg0->unk_28 & 8) != 0;
-    sp68 = arg0->unk_24;
+    sp5C = arg0[5];
+    sp64 = (arg0[10] & 8) != 0;
+    sp68 = arg0[9];
     phi_s1 = temp_a0->unk_48 + (temp_v1 * 4);
 loop_3:
     temp_v0_2 = phi_s1->unk_0;
     temp_t7 = (temp_v0_2 * 0x10) + temp_v0->unk_18;
     sp50 = temp_t7;
-    temp_a0_2 = arg0->unk_8;
+    temp_a0_2 = arg0[2];
     temp_a2 = temp_a0_2->unk_4C + temp_v0_2;
     phi_fp = phi_fp_2;
     phi_fp_3 = phi_fp_2;
-    if ((*temp_a2 == 1) || ((temp_v0_3 = arg0->unk_E, (temp_v0_3 != 0)) && ((temp_t7->vtxData[0] & ((temp_v0_3 & 7) << 0xD)) == 0)) || (temp_v1_2 = arg0->unk_C, ((sp50->vtxData[0] & ((temp_v1_2 & 7) << 0xD)) != 0)) || (((sp50->vtxData[1] & 0x8000) != 0) && (((temp_v0_4 = arg0->unk_2C, (temp_v0_4 != 0)) && (temp_v0_4->unk_2 != 2)) || ((temp_v0_4 == 0) && (temp_v1_2 != 1))))) {
+    if ((*temp_a2 == 1) || ((temp_v0_3 = arg0->unk_E, (temp_v0_3 != 0)) && ((temp_t7->vtxData[0] & ((temp_v0_3 & 7) << 0xD)) == 0)) || (temp_v1_2 = arg0->unk_C, ((sp50->vtxData[0] & ((temp_v1_2 & 7) << 0xD)) != 0)) || (((sp50->vtxData[1] & 0x8000) != 0) && (((temp_v0_4 = arg0[11], (temp_v0_4 != 0)) && (temp_v0_4->unk_2 != 2)) || ((temp_v0_4 == 0) && (temp_v1_2 != 1))))) {
         temp_v0_6 = phi_s1->unk_2;
         if (temp_v0_6 != 0xFFFF) {
             phi_s1 = temp_a0_2->unk_48 + (temp_v0_6 * 4);
@@ -2290,17 +2290,17 @@ loop_3:
         if (!(sp58->y < temp_f0) || !(sp5C->unk_4 < temp_f0)) {
             if (func_800C07F0(temp_s6) != 0) {
                 temp_f0_2 = Math3D_DistanceSquared(sp58, (Vec3f *) sp60);
-                if (temp_f0_2 < arg0->unk_20) {
-                    arg0->unk_20 = temp_f0_2;
-                    temp_t8 = arg0->unk_18;
+                if (temp_f0_2 < arg0[8]) {
+                    arg0[8] = temp_f0_2;
+                    temp_t8 = arg0[6];
                     temp_t8->unk_0 = (s32) sp60->unk_0;
                     temp_t8->unk_4 = (s32) sp60->unk_4;
                     temp_t8->unk_8 = (s32) sp60->unk_8;
-                    temp_t1 = arg0->unk_14;
+                    temp_t1 = arg0[5];
                     temp_t1->unk_0 = (s32) sp60->unk_0;
                     temp_t1->unk_4 = (s32) sp60->unk_4;
                     temp_t1->unk_8 = (s32) sp60->unk_8;
-                    *arg0->unk_1C = sp50;
+                    *arg0[7] = sp50;
                     phi_fp_3 = 1;
                 }
             }
@@ -2308,7 +2308,7 @@ loop_3:
             phi_fp = phi_fp_3;
             phi_fp_2 = phi_fp_3;
             if (temp_v0_5 != 0xFFFF) {
-                phi_s1 = arg0->unk_8->unk_48 + (temp_v0_5 * 4);
+                phi_s1 = arg0[2]->unk_48 + (temp_v0_5 * 4);
                 goto loop_3;
             }
         }
@@ -2316,21 +2316,21 @@ loop_3:
     return phi_fp;
 }
 
-s32 func_800C2008(void **arg0) {
+s32 func_800C2008(u16 **arg0) {
     s32 sp1C;
     u16 *temp_v0;
     void *temp_v0_2;
     void *temp_v0_3;
     s32 phi_v1;
-    void **phi_a0;
+    u16 **phi_a0;
     s32 phi_v1_2;
     s32 phi_v1_3;
 
     phi_v1 = 0;
-    if ((arg0->unk_28 & 2) != 0) {
+    if ((arg0[10] & 2) != 0) {
         temp_v0 = arg0->unk_0;
         if (*temp_v0 != 0xFFFF) {
-            arg0->unk_4 = temp_v0;
+            arg0[1] = temp_v0;
             sp1C = 0;
             phi_v1 = sp1C;
             if (func_800C1D7C() != 0) {
@@ -2340,10 +2340,10 @@ s32 func_800C2008(void **arg0) {
     }
     phi_a0 = arg0;
     phi_v1_2 = phi_v1;
-    if ((arg0->unk_28 & 1) != 0) {
+    if ((arg0[10] & 1) != 0) {
         temp_v0_2 = arg0->unk_0;
-        if (temp_v0_2->unk_2 != 0xFFFF) {
-            arg0->unk_4 = (void *) (temp_v0_2 + 2);
+        if (temp_v0_2[1] != 0xFFFF) {
+            arg0[1] = temp_v0_2 + 2;
             arg0 = arg0;
             sp1C = phi_v1;
             phi_a0 = arg0;
@@ -2354,10 +2354,10 @@ s32 func_800C2008(void **arg0) {
         }
     }
     phi_v1_3 = phi_v1_2;
-    if ((phi_a0->unk_28 & 4) != 0) {
+    if ((phi_a0[10] & 4) != 0) {
         temp_v0_3 = phi_a0->unk_0;
-        if (temp_v0_3->unk_4 != 0xFFFF) {
-            phi_a0->unk_4 = (void *) (temp_v0_3 + 4);
+        if (temp_v0_3[2] != 0xFFFF) {
+            phi_a0[1] = temp_v0_3 + 4;
             sp1C = phi_v1_2;
             phi_v1_3 = phi_v1_2;
             if (func_800C1D7C(phi_a0) != 0) {
@@ -2400,7 +2400,7 @@ loop_1:
     if (((temp_v1->unk_2 & phi_t2) != 0) || ((temp_s0 = temp_a0 + phi_t1, ((temp_v1->unk_4 & 0x8000) != 0)) && (((arg6 != 0) && (arg6->unk_2 != 2)) || ((arg6 == 0) && (temp_a1 != 1))))) {
         temp_v0_3 = phi_s1->unk_2;
         if (temp_v0_3 != 0xFFFF) {
-            phi_s1 = arg2->unk_48 + (temp_v0_3 * 4);
+            phi_s1 = arg2[6].x + (temp_v0_3 * 4);
             goto loop_1;
         }
         goto block_16;
@@ -2417,7 +2417,7 @@ loop_1:
         temp_v0_2 = phi_s1->unk_2;
         if (temp_v0_2 != 0xFFFF) {
             phi_t0 = arg2->x->unk_18;
-            phi_s1 = arg2->unk_48 + (temp_v0_2 * 4);
+            phi_s1 = arg2[6].x + (temp_v0_2 * 4);
             goto loop_1;
         }
         goto block_16;
@@ -2433,16 +2433,16 @@ s32 func_800C2310(CollisionPoly **arg0, u16 arg1, Vec3f *arg2, Vec3f *arg3, Vec3
     Vec3f *phi_a2;
 
     temp_v0 = arg0->unk_0;
-    if ((temp_v0 != 0xFFFF) && ((arg6 & 4) == 0) && (func_800C20F4(arg2->unk_48 + (temp_v0 * 4), arg1, arg3, arg4, arg5, arg7) != 0)) {
+    if ((temp_v0 != 0xFFFF) && ((arg6 & 4) == 0) && (func_800C20F4(arg2[6].x + (temp_v0 * 4), arg1, arg3, arg4, arg5, arg7) != 0)) {
         return 1;
     }
     temp_v0_2 = arg0->unk_2;
     phi_a2 = arg2;
-    if ((temp_v0_2 != 0xFFFF) && ((arg6 & 2) == 0) && (arg2 = arg2, phi_a2 = arg2, (func_800C20F4(arg2->unk_48 + (temp_v0_2 * 4), arg1, arg2, arg3, (bitwise f32) arg4, (bitwise CollisionPoly **) arg5, arg7) != 0))) {
+    if ((temp_v0_2 != 0xFFFF) && ((arg6 & 2) == 0) && (arg2 = arg2, phi_a2 = arg2, (func_800C20F4(arg2[6].x + (temp_v0_2 * 4), arg1, arg2, arg3, (bitwise f32) arg4, (bitwise CollisionPoly **) arg5, arg7) != 0))) {
         return 1;
     }
     temp_v0_3 = arg0->unk_4;
-    if ((temp_v0_3 != 0xFFFF) && ((arg6 & 1) == 0) && (func_800C20F4(phi_a2->unk_48 + (temp_v0_3 * 4), arg1, phi_a2, arg3, (bitwise f32) arg4, (bitwise CollisionPoly **) arg5, arg7) != 0)) {
+    if ((temp_v0_3 != 0xFFFF) && ((arg6 & 1) == 0) && (func_800C20F4(phi_a2[6].x + (temp_v0_3 * 4), arg1, phi_a2, arg3, (bitwise f32) arg4, (bitwise CollisionPoly **) arg5, arg7) != 0)) {
         return 1;
     }
     return 0;
@@ -2484,8 +2484,8 @@ void func_800C25E0(CollisionContext *arg0, ? *arg1, s32 *arg2) {
 
     temp_f18 = (s32) ((arg1->unk_0 - arg0->minBounds.x) * arg0->subdivLengthInv.x);
     arg2->unk_0 = temp_f18;
-    arg2->unk_4 = (s32) ((arg1->unk_4 - arg0->minBounds.y) * arg0->subdivLengthInv.y);
-    arg2->unk_8 = (s32) ((arg1->unk_8 - arg0->minBounds.z) * arg0->subdivLengthInv.z);
+    arg2[1] = (s32) ((arg1->unk_4 - arg0->minBounds.y) * arg0->subdivLengthInv.y);
+    arg2[2] = (s32) ((arg1->unk_8 - arg0->minBounds.z) * arg0->subdivLengthInv.z);
     if (temp_f18 < 0) {
         arg2->unk_0 = 0;
     } else {
@@ -2494,23 +2494,23 @@ void func_800C25E0(CollisionContext *arg0, ? *arg1, s32 *arg2) {
             arg2->unk_0 = temp_v1 - 1;
         }
     }
-    temp_v0 = arg2->unk_4;
+    temp_v0 = arg2[1];
     if (temp_v0 < 0) {
-        arg2->unk_4 = 0;
+        arg2[1] = 0;
     } else {
         temp_v1_2 = arg0->subdivAmount.y;
         if (temp_v0 >= temp_v1_2) {
-            arg2->unk_4 = (s32) (temp_v1_2 - 1);
+            arg2[1] = temp_v1_2 - 1;
         }
     }
-    temp_v0_2 = arg2->unk_8;
+    temp_v0_2 = arg2[2];
     if (temp_v0_2 < 0) {
-        arg2->unk_8 = 0;
+        arg2[2] = 0;
         return;
     }
     temp_v1_3 = arg0->subdivAmount.z;
     if (temp_v0_2 >= temp_v1_3) {
-        arg2->unk_8 = (s32) (temp_v1_3 - 1);
+        arg2[2] = temp_v1_3 - 1;
     }
 }
 
@@ -2858,7 +2858,7 @@ u32 BgCheck_SplitScenePolygonsIntoSubdivisions(CollisionContext *colCtx, GlobalC
                                     temp_v0_3 = spD4 + 1;
                                     spC0 += colCtx->subdivLength.x;
                                     spB4 += colCtx->subdivLength.x;
-                                    phi_s0 += 6;
+                                    phi_s0 = &phi_s0[1];
                                     phi_s1 = temp_s1;
                                     phi_v0_2 = temp_v0_3;
                                 } while (temp_s1 < temp_v0_3);
@@ -3756,7 +3756,7 @@ s32 func_800C5954(Vec3f *arg0, u16 arg1, f32 arg2, s32 *arg3, StaticLookup *arg4
     CollisionPoly **temp_v0;
 
     *arg3 = 0x32;
-    temp_v0 = func_800C2514(arg0->unk_40, arg4);
+    temp_v0 = func_800C2514(arg0[5].y, arg4);
     if (temp_v0 == 0) {
         goto block_5;
     }
@@ -3813,11 +3813,11 @@ s32 func_800C5B80(u16 *arg0) {
     u16 temp_t8;
     u16 temp_v0;
 
-    temp_v0 = arg0->unk_2;
+    temp_v0 = arg0[1];
     temp_t8 = temp_v0 + 1;
     temp_t7 = temp_v0 * 4;
     temp_at = (temp_t8 & 0xFFFF) < (s32) arg0->unk_0;
-    arg0->unk_2 = temp_t8;
+    arg0[1] = temp_t8;
     if (temp_at == 0) {
         return 0;
     }
@@ -4001,7 +4001,7 @@ void BgCheck_DynaAlloc(GlobalContext *globalCtx, DynaCollisionContext *dyna) {
         temp_s0 = phi_s0 + 0x64;
         temp_s2 = phi_s2 + 2;
         temp_s2->unk_138A = 0;
-        phi_s1 += 0x64;
+        phi_s1 = &phi_s1[1];
         phi_s2 = temp_s2;
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x1388);
@@ -4349,14 +4349,14 @@ void BgCheck_AddActorMeshToLists(GlobalContext *globalCtx, DynaCollisionContext 
                     temp_v1 = (dyna->polyList + phi_s1)->unk_A;
                     if ((s32) temp_v1 >= 0x4000) {
                         temp_a2 = &sp108;
-                        if ((sp74->unk_138C & 0x20) == 0) {
+                        if ((sp74[625].center.z & 0x20) == 0) {
                             sp108 = phi_s0;
                             BgCheck_PolygonLinkedListNodeInsert(&dyna->polyNodes, (u16 *) &dyna->bgActors[index].dynaLookup.floor, temp_a2);
                             phi_a0 = *currPolygons + temp_s5->numPolygons;
                         }
                     } else if ((s32) temp_v1 < -0x6665) {
                         temp_a2_2 = &sp106;
-                        if ((sp74->unk_138C & 8) == 0) {
+                        if ((sp74[625].center.z & 8) == 0) {
                             sp106 = phi_s0;
                             BgCheck_PolygonLinkedListNodeInsert(&dyna->polyNodes, (u16 *) &dyna->bgActors[index].dynaLookup.ceiling, temp_a2_2);
                             phi_a0 = *currPolygons + temp_s5->numPolygons;
@@ -4588,7 +4588,7 @@ void BgCheck_Update(GlobalContext *globalCtx, DynaCollisionContext *dyna) {
     do {
         BgCheck_ActorMeshPolyListsHeadsInit(phi_s1);
         temp_s0 = phi_s0 + 0x64;
-        phi_s1 += 0x64;
+        phi_s1 = (DynaLookup *) &phi_s1[12].wall;
         phi_s0 = temp_s0;
     } while (temp_s0 < 0x1388);
     phi_s0_2 = dyna;
@@ -4714,15 +4714,15 @@ f32 func_800C76EC(s32 *arg0, s32 arg1) {
     s32 phi_t8;
     f32 phi_f20_3;
 
-    temp_f20 = arg0->unk_10;
-    temp_a2 = *arg0->unk_30;
+    temp_f20 = arg0[4];
+    temp_a2 = *arg0[12];
     phi_f20_2 = temp_f20;
     phi_t8 = temp_a2 * 4;
     phi_f20 = temp_f20;
     if (temp_a2 == 0xFFFF) {
 
     } else {
-        temp_v0 = arg0->unk_2C;
+        temp_v0 = arg0[11];
         temp_s4 = temp_v0->unk_13F0;
         phi_t7 = temp_v0->unk_1400;
         phi_a0 = (arg0->unk_8 & 7) << 0xD;
@@ -4734,27 +4734,27 @@ loop_4:
         temp_s3 = temp_s4 + temp_s2;
         phi_f20_2 = phi_f20;
         phi_f20_3 = phi_f20;
-        if (((temp_s3->unk_2 & phi_a0) != 0) || (((temp_s3->unk_4 & 0x8000) != 0) && (((temp_v0_2 = arg0->unk_20, (temp_v0_2 != 0)) && (temp_v0_2->unk_2 != 2)) || ((temp_v0_2 == 0) && (phi_v1 != 1)))) || (((arg0->unk_24 & 0x20) != 0) && (func_800C9B68(arg0->unk_4, temp_s2 + temp_s4, arg0->unk_1C) != 0))) {
+        if (((temp_s3->unk_2 & phi_a0) != 0) || (((temp_s3->unk_4 & 0x8000) != 0) && (((temp_v0_2 = arg0[8], (temp_v0_2 != 0)) && (temp_v0_2->unk_2 != 2)) || ((temp_v0_2 == 0) && (phi_v1 != 1)))) || (((arg0[9] & 0x20) != 0) && (func_800C9B68(arg0[1], temp_s2 + temp_s4, arg0[7]) != 0))) {
             temp_v0_6 = phi_s1->unk_2;
             if (temp_v0_6 != 0xFFFF) {
-                phi_t7 = arg0->unk_2C->unk_1400;
+                phi_t7 = arg0[11]->unk_1400;
                 phi_t8 = temp_v0_6 * 4;
                 phi_a0 = (arg0->unk_8 & 7) << 0xD;
                 goto loop_3;
             }
-        } else if (((arg1 & 6) != 0) && ((arg0->unk_24 & 0x10) != 0) && (((f32) temp_s3->unk_A * 0.00003051851f) < 0.0f)) {
+        } else if (((arg1 & 6) != 0) && ((arg0[9] & 0x10) != 0) && (((f32) temp_s3->unk_A * 0.00003051851f) < 0.0f)) {
             temp_v0_3 = phi_s1->unk_2;
             if (temp_v0_3 != 0xFFFF) {
                 temp_v1 = arg0->unk_8;
-                phi_s1 = arg0->unk_2C->unk_1400 + (temp_v0_3 * 4);
+                phi_s1 = arg0[11]->unk_1400 + (temp_v0_3 * 4);
                 phi_a0 = (temp_v1 & 7) << 0xD;
                 phi_v1 = temp_v1;
                 goto loop_4;
             }
         } else {
-            temp_v0_4 = arg0->unk_14;
-            if ((func_800C0340(temp_s2 + temp_s4, arg0->unk_2C->unk_13F4, temp_v0_4->unk_0, temp_v0_4->unk_8, &sp78, arg0->unk_28) != 0) && (sp78 < arg0->unk_14->unk_4) && (phi_f20 < sp78)) {
-                *arg0->unk_C = arg0->unk_2C->unk_13F0 + temp_s2;
+            temp_v0_4 = arg0[5];
+            if ((func_800C0340(temp_s2 + temp_s4, arg0[11]->unk_13F4, temp_v0_4->unk_0, temp_v0_4->unk_8, &sp78, arg0[10]) != 0) && (sp78 < arg0[5]->unk_4) && (phi_f20 < sp78)) {
+                *arg0[3] = arg0[11]->unk_13F0 + temp_s2;
                 phi_f20_3 = sp78;
             }
             temp_v0_5 = phi_s1->unk_2;
@@ -4762,7 +4762,7 @@ loop_4:
             phi_f20_2 = phi_f20_3;
             if (temp_v0_5 != 0xFFFF) {
                 temp_v1_2 = arg0->unk_8;
-                phi_s1 = arg0->unk_2C->unk_1400 + (temp_v0_5 * 4);
+                phi_s1 = arg0[11]->unk_1400 + (temp_v0_5 * 4);
                 phi_a0 = (temp_v1_2 & 7) << 0xD;
                 phi_v1 = temp_v1_2;
                 goto loop_4;
@@ -4819,8 +4819,8 @@ f32 func_800C7974(s32 *arg0) {
     f32 phi_f20_2;
     f32 phi_f20_3;
 
-    *arg0->unk_18 = 0x32;
-    phi_a2 = arg0->unk_4;
+    *arg0[6] = 0x32;
+    phi_a2 = arg0[1];
     phi_s3 = 0;
     phi_s1 = 0;
     phi_f20_3 = -32000.0f;
@@ -4833,45 +4833,45 @@ f32 func_800C7974(s32 *arg0) {
         if (((temp_v0 & 1) != 0) && ((temp_v0 & 2) == 0)) {
             temp_s2 = phi_s1 * 0x64;
             temp_v1 = phi_a2 + temp_s2;
-            if (arg0->unk_20 != temp_v1->unk_54) {
-                temp_v0_2 = arg0->unk_14;
+            if (arg0[8] != temp_v1->unk_54) {
+                temp_v0_2 = arg0[5];
                 if (!(temp_v0_2->unk_4 < temp_v1->unk_B0)) {
                     if (func_8017F9C0(temp_v1 + 0xA8, temp_v0_2->unk_0, temp_v0_2->unk_8) == 0) {
 
                     } else {
-                        temp_a2 = arg0->unk_4;
-                        arg0->unk_1C = phi_s1;
-                        arg0->unk_2C = (void *) (temp_a2 + 0x50);
-                        if ((arg0->unk_24 & 4) != 0) {
-                            arg0->unk_30 = (s32) (temp_a2 + temp_s2 + 0x62);
+                        temp_a2 = arg0[1];
+                        arg0[7] = phi_s1;
+                        arg0[11] = temp_a2 + 0x50;
+                        if ((arg0[9] & 4) != 0) {
+                            arg0[12] = temp_a2 + temp_s2 + 0x62;
                             temp_f0 = func_800C76EC(arg0, 1, temp_a2);
-                            if (arg0->unk_10 < temp_f0) {
-                                arg0->unk_10 = temp_f0;
-                                *arg0->unk_18 = phi_s1;
+                            if (arg0[4] < temp_f0) {
+                                arg0[4] = temp_f0;
+                                *arg0[6] = phi_s1;
                                 phi_f20 = temp_f0;
                             }
                         }
-                        temp_v0_3 = arg0->unk_24;
-                        if (((temp_v0_3 & 2) != 0) || ((*arg0->unk_C == 0) && ((temp_v0_3 & 8) != 0))) {
-                            arg0->unk_30 = (s32) (arg0->unk_4 + temp_s2 + 0x60);
+                        temp_v0_3 = arg0[9];
+                        if (((temp_v0_3 & 2) != 0) || ((*arg0[3] == 0) && ((temp_v0_3 & 8) != 0))) {
+                            arg0[12] = arg0[1] + temp_s2 + 0x60;
                             temp_f0_2 = func_800C76EC(arg0, 2);
-                            if (arg0->unk_10 < temp_f0_2) {
-                                arg0->unk_10 = temp_f0_2;
-                                *arg0->unk_18 = phi_s1;
+                            if (arg0[4] < temp_f0_2) {
+                                arg0[4] = temp_f0_2;
+                                *arg0[6] = phi_s1;
                                 phi_f20 = temp_f0_2;
                             }
                         }
-                        if ((arg0->unk_24 & 1) != 0) {
-                            arg0->unk_30 = (s32) (arg0->unk_4 + temp_s2 + 0x5E);
+                        if ((arg0[9] & 1) != 0) {
+                            arg0[12] = arg0[1] + temp_s2 + 0x5E;
                             temp_f0_3 = func_800C76EC(arg0, 4);
-                            if (arg0->unk_10 < temp_f0_3) {
-                                arg0->unk_10 = temp_f0_3;
-                                *arg0->unk_18 = phi_s1;
+                            if (arg0[4] < temp_f0_3) {
+                                arg0[4] = temp_f0_3;
+                                *arg0[6] = phi_s1;
                                 phi_f20 = temp_f0_3;
                             }
                         }
                     }
-                    phi_a2_2 = arg0->unk_4;
+                    phi_a2_2 = arg0[1];
                 }
             }
         }
@@ -4882,7 +4882,7 @@ f32 func_800C7974(s32 *arg0) {
         phi_f20_2 = phi_f20;
         phi_f20_3 = phi_f20;
     } while (temp_s1 != 0x32);
-    if ((phi_f20 != -32000.0f) && (BgCheck_GetActorOfMesh(phi_a2_2, *arg0->unk_18) != 0)) {
+    if ((phi_f20 != -32000.0f) && (BgCheck_GetActorOfMesh(phi_a2_2, *arg0[6]) != 0)) {
         temp_v1_2 = arg0->unk_0;
         if (temp_v1_2 != 0) {
             temp_v0_4 = temp_v1_2->unk_16F1C != 0;
@@ -4891,20 +4891,20 @@ f32 func_800C7974(s32 *arg0) {
                 phi_v0 = temp_v1_2->unk_16F1E != 0;
             }
             if (phi_v0 == 0) {
-                temp_t1 = *arg0->unk_18;
-                if (((arg0->unk_4 + (temp_t1 * 2))->unk_13DC & 2) != 0) {
-                    temp_v1_3 = arg0->unk_2C;
+                temp_t1 = *arg0[6];
+                if (((arg0[1] + (temp_t1 * 2))->unk_13DC & 2) != 0) {
+                    temp_v1_3 = arg0[11];
                     temp_t0 = temp_v1_3 + (temp_t1 * 0x64);
                     temp_v0_5 = temp_t0 + 0x38;
-                    temp_s3 = temp_t0->unk_8->unk_18 + (((s32) (*arg0->unk_C - (((temp_v1_3 + (temp_t1 * 0x64))->unk_C * 0x10) + temp_v1_3->unk_13F0)) >> 4) * 0x10);
+                    temp_s3 = temp_t0->unk_8->unk_18 + (((s32) (*arg0[3] - (((temp_v1_3 + (temp_t1 * 0x64))->unk_C * 0x10) + temp_v1_3->unk_13F0)) >> 4) * 0x10);
                     SkinMatrix_SetScaleRotateYRPTranslate((MtxF *) &sp8C, temp_v0_5->unk_0, temp_v0_5->unk_4, temp_v0_5->unk_8, (s16) (s32) temp_v0_5->unk_C, (s16) (s32) temp_v0_5->unk_E, (s16) (s32) temp_v0_5->unk_10, temp_v0_5->unk_14, temp_v0_5->unk_18, temp_v0_5->unk_1C);
-                    sp84 = (arg0->unk_2C + (*arg0->unk_18 * 0x64))->unk_8->unk_10;
+                    sp84 = (arg0[11] + (*arg0[6] * 0x64))->unk_8->unk_10;
                     phi_s2 = temp_s3;
                     phi_s1_2 = (Vec3f *) &spE0;
                     do {
                         Math_Vec3s_ToVec3f((Vec3f *) &sp70, ((phi_s2->unk_2 & 0x1FFF) * 6) + sp84);
                         SkinMatrix_Vec3fMtxFMultXYZ((MtxF *) &sp8C, (Vec3f *) &sp70, phi_s1_2);
-                        temp_s1_2 = phi_s1_2 + 0xC;
+                        temp_s1_2 = &phi_s1_2[1];
                         phi_s2 += 2;
                         phi_s1_2 = temp_s1_2;
                     } while (temp_s1_2 != &sp104);
@@ -4918,8 +4918,8 @@ f32 func_800C7974(s32 *arg0) {
                         spD4 = temp_f4;
                         spD8 = temp_f8;
                         spDC = temp_f16;
-                        temp_v0_6 = arg0->unk_14;
-                        if ((func_8017BEE0(temp_f0_4, &spE0, &spEC, &spF8, temp_f4, temp_f8, temp_f16, -((spE8 * temp_f16) + ((temp_f4 * spE0) + (temp_f8 * spE4))), temp_v0_6->unk_8, temp_v0_6->unk_0, &sp6C, arg0->unk_28) != 0) && (fabsf(sp6C - phi_f20) < 1.0f)) {
+                        temp_v0_6 = arg0[5];
+                        if ((func_8017BEE0(temp_f0_4, &spE0, &spEC, &spF8, temp_f4, temp_f8, temp_f16, -((spE8 * temp_f16) + ((temp_f4 * spE0) + (temp_f8 * spE4))), temp_v0_6->unk_8, temp_v0_6->unk_0, &sp6C, arg0[10]) != 0) && (fabsf(sp6C - phi_f20) < 1.0f)) {
                             phi_f20_2 = sp6C;
                         }
                     }
@@ -4994,8 +4994,8 @@ s32 func_800C7E40(f32 *arg0, u16 arg1, void *arg2, u16 *arg3, f32 *arg4, f32 *ar
         return 0;
     }
     spB4.unk_0 = arg8->unk_0;
-    spB4.unk_4 = (f32) arg8->unk_4;
-    spB4.unk_8 = (s32) arg8->unk_8;
+    (&spB4)[1] = arg8[1];
+    (&spB4)[2] = arg8[2];
     phi_t4 = *arg3 * 4;
 loop_3:
     phi_s1 = arg2->unk_1400 + phi_t4;
@@ -5049,7 +5049,7 @@ loop_4:
             } else {
                 sp98 = temp_f18;
                 sp78 = temp_f14;
-                if (func_800C074C((bitwise Vec3s *) temp_f12_2, temp_f14, temp_s0, temp_a1, spB4, arg8->unk_4, &spD8) != 0) {
+                if (func_800C074C((bitwise Vec3s *) temp_f12_2, temp_f14, temp_s0, temp_a1, spB4, arg8[1], &spD8) != 0) {
                     temp_f2 = spD8 - spBC;
                     if ((fabsf(temp_f2) <= (arg9 / temp_f18)) && ((temp_f2 * spC0) <= 4.0f)) {
                         spD4 = 1;
@@ -5119,7 +5119,7 @@ loop_37:
             } else {
                 sp98 = temp_f18_2;
                 sp78 = temp_f14_2;
-                if (func_800C06A8((bitwise Vec3s *) temp_f12_4, temp_f14_2, temp_s0_2, temp_a1_2, arg8->unk_4, spBC, &spD8) != 0) {
+                if (func_800C06A8((bitwise Vec3s *) temp_f12_4, temp_f14_2, temp_s0_2, temp_a1_2, arg8[1], spBC, &spD8) != 0) {
                     temp_f2_2 = spD8 - spB4;
                     if ((fabsf(temp_f2_2) <= (arg9 / temp_f18_2)) && ((temp_f2_2 * spC8) <= 4.0f)) {
                         spD4 = 1;
@@ -5161,8 +5161,8 @@ s32 func_800C8580(f32 *arg0, u16 arg1, f32 *arg2, f32 *arg3, ? *arg4, f32 arg5, 
 
     sp90 = 0;
     sp94.unk_0 = arg4->unk_0;
-    sp94.unk_4 = (s32) arg4->unk_4;
-    sp94.unk_8 = (s32) arg4->unk_8;
+    (&sp94)[1] = arg4->unk_4;
+    (&sp94)[2] = arg4->unk_8;
     phi_s6 = arg0;
     phi_s4 = 0;
     do {
@@ -5232,8 +5232,8 @@ s32 func_800C87D0(CollisionContext *arg0, s32 arg1, void *arg2, u16 *arg3, f32 *
         return 0;
     }
     sp98.unk_0 = arg5->unk_0;
-    sp98.unk_4 = (s32) arg5->unk_4;
-    sp98.unk_8 = (s32) arg5->unk_8;
+    (&sp98)[1] = arg5->unk_4;
+    (&sp98)[2] = arg5->unk_8;
     phi_v1 = arg2->unk_13F0;
     phi_s1 = arg2->unk_1400 + (temp_v0 * 4);
 loop_3:
@@ -5347,47 +5347,47 @@ s32 func_800C8BD0(CollisionContext **arg0) {
     s32 phi_s3_2;
     s32 phi_s3_3;
 
-    temp_v0 = *arg0->unk_C;
+    temp_v0 = *arg0[3];
     phi_s3_2 = 0;
     if (temp_v0 == 0xFFFF) {
         return 0;
     }
-    temp_v1 = arg0->unk_8;
+    temp_v1 = arg0[2];
     temp_s6 = &sp40;
     sp44 = temp_v1->unk_13F4;
-    sp48 = arg0->unk_10;
+    sp48 = arg0[4];
     sp50 = &sp60;
-    sp4C = arg0->unk_14;
-    sp54 = arg0->unk_20;
-    sp58 = arg0->unk_28;
+    sp4C = arg0[5];
+    sp54 = arg0[8];
+    sp58 = arg0[10];
     phi_s1 = temp_v1->unk_1400 + (temp_v0 * 4);
 loop_3:
-    temp_t6 = arg0->unk_8->unk_13F0 + (phi_s1->unk_0 * 0x10);
+    temp_t6 = arg0[2]->unk_13F0 + (phi_s1->unk_0 * 0x10);
     sp40 = temp_t6;
     temp_a0 = arg0->unk_4;
     phi_s3 = phi_s3_2;
     phi_s3_3 = phi_s3_2;
-    if (((temp_t6->vtxData[0] & ((temp_a0 & 7) << 0xD)) != 0) || (((temp_t6->vtxData[1] & 0x8000) != 0) && (((temp_v0_2 = arg0->unk_2C, (temp_v0_2 != 0)) && (temp_v0_2->unk_2 != 2)) || ((temp_v0_2 == 0) && (temp_a0 != 1))))) {
+    if (((temp_t6->vtxData[0] & ((temp_a0 & 7) << 0xD)) != 0) || (((temp_t6->vtxData[1] & 0x8000) != 0) && (((temp_v0_2 = arg0[11], (temp_v0_2 != 0)) && (temp_v0_2->unk_2 != 2)) || ((temp_v0_2 == 0) && (temp_a0 != 1))))) {
         temp_v0_5 = phi_s1->unk_2;
         if (temp_v0_5 != 0xFFFF) {
-            phi_s1 = arg0->unk_8->unk_1400 + (temp_v0_5 * 4);
+            phi_s1 = arg0[2]->unk_1400 + (temp_v0_5 * 4);
             goto loop_3;
         }
     } else {
         if (func_800C07F0(temp_s6) != 0) {
-            temp_f0 = Math3D_DistanceSquared(arg0->unk_10, (Vec3f *) sp50);
-            temp_v0_3 = arg0->unk_24;
+            temp_f0 = Math3D_DistanceSquared(arg0[4], (Vec3f *) sp50);
+            temp_v0_3 = arg0[9];
             if (temp_f0 < *temp_v0_3) {
                 *temp_v0_3 = temp_f0;
-                temp_t9 = arg0->unk_18;
-                temp_t9->unk_0 = (s32) sp50->unk_0;
-                temp_t9->unk_4 = (s32) sp50->unk_4;
-                temp_t9->unk_8 = (s32) sp50->unk_8;
-                temp_t7 = arg0->unk_14;
-                temp_t7->unk_0 = (s32) sp50->unk_0;
-                temp_t7->unk_4 = (s32) sp50->unk_4;
-                temp_t7->unk_8 = (s32) sp50->unk_8;
-                *arg0->unk_1C = sp40;
+                temp_t9 = arg0[6];
+                temp_t9->colHeader = sp50->unk_0;
+                temp_t9->minBounds.x = sp50->unk_4;
+                temp_t9->minBounds.y = sp50->unk_8;
+                temp_t7 = arg0[5];
+                temp_t7->colHeader = sp50->unk_0;
+                temp_t7->minBounds.x = sp50->unk_4;
+                temp_t7->minBounds.y = sp50->unk_8;
+                *arg0[7] = sp40;
                 phi_s3_3 = 1;
             }
         }
@@ -5395,7 +5395,7 @@ loop_3:
         phi_s3 = phi_s3_3;
         phi_s3_2 = phi_s3_3;
         if (temp_v0_4 != 0xFFFF) {
-            phi_s1 = arg0->unk_8->unk_1400 + (temp_v0_4 * 4);
+            phi_s1 = arg0[2]->unk_1400 + (temp_v0_4 * 4);
             goto loop_3;
         }
     }
@@ -5530,7 +5530,7 @@ s32 func_800C90AC(Vec3f *arg0, s32 arg1, CollisionPoly **arg2, Vec3f *arg3, f32 
         goto block_15;
     }
     phi_v1 = temp_s2->unk_13F0;
-    phi_s1 = arg0->unk_1450 + (temp_v0 * 4);
+    phi_s1 = arg0[433].y + (temp_v0 * 4);
 loop_3:
     temp_s0 = phi_v1 + (phi_s1->unk_0 * 0x10);
     if (((temp_s0->vtxData[0] & ((temp_a1 & 7) << 0xD)) != 0) || (((temp_s0->vtxData[1] & 0x8000) != 0) && (((arg6 != 0) && (arg6->unk_2 != 2)) || ((arg6 == 0) && (temp_a1 != 1))))) {
@@ -5589,7 +5589,7 @@ s32 func_800C9380(Vec3f *arg0, u16 arg1, s32 arg2, s32 *arg3, CollisionPoly **ar
     phi_s0 = 0;
 loop_1:
     temp_v0 = phi_s2->unk_13DC;
-    if (((temp_v0 & 1) != 0) && ((temp_v0 & 2) == 0) && (temp_v0_2 = arg0 + (phi_s0 * 0x64), (arg6 != temp_v0_2->unk_54)) && (temp_a0 = &sp64, sp64 = (s16) (s32) arg4->unk_0, sp66 = (s16) (s32) arg4->unk_4, sp6A = (s16) (s32) arg5, sp68 = (s16) (s32) arg4->unk_8, (Math3D_ColSphereSphere((Sphere16 *) temp_a0, temp_v0_2 + 0xA8) != 0)) && (func_800C921C(arg0, arg1, arg2, arg4, (bitwise Vec3f *) arg5, phi_s0, (u16) (s32) arg7, arg6) != 0)) {
+    if (((temp_v0 & 1) != 0) && ((temp_v0 & 2) == 0) && (temp_v0_2 = arg0 + (phi_s0 * 0x64), (arg6 != temp_v0_2->unk_54)) && (temp_a0 = &sp64, sp64 = (s16) (s32) arg4->unk_0, sp66 = (s16) (s32) arg4[1], sp6A = (s16) (s32) arg5, sp68 = (s16) (s32) arg4[2], (Math3D_ColSphereSphere((Sphere16 *) temp_a0, temp_v0_2 + 0xA8) != 0)) && (func_800C921C(arg0, arg1, arg2, arg4, (bitwise Vec3f *) arg5, phi_s0, (u16) (s32) arg7, arg6) != 0)) {
         return 1;
     }
     temp_s0 = phi_s0 + 1;

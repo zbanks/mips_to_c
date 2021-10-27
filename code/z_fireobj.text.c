@@ -190,8 +190,8 @@ void FireObj_UpdateStateTransitions(GlobalContext *globalCtx, FireObj *fire) {
     if (((fire->flags & 1) != 0) && (fire->state != 3) && (func_800CA1E8(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &sp44, &sp48) != 0) && ((6500.0f * fire->yScale) < (sp44 - fire->position.y))) {
         FireObj_SetState(fire, fire->dynamicSizeStep, 3U);
     }
-    if (((fire->flags & 2) != 0) && (sp4C->unk_147 == 7)) {
-        Math_Vec3f_Diff(sp4C + 0xB9C, (Vec3f *) fire, (Vec3f *) &sp30);
+    if (((fire->flags & 2) != 0) && (sp4C[1].room == 7)) {
+        Math_Vec3f_Diff((Vec3f *) &sp4C[9].cutscene, (Vec3f *) fire, (Vec3f *) &sp30);
         if (Math3D_LengthSquared((Vec3f *) &sp30) < 400.0f) {
             sp40 = 1;
         }
@@ -240,17 +240,17 @@ void FireObj_Draw(GlobalContext *globalCtx, FireObj *fire) {
         temp_s0 = temp_a0;
         func_8012C2DC(temp_a0);
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp70 = temp_v1;
         sp5C = temp_v0;
         sp5C->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) fire->unk26 * -0x14) & 0x1FF, 0x20, 0x80);
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = temp_v1->unk4 | 0xFA000000;
         temp_v0_2->words.w1 = (temp_v1->unk0 << 0x18) | (temp_v1->unk1 << 0x10) | (temp_v1->unk2 << 8) | temp_v1->unk3;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = (temp_v1->unk5 << 0x18) | (temp_v1->unk6 << 0x10) | (temp_v1->unk7 << 8);
         sp68 = 0;
@@ -259,11 +259,11 @@ void FireObj_Draw(GlobalContext *globalCtx, FireObj *fire) {
         SysMatrix_SetStateRotationAndTranslation(fire->position.x, fire->position.y, fire->position.z, (Vec3s *) &sp68);
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, 1);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         temp_v0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = (u32) D_0407D590;
     }
@@ -274,7 +274,7 @@ void FireObj_InitLight(GlobalContext *globalCtx, FireObjLight *light, u8 *param_
     FireObjLightParams *temp_v0;
     LightInfoPositional *temp_a0;
 
-    temp_v0 = &(D_801BD8FC + 8)[*param_3];
+    temp_v0 = &(&D_801BD8FC[1])[*param_3];
     temp_a0 = &light->lightInfo;
     sp28 = temp_a0;
     Lights_PointGlowSetInfo((LightInfo *) temp_a0, (s16) (s32) pos->x, (s16) (s32) pos->y, (s16) (s32) pos->z, (u8) (s32) temp_v0->unk2, (u8) (s32) temp_v0->unk3, (u8) (s32) temp_v0->unk4, (s16) (s32) temp_v0->unk_0);
@@ -296,7 +296,7 @@ void FireObj_UpdateLight(GlobalContext *globalCtx, FireObjLight *light, FireObj 
     u8 temp_t8;
     f32 phi_f8;
 
-    temp_v0 = &(D_801BD8FC + 8)[light->unk12];
+    temp_v0 = &(&D_801BD8FC[1])[light->unk12];
     if (fire->state == 3) {
         Lights_PointSetColorAndRadius((LightInfo *) &light->lightInfo, 0U, 0U, 0U, (s16) -1);
         return;
@@ -358,7 +358,7 @@ void FireObj_Update(GlobalContext *globalCtx, FireObj *fire) {
         }
     } else if (((fire->collision.base.acFlags & 2) != 0) && (temp_v0->update != 0) && (temp_v0->id == 0xF)) {
         temp_v0->params = 0;
-        temp_v0->unk_1C0 = 0x800;
+        temp_v0[1].wallPoly = (CollisionPoly *)0x800;
     }
     fire->collision.dim.pos.x = (s16) (s32) fire->position.x;
     fire->collision.dim.pos.y = (s16) (s32) fire->position.y;

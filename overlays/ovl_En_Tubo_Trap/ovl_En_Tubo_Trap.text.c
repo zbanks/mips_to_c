@@ -191,8 +191,8 @@ void EnTuboTrap_SpawnEffectsInWater(Actor *arg0, GlobalContext *arg1) {
     temp_s5 = &spC8;
     temp_s1 = arg0 + 0x24;
     temp_s5->unk_0 = temp_s1->x;
-    temp_s5->unk_4 = (f32) temp_s1->y;
-    temp_s5->unk_8 = (f32) temp_s1->z;
+    temp_s5[1] = temp_s1->y;
+    temp_s5[2] = temp_s1->z;
     spCC += arg0->yDistToWater;
     EffectSsGSplash_Spawn(arg1, (Vec3f *) temp_s5, NULL, NULL, (s16) 0, (s16) 0x190);
     temp_s6 = &spBC;

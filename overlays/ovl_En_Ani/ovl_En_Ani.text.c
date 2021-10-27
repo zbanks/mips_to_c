@@ -284,7 +284,7 @@ void func_80967DCC(void *arg0, void *arg1) {
 void func_80967E34(Actor *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x1DC);
     if (func_800B84D0(arg0, arg1) != 0) {
-        arg0->unk_2FC = func_80967DCC;
+        arg0[2].gravity = (bitwise f32) func_80967DCC;
         return;
     }
     func_80967D20(arg0, arg1, 0x6DE);
@@ -322,7 +322,7 @@ void func_80967FA4(Actor *arg0, void *arg1) {
     s32 temp_a0;
 
     if ((arg0->bgCheckFlags & 1) != 0) {
-        arg0->unk_2FC = func_80967F20;
+        arg0[2].gravity = func_80967F20;
         arg0->flags &= -0x11;
         arg0->velocity.x = 0.0f;
         arg0->velocity.z = 0.0f;
@@ -473,7 +473,7 @@ void EnAni_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(0.0f, 0.0f, -1000.0f, 1);
     func_8012C5B0(globalCtx->state.gfxCtx);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_809686B0 + (this->unk_2F8 * 4)));

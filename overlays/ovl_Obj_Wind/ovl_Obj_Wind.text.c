@@ -166,7 +166,7 @@ block_5:
                 temp_f16_2 = (sp7C * sp40) + (sp58 * temp_f4);
                 sp34 = temp_f16_2;
                 temp_f12_2 = (sp80 * sp40) + (sp5C * temp_f4);
-                sp84->unk_B2C = sqrtf((temp_f14_2 * temp_f14_2) + (temp_f16_2 * temp_f16_2) + (temp_f12_2 * temp_f12_2));
+                sp84[8].prevPos.y = sqrtf((temp_f14_2 * temp_f14_2) + (temp_f16_2 * temp_f16_2) + (temp_f12_2 * temp_f12_2));
                 sp38 = temp_f14_2;
                 sp30 = temp_f12_2;
                 sp84->unk_B32 = Math_FAtan2F(temp_f12_2, temp_f14_2);
@@ -192,12 +192,12 @@ void ObjWind_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual((void *) &D_0407F218));
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_0407E8C0;
     temp_v0_2->words.w0 = 0xDE000000;
 }

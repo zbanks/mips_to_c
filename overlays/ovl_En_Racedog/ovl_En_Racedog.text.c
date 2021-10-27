@@ -311,7 +311,7 @@ void func_80B246F4(Actor *arg0, GlobalContext *arg1) {
     GlobalContext *temp_a0;
 
     temp_a1 = arg1 + 0x18884;
-    arg0->unk_1D6 = (s16) (s32) arg0->world.pos.x;
+    arg0[1].yawTowardsPlayer = (s16) (s32) arg0->world.pos.x;
     temp_a0 = arg1;
     arg0->unk_1D8 = (s16) (s32) arg0->world.pos.y;
     arg0->unk_1DA = (s16) (s32) arg0->world.pos.z;
@@ -605,7 +605,7 @@ void func_80B251EC(EnRacedog *arg0) {
         arg0->unk_298 = *(&D_80B25D54 + (phi_v1->unk_8 * 8)) * phi_v1->unk_0;
     }
     if (((s32) phi_v1->unk_E < 0x353E) && (D_80B25D4C != arg0->unk_290)) {
-        arg0->unk_298 *= phi_v1->unk_4;
+        arg0->unk_298 *= phi_v1[1];
     }
 }
 
@@ -734,8 +734,8 @@ void EnRacedog_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnRacedog *this = (EnRacedog *) thisx;
 
     sp2C.unk_0 = D_80B25FF4.unk_0;
-    sp2C.unk_4 = (s32) D_80B25FF4.unk_4;
-    sp2C.unk_8 = (s32) D_80B25FF4.unk_8;
+    (&sp2C)[1] = D_80B25FF4.unk_4;
+    (&sp2C)[2] = D_80B25FF4.unk_8;
     this->unk_292 = *D_80B25E72;
     this->actionFunc(this, globalCtx);
     func_80B246F4((Actor *) this, globalCtx);
@@ -754,8 +754,8 @@ void EnRacedog_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->unk_14C.animCurrentFrame = 0.0f;
     }
     this->unk_2A0 = sp28->unk_0;
-    this->unk_2A4 = sp28->unk_4;
-    this->unk_2A8 = sp28->unk_8;
+    this->unk_2A4 = sp28[1];
+    this->unk_2A8 = sp28[2];
     SkelAnime_FrameUpdateMatrix(&this->unk_14C);
 }
 
@@ -763,24 +763,24 @@ void func_80B2583C(Actor *arg0) {
     s16 temp_v0;
     s16 phi_v1;
 
-    if ((s32) arg0->unk_288 >= 7) {
+    if ((s32) arg0[2].id >= 7) {
         arg0->unk_2BC = (s32) (arg0->unk_2BC - 0x10);
         arg0->unk_2C0 = (s32) (arg0->unk_2C0 + 8);
-        arg0->unk_2C4 = (f32) (arg0->unk_2C4 + 0.05f);
+        arg0[2].focus.pos.x += 0.05f;
     } else {
         arg0->unk_2BC = (s32) (arg0->unk_2BC + 0x10);
         arg0->unk_2C0 = (s32) (arg0->unk_2C0 - 8);
-        arg0->unk_2C4 = (f32) (arg0->unk_2C4 - 0.05f);
+        arg0[2].focus.pos.x -= 0.05f;
     }
-    temp_v0 = arg0->unk_288;
+    temp_v0 = arg0[2].id;
     if (temp_v0 == 0) {
         phi_v1 = 0;
     } else {
-        arg0->unk_288 = (s16) (temp_v0 - 1);
-        phi_v1 = arg0->unk_288;
+        arg0[2].id = temp_v0 - 1;
+        phi_v1 = arg0[2].id;
     }
     if (phi_v1 == 0) {
-        arg0->unk_288 = 0xC;
+        arg0[2].id = 0xC;
     }
 }
 
@@ -810,29 +810,29 @@ void func_80B258D8(Actor *arg0, GraphicsContext **arg1) {
         func_80B2583C(arg0);
         SysMatrix_SetStateRotationAndTranslation(arg0->world.pos.x, arg0->world.pos.y + 40.0f, arg0->world.pos.z, (Vec3s *) &sp48);
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w1 = 0;
         temp_v0->words.w0 = 0xE7000000;
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA0000FF;
         temp_v0_2->words.w1 = ((arg0->unk_2BC & 0xFF) << 0x10) | 0xFF000000 | 0xFF;
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = ((arg0->unk_2C0 & 0xFF) << 0x10) | 0xFF000000 | 0xFF;
-        temp_f12 = 2.0f * arg0->unk_2C4;
+        temp_f12 = 2.0f * arg0[2].focus.pos.x;
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
+        temp_s0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         temp_v0_4->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_5 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_5 + 8;
+        temp_s0->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) &D_06000618;
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_6 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_6 + 8;
+        temp_s0->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = (u32) &D_06000550;
         temp_v0_6->words.w0 = 0xDE000000;
     }
@@ -875,50 +875,50 @@ void EnRacedog_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v0 + 8;
+    sp30->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0;
     temp_v0->words.w0 = 0xE7000000;
     temp_t1 = *(&D_80B25D90 + (this->unk_290 * 0x10));
     switch (temp_t1) {
     case 3:
         temp_v0_2 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_2 + 8;
+        sp30->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = -0x3800;
         temp_v0_2->words.w0 = 0xFB000000;
         break;
     case 1:
         temp_v0_3 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_3 + 8;
+        sp30->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = -0x100;
         temp_v0_3->words.w0 = 0xFB000000;
         break;
     case 5:
         temp_v0_4 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_4 + 8;
+        sp30->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFB000000;
         temp_v0_4->words.w1 = 0x4F4F8F00;
         break;
     case 6:
         temp_v0_5 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_5 + 8;
+        sp30->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFB000000;
         temp_v0_5->words.w1 = 0xFFCF2F00;
         break;
     case 4:
         temp_v0_6 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_6 + 8;
+        sp30->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xFB000000;
         temp_v0_6->words.w1 = 0x8F4F2F00;
         break;
     case 2:
         temp_v0_7 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_7 + 8;
+        sp30->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xFB000000;
         temp_v0_7->words.w1 = 0x8F8F8F00;
         break;
     default:
         temp_v0_8 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_8 + 8;
+        sp30->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = -0x3800;
         temp_v0_8->words.w0 = 0xFB000000;
         break;

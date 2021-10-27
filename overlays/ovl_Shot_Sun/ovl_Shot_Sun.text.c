@@ -43,7 +43,7 @@ struct _mips2c_stack_func_80973960 {
     /* 0x44 */ f32 sp44;                            /* inferred */
     /* 0x48 */ f32 sp48;                            /* inferred */
     /* 0x4C */ char pad_4C[0xC];                    /* maybe part of sp48[4]? */
-    /* 0x58 */ s16 sp58;                            /* inferred */
+    /* 0x58 */ u16 sp58;                            /* inferred */
     /* 0x5A */ s16 sp5A;                            /* inferred */
     /* 0x5C */ s16 sp5C;                            /* inferred */
     /* 0x5E */ char pad_5E[0x2];
@@ -175,7 +175,7 @@ void func_809738D0(ShotSun *this, GlobalContext *globalCtx) {
 void func_80973960(ShotSun *this, GlobalContext *globalCtx) {
     s16 sp5C;
     s16 sp5A;
-    s16 sp58;
+    u16 sp58;
     f32 sp48;
     f32 sp44;
     f32 sp40;
@@ -184,7 +184,7 @@ void func_80973960(ShotSun *this, GlobalContext *globalCtx) {
     ColliderCylinder *temp_a2;
     EnItem00 *temp_v0;
     f32 *temp_a1;
-    s16 *temp_a1_2;
+    u16 *temp_a1_2;
     u16 temp_v0_2;
 
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
@@ -213,11 +213,11 @@ void func_80973960(ShotSun *this, GlobalContext *globalCtx) {
         if (((s32) temp_v0_2 >= 0x4555) && ((s32) temp_v0_2 < 0x5000)) {
             temp_a1_2 = &sp58;
             temp_a2 = &this->unk_144;
-            sp58 = (s16) (s32) (temp_v1->unk_C40 + (globalCtx->envCtx.unk_4 * 0.16666667f));
-            sp5A = (s16) (s32) ((temp_v1->unk_C44 - 30.0f) + (globalCtx->envCtx.unk_8 * 0.16666667f));
-            sp5C = (s16) (s32) (temp_v1->unk_C48 + (globalCtx->envCtx.unk_C * 0.16666667f));
+            sp58 = (u16) (s32) (temp_v1[9].shape.feetPos[0].z + (globalCtx->envCtx.unk_4 * 0.16666667f));
+            sp5A = (s16) (s32) ((temp_v1[9].shape.feetPos[1].x - 30.0f) + (globalCtx->envCtx.unk_8 * 0.16666667f));
+            sp5C = (s16) (s32) (temp_v1[9].shape.feetPos[1].y + (globalCtx->envCtx.unk_C * 0.16666667f));
             this->unk_194 = (unaligned s32) temp_a1_2->unk_0;
-            this->unk_198 = temp_a1_2->unk_4;
+            this->unk_198 = temp_a1_2[2];
             sp3C = temp_a2;
             Collider_SetCylinderPosition(temp_a2, (Vec3s *) temp_a1_2);
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);

@@ -380,14 +380,14 @@ void func_80BF6478(Actor *arg0) {
             /* Duplicate return node #12. Try simplifying control flow for better match */
             return;
         case 3:
-            if (func_801378B8((SkelAnime *) (arg0 + 0x144), 11.0f) != 0) {
+            if (func_801378B8((SkelAnime *) &arg0[1], 11.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
                 return;
             }
             /* Duplicate return node #12. Try simplifying control flow for better match */
             return;
         case 4:
-            if (func_801378B8((SkelAnime *) (arg0 + 0x144), 5.0f) != 0) {
+            if (func_801378B8((SkelAnime *) &arg0[1], 5.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
                 return;
             }
@@ -522,21 +522,21 @@ void func_80BF68E0(Actor *arg0) {
             /* Duplicate return node #16. Try simplifying control flow for better match */
             return;
         case 2:
-            if (func_801378B8((SkelAnime *) (arg0 + 0x144), 4.0f) != 0) {
+            if (func_801378B8((SkelAnime *) &arg0[1], 4.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
                 return;
             }
             /* Duplicate return node #16. Try simplifying control flow for better match */
             return;
         case 4:
-            if (func_801378B8((SkelAnime *) (arg0 + 0x144), 5.0f) != 0) {
+            if (func_801378B8((SkelAnime *) &arg0[1], 5.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
                 return;
             }
             /* Duplicate return node #16. Try simplifying control flow for better match */
             return;
         case 5:
-            temp_a0_2 = arg0 + 0x144;
+            temp_a0_2 = &arg0[1];
             sp24 = (SkelAnime *) temp_a0_2;
             if ((func_801378B8((SkelAnime *) temp_a0_2, 6.0f) != 0) || (func_801378B8((SkelAnime *) temp_a0_2, 11.0f) != 0)) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
@@ -545,7 +545,7 @@ void func_80BF68E0(Actor *arg0) {
             /* Duplicate return node #16. Try simplifying control flow for better match */
             return;
         case 8:
-            if (func_801378B8((SkelAnime *) (arg0 + 0x144), 13.0f) != 0) {
+            if (func_801378B8((SkelAnime *) &arg0[1], 13.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x3A8AU);
             }
             /* Duplicate return node #16. Try simplifying control flow for better match */
@@ -646,7 +646,7 @@ void EnOsk_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp6C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp6C->polyOpa.p;
-    sp6C->polyOpa.p = temp_v0 + 8;
+    sp6C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp64 = temp_v0;
     sp64->words.w1 = Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -669,21 +669,21 @@ void EnOsk_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0_2 = func_8012C868(sp6C->polyXlu.p);
     temp_v0_2->words.w1 = 0x80;
     temp_v0_2->words.w0 = 0xE3001803;
-    temp_a1_2 = temp_v0_2 + 8;
+    temp_a1_2 = &temp_v0_2[1];
     temp_a1_2->words.w0 = 0xFCFF97FF;
     temp_a1_2->words.w1 = 0xFF2DFEFF;
-    temp_a1_3 = temp_a1_2 + 8;
+    temp_a1_3 = &temp_a1_2[1];
     temp_a1_3->words.w0 = 0xDE000000;
     temp_a1_3->words.w1 = (u32) D_04029CB0;
-    temp_a1_4 = temp_a1_3 + 8;
+    temp_a1_4 = &temp_a1_3[1];
     temp_a1_4->words.w0 = 0xFA000000;
     temp_a1_4->words.w1 = 0x8200FF64;
-    temp_a1_5 = temp_a1_4 + 8;
+    temp_a1_5 = &temp_a1_4[1];
     temp_a1_5->words.w0 = 0xDA380003;
-    temp_a1_6 = temp_a1_5 + 8;
+    temp_a1_6 = &temp_a1_5[1];
     sp8C = temp_a1_6;
     temp_a1_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_a1_6->words.w0 = 0xDE000000;
     temp_a1_6->words.w1 = (u32) D_04029CF0;
-    sp6C->polyXlu.p = temp_a1_6 + 8;
+    sp6C->polyXlu.p = &temp_a1_6[1];
 }

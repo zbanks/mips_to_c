@@ -530,12 +530,12 @@ void func_8089A9B0(Actor *arg0, GlobalContext *arg1) {
     Actor *temp_a0;
     Actor *temp_a1;
     Actor *temp_a2;
+    ActorOverlay *temp_v0;
+    ActorOverlay *temp_v0_2;
     f32 temp_f0;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 phi_v0;
+    ActorOverlay *phi_v0;
     EnDinofos *phi_a2;
-    s32 phi_v0_2;
+    ActorOverlay *phi_v0_2;
     EnDinofos *phi_a2_2;
 
     temp_a2 = arg0;
@@ -548,13 +548,13 @@ void func_8089A9B0(Actor *arg0, GlobalContext *arg1) {
             arg0 = arg0;
             phi_a2 = (EnDinofos *) arg0;
             if (func_800BC5EC(arg1, temp_a1) == 0) {
-                temp_v0 = arg0->unk_284;
+                temp_v0 = arg0[1].overlayEntry;
                 phi_v0 = temp_v0;
                 if (func_8089C56C != temp_v0) {
                     sp1C = func_8089C56C;
                     arg0 = arg0;
                     if (!(Rand_ZeroOne() > 0.35f)) {
-                        phi_v0 = arg0->unk_284;
+                        phi_v0 = arg0[1].overlayEntry;
                         goto block_6;
                     }
                     goto block_8;
@@ -573,13 +573,13 @@ block_9:
             return;
         }
         if ((temp_f0 < 260.0f) && (temp_f0 > 180.0f)) {
-            temp_v0_2 = arg0->unk_284;
+            temp_v0_2 = arg0[1].overlayEntry;
             phi_v0_2 = temp_v0_2;
             if (func_8089C44C != temp_v0_2) {
                 sp1C = func_8089C44C;
                 arg0 = arg0;
                 if (!(Rand_ZeroOne() < 0.1f)) {
-                    phi_v0_2 = arg0->unk_284;
+                    phi_v0_2 = arg0[1].overlayEntry;
                     goto block_15;
                 }
                 goto block_17;
@@ -627,21 +627,21 @@ void func_8089ABF4(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_8089AC70(Actor *arg0) {
-    arg0->unk_28A = 0xA;
+    arg0[2].category = 0xA;
     arg0->unk_378 = 3;
-    arg0->unk_2B4 = 0.55f;
+    arg0[2].world.pos.z = 0.55f;
     arg0->unk_290 = 0x50;
     arg0->flags &= -0x401;
     arg0->unk_2B8 = 0.82500005f;
-    arg0->unk_2B0 = 1.0f;
+    arg0[2].world.pos.y = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
 
 void func_8089ACEC(Actor *arg0, GlobalContext *arg1) {
-    if (arg0->unk_28A == 0xA) {
-        arg0->unk_28A = 0U;
+    if (arg0[2].category == 0xA) {
+        arg0[2].category = 0;
         arg0->unk_378 = 0;
-        arg0->unk_2B0 = 0.0f;
+        arg0[2].world.pos.y = 0.0f;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x2D4), 0xC, 2, 0.3f, 0.2f);
         arg0->flags |= 0x400;
     }
@@ -660,7 +660,7 @@ void func_8089AD70(EnDinofos *arg0) {
         temp_v1 = arg0->colliderJntSph.elements;
         temp_v1->info.bumper.dmgFlags |= 0x400;
         temp_v1_2 = arg0->colliderJntSph.elements;
-        temp_v1_2->unk_48 = (s32) (temp_v1_2->unk_48 | 0x400);
+        temp_v1_2[1].info.bumper.dmgFlags |= 0x400;
         temp_v1_3 = 2 << 6;
         temp_a1 = arg0->colliderJntSph.elements + temp_v1_3;
         temp_a1->unk_8 = (s32) (temp_a1->unk_8 | 0x400);
@@ -678,12 +678,12 @@ s32 func_8089AE00(Actor *arg0, GlobalContext *arg1) {
     void *sp24;
     Actor *temp_v0;
     Actor *temp_v0_2;
+    f32 temp_v0_3;
+    f32 temp_v0_4;
     s16 temp_a2;
     s16 temp_v1;
     s16 temp_v1_2;
     s32 temp_v1_3;
-    void *temp_v0_3;
-    void *temp_v0_4;
     void *temp_v0_5;
     void *temp_v0_6;
     void *temp_v0_7;
@@ -727,7 +727,7 @@ block_11:
         func_8089C024((EnDinofos *) arg0, 1);
         return 1;
     }
-    if ((arg0->xzDistToPlayer < 100.0f) && (sp24->unk_ADB != 0) && (arg0->isTargeted != 0) && (Rand_ZeroOne() < 0.5f) && (func_8089A968(arg0) != 0) && (Actor_IsLinkFacingActor(arg0, 0x2000, arg1) != 0)) {
+    if ((arg0->xzDistToPlayer < 100.0f) && (sp24[8].colChkInfo.acHitEffect != 0) && (arg0->isTargeted != 0) && (Rand_ZeroOne() < 0.5f) && (func_8089A968(arg0) != 0) && (Actor_IsLinkFacingActor(arg0, 0x2000, arg1) != 0)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024((EnDinofos *) arg0, 2);
         } else {
@@ -736,20 +736,20 @@ block_11:
         Audio_PlayActorSound2(arg0, 0x382CU);
         return 1;
     }
-    if ((gSaveContext.playerForm == 1) && (sp24->velocity.y < -5.0f) && (sp24->unk_AE7 == 1) && (arg0->unk_28B == 0)) {
-        temp_v0_3 = arg0->unk_380;
-        arg0->unk_28B = 1U;
+    if ((gSaveContext.playerForm == 1) && (sp24->velocity.y < -5.0f) && (sp24->unk_AE7 == 1) && ((u8) arg0[2].room == 0)) {
+        temp_v0_3 = arg0[2].projectedW;
+        arg0[2].room = 1;
         temp_v0_3->unk_8 = (s32) (temp_v0_3->unk_8 & ~0x400);
-        temp_v0_4 = arg0->unk_380;
+        temp_v0_4 = arg0[2].projectedW;
         temp_v1_3 = 2 << 6;
         temp_v0_4->unk_48 = (s32) (temp_v0_4->unk_48 & ~0x400);
-        temp_v0_5 = arg0->unk_380 + temp_v1_3;
+        temp_v0_5 = (bitwise s32) arg0[2].projectedW + temp_v1_3;
         temp_v0_5->unk_8 = (s32) (temp_v0_5->unk_8 & ~0x400);
-        temp_v0_6 = arg0->unk_380 + temp_v1_3;
+        temp_v0_6 = (bitwise s32) arg0[2].projectedW + temp_v1_3;
         temp_v0_6->unk_48 = (s32) (temp_v0_6->unk_48 & ~0x400);
-        temp_v0_7 = arg0->unk_380 + temp_v1_3;
+        temp_v0_7 = (bitwise s32) arg0[2].projectedW + temp_v1_3;
         temp_v0_7->unk_88 = (s32) (temp_v0_7->unk_88 & ~0x400);
-        temp_v0_8 = arg0->unk_380 + temp_v1_3;
+        temp_v0_8 = (bitwise s32) arg0[2].projectedW + temp_v1_3;
         temp_v0_8->unk_C8 = (s32) (temp_v0_8->unk_C8 & ~0x400);
     }
     return 0;
@@ -1393,7 +1393,7 @@ void func_8089C784(Actor *arg0) {
     if (arg0->velocity.y > 0.0f) {
         arg0->velocity.y = 0.0f;
     }
-    arg0->unk_284 = func_8089C7B8;
+    arg0[1].overlayEntry = func_8089C7B8;
 }
 
 void func_8089C7B8(EnDinofos *this, GlobalContext *globalCtx) {
@@ -1437,7 +1437,7 @@ void func_8089C87C(Actor *arg0, s32 arg1) {
     Audio_PlayActorSound2(arg0, 0x382BU);
     arg0->unk_375 = (u8) (arg0->unk_375 & 0xFFFE);
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x12);
-    arg0->unk_284 = func_8089C938;
+    arg0[1].overlayEntry = (ActorOverlay *) func_8089C938;
 }
 
 void func_8089C938(EnDinofos *this, GlobalContext *globalCtx) {
@@ -1828,7 +1828,7 @@ s32 func_8089D60C(Actor *arg0, GlobalContext *arg1) {
     if ((temp_v0 & 2) != 0) {
         arg0->unk_375 = (u8) (temp_v0 & 0xFFFD);
         func_800BE2B8(arg0, arg0 + 0x364);
-        phi_v0 = arg0->unk_380;
+        phi_v0 = (bitwise void *) arg0[2].projectedW;
         phi_s0 = 0;
         phi_t0_2 = 0;
 loop_2:
@@ -1852,7 +1852,7 @@ loop_2:
         if (phi_s0_2 == 9) {
             goto block_32;
         }
-        if ((arg0->unk_28A == 0xA) && ((*phi_v0_2->unk_24 & 0xDB0B3) != 0)) {
+        if ((arg0[2].category == 0xA) && ((*phi_v0_2->unk_24 & 0xDB0B3) != 0)) {
             goto block_32;
         }
         if (arg0->colChkInfo.damageEffect == 0xF) {
@@ -1903,22 +1903,22 @@ loop_2:
         if (temp_v0_4 == 5) {
             arg0->unk_290 = 0x28;
             func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
-            arg0->unk_28A = 0x1FU;
-            arg0->unk_2B4 = 0.55f;
-            arg0->unk_2B0 = 2.0f;
+            arg0[2].category = 0x1F;
+            arg0[2].world.pos.z = 0.55f;
+            arg0[2].world.pos.y = 2.0f;
             Audio_PlayActorSound2(arg0, 0x389EU);
             func_8089C784(arg0);
             return 1;
         }
         if (temp_v0_4 == 2) {
-            arg0->unk_2B0 = 4.0f;
-            arg0->unk_28A = 0U;
-            arg0->unk_2B4 = 0.55f;
+            arg0[2].world.pos.y = 4.0f;
+            arg0[2].category = 0;
+            arg0[2].world.pos.z = 0.55f;
         } else if (temp_v0_4 == 4) {
-            arg0->unk_2B0 = 4.0f;
-            arg0->unk_28A = 0x14U;
-            temp_v0_5 = arg0->unk_380 + phi_t0;
-            arg0->unk_2B4 = 0.55f;
+            arg0[2].world.pos.y = 4.0f;
+            arg0[2].category = 0x14;
+            temp_v0_5 = (bitwise s32) arg0[2].projectedW + phi_t0;
+            arg0[2].world.pos.z = 0.55f;
             Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) temp_v0_5->unk_E, (f32) temp_v0_5->unk_10, (f32) temp_v0_5->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         }
         func_8089C87C(arg0, phi_s0_2);
@@ -2041,7 +2041,7 @@ void func_8089DC84(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     if (temp_v0 != -1) {
         SysMatrix_GetStateTranslation(arg4 + (temp_v0 * 0xC) + 0x2D4);
     }
-    if ((sp40 == &D_8089E3BE) && (arg4->unk_290 != arg4->unk_292) && ((temp_v0_2 = arg4->unk_284, (func_8089C56C == temp_v0_2)) || (func_8089C2A8 == temp_v0_2))) {
+    if ((sp40 == &D_8089E3BE) && (arg4->unk_290 != arg4->unk_292) && ((temp_v0_2 = arg4[1].overlayEntry, (func_8089C56C == temp_v0_2)) || (func_8089C2A8 == temp_v0_2))) {
         Math_Vec3f_Copy((Vec3f *) &sp74, arg4 + 0x604);
         Math_Vec3f_Copy((Vec3f *) &sp80, arg4 + 0x610);
         SysMatrix_MultiplyVector3fByState(&D_8089E38C, (Vec3f *) &sp68);
@@ -2057,7 +2057,7 @@ void func_8089DC84(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     } else if (sp40 == &D_8089E3B7) {
         SysMatrix_GetStateTranslationAndScaledX(300.0f, arg4 + 0xE0);
     }
-    if ((sp40 == &D_8089E3C0) && (func_8089B580 == arg4->unk_284)) {
+    if ((sp40 == &D_8089E3C0) && (func_8089B580 == arg4[1].overlayEntry)) {
         temp_f0 = arg4->unk_15C;
         if ((temp_f0 > 38.0f) && (temp_f0 <= 55.0f) && (arg4->unk_290 != arg4->unk_292)) {
             temp_v0_3 = SysMatrix_GetCurrentState();
@@ -2093,11 +2093,11 @@ void EnDinofos_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C28C(temp_a2);
         func_800B8050((Actor *) this, globalCtx, 0);
         temp_v1 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v1 + 8;
+        temp_s1->polyOpa.p = &temp_v1[1];
         temp_v1->words.w0 = 0xDB060020;
         temp_v1->words.w1 = (u32) D_8089E33C[this->unk_289];
         temp_v1_2 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v1_2 + 8;
+        temp_s1->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = 0x142828FF;
         temp_v1_2->words.w0 = 0xFB000000;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
@@ -2106,11 +2106,11 @@ void EnDinofos_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C2DC(temp_a2);
         func_800B8118((Actor *) this, globalCtx, 0);
         temp_v1_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_3 + 8;
+        temp_s1->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xDB060020;
         temp_v1_3->words.w1 = (u32) D_8089E33C[this->unk_289];
         temp_v1_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_4 + 8;
+        temp_s1->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xFB000000;
         temp_v1_4->words.w1 = this->unk_288 | 0x14282800;
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);

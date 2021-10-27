@@ -278,7 +278,7 @@ f32 func_8091D630(f32 *arg0, PosRot *arg1) {
     f32 temp_f2;
 
     temp_f2 = arg0->unk_0 - arg1->pos.x;
-    temp_f12 = arg0->unk_8 - arg1->pos.z;
+    temp_f12 = arg0[2] - arg1->pos.z;
     return (temp_f2 * temp_f2) + (temp_f12 * temp_f12);
 }
 
@@ -323,7 +323,7 @@ void func_8091D7C4(Actor *arg0) {
         Math_ScaledStepToS(arg0 + 0x34, temp_a1, arg0->unk_272);
     }
     arg0->unk_BC = (unaligned s32) sp20->unk_0;
-    arg0->shape.rot.z = sp20->unk_4;
+    arg0->shape.rot.z = (u16) sp20[2];
 }
 
 void func_8091D840(Actor *arg0, GlobalContext *arg1, s32 arg2, f32 arg3) {
@@ -833,9 +833,9 @@ void func_8091E9A4(Actor *arg0) {
     arg0->shape.yOffset = 300.0f;
     sp24 = phi_v0;
     func_8091D6C4(arg0);
-    arg0->unk_23C = func_8091EAF0;
-    arg0->unk_248 = 5;
-    arg0->unk_24C = 0.0f;
+    arg0[1].projectedW = func_8091EAF0;
+    arg0[1].uncullZoneDownward = 7e-45.0f;
+    arg0[1].prevPos.x = 0.0f;
     if ((phi_v0 != 0) && (arg0->draw != 0)) {
         Audio_PlayActorSound2(arg0, 0x2869U);
     }
@@ -915,9 +915,9 @@ void func_8091ECF4(Actor *arg0) {
     arg0->home.pos.y = arg0->world.pos.y;
     arg0->home.pos.z = arg0->world.pos.z;
     func_8091D660();
-    arg0->unk_23C = func_8091ED70;
-    arg0->unk_248 = 5;
-    arg0->unk_24C = 0.0f;
+    arg0[1].projectedW = func_8091ED70;
+    arg0[1].uncullZoneDownward = 7e-45.0f;
+    arg0[1].prevPos.x = 0.0f;
 }
 
 void func_8091ED70(Actor *arg0) {
@@ -952,9 +952,9 @@ void func_8091ED70(Actor *arg0) {
     }
     temp_f0 = (arg0->speedXZ * 1.5f) + 1.0f;
     if (temp_f0 > 4.8f) {
-        arg0->unk_1C0 = 4.8f;
+        arg0[1].wallPoly = (bitwise CollisionPoly *) 4.8f;
     } else {
-        arg0->unk_1C0 = temp_f0;
+        arg0[1].wallPoly = (bitwise CollisionPoly *) temp_f0;
     }
     if ((s32) arg0->unk_240 <= 0) {
         Actor_MarkForDeath(arg0);
@@ -975,9 +975,9 @@ void func_8091EF30(Actor *arg0) {
     func_8091D660();
     arg0->unk_240 = 0xF;
     arg0->unk_279 = 0xA;
-    arg0->unk_23C = func_8091EFE8;
-    arg0->unk_248 = 5;
-    arg0->unk_24C = 0.0f;
+    arg0[1].projectedW = func_8091EFE8;
+    arg0[1].uncullZoneDownward = 7e-45.0f;
+    arg0[1].prevPos.x = 0.0f;
 }
 
 void func_8091EFE8(Actor *arg0) {
@@ -1086,10 +1086,10 @@ block_15:
     arg0->velocity.y *= 0.8f;
     temp_f0_2 = (arg0->speedXZ * 1.5f) + 1.0f;
     if (temp_f0_2 > 4.8f) {
-        arg0->unk_1C0 = 4.8f;
+        arg0[1].wallPoly = (bitwise CollisionPoly *) 4.8f;
         return;
     }
-    arg0->unk_1C0 = temp_f0_2;
+    arg0[1].wallPoly = (bitwise CollisionPoly *) temp_f0_2;
 }
 
 void func_8091F344(EnFish *arg0) {
@@ -1173,9 +1173,9 @@ void func_8091F3BC(EnFish *arg0, GlobalContext *arg1) {
 
 void func_8091F5A4(Actor *arg0, GlobalContext *arg1) {
     ? (*temp_v0_3)(Actor *, GlobalContext *);
+    f32 temp_v1;
     s16 temp_v0;
     s16 temp_v0_4;
-    u32 temp_v1;
     void *temp_v0_2;
     void *temp_v0_5;
     s32 phi_v1;
@@ -1191,7 +1191,7 @@ void func_8091F5A4(Actor *arg0, GlobalContext *arg1) {
     if ((temp_v0_2 != 0) && (temp_v0_2->update == 0) && (arg0 != temp_v0_2)) {
         arg0->child = NULL;
     }
-    temp_v0_3 = arg0->unk_23C;
+    temp_v0_3 = arg0[1].projectedW;
     if ((temp_v0_3 == 0) || (temp_v0_3(arg0, arg1), (arg0->update != 0))) {
         temp_v0_4 = arg0->unk_26A - arg0->shape.rot.y;
         phi_v1 = (s32) temp_v0_4;
@@ -1199,26 +1199,26 @@ void func_8091F5A4(Actor *arg0, GlobalContext *arg1) {
             phi_v1 = -(s32) temp_v0_4;
         }
         if ((phi_v1 >= 0x3001) && ((s32) arg0->unk_270 >= 0x3E9)) {
-            arg0->unk_1C0 = (f32) (arg0->unk_1C0 + arg0->unk_24C);
+            arg0[1].wallPoly += arg0[1].prevPos.x;
         }
         SkelAnime_FrameUpdateMatrix(arg0 + 0x1A4);
         func_8091D7C4(arg0);
         Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-        temp_v1 = arg0->unk_248;
-        if (temp_v1 != 0) {
+        temp_v1 = arg0[1].uncullZoneDownward;
+        if ((bitwise s32) temp_v1 != 0) {
             phi_f0 = (f32) gGameInfo->data[2401] + 10.0f;
             if (arg1->sceneNum != 0x2F) {
                 phi_f0 = 6.0f;
             }
-            Actor_UpdateBgCheckInfo(arg1, arg0, 17.5f, phi_f0, 0.0f, temp_v1);
+            Actor_UpdateBgCheckInfo(arg1, arg0, 17.5f, phi_f0, 0.0f, (bitwise u32) temp_v1);
         }
-        if ((arg0->xzDistToPlayer < 70.0f) && (func_8091EFE8 != arg0->unk_23C)) {
+        if ((arg0->xzDistToPlayer < 70.0f) && (func_8091EFE8 != (bitwise s32) arg0[1].projectedW)) {
             temp_v0_5 = arg0->unk_160;
             temp_v0_5->unk_30 = (s16) (s32) arg0->world.pos.x;
             temp_v0_5->unk_32 = (s16) (s32) arg0->world.pos.y;
             temp_v0_5->unk_34 = (s16) (s32) arg0->world.pos.z;
             temp_v0_5->unk_36 = (s16) (s32) (arg0->unk_25C * 500.0f);
-            CollisionCheck_SetOC(arg1, &arg1->colChkCtx, (Collider *) (arg0 + 0x144));
+            CollisionCheck_SetOC(arg1, &arg1->colChkCtx, (Collider *) &arg0[1]);
         }
         Actor_SetHeight(arg0, arg0->shape.yOffset * 0.01f);
         if (Actor_HasParent(arg0, arg1) != 0) {
@@ -1238,9 +1238,9 @@ void func_8091F5A4(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_8091F830(Actor *arg0) {
-    ? (*temp_v0_2)();
     Actor *temp_v0;
     f32 temp_f0;
+    f32 temp_v0_2;
     s16 temp_v0_3;
 
     if (arg0->params == 1) {
@@ -1251,8 +1251,8 @@ void func_8091F830(Actor *arg0) {
     if ((temp_v0 != 0) && (temp_v0->update == 0) && (arg0 != temp_v0)) {
         arg0->child = NULL;
     }
-    temp_v0_2 = arg0->unk_23C;
-    if ((temp_v0_2 == 0) || (temp_v0_2(), (arg0->update != 0))) {
+    temp_v0_2 = arg0[1].projectedW;
+    if (((bitwise s32) temp_v0_2 == 0) || ((bitwise ? (*)()) temp_v0_2(), (arg0->update != 0))) {
         arg0 = arg0;
         func_8091D7C4(arg0);
         Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
@@ -1314,7 +1314,7 @@ void EnFish_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp2C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp2C->polyOpa.p;
-    sp2C->polyOpa.p = temp_v1 + 8;
+    sp2C->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFA000000;
     temp_v1->words.w1 = (temp_a2->unk_0 << 0x18) | (temp_a2->unk_1 << 0x10) | (temp_a2->unk_2 << 8) | 0xFF;
     SkelAnime_DrawSV(globalCtx, this->unk_1A4.skeleton, this->unk_1A4.limbDrawTbl, (s32) this->unk_1A4.dListCount, NULL, NULL, NULL);

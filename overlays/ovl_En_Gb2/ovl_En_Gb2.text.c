@@ -517,7 +517,7 @@ void func_80B0FD8C(Actor *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     arg0->unk_280 = (s16) (arg0->unk_280 + 1);
-    arg0->unk_268 = (s32) arg0->child;
+    arg0[1].child = arg0->child;
     temp_v0 = (arg0->unk_280 * 0x14) + &D_80B119B0;
     Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x1E8, temp_v0->unk_4, temp_v0->unk_8, temp_v0->unk_C, (s16) 0, (s16) 0, (s16) 0, (s32) temp_v0->unk_10);
 }
@@ -1283,7 +1283,7 @@ void EnGb2_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80B1179C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 7) {
         arg1 = arg1;
-        Matrix_RotateY(arg5->unk_272, 1U);
+        Matrix_RotateY(arg5[104].y, 1U);
     }
     if (arg1 == 1) {
         *arg2 = NULL;
@@ -1314,7 +1314,7 @@ void EnGb2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     if (this->unk_28A == 0xFF) {
         func_8012C28C(temp_a2);
         temp_v1 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v1 + 8;
+        temp_s1->polyOpa.p = &temp_v1[1];
         temp_v1->words.w1 = -1;
         temp_v1->words.w0 = 0xFB000000;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
@@ -1323,7 +1323,7 @@ void EnGb2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     func_8012C2DC(temp_a2);
     temp_v1_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v1_2 + 8;
+    temp_s1->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xFB000000;
     temp_v1_2->words.w1 = this->unk_28A | ~0xFF;
     Scene_SetRenderModeXlu(globalCtx, 1, 2U);

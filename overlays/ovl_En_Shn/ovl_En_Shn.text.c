@@ -189,11 +189,11 @@ void func_80AE61C0(Actor *arg0) {
         phi_v1 = arg0->unk_2C8;
     }
     if (phi_v1 == 0) {
-        arg0->unk_2EC = (s32) (arg0->unk_2EC ^ 1);
+        arg0[2].velocity.x ^= 1;
         arg0 = arg0;
         arg0->unk_2C8 = Rand_S16Offset(0x1E, 0x1E);
     }
-    if (arg0->unk_2EC != 0) {
+    if (arg0[2].velocity.x != 0) {
         phi_f0 = 120.0f;
     } else {
         phi_f0 = 80.0f;
@@ -335,7 +335,7 @@ void *func_80AE6488(Vec3s *arg0, GlobalContext *arg1) {
     sp20 = (s32) temp_v1;
     SysMatrix_InsertTranslation(arg0->unk_2D4, 0.0f, 0.0f, 1);
     phi_v0 = arg1 + 0x10000;
-    if ((arg0 == sp24->unk_A88) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0->unk_2DC == (void *)3))) {
+    if ((arg0 == sp24[8].velocity.y) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0->unk_2DC == (void *)3))) {
         if ((arg1->state.frames & 1) == 0) {
             if (arg0->unk_2D0 != 0.0f) {
                 phi_v0 = (void *)3;
@@ -399,7 +399,7 @@ s32 func_80AE6704(Actor *arg0, GlobalContext *arg1) {
     phi_t0 = 0;
     switch (temp_a2) {
     case 0:
-        if ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) == 0) {
+        if ((gBitFlags[25] & gSaveContext.inventory.questItems) == 0) {
             arg0->unk_2C6 = 6;
             phi_t0 = 1;
         } else {
@@ -415,7 +415,7 @@ s32 func_80AE6704(Actor *arg0, GlobalContext *arg1) {
         sp18 = 0;
         if (func_8013A4C4(*(&D_80AE7258 + (temp_a2 * 4))) != 0) {
             arg0->unk_2C6 = 6;
-            gSaveContext.inventory.questItems &= -1 - *(gBitFlags + 0x64);
+            gSaveContext.inventory.questItems &= -1 - gBitFlags[25];
             phi_t0 = 1;
         } else {
             arg0->unk_2C6 = (s16) (arg0->unk_2C6 + 1);
@@ -441,7 +441,7 @@ s32 func_80AE6704(Actor *arg0, GlobalContext *arg1) {
 ? *func_80AE6880(Actor *arg0, GlobalContext *arg1) {
     u16 temp_v0;
 
-    if (arg0->unk_2BE != 0) {
+    if (arg0[2].world.unk_12 != 0) {
         return &D_80AE70B0;
     }
     temp_v0 = arg0->unk_1D8;
@@ -476,13 +476,13 @@ s32 func_80AE68F0(Actor *arg0, GlobalContext *arg1) {
             temp_v0 = temp_a2->unk_A87;
             if (temp_v0 == 0x13) {
                 arg0->unk_1D8 = (u16) (temp_t9 | 0x80);
-                arg0->unk_2E4 = (s32) temp_a2->unk_A87;
+                arg0[2].scale.y = (bitwise f32) temp_a2->unk_A87;
             } else if (temp_v0 != 0) {
                 arg0->unk_1D8 = (u16) (arg0->unk_1D8 | 0x100);
-                arg0->unk_2E4 = (s32) temp_a2->unk_A87;
+                arg0[2].scale.y = (bitwise f32) temp_a2->unk_A87;
             }
-            func_8013AED4(arg0 + 0x1D8, 0U, 7U);
-            arg0->unk_1DC = func_80AE6880(arg0, arg1);
+            func_8013AED4((u16 *) &arg0[1].xyzDistToPlayerSq, 0U, 7U);
+            arg0[1].xzDistToPlayer = (bitwise f32) func_80AE6880(arg0, arg1);
             arg0->unk_2C6 = 0;
             phi_v1 = 1;
             if ((gSaveContext.weekEventReg[23] & 8) != 0) {
@@ -602,13 +602,13 @@ void func_80AE6D90(GlobalContext *arg0, s32 arg1, Actor *arg2) {
         phi_v0 = 0;
     }
     if (arg1 == 0xF) {
-        func_8013AD9C((s16) (arg2->unk_2BA + 0x4000), (s16) (arg2->unk_2BC + arg2->shape.rot.y + 0x4000), arg2 + 0x1E8, arg2 + 0x1F4, phi_v0, phi_v1);
+        func_8013AD9C((s16) (arg2[2].world.rot.y + 0x4000), (s16) (arg2[2].world.rot.z + arg2->shape.rot.y + 0x4000), arg2 + 0x1E8, arg2 + 0x1F4, phi_v0, phi_v1);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_1E8, arg2->unk_1EC, arg2->unk_1F0, 0);
+        SysMatrix_InsertTranslation(arg2[1].colChkInfo.displacement.x, arg2[1].colChkInfo.displacement.y, arg2[1].colChkInfo.displacement.z, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-        Matrix_RotateY(arg2->unk_1F6, 1U);
-        SysMatrix_InsertXRotation_s(arg2->unk_1F4, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_1F8, 1);
+        Matrix_RotateY(arg2[1].colChkInfo.cylHeight, 1U);
+        SysMatrix_InsertXRotation_s(arg2[1].colChkInfo.cylRadius, 1);
+        SysMatrix_InsertZRotation_s(arg2[1].colChkInfo.cylYShift, 1);
         SysMatrix_StatePush();
     }
 }

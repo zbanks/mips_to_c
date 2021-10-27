@@ -51,21 +51,21 @@ void EffectSsStick_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     Matrix_Scale(0.01f, 0.0025f, 0.01f, 1);
     SysMatrix_InsertRotation(0, this->regs[1], 0, 1);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(temp_s0);
     func_8012C28C(temp_s0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060018;
     temp_v0_2->words.w1 = (u32) globalCtx->objectCtx.status[this->regs[0]].segment;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_801C0850;
     temp_v0_3->words.w0 = 0xDB060030;
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_040032B0;
 }

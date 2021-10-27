@@ -252,7 +252,7 @@ s32 func_801388E4(void *arg0, MtxF *arg1, void *arg2, s32 arg3) {
     } else {
         SkinMatrix_SetRotateRPYTranslate(arg1, (s16) (s32) temp_f0, (s16) (s32) temp_f2, (s16) (s32) temp_f12, 0.0f, 0.0f, 0.0f);
     }
-    phi_s3 = arg1 + 0x40;
+    phi_s3 = &arg1[1];
     phi_s0 = temp_s0 + 6 + 6;
     phi_s1 = 1;
     if ((s32) arg0->unk_0->unk_4 >= 2) {
@@ -262,7 +262,7 @@ s32 func_801388E4(void *arg0, MtxF *arg1, void *arg2, s32 arg3) {
             SkinMatrix_SetRotateRPYTranslate(phi_s3, (s16) (s32) (f32) phi_s0->unk_0, (s16) (s32) (f32) phi_s0->unk_2, (s16) (s32) (f32) phi_s0->unk_4, (f32) temp_v0_2->unk_0, (f32) temp_v0_2->unk_2, (f32) temp_v0_2->unk_4);
             temp_s1 = phi_s1 + 1;
             phi_s2 += 4;
-            phi_s3 += 0x40;
+            phi_s3 = &phi_s3[1];
             phi_s0 += 6;
             phi_s1 = temp_s1;
         } while (temp_s1 < (s32) arg0->unk_0->unk_4);

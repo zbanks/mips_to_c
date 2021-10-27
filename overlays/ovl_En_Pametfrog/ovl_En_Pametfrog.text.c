@@ -570,18 +570,18 @@ void EnPametfrog_ChangeColliderFreeze(Actor *arg0) {
     arg0->unk_2AC = 0xA;
     arg0->unk_398 = 3;
     arg0->unk_3A0->unk_14 = 0;
-    arg0->unk_2C8 = 0.75f;
-    arg0->unk_2CC = 1.125f;
-    arg0->unk_2C4 = 1.0f;
+    arg0[2].focus.pos.y = 0.75f;
+    arg0[2].focus.pos.z = 1.125f;
+    arg0[2].focus.pos.x = 1.0f;
 }
 
 void EnPametfrog_ChangeColliderThaw(Actor *arg0, GlobalContext *arg1) {
-    arg0->unk_2BC = 0;
+    arg0[2].world.rot.z = 0;
     if (arg0->unk_2AC == 0xA) {
         arg0->unk_2AC = 0U;
         arg0->unk_398 = 6;
         arg0->unk_3A0->unk_14 = 1;
-        arg0->unk_2C4 = 0.0f;
+        arg0[2].focus.pos.x = 0.0f;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x2F4), 0xC, 2, 0.3f, 0.2f);
     }
 }
@@ -727,11 +727,11 @@ void EnPametfrog_StopCutscene(Actor *arg0, GlobalContext *arg1) {
     Camera *temp_v0;
     s16 temp_a2;
 
-    temp_a2 = arg0->unk_2BA;
+    temp_a2 = arg0[2].world.rot.y;
     if (temp_a2 != 0) {
         temp_v0 = Play_GetCamera(arg1, temp_a2);
         Play_CameraSetAtEye(arg1, 0, temp_v0 + 0x50, temp_v0 + 0x5C);
-        arg0->unk_2BA = 0;
+        arg0[2].world.rot.y = 0;
         ActorCutscene_Stop(arg0->unk_2B0);
         func_800B724C(arg1, arg0, 6U);
     }
@@ -795,15 +795,15 @@ void EnPametfrog_ApplyMagicArrowEffects(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 2) {
         arg0->unk_2AC = 0;
-        arg0->unk_2C4 = 3.0f;
-        arg0->unk_2C8 = 0.75f;
+        arg0[2].focus.pos.x = 3.0f;
+        arg0[2].focus.pos.y = 0.75f;
         return;
     }
     if (temp_v0 == 4) {
         temp_v0_2 = arg0->unk_3A0;
         arg0->unk_2AC = 0x14;
-        arg0->unk_2C8 = 0.75f;
-        arg0->unk_2C4 = 3.0f;
+        arg0[2].focus.pos.y = 0.75f;
+        arg0[2].focus.pos.x = 3.0f;
         Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) temp_v0_2->unk_E, (f32) temp_v0_2->unk_10, (f32) temp_v0_2->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         return;
     }
@@ -813,16 +813,16 @@ void EnPametfrog_ApplyMagicArrowEffects(Actor *arg0, GlobalContext *arg1) {
 }
 
 void EnPametfrog_ApplyElectricStun(Actor *arg0) {
-    arg0->unk_2BC = 0x28;
+    arg0[2].world.rot.z = 0x28;
     Audio_PlayActorSound2(arg0, 0x389EU);
     func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
     arg0->unk_2AC = 0x1E;
-    arg0->unk_2C8 = 0.75f;
-    arg0->unk_2C4 = 2.0f;
+    arg0[2].focus.pos.y = 0.75f;
+    arg0[2].focus.pos.x = 2.0f;
 }
 
 void EnPametfrog_ApplyStun(Actor *arg0) {
-    arg0->unk_2BC = 0x28;
+    arg0[2].world.rot.z = 0x28;
     Audio_PlayActorSound2(arg0, 0x389EU);
     func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
 }
@@ -936,7 +936,7 @@ void EnPametfrog_RearOnSnapperRise(EnPametfrog *this, GlobalContext *globalCtx) 
     }
     temp_lo = temp_v0 * 0xCCC;
     this = this;
-    this->actor.world.pos.y = (Math_SinS(temp_lo) * 100.0f) + (this->actor.child->unk_2AC + 46.0f);
+    this->actor.world.pos.y = (Math_SinS(temp_lo) * 100.0f) + (this->actor.child[2].world.pos.x + 46.0f);
 }
 
 void EnPametfrog_SetupFallOffSnapper(Actor *arg0, GlobalContext *arg1) {
@@ -962,7 +962,7 @@ void EnPametfrog_SetupFallOffSnapper(Actor *arg0, GlobalContext *arg1) {
     sp24 = (Math_SinS((s16) (temp_a0 >> 0x10)) * 300.0f) + arg0->focus.pos.x;
     sp28 = arg0->focus.pos.y + 100.0f;
     sp2C = (Math_CosS(sp22) * 300.0f) + arg0->focus.pos.z;
-    Play_CameraSetAtEye(arg1, arg0->unk_2BA, (Vec3f *) &arg0->focus, (Vec3f *) &sp24);
+    Play_CameraSetAtEye(arg1, arg0[2].world.rot.y, (Vec3f *) &arg0->focus, (Vec3f *) &sp24);
     Audio_PlayActorSound2(arg0, 0x38D3U);
     arg0->unk_2A8 = EnPametfrog_FallOffSnapper;
 }
@@ -1328,7 +1328,7 @@ void EnPametfrog_JumpOnSnapper(EnPametfrog *this, GlobalContext *globalCtx) {
     this->actor.world.pos.x = temp_f2 - ((temp_f2 - temp_v0->world.pos.x) * temp_f0);
     this->actor.world.pos.z = temp_f12 - ((temp_f12 - temp_v0->world.pos.z) * temp_f0);
     this = this;
-    this->actor.world.pos.y = (Math_SinS((s16) (((s32) temp_v1 * -0x1000) + 0x6000)) * 65.0f) + this->actor.child->unk_2AC;
+    this->actor.world.pos.y = (Math_SinS((s16) (((s32) temp_v1 * -0x1000) + 0x6000)) * 65.0f) + this->actor.child[2].world.pos.x;
 }
 
 void EnPametfrog_SetupLandOnSnapper(EnPametfrog *this) {
@@ -1381,22 +1381,22 @@ void EnPametfrog_SetupFallInAir(Actor *arg0, GlobalContext *arg1) {
     sp46 = temp_v0;
     arg0->world.pos.x += 30.0f * Math_SinS((s16) (temp_a0 >> 0x10));
     arg0->world.pos.z += 30.0f * Math_CosS(sp46);
-    if (arg0->unk_2BA != 0) {
-        temp_f12 = arg0->unk_2DC;
-        temp_f2 = arg0->unk_2E4;
+    if (arg0[2].world.rot.y != 0) {
+        temp_f12 = arg0[2].targetArrowOffset;
+        temp_f2 = arg0[2].scale.y;
         temp_f0 = sqrtf((temp_f12 * temp_f12) + (temp_f2 * temp_f2));
         if (temp_f0 > 0.001f) {
             phi_f2 = 200.0f / temp_f0;
         } else {
-            arg0->unk_2DC = 1.0f;
-            arg0->unk_2E4 = 0.0f;
+            arg0[2].targetArrowOffset = 1.0f;
+            arg0[2].scale.y = 0.0f;
             phi_f2 = 200.0f;
         }
         temp_a3 = &sp38;
-        sp38 = arg0->world.pos.x + (phi_f2 * arg0->unk_2DC);
+        sp38 = arg0->world.pos.x + (phi_f2 * arg0[2].targetArrowOffset);
         sp3C = (arg0->world.pos.y + arg0->home.pos.y) * 0.5f;
-        sp40 = arg0->world.pos.z + (phi_f2 * arg0->unk_2E4);
-        Play_CameraSetAtEye(arg1, arg0->unk_2BA, (Vec3f *) &arg0->world, (Vec3f *) temp_a3);
+        sp40 = arg0->world.pos.z + (phi_f2 * arg0[2].scale.y);
+        Play_CameraSetAtEye(arg1, arg0[2].world.rot.y, (Vec3f *) &arg0->world, (Vec3f *) temp_a3);
     }
     arg0->unk_2A8 = EnPametfrog_FallInAir;
 }
@@ -1757,7 +1757,7 @@ void EnPametfrog_SetupDamage(Actor *arg0) {
     arg0->speedXZ = 10.0f;
     Audio_PlayActorSound2(arg0, 0x38D3U);
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x14);
-    func_800BE5CC(arg0, arg0 + 0x384, 0);
+    func_800BE5CC(arg0, (ColliderJntSph *) &arg0[2].uncullZoneForward, 0);
     arg0->shape.rot.y = arg0->world.rot.y + 0x8000;
     arg0->unk_2A8 = EnPametfrog_Damage;
 }
@@ -1783,7 +1783,7 @@ void EnPametfrog_Damage(EnPametfrog *this, GlobalContext *globalCtx) {
 void EnPametfrog_SetupStun(Actor *arg0) {
     SkelAnime *temp_a0;
 
-    if (&D_060039C4 == arg0->unk_14C) {
+    if (&D_060039C4 == arg0[1].home.pos.x) {
         temp_a0 = arg0 + 0x144;
         arg0->unk_15C = 0.0f;
         arg0 = arg0;
@@ -1950,7 +1950,7 @@ void EnPametfrog_ApplyDamageEffect(Actor *arg0, GlobalContext *arg1) {
             }
             if (temp_v0_2 == 3) {
                 EnPametfrog_ChangeColliderFreeze(arg0);
-                arg0->unk_2BC = 0x50;
+                arg0[2].world.rot.z = 0x50;
                 func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
                 EnPametfrog_SetupStun(arg0);
                 return;
@@ -1959,13 +1959,13 @@ void EnPametfrog_ApplyDamageEffect(Actor *arg0, GlobalContext *arg1) {
             temp_v0_3 = arg0->colChkInfo.damageEffect;
             if (temp_v0_3 == 2) {
                 arg0->unk_2AC = 0U;
-                arg0->unk_2C8 = 0.75f;
-                arg0->unk_2C4 = 4.0f;
+                arg0[2].focus.pos.y = 0.75f;
+                arg0[2].focus.pos.x = 4.0f;
             } else if (temp_v0_3 == 4) {
                 temp_v0_4 = arg0->unk_3A0;
                 arg0->unk_2AC = 0x14U;
-                arg0->unk_2C8 = 0.75f;
-                arg0->unk_2C4 = 4.0f;
+                arg0[2].focus.pos.y = 0.75f;
+                arg0[2].focus.pos.x = 4.0f;
                 Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) temp_v0_4->unk_E, (f32) temp_v0_4->unk_10, (f32) temp_v0_4->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
             }
             EnPametfrog_SetupDamage(arg0);

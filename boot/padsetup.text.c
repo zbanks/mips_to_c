@@ -22,13 +22,13 @@ s32 func_80086620(OSMesgQueue *param_1, PadMgr *param_2, OSContStatus *param_3) 
         if ((param_3->errno == 0) && (param_3->type == 5)) {
             param_2->controllers = 1;
         }
-        if ((param_3->unk_7 == 0) && (param_3->unk_4 == 5)) {
+        if ((param_3[1].errno == 0) && (param_3[1].type == 5)) {
             param_2->controllers |= 2;
         }
-        if ((param_3->unk_B == 0) && (param_3->unk_8 == 5)) {
+        if ((param_3[2].errno == 0) && (param_3[2].type == 5)) {
             param_2->controllers |= 4;
         }
-        if ((param_3->unk_F == 0) && (param_3->unk_C == 5)) {
+        if ((param_3[3].errno == 0) && (param_3[3].type == 5)) {
             param_2->controllers |= 8;
         }
         goto block_17;

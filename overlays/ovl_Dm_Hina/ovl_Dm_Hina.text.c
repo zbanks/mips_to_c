@@ -223,15 +223,15 @@ void func_80A1F9AC(DmHina *arg0, GraphicsContext **arg1) {
     if (arg0->unk_17E != 0) {
         func_8012C2DC(temp_a2);
         temp_v1 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1 + 8;
+        temp_s1->polyXlu.p = &temp_v1[1];
         temp_v1->words.w0 = 0xFA000000;
         temp_v1->words.w1 = ((((u32) (arg0->unk_14C * 100.0f) + 0x9B) & 0xFF) << 8) | 0xFFFF0000 | arg0->unk_17F;
         temp_v1_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_2 + 8;
+        temp_s1->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFB000000;
         temp_v1_2->words.w1 = ((((u32) (arg0->unk_150 * 100.0f) + 0x32) & 0xFF) << 8) | 0xFFFF0000;
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w1 = (u32) &D_04023348;
         temp_v0->words.w0 = 0xDE000000;
         temp_f0 = arg0->unk_15C;
@@ -241,11 +241,11 @@ void func_80A1F9AC(DmHina *arg0, GraphicsContext **arg1) {
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         SysMatrix_InsertZRotation_f(Rand_ZeroFloat(6.2831855f), 1);
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         temp_v0_2->words.w1 = Matrix_NewMtx(temp_s1);
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = (u32) &D_04023428;
     }

@@ -439,9 +439,9 @@ void func_808B1530(EnDekubaba *arg0) {
     void *temp_v1_2;
 
     temp_v1 = arg0->unk_23C.elements;
-    (temp_v1 + 0x40)->unk_16 = (s8) (temp_v1->unk_56 & 0xFFFE);
+    (temp_v1 + 0x40)->unk_16 = (s8) (temp_v1[1].info.bumperFlags & 0xFFFE);
     temp_v1_2 = arg0->unk_23C.elements;
-    (temp_v1_2 + 0x40)->unk_56 = (s8) (temp_v1_2->unk_96 & 0xFFFE);
+    (temp_v1_2 + 0x40)->unk_56 = (s8) (temp_v1_2[2].info.bumperFlags & 0xFFFE);
     temp_v1_3 = 3 << 6;
     temp_a1 = arg0->unk_23C.elements + temp_v1_3;
     temp_a1->unk_16 = (u8) (temp_a1->unk_16 & 0xFFFE);
@@ -491,7 +491,7 @@ void func_808B16BC(Actor *arg0, GlobalContext *arg1, s32 arg2) {
 void func_808B1798(Actor *arg0) {
     arg0->unk_18C = 0xA;
     arg0->unk_250 = 3;
-    arg0->unk_18E = 0x50;
+    arg0[1].focus.rot.y = 0x50;
     arg0->flags &= -0x401;
     arg0->unk_200 = 0.75f;
     arg0->unk_204 = 1.125f;
@@ -526,16 +526,16 @@ void func_808B18A8(Actor *arg0) {
     temp_f0 = arg0->unk_1F8;
     arg0->shape.rot.x = -0x4000;
     temp_v0 = arg0->shape.rot.x;
-    arg0->unk_196 = temp_v0;
-    arg0->unk_194 = temp_v0;
-    arg0->unk_192 = temp_v0;
+    arg0[1].unk_52 = temp_v0;
+    arg0[1].sfx = temp_v0;
+    arg0[1].focus.unk_12 = temp_v0;
     arg0->world.pos.x = arg0->home.pos.x;
     arg0->world.pos.y = arg0->home.pos.y + (14.0f * temp_f0);
     arg0->world.pos.z = arg0->home.pos.z;
     Actor_SetScale(arg0, temp_f0 * 0.01f * 0.5f);
     arg0->unk_250 = 0xC;
     arg0->unk_24D = (u8) (arg0->unk_24D | 4);
-    arg0->unk_18E = 0x2D;
+    arg0[1].focus.rot.y = 0x2D;
     temp_v0_2 = arg0->unk_258 + 0x40;
     temp_v0_2->unk_30 = (s16) (s32) arg0->world.pos.x;
     temp_v1 = 3 << 6;
@@ -561,7 +561,7 @@ void func_808B18A8(Actor *arg0) {
     temp_v0_7->unk_30 = (s16) (s32) arg0->world.pos.x;
     temp_v0_7->unk_32 = (s16) ((s32) arg0->world.pos.y - 7);
     temp_v0_7->unk_34 = (s16) (s32) arg0->world.pos.z;
-    arg0->unk_188 = func_808B1B14;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B1B14;
 }
 
 void func_808B1B14(EnDekubaba *this, GlobalContext *globalCtx) {
@@ -593,7 +593,7 @@ void func_808B1BC0(Actor *arg0) {
     sp30 = SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060002B8);
     SkelAnime_ChangeAnim(arg0 + 0x144, &D_060002B8, (f32) sp30 * 0.06666667f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060002B8), (u8) 2, 0.0f);
     temp_v0 = arg0->unk_258;
-    arg0->unk_18E = 0xF;
+    arg0[1].focus.rot.y = 0xF;
     temp_v1 = 3 << 6;
     temp_v0->unk_97 = (u8) (temp_v0->unk_97 | 1);
     temp_v0_2 = arg0->unk_258 + temp_v1;
@@ -607,7 +607,7 @@ void func_808B1BC0(Actor *arg0) {
     arg0->unk_250 = 6;
     arg0->unk_24D = (u8) (arg0->unk_24D & 0xFFFB);
     Audio_PlayActorSound2(arg0, 0x39E2U);
-    arg0->unk_188 = func_808B1CF0;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B1CF0;
 }
 
 void func_808B1CF0(EnDekubaba *this, GlobalContext *globalCtx) {
@@ -710,7 +710,7 @@ void func_808B2158(EnDekubaba *arg0) {
     temp_v0 = arg0->unk_23C.elements;
     arg0->unk_18E = 0xF;
     temp_v1 = 3 << 6;
-    temp_v0->unk_97 = (u8) (temp_v0->unk_97 & 0xFFFE);
+    temp_v0[2].info.ocElemFlags &= 0xFFFE;
     temp_v0_2 = arg0->unk_23C.elements + temp_v1;
     temp_v0_2->unk_17 = (u8) (temp_v0_2->unk_17 & 0xFFFE);
     temp_v0_3 = arg0->unk_23C.elements + temp_v1;
@@ -998,8 +998,8 @@ void func_808B2CB8(EnDekubaba *this, GlobalContext *globalCtx) {
             sp38 = Math_SinS(this->actor.shape.rot.y) * 30.0f * this->unk_1F8;
             temp_f18 = Math_CosS(this->actor.shape.rot.y) * 30.0f;
             sp3C.unk_0 = this->actor.home.pos.x;
-            sp3C.unk_4 = (f32) this->actor.home.pos.y;
-            sp3C.unk_8 = (f32) this->actor.home.pos.z;
+            (&sp3C)[1] = this->actor.home.pos.y;
+            (&sp3C)[2] = this->actor.home.pos.z;
             phi_f2 = temp_f18 * this->unk_1F8;
             phi_v0 = 0;
             do {
@@ -1099,7 +1099,7 @@ void func_808B3078(EnDekubaba *this, GlobalContext *globalCtx) {
 void func_808B3170(Actor *arg0, s32 arg1) {
     SkelAnime_ChangeAnimTransitionStop(arg0 + 0x144, &D_06000208, -5.0f);
     arg0->unk_24D = (u8) (arg0->unk_24D & 0xFFFE);
-    arg0->unk_18E = (s16) arg1;
+    arg0[1].focus.rot.y = (s16) arg1;
     Actor_SetScale(arg0, arg0->unk_1F8 * 0.01f);
     if (arg1 == 2) {
         func_800BCB70(arg0, 0, 0x9B, 0, (s16) 0x2A);
@@ -1111,7 +1111,7 @@ void func_808B3170(Actor *arg0, s32 arg1) {
     } else {
         func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x2A);
     }
-    arg0->unk_188 = func_808B3280;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B3280;
 }
 
 void func_808B3280(EnDekubaba *this, GlobalContext *globalCtx) {
@@ -1143,13 +1143,13 @@ void func_808B3280(EnDekubaba *this, GlobalContext *globalCtx) {
 }
 
 void func_808B3390(Actor *arg0) {
-    arg0->unk_18E = 0;
+    arg0[1].focus.rot.y = 0;
     arg0->unk_160 = 0.0f;
     arg0->world.rot.y = arg0->shape.rot.y + 0x8000;
     arg0->unk_24D = (u8) (arg0->unk_24D & 0xFFFE);
     arg0->speedXZ = arg0->unk_1F8 * 3.0f;
     arg0->flags |= 0x30;
-    arg0->unk_188 = func_808B3404;
+    arg0[1].focus.pos.z = func_808B3404;
     arg0->gravity = -0.8f;
     arg0->velocity.y = 4.0f;
 }
@@ -1199,8 +1199,8 @@ void func_808B3404(EnDekubaba *this, GlobalContext *globalCtx) {
     }
     if (temp_v0 == 1) {
         sp78.unk_0 = this->actor.world.pos.x;
-        sp78.unk_4 = (f32) this->actor.world.pos.y;
-        sp78.unk_8 = (f32) this->actor.world.pos.z;
+        (&sp78)[1] = this->actor.world.pos.y;
+        (&sp78)[2] = this->actor.world.pos.z;
         temp_f24 = Math_SinS(this->actor.shape.rot.x) * 20.0f;
         sp68 = Math_CosS(this->actor.shape.rot.x);
         temp_f20 = Math_SinS(this->actor.shape.rot.y) * (-20.0f * sp68);
@@ -1272,9 +1272,9 @@ void func_808B39AC(EnDekubaba *arg0) {
 
     temp_v0 = arg0->unk_23C.elements;
     temp_v1 = 3 << 6;
-    (temp_v0 + 0x40)->unk_16 = (s8) (temp_v0->unk_56 | 1);
+    (temp_v0 + 0x40)->unk_16 = (s8) (temp_v0[1].info.bumperFlags | 1);
     temp_v0_2 = arg0->unk_23C.elements;
-    (temp_v0_2 + 0x40)->unk_56 = (s8) (temp_v0_2->unk_96 | 1);
+    (temp_v0_2 + 0x40)->unk_56 = (s8) (temp_v0_2[2].info.bumperFlags | 1);
     temp_v0_3 = arg0->unk_23C.elements + temp_v1;
     temp_v0_3->unk_16 = (u8) (temp_v0_3->unk_16 | 1);
     temp_v0_4 = arg0->unk_23C.elements + temp_v1;
@@ -1328,12 +1328,12 @@ void func_808B3B48(EnDekubaba *this, GlobalContext *globalCtx) {
 }
 
 void func_808B3BE4(Actor *arg0) {
-    arg0->unk_190 = -0x6000;
-    arg0->unk_196 = -0x5000;
-    arg0->unk_194 = -0x4800;
+    arg0[1].focus.rot.z = -0x6000;
+    arg0[1].unk_52 = -0x5000;
+    arg0[1].sfx = -0x4800;
     func_808B1530();
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x23);
-    arg0->unk_188 = func_808B3C50;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B3C50;
     arg0->unk_24D = (u8) (arg0->unk_24D & 0xFFFE);
 }
 
@@ -1366,7 +1366,7 @@ void func_808B3C50(EnDekubaba *this, GlobalContext *globalCtx) {
 
 void func_808B3D74(Actor *arg0) {
     func_808B1798(arg0);
-    arg0->unk_188 = func_808B3DA8;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B3DA8;
 }
 
 void func_808B3DA8(EnDekubaba *this, GlobalContext *globalCtx) {
@@ -1404,8 +1404,8 @@ void func_808B3E40(Actor *arg0, GlobalContext *arg1) {
     arg0->shape.shadowScale = 3.0f;
     func_800BC154(arg1, arg1 + 0x1CA0, arg0, 8U);
     arg0->flags &= -0x21;
-    arg0->unk_18E = 0xC8;
-    arg0->unk_188 = func_808B3EE8;
+    arg0[1].focus.rot.y = 0xC8;
+    arg0[1].focus.pos.z = (bitwise f32) func_808B3EE8;
     arg0->unk_1FC = 0.0f;
 }
 
@@ -1426,9 +1426,9 @@ void func_808B3EE8(EnDekubaba *this, GlobalContext *globalCtx) {
 void func_808B3F50(Actor *arg0, GlobalContext *arg1) {
     s32 sp24;
     s32 sp20;
+    f32 temp_v0_5;
     s16 temp_v0_7;
     s32 temp_a2;
-    s32 temp_v0_5;
     u8 temp_v0;
     u8 temp_v0_3;
     u8 temp_v0_4;
@@ -1463,7 +1463,7 @@ loop_4:
                 sp20 = phi_a2_2;
                 func_808B1814(arg0, arg1, phi_a2_2);
                 sp24 = arg0->colChkInfo.health - arg0->colChkInfo.damage;
-                if (func_808B3B48 != arg0->unk_188) {
+                if (func_808B3B48 != (bitwise s32) arg0[1].focus.pos.z) {
                     temp_v0_3 = arg0->colChkInfo.damageEffect;
                     if (temp_v0_3 == 3) {
                         func_808B3D74(arg0);
@@ -1473,7 +1473,7 @@ loop_4:
                         func_808B3170(arg0, 2, phi_a2_2);
                     } else {
                         func_808B16BC(arg0, arg1, phi_a2_2);
-                        if (func_808B2CB8 == arg0->unk_188) {
+                        if (func_808B2CB8 == (bitwise s32) arg0[1].focus.pos.z) {
                             if (sp24 <= 0) {
                                 sp24 = 1;
                             }
@@ -1514,13 +1514,13 @@ loop_4:
         /* Duplicate return node #54. Try simplifying control flow for better match */
         return;
     }
-    if ((arg1->actorCtx.unk2 != 0) && (arg0->xyzDistToPlayerSq < 40000.0f) && (arg0->unk_250 != 0xC) && (temp_v0_5 = arg0->unk_188, (func_808B3B48 != temp_v0_5)) && (func_808B3280 != temp_v0_5) && (temp_v0_6 = arg0->colChkInfo.health, (temp_v0_6 != 0))) {
+    if ((arg1->actorCtx.unk2 != 0) && (arg0->xyzDistToPlayerSq < 40000.0f) && (arg0->unk_250 != 0xC) && (temp_v0_5 = arg0[1].focus.pos.z, (func_808B3B48 != (bitwise s32) temp_v0_5)) && (func_808B3280 != (bitwise s32) temp_v0_5) && (temp_v0_6 = arg0->colChkInfo.health, (temp_v0_6 != 0))) {
         arg0->colChkInfo.health = temp_v0_6 - 1;
         arg0->dropFlag = 0;
         func_808B3170(arg0, 1);
 block_42:
         if (arg0->colChkInfo.health != 0) {
-            temp_v0_7 = arg0->unk_18E;
+            temp_v0_7 = arg0[1].focus.rot.y;
             if ((temp_v0_7 == 2) || (temp_v0_7 == 3)) {
                 Audio_PlayActorSound2(arg0, 0x389EU);
                 return;
@@ -1530,7 +1530,7 @@ block_42:
         }
         Enemy_StartFinishingBlow(arg1, arg0);
         if (arg0->unk_18C == 0xA) {
-            arg0->unk_18E = 3;
+            arg0[1].focus.rot.y = 3;
             arg0->unk_24D = (u8) (arg0->unk_24D & 0xFFFE);
         } else if (arg0->unk_1FC > 1.5f) {
             arg0->unk_1FC = 1.5f;
@@ -1614,14 +1614,14 @@ void func_808B4548(Actor *arg0, GraphicsContext **arg1) {
     temp_s0 = *arg1;
     sp2C = temp_f0 * 0.01f;
     SysMatrix_InsertTranslation(arg0->home.pos.x, arg0->home.pos.y + (-6.0f * temp_f0), arg0->home.pos.z, 0);
-    SysMatrix_InsertRotation(arg0->unk_192, arg0->shape.rot.y, 0, 1);
+    SysMatrix_InsertRotation(arg0[1].focus.unk_12, arg0->shape.rot.y, 0, 1);
     Matrix_Scale(sp2C, sp2C, sp2C, 1);
     temp_v0 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_06001330;
     phi_s1 = arg0 + 0x214;
@@ -1629,7 +1629,7 @@ void func_808B4548(Actor *arg0, GraphicsContext **arg1) {
     do {
         SysMatrix_GetStateTranslation(phi_s1);
         temp_s0_2 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0_2;
     } while (temp_s0_2 != 0x30);
     Actor_SetHeight(arg0, 0.0f);
@@ -1687,7 +1687,7 @@ void func_808B465C(EnDekubaba *arg0, GraphicsContext **arg1) {
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_2 = temp_fp->polyOpa.p;
-            temp_fp->polyOpa.p = temp_v0_2 + 8;
+            temp_fp->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_2->words.w1 = *phi_s4;
             Collider_UpdateSpheres(phi_s5, sp6C);
@@ -1704,7 +1704,7 @@ void func_808B465C(EnDekubaba *arg0, GraphicsContext **arg1) {
                 }
             }
             SysMatrix_GetStateTranslation(phi_s3);
-            temp_s3 = phi_s3 + 0xC;
+            temp_s3 = &phi_s3[1];
             phi_s2 += 2;
             phi_s4 += 4;
             phi_s5 += 2;
@@ -1734,7 +1734,7 @@ void func_808B48FC(EnDekubaba *arg0, GraphicsContext **arg1) {
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_2 = temp_t0->polyOpa.p;
-    temp_t0->polyOpa.p = temp_v0_2 + 8;
+    temp_t0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06001828;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_a1 = arg0 + 0x23C;
@@ -1757,7 +1757,7 @@ void func_808B49C8(EnDekubaba *arg0, GraphicsContext **arg1) {
     temp_s0 = temp_a0;
     func_8012C448(temp_a0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = 0xFF;
     temp_v0->words.w0 = 0xFA000000;
     func_800C0094(arg0->unk_238, arg0->actor.home.pos.x, arg0->actor.home.pos.y, arg0->actor.home.pos.z, (MtxF *) &sp48);
@@ -1765,11 +1765,11 @@ void func_808B49C8(EnDekubaba *arg0, GraphicsContext **arg1) {
     temp_f12 = arg0->unk_1F8 * 0.15f;
     Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     temp_v0_2->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) D_04076BC0;
 }
@@ -1813,12 +1813,12 @@ void EnDekubaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY(this->actor.home.rot.y, 1U);
         Matrix_Scale(sp50, sp50, sp50, 1);
         temp_v0 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0 + 8;
+        temp_s1->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp44 = temp_v0;
         sp44->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_2 + 8;
+        temp_s1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_060010F0;
         temp_v0_2->words.w0 = 0xDE000000;
         if (func_808B3404 == this->actionFunc) {
@@ -1832,12 +1832,12 @@ void EnDekubaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if (((s32) temp_v0_3 >= 0x29) || ((temp_v0_3 & 1) != 0)) {
             SysMatrix_InsertTranslation(0.0f, 0.0f, 200.0f, 1);
             temp_v0_4 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_4 + 8;
+            temp_s1->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDA380003;
             sp3C = temp_v0_4;
             sp3C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_5 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_5 + 8;
+            temp_s1->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_06003070;
             temp_v0_5->words.w0 = 0xDE000000;
         }

@@ -166,7 +166,7 @@ void func_80AAB710(Actor *arg0, GlobalContext *arg1) {
                             phi_a2 = 0U;
                         } else {
                             Item_Give(arg1, 0x32U);
-                            arg0->unk_188 = func_80AAB5F8;
+                            arg0[1].focus.pos.z = func_80AAB5F8;
                             phi_a2 = 0U;
                         }
                     } else {
@@ -176,13 +176,13 @@ void func_80AAB710(Actor *arg0, GlobalContext *arg1) {
                         phi_a2 = sp27;
                     }
                 } else {
-                    arg0->unk_18C = 0;
+                    arg0[1].focus.rot.x = 0;
                 }
             } else {
                 phi_a2 = 0U;
             }
             if (phi_a2 != 0) {
-                func_80AAB4A0((SkelAnime *) (arg0 + 0x144), (arg0->unk_18C * 0x18) + &D_80AABB80, 0);
+                func_80AAB4A0((SkelAnime *) &arg0[1], (arg0[1].focus.rot.x * 0x18) + &D_80AABB80, 0);
             }
         }
         func_800EDF24(arg0, arg1, sp20);

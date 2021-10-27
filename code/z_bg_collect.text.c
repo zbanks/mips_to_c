@@ -59,7 +59,7 @@ void BgCheck2_UpdateActorYRotation(CollisionContext *colCtx, s32 index, Actor *a
     if (BgCheck_IsActorMeshIndexValid(index) != 0) {
         temp_v1 = colCtx->dyna.bgActors[index].curTransform.rot.y - colCtx->dyna.bgActors[index].prevTransform.rot.y;
         if (actor->id == 0) {
-            actor->unk_AD4 = (s16) (actor->unk_AD4 + temp_v1);
+            actor[8].colChkInfo.cylYShift += temp_v1;
         }
         actor->shape.rot.y += temp_v1;
         actor->world.rot.y += temp_v1;

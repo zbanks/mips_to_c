@@ -221,7 +221,7 @@ void func_80ADE748(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_80ADE7E0(Actor *arg0) {
-    arg0->unk_1A8 = func_80ADE7F4;
+    arg0[1].velocity.x = func_80ADE7F4;
 }
 
 void func_80ADE7F4(Actor *arg0, ? arg1) {
@@ -258,17 +258,17 @@ void BgDkjailIvy_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp28->polyXlu.p;
-    sp28->polyXlu.p = temp_v0 + 8;
+    sp28->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA0000FF;
     temp_v0->words.w1 = this->unk_1AD | ~0xFF;
     temp_v0_2 = sp28->polyXlu.p;
-    sp28->polyXlu.p = temp_v0_2 + 8;
+    sp28->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp28 = sp28;
     sp1C = temp_v0_2;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = sp28->polyXlu.p;
-    sp28->polyXlu.p = temp_v0_3 + 8;
+    sp28->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_06000080;
     temp_v0_3->words.w0 = 0xDE000000;
 }

@@ -32,7 +32,7 @@ void __osViInit(void) {
     u32 temp_v1;
 
     bzero((void *) D_80098060, 0x60);
-    temp_t7 = D_80098060 + 0x30;
+    temp_t7 = &D_80098060[1];
     __osViCurr = D_80098060;
     __osViNext = temp_t7;
     temp_t7->retraceCount = 1;

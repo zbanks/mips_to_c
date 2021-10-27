@@ -12,6 +12,23 @@ typedef struct {
     /* 0x10 */ s32 unk_10;                          /* inferred */
 } Room;                                             /* size = 0x14 */
 
+typedef struct {
+    /* 0x0 */ u8 type;
+    /* 0x1 */ u8 count;
+    /* 0x2 */ u16 unk_2;                            /* inferred */
+    /* 0x4 */ RoomMeshType0Params *paramsStart;
+    /* 0x8 */ RoomMeshType0Params *paramsEnd;
+} RoomMeshType0;                                    /* size = 0xC */
+
+typedef struct {
+    /* 0x0 */ u8 type;
+    /* 0x1 */ u8 count;
+    /* 0x2 */ ? unk_2;                              /* inferred */
+    /* 0x2 */ char pad_2[0x2];
+    /* 0x4 */ RoomMeshType2Params *paramsStart;
+    /* 0x8 */ RoomMeshType2Params *paramsEnd;
+} RoomMeshType2;                                    /* size = 0xC */
+
 struct _mips2c_stack_Room_AllocateAndLoad {
     /* 0x00 */ char pad_0[0x20];
     /* 0x20 */ void *sp20;                          /* inferred */
@@ -188,14 +205,14 @@ void Room_DrawType0Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         sp20 = temp_t2;
         func_800BCBF4(&D_801C1D10, globalCtx);
         temp_v1 = temp_a3->polyOpa.p;
-        temp_a3->polyOpa.p = temp_v1 + 8;
+        temp_a3->polyOpa.p = &temp_v1[1];
         temp_v1->words.w0 = 0xDB06000C;
         temp_v1->words.w1 = (u32) room->segment;
         sp40 = temp_a3;
         sp20 = temp_t2;
         func_8012C268(globalCtx);
         temp_v1_2 = temp_a3->polyOpa.p;
-        temp_a3->polyOpa.p = temp_v1_2 + 8;
+        temp_a3->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDA380003;
         temp_v1_2->words.w1 = (u32) &D_801D1DE0;
     }
@@ -207,7 +224,7 @@ void Room_DrawType0Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         sp20 = flags & 1;
         func_800BCC68(&D_801C1D10, globalCtx);
         temp_v1_3 = globalCtx->state.gfxCtx->polyXlu.p;
-        globalCtx->state.gfxCtx->polyXlu.p = temp_v1_3 + 8;
+        globalCtx->state.gfxCtx->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xDB06000C;
         temp_v1_3->words.w1 = (u32) room->segment;
         sp20 = flags & 1;
@@ -215,7 +232,7 @@ void Room_DrawType0Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         sp40 = globalCtx->state.gfxCtx;
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v1_4 = globalCtx->state.gfxCtx->polyXlu.p;
-        globalCtx->state.gfxCtx->polyXlu.p = temp_v1_4 + 8;
+        globalCtx->state.gfxCtx->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xDA380003;
         temp_v1_4->words.w1 = (u32) sp1C;
     }
@@ -230,13 +247,13 @@ void Room_DrawType0Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         do {
             if (((flags & 1) != 0) && (phi_a0->unk_0 != 0)) {
                 temp_v1_5 = globalCtx->state.gfxCtx->polyOpa.p;
-                globalCtx->state.gfxCtx->polyOpa.p = temp_v1_5 + 8;
+                globalCtx->state.gfxCtx->polyOpa.p = &temp_v1_5[1];
                 temp_v1_5->words.w0 = 0xDE000000;
                 temp_v1_5->words.w1 = phi_a0->unk_0;
             }
             if (((flags & 2) != 0) && (phi_a0->unk_4 != 0)) {
                 temp_v1_6 = globalCtx->state.gfxCtx->polyXlu.p;
-                globalCtx->state.gfxCtx->polyXlu.p = temp_v1_6 + 8;
+                globalCtx->state.gfxCtx->polyXlu.p = &temp_v1_6[1];
                 temp_v1_6->words.w0 = 0xDE000000;
                 temp_v1_6->words.w1 = phi_a0->unk_4;
             }
@@ -351,12 +368,12 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         spC0 = NULL;
         func_800BCBF4(&D_801C1D10, globalCtx);
         temp_v0 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_v0 + 8;
+        temp_t0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB06000C;
         temp_v0->words.w1 = (u32) room->segment;
         if (globalCtx->roomCtx.unk74 != 0) {
             temp_v0_2 = temp_t0->polyOpa.p;
-            temp_t0->polyOpa.p = temp_v0_2 + 8;
+            temp_t0->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060018;
             temp_v0_2->words.w1 = (u32) globalCtx->roomCtx.unk74;
         }
@@ -365,7 +382,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         spC0 = NULL;
         func_8012C268(globalCtx);
         temp_v0_3 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_v0_3 + 8;
+        temp_t0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         temp_v0_3->words.w1 = (u32) &D_801D1DE0;
     }
@@ -380,12 +397,12 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         spC0 = NULL;
         func_800BCC68(&D_801C1D10, globalCtx);
         temp_v0_4 = globalCtx->state.gfxCtx->polyXlu.p;
-        globalCtx->state.gfxCtx->polyXlu.p = temp_v0_4 + 8;
+        globalCtx->state.gfxCtx->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDB06000C;
         temp_v0_4->words.w1 = (u32) room->segment;
         if (globalCtx->roomCtx.unk74 != 0) {
             temp_v0_5 = globalCtx->state.gfxCtx->polyXlu.p;
-            globalCtx->state.gfxCtx->polyXlu.p = temp_v0_5 + 8;
+            globalCtx->state.gfxCtx->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDB060018;
             temp_v0_5->words.w1 = (u32) globalCtx->roomCtx.unk74;
         }
@@ -395,7 +412,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         sp24 = temp_a2;
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_6 = globalCtx->state.gfxCtx->polyXlu.p;
-        globalCtx->state.gfxCtx->polyXlu.p = temp_v0_6 + 8;
+        globalCtx->state.gfxCtx->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         temp_v0_6->words.w1 = (u32) sp20;
     }
@@ -438,7 +455,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
                             temp_a0 = phi_a3->unk_8;
                             if (temp_a0 != 0) {
                                 temp_v0_10 = globalCtx->state.gfxCtx->polyOpa.p;
-                                globalCtx->state.gfxCtx->polyOpa.p = temp_v0_10 + 8;
+                                globalCtx->state.gfxCtx->polyOpa.p = &temp_v0_10[1];
                                 temp_v0_10->words.w1 = temp_a0;
                                 temp_v0_10->words.w0 = 0xDE000000;
                             }
@@ -447,7 +464,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
                             temp_a0_2 = phi_a3->unk_C;
                             if (temp_a0_2 != 0) {
                                 temp_v0_11 = globalCtx->state.gfxCtx->polyXlu.p;
-                                globalCtx->state.gfxCtx->polyXlu.p = temp_v0_11 + 8;
+                                globalCtx->state.gfxCtx->polyXlu.p = &temp_v0_11[1];
                                 temp_v0_11->words.w1 = temp_a0_2;
                                 temp_v0_11->words.w0 = 0xDE000000;
                             }
@@ -458,7 +475,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
                         temp_a0_3 = phi_a3->unk_8;
                         if (temp_a0_3 != 0) {
                             temp_v0_12 = globalCtx->state.gfxCtx->polyOpa.p;
-                            globalCtx->state.gfxCtx->polyOpa.p = temp_v0_12 + 8;
+                            globalCtx->state.gfxCtx->polyOpa.p = &temp_v0_12[1];
                             temp_v0_12->words.w1 = temp_a0_3;
                             temp_v0_12->words.w0 = 0xDE000000;
                         }
@@ -467,7 +484,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
                         temp_a0_4 = phi_a3->unk_C;
                         if (temp_a0_4 != 0) {
                             temp_v0_13 = globalCtx->state.gfxCtx->polyXlu.p;
-                            globalCtx->state.gfxCtx->polyXlu.p = temp_v0_13 + 8;
+                            globalCtx->state.gfxCtx->polyXlu.p = &temp_v0_13[1];
                             temp_v0_13->words.w1 = temp_a0_4;
                             temp_v0_13->words.w0 = 0xDE000000;
                         }
@@ -483,7 +500,7 @@ void Room_DrawType2Mesh(GlobalContext *globalCtx, Room *room, u32 flags) {
         return;
     }
     temp_v0_14 = temp_t5->type0.count;
-    phi_f14 = 1.0f / (globalCtx + 0x18000)->unk_7F8;
+    phi_f14 = 1.0f / (globalCtx + 0x18000)[31].mf[3][2];
     phi_t1_2 = 0;
     phi_v0_3 = (s16) temp_v0_14;
     if ((s32) temp_v0_14 > 0) {
@@ -712,7 +729,7 @@ void func_8012DEE8(GlobalContext *globalCtx, Room *room, u32 flags) {
     phi_t0_4 = phi_t0_3;
     if ((phi_t0 != 0) || (phi_t0_2 != 0)) {
         temp_v1_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1_2 + 8;
+        temp_s0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB06000C;
         temp_v1_2->words.w1 = (u32) room->segment;
         if (phi_t0 != 0) {
@@ -721,22 +738,22 @@ void func_8012DEE8(GlobalContext *globalCtx, Room *room, u32 flags) {
             sp90 = phi_t0_2;
             func_8012C28C(globalCtx->state.gfxCtx);
             temp_v1_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_3 + 8;
+            temp_s0->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xDA380003;
             temp_v1_3->words.w1 = (u32) &D_801D1DE0;
             temp_v1_4 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_4 + 8;
+            temp_s0->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w0 = 0xDE000000;
             temp_v1_4->words.w1 = sp98->unk_0;
         }
         phi_t0_4 = phi_t0_3;
         if (phi_t0_2 != 0) {
             temp_v1_5 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_5 + 8;
+            temp_s0->polyOpa.p = &temp_v1_5[1];
             temp_v1_5->words.w1 = (u32) (&D_801E3BB0 - 0x80000000);
             temp_v1_5->words.w0 = 0xE1000000;
             temp_v1_6 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_6 + 8;
+            temp_s0->polyOpa.p = &temp_v1_6[1];
             temp_v1_6->words.w0 = 0xDD0007FF;
             temp_v1_6->words.w1 = (u32) (&D_801ABAB0 - 0x80000000);
             spA0 = temp_s0->polyOpa.p;
@@ -744,17 +761,17 @@ void func_8012DEE8(GlobalContext *globalCtx, Room *room, u32 flags) {
             sp9C = room->mesh;
             func_800E01B8(&sp64, spA4);
             temp_f0 = sp64 + sp6C;
-            func_80172758(&spA0, (void *) room->mesh->type0.paramsEnd, room->mesh->unk_10, room->mesh->unk_14, (u16) (s32) room->mesh->unk_16, (u8) (s32) room->mesh->unk_18, (u8) (s32) room->mesh->unk_19, (u16) (s32) room->mesh->unk_1A, (u16) (s32) room->mesh->unk_1C, (temp_f0 * 1.2f) + (sp68 * 0.6f), (sp68 * 2.4f) + (temp_f0 * 0.3f), 1.0f, 1.0f, 0U);
+            func_80172758(&spA0, (void *) room->mesh->type0.paramsEnd, (void *) room->mesh[1].type0.paramsStart, room->mesh->unk_14, (u16) (s32) room->mesh->unk_16, (u8) (s32) room->mesh[2].type0.type, (u8) (s32) room->mesh[2].type0.count, (u16) (s32) room->mesh[2].type0.unk_2, (u16) (s32) room->mesh->unk_1C, (temp_f0 * 1.2f) + (sp68 * 0.6f), (sp68 * 2.4f) + (temp_f0 * 0.3f), 1.0f, 1.0f, 0U);
             temp_s0->polyOpa.p = spA0;
             temp_v1_7 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_7 + 8;
+            temp_s0->polyOpa.p = &temp_v1_7[1];
             temp_v1_7->words.w0 = 0xE1000000;
             sp50 = phi_t0_3;
             sp60 = temp_v1_7;
             temp_a0 = sp60;
             temp_a0->words.w1 = func_80182CCC();
             temp_v1_8 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_8 + 8;
+            temp_s0->polyOpa.p = &temp_v1_8[1];
             temp_v1_8->words.w0 = 0xDD0007FF;
             sp60 = temp_v1_8;
             sp60->words.w1 = func_80182CBC(temp_a0);
@@ -763,17 +780,17 @@ void func_8012DEE8(GlobalContext *globalCtx, Room *room, u32 flags) {
     }
     if (phi_t0_4 != 0) {
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB06000C;
         temp_v0_2->words.w1 = (u32) room->segment;
         sp4C = &D_801D1DE0;
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_801D1DE0;
         temp_v0_3->words.w0 = 0xDA380003;
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = sp98->unk_4;
     }
@@ -887,7 +904,7 @@ void func_8012E32C(GlobalContext *globalCtx, Room *room, u32 flags) {
     phi_t0_4 = phi_t0_3;
     if ((phi_t0 != 0) || (phi_t0_2 != 0)) {
         temp_v1_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1_2 + 8;
+        temp_s0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB06000C;
         temp_v1_2->words.w1 = (u32) room->segment;
         if (phi_t0 != 0) {
@@ -896,22 +913,22 @@ void func_8012E32C(GlobalContext *globalCtx, Room *room, u32 flags) {
             sp8C = phi_t0_2;
             func_8012C28C(globalCtx->state.gfxCtx);
             temp_v1_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_3 + 8;
+            temp_s0->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xDA380003;
             temp_v1_3->words.w1 = (u32) &D_801D1DE0;
             temp_v1_4 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_4 + 8;
+            temp_s0->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w0 = 0xDE000000;
             temp_v1_4->words.w1 = sp94->unk_0;
         }
         phi_t0_4 = phi_t0_3;
         if (phi_t0_2 != 0) {
             temp_v1_5 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_5 + 8;
+            temp_s0->polyOpa.p = &temp_v1_5[1];
             temp_v1_5->words.w1 = (u32) (&D_801E3BB0 - 0x80000000);
             temp_v1_5->words.w0 = 0xE1000000;
             temp_v1_6 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_6 + 8;
+            temp_s0->polyOpa.p = &temp_v1_6[1];
             temp_v1_6->words.w0 = 0xDD0007FF;
             temp_v1_6->words.w1 = (u32) (&D_801ABAB0 - 0x80000000);
             spA0 = temp_s0->polyOpa.p;
@@ -922,14 +939,14 @@ void func_8012E32C(GlobalContext *globalCtx, Room *room, u32 flags) {
             func_80172758(&spA0, temp_t1->unk_4, temp_t1->unk_C, temp_t1->unk_10, (u16) (s32) temp_t1->unk_12, (u8) (s32) temp_t1->unk_14, (u8) (s32) temp_t1->unk_15, (u16) (s32) temp_t1->unk_16, (u16) (s32) temp_t1->unk_18, (temp_f0 * 1.2f) + (sp64 * 0.6f), (sp64 * 2.4f) + (temp_f0 * 0.3f), 1.0f, 1.0f, 0U);
             temp_s0->polyOpa.p = spA0;
             temp_v1_7 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_7 + 8;
+            temp_s0->polyOpa.p = &temp_v1_7[1];
             temp_v1_7->words.w0 = 0xE1000000;
             sp4C = phi_t0_3;
             sp5C = temp_v1_7;
             temp_a0 = sp5C;
             temp_a0->words.w1 = func_80182CCC();
             temp_v1_8 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_8 + 8;
+            temp_s0->polyOpa.p = &temp_v1_8[1];
             temp_v1_8->words.w0 = 0xDD0007FF;
             sp5C = temp_v1_8;
             sp5C->words.w1 = func_80182CBC(temp_a0);
@@ -938,17 +955,17 @@ void func_8012E32C(GlobalContext *globalCtx, Room *room, u32 flags) {
     }
     if (phi_t0_4 != 0) {
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB06000C;
         temp_v0->words.w1 = (u32) room->segment;
         sp48 = &D_801D1DE0;
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_801D1DE0;
         temp_v0_2->words.w0 = 0xDA380003;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = sp94->unk_4;
     }
@@ -1155,7 +1172,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext *globalCtx, RoomContext *roomCtx) {
             temp_v0 = roomCtx->activeRoomVram;
             roomCtx->unk31 = 0;
             roomCtx->currRoom.segment = temp_v0;
-            *(gSegments + 0xC) = (u32) (temp_v0 + 0x80000000);
+            gSegments[3] = (u32) (temp_v0 + 0x80000000);
             Scene_ProcessHeader(globalCtx, (SceneCmd *) roomCtx->currRoom.segment);
             func_80123140(globalCtx, (Player *) globalCtx->actorCtx.actorList[2].first);
             Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
@@ -1181,7 +1198,7 @@ void Room_Draw(GlobalContext *globalCtx, Room *room, u32 flags) {
 
     temp_v0 = room->segment;
     if (temp_v0 != 0) {
-        *(gSegments + 0xC) = (u32) (temp_v0 + 0x80000000);
+        gSegments[3] = (u32) (temp_v0 + 0x80000000);
         roomDrawFuncs[room->mesh->type0.type](globalCtx, room, flags);
     }
 }

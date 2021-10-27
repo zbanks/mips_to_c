@@ -142,15 +142,15 @@ void BgLadder_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_v1 = temp_a3->polyXlu.p;
     }
     phi_v1->words.w0 = 0xDE000000;
-    phi_v1->words.w1 = sSetupDL + 0x4B0;
-    phi_v1->unk_8 = 0xFB000000;
-    phi_v1->unk_C = (s32) ((this->alpha & 0xFF) | ~0xFF);
-    phi_v1->unk_10 = 0xDA380003;
+    phi_v1->words.w1 = &sSetupDL[150];
+    phi_v1[1].words.w0 = 0xFB000000;
+    phi_v1[1].words.w1 = (this->alpha & 0xFF) | ~0xFF;
+    phi_v1[2].words.w0 = 0xDA380003;
     sp18 = globalCtx->state.gfxCtx;
     sp1C = phi_v1;
-    phi_v1->unk_14 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    phi_v1->unk_18 = 0xDE000000;
-    phi_v1->unk_1C = (s32) *(&D_80A4DE44 + (this->dyna.actor.params * 4));
+    phi_v1[2].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    phi_v1[3].words.w0 = 0xDE000000;
+    phi_v1[3].words.w1 = *(&D_80A4DE44 + (this->dyna.actor.params * 4));
     if (this->alpha == 0xFF) {
         globalCtx->state.gfxCtx->polyOpa.p = phi_v1 + 0x20;
         return;

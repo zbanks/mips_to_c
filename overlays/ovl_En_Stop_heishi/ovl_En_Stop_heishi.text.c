@@ -338,7 +338,7 @@ void func_80AE795C(EnStopheishi *arg0, EnStopheishi *arg1) {
     f32 phi_f12;
     f32 phi_f12_2;
 
-    temp_a2 = arg1->unk_1CCC;
+    temp_a2 = arg1[9].unk_29C.base.ac;
     sp58 = arg0->unk_144.animCurrentFrame;
     temp_v1 = arg0->actor.yawTowardsPlayer;
     temp_a1 = temp_a2 + 0x24;
@@ -369,9 +369,9 @@ void func_80AE795C(EnStopheishi *arg0, EnStopheishi *arg1) {
         }
     }
     temp_v0_2 = Math_Vec3f_Yaw(sp2C, sp28);
-    sp48 = fabsf(arg0->actor.home.pos.x - sp5C->unk_24);
+    sp48 = fabsf(arg0->actor.home.pos.x - sp5C->world.pos.x);
     sp3E = temp_v0_2;
-    temp_f12 = fabsf(arg0->actor.home.pos.z - sp5C->unk_2C);
+    temp_f12 = fabsf(arg0->actor.home.pos.z - sp5C->world.pos.z);
     sp44 = temp_f12;
     Math_Vec3f_Copy((Vec3f *) &sp4C, sp2C);
     temp_v0_3 = arg0->actor.home.rot.y;
@@ -732,7 +732,7 @@ void EnStopheishi_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80AE87A4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0x10) {
-        arg4->x += arg5->unk_25A;
+        arg4->x += arg5[1].textId;
         arg4->z += arg5->unk_258;
     }
     return 0;

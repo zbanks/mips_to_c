@@ -29,8 +29,7 @@ typedef struct EnOt {
     /* 0x364 */ LightNode *unk_364;                 /* inferred */
     /* 0x368 */ LightInfo unk_368;                  /* inferred */
     /* 0x376 */ char pad_376[0x2];
-    /* 0x378 */ ? unk_378;                          /* inferred */
-    /* 0x378 */ char pad_378[0x4];
+    /* 0x378 */ f32 unk_378;                        /* inferred */
     /* 0x37C */ f32 unk_37C;                        /* inferred */
     /* 0x380 */ f32 unk_380;                        /* inferred */
     /* 0x384 */ u8 unk_384;                         /* inferred */
@@ -337,7 +336,7 @@ struct _mips2c_stack_func_80B5E1D8 {
 f32 func_800C40B4(CollisionContext *, CollisionPoly **, ? *, PosRot *); /* extern */
 s32 func_801242B4(Actor *);                         /* extern */
 void func_80B5B2E0(GlobalContext *arg0, Vec3f *arg1, s16 arg2, Vec3f *arg3, s32 *arg4); /* static */
-void func_80B5BAAC(LightInfo *arg0, ? *arg1, ? *arg2, s16 arg3); /* static */
+void func_80B5BAAC(LightInfo *arg0, f32 *arg1, ? *arg2, s16 arg3); /* static */
 void func_80B5BB38(? *arg0, s8 *arg1, f32 arg2);    /* static */
 void func_80B5BDA8(EnOt *arg0, GlobalContext *arg1); /* static */
 void func_80B5BE88(EnOt *arg0, GlobalContext *arg1); /* static */
@@ -602,8 +601,8 @@ void EnOt_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_364);
 }
 
-void func_80B5BAAC(LightInfo *arg0, ? *arg1, ? *arg2, s16 arg3) {
-    Lights_PointNoGlowSetInfo(arg0, (s16) (s32) arg1->unk_0, (s16) (s32) arg1->unk_4, (s16) (s32) arg1->unk_8, (u8) (s32) arg2->unk_0, (u8) (s32) arg2->unk_1, (u8) (s32) arg2->unk_2, (s16) (s32) arg3);
+void func_80B5BAAC(LightInfo *arg0, f32 *arg1, ? *arg2, s16 arg3) {
+    Lights_PointNoGlowSetInfo(arg0, (s16) (s32) arg1->unk_0, (s16) (s32) arg1[1], (s16) (s32) arg1[2], (u8) (s32) arg2->unk_0, (u8) (s32) arg2->unk_1, (u8) (s32) arg2->unk_2, (s16) (s32) arg3);
 }
 
 void func_80B5BB38(? *arg0, s8 *arg1, f32 arg2) {
@@ -628,14 +627,14 @@ void func_80B5BB38(? *arg0, s8 *arg1, f32 arg2) {
     }
     temp_f2 = 1.0f - arg2;
     arg0->unk_0 = (s8) (u32) ((phi_f12 * arg2) + (phi_f12 * temp_f2 * temp_f0));
-    temp_t9 = arg1->unk_1;
+    temp_t9 = arg1[1];
     temp_f14 = (f32) temp_t9;
     phi_f14 = temp_f14;
     if ((s32) temp_t9 < 0) {
         phi_f14 = temp_f14 + 4294967296.0f;
     }
     arg0->unk_1 = (s8) (u32) ((phi_f14 * arg2) + (phi_f14 * temp_f2 * temp_f0));
-    temp_t2 = arg1->unk_2;
+    temp_t2 = arg1[2];
     temp_f16 = (f32) temp_t2;
     phi_f16 = temp_f16;
     if ((s32) temp_t2 < 0) {
@@ -721,12 +720,12 @@ void func_80B5BFB8(EnOt *this, GlobalContext *globalCtx) {
 
 void func_80B5C154(Actor *arg0, GlobalContext *arg1) {
     if ((gSaveContext.weekEventReg[32] & 1) != 0) {
-        arg0->unk_38C = 4;
+        arg0[2].uncullZoneDownward = 4;
     } else {
-        arg0->unk_38C = 0xC;
+        arg0[2].uncullZoneDownward = 0xC;
         gSaveContext.weekEventReg[32] |= 1;
     }
-    func_800B8A1C(arg0, arg1, arg0->unk_38C, arg0->xzDistToPlayer, arg0->yDistToPlayer);
+    func_800B8A1C(arg0, arg1, arg0[2].uncullZoneDownward, arg0->xzDistToPlayer, arg0->yDistToPlayer);
     arg0->unk_144 = func_80B5C1CC;
 }
 
@@ -1227,8 +1226,8 @@ s32 func_80B5D37C(GlobalContext *arg0, EnDno_ActorUnkStruct *arg1) {
     temp_s0->velocity.x = Math_SinS(temp_s0->world.rot.y) * sp24;
     temp_s0->velocity.y = Math_SinS((s16) ((s32) temp_s0->world.rot.x * -1)) * temp_s0->speedXZ;
     temp_s0->velocity.z = Math_CosS(temp_s0->world.rot.y) * temp_f6;
-    temp_s0->unk_330 = (f32) (temp_s0->unk_330 + ((temp_s0->velocity.x * sp20) + temp_s0->colChkInfo.displacement.x));
-    temp_s0->unk_334 = (f32) (temp_s0->unk_334 + ((temp_s0->velocity.y * sp20) + temp_s0->colChkInfo.displacement.y));
+    temp_s0[2].colChkInfo.displacement.y += (temp_s0->velocity.x * sp20) + temp_s0->colChkInfo.displacement.x;
+    temp_s0[2].colChkInfo.displacement.z += (temp_s0->velocity.y * sp20) + temp_s0->colChkInfo.displacement.y;
     temp_s0->unk_338 = (f32) (temp_s0->unk_338 + ((temp_s0->velocity.z * sp20) + temp_s0->colChkInfo.displacement.z));
     return 0;
 }
@@ -1307,18 +1306,18 @@ void func_80B5D648(Actor *arg0, GlobalContext *arg1) {
 
     temp_a1 = arg0 + 0x24;
     sp3C = temp_a1;
-    func_80B5B2E0(arg1, temp_a1, arg0->unk_346, arg0 + 0x348, arg0 + 0x340);
+    func_80B5B2E0(arg1, temp_a1, arg0[2].shape.rot.y, arg0 + 0x348, arg0 + 0x340);
     temp_a0 = arg0 + 0x330;
     sp38 = temp_a0;
     Math_Vec3f_Copy(temp_a0, temp_a1);
-    func_8013DCE0(arg1, sp38, arg0, arg0 + 0x2C0, arg1->setupPathList, (s32) arg0->unk_346, 0, 0, arg0->unk_340, 0);
+    func_8013DCE0(arg1, sp38, arg0, arg0 + 0x2C0, arg1->setupPathList, (s32) arg0[2].shape.rot.y, 0, 0, arg0->unk_340, 0);
     arg0->unk_32C = 0;
-    arg0->unk_2EC = 0.0f;
-    arg0->unk_2F0 = 0.0f;
-    arg0->unk_2F4 = 0.0f;
+    arg0[2].velocity.x = 0.0f;
+    arg0[2].velocity.y = 0.0f;
+    arg0[2].velocity.z = 0.0f;
     arg0->gravity = 0.0f;
     arg0->speedXZ = 0.0f;
-    func_8013E1C8(arg0 + 0x148, (struct_80B8E1A8 []) D_80B5E3CC, 1, arg0 + 0x2BC);
+    func_8013E1C8((SkelAnime *) &arg0[1].flags, (struct_80B8E1A8 []) D_80B5E3CC, 1, (s32 *) &arg0[2].world.rot.z);
     temp_t1 = arg0->flags | 0x8000000;
     arg0->flags = temp_t1;
     arg0->flags = temp_t1 & ~9;
@@ -1427,12 +1426,12 @@ void func_80B5DAEC(Actor *this, GlobalContext *globalCtx) {
 
     this->unk_144(this);
     Actor_SetHeight(this, 12.0f);
-    SkelAnime_FrameUpdateMatrix(this + 0x148);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &this[1].flags);
     temp_a0 = this + 0x747;
     sp24 = temp_a0;
-    func_80B5BB38(temp_a0, this + 0x744, 0.7f);
+    func_80B5BB38(temp_a0, (u8 *) &this[5].projectedPos.y, 0.7f);
     if ((this->unk_32C & 0x400) != 0) {
-        func_80B5BAAC(this + 0x368, this + 0x378, sp24, 0xD2);
+        func_80B5BAAC((LightInfo *) &this[2].shape.feetPos[1], &this[2].projectedPos.y, sp24, 0xD2);
     }
 }
 
@@ -1447,7 +1446,7 @@ void func_80B5DB6C(Actor *this, GlobalContext *globalCtx) {
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
     if (((gSaveContext.weekEventReg[84] & 0x10) == 0) && ((this->unk_32C & 8) == 0)) {
         if ((gSaveContext.weekEventReg[25] & 4) != 0) {
-            func_80B5B2E0(globalCtx, (Vec3f *) &this->world, (s16) (this->params & 0x7F), (Vec3f *) &sp50, this + 0x340);
+            func_80B5B2E0(globalCtx, (Vec3f *) &this->world, (s16) (this->params & 0x7F), (Vec3f *) &sp50, (s32 *) &this[2].colChkInfo.damage);
             if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, 0x205, sp50, sp54, sp58, (s16) 0, (s16) (s32) this->shape.rot.y, (s16) 1, (this->params & 0x3FFF) | 0x8000, (u32) this->cutscene, (s32) this->unk20, NULL) != 0) {
                 this->unk_32C = (u16) (this->unk_32C | 8);
                 return;
@@ -1511,18 +1510,18 @@ void EnOt_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1_2 = temp_v0_2;
     temp_v0_2->words.w1 = 0x80;
     temp_v0_2->words.w0 = 0xE3001803;
-    temp_v0_2->unk_8 = 0xFCFF97FF;
-    temp_v0_2->unk_C = 0xFF2DFEFF;
-    temp_v0_2->unk_10 = 0xDE000000;
-    temp_v0_2->unk_14 = D_04029CB0;
-    temp_v0_2->unk_18 = 0xFA000000;
-    temp_v0_2->unk_1C = (s32) ((this->unk_747 << 0x18) | (this->unk_748 << 0x10) | (this->unk_749 << 8) | 0x32);
-    temp_v1_2->unk_20 = 0xDA380003;
+    temp_v0_2[1].words.w0 = 0xFCFF97FF;
+    temp_v0_2[1].words.w1 = 0xFF2DFEFF;
+    temp_v0_2[2].words.w0 = 0xDE000000;
+    temp_v0_2[2].words.w1 = (u32) D_04029CB0;
+    temp_v0_2[3].words.w0 = 0xFA000000;
+    temp_v0_2[3].words.w1 = (this->unk_747 << 0x18) | (this->unk_748 << 0x10) | (this->unk_749 << 8) | 0x32;
+    temp_v1_2[4].words.w0 = 0xDA380003;
     sp40 = temp_v1_2;
-    temp_v1_2->unk_24 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_v1_2->unk_2C = D_04029CF0;
-    temp_v1_2->unk_28 = 0xDE000000;
-    sp34->polyXlu.p = temp_v1_2 + 0x30;
+    temp_v1_2[4].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_v1_2[5].words.w1 = (u32) D_04029CF0;
+    temp_v1_2[5].words.w0 = 0xDE000000;
+    sp34->polyXlu.p = &temp_v1_2[6];
 }
 
 void func_80B5DECC(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor) {
@@ -1534,12 +1533,12 @@ void func_80B5DECC(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
         temp_v0 = temp_v1->polyOpa.p;
         temp_v0->words.w0 = 0xDE000000;
         temp_v0->words.w1 = (u32) &D_060004A0;
-        temp_v1->polyOpa.p = temp_v0 + 8;
-        SysMatrix_MultiplyVector3fByState(&D_80B5E410, actor + 0x74C);
+        temp_v1->polyOpa.p = &temp_v0[1];
+        SysMatrix_MultiplyVector3fByState(&D_80B5E410, (Vec3f *) &actor[5].projectedW);
         return;
     }
     if (limbIndex == 1) {
-        SysMatrix_GetStateTranslation(actor + 0x378);
+        SysMatrix_GetStateTranslation((Vec3f *) &actor[2].projectedPos.y);
         actor->unk_32C = (u16) (actor->unk_32C | 0x400);
     }
 }
@@ -1582,7 +1581,7 @@ loop_2:
         arg0->unk_34 = 0.0f;
         arg0->unk_38 = 0.3f;
         arg0->unk_3C = 1.4f;
-        arg0->unk_4C = 0x28;
+        arg0[76] = 0x28;
         arg0->unk_40 = -0.05f;
         phi_a3_3 = arg0;
         if (arg0->unk_0 == 2) {
@@ -1616,12 +1615,12 @@ void func_80B5E078(GlobalContext *arg0, u8 *arg1, s32 arg2) {
         do {
             temp_v0 = phi_s0->unk_0;
             if ((temp_v0 == 1) || (temp_v0 == 2)) {
-                temp_v0_2 = phi_s0->unk_4C;
+                temp_v0_2 = phi_s0[76];
                 temp_t9 = temp_v0_2 - 1;
                 if (temp_v0_2 == 0) {
                     phi_v1 = 0;
                 } else {
-                    phi_s0->unk_4C = temp_t9;
+                    phi_s0[76] = temp_t9;
                     phi_v1 = temp_t9 & 0xFF;
                 }
                 if (phi_v1 == 0) {
@@ -1639,7 +1638,7 @@ void func_80B5E078(GlobalContext *arg0, u8 *arg1, s32 arg2) {
                 temp_s1 = phi_s0 + 0xC;
                 SysMatrix_MultiplyVector3fByState((Vec3f *) temp_s5, temp_s1);
                 Math_Vec3f_Sum(temp_s1, phi_s0 + 0x50, temp_s1);
-                phi_s0->unk_4C = (u8) (phi_s0->unk_4C - 1);
+                phi_s0[76] += -1;
             }
             temp_s2 = phi_s2 + 1;
             phi_s0 += 0x5C;
@@ -1673,7 +1672,7 @@ void func_80B5E1D8(GlobalContext *arg0, u8 *arg1, s32 arg2) {
             if (phi_s2->unk_0 != 0) {
                 if (phi_s7 == 0) {
                     temp_v0_2 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_2 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_2[1];
                     temp_v0_2->words.w1 = (u32) &D_06000040;
                     temp_v0_2->words.w0 = 0xDE000000;
                     phi_s7 = 1;
@@ -1683,15 +1682,15 @@ void func_80B5E1D8(GlobalContext *arg0, u8 *arg1, s32 arg2) {
                 temp_f12 = phi_s2->unk_4;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_v0_3 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_3 + 8;
+                temp_s1->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDB060020;
                 temp_v0_3->words.w1 = Lib_SegmentedToVirtual((void *) &D_0405E6F0);
                 temp_v0_4 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_4 + 8;
+                temp_s1->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDA380003;
                 temp_v0_4->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                 temp_v0_5 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_5 + 8;
+                temp_s1->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = (u32) &D_06000078;
                 temp_v0_5->words.w0 = 0xDE000000;
             }

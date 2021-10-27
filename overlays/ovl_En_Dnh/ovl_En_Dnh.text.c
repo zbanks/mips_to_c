@@ -106,10 +106,10 @@ static ? D_80A5143C;                                /* unable to generate initia
 }
 
 ? func_80A50E40(Actor *arg0, GlobalContext *arg1) {
-    if (((arg0->unk_18C & 7) == 0) || (func_800B84D0(arg0, arg1) == 0)) {
+    if (((arg0[1].focus.rot.x & 7) == 0) || (func_800B84D0(arg0, arg1) == 0)) {
         return 0;
     }
-    func_8013AED4(arg0 + 0x18C, 0U, 7U);
+    func_8013AED4((u16 *) &arg0[1].focus.rot, 0U, 7U);
     arg0->unk_190 = func_80A50DF8(arg0, arg1);
     arg0->unk_144 = func_80A50F38;
     return 1;
@@ -212,7 +212,7 @@ void EnDnh_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v0 + 8;
+    sp28->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp20 = temp_v0;
     sp20->words.w1 = Lib_SegmentedToVirtual(*(&D_80A5143C + (this->unk_19E * 4)));

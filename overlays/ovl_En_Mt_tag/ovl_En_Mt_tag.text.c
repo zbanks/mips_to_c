@@ -265,9 +265,9 @@ s32 func_809CF67C(EnMttag *arg0, GlobalContext *arg1) {
         }
         temp_s0 = phi_s0 + 4;
         phi_s1 += 4;
-        phi_s2 += 4;
-        phi_s3 += 4;
-        phi_s4 += 4;
+        phi_s2 = &phi_s2[1];
+        phi_s3 = &phi_s3[1];
+        phi_s4 = &phi_s4[1];
         phi_s0 = temp_s0;
         phi_fp = phi_fp_2;
     } while ((u32) temp_s0 < (u32) &spB8);

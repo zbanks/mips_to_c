@@ -446,11 +446,11 @@ void EnHoll_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp18 = phi_a2_2;
         phi_a2_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_a2->words.w0 = 0xFA000000;
-        temp_a2_2 = temp_a2 + 8;
+        temp_a2_2 = &temp_a2[1];
         temp_a2->words.w1 = (u32) this->alpha;
         temp_a2_2->words.w1 = (u32) &gEnHollCentralPlaneDL;
         temp_a2_2->words.w0 = 0xDE000000;
-        temp_a2_3 = temp_a2_2 + 8;
+        temp_a2_3 = &temp_a2_2[1];
         if (this->alpha == 0xFF) {
             globalCtx->state.gfxCtx->polyOpa.p = temp_a2_3;
             return;

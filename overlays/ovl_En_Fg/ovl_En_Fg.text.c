@@ -79,7 +79,7 @@ struct _mips2c_stack_func_80A2D4B8 {
 
 struct _mips2c_stack_func_80A2D778 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ SkelAnime *sp20;                     /* inferred */
+    /* 0x20 */ u32 *sp20;                           /* inferred */
     /* 0x24 */ char pad_24[0x8];                    /* maybe part of sp20[3]? */
     /* 0x2C */ s16 sp2C;                            /* inferred */
     /* 0x2E */ s16 sp2E;                            /* inferred */
@@ -283,7 +283,7 @@ void func_80A2D4B8(Actor *arg0, GlobalContext *arg1) {
                     }
                     if (phi_v0 == 0) {
                         Audio_PlayActorSound2(arg0, 0x28B1U);
-                        EnFg_UpdateAnimation(arg0 + 0x148, 3);
+                        EnFg_UpdateAnimation((SkelAnime *) &arg0[1].flags, 3);
                         arg0->velocity.y = 10.0f;
                         arg0->unk_2F8 = Rand_S16Offset(0x1E, 0x1E);
                         arg0->unk_144 = func_80A2D778;
@@ -351,19 +351,19 @@ void func_80A2D4B8(Actor *arg0, GlobalContext *arg1) {
 void func_80A2D778(Actor *arg0, GlobalContext *arg1) {
     s16 sp2E;
     s16 sp2C;
-    SkelAnime *sp20;
-    SkelAnime *temp_a0;
+    u32 *sp20;
     f32 temp_f0;
     f32 temp_f0_2;
     f32 temp_f12;
     s16 temp_a0_2;
     s32 temp_v0;
+    u32 *temp_a0;
     void *temp_v1;
 
     temp_v0 = func_80A2D42C(arg0);
     if (temp_v0 != 1) {
         if (temp_v0 != 3) {
-            temp_a0 = arg0 + 0x148;
+            temp_a0 = &arg0[1].flags;
             if (temp_v0 == 4) {
                 temp_v1 = arg0->unk_194;
                 arg0->flags &= -2;
@@ -396,12 +396,12 @@ void func_80A2D778(Actor *arg0, GlobalContext *arg1) {
                 return;
             }
             sp20 = temp_a0;
-            if (func_801378B8(temp_a0, 8.0f) != 0) {
+            if (func_801378B8((SkelAnime *) temp_a0, 8.0f) != 0) {
                 arg0->unk_160 = 8.0f;
                 arg0->unk_164 = 0.0f;
             }
             if ((arg0->velocity.y <= 0.0f) && ((arg0->bgCheckFlags & 1) != 0)) {
-                EnFg_UpdateAnimation(temp_a0, 0);
+                EnFg_UpdateAnimation((SkelAnime *) temp_a0, 0);
                 arg0->unk_144 = func_80A2D4B8;
                 arg0->velocity.y = 0.0f;
                 return;
@@ -414,7 +414,7 @@ void func_80A2D778(Actor *arg0, GlobalContext *arg1) {
     }
     arg0->flags &= -2;
     Audio_PlayActorSound2(arg0, 0x28E3U);
-    EnFg_UpdateAnimation(arg0 + 0x148, 0);
+    EnFg_UpdateAnimation((SkelAnime *) &arg0[1].flags, 0);
     arg0->params = 5;
     arg0->unk_164 = 0.0f;
     arg0->world.rot.y = Math_Vec3f_Yaw(arg0->unk_194 + 0x24, (Vec3f *) &arg0->world);
@@ -545,7 +545,7 @@ void EnFg_PostLimbDraw(GraphicsContext **arg0, s32 arg1, u32 *arg2, Vec3s *arg3,
         sp28 = temp_v0;
         sp28->words.w1 = Matrix_NewMtx(*arg0);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *arg2;
         SysMatrix_StatePop();
@@ -581,22 +581,22 @@ void EnFg_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp4C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp4C->polyOpa.p;
-    sp4C->polyOpa.p = temp_v0 + 8;
+    sp4C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0;
     temp_v0->words.w0 = 0xE7000000;
     temp_v0_2 = sp4C->polyOpa.p;
-    sp4C->polyOpa.p = temp_v0_2 + 8;
+    sp4C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v1 = (this->actor.params * 4) + &sp50;
     temp_v0_2->words.w1 = temp_v1->unk_3 | (temp_v1->unk_0 << 0x18) | (temp_v1->unk_1 << 0x10) | (temp_v1->unk_2 << 8);
     temp_v0_3 = sp4C->polyOpa.p;
-    sp4C->polyOpa.p = temp_v0_3 + 8;
+    sp4C->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp4C = sp4C;
     sp3C = temp_v0_3;
     sp3C->words.w1 = Lib_SegmentedToVirtual(&D_060059A0);
     temp_v0_4 = sp4C->polyOpa.p;
-    sp4C->polyOpa.p = temp_v0_4 + 8;
+    sp4C->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060024;
     sp38 = temp_v0_4;
     sp38->words.w1 = Lib_SegmentedToVirtual(&D_060059A0);
@@ -685,8 +685,8 @@ void EnFg_UpdateDust(EnFgEffectDust *dustEffect) {
         }
         dustEffect->pos.y += dustEffect->velocity.y;
     }
-    temp_a0 = dustEffect + 0x3C;
-    if (dustEffect->unk_3C == 1) {
+    temp_a0 = &dustEffect[1];
+    if (dustEffect[1].type == 1) {
         temp_v1_2 = temp_a0->timer;
         temp_t9 = temp_v1_2 - 1;
         if (temp_v1_2 == 0) {
@@ -700,7 +700,7 @@ void EnFg_UpdateDust(EnFgEffectDust *dustEffect) {
         }
         temp_a0->pos.y += temp_a0->velocity.y;
     }
-    phi_a0 = temp_a0 + 0x3C;
+    phi_a0 = &temp_a0[1];
     do {
         temp_v0 = phi_v0 + 4;
         phi_v0 = temp_v0;
@@ -719,7 +719,7 @@ void EnFg_UpdateDust(EnFgEffectDust *dustEffect) {
             phi_a0->pos.y += phi_a0->velocity.y;
         }
         temp_a0_2 = phi_a0 + 0x3C;
-        if (phi_a0->unk_3C == 1) {
+        if (phi_a0[1].type == 1) {
             temp_v1_4 = temp_a0_2->unk_1;
             temp_t3 = temp_v1_4 - 1;
             if (temp_v1_4 == 0) {
@@ -799,11 +799,11 @@ void EnFg_DrawDust(GlobalContext *globalCtx, EnFgEffectDust *dustEffect) {
             if (phi_s6 == 0) {
                 temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0U);
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_0600B328;
                 temp_v0->words.w0 = 0xDE000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = 0;
                 temp_v0_2->words.w0 = 0xFB000000;
                 phi_s6 = 1;
@@ -815,11 +815,11 @@ void EnFg_DrawDust(GlobalContext *globalCtx, EnFgEffectDust *dustEffect) {
                 phi_f6 = temp_f6 + 4294967296.0f;
             }
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (s16) (s32) (phi_f6 * 15.9375f) & 0xFF;
             temp_v0_3->words.w0 = 0xFA000000;
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = 0;
             temp_v0_4->words.w0 = 0xE7000000;
             SysMatrix_InsertTranslation(phi_s2->pos.x, phi_s2->pos.y, phi_s2->pos.z, 0);
@@ -827,15 +827,15 @@ void EnFg_DrawDust(GlobalContext *globalCtx, EnFgEffectDust *dustEffect) {
             temp_f12 = phi_s2->xyScale;
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDB060020;
             temp_v0_6->words.w1 = Lib_SegmentedToVirtual(*(&D_80A2E5D4 + ((s16) (s32) ((f32) phi_s2->timer * 0.5f) * 4)));
             temp_v0_7 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_7 + 8;
+            temp_s0->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_0600B338;
             temp_v0_7->words.w0 = 0xDE000000;
         }

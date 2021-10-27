@@ -86,7 +86,7 @@ void func_80960CF0(Vec3f *arg0, void *arg1) {
 
     temp_s5 = arg1 + 0x24;
     Math_Vec3f_Copy(arg0, temp_s5);
-    phi_s0 = arg0 + 0xC;
+    phi_s0 = &arg0[1];
     phi_s3 = 1;
     if ((s32) *(&D_809615A8 + ((arg1->unk_1C & 3) * 2)) >= 2) {
         phi_s1 = 0;
@@ -94,7 +94,7 @@ void func_80960CF0(Vec3f *arg0, void *arg1) {
             Math_Vec3f_Copy(phi_s0, temp_s5);
             phi_s0->x += 80.0f * Math_SinS(phi_s1);
             temp_s3 = phi_s3 + 1;
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             temp_s0->unk_-4 = (f32) (phi_s0->z + (80.0f * Math_CosS(phi_s1)));
             phi_s0 = temp_s0;
             phi_s1 += 0x2000;
@@ -118,7 +118,7 @@ void func_80960E0C(Vec3f *arg0, void *arg1) {
             Math_Vec3f_Copy(phi_s0, arg1 + 0x24);
             phi_s0->x += (f32) phi_s1->unk_0 * Math_CosS(phi_s1->unk_2);
             temp_s2 = phi_s2 + 1;
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             temp_s0->unk_-4 = (f32) (phi_s0->z - ((f32) phi_s1->unk_0 * Math_SinS(phi_s1->unk_2)));
             phi_s0 = temp_s0;
             phi_s1 += 4;
@@ -142,7 +142,7 @@ void func_80960F0C(Vec3f *arg0, void *arg1) {
             Math_Vec3f_Copy(phi_s0, arg1 + 0x24);
             phi_s0->x += 80.0f * Math_SinS(phi_s1);
             temp_s3 = phi_s3 + 1;
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             temp_s0->unk_-4 = (f32) (phi_s0->z + (80.0f * Math_CosS(phi_s1)));
             phi_s0 = temp_s0;
             phi_s1 += 0x2000;

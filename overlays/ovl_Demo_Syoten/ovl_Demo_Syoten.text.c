@@ -27,6 +27,12 @@ typedef struct DemoSyoten {
     /* 0x3F4 */ void (*actionFunc)(DemoSyoten *, GlobalContext *);
 } DemoSyoten;                                       /* size = 0x3F8 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_DemoSyoten_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -813,7 +819,7 @@ void func_80C173B4(Actor *thisx, GlobalContext *globalCtx) {
         sp28 = temp_a2;
         func_8012C2DC(globalCtx->state.gfxCtx);
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
-        func_8018450C(globalCtx, thisx + 0x144, temp_a2, func_80C170F8, 0, thisx);
+        func_8018450C(globalCtx, &thisx[1], temp_a2, func_80C170F8, 0, thisx);
     }
 }
 
@@ -876,12 +882,12 @@ void DemoSyoten_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     if (this->unk_3DC != 0) {
         temp_v0 = sp2C->polyXlu.p;
-        sp2C->polyXlu.p = temp_v0 + 8;
+        sp2C->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = temp_v0;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = sp2C->polyXlu.p;
-        sp2C->polyXlu.p = temp_v0_2 + 8;
+        sp2C->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = (u32) this->unk_3DC;
     }
@@ -899,22 +905,22 @@ void func_80C17690(Actor *thisx, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C2DC(temp_a0);
     Matrix_RotateY((s16) (func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 1U);
-    if ((thisx->unk_3E4 & 8) != 0) {
+    if (((u16) thisx[3].home.rot.z & 8) != 0) {
         func_80C17468((void **) globalCtx);
     }
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp2C = temp_v0;
     sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    AnimatedMat_DrawStepXlu(globalCtx, thisx->unk_3E0, (u32) thisx->unk_3E6);
+    AnimatedMat_DrawStepXlu(globalCtx, thisx->unk_3E0, (u32) thisx[3].home.unk_12);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_06002880;
-    AnimatedMat_DrawStepXlu(globalCtx, thisx->unk_3E0, thisx->unk_3E6 + 5);
+    AnimatedMat_DrawStepXlu(globalCtx, thisx->unk_3E0, thisx[3].home.unk_12 + 5);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_06002A20;
 }

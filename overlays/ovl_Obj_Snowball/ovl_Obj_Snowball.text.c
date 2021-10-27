@@ -573,8 +573,8 @@ void func_80B03A80(GlobalContext *arg0, f32 arg1, f32 *arg2) {
         spD4 = spE0 * 0.17f;
         spD0 = temp_f18;
         spD8 += arg2->unk_0;
-        spDC += arg2->unk_4;
-        spE0 += arg2->unk_8;
+        spDC += arg2[1];
+        spE0 += arg2[2];
         phi_s2 = -0x190;
         phi_s3 = 1;
         if (temp_v0 == 0) {
@@ -629,16 +629,16 @@ void func_80B03E2C(Actor *arg0, GlobalContext *arg1) {
 
     arg0->unk_1C6 = (s16) (arg0->yawTowardsPlayer - 0x4000);
     temp_f6 = Rand_ZeroOne() * -600.0f;
-    arg0->unk_1F6 = (s16) (arg0->yawTowardsPlayer + 0x4000);
+    arg0[1].colChkInfo.cylHeight = arg0->yawTowardsPlayer + 0x4000;
     arg0->unk_1CC = (s16) (s32) temp_f6;
     arg0->unk_1FC = (s16) (s32) (Rand_ZeroOne() * 600.0f);
     phi_s1 = arg0;
     phi_s0 = arg0 + 0x1A8;
     phi_s4 = 0;
     do {
-        phi_s1->unk_1A8 = (f32) arg0->home.pos.x;
-        phi_s1->unk_1AC = (f32) (arg0->home.pos.y + (61.0f * arg0->unk_20C));
-        phi_s1->unk_1B0 = (f32) arg0->home.pos.z;
+        phi_s1[1].velocity.x = arg0->home.pos.x;
+        phi_s1[1].velocity.y = arg0->home.pos.y + (61.0f * arg0[1].shape.shadowDraw);
+        phi_s1[1].velocity.z = arg0->home.pos.z;
         temp_f20 = Math_SinS(phi_s1->unk_1C6);
         phi_s0->unk_C = (f32) ((Rand_ZeroOne() + 5.0f) * temp_f20);
         phi_s0->unk_10 = (f32) ((Rand_ZeroOne() * 11.0f) + 20.0f);
@@ -836,7 +836,7 @@ void func_80B04350(Actor *arg0, GlobalContext *arg1) {
 
 void func_80B04540(Actor *arg0, GlobalContext *arg1) {
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
-    arg0->unk_1A4 = func_80B0457C;
+    arg0[1].scale.z = func_80B0457C;
 }
 
 void func_80B0457C(Actor *arg0, GlobalContext *arg1) {
@@ -859,7 +859,7 @@ void func_80B04608(Actor *arg0) {
     arg0->draw = NULL;
     arg0->unk_208 = 0x32;
     arg0->floorPoly = NULL;
-    arg0->unk_1A4 = func_80B04648;
+    arg0[1].scale.z = func_80B04648;
 }
 
 void func_80B04648(GlobalContext *arg0, s32 arg1) {
@@ -900,10 +900,10 @@ void func_80B046E4(Actor *arg0, GlobalContext *arg1) {
     phi_s1 = 0;
     do {
         temp_a2 = &sp44;
-        sp44 = phi_s0->unk_1A8;
-        sp48 = phi_s0->unk_1AC - (60.0f * arg0->unk_20C);
-        sp4C = phi_s0->unk_1B0;
-        func_80B03A80(arg1, arg0->unk_20C, temp_a2);
+        sp44 = phi_s0[1].velocity.x;
+        sp48 = phi_s0[1].velocity.y - (60.0f * arg0[1].shape.shadowDraw);
+        sp4C = phi_s0[1].velocity.z;
+        func_80B03A80(arg1, arg0[1].shape.shadowDraw, temp_a2);
         temp_s1 = phi_s1 + 0x30;
         phi_s0 += 0x30;
         phi_s1 = temp_s1;
@@ -911,7 +911,7 @@ void func_80B046E4(Actor *arg0, GlobalContext *arg1) {
     arg0->draw = func_80B04D34;
     arg0->floorPoly = NULL;
     arg0->unk_208 = 0x32;
-    arg0->unk_1A4 = func_80B047C0;
+    arg0[1].scale.z = func_80B047C0;
 }
 
 void func_80B047C0(Actor *arg0, s32 arg1) {
@@ -936,7 +936,7 @@ void func_80B047C0(Actor *arg0, s32 arg1) {
     f32 phi_f12;
     s32 phi_s2;
     Actor *phi_s1_2;
-    void *phi_s0;
+    Vec3f *phi_s0;
     s32 phi_s2_2;
 
     phi_s1 = arg0;
@@ -963,7 +963,7 @@ void func_80B047C0(Actor *arg0, s32 arg1) {
             if (temp_s0->unk_10 <= 0.0f) {
                 SysMatrix_InsertRotation(temp_s0->unk_1C, temp_s0->unk_1E, temp_s0->unk_20, 0);
                 SysMatrix_MultiplyVector3fByState(&D_80B04FE4, (Vec3f *) &sp88);
-                temp_f12 = arg0->unk_20C * 60.0f * 0.9f;
+                temp_f12 = (bitwise f32) arg0[1].shape.shadowDraw * 60.0f * 0.9f;
                 phi_f12 = temp_f12;
                 if (sp8C > 0.0f) {
                     sp84 = temp_f12;
@@ -984,7 +984,7 @@ void func_80B047C0(Actor *arg0, s32 arg1) {
                     sp70 = temp_s0->unk_0;
                     sp74 = temp_s0->unk_4 - phi_f12;
                     sp78 = temp_s0->unk_8;
-                    func_80B03A80((bitwise GlobalContext *) phi_f12, (bitwise f32) arg1, (bitwise f32 *) arg0->unk_20C, &sp70);
+                    func_80B03A80((bitwise GlobalContext *) phi_f12, (bitwise f32) arg1, (f32 *) arg0[1].shape.shadowDraw, &sp70);
                 }
             }
         }
@@ -993,7 +993,7 @@ void func_80B047C0(Actor *arg0, s32 arg1) {
         phi_s2 = temp_s2;
     } while (temp_s2 < 0x60);
     arg0->unk_208 = (s8) (arg0->unk_208 - 1);
-    if (((s32) arg0->unk_208 <= 0) || ((phi_s1_2 = arg0, phi_s0 = arg0 + 0x1A8, ((arg0->unk_1D5 & 1) != 0)) && ((arg0->unk_205 & 1) != 0))) {
+    if (((s32) arg0->unk_208 <= 0) || ((phi_s1_2 = arg0, phi_s0 = &arg0[1].velocity, ((arg0->unk_1D5 & 1) != 0)) && ((arg0->unk_205 & 1) != 0))) {
         if (arg0->unk_20B != 0) {
             ActorCutscene_Stop((s16) arg0->cutscene);
         }
@@ -1023,7 +1023,7 @@ void func_80B047C0(Actor *arg0, s32 arg1) {
 }
 
 void func_80B04B48(Actor *arg0, s32 arg1) {
-    arg0->unk_1A4 = func_80B04B60;
+    arg0[1].scale.z = func_80B04B60;
 }
 
 void func_80B04B60(s32 arg0, ? arg1) {
@@ -1109,22 +1109,22 @@ void func_80B04D34(Actor *arg0, GlobalContext *arg1) {
                 temp_s1 = temp_a0;
                 func_8012C448(temp_a0);
                 temp_v0 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0 + 8;
+                temp_s1->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w0 = 0xFCFF97FF;
                 temp_v0->words.w1 = 0xFFFDFE38;
                 temp_v0_2 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_2 + 8;
+                temp_s1->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w0 = 0xFA000000;
                 temp_v0_2->words.w1 = (u32) temp_s0->unk_2C;
                 func_800C0094(temp_s0->unk_28, temp_s0->unk_0, temp_s0->unk_18, temp_s0->unk_8, (MtxF *) &sp88);
                 SysMatrix_SetCurrentState((MtxF *) &sp88);
                 Matrix_Scale(arg0->scale.x * 7.5f, 1.0f, arg0->scale.z * 7.5f, 1);
                 temp_v0_3 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_3 + 8;
+                temp_s1->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDA380003;
                 temp_v0_3->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
                 temp_v0_4 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_4 + 8;
+                temp_s1->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = (u32) D_04076BC0;
                 temp_v0_4->words.w0 = 0xDE000000;
             }

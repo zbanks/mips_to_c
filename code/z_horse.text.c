@@ -135,8 +135,8 @@ loop_1:
     }
     temp_v1_2 = Lib_SegmentedToVirtual(temp_v0->unk_4) + (arg2 * 6);
     arg3->unk_0 = (s16) temp_v1_2->unk_0;
-    arg3->unk_2 = (s16) temp_v1_2->unk_2;
-    arg3->unk_4 = (s16) temp_v1_2->unk_4;
+    arg3->unk_2 = (s16) temp_v1_2[1];
+    arg3->unk_4 = (s16) temp_v1_2[2];
     *arg4 = 0;
     return 1;
 }
@@ -221,7 +221,7 @@ void func_800F3C44(GlobalContext *arg0, SaveContext *arg1) {
     f32 phi_f2;
 
     if (func_800F3B68(arg0, arg1) != 0) {
-        if ((D_801BDA9C != 0) && ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0)) {
+        if ((D_801BDA9C != 0) && ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0)) {
             sp60.unk_0 = (f32) arg1->unk_24;
             sp60.unk_4 = (f32) arg1->unk_28;
             sp60.unk_8 = (f32) arg1->unk_2C;
@@ -239,7 +239,7 @@ void func_800F3C44(GlobalContext *arg0, SaveContext *arg1) {
         }
         temp_a0 = gSaveContext.horseData.scene;
         temp_a1 = arg0->sceneNum;
-        temp_v1 = *(gBitFlags + 0x38);
+        temp_v1 = gBitFlags[14];
         temp_v0_2 = gSaveContext.inventory.questItems;
         if ((temp_a0 == temp_a1) && ((temp_v1 & temp_v0_2) != 0)) {
             if (func_800F3A64(temp_a0, temp_a1) != 0) {

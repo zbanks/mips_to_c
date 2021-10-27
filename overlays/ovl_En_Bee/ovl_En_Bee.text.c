@@ -245,7 +245,7 @@ void func_80B5AC3C(EnBee *this, GlobalContext *globalCtx) {
         Math_Vec3f_Copy(phi_s2, (Vec3f *) temp_s5);
         temp_s1 = phi_s1 + 0xC;
         phi_f22 -= 16384.0f;
-        phi_s2 += 0xC;
+        phi_s2 = &phi_s2[1];
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x18);
     Math_Vec3f_Copy((Vec3f *) temp_s5, this + (this->unk_214 * 0xC) + 0x21C);
@@ -271,9 +271,9 @@ void func_80B5AF80(Actor *arg0, GlobalContext *arg1) {
     PosRot *sp34;
     PosRot *temp_a1;
 
-    if ((arg0->unk_206 == 0) && ((arg0->unk_24C & 2) != 0)) {
+    if ((arg0[1].shape.face == 0) && ((arg0->unk_24C & 2) != 0)) {
         func_801A7328(arg0 + 0xEC, 0x304A);
-        arg0->unk_206 = 5;
+        arg0[1].shape.face = 5;
     }
     if ((arg0->unk_24D & 2) != 0) {
         Enemy_StartFinishingBlow(arg1, arg0);

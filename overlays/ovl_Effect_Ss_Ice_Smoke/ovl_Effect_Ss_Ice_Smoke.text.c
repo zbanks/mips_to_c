@@ -54,11 +54,11 @@ void EffectSsIceSmoke_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
     temp_s1 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v1 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1 + 8;
+    temp_s1->polyXlu.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFA000000;
     temp_v1->words.w1 = (this->regs[0] & 0xFF) | 0xC3EBEB00;
     temp_v1_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1_2 + 8;
+    temp_s1->polyXlu.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060020;
     temp_v0 = this->life;
     sp44 = temp_v1_2;
@@ -70,11 +70,11 @@ void EffectSsIceSmoke_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
     temp_v0_2 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     if (temp_v0_2 != 0) {
         temp_v1_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_3 + 8;
+        temp_s1->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w1 = (u32) temp_v0_2;
         temp_v1_3->words.w0 = 0xDA380003;
         temp_v1_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_4 + 8;
+        temp_s1->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w1 = (u32) &D_040510B0;
         temp_v1_4->words.w0 = 0xDE000000;
     }

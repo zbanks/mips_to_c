@@ -214,12 +214,12 @@ void func_80A34A44(ObjEntotu *arg0, GlobalContext *arg1) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000158;
     temp_v0_2->words.w0 = 0xDE000000;
 }
@@ -311,21 +311,21 @@ void func_80A34B28(ObjEntotu *arg0, GlobalContext *arg1) {
         temp_s1 = temp_a0_2;
         func_8012C28C(temp_a0_2);
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060020;
         sp44 = temp_v0_2;
         sp44->words.w1 = Gfx_TwoTexScroll(arg1->state.gfxCtx, 0, 0U, (u32) sp57, 0x20, 0x20, 1, 0U, (u32) sp56, 0x20, 0x20);
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDB060024;
         sp40 = temp_v0_3;
         sp40->words.w1 = Lib_SegmentedToVirtual(arg0 + 0x148);
         temp_v0_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_4 + 8;
+        temp_s1->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         temp_v0_4->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = (u32) &D_06001C00;
     }

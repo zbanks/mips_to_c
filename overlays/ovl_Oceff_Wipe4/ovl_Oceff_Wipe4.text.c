@@ -467,8 +467,8 @@ void OceffWipe4_Draw(Actor *thisx, GlobalContext *globalCtx) {
     spA4 = globalCtx->state.frames & 0xFFF;
     temp_t4 = globalCtx->cameraPtrs[globalCtx->activeCamera];
     sp84.unk_0 = temp_t4->eye.x;
-    sp84.unk_4 = (f32) temp_t4->eye.y;
-    sp84.unk_8 = (f32) temp_t4->eye.z;
+    (&sp84)[1] = temp_t4->eye.y;
+    (&sp84)[2] = temp_t4->eye.z;
     func_800E01B8(&sp74, globalCtx->cameraPtrs[globalCtx->activeCamera]);
     temp_v1 = this->unk_144;
     phi_v1 = (s32) temp_v1;
@@ -504,32 +504,32 @@ void OceffWipe4_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertXRotation_s(0x708, 1);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -sp9C, 1);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp68 = temp_v0_2;
     sp68->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     if (this->actor.params == 1) {
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_8099E578;
         temp_v0_3->words.w0 = 0xDE000000;
     } else {
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_8099E510;
         temp_v0_4->words.w0 = 0xDE000000;
     }
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_8099E5E0;
     temp_v0_5->words.w0 = 0xDE000000;
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDE000000;
     sp58 = temp_v0_6;
     sp58->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, spA4 * 2, spA4 * -2, 0x20, 0x40, 1, (u32) -spA4, (u32) spA4, 0x20, 0x20);
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = (u32) &D_8099E638;
     temp_v0_7->words.w0 = 0xDE000000;
 }

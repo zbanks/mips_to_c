@@ -130,7 +130,7 @@ void EnTimeTag_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
     this->actionFunc = func_80ACA268;
     this->actor.flags |= 0x2000000;
-    if ((*(gBitFlags + 0x3C) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[15] & gSaveContext.inventory.questItems) != 0) {
         this->actor.textId = 0xC02;
         return;
     }
@@ -162,7 +162,7 @@ void func_80AC9FE4(EnTimeTag *this, GlobalContext *globalCtx) {
         this->actionFunc = func_80AC9FD4;
         temp_v1 = gSaveContext.inventory.questItems;
         gSaveContext.unk_3DD0[3] = 0;
-        if (((gBitFlags->unk_0 & temp_v1) != 0) && ((gBitFlags->unk_4 & temp_v1) != 0) && ((gBitFlags->unk_8 & temp_v1) != 0) && ((gBitFlags->unk_C & temp_v1) != 0)) {
+        if (((gBitFlags->unk_0 & temp_v1) != 0) && ((gBitFlags[1] & temp_v1) != 0) && ((gBitFlags[2] & temp_v1) != 0) && ((gBitFlags[3] & temp_v1) != 0)) {
             gSaveContext.weekEventReg[25] |= 2;
             return;
         }
@@ -222,7 +222,7 @@ void func_80ACA268(EnTimeTag *this, GlobalContext *globalCtx) {
         this->actionFunc = func_80ACA208;
         return;
     }
-    if ((this->actor.xzDistToPlayer < 100.0f) && (Actor_IsLinkFacingActor((Actor *) this, 0x3000, globalCtx) != 0) && ((Flags_GetSwitch(globalCtx, this->actor.params & 0x7F) != 0) || ((*(gBitFlags + 0x3C) & gSaveContext.inventory.questItems) != 0))) {
+    if ((this->actor.xzDistToPlayer < 100.0f) && (Actor_IsLinkFacingActor((Actor *) this, 0x3000, globalCtx) != 0) && ((Flags_GetSwitch(globalCtx, this->actor.params & 0x7F) != 0) || ((gBitFlags[15] & gSaveContext.inventory.questItems) != 0))) {
         this->actor.flags |= 1;
         func_800B8614((Actor *) this, globalCtx, 110.0f);
     }
@@ -327,7 +327,7 @@ void func_80ACA418(EnTimeTag *this, GlobalContext *globalCtx) {
 }
 
 void func_80ACA5F8(EnTimeTag *this, GlobalContext *globalCtx) {
-    Actor *temp_v0;
+    f32 temp_v0;
 
     if (func_800B84D0((Actor *) this, globalCtx) != 0) {
         if (gSaveContext.playerForm == 2) {
@@ -339,9 +339,9 @@ void func_80ACA5F8(EnTimeTag *this, GlobalContext *globalCtx) {
             this->actor.home.rot.x = 1;
         } else {
             func_801518B0(globalCtx, 0x122AU, (Actor *) this);
-            temp_v0 = globalCtx->actorCtx.actorList[2].first->unk_A80;
+            temp_v0 = globalCtx->actorCtx.actorList[2].first[8].scale.z;
             temp_v0->unk_264 = (u16) (temp_v0->unk_264 | 4);
-            func_800B86C8((Actor *) this, globalCtx, globalCtx->actorCtx.actorList[2].first->unk_A80);
+            func_800B86C8((Actor *) this, globalCtx, (bitwise Actor *) globalCtx->actorCtx.actorList[2].first[8].scale.z);
             this->actor.home.rot.x = 0;
         }
         this->actionFunc = func_80ACA418;
@@ -387,7 +387,7 @@ void func_80ACA840(EnTimeTag *this, GlobalContext *globalCtx) {
     u8 temp_v0;
     f32 phi_f0;
 
-    if ((globalCtx->sceneNum != 0x61) || (gSaveContext.inventory.items[gItemSlots[0x2D]] != 0x2D)) {
+    if ((globalCtx->sceneNum != 0x61) || (gSaveContext.inventory.items[gItemSlots[45]] != 0x2D)) {
         temp_t0 = gSaveContext.time;
         temp_f0 = (f32) temp_t0;
         phi_f0 = temp_f0;

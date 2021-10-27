@@ -83,11 +83,11 @@ void func_80A4FDD0(EnDnbParticle *arg0, EnDnb *arg1, void *arg2, s32 arg3) {
     sp20 = (f32) temp_v0->unk_2 + arg1->dyna.actor.world.pos.y;
     sp24 = (f32) temp_v0->unk_4 + arg1->dyna.actor.world.pos.z;
     arg0->unk_00.x = temp_a1->unk_0;
-    arg0->unk_00.y = temp_a1->unk_4;
-    arg0->unk_00.z = temp_a1->unk_8;
+    arg0->unk_00.y = temp_a1[1];
+    arg0->unk_00.z = temp_a1[2];
     arg0->unk_0C.x = temp_a1->unk_0;
-    arg0->unk_0C.y = temp_a1->unk_4;
-    arg0->unk_0C.z = temp_a1->unk_8;
+    arg0->unk_0C.y = temp_a1[1];
+    arg0->unk_0C.z = temp_a1[2];
     arg0->unk_24 = Math_Vec3f_Yaw(arg1 + 0x24, (Vec3f *) temp_a1);
     arg0->unk_18 = (unaligned s32) D_801D15BC.unk_0;
     arg0->unk_18.z = (u16) D_801D15BC.z;
@@ -163,7 +163,7 @@ s32 func_80A500F8(EnDnb *arg0) {
         sp9C = Math_SinS(phi_s1) * temp_f20;
         spA4 = Math_CosS(phi_s1) * temp_f20;
         spA0 = Rand_ZeroOne() * 180.0f;
-        func_80A507C0(arg0 + 0xD38, (Vec3f) subroutine_arg1, (bitwise Vec3f) spA8.unk_4, (u8) (bitwise Vec3f) spA8.unk_8, temp_fp->unk_0, temp_fp->unk_4, temp_fp->unk_8, 0x10, 50.0f, 30.0f);
+        func_80A507C0(arg0 + 0xD38, (Vec3f) subroutine_arg1, (bitwise Vec3f) spA8.unk_4, (u8) (bitwise Vec3f) spA8.unk_8, temp_fp->unk_0, temp_fp[1], temp_fp[2], 0x10, 50.0f, 30.0f);
         temp_s2 = phi_s2 + 1;
         phi_s1 += 0x1000;
         phi_s2 = temp_s2;
@@ -294,11 +294,11 @@ void func_80A50510(EnDnb *arg0, GraphicsContext **arg1) {
         Matrix_RotateY(phi_s0->particles[0].unk_18.y, 1U);
         SysMatrix_InsertZRotation_s(phi_s0->particles[0].unk_18.z, 1);
         temp_v0 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0 + 8;
+        temp_s2->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_2 + 8;
+        temp_s2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *phi_s4;
         SysMatrix_StatePop();
@@ -334,11 +334,11 @@ void func_80A5063C(EnDnb *arg0, GraphicsContext **arg1) {
         Matrix_RotateY(phi_s0->particles[0].unk_18.y, 1U);
         SysMatrix_InsertZRotation_s(phi_s0->particles[0].unk_18.z, 1);
         temp_v0 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0 + 8;
+        temp_s2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *phi_s4;
         SysMatrix_StatePop();
@@ -426,7 +426,7 @@ s32 func_80A5086C(EnDnbUnkStruct *arg0) {
         }
         temp_a0 = phi_a0 + 0x28;
         phi_v1 = phi_v1_2;
-        if (phi_a0->unk_28 == 1) {
+        if (phi_a0[1].isEnabled == 1) {
             temp_a1_2 = temp_a0->unk_1;
             phi_v1 = phi_v1_2 + 1;
             if (temp_a1_2 != 0) {
@@ -480,11 +480,11 @@ s32 func_80A50950(EnDnbUnkStruct *arg0, GlobalContext *globalCtx) {
             if (phi_s7 == 0) {
                 temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0U);
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_06000000;
                 temp_v0->words.w0 = 0xDE000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = -0x100;
                 temp_v0_2->words.w0 = 0xFB000000;
                 phi_s7 = 1;
@@ -498,7 +498,7 @@ s32 func_80A50950(EnDnbUnkStruct *arg0, GlobalContext *globalCtx) {
             }
             phi_s1->unk_24 = ((f32) phi_s1->unk_01 / phi_f16) * 255.0f;
             temp_v1 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1 + 8;
+            temp_s0->polyXlu.p = &temp_v1[1];
             temp_v1->words.w0 = 0xFA000000;
             temp_v1->words.w1 = ((u32) phi_s1->unk_24 & 0xFF) | ~0xFF;
             SysMatrix_InsertTranslation(phi_s1->unk_0C.x, phi_s1->unk_0C.y, phi_s1->unk_0C.z, 0);
@@ -506,7 +506,7 @@ s32 func_80A50950(EnDnbUnkStruct *arg0, GlobalContext *globalCtx) {
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             SysMatrix_NormalizeXYZ(temp_s3);
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDA380003;
             temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_t3 = phi_s1->unk_02;
@@ -516,11 +516,11 @@ s32 func_80A50950(EnDnbUnkStruct *arg0, GlobalContext *globalCtx) {
                 phi_f10 = temp_f10 + 4294967296.0f;
             }
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDB060020;
             temp_v0_4->words.w1 = Lib_SegmentedToVirtual(*(&D_80A50CBC + ((s32) (((f32) phi_s1->unk_01 / phi_f10) * 8.0f) * 4)));
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_06000020;
             temp_v0_5->words.w0 = 0xDE000000;
             SysMatrix_StatePop();

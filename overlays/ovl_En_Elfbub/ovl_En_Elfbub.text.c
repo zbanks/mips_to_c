@@ -103,11 +103,11 @@ void func_80ACDE60(Actor *arg0, GlobalContext *arg1) {
 
     Math_SmoothStepToF(arg0 + 0x19C, 3.0f, 0.1f, 1000.0f, 0.0f);
     Math_SmoothStepToF(arg0 + 0x198, 0.2f, 0.1f, 1000.0f, 0.0f);
-    arg0->unk_192 = (s16) (arg0->unk_192 + 0x3E8);
-    arg0->unk_196 = (s16) (arg0->unk_196 - 1);
-    arg0->unk_190 = (s16) (arg0->unk_190 + arg0->unk_192);
+    arg0[1].focus.unk_12 += 0x3E8;
+    arg0[1].unk_52 += -1;
+    arg0[1].focus.rot.z += arg0[1].focus.unk_12;
     phi_s0 = 0;
-    if ((s32) arg0->unk_196 <= 0) {
+    if ((s32) arg0[1].unk_52 <= 0) {
         sp6C = arg0->world.pos.x;
         sp70 = arg0->world.pos.y;
         temp_s3 = &sp78;
@@ -179,12 +179,12 @@ void EnElfbub_Draw(Actor *thisx, GlobalContext *globalCtx) {
     Matrix_Scale(this->unk_198 + 1.0f, 1.0f, 1.0f, 1);
     SysMatrix_InsertZRotation_s((s16) ((s32) this->unk_190 * -1), 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp2C = temp_v0;
     sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06001000;
     temp_v0_2->words.w0 = 0xDE000000;
 }

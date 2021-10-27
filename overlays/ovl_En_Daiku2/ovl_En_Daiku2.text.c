@@ -148,7 +148,7 @@ void func_80BE61D0(Actor *arg0) {
         temp_a0 = arg0->unk_258;
         temp_a2 = arg0 + 0x268;
         if (temp_a0 != 0) {
-            temp_a1 = arg0->unk_25C;
+            temp_a1 = arg0[1].freezeTimer;
             arg0 = arg0;
             if (func_8013D68C(temp_a0, temp_a1, temp_a2) == 0) {
                 Actor_MarkForDeath(arg0);
@@ -644,18 +644,18 @@ void EnDaiku2_PostLimbDraw(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *
         temp_f12 = arg4->unk_260;
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp20 = temp_v0;
         sp20->words.w1 = Matrix_NewMtx(*arg0);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06009638;
         temp_v0_2->words.w0 = 0xDE000000;
     }
     if (arg1 == 0xF) {
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_0600A390;
         temp_v0_3->words.w0 = 0xDE000000;
     }
@@ -671,7 +671,7 @@ void EnDaiku2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFB000000;
     temp_v1->words.w1 = 0xF59B00FF;
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, NULL, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) EnDaiku2_PostLimbDraw, (Actor *) this);
@@ -745,7 +745,7 @@ void func_80BE7600(EnDaiku2 *this, GlobalContext *globalCtx) {
             }
         }
         temp_v0 = phi_v0 + 0x38;
-        if (phi_v0->unk_38 != 0) {
+        if (phi_v0[1].isEnabled != 0) {
             temp_f0_2 = temp_v0->unk_14;
             temp_f8 = temp_v0->unk_8 + temp_f0_2;
             temp_v0->unk_4 = (f32) (temp_v0->unk_4 + temp_v0->unk_10);
@@ -790,11 +790,11 @@ void func_80BE7718(EnDaiku2 *this, GlobalContext *globalCtx) {
     temp_v0 = Object_GetIndex(temp_s0, 0x12A);
     if ((temp_v0 >= 0) && (Object_IsLoaded(temp_s0, temp_v0) != 0)) {
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = 0;
         temp_v0_2->words.w0 = 0xE7000000;
         temp_v0_3 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_3 + 8;
+        temp_s2->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDB060018;
         temp_v0_3->words.w1 = (u32) globalCtx->objectCtx.status[temp_v0].segment;
         phi_s1 = temp_s1;
@@ -809,11 +809,11 @@ void func_80BE7718(EnDaiku2 *this, GlobalContext *globalCtx) {
                 temp_f12 = phi_s1->unk_30;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_v0_4 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_4 + 8;
+                temp_s2->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDA380003;
                 temp_v0_4->words.w1 = Matrix_NewMtx(temp_fp);
                 temp_v0_5 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_5 + 8;
+                temp_s2->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = (u32) &D_060009E0;
                 temp_v0_5->words.w0 = 0xDE000000;
                 SysMatrix_StatePop();

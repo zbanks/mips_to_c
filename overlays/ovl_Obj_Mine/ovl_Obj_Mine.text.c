@@ -231,7 +231,7 @@ struct _mips2c_stack_func_80A832BC {};              /* size 0x0 */
 struct _mips2c_stack_func_80A832D0 {
     /* 0x00 */ char pad_0[0x30];
     /* 0x30 */ Actor *sp30;                         /* inferred */
-    /* 0x34 */ void *sp34;                          /* inferred */
+    /* 0x34 */ f32 *sp34;                           /* inferred */
     /* 0x38 */ char pad_38[0xC];                    /* maybe part of sp34[4]? */
     /* 0x44 */ f32 sp44;                            /* inferred */
     /* 0x48 */ f32 sp48;                            /* inferred */
@@ -268,7 +268,7 @@ struct _mips2c_stack_func_80A83B14 {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80A83B28 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ Vec3f *sp24;                         /* inferred */
+    /* 0x24 */ f32 *sp24;                           /* inferred */
     /* 0x28 */ Actor *sp28;                         /* inferred */
     /* 0x2C */ char pad_2C[0x6];                    /* maybe part of sp28[2]? */
     /* 0x32 */ s16 sp32;                            /* inferred */
@@ -295,7 +295,7 @@ struct _mips2c_stack_func_80A83FBC {
 
 struct _mips2c_stack_func_80A84088 {
     /* 0x00 */ char pad_0[0x4C];
-    /* 0x4C */ void *sp4C;                          /* inferred */
+    /* 0x4C */ f32 *sp4C;                           /* inferred */
     /* 0x50 */ char pad_50[0x30];                   /* maybe part of sp4C[13]? */
     /* 0x80 */ GraphicsContext *sp80;               /* inferred */
     /* 0x84 */ char pad_84[0x4];
@@ -321,10 +321,10 @@ void func_80A8131C(ObjMine *arg0, GlobalContext *arg1); /* static */
 void func_80A81384(Actor *arg0, GlobalContext *arg1); /* static */
 s32 func_80A8140C(Actor *arg0);                     /* static */
 void func_80A8146C(Actor *arg0, s16 *arg1, s16 *arg2); /* static */
-void func_80A81544(Actor *arg0, Vec3f *arg1, Vec3f *); /* static */
+void func_80A81544(Actor *arg0, Vec3f *arg1, f32 *); /* static */
 void func_80A81640(Actor *arg0);                    /* static */
 void func_80A8164C(f32 *arg0);                      /* static */
-void func_80A81684(void *arg0);                     /* static */
+void func_80A81684(f32 *arg0);                      /* static */
 ? func_80A81714(Vec3f *arg0, Vec3f *arg1, f32 arg2); /* static */
 void func_80A81818(Actor *arg0);                    /* static */
 void func_80A81868(ObjMine *arg0, s32 arg1);        /* static */
@@ -396,8 +396,8 @@ s32 func_80A81288(Vec3f *arg0, f32 *arg1, f32 *arg2, f32 *arg3) {
     }
     temp_f2 = 1.0f / temp_f0;
     arg1->unk_0 = arg0->x * temp_f2;
-    arg1->unk_4 = (f32) (arg0->y * temp_f2);
-    arg1->unk_8 = (f32) (arg0->z * temp_f2);
+    arg1[1] = arg0->y * temp_f2;
+    arg1[2] = arg0->z * temp_f2;
     *arg2 = temp_f0;
     *arg3 = temp_f2;
     return 1;
@@ -429,7 +429,7 @@ s32 func_80A8140C(Actor *arg0) {
     if ((arg0->unk_157 & 1) != 0) {
         return 1;
     }
-    if (((arg0->unk_156 & 2) != 0) && (temp_v0 = arg0->unk_150, (temp_v0->unk_0 == 0x185)) && (arg0->room == temp_v0->unk_3)) {
+    if (((arg0->unk_156 & 2) != 0) && (temp_v0 = arg0[1].home.pos.y, (temp_v0->unk_0 == 0x185)) && (arg0->room == temp_v0->unk_3)) {
         return 1;
     }
     return 0;
@@ -447,7 +447,7 @@ void func_80A8146C(Actor *arg0, s16 *arg1, s16 *arg2) {
     void *temp_v1;
 
     temp_a1 = arg0->unk_160;
-    temp_s0 = arg0->unk_14C;
+    temp_s0 = arg0[1].home.pos.x;
     arg0 = arg0;
     Math_Vec3s_ToVec3f((Vec3f *) &sp40, temp_a1 + 0x30);
     temp_a0 = temp_s0 + 0x24;
@@ -476,7 +476,7 @@ void func_80A81544(Actor *arg0, Vec3f *arg1) {
     void *temp_v1;
 
     temp_a2 = arg0->unk_160;
-    temp_v1 = arg0->unk_14C;
+    temp_v1 = arg0[1].home.pos.x;
     temp_v0 = temp_a2 + 0x30;
     if ((*temp_a2->world.pos.x & 0x13820) != 0) {
         sp2C = temp_v1;
@@ -505,30 +505,30 @@ void func_80A8164C(f32 *arg0) {
 
     temp_v0 = SysMatrix_GetCurrentState();
     temp_v0->mf[3][0] = arg0->unk_0;
-    temp_v0->mf[3][1] = arg0->unk_4;
-    temp_v0->mf[3][2] = arg0->unk_8;
+    temp_v0->mf[3][1] = arg0[1];
+    temp_v0->mf[3][2] = arg0[2];
 }
 
-void func_80A81684(void *arg0) {
+void func_80A81684(f32 *arg0) {
     MtxF *temp_v0;
 
     temp_v0 = SysMatrix_GetCurrentState();
     temp_v0->mf[0][0] = arg0->unk_0;
-    temp_v0->mf[0][1] = arg0->unk_4;
+    temp_v0->mf[0][1] = arg0[1];
     temp_v0->mf[0][3] = 0.0f;
-    temp_v0->mf[0][2] = arg0->unk_8;
-    temp_v0->mf[1][0] = arg0->unk_C;
-    temp_v0->mf[1][1] = arg0->unk_10;
+    temp_v0->mf[0][2] = arg0[2];
+    temp_v0->mf[1][0] = arg0[3];
+    temp_v0->mf[1][1] = arg0[4];
     temp_v0->mf[1][3] = 0.0f;
-    temp_v0->mf[1][2] = arg0->unk_14;
-    temp_v0->mf[2][0] = arg0->unk_18;
-    temp_v0->mf[2][1] = arg0->unk_1C;
+    temp_v0->mf[1][2] = arg0[5];
+    temp_v0->mf[2][0] = arg0[6];
+    temp_v0->mf[2][1] = arg0[7];
     temp_v0->mf[2][3] = 0.0f;
     temp_v0->mf[3][0] = 0.0f;
     temp_v0->mf[3][1] = 0.0f;
     temp_v0->mf[3][2] = 0.0f;
     temp_v0->mf[3][3] = 1.0f;
-    temp_v0->mf[2][2] = arg0->unk_20;
+    temp_v0->mf[2][2] = arg0[8];
 }
 
 ? func_80A81714(Vec3f *arg0, Vec3f *arg1, f32 arg2) {
@@ -616,9 +616,9 @@ void func_80A81868(ObjMine *arg0, s32 arg1) {
 block_7:
             do {
                 temp_v1_2 = phi_v1_2 + 4;
-                phi_a2_2->unk_4 = 0x4000;
-                phi_a2_2->unk_8 = 0x4000;
-                phi_a2_2->unk_C = 0x4000;
+                phi_a2_2[2] = 0x4000;
+                phi_a2_2[4] = 0x4000;
+                phi_a2_2[6] = 0x4000;
                 temp_a2_3 = phi_a2_2 + 0x10;
                 temp_a2_3->unk_-10 = 0x4000;
                 phi_a2_2 = temp_a2_3;
@@ -660,9 +660,9 @@ void func_80A81A00(Actor *arg0) {
 
     temp_a3 = arg0;
     temp_a0 = &sp28;
-    sp28 = -temp_a3->unk_1E8;
+    sp28 = -temp_a3[1].colChkInfo.displacement.x;
     sp2C = 1.0f;
-    temp_f10 = temp_a3->unk_1EC;
+    temp_f10 = temp_a3[1].colChkInfo.displacement.y;
     arg0 = temp_a3;
     sp30 = -temp_f10;
     func_80A8120C((Vec3f *) temp_a0, temp_a3 + 0x1C4, temp_a3);
@@ -682,17 +682,17 @@ void func_80A81AA4(Actor *arg0) {
     f32 temp_f0;
 
     temp_f0 = -(((f32) (arg0->params & 0x3F) * 12.0f) + 10.0f);
-    arg0->world.pos.x = (arg0->unk_1C4 * temp_f0) + arg0->home.pos.x;
+    arg0->world.pos.x = (arg0[1].floorPoly * temp_f0) + arg0->home.pos.x;
     arg0->world.pos.y = (arg0->unk_1C8 * temp_f0) + arg0->home.pos.y;
-    arg0->world.pos.z = (arg0->unk_1CC * temp_f0) + arg0->home.pos.z;
+    arg0->world.pos.z = (arg0[1].floorHeight * temp_f0) + arg0->home.pos.z;
 }
 
 void func_80A81B14(Actor *arg0) {
     f32 temp_f0;
 
     temp_f0 = 1.0f / (((f32) (arg0->params & 0x3F) * 12.0f) + 10.0f);
-    arg0->unk_1E8 = (f32) ((arg0->world.pos.x - arg0->home.pos.x) * temp_f0);
-    arg0->unk_1EC = (f32) ((arg0->world.pos.z - arg0->home.pos.z) * temp_f0);
+    arg0[1].colChkInfo.displacement.x = (arg0->world.pos.x - arg0->home.pos.x) * temp_f0;
+    arg0[1].colChkInfo.displacement.y = (arg0->world.pos.z - arg0->home.pos.z) * temp_f0;
 }
 
 void func_80A81B7C(ObjMine *arg0, s32 arg1) {
@@ -810,7 +810,7 @@ void func_80A81E7C(Actor *arg0, s32 arg1) {
     void *temp_v1;
 
     arg0->unk_1F8 = 0;
-    if (arg0->unk_1EC > -0.000001f) {
+    if (arg0[1].colChkInfo.displacement.y > -0.000001f) {
         temp_v1 = arg0 + 0x1B8;
         if (temp_v1->unk_34 <= Math3D_XZDistanceSquared(arg0->home.pos.x, arg0->home.pos.z, arg0->world.pos.x, arg0->world.pos.z)) {
             temp_a0 = &sp58;
@@ -888,19 +888,19 @@ void func_80A828A8(Actor *arg0) {
         spC4 = temp_v1;
         arg0 = arg0;
         do {
-            phi_s0->unk_30 = (f32) (phi_s0->unk_30 + phi_s0->unk_3C);
-            phi_s0->unk_34 = (f32) (phi_s0->unk_34 + phi_s0->unk_40);
-            phi_s0->unk_38 = (f32) (phi_s0->unk_38 + phi_s0->unk_44);
+            phi_s0[4].x += phi_s0[5].x;
+            phi_s0[4].y += phi_s0[5].y;
+            phi_s0[4].z += phi_s0[5].z;
             Math_Vec3f_Scale(phi_s0 + 0x30, *sp70);
             temp_s1 = phi_s0 + 0x24;
             Math_Vec3f_Copy((Vec3f *) &sp90, temp_s1);
-            temp_f0 = phi_s0->unk_34;
-            phi_s0->unk_24 = (f32) (phi_s0->unk_24 + phi_s0->unk_30);
-            phi_s0->unk_28 = (f32) (phi_s0->unk_28 + temp_f0);
-            phi_s0->unk_2C = (f32) (phi_s0->unk_2C + phi_s0->unk_38);
+            temp_f0 = phi_s0[4].y;
+            phi_s0[3].x += phi_s0[4].x;
+            phi_s0[3].y += temp_f0;
+            phi_s0[3].z += phi_s0[4].z;
             phi_s5 = 0;
-            if ((phi_s0->unk_28 <= arg0->home.pos.y) && (temp_f0 < 0.0f)) {
-                phi_s0->unk_34 = (f32) (temp_f0 * 0.1f);
+            if ((phi_s0[3].y <= arg0->home.pos.y) && (temp_f0 < 0.0f)) {
+                phi_s0[4].y = temp_f0 * 0.1f;
             }
             Math_Vec3f_Diff(temp_s1, (Vec3f *) &sp84, (Vec3f *) &spA8);
             if ((func_80A81288((Vec3f *) &spA8, &sp9C, &sp7C, &sp78) != 0) && (sp7C > 4.0f)) {
@@ -922,26 +922,26 @@ void func_80A828A8(Actor *arg0) {
             if (phi_s5 != 0) {
                 Math_Vec3f_Copy(phi_s0, (Vec3f *) &spC8);
                 Math_Vec3f_Copy(phi_s0 + 0xC, (Vec3f *) &spD4);
-                Math_Vec3f_Copy(phi_s0 + 0x18, (Vec3f *) &spE0);
+                Math_Vec3f_Copy(&phi_s0[2], (Vec3f *) &spE0);
             } else {
                 sp7C = 4.0f;
             }
             if (sp7C >= 6.0f) {
-                temp_f2 = phi_s0->unk_C * 6.0f;
-                phi_s0->unk_24 = (f32) (temp_f2 + sp84);
-                phi_s0->unk_28 = (f32) ((phi_s0->unk_10 * 6.0f) + sp88);
-                phi_s0->unk_2C = (f32) ((phi_s0->unk_14 * 6.0f) + sp8C);
+                temp_f2 = phi_s0[1].x * 6.0f;
+                phi_s0[3].x = temp_f2 + sp84;
+                phi_s0[3].y = (phi_s0[1].y * 6.0f) + sp88;
+                phi_s0[3].z = (phi_s0[1].z * 6.0f) + sp8C;
                 phi_f2 = temp_f2;
             } else {
-                temp_f0_2 = phi_s0->unk_C;
-                phi_s0->unk_24 = (f32) ((temp_f0_2 * sp7C) + sp84);
-                phi_s0->unk_28 = (f32) ((phi_s0->unk_10 * sp7C) + sp88);
-                phi_s0->unk_2C = (f32) ((phi_s0->unk_14 * sp7C) + sp8C);
+                temp_f0_2 = phi_s0[1].x;
+                phi_s0[3].x = (temp_f0_2 * sp7C) + sp84;
+                phi_s0[3].y = (phi_s0[1].y * sp7C) + sp88;
+                phi_s0[3].z = (phi_s0[1].z * sp7C) + sp8C;
                 phi_f2 = temp_f0_2 * 6.0f;
             }
             temp_s6 = phi_s6 + 1;
-            temp_s0_2 = phi_s0 + 0x48;
-            sp84 = phi_s0->unk_24 + phi_f2;
+            temp_s0_2 = &phi_s0[6];
+            sp84 = phi_s0[3].x + phi_f2;
             sp88 = temp_s0_2->unk_-20 + (temp_s0_2->unk_-38 * 6.0f);
             sp8C = temp_s0_2->unk_-1C + (temp_s0_2->unk_-34 * 6.0f);
             phi_s0 = temp_s0_2;
@@ -1133,7 +1133,7 @@ void func_80A83214(Actor *arg0) {
     arg0->scale.x = 0.02f;
     arg0->scale.y = 0.02f;
     arg0->scale.z = 0.02f;
-    arg0->unk_1A4 = func_80A83258;
+    arg0[1].scale.z = func_80A83258;
 }
 
 void func_80A83258(Actor *arg0, ? arg1) {
@@ -1169,12 +1169,16 @@ void func_80A832D0(Actor *arg0, GlobalContext *arg1) {
     f32 sp4C;
     f32 sp48;
     f32 sp44;
-    void *sp34;
+    f32 *sp34;
     Actor *sp30;
     Actor *temp_a2;
-    CollisionCheckContext *temp_s0_7;
+    CollisionCheckContext *temp_s0_8;
     f32 *temp_a0;
     f32 *temp_a1;
+    f32 *temp_s0_6;
+    f32 *temp_s0_7;
+    f32 *temp_v1;
+    f32 *temp_v1_2;
     f32 temp_f0;
     f32 temp_f12;
     f32 temp_f12_2;
@@ -1206,9 +1210,6 @@ void func_80A832D0(Actor *arg0, GlobalContext *arg1) {
     void *temp_s0_3;
     void *temp_s0_4;
     void *temp_s0_5;
-    void *temp_s0_6;
-    void *temp_v1;
-    void *temp_v1_2;
     void *phi_s0;
     f32 phi_f2;
     s16 phi_v1;
@@ -1225,7 +1226,7 @@ void func_80A832D0(Actor *arg0, GlobalContext *arg1) {
     f32 phi_f0_2;
     f32 phi_f8;
     s32 phi_t0_4;
-    void *phi_s0_3;
+    f32 *phi_s0_3;
 
     spA0 = arg0->params & 0x3F;
     Math_Vec3f_Copy(arg0 + 0x1DC, arg0 + 0x1C4);
@@ -1239,7 +1240,7 @@ void func_80A832D0(Actor *arg0, GlobalContext *arg1) {
     if ((temp_v0 & 2) != 0) {
         arg0->unk_155 = (u8) (temp_v0 & 0xFFFD);
         temp_v1 = arg0 + 0x1B8;
-        temp_v1->unk_48 = 0.04f;
+        temp_v1[18] = 0.04f;
         sp34 = temp_v1;
         func_80A8146C(arg0, temp_v1 + 0x4C, &sp84);
         temp_f12 = Math_SinS(sp84) * 150.0f;
@@ -1340,105 +1341,106 @@ block_13:
             }
         }
     }
-    temp_v1_2 = arg0 + 0x1B8;
+    temp_v1_2 = &arg0[1].gravity;
+    temp_s0_6 = &temp_v1_2[24];
     phi_t0_3 = 0;
-    phi_s0_3 = temp_v1_2 + 0x60;
-    if (temp_v1_2->unk_48 > 0.0001f) {
+    phi_s0_3 = temp_s0_6;
+    if (temp_v1_2[18] > 0.0001f) {
         sp94 = 0;
         sp34 = temp_v1_2;
-        sp90 = Math_SinS(temp_v1_2->unk_4C) * temp_v1_2->unk_48;
-        temp_f18 = Math_CosS(temp_v1_2->unk_4C) * temp_v1_2->unk_48;
-        temp_v1_2->unk_38 = (f32) (temp_v1_2->unk_38 + sp90);
-        temp_v1_2->unk_3C = (f32) (temp_v1_2->unk_3C + temp_f18);
-        Math_StepToF(temp_v1_2 + 0x48, 0.0f, 0.02f);
+        sp90 = Math_SinS(temp_v1_2->unk_4C) * temp_v1_2[18];
+        temp_f18 = Math_CosS(temp_v1_2->unk_4C) * temp_v1_2[18];
+        temp_v1_2[14] += sp90;
+        temp_v1_2[15] += temp_f18;
+        Math_StepToF(&temp_v1_2[18], 0.0f, 0.02f);
         phi_t0_3 = sp94;
     }
-    sp34 = arg0 + 0x1B8;
+    sp34 = &arg0[1].gravity;
     sp94 = phi_t0_3;
     if ((Rand_Next() >> 0x1B) == 0) {
-        sp34 = arg0 + 0x1B8;
+        sp34 = &arg0[1].gravity;
         sp94 = phi_t0_3;
-        (arg0 + 0x1B8)->unk_50 = (f32) (Rand_ZeroOne() * (arg0 + 0x1B8)->unk_58);
-        (arg0 + 0x1B8)->unk_54 = (s16) (Rand_Next() >> 0x10);
+        (&arg0[1].gravity)[20] = Rand_ZeroOne() * (&arg0[1].gravity)[22];
+        arg0[1].gravity.unk_54 = (s16) (Rand_Next() >> 0x10);
     }
     sp94 = phi_t0_3;
-    sp34 = arg0 + 0x1B8;
-    sp90 = Math_SinS((arg0 + 0x1B8)->unk_54) * (arg0 + 0x1B8)->unk_50;
-    temp_f2_5 = (arg0 + 0x1B8)->unk_30;
-    temp_f18_2 = Math_CosS((arg0 + 0x1B8)->unk_54) * (arg0 + 0x1B8)->unk_50;
-    temp_f14 = (arg0 + 0x1B8)->unk_40;
-    (arg0 + 0x1B8)->unk_38 = (f32) ((arg0 + 0x1B8)->unk_38 + sp90);
-    temp_f12_2 = (arg0 + 0x1B8)->unk_34;
-    temp_f16 = (arg0 + 0x1B8)->unk_44;
-    (arg0 + 0x1B8)->unk_3C = (f32) ((arg0 + 0x1B8)->unk_3C + temp_f18_2);
-    (arg0 + 0x1B8)->unk_38 = (f32) ((arg0 + 0x1B8)->unk_38 + (temp_f2_5 * temp_f14));
-    (arg0 + 0x1B8)->unk_3C = (f32) ((arg0 + 0x1B8)->unk_3C + (temp_f12_2 * temp_f14));
-    (arg0 + 0x1B8)->unk_38 = (f32) ((arg0 + 0x1B8)->unk_38 * temp_f16);
-    (arg0 + 0x1B8)->unk_30 = (f32) (temp_f2_5 + (arg0 + 0x1B8)->unk_38);
-    temp_f2_6 = (arg0 + 0x1B8)->unk_30;
-    (arg0 + 0x1B8)->unk_3C = (f32) ((arg0 + 0x1B8)->unk_3C * temp_f16);
-    (arg0 + 0x1B8)->unk_34 = (f32) (temp_f12_2 + (arg0 + 0x1B8)->unk_3C);
+    sp34 = &arg0[1].gravity;
+    sp90 = Math_SinS(arg0[1].gravity.unk_54) * (&arg0[1].gravity)[20];
+    temp_f2_5 = (&arg0[1].gravity)[12];
+    temp_f18_2 = Math_CosS(arg0[1].gravity.unk_54) * (&arg0[1].gravity)[20];
+    temp_f14 = (&arg0[1].gravity)[16];
+    (&arg0[1].gravity)[14] += sp90;
+    temp_f12_2 = (&arg0[1].gravity)[13];
+    temp_f16 = (&arg0[1].gravity)[17];
+    (&arg0[1].gravity)[15] += temp_f18_2;
+    (&arg0[1].gravity)[14] += temp_f2_5 * temp_f14;
+    (&arg0[1].gravity)[15] += temp_f12_2 * temp_f14;
+    (&arg0[1].gravity)[14] *= temp_f16;
+    (&arg0[1].gravity)[12] = temp_f2_5 + (&arg0[1].gravity)[14];
+    temp_f2_6 = (&arg0[1].gravity)[12];
+    (&arg0[1].gravity)[15] *= temp_f16;
+    (&arg0[1].gravity)[13] = temp_f12_2 + (&arg0[1].gravity)[15];
     if (temp_f2_6 < -5.0f) {
-        (arg0 + 0x1B8)->unk_30 = -5.0f;
+        (&arg0[1].gravity)[12] = -5.0f;
     } else {
         if (temp_f2_6 > 5.0f) {
             phi_f0 = 5.0f;
         } else {
             phi_f0 = temp_f2_6;
         }
-        (arg0 + 0x1B8)->unk_30 = phi_f0;
+        (&arg0[1].gravity)[12] = phi_f0;
     }
-    temp_f12_3 = (arg0 + 0x1B8)->unk_34;
+    temp_f12_3 = (&arg0[1].gravity)[13];
     if (temp_f12_3 < -5.0f) {
-        (arg0 + 0x1B8)->unk_34 = -5.0f;
+        (&arg0[1].gravity)[13] = -5.0f;
     } else {
         if (temp_f12_3 > 5.0f) {
             phi_f0_2 = 5.0f;
         } else {
             phi_f0_2 = temp_f12_3;
         }
-        (arg0 + 0x1B8)->unk_34 = phi_f0_2;
+        (&arg0[1].gravity)[13] = phi_f0_2;
     }
-    sp34 = arg0 + 0x1B8;
+    sp34 = &arg0[1].gravity;
     sp94 = phi_t0_3;
     func_80A81A00((bitwise Actor *) temp_f12_3, -5.0f, arg0);
     func_80A81AA4(arg0);
     phi_t0_4 = phi_t0_3;
-    if ((arg0 + 0x1B8)->unk_5C > -0.000001f) {
+    if ((&arg0[1].gravity)[23] > -0.000001f) {
         sp94 = phi_t0_3;
-        sp34 = arg0 + 0x1B8;
+        sp34 = &arg0[1].gravity;
         phi_t0_4 = phi_t0_3;
-        if ((arg0 + 0x1B8)->unk_5C <= Math3D_XZDistanceSquared(arg0->world.pos.x, arg0->world.pos.z, arg0->home.pos.x, arg0->home.pos.z)) {
-            sp34 = arg0 + 0x1B8;
+        if ((&arg0[1].gravity)[23] <= Math3D_XZDistanceSquared(arg0->world.pos.x, arg0->world.pos.z, arg0->home.pos.x, arg0->home.pos.z)) {
+            sp34 = &arg0[1].gravity;
             sp94 = phi_t0_3;
             Actor_UpdateBgCheckInfo(arg1, arg0, 0.0f, 20.0f, 0.0f, 1U);
             phi_t0_4 = phi_t0_3;
             if ((arg0->bgCheckFlags & 8) != 0) {
                 temp_a0 = &sp4C;
                 if (arg0->wallPoly != 0) {
-                    sp4C = (arg0 + 0x1B8)->unk_38;
+                    sp4C = (&arg0[1].gravity)[14];
                     sp50 = 0.0f;
                     sp94 = phi_t0_3;
-                    sp34 = arg0 + 0x1B8;
-                    sp54 = (arg0 + 0x1B8)->unk_3C;
+                    sp34 = &arg0[1].gravity;
+                    sp54 = (&arg0[1].gravity)[15];
                     if (func_80A81288((Vec3f *) temp_a0, &sp70, &sp48, &sp44) != 0) {
                         temp_a1 = &sp58;
                         sp58 = (f32) arg0->wallPoly->normal.x * 0.00003051851f;
                         sp5C = (f32) arg0->wallPoly->normal.y * 0.00003051851f;
                         sp94 = phi_t0_3;
-                        sp34 = arg0 + 0x1B8;
+                        sp34 = &arg0[1].gravity;
                         sp60 = (f32) arg0->wallPoly->normal.z * 0.00003051851f;
                         func_80179F64((Vec3f *) &sp70, (Vec3f *) temp_a1, (Vec3f *) &sp64);
                         temp_f8 = sp48 * 0.5f;
                         temp_f4 = sp64 * temp_f8;
                         sp48 = temp_f8;
-                        (arg0 + 0x1B8)->unk_38 = temp_f4;
+                        (&arg0[1].gravity)[14] = temp_f4;
                         phi_f8 = sp6C * sp48;
                     } else {
-                        (arg0 + 0x1B8)->unk_38 = (f32) ((arg0 + 0x1B8)->unk_38 * -0.1f);
-                        phi_f8 = (arg0 + 0x1B8)->unk_3C * -0.1f;
+                        (&arg0[1].gravity)[14] *= -0.1f;
+                        phi_f8 = (&arg0[1].gravity)[15] * -0.1f;
                     }
-                    (arg0 + 0x1B8)->unk_3C = phi_f8;
+                    (&arg0[1].gravity)[15] = phi_f8;
                     sp94 = phi_t0_3;
                     func_80A81B14(arg0);
                     func_80A81A00(arg0);
@@ -1453,20 +1455,20 @@ block_13:
             sp94 = phi_t0_4;
             sp86 = phi_s0_3->unk_0 - 0x4000;
             temp_t0_3 = phi_t0_4 + 1;
-            temp_s0_6 = phi_s0_3 + 4;
-            temp_s0_6->unk_-2 = (s16) (s32) ((((Rand_ZeroOne() * 30.0f) - 15.0f) + ((f32) phi_s0_3->unk_2 + ((f32) sp86 * -0.05f))) * 0.995f);
-            temp_s0_6->unk_-4 = (s16) (phi_s0_3->unk_0 + temp_s0_6->unk_-2);
+            temp_s0_7 = phi_s0_3 + 4;
+            temp_s0_7->unk_-2 = (s16) (s32) ((((Rand_ZeroOne() * 30.0f) - 15.0f) + ((f32) phi_s0_3->unk_2 + ((f32) sp86 * -0.05f))) * 0.995f);
+            temp_s0_7->unk_-4 = (s16) (phi_s0_3->unk_0 + temp_s0_7->unk_-2);
             phi_t0_4 = temp_t0_3;
-            phi_s0_3 = temp_s0_6;
+            phi_s0_3 = temp_s0_7;
         } while (temp_t0_3 != spA0);
     }
     func_800B4AEC(arg1, arg0, 0.0f);
     func_80A81818(arg0);
-    temp_a2 = arg0 + 0x144;
-    temp_s0_7 = &arg1->colChkCtx;
+    temp_a2 = &arg0[1];
+    temp_s0_8 = &arg1->colChkCtx;
     sp30 = temp_a2;
-    CollisionCheck_SetOC(arg1, temp_s0_7, (Collider *) temp_a2);
-    CollisionCheck_SetAC(arg1, temp_s0_7, (Collider *) temp_a2);
+    CollisionCheck_SetOC(arg1, temp_s0_8, (Collider *) temp_a2);
+    CollisionCheck_SetAC(arg1, temp_s0_8, (Collider *) temp_a2);
 }
 
 void func_80A83A74(ObjMine *arg0) {
@@ -1486,7 +1488,7 @@ void func_80A83A88(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     temp_a1 = &arg1->colChkCtx;
-    temp_a2 = arg0 + 0x144;
+    temp_a2 = &arg0[1];
     sp20 = temp_a2;
     sp24 = temp_a1;
     CollisionCheck_SetOC(arg1, temp_a1, (Collider *) temp_a2);
@@ -1500,15 +1502,15 @@ void func_80A83B14(ObjMine *arg0) {
 void func_80A83B28(Actor *arg0, GlobalContext *arg1) {
     s16 sp32;
     Actor *sp28;
-    Vec3f *sp24;
+    f32 *sp24;
     Actor *temp_a2_2;
     CollisionCheckContext *temp_s0_3;
-    Vec3f *temp_a2;
+    f32 *temp_a2;
+    f32 *temp_s0;
+    f32 *temp_s0_2;
     s32 temp_a0;
     u32 temp_v1;
     u8 temp_v0;
-    void *temp_s0;
-    void *temp_s0_2;
 
     if (func_80A8140C(arg0) != 0) {
         func_80A81384(arg0, arg1);
@@ -1517,35 +1519,35 @@ void func_80A83B28(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     temp_v0 = arg0->unk_155;
-    temp_s0 = arg0 + 0x1B8;
+    temp_s0 = &arg0[1].gravity;
     if ((temp_v0 & 2) != 0) {
         arg0->unk_155 = (u8) (temp_v0 & 0xFFFD);
-        temp_a2 = temp_s0 + 4;
+        temp_a2 = &temp_s0[1];
         sp24 = temp_a2;
-        func_80A81544(arg0, temp_a2, temp_a2);
-        temp_s0->unk_10 = 7.0f;
-        Math_Vec3f_Scale(sp24, 7.0f);
+        func_80A81544(arg0, (Vec3f *) temp_a2, temp_a2);
+        temp_s0[4] = 7.0f;
+        Math_Vec3f_Scale((Vec3f *) sp24, 7.0f);
     }
-    temp_s0_2 = arg0 + 0x1B8;
-    if (temp_s0_2->unk_10 > 0.0001f) {
-        temp_s0_2->unk_10 = Math_Vec3f_StepTo(temp_s0_2 + 4, &D_801D15B0, 2.8f);
+    temp_s0_2 = &arg0[1].gravity;
+    if (temp_s0_2[4] > 0.0001f) {
+        temp_s0_2[4] = Math_Vec3f_StepTo((Vec3f *) &temp_s0_2[1], &D_801D15B0, 2.8f);
     }
-    temp_s0_2->unk_24 = -0.0002f;
-    temp_s0_2->unk_30 = -0.0002f;
+    temp_s0_2[9] = -0.0002f;
+    temp_s0_2[12] = -0.0002f;
     temp_s0_2->unk_0 = 0.9f;
-    temp_s0_2->unk_1C = 0.003f;
+    temp_s0_2[7] = 0.003f;
     if ((Rand_Next() >> 0x1B) == 0) {
         temp_v1 = Rand_Next() >> 0x10;
         temp_a0 = temp_v1 << 0x10;
         sp32 = (s16) temp_v1;
-        temp_s0_2->unk_14 = (f32) (Math_SinS((s16) (temp_a0 >> 0x10)) * 1.8f * temp_s0_2->unk_1C);
-        temp_s0_2->unk_18 = (f32) (Math_CosS(sp32) * 0.2f * temp_s0_2->unk_1C);
+        temp_s0_2[5] = Math_SinS((s16) (temp_a0 >> 0x10)) * 1.8f * temp_s0_2[7];
+        temp_s0_2[6] = Math_CosS(sp32) * 0.2f * temp_s0_2[7];
         temp_s0_2->unk_20 = (s16) (Rand_Next() >> 0x13);
     }
     func_80A82C28(arg0, arg1);
     func_80A81DEC(arg0);
     func_80A81818(arg0);
-    temp_a2_2 = arg0 + 0x144;
+    temp_a2_2 = &arg0[1];
     temp_s0_3 = &arg1->colChkCtx;
     sp28 = temp_a2_2;
     CollisionCheck_SetOC(arg1, temp_s0_3, (Collider *) temp_a2_2);
@@ -1569,7 +1571,7 @@ void func_80A83D00(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     temp_a1 = &arg1->colChkCtx;
-    temp_a2 = arg0 + 0x144;
+    temp_a2 = &arg0[1];
     sp20 = temp_a2;
     sp24 = temp_a1;
     CollisionCheck_SetOC(arg1, temp_a1, (Collider *) temp_a2);
@@ -1604,7 +1606,7 @@ void ObjMine_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80A83E7C(Actor *this, GlobalContext *globalCtx) {
-    this->unk_1A4();
+    (bitwise ? (*)()) this[1].scale.z();
 }
 
 void ObjMine_Draw(Actor *thisx, GlobalContext *globalCtx) {
@@ -1627,24 +1629,24 @@ void ObjMine_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800B8050((Actor *) this, globalCtx, 1);
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0xC192078;
     temp_v0_2->words.w0 = 0xE200001C;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0xFF;
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06002068;
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_5 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_5 + 8;
+    temp_s0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_06002188;
     temp_v0_5->words.w0 = 0xDE000000;
 }
@@ -1661,20 +1663,20 @@ void func_80A83FBC(Actor *arg0, GlobalContext *arg1) {
     func_800B8118(arg0, arg1, 1);
     func_8012C2DC(arg1->state.gfxCtx);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xE200001C;
     temp_v0->words.w1 = 0xC1849D8;
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0x4B;
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06002068;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -1685,24 +1687,25 @@ void func_80A84088(Actor *this, GlobalContext *globalCtx) {
     f32 sp94;
     f32 sp88;
     GraphicsContext *sp80;
-    void *sp4C;
+    f32 *sp4C;
+    Gfx *temp_s0;
     Gfx *temp_s1;
     Gfx *temp_s1_2;
     Gfx *temp_s1_3;
     Gfx *temp_s1_4;
     Gfx *temp_s1_6;
     GraphicsContext *temp_v1;
-    Vec3f *temp_s0;
+    f32 *temp_a0;
+    f32 *temp_s0_2;
     s32 temp_s2;
     s32 temp_s5;
-    void *temp_a0;
     void *temp_s1_10;
     void *temp_s1_11;
     void *temp_s1_5;
     void *temp_s1_7;
     void *temp_s1_8;
     void *temp_s1_9;
-    s16 *phi_s3;
+    f32 *phi_s3;
     Gfx *phi_s1;
     s32 phi_s2;
     Gfx *phi_s1_2;
@@ -1711,31 +1714,33 @@ void func_80A84088(Actor *this, GlobalContext *globalCtx) {
     func_800B8050(this, globalCtx, 1);
     temp_v1 = globalCtx->state.gfxCtx;
     temp_s1 = temp_v1->polyOpa.p;
-    temp_s1->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s1->words.w1 = (u32) &sSetupDL[150];
     temp_s1->words.w0 = 0xDE000000;
-    temp_s1_2 = temp_s1 + 8;
-    temp_s1_2->words.w0 = 0xDA380003;
+    temp_s1_2 = &temp_s1[1];
+    temp_s0 = temp_s1_2;
+    temp_s0->words.w0 = 0xDA380003;
     sp80 = temp_v1;
-    temp_s1_3 = temp_s1_2 + 8;
-    temp_s1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s1_3 = &temp_s1_2[1];
+    temp_s0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_s1_3->words.w1 = (u32) &D_06000030;
     temp_s1_3->words.w0 = 0xDE000000;
-    temp_s1_4 = temp_s1_3 + 8;
-    temp_a0 = this + 0x1B8;
+    temp_s1_4 = &temp_s1_3[1];
+    temp_a0 = &this[1].gravity;
     sp4C = temp_a0;
     func_80A81684(temp_a0);
     Matrix_Scale(this->scale.x, this->scale.y, this->scale.z, 1);
-    phi_s1 = temp_s1_4;
     phi_s1_2 = temp_s1_4;
     if (temp_s5 != 0) {
-        temp_s0 = sp4C + 0xC;
-        Math_Vec3f_ScaleAndStore(temp_s0, -6.0f, (Vec3f *) &sp88);
+        temp_s0_2 = &sp4C[3];
+        Math_Vec3f_ScaleAndStore((Vec3f *) temp_s0_2, -6.0f, (Vec3f *) &sp88);
         sp94 = this->home.pos.x - sp88;
         sp98 = (this->home.pos.y - 6.0f) - sp8C;
         sp9C = this->home.pos.z - sp90;
-        Math_Vec3f_ScaleAndStore(temp_s0, -12.0f, (Vec3f *) &sp88);
-        phi_s3 = sp4C + 0x60;
+        Math_Vec3f_ScaleAndStore((Vec3f *) temp_s0_2, -12.0f, (Vec3f *) &sp88);
+        phi_s3 = &sp4C[24];
+        phi_s1 = temp_s1_4;
         phi_s2 = 0;
+        phi_s1_2 = temp_s1_4;
         if (temp_s5 > 0) {
             do {
                 Matrix_RotateY(*phi_s3, 1U);
@@ -1781,6 +1786,7 @@ void func_80A84088(Actor *this, GlobalContext *globalCtx) {
 
 void func_80A84338(Actor *this, GlobalContext *globalCtx) {
     GraphicsContext *sp40;
+    Gfx *temp_s0;
     Gfx *temp_s3;
     Gfx *temp_s3_2;
     Gfx *temp_s3_3;
@@ -1795,7 +1801,7 @@ void func_80A84338(Actor *this, GlobalContext *globalCtx) {
     void *temp_s3_7;
     void *temp_s3_8;
     void *temp_s3_9;
-    void *phi_s2;
+    f32 *phi_s2;
     s32 phi_s1;
     Gfx *phi_s3;
     Gfx *phi_s3_2;
@@ -1804,17 +1810,18 @@ void func_80A84338(Actor *this, GlobalContext *globalCtx) {
     func_800B8050(this, globalCtx, 1);
     temp_v1 = globalCtx->state.gfxCtx;
     temp_s3 = temp_v1->polyOpa.p;
-    temp_s3->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s3->words.w1 = (u32) &sSetupDL[150];
     temp_s3->words.w0 = 0xDE000000;
-    temp_s3_2 = temp_s3 + 8;
-    temp_s3_2->words.w0 = 0xDA380003;
+    temp_s3_2 = &temp_s3[1];
+    temp_s0 = temp_s3_2;
+    temp_s0->words.w0 = 0xDA380003;
     sp40 = temp_v1;
-    temp_s3_3 = temp_s3_2 + 8;
-    temp_s3_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s3_3 = &temp_s3_2[1];
+    temp_s0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_s3_3->words.w0 = 0xDE000000;
     temp_s3_3->words.w1 = (u32) &D_06000030;
-    temp_s3_4 = temp_s3_3 + 8;
-    phi_s2 = this + 0x1FC;
+    temp_s3_4 = &temp_s3_3[1];
+    phi_s2 = (f32 *) &this[1].colChkInfo.damage;
     phi_s1 = 0;
     phi_s3 = temp_s3_4;
     phi_s3_2 = temp_s3_4;
@@ -1825,7 +1832,7 @@ void func_80A84338(Actor *this, GlobalContext *globalCtx) {
             if ((phi_s1 & 1) == 0) {
                 Matrix_RotateY(0x4000, 1U);
             }
-            func_80A8164C(phi_s2 + 0x24);
+            func_80A8164C(&phi_s2[9]);
             phi_s3->words.w0 = 0xDA380003;
             temp_s3_5 = phi_s3 + 8;
             phi_s3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -1833,7 +1840,7 @@ void func_80A84338(Actor *this, GlobalContext *globalCtx) {
             temp_s3_5->unk_4 = &D_06000030;
             temp_s3_6 = temp_s3_5 + 8;
             temp_s1 = phi_s1 + 1;
-            phi_s2 += 0x48;
+            phi_s2 = &phi_s2[18];
             phi_s1 = temp_s1;
             phi_s3 = temp_s3_6;
             phi_s3_2 = temp_s3_6;

@@ -292,7 +292,7 @@ SaveContext gSaveContext;
     temp_v0 = *arg1;
     temp_v1 = temp_v0->unk_1;
     phi_v0 = temp_v0;
-    if (((temp_v1 != 0) || (gSaveContext.inventory.items[gItemSlots[0x2D]] != 0x2D)) && ((temp_v1 != 1) || (gSaveContext.inventory.items[gItemSlots[0x2F]] != 0x2F))) {
+    if (((temp_v1 != 0) || (gSaveContext.inventory.items[gItemSlots[45]] != 0x2D)) && ((temp_v1 != 1) || (gSaveContext.inventory.items[gItemSlots[47]] != 0x2F))) {
         if (temp_v1 == 2) {
             sp1C = temp_v0;
             if (Player_GetMask(arg0) == 7) {

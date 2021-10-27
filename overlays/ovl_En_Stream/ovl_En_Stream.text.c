@@ -84,23 +84,23 @@ s32 func_809656D4(PosRot *arg0, f32 *arg1, f32 *arg2, f32 arg3) {
 
     arg2->unk_0 = arg1->unk_0 - arg0->pos.x;
     temp_f2 = arg2->unk_0;
-    arg2->unk_4 = (f32) (arg1->unk_4 - arg0->pos.y);
-    temp_f18 = arg2->unk_4;
-    arg2->unk_8 = (f32) (arg1->unk_8 - arg0->pos.z);
-    temp_f16 = arg2->unk_8;
+    arg2[1] = arg1[1] - arg0->pos.y;
+    temp_f18 = arg2[1];
+    arg2[2] = arg1[2] - arg0->pos.z;
+    temp_f16 = arg2[2];
     temp_f0 = sqrtf((temp_f2 * temp_f2) + (temp_f16 * temp_f16));
     temp_f14 = 0.0f * arg3 * 50.0f;
     phi_v1 = 0;
     if (temp_f14 <= temp_f18) {
         temp_f2_2 = 160.0f * arg3 * 50.0f;
         if (temp_f18 <= temp_f2_2) {
-            arg2->unk_4 = (f32) (temp_f18 - temp_f14);
-            if (temp_f0 <= (((75.0f - 28.0f) * (arg2->unk_4 / (temp_f2_2 - temp_f14))) + 28.0f)) {
+            arg2[1] = temp_f18 - temp_f14;
+            if (temp_f0 <= (((75.0f - 28.0f) * (arg2[1] / (temp_f2_2 - temp_f14))) + 28.0f)) {
                 phi_v1 = 1;
             }
         }
     }
-    if ((arg2->unk_4 <= temp_f14) && (temp_f0 <= 28.0f)) {
+    if ((arg2[1] <= temp_f14) && (temp_f0 <= 28.0f)) {
         phi_v1 = 2;
     }
     return phi_v1;
@@ -124,7 +124,7 @@ void func_809657F4(EnStream *arg0, GlobalContext *arg1) {
         sp38 = temp_f2;
         sp34 = temp_s0->world.pos.y - (arg0->actor.world.pos.y - 90.0f);
         temp_f2_2 = temp_f2;
-        temp_s0->unk_B84 = Math_Atan2S(-sp3C, -sp44);
+        temp_s0[9].unk20 = Math_Atan2S(-sp3C, -sp44);
         if (temp_f2_2 > 3.0f) {
             Math_SmoothStepToF(temp_s0 + 0xB80, 3.0f, 0.5f, temp_f2_2, 0.0f);
         } else {
@@ -174,12 +174,12 @@ void EnStream_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1->words.w0 = 0xDA380003;
     sp3C = temp_v1;
     temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_v1->unk_8 = 0xDB060020;
+    temp_v1[1].words.w0 = 0xDB060020;
     temp_v0 = sp40 * 0x14;
     temp_a3 = -temp_v0;
     sp3C = temp_v1;
-    temp_v1->unk_C = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp40 * 0x1E, (u32) temp_a3, 0x40, 0x40, 1, (u32) temp_v0, (u32) temp_a3, 0x40, 0x40);
-    temp_v1->unk_14 = &D_06000950;
-    temp_v1->unk_10 = 0xDE000000;
-    sp38->polyXlu.p = temp_v1 + 0x18;
+    temp_v1[1].words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp40 * 0x1E, (u32) temp_a3, 0x40, 0x40, 1, (u32) temp_v0, (u32) temp_a3, 0x40, 0x40);
+    temp_v1[2].words.w1 = (u32) &D_06000950;
+    temp_v1[2].words.w0 = 0xDE000000;
+    sp38->polyXlu.p = &temp_v1[3];
 }

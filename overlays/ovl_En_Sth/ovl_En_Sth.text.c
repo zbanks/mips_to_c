@@ -13,6 +13,13 @@ typedef struct EnSth {
     /* 0x2A0 */ void (*unk_2A0)(Actor *, GlobalContext *); /* inferred */
 } EnSth;                                            /* size = 0x2A4 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ u8 unk_12;                           /* inferred */
+    /* 0x13 */ char pad_13[0x1];
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnSth_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -1992,7 +1999,7 @@ void func_80B672A4(Actor *arg0, GlobalContext *arg1) {
     if (temp_v0 < 0) {
         phi_v0 = 0;
     }
-    if ((temp_a2->unk_29C & 2) != 0) {
+    if ((temp_a2[2].home.rot.x & 2) != 0) {
         temp_a3 = *(&D_80B6D1F0 + (phi_v0 * 2));
         phi_a3 = temp_a3;
         if (phi_v0 == 2) {
@@ -2115,7 +2122,7 @@ block_22:
                         arg0->home.rot.z = phi_t6;
                     } else {
                         gSaveContext.weekEventReg[13] = temp_v1 | 0x40;
-                        temp_v0_3 = (u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4];
+                        temp_v0_3 = (u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
                         if (temp_v0_3 != 0) {
                             if (temp_v0_3 != 1) {
 
@@ -2141,7 +2148,7 @@ block_22:
             default:
                 arg0->unk_2A0 = func_80B677BC;
                 func_801477B4(arg1);
-                arg0->unk_29C = (u16) (arg0->unk_29C | 2);
+                arg0[2].home.rot.x = (u16) arg0[2].home.rot.x | 2;
                 return;
             }
         } else {
@@ -2149,7 +2156,7 @@ block_22:
         }
     } else {
         arg0->unk_2A0 = func_80B677BC;
-        arg0->unk_29C = (u16) (arg0->unk_29C | 2);
+        arg0[2].home.rot.x = (u16) arg0[2].home.rot.x | 2;
     }
 }
 
@@ -2222,8 +2229,8 @@ void func_80B67984(Actor *arg0, GlobalContext *arg1) {
         func_80B670A4(arg0, 2, (Actor *) phi_a3);
         phi_a3_2 = phi_a3;
     } else if (func_8012F22C(arg1->sceneNum) >= 0x1E) {
-        if (gSaveContext.inventory.items[gItemSlots[0x36]] == 0x36) {
-            arg0->unk_29C = (u16) (arg0->unk_29C | 4);
+        if (gSaveContext.inventory.items[gItemSlots[54]] == 0x36) {
+            arg0[2].home.rot.x = (u16) arg0[2].home.rot.x | 4;
             phi_a3_2 = 0x919U;
         } else {
             phi_a3_2 = 0x916U;
@@ -2260,7 +2267,7 @@ void func_80B67B50(Actor *arg0, GlobalContext *arg1) {
         func_800B8500(arg0, arg1, 1000.0f, 1000.0f, -1);
         return;
     }
-    arg0->unk_29C = (u16) (arg0->unk_29C & 0xFFFE);
+    arg0[2].home.rot.x = (u16) arg0[2].home.rot.x & 0xFFFE;
     gSaveContext.weekEventReg[34] |= 8;
     func_800B8A1C(arg0, arg1, 0x8A, 10000.0f, 50.0f);
 }
@@ -2415,20 +2422,20 @@ void func_80B680A8(Actor *arg0, GlobalContext *arg1) {
     Actor *temp_a2;
 
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-    temp_a2 = arg0 + 0x144;
+    temp_a2 = &arg0[1];
     sp34 = temp_a2;
     Collider_UpdateCylinder(arg0, (ColliderCylinder *) temp_a2);
     CollisionCheck_SetOC(arg1, &arg1->colChkCtx, (Collider *) temp_a2);
     Actor_UpdateBgCheckInfo(arg1, arg0, 0.0f, 0.0f, 0.0f, 4U);
     arg0->unk_2A0(arg0, arg1);
-    if ((func_80B6703C(arg0, arg1) != 0) && ((arg0->unk_29C & 8) == 0) && (arg0->unk_29A != 5)) {
+    if ((func_80B6703C(arg0, arg1) != 0) && (((u16) arg0[2].home.rot.x & 8) == 0) && (arg0->unk_29A != 5)) {
         sp3C = 0;
         sp3A = 0;
         sp38 = 0;
-        func_800E9250(arg1, arg0, arg0 + 0x294, (Vec3s *) &sp38, (bitwise Vec3f) arg0->focus.pos.x, arg0->focus.pos.y, arg0->focus.pos.z);
+        func_800E9250(arg1, arg0, (Vec3s *) &arg0[2].home.pos.y, (Vec3s *) &sp38, (bitwise Vec3f) arg0->focus.pos.x, arg0->focus.pos.y, arg0->focus.pos.z);
         return;
     }
-    Math_SmoothStepToS(arg0 + 0x294, 0, 6, 0x1838, (s16) 0x64);
+    Math_SmoothStepToS((s16 *) &arg0[2].home.pos.y, 0, 6, 0x1838, (s16) 0x64);
     Math_SmoothStepToS(arg0 + 0x296, 0, 6, 0x1838, (s16) 0x64);
 }
 
@@ -2471,7 +2478,7 @@ void func_80B68310(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
             return;
         }
         temp_t0 = *arg0;
-        if ((arg4->unk_29C & 1) != 0) {
+        if ((arg4[2].home.rot.x & 1) != 0) {
             sp20 = temp_t0;
             if (Object_IsLoaded(arg0 + 0x17D88, (s32) arg4->unk_29F) != 0) {
                 sp20 = temp_t0;
@@ -2485,11 +2492,11 @@ void func_80B68310(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
                 sp18 = temp_v0;
                 sp18->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_2 = temp_t0->polyOpa.p;
-                temp_t0->polyOpa.p = temp_v0_2 + 8;
+                temp_t0->polyOpa.p = &temp_v0_2[1];
                 temp_v0_2->words.w0 = 0xDB060028;
                 temp_v0_2->words.w1 = (arg0 + (arg4->unk_29F * 0x44))->unk_17D98;
                 temp_v0_3 = temp_t0->polyOpa.p;
-                temp_t0->polyOpa.p = temp_v0_3 + 8;
+                temp_t0->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = (u32) &D_0A0001A0;
                 temp_v0_3->words.w0 = 0xDE000000;
                 SysMatrix_StatePop();
@@ -2511,15 +2518,15 @@ void func_80B6849C(Actor *this, GlobalContext *globalCtx) {
     sp34 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0 + 8;
+    sp34->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = sp34;
     sp2C = temp_v0;
     sp2C->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) D_80B6D20C.unk_3, (s32) D_80B6D20C.unk_4, (s32) D_80B6D20C.unk_5, 0xFF);
     temp_v0_2 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0_2 + 8;
+    sp34->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp28 = temp_v0_2;
     sp28->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x5A, 0x6E, 0x82, 0xFF);
-    SkelAnime_DrawSV(globalCtx, this->unk_194, this->unk_1B0, (s32) this->unk_192, func_80B681E8, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80B68310, this);
+    SkelAnime_DrawSV(globalCtx, this->unk_194, (bitwise Vec3s *) this[1].velocity.z, (s32) this[1].focus.unk_12, func_80B681E8, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80B68310, this);
 }

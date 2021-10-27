@@ -442,7 +442,7 @@ void func_80A767A8(EnPrz *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->actor.parent;
     temp_f2 = sp3C->world.pos.x - temp_v0->home.pos.x;
     temp_f12 = sp3C->world.pos.z - temp_v0->home.pos.z;
-    if (((sp3C->unk_A6C * 0x10) >= 0) || (sp38->unk_2C8 < sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12)))) {
+    if (((sp3C->unk_A6C * 0x10) >= 0) || (sp38[2].focus.pos.y < sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12)))) {
         arg0->unk_1F2 = 0x64;
         arg0->unk_144.animPlaybackSpeed = 1.0f;
         func_80A76388((bitwise EnPrz *) temp_f12, arg0);
@@ -492,7 +492,7 @@ void func_80A76A1C(Actor *arg0) {
     arg0->unk_1EE = 0x32;
     func_80A75F18((EnPrz *) arg0, 0);
     arg0->unk_1EA = 7;
-    arg0->unk_1C4 = func_80A76B14;
+    arg0[1].floorPoly = (CollisionPoly *) func_80A76B14;
 }
 
 void func_80A76B14(Actor *arg0, GlobalContext *arg1) {
@@ -512,7 +512,7 @@ void func_80A76B14(Actor *arg0, GlobalContext *arg1) {
     phi_s0 = 0;
     phi_s0_2 = 0;
     if (func_800CA1AC(arg1, arg1 + 0x830, arg0->world.pos.x, arg0->world.pos.z, arg0 + 0x210, &sp7C) != 0) {
-        temp_f0 = arg0->unk_210;
+        temp_f0 = arg0[1].shape.shadowScale;
         if ((temp_f0 - 15.0f) <= arg0->world.pos.y) {
             phi_s0 = 1;
         } else {
@@ -601,7 +601,7 @@ void EnPrz_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80A76F70(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 2) {
-        arg4->y += (s32) arg5->unk_218 * -0x64;
+        arg4->y += (s32) arg5[1].shape.feetPos[0].x * -0x64;
     }
     return 0;
 }
@@ -634,16 +634,16 @@ void EnPrz_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     if (this->unk_1EC == 0xFF) {
         temp_v0 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0 + 8;
+        temp_s1->polyOpa.p = &temp_v0[1];
         temp_v0->words.w1 = 0;
         temp_v0->words.w0 = 0xE7000000;
         temp_v0_2 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_2 + 8;
+        temp_s1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA000000;
         temp_v1 = this->unk_1E8 & 0xFF;
         temp_v0_2->words.w1 = (temp_v1 << 0x18) | (temp_v1 << 0x10) | (temp_v1 << 8) | (this->unk_1EC & 0xFF);
         temp_v0_3 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_3 + 8;
+        temp_s1->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = this->unk_1EC & 0xFF;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
@@ -651,11 +651,11 @@ void EnPrz_Draw(Actor *thisx, GlobalContext *globalCtx) {
         return;
     }
     temp_v1_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1_2 + 8;
+    temp_s1->polyXlu.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = 0;
     temp_v1_2->words.w0 = 0xE7000000;
     temp_v1_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1_3 + 8;
+    temp_s1->polyXlu.p = &temp_v1_3[1];
     temp_v1_3->words.w0 = 0xFB000000;
     temp_v1_3->words.w1 = this->unk_1EC & 0xFF;
     Scene_SetRenderModeXlu(globalCtx, 1, 2U);

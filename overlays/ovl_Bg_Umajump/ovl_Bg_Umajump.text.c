@@ -127,7 +127,7 @@ void BgUmajump_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.params &= 0xFF;
     this->unk_160 = ((s32) temp_t6 >> 8) & 0xFF;
     if (this->actor.params == 2) {
-        if ((globalCtx->sceneNum == 0x35) && ((gSaveContext.weekEventReg[89] & 0x20) == 0) && ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) == 0) && (this->actor.cutscene != -1)) {
+        if ((globalCtx->sceneNum == 0x35) && ((gSaveContext.weekEventReg[89] & 0x20) == 0) && ((gBitFlags[14] & gSaveContext.inventory.questItems) == 0) && (this->actor.cutscene != -1)) {
             this->unk_15C = func_8091A0B8;
             this->actor.update = func_8091A5A0;
             this->actor.flags |= 0x10;
@@ -142,7 +142,7 @@ void BgUmajump_Init(Actor *thisx, GlobalContext *globalCtx) {
     if (temp_v0 < 0) {
         Actor_MarkForDeath((Actor *) this);
     }
-    if ((this->actor.params == 3) && ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0)) {
+    if ((this->actor.params == 3) && ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0)) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xA8, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) (s32) this->actor.shape.rot.x, (s16) (s32) this->actor.shape.rot.y, (s16) (s32) this->actor.shape.rot.z, (s16) 0x3E);
         Actor_MarkForDeath((Actor *) this);
     }
@@ -228,7 +228,7 @@ void func_8091A5A0(Actor *actor, GlobalContext *globalCtx) {
     if (temp_v0 != 0) {
         temp_v0(actor, globalCtx);
     }
-    if ((actor->params == 3) && ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0)) {
+    if ((actor->params == 3) && ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0)) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xA8, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, (s16) (s32) actor->shape.rot.x, (s16) (s32) actor->shape.rot.y, (s16) (s32) actor->shape.rot.z, (s16) 0x3E);
         Actor_MarkForDeath(actor);
     }

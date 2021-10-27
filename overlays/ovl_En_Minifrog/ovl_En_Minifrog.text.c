@@ -510,7 +510,7 @@ void EnMinifrog_CheckChoirSuccess(Actor *arg0, GlobalContext *arg1) {
     Actor *temp_a0;
 
     arg0->unk_2A8 = EnMinifrog_YellowFrogDialog;
-    if (arg0->unk_2AC != 0) {
+    if (arg0[2].world.pos.x != 0) {
         arg0 = arg0;
         func_80151938(arg1, 0xD78U);
     } else {
@@ -520,7 +520,7 @@ void EnMinifrog_CheckChoirSuccess(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0;
     arg0 = arg0;
     EnMinifrog_SetJumpState(temp_a0);
-    arg0->unk_2AC = 0;
+    arg0[2].world.pos.x = 0.0f;
     arg0->home.rot.z = 0;
 }
 
@@ -579,7 +579,7 @@ void EnMinifrog_NextFrogReturned(Actor *arg0, void *arg1) {
 
 void EnMinifrog_SetupNextFrogChoir(Actor *arg0, void *arg1) {
     u8 sp27;
-    Actor *temp_a1_2;
+    f32 temp_a1_2;
     s32 temp_v1;
     u16 temp_t5;
     u16 temp_v0_2;
@@ -603,12 +603,12 @@ void EnMinifrog_SetupNextFrogChoir(Actor *arg0, void *arg1) {
             arg0->unk_2B4 = (s16) (arg0->unk_2B4 - 1);
         }
     }
-    temp_a1_2 = arg0->unk_2AC;
-    if (temp_a1_2 != 0) {
+    temp_a1_2 = arg0[2].world.pos.x;
+    if ((bitwise s32) temp_a1_2 != 0) {
         arg0->home.rot.z = 0;
         arg0->unk_2A8 = EnMinifrog_NextFrogMissing;
         arg0->unk_2B4 = 0x3C;
-        arg0->home.rot.y = Actor_YawBetweenActors(arg0, temp_a1_2);
+        arg0->home.rot.y = Actor_YawBetweenActors(arg0, (bitwise Actor *) temp_a1_2);
         func_801A1F88();
         temp_t5 = arg0->unk_2B6 & 0xFEFF;
         arg0->unk_2B6 = temp_t5;
@@ -815,7 +815,7 @@ void EnMinifrog_PostLimbDraw(GraphicsContext **arg0, s32 arg1, u32 *arg2, Vec3s 
         sp18 = temp_v0;
         sp18->words.w1 = Matrix_NewMtx(*arg0);
         temp_v0_2 = temp_a1->polyOpa.p;
-        temp_a1->polyOpa.p = temp_v0_2 + 8;
+        temp_a1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *arg2;
     }
@@ -838,15 +838,15 @@ void EnMinifrog_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     temp_a0_2 = (this->frogIndex * 4) + &D_808A4D98;
     temp_v0 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0 + 8;
+    sp34->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     temp_v0->words.w1 = (u32) *D_808A4D74;
     temp_v0_2 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0_2 + 8;
+    sp34->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     temp_v0_2->words.w1 = (u32) *D_808A4D74;
     temp_v0_3 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0_3 + 8;
+    sp34->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = (temp_a0_2->unk_0 << 0x18) | (temp_a0_2->unk_1 << 0x10) | (temp_a0_2->unk_2 << 8) | temp_a0_2->unk_3;
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, EnMinifrog_OverrideLimbDraw, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) EnMinifrog_PostLimbDraw, (Actor *) this);

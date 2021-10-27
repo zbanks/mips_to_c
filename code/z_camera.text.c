@@ -588,7 +588,7 @@ struct _mips2c_stack_Camera_ModeKEEP4 {
     /* 0x7C */ Player *sp7C;                        /* inferred */
     /* 0x80 */ char pad_80[0x2];
     /* 0x82 */ s16 sp82;                            /* inferred */
-    /* 0x84 */ s32 sp84;                            /* inferred */
+    /* 0x84 */ f32 sp84;                            /* inferred */
     /* 0x88 */ f32 sp88;                            /* inferred */
     /* 0x8C */ char pad_8C[0x10];                   /* maybe part of sp88[5]? */
     /* 0x9C */ s16 sp9C;                            /* inferred */
@@ -650,7 +650,7 @@ struct _mips2c_stack_Camera_ModeNORM1 {
     /* 0x4C */ Vec3f *sp4C;                         /* inferred */
     /* 0x50 */ char pad_50[0x8];                    /* maybe part of sp4C[3]? */
     /* 0x58 */ f32 sp58;                            /* inferred */
-    /* 0x5C */ s32 sp5C;                            /* inferred */
+    /* 0x5C */ f32 sp5C;                            /* inferred */
     /* 0x60 */ ? sp60;                              /* inferred */
     /* 0x60 */ char pad_60[0x4];
     /* 0x64 */ ? sp64;                              /* inferred */
@@ -1064,7 +1064,7 @@ struct _mips2c_stack_Camera_Update {
     /* 0x90 */ CollisionPoly *sp90;                 /* inferred */
     /* 0x94 */ s32 sp94;                            /* inferred */
     /* 0x98 */ s32 sp98;                            /* inferred */
-    /* 0x9C */ s32 sp9C;                            /* inferred */
+    /* 0x9C */ f32 sp9C;                            /* inferred */
     /* 0xA0 */ f32 spA0;                            /* inferred */
     /* 0xA4 */ f32 spA4;                            /* inferred */
     /* 0xA8 */ char pad_A8[0x4];
@@ -1160,7 +1160,7 @@ struct _mips2c_stack_func_800CBC84 {
     /* 0x00 */ char pad_0[0x38];
     /* 0x38 */ Vec3f *sp38;                         /* inferred */
     /* 0x3C */ char pad_3C[0x8];                    /* maybe part of sp38[3]? */
-    /* 0x44 */ s32 sp44;                            /* inferred */
+    /* 0x44 */ f32 sp44;                            /* inferred */
     /* 0x48 */ char pad_48[0x8];                    /* maybe part of sp44[3]? */
     /* 0x50 */ f32 sp50;                            /* inferred */
     /* 0x54 */ f32 sp54;                            /* inferred */
@@ -1282,7 +1282,7 @@ struct _mips2c_stack_func_800CC9C0 {
     /* 0x00 */ char pad_0[0x2C];
     /* 0x2C */ f32 sp2C;                            /* inferred */
     /* 0x30 */ f32 sp30;                            /* inferred */
-    /* 0x34 */ s32 sp34;                            /* inferred */
+    /* 0x34 */ f32 sp34;                            /* inferred */
     /* 0x38 */ f32 sp38;                            /* inferred */
     /* 0x3C */ f32 sp3C;                            /* inferred */
     /* 0x40 */ f32 sp40;                            /* inferred */
@@ -1542,7 +1542,7 @@ struct _mips2c_stack_func_800CEC38 {
 
 struct _mips2c_stack_func_800CED90 {
     /* 0x00 */ char pad_0[0x2C];
-    /* 0x2C */ Vec3f *sp2C;                         /* inferred */
+    /* 0x2C */ f32 *sp2C;                           /* inferred */
     /* 0x30 */ Vec3f *sp30;                         /* inferred */
     /* 0x34 */ Vec3f *sp34;                         /* inferred */
     /* 0x38 */ Vec3f *sp38;                         /* inferred */
@@ -1729,9 +1729,9 @@ f32 func_80086760(f32, f32);                        /* extern */
 f32 func_800B7090(s32, s32);                        /* extern */
 ? func_800B81E0(f32 *, Player *, Camera *);         /* extern */
 f32 func_800C40B4(s32, void **, s32 *, f32 *);      /* extern */
-f32 func_800C41E4(GlobalContext *, CollisionContext *, CollisionPoly **, s32 *, Player *, f32 *); /* extern */
-f32 func_800C4488(CollisionContext *, Vec3f *, s32 *, f32 *); /* extern */
-s32 func_800C54AC(CollisionContext *, Vec3f *, f32 *, f32 *, Vec3f *, s32, s32, s32, ? *, s32 *); /* extern */
+f32 func_800C41E4(GlobalContext *, CollisionContext *, CollisionPoly **, f32 *, Player *, f32 *); /* extern */
+f32 func_800C4488(CollisionContext *, Vec3f *, f32 *, f32 *); /* extern */
+s32 func_800C54AC(CollisionContext *, Vec3f *, f32 *, f32 *, Vec3f *, s32, s32, s32, ? *, f32 *); /* extern */
 s32 func_800C9728(s32, u32, s32, s32);              /* extern */
 ? func_800C98CC(s32, s32, ?, s16);                  /* extern */
 s32 func_800C9EBC(s32, s32, s32, s32, f32 *, s32 *, s32 *); /* extern */
@@ -1775,7 +1775,7 @@ s32 func_800CC1C4(Camera *arg0, Vec3f *arg1, f32 *); /* static */
 s16 func_800CC260(Camera *arg0, Vec3f *arg1, Vec3f *arg2, f32 *arg3, Actor **arg4, s16 arg5); /* static */
 f32 func_800CC488(? *arg0, ? *arg1, f32 *arg2, s32 *arg3); /* static */
 void func_800CC56C(Camera *arg1, f32 *);            /* static */
-f32 func_800CC5C8(Camera *arg0, ? *arg1, f32 *arg2, s32 *arg3); /* static */
+f32 func_800CC5C8(Camera *arg0, ? *arg1, f32 *arg2, f32 *arg3); /* static */
 s32 func_800CC740(void *arg0, s32 arg1);            /* static */
 void func_800CC7A8(Camera *arg0, s16 arg1, s16);    /* static */
 u32 func_800CC804(Camera *arg0, s32 *arg1, CollisionPoly *arg2); /* static */
@@ -1788,7 +1788,7 @@ void func_800CD04C(? *arg0, s16 arg1, s16 arg2, s16 arg3); /* static */
 f32 func_800CD288(Camera *arg0, f32 arg1);          /* static */
 void func_800CD2E0(Camera *arg0, s16 arg1, s16, Camera *); /* static */
 void func_800CD2F0(s32 arg0);                       /* static */
-void func_800CD3E4(Vec3f *arg0, Vec3f *arg1, Vec3f *arg2, Vec3f *arg3, void *arg4); /* static */
+void func_800CD3E4(Vec3f *arg0, Vec3f *arg1, Vec3f *arg2, Vec3f *arg3, f32 *arg4); /* static */
 s32 func_800CD44C(Camera *arg0, f32 *arg1, Vec3f *arg2, void *arg3, s16 arg4); /* static */
 f32 func_800CD634(Vec3f *arg0, s16 arg1, s16 arg2, f32 arg3); /* static */
 f32 func_800CD6CC(Actor *arg0);                     /* static */
@@ -2107,8 +2107,8 @@ s8 *func_800CB60C(s8 *arg0, void *arg1) {
     sp8 = (f32) arg1->unk_2;
     spC = (f32) arg1->unk_4;
     arg0->unk_0 = (f32) temp_t9->unk_0;
-    arg0->unk_4 = (s32) temp_t9->unk_4;
-    arg0->unk_8 = (s32) temp_t9->unk_8;
+    arg0->unk_4 = (f32) temp_t9[1];
+    arg0->unk_8 = (f32) temp_t9[2];
     return arg0;
 }
 
@@ -2395,11 +2395,11 @@ s32 func_800CBC84(? *arg0, Vec3f *arg1, Vec3f *arg2, s32 arg3) {
     f32 sp60;
     f32 sp5C;
     f32 sp50;
-    s32 sp44;
+    f32 sp44;
     Vec3f *sp38;
     Vec3f *temp_t0;
-    void *temp_v1;
-    void *temp_v1_2;
+    f32 temp_v1;
+    f32 temp_v1_2;
     s32 phi_v1;
     s32 phi_v0;
     f32 phi_f12;
@@ -2407,7 +2407,7 @@ s32 func_800CBC84(? *arg0, Vec3f *arg1, Vec3f *arg2, s32 arg3) {
     sp74 = arg0->unk_8C + 0x830;
     OLib_Vec3fDistNormalize((Vec3f *) &sp50, arg1, arg2);
     sp5C = arg2->x + sp50;
-    temp_t0 = arg2 + 0x18;
+    temp_t0 = &arg2[2];
     sp60 = arg2->y + sp54;
     sp64 = arg2->z + sp58;
     phi_v1 = 1;
@@ -2421,17 +2421,17 @@ s32 func_800CBC84(? *arg0, Vec3f *arg1, Vec3f *arg2, s32 arg3) {
     sp38 = temp_t0;
     if (func_800C54AC(sp74, arg1, &sp5C, &sp68, temp_t0, phi_v1, 1, phi_v0, (? *)-1, &sp44) == 0) {
         sp68.unk_0 = arg2->x;
-        sp68.unk_4 = (f32) arg2->y;
-        sp68.unk_8 = (f32) arg2->z;
+        (&sp68)[1] = arg2->y;
+        (&sp68)[2] = arg2->z;
         sp6C += 5.0f;
         if ((arg3 != 0) && (func_800CB7CC(arg0) != 0)) {
-            arg2->unk_18 = (void *) arg0->unk_90->unk_80;
-            sp44 = (s32) arg0->unk_90->unk_85;
-            temp_v1 = arg2->unk_18;
-            arg2->unk_C = (f32) ((f32) temp_v1->unk_8 * 0.00003051851f);
-            arg2->unk_10 = (f32) ((f32) temp_v1->unk_A * 0.00003051851f);
-            arg2->unk_14 = (f32) ((f32) temp_v1->unk_C * 0.00003051851f);
-            if (func_8017D2FC(arg2->unk_C, arg2->unk_10, arg2->unk_14, (f32) temp_v1->unk_E, arg1, &sp5C, &sp68, 1) == 0) {
+            arg2[2].x = arg0->unk_90->unk_80;
+            sp44 = (bitwise f32) arg0->unk_90->unk_85;
+            temp_v1 = arg2[2].x;
+            arg2[1].x = (f32) temp_v1->unk_8 * 0.00003051851f;
+            arg2[1].y = (f32) temp_v1->unk_A * 0.00003051851f;
+            arg2[1].z = (f32) temp_v1->unk_C * 0.00003051851f;
+            if (func_8017D2FC(arg2[1].x, arg2[1].y, arg2[1].z, (f32) temp_v1->unk_E, arg1, &sp5C, &sp68, 1) == 0) {
                 phi_f12 = arg2->y - 20.0f;
             } else {
                 sp6C += 5.0f;
@@ -2441,23 +2441,23 @@ s32 func_800CBC84(? *arg0, Vec3f *arg1, Vec3f *arg2, s32 arg3) {
             phi_f12 = func_800C4488(sp74, sp38, &sp44, &sp68);
         }
         if ((arg2->y - phi_f12) > 5.0f) {
-            arg2->unk_C = (f32) -sp50;
-            arg2->unk_10 = (f32) -sp54;
-            arg2->unk_14 = (f32) -sp58;
+            arg2[1].x = -sp50;
+            arg2[1].y = -sp54;
+            arg2[1].z = -sp58;
             return 0;
         }
         goto block_13;
     }
 block_13:
-    temp_v1_2 = arg2->unk_18;
-    arg2->unk_24 = sp44;
-    arg2->unk_C = (f32) ((f32) temp_v1_2->unk_8 * 0.00003051851f);
-    arg2->unk_10 = (f32) ((f32) temp_v1_2->unk_A * 0.00003051851f);
-    arg2->unk_14 = (f32) ((f32) temp_v1_2->unk_C * 0.00003051851f);
-    arg2->x = arg2->unk_C + sp68;
-    arg2->y = arg2->unk_10 + sp6C;
-    arg2->z = arg2->unk_14 + sp70;
-    return sp44 + 1;
+    temp_v1_2 = arg2[2].x;
+    arg2[3].x = sp44;
+    arg2[1].x = (f32) temp_v1_2->unk_8 * 0.00003051851f;
+    arg2[1].y = (f32) temp_v1_2->unk_A * 0.00003051851f;
+    arg2[1].z = (f32) temp_v1_2->unk_C * 0.00003051851f;
+    arg2->x = arg2[1].x + sp68;
+    arg2->y = arg2[1].y + sp6C;
+    arg2->z = arg2[1].z + sp70;
+    return (bitwise s32) sp44 + 1;
 }
 
 void func_800CBFA4(Camera *arg2) {
@@ -2480,20 +2480,20 @@ s32 func_800CC000(Camera *arg0, Vec3f *arg1, Vec3f *arg2) {
 
     temp_a2 = arg2;
     if (func_800C54AC(arg0->globalCtx + 0x830, arg1, &sp40, arg2 + 0x18, (Vec3f *)1, 1, 1, -1, arg2 + 0x24) != 0) {
-        temp_v1 = temp_a2->unk_18;
-        temp_a2->unk_C = (f32) ((f32) temp_v1->unk_8 * 0.00003051851f);
-        temp_a2->unk_10 = (f32) ((f32) temp_v1->unk_A * 0.00003051851f);
-        temp_a2->unk_14 = (f32) ((f32) temp_v1->unk_C * 0.00003051851f);
+        temp_v1 = temp_a2[2].x;
+        temp_a2[1].x = (f32) temp_v1->unk_8 * 0.00003051851f;
+        temp_a2[1].y = (f32) temp_v1->unk_A * 0.00003051851f;
+        temp_a2[1].z = (f32) temp_v1->unk_C * 0.00003051851f;
         temp_a2->x = sp40.unk_0;
-        temp_a2->y = sp40.unk_4;
-        temp_a2->z = sp40.unk_8;
-        return temp_a2->unk_24 + 1;
+        temp_a2->y = (&sp40)[1];
+        temp_a2->z = (&sp40)[2];
+        return temp_a2[3].x + 1;
     }
     arg2 = temp_a2;
     OLib_Vec3fDistNormalize((Vec3f *) &sp34, arg1, temp_a2);
-    arg2->unk_C = (f32) -sp34;
-    arg2->unk_10 = (f32) -sp38;
-    arg2->unk_14 = (f32) -sp3C;
+    arg2[1].x = -sp34;
+    arg2[1].y = -sp38;
+    arg2[1].z = -sp3C;
     return 0;
 }
 
@@ -2507,8 +2507,8 @@ s32 func_800CC128(Camera *arg0, Vec3f *arg2) {
     sp30 = 0.0f;
     if (func_800C54AC(arg0->globalCtx + 0x830, arg2, &sp38, temp_t7, (Vec3f *)1, 1, 1, -1, &sp34) != 0) {
         arg2->x = sp38.unk_0;
-        arg2->y = sp38.unk_4;
-        arg2->z = sp38.unk_8;
+        arg2->y = (&sp38)[1];
+        arg2->z = (&sp38)[2];
         return 1;
     }
     return 0;
@@ -2543,11 +2543,11 @@ s16 func_800CC260(Camera *arg0, Vec3f *arg1, Vec3f *arg2, f32 *arg3, Actor **arg
     s16 phi_v1;
 
     sp64.unk_0 = arg2->x;
-    sp64.unk_4 = (f32) arg2->y;
-    sp64.unk_8 = (f32) arg2->z;
+    (&sp64)[1] = arg2->y;
+    (&sp64)[2] = arg2->z;
     func_800B81E0(&sp70, arg0->globalCtx->actorCtx.actorList[2].first);
     sp90.unk_0 = arg3->unk_0;
-    sp90.unk_4 = (s32) arg3->unk_4;
+    (&sp90)[1] = arg3[1];
     sp88 = 0xE;
     phi_s3 = 0;
 loop_1:
@@ -2556,7 +2556,7 @@ loop_1:
     if ((func_800CC1C4(arg0, arg1, &sp64) != 0) || (func_800CBC30(arg0, arg2->y, arg1->y) != 0) || (temp_a0 = arg0->globalCtx, (CollisionCheck_LineOCCheck(temp_a0, temp_a0 + 0x18884, arg2, arg1, arg4, (s32) arg5) != 0))) {
         temp_v0 = phi_s3 * 2;
         sp96 = *(&D_801B9E18 + temp_v0) + arg3->unk_6;
-        sp94 = *(temp_v0 + &D_801B9E34) + (s32) ((f32) (s16) arg3->unk_4 * Rand_ZeroOne());
+        sp94 = *(temp_v0 + &D_801B9E34) + (s32) ((f32) (bitwise s16) arg3->unk_4 * Rand_ZeroOne());
         if ((s32) sp94 >= 0x36B1) {
             sp94 += -0x3E80;
         }
@@ -2566,8 +2566,8 @@ loop_1:
         temp_s3 = phi_s3 + 1;
         sp90 *= 0.9f;
         sp64.unk_0 = arg2->x;
-        sp64.unk_4 = (f32) arg2->y;
-        sp64.unk_8 = (f32) arg2->z;
+        (&sp64)[1] = arg2->y;
+        (&sp64)[2] = arg2->z;
         phi_s3 = temp_s3;
         phi_s3_2 = temp_s3;
         if (temp_s3 < sp88) {
@@ -2575,7 +2575,7 @@ loop_1:
         }
     }
     arg3->unk_0 = sp90.unk_0;
-    arg3->unk_4 = (s32) sp90.unk_4;
+    arg3[1] = (&sp90)[1];
     phi_v1 = (s16) phi_s3_2;
     if (phi_s3_2 == 0xE) {
         phi_v1 = -1;
@@ -2613,7 +2613,7 @@ void func_800CC56C(Camera *arg1) {
     func_800CC488(&sp20, &sp2C, &sp1C);
 }
 
-f32 func_800CC5C8(Camera *arg0, ? *arg1, f32 *arg2, s32 *arg3) {
+f32 func_800CC5C8(Camera *arg0, ? *arg1, f32 *arg2, f32 *arg3) {
     CollisionPoly *sp3C;
     CollisionContext *sp38;
     GlobalContext *sp30;
@@ -2729,7 +2729,7 @@ s16 func_800CC9C0(Camera *arg0, s16 arg1, s16 arg2) {
     f32 sp40;
     f32 sp3C;
     f32 sp38;
-    s32 sp34;
+    f32 sp34;
     f32 sp30;
     f32 sp2C;
     f32 temp_f0;
@@ -2839,10 +2839,10 @@ f32 func_800CCCEC(Camera *arg0, s16 arg1) {
         D_801B9E60 = 0.0f;
     }
     sp5C.unk_0 = arg0->playerPosRot.pos.x;
-    sp5C.unk_4 = (f32) arg0->playerPosRot.pos.y;
-    sp5C.unk_8 = (f32) arg0->playerPosRot.pos.z;
-    sp5C.unk_C = (s32) arg0->unk_A0;
-    sp5C.unk_10 = (s32) arg0->unk_A4;
+    (&sp5C)[1] = arg0->playerPosRot.pos.y;
+    (&sp5C)[2] = arg0->playerPosRot.pos.z;
+    (&sp5C)[3] = arg0->unk_A0;
+    (&sp5C)[4] = arg0->unk_A4;
     sp28 = Math_SinS(sp6A);
     temp_f0 = Math_CosS(sp6A);
     temp_f4 = sp60 + sp2C;
@@ -2982,8 +2982,8 @@ void func_800CD04C(? *arg0, s16 arg1, s16 arg2, s16 arg3) {
     sp54 = temp_f12 * temp_f12;
     spAC = (temp_f16 * (temp_f6 - sp30)) + (temp_f20 * (temp_f4_2 + temp_f8_4)) + (temp_f18 * (((1.0f - sp54) * temp_f0) + sp54));
     arg0->unk_0 = (f32) temp_t9->unk_0;
-    arg0->unk_4 = (s32) temp_t9->unk_4;
-    arg0->unk_8 = (s32) temp_t9->unk_8;
+    arg0->unk_4 = (f32) temp_t9[1];
+    arg0->unk_8 = (f32) temp_t9[2];
 }
 
 f32 func_800CD288(Camera *arg0, f32 arg1) {
@@ -3048,10 +3048,10 @@ void func_800CD2F0(s32 arg0) {
     }
 }
 
-void func_800CD3E4(Vec3f *arg0, Vec3f *arg1, Vec3f *arg2, Vec3f *arg3, void *arg4) {
+void func_800CD3E4(Vec3f *arg0, Vec3f *arg1, Vec3f *arg2, Vec3f *arg3, f32 *arg4) {
     ? sp24;
 
-    func_800CAA14(arg3->unk_18, arg4->unk_18, arg1, arg2, &sp24);
+    func_800CAA14(arg3[2].x, arg4[6], arg1, arg2, &sp24);
     arg0->x = sp24.unk_0;
     arg0->y = sp24.unk_4;
     arg0->z = sp24.unk_8;
@@ -3109,7 +3109,7 @@ s32 func_800CD44C(Camera *arg0, f32 *arg1, Vec3f *arg2, void *arg3, s16 arg4) {
         }
 block_9:
         temp_a1_3 = arg3 + 0xC;
-        if (arg3->unk_18 == arg2->unk_18) {
+        if (arg3->unk_18 == arg2[2].x) {
             return 3;
         }
         sp28 = temp_a1_3;
@@ -3434,14 +3434,14 @@ f32 func_800CD6CC(Actor *arg0) {
     }
     temp_v0 = &arg0->playerPosRot;
     sp74.unk_0 = temp_v0->pos.x;
-    sp74.unk_4 = (f32) temp_v0->pos.y;
-    sp74.unk_8 = (f32) temp_v0->pos.z;
+    (&sp74)[1] = temp_v0->pos.y;
+    (&sp74)[2] = temp_v0->pos.z;
     sp38 = temp_v0;
     sp78 += temp_f0;
     OLib_Vec3fDiffToVecSphGeo(arg6, (Vec3f *) &sp74, arg2);
     temp_a1 = &sp5C;
     temp_a1->unk_0 = arg6->r;
-    temp_a1->unk_4 = (s32) arg6->unk_4;
+    temp_a1[1] = arg6->unk_4;
     if (arg4 < sp5C) {
         phi_f0 = sp5C * 0.2f;
     } else {
@@ -3546,7 +3546,7 @@ f32 func_800CD6CC(Actor *arg0) {
     sp78 = 0.0f;
     sp80 = 0.0f;
     temp_a1->unk_0 = arg7->unk_0;
-    temp_a1->unk_4 = (s32) arg7->unk_4;
+    temp_a1[1] = arg7[1];
     temp_v1 = arg8 & 0x80;
     sp58 = arg7->unk_0 * (arg5 * arg4);
     if (temp_v1 != 0) {
@@ -3632,7 +3632,7 @@ f32 func_800CD6CC(Actor *arg0) {
     sp44 = temp_v0;
     func_800B8214((PosRot *) &sp30, temp_v0->unk_390);
     phi_v0 = 0;
-    if ((temp_v0->unk_390->unk_1E8 & 4) != 0) {
+    if (((bitwise s32) temp_v0->unk_390[1].colChkInfo.displacement.x & 4) != 0) {
         phi_v0 = 1;
     }
     if (phi_v0 != 0) {
@@ -3845,7 +3845,7 @@ void func_800CED90(Camera *arg0, f32 *arg1, f32 *arg2, f32 arg3, f32 arg4, Vec3f
     Vec3f *sp38;
     Vec3f *sp34;
     Vec3f *sp30;
-    Vec3f *sp2C;
+    f32 *sp2C;
     Vec3f *temp_a0;
     Vec3f *temp_a0_2;
     Vec3f *temp_a0_3;
@@ -3879,7 +3879,7 @@ void func_800CED90(Camera *arg0, f32 *arg1, f32 *arg2, f32 arg3, f32 arg4, Vec3f
             goto block_12;
         }
         sp8C = sp8C;
-        temp_f0_2 = Math3D_SignedDistanceFromPlane(arg5->unk_40, arg5->unk_44, arg5->unk_48, (f32) arg5->unk_4C->unk_E, sp34);
+        temp_f0_2 = Math3D_SignedDistanceFromPlane(arg5[5].y, arg5[5].z, arg5[6].x, (f32) arg5[6].y->unk_E, sp34);
         temp_cond = temp_f0_2 > 0.0f;
         sp88 = temp_f0_2;
         temp_a0_2 = arg0 + 0x5C;
@@ -3888,22 +3888,22 @@ void func_800CED90(Camera *arg0, f32 *arg1, f32 *arg2, f32 arg3, f32 arg4, Vec3f
         }
         sp8C = sp8C;
         sp38 = temp_a0_2;
-        temp_f0_3 = OLib_Vec3fDist(temp_a0_2, arg5 + 0x34);
+        temp_f0_3 = OLib_Vec3fDist(temp_a0_2, (Vec3f *) &arg5[4].y);
         sp88 = temp_f0_3;
         if (temp_f0_3 < 10.0f) {
             goto block_12;
         }
         sp8C = sp8C;
-        temp_f0_4 = Math3D_SignedDistanceFromPlane(arg5->unk_18, arg5->unk_1C, arg5->unk_20, (f32) arg5->unk_24->unk_E, sp38);
+        temp_f0_4 = Math3D_SignedDistanceFromPlane(arg5[2].x, arg5[2].y, arg5[2].z, (f32) arg5[3].x->unk_E, sp38);
         sp88 = temp_f0_4;
         if (temp_f0_4 > 0.0f) {
             goto block_12;
         }
-        if (arg5->unk_1C > 0.5f) {
+        if (arg5[2].y > 0.5f) {
             goto block_12;
         }
         sp8C = sp8C;
-        Math3D_AngleBetweenVectors(arg0 + 0xF0, arg5 + 0x40, &sp88);
+        Math3D_AngleBetweenVectors(arg0 + 0xF0, (Vec3f *) &arg5[5].y, &sp88);
         phi_v1 = sp8C;
         if (sp88 > 0.0f) {
 block_12:
@@ -3927,14 +3927,14 @@ block_12:
         } else {
             phi_v0 = 0;
         }
-        phi_v1_3 = func_800CD44C(arg0, arg1, arg5 + 0xC, arg5 + 0x34, (s16) (phi_v0 | phi_v1_2));
+        phi_v1_3 = func_800CD44C(arg0, arg1, &arg5[1], (void *) &arg5[4].y, (s16) (phi_v0 | phi_v1_2));
     }
     if (phi_v1_3 != 1) {
         if (phi_v1_3 != 2) {
-            temp_a1 = arg5 + 0xC;
+            temp_a1 = &arg5[1];
             if ((phi_v1_3 != 3) && (phi_v1_3 != 6)) {
                 *arg6 &= 0xEFFF;
-                arg5->unk_5C = arg4;
+                arg5[7].z = arg4;
                 sp38->x = temp_a1->x;
                 sp38->y = temp_a1->y;
                 sp38->z = temp_a1->z;
@@ -3970,22 +3970,22 @@ block_12:
         }
         goto block_31;
     }
-    func_800CD3E4(arg5, &arg0->at, &arg0->eyeNext, arg5 + 0xC, arg5 + 0x34);
+    func_800CD3E4(arg5, &arg0->at, &arg0->eyeNext, &arg5[1], &arg5[4].y);
 block_31:
     temp_a1_2 = &arg0->at;
     temp_a2_3 = &sp90;
-    sp90 = arg5->x + (arg5->unk_18 + arg5->unk_40);
-    sp94 = arg5->y + (arg5->unk_1C + arg5->unk_44);
+    sp90 = arg5->x + (arg5[2].x + arg5[5].y);
+    sp94 = arg5->y + (arg5[2].y + arg5[5].z);
     sp34 = temp_a1_2;
-    sp2C = arg5 + 0x34;
+    sp2C = &arg5[4].y;
     sp30 = &arg0->eyeNext;
-    sp98 = arg5->z + (arg5->unk_20 + arg5->unk_48);
+    sp98 = arg5->z + (arg5[2].z + arg5[6].x);
     OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp50, temp_a1_2, (Vec3f *) temp_a2_3);
     sp50 = arg1->unk_0;
     arg5->unk_64 = 1;
-    arg5->unk_5C = 1.5f;
+    arg5[7].z = 1.5f;
     OLib_VecSphAddToVec3f((Vec3f *) &sp58, temp_a1_2, (VecSph *) &sp50);
-    if (func_800CBC84((? *) arg0, sp2C, (Vec3f *) &sp58, 0) == 0) {
+    if (func_800CBC84((? *) arg0, (Vec3f *) sp2C, (Vec3f *) &sp58, 0) == 0) {
         sp56 = func_800CB674(arg1->unk_6, arg2->unk_6, (arg0->speedRatio * 0.5f) + 0.5f) + arg2->unk_6;
         sp54 = func_800CB674(arg1->unk_4, arg2->unk_4, (arg0->speedRatio * 0.5f) + 0.5f) + arg2->unk_4;
         if ((s32) arg5->unk_2C < 0x2AA8) {
@@ -4032,7 +4032,7 @@ s32 Camera_ModeNORM1(Camera *camera) {
     f32 sp6C;
     ? sp64;
     ? sp60;
-    s32 sp5C;
+    f32 sp5C;
     f32 sp58;
     Vec3f *sp4C;
     Vec3f *sp48;
@@ -4444,7 +4444,7 @@ block_118:
     OLib_VecSphAddToVec3f(sp44, sp48, (VecSph *) &spB4);
     if ((camera->status == 7) && ((camera->unk_22 & 0x10) == 0) && (spC4 <= 0.9f)) {
         if (func_800CBA7C(camera) == 0) {
-            func_800CED90(camera, &spB4, &sp9C, camera->unk_4, camera->unk_C, (camera->thisIdx * 0x68) + &D_801EDC30, (s16 *) (sp3C + 0xC));
+            func_800CED90(camera, &spB4, &sp9C, camera->unk_4, camera->unk_C, (camera->thisIdx * 0x68) + &D_801EDC30, (s16 *) &sp3C[12]);
             temp_ret = func_800C4488(&camera->globalCtx->colCtx, (Vec3f *) &sp60, &sp5C, (f32 *) sp4C);
             temp_f0_10 = temp_ret;
             if (((camera->unk_22 & 8) != 0) && (sp58 = temp_f0_10, phi_f14 = temp_f0_10, (func_800CB924(camera) != 0))) {
@@ -4851,7 +4851,7 @@ s32 Camera_ModeNORM0(Camera *camera) {
             sp8C = temp_s1->unk_20;
             sp88 = 100.0f;
             sp8E = temp_s1->unk_22;
-            OLib_VecSphGeoToVec3f((Vec3f *) (temp_s1 + 0xC), (VecSph *) temp_a1_2);
+            OLib_VecSphGeoToVec3f((Vec3f *) &temp_s1[12], (VecSph *) temp_a1_2);
         }
         camera->animState = 1;
         camera->yawUpdateRateInv = 50.0f;
@@ -4883,17 +4883,17 @@ s32 Camera_ModeNORM0(Camera *camera) {
     camera->fovUpdateRate = Camera_Lerpf(0.05f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
     if ((temp_v0_7 & 0x80) == 0) {
         func_800CD6F8(camera, &sp78, camera->unk_0, (s16) (temp_v0_7 & 1));
-        phi_s1->unk_28 = 120.0f;
+        phi_s1[3].y = 120.0f;
     } else {
-        func_800CD834(camera, &sp78, camera->unk_0, phi_s1 + 0x24, phi_s1->unk_28);
-        temp_f0_3 = phi_s1->unk_28;
+        func_800CD834(camera, &sp78, camera->unk_0, phi_s1 + 0x24, phi_s1[3].y);
+        temp_f0_3 = phi_s1[3].y;
         if (temp_f0_3 > 20.0f) {
-            phi_s1->unk_28 = (f32) (temp_f0_3 - 0.2f);
+            phi_s1[3].y = temp_f0_3 - 0.2f;
         }
     }
     if ((camera->unk_1E & 4) != 0) {
-        phi_s1->x = sp34->pos.x + phi_s1->unk_C;
-        phi_s1->z = sp34->pos.z + phi_s1->unk_14;
+        phi_s1->x = sp34->pos.x + phi_s1[1].x;
+        phi_s1->z = sp34->pos.z + phi_s1[1].z;
     }
     phi_s1->y = sp34->pos.y;
     OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp88, phi_s1, sp3C);
@@ -4942,7 +4942,7 @@ block_40:
     } else {
 block_46:
         sp98.unk_0 = sp90.unk_0;
-        sp98.unk_4 = (s32) sp90.unk_4;
+        (&sp98)[1] = (&sp90)[1];
     }
     temp_f0_4 = (bitwise f32) func_800CE79C(camera, sp90, camera->unk_4, camera->unk_8, (s16) 0);
     sp98 = temp_f0_4;
@@ -4972,7 +4972,7 @@ block_46:
             camera->inputDir.y = sp9E;
         }
     }
-    camera->fov = Camera_Lerpf(phi_s1->unk_1C, camera->fov, camera->fovUpdateRate, 0.1f);
+    camera->fov = Camera_Lerpf(phi_s1[2].y, camera->fov, camera->fovUpdateRate, 0.1f);
     camera->roll = Camera_Lerps(0, camera->roll, 0.5f, 5);
     camera->atLERPStepScale = func_800CD288(camera, camera->unk_18);
     return 1;
@@ -5313,7 +5313,7 @@ block_90:
             camera->paramData[40].unk_22 = (s16) (camera->paramData[40].unk_22 - 1);
         } else {
             sp90.unk_0 = sp80.unk_0;
-            sp90.unk_4 = (s32) sp80.unk_4;
+            (&sp90)[1] = (&sp80)[1];
             sp90 = camera->dist;
         }
     } else {
@@ -5505,8 +5505,8 @@ s32 Camera_ModeJUMP2(Camera *camera) {
     if ((temp_v1_2 == 0) || (temp_v1_2 == 0xA) || (temp_v1_2 == 0x14)) {
         temp_t0 = &camera->playerPosRot;
         spC8.unk_0 = temp_t0->pos.x;
-        spC8.unk_4 = (f32) temp_t0->pos.y;
-        spC8.unk_8 = (f32) temp_t0->pos.z;
+        (&spC8)[1] = temp_t0->pos.y;
+        (&spC8)[2] = temp_t0->pos.z;
         sp2C = temp_t0;
         temp_f0_2 = (bitwise f32) func_800CC56C(camera, &spC8);
         temp_t1 = &camera->paramData[36];
@@ -5630,16 +5630,16 @@ s32 Camera_ModeJUMP2(Camera *camera) {
     if (func_800CBC84((? *) camera, sp34, (Vec3f *) &sp60, 0) != 0) {
         temp_a2_3 = &spAC;
         spC8.unk_0 = sp60.unk_0;
-        spC8.unk_4 = (f32) sp60.unk_4;
-        spC8.unk_8 = (f32) sp60.unk_8;
+        (&spC8)[1] = sp60.unk_4;
+        (&spC8)[2] = sp60.unk_8;
         spB0 = 0;
         spAC = spB4;
         spB2 = spBA;
         OLib_VecSphAddToVec3f((Vec3f *) &sp60, sp34, (VecSph *) temp_a2_3);
         if (func_800CBC84((? *) camera, sp34, (Vec3f *) &sp60, 0) != 0) {
             sp38->x = spC8.unk_0;
-            sp38->y = spC8.unk_4;
-            sp38->z = spC8.unk_8;
+            sp38->y = (&spC8)[1];
+            sp38->z = (&spC8)[2];
         } else {
             spB8 = Camera_Lerps(0, spB8, 0.2f, 5);
             OLib_VecSphAddToVec3f(sp38, sp34, (VecSph *) &spB4);
@@ -5938,7 +5938,7 @@ block_34:
     OLib_VecSphAddToVec3f(sp40, sp44, (VecSph *) &spAC);
     if ((camera->status == 7) && ((camera->unk_22 & 0x40) == 0)) {
         if (func_800CBA7C(camera) == 0) {
-            func_800CED90(camera, &spAC, &sp9C, camera->unk_4, camera->unk_C, (camera->thisIdx * 0x68) + &D_801EDC30, (s16 *) (sp38 + 0x10));
+            func_800CED90(camera, &spAC, &sp9C, camera->unk_4, camera->unk_C, (camera->thisIdx * 0x68) + &D_801EDC30, (s16 *) &sp38[16]);
         }
         if ((camera->unk_22 & 4) != 0) {
             camera->inputDir.x = (s16) -(s32) spA0;
@@ -6296,8 +6296,8 @@ s32 Camera_ModeBATT1(Camera *camera) {
                 spC0 = Camera_Lerps(phi_a0, sp98, 1.0f / camera->pitchUpdateRateInv, 5);
                 OLib_VecSphAddToVec3f(sp48, sp4C, (VecSph *) &spBC);
                 spC4.unk_0 = sp48->x;
-                spC4.unk_4 = (f32) sp48->y;
-                spC4.unk_8 = (f32) sp48->z;
+                (&spC4)[1] = sp48->y;
+                (&spC4)[2] = sp48->z;
                 if (camera->status == 7) {
                     temp_v0_7 = camera->unk_30;
                     if ((temp_v0_7 & 0x10) == 0) {
@@ -6316,8 +6316,8 @@ s32 Camera_ModeBATT1(Camera *camera) {
                             spCC -= sp11C;
                         }
                         sp50->x = spC4.unk_0;
-                        sp50->y = spC4.unk_4;
-                        sp50->z = spC4.unk_8;
+                        sp50->y = (&spC4)[1];
+                        sp50->z = (&spC4)[2];
                         camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
                     } else if ((camera->globalCtx->envCtx.unk_15 == 0) || ((temp_v0_7 & 1) != 0)) {
                         if (func_800CBC84((? *) camera, sp4C, (Vec3f *) &spC4, 0) != 0) {
@@ -6338,8 +6338,8 @@ s32 Camera_ModeBATT1(Camera *camera) {
                                 spB8 = (s16) -(s32) spA8;
                                 spB4 = 40.0f;
                                 sp114.unk_0 = sp8C->pos.x;
-                                sp114.unk_4 = (f32) sp8C->pos.y;
-                                sp114.unk_8 = (f32) sp8C->pos.z;
+                                (&sp114)[1] = sp8C->pos.y;
+                                (&sp114)[2] = sp8C->pos.z;
                                 sp118 += 40.0f;
                                 OLib_VecSphAddToVec3f((Vec3f *) &sp120, (Vec3f *) &sp114, (VecSph *) &spB4);
                                 Camera_LerpVec3f((Vec3f *) &sp120, sp50, 0.15f, 0.15f, 0.2f);
@@ -6349,16 +6349,16 @@ s32 Camera_ModeBATT1(Camera *camera) {
                                     if (OLib_Vec3fDist((Vec3f *) &spC4, sp50) < 20.0f) {
                                         camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
                                         sp50->x = spC4.unk_0;
-                                        sp50->y = spC4.unk_4;
-                                        sp50->z = spC4.unk_8;
+                                        sp50->y = (&spC4)[1];
+                                        sp50->z = (&spC4)[2];
                                     } else {
                                         Camera_LerpVec3f((Vec3f *) &spC4, sp50, 0.15f, 0.15f, 0.2f);
                                     }
                                 } else {
                                     camera->paramData[52].unk_1A = (s16) (temp_v0_8 & 0xFFEF);
                                     sp50->x = spC4.unk_0;
-                                    sp50->y = spC4.unk_4;
-                                    sp50->z = spC4.unk_8;
+                                    sp50->y = (&spC4)[1];
+                                    sp50->z = (&spC4)[2];
                                 }
                             }
                         } else {
@@ -6367,16 +6367,16 @@ s32 Camera_ModeBATT1(Camera *camera) {
                                 if (OLib_Vec3fDist((Vec3f *) &spC4, sp50) < 20.0f) {
                                     camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
                                     sp50->x = spC4.unk_0;
-                                    sp50->y = spC4.unk_4;
-                                    sp50->z = spC4.unk_8;
+                                    sp50->y = (&spC4)[1];
+                                    sp50->z = (&spC4)[2];
                                 } else {
                                     Camera_LerpVec3f((Vec3f *) &spC4, sp50, 0.15f, 0.15f, 0.2f);
                                 }
                             } else {
                                 camera->paramData[52].unk_1A = (s16) (temp_v0_9 & 0xFFEF);
                                 sp50->x = spC4.unk_0;
-                                sp50->y = spC4.unk_4;
-                                sp50->z = spC4.unk_8;
+                                sp50->y = (&spC4)[1];
+                                sp50->z = (&spC4)[2];
                             }
                             camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xEFFF);
                         }
@@ -6384,12 +6384,12 @@ s32 Camera_ModeBATT1(Camera *camera) {
                         camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
                         if (func_800CBC84((? *) camera, sp4C, (Vec3f *) &spC4, 3) != 0) {
                             sp50->x = spC4.unk_0;
-                            sp50->y = spC4.unk_4;
-                            sp50->z = spC4.unk_8;
+                            sp50->y = (&spC4)[1];
+                            sp50->z = (&spC4)[2];
                         } else {
                             sp50->x = spC4.unk_0;
-                            sp50->y = spC4.unk_4;
-                            sp50->z = spC4.unk_8;
+                            sp50->y = (&spC4)[1];
+                            sp50->z = (&spC4)[2];
                         }
                     } else {
                         camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
@@ -6399,8 +6399,8 @@ s32 Camera_ModeBATT1(Camera *camera) {
                         spC8 -= sp118;
                         spCC -= sp11C;
                         sp50->x = temp_t2->unk_0;
-                        sp50->y = temp_t2->unk_4;
-                        sp50->z = temp_t2->unk_8;
+                        sp50->y = temp_t2[1];
+                        sp50->z = temp_t2[2];
                     }
                 } else {
                     camera->paramData[52].unk_1A = (s16) (camera->paramData[52].unk_1A & 0xFFEF);
@@ -6661,7 +6661,7 @@ s32 Camera_ModeKEEP1(Camera *camera) {
             phi_v0 = 0;
         }
         sp38 = &camera->paramData[48];
-        func_800CDE6C(camera, &spC0, (Vec3f *) sp30, camera->unk_0, camera->unk_8, (f32 *) (&camera->paramData[48] + 8), (VecSph *) &spD0, (s16) (phi_v0 | camera->unk_2C));
+        func_800CDE6C(camera, &spC0, (Vec3f *) sp30, camera->unk_0, camera->unk_8, (f32 *) &(&camera->paramData[48])[8], (VecSph *) &spD0, (s16) (phi_v0 | camera->unk_2C));
         sp124.unk_0 = (f32) sp3C->pos.x;
         sp124.unk_4 = (f32) sp3C->pos.y;
         sp124.unk_8 = (f32) sp3C->pos.z;
@@ -6780,8 +6780,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
             spEC = Camera_Lerps(phi_a0, spC4, 0.11111111f, 5);
             OLib_VecSphAddToVec3f(sp40, sp44, (VecSph *) &spE8);
             sp7C.unk_0 = sp40->x;
-            sp7C.unk_4 = (f32) sp40->y;
-            sp7C.unk_8 = (f32) sp40->z;
+            (&sp7C)[1] = sp40->y;
+            (&sp7C)[2] = sp40->z;
             if (camera->status == 7) {
                 temp_v0_4 = camera->unk_2C;
                 if ((temp_v0_4 & 0x10) == 0) {
@@ -6803,8 +6803,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                         sp84 -= sp138;
                     }
                     sp48->x = sp7C.unk_0;
-                    sp48->y = sp7C.unk_4;
-                    sp48->z = sp7C.unk_8;
+                    sp48->y = (&sp7C)[1];
+                    sp48->z = (&sp7C)[2];
                     phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
                 } else if ((camera->globalCtx->envCtx.unk_15 == 0) || ((temp_v0_4 & 1) != 0)) {
                     sp38 = phi_t0;
@@ -6829,8 +6829,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                             spE4 = (s16) -(s32) spD4;
                             spE0 = 40.0f;
                             sp130.unk_0 = spA4->pos.x;
-                            sp130.unk_4 = (f32) spA4->pos.y;
-                            sp130.unk_8 = (f32) spA4->pos.z;
+                            (&sp130)[1] = spA4->pos.y;
+                            (&sp130)[2] = spA4->pos.z;
                             sp134 += 40.0f;
                             OLib_VecSphAddToVec3f((Vec3f *) &sp124, (Vec3f *) &sp130, (VecSph *) &spE0);
                             Camera_LerpVec3f((Vec3f *) &sp124, sp48, 0.15f, 0.15f, 0.2f);
@@ -6841,16 +6841,16 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                                 if (OLib_Vec3fDist((Vec3f *) &sp7C, sp48) < 20.0f) {
                                     phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
                                     sp48->x = sp7C.unk_0;
-                                    sp48->y = sp7C.unk_4;
-                                    sp48->z = sp7C.unk_8;
+                                    sp48->y = (&sp7C)[1];
+                                    sp48->z = (&sp7C)[2];
                                 } else {
                                     Camera_LerpVec3f((Vec3f *) &sp7C, sp48, 0.15f, 0.15f, 0.2f);
                                 }
                             } else {
                                 phi_t0->unk_18 = (s16) (temp_v0_5 & 0xFFEF);
                                 sp48->x = sp7C.unk_0;
-                                sp48->y = sp7C.unk_4;
-                                sp48->z = sp7C.unk_8;
+                                sp48->y = (&sp7C)[1];
+                                sp48->z = (&sp7C)[2];
                             }
                         }
                     } else {
@@ -6860,8 +6860,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                             if (OLib_Vec3fDist((Vec3f *) &sp7C, sp48) < 20.0f) {
                                 phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
                                 sp48->x = sp7C.unk_0;
-                                sp48->y = sp7C.unk_4;
-                                sp48->z = sp7C.unk_8;
+                                sp48->y = (&sp7C)[1];
+                                sp48->z = (&sp7C)[2];
                             } else {
                                 sp38 = phi_t0;
                                 Camera_LerpVec3f((Vec3f *) &sp7C, sp48, 0.15f, 0.15f, 0.2f);
@@ -6869,8 +6869,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                         } else {
                             phi_t0->unk_18 = (s16) (temp_v0_6 & 0xFFEF);
                             sp48->x = sp7C.unk_0;
-                            sp48->y = sp7C.unk_4;
-                            sp48->z = sp7C.unk_8;
+                            sp48->y = (&sp7C)[1];
+                            sp48->z = (&sp7C)[2];
                         }
                         phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xEFFF);
                     }
@@ -6878,12 +6878,12 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                     phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
                     if (func_800CBC84((? *) camera, sp44, (Vec3f *) &sp7C, 3) != 0) {
                         sp48->x = sp7C.unk_0;
-                        sp48->y = sp7C.unk_4;
-                        sp48->z = sp7C.unk_8;
+                        sp48->y = (&sp7C)[1];
+                        sp48->z = (&sp7C)[2];
                     } else {
                         sp48->x = sp7C.unk_0;
-                        sp48->y = sp7C.unk_4;
-                        sp48->z = sp7C.unk_8;
+                        sp48->y = (&sp7C)[1];
+                        sp48->z = (&sp7C)[2];
                     }
                 } else {
                     phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
@@ -6893,8 +6893,8 @@ s32 Camera_ModeKEEP1(Camera *camera) {
                     sp80 -= sp134;
                     sp84 -= sp138;
                     sp48->x = temp_t5->unk_0;
-                    sp48->y = temp_t5->unk_4;
-                    sp48->z = temp_t5->unk_8;
+                    sp48->y = temp_t5[1];
+                    sp48->z = temp_t5[2];
                 }
             } else {
                 phi_t0->unk_18 = (s16) (phi_t0->unk_18 & 0xFFEF);
@@ -7056,8 +7056,8 @@ block_9:
     func_800B81E0((f32 *) temp_s1, (Player *) camera->target);
     temp_v1_3 = &camera->playerPosRot;
     spD8.unk_0 = temp_v1_3->pos.x;
-    spD8.unk_4 = (f32) temp_v1_3->pos.y;
-    spD8.unk_8 = (f32) temp_v1_3->pos.z;
+    (&spD8)[1] = temp_v1_3->pos.y;
+    (&spD8)[2] = temp_v1_3->pos.z;
     sp3C = temp_v1_3;
     spDC += sp58;
     OLib_Vec3fDiffToVecSphGeo((VecSph *) &spA0, (Vec3f *) &spD8, (Vec3f *) temp_s1);
@@ -7110,8 +7110,8 @@ block_9:
                 sp90 = 30.0f;
                 temp_s2_2 = &spCC;
                 temp_s2_2->unk_0 = sp70->pos.x;
-                temp_s2_2->unk_4 = (f32) sp70->pos.y;
-                temp_s2_2->unk_8 = (f32) sp70->pos.z;
+                temp_s2_2[1] = sp70->pos.y;
+                temp_s2_2[2] = sp70->pos.z;
                 sp38 = temp_t0;
                 spD0 += 30.0f;
                 OLib_VecSphAddToVec3f((Vec3f *) &spC0, (Vec3f *) temp_s2_2, (VecSph *) &sp90);
@@ -7161,8 +7161,8 @@ block_42:
         temp_a2_3 = &spA0;
         spA0 = (spB8 * temp_f2_3) + (temp_f0_3 * (1.0f - temp_f2_3));
         spD8.unk_0 = sp3C->pos.x;
-        spD8.unk_4 = (f32) sp3C->pos.y;
-        spD8.unk_8 = (f32) sp3C->pos.z;
+        (&spD8)[1] = sp3C->pos.y;
+        (&spD8)[2] = sp3C->pos.z;
         sp38 = phi_t0;
         spB4 = temp_f0_3;
         spDC += sp58;
@@ -7261,7 +7261,7 @@ s32 Camera_ModeKEEP4(Camera *camera) {
     s16 spA2;
     s16 sp9C;
     f32 sp88;
-    s32 sp84;
+    f32 sp84;
     s16 sp82;
     Player *sp7C;
     ? sp60;
@@ -7396,8 +7396,8 @@ block_6:
     OLib_Vec3fDiffToVecSphGeo((VecSph *) &spA8, temp_a1, temp_a2_2);
     temp_v1_4 = &camera->playerPosRot;
     D_801EDDD0.unk_0 = temp_v1_4->pos.x;
-    D_801EDDD0.unk_4 = (f32) temp_v1_4->pos.y;
-    D_801EDDD0.unk_8 = (f32) temp_v1_4->pos.z;
+    (&D_801EDDD0)[1] = temp_v1_4->pos.y;
+    (&D_801EDDD0)[2] = temp_v1_4->pos.z;
     D_801EDDD4 += phi_f2;
     sp38 = temp_v1_4;
     temp_f0_2 = func_800C4488(&camera->globalCtx->colCtx, (Vec3f *) &spC0, &sp84, &D_801EDDD0);
@@ -7410,8 +7410,8 @@ block_6:
     if (camera->unk_10 != 0.0f) {
         D_801EDDE0.unk_0 = (f32) D_801EDDD0.unk_0;
         temp_a2_3 = &spB8;
-        D_801EDDE0.unk_4 = (f32) D_801EDDD0.unk_4;
-        D_801EDDE0.unk_8 = (f32) D_801EDDD0.unk_8;
+        D_801EDDE0.unk_4 = (f32) (&D_801EDDD0)[1];
+        D_801EDDE0.unk_8 = (f32) (&D_801EDDD0)[2];
         spBC = 0;
         spB8 = camera->unk_10;
         sp34 = &camera->paramData[32];
@@ -7510,7 +7510,7 @@ block_31:
         sp34 = &camera->paramData[32];
         temp_a3 = &spB8;
         spB8 = camera->unk_4;
-        sp84 = func_800CC260(camera, &D_801EDDF0, (Vec3f *) &D_801EDDD0, temp_a3, (Actor **) &spCC, (s16) (s32) sp9C);
+        sp84 = (bitwise f32) func_800CC260(camera, &D_801EDDF0, (Vec3f *) &D_801EDDD0, temp_a3, (Actor **) &spCC, (s16) (s32) sp9C);
         temp_f0_3 = (f32) camera->paramData[32].unk_14;
         camera->paramData[32].unk_4 = (f32) ((f32) (s16) (spBC - spAC) / temp_f0_3);
         camera->paramData[32] = (f32) ((f32) (s16) (spBE - spAE) / temp_f0_3);
@@ -7631,7 +7631,7 @@ s32 Camera_ModeFIXD1(Camera *camera) {
     sp68 = temp_v0;
     func_800CB60C(temp_s1, temp_v0);
     temp_v1_3 = temp_v1_2 + 0xC;
-    temp_s1->unk_C = (unaligned s32) sp68->unk_6;
+    temp_s1[12] = (unaligned s32) sp68->unk_6;
     temp_s1->unk_10 = (u16) sp68->unk_A;
     temp_s1->unk_14 = (s16) sp68->unk_C;
     temp_s1->unk_18 = (Player *) camera->player;
@@ -7656,7 +7656,7 @@ s32 Camera_ModeFIXD1(Camera *camera) {
         goto block_8;
     }
 block_8:
-    if (camera->player != phi_s1->unk_18) {
+    if (camera->player != phi_s1[2].x) {
         camera->animState = 0x14;
     }
     temp_v0_3 = phi_s1->unk_14;
@@ -7987,11 +7987,11 @@ block_55:
         if ((camera->unk_18 & 1) == 0) {
             temp_a1_3 = &camera->at;
             temp_a1_3->x = spB0.unk_0;
-            temp_a1_3->y = spB0.unk_4;
-            temp_a1_3->z = spB0.unk_8;
+            temp_a1_3->y = (&spB0)[1];
+            temp_a1_3->z = (&spB0)[2];
             sp3C = temp_a1_3;
             OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp80, temp_a1_3, phi_s1);
-            temp_f0_5 = phi_s1->unk_C;
+            temp_f0_5 = phi_s1[1].x;
             temp_a2_3 = &sp80;
             if ((temp_f0_5 < sp80) || ((camera->unk_18 & 0x20) != 0)) {
                 sp80 = temp_f0_5;
@@ -8020,13 +8020,13 @@ block_55:
             camera->fov = (f32) phi_s1->unk_1C * 0.01f;
         }
     }
-    temp_f0_7 = phi_s1->unk_14;
+    temp_f0_7 = phi_s1[1].z;
     temp_a1_4 = &camera->at;
     sp38 = (PosRot *) &camera->eyeNext;
     sp3C = temp_a1_4;
     Camera_LerpVec3f((Vec3f *) &spB0, temp_a1_4, temp_f0_7, temp_f0_7, 1.0f);
     OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp80, temp_a1_4, phi_s1);
-    temp_f0_8 = phi_s1->unk_C;
+    temp_f0_8 = phi_s1[1].x;
     temp_a2_5 = &sp80;
     if ((temp_f0_8 < sp80) || ((camera->unk_18 & 0x20) != 0)) {
         sp80 = temp_f0_8;
@@ -8043,7 +8043,7 @@ block_55:
             spA4.unk_8 = (f32) phi_s1->z;
         }
     }
-    temp_f0_10 = phi_s1->unk_18;
+    temp_f0_10 = phi_s1[2].x;
     Camera_LerpVec3f((Vec3f *) &spA4, (Vec3f *) sp38, temp_f0_10, temp_f0_10, 0.1f);
     sp40->x = sp38->pos.x;
     sp40->y = sp38->pos.y;
@@ -8052,8 +8052,8 @@ block_55:
     camera->roll = 0;
     camera->xzSpeed = 0.0f;
     temp_f12 = (f32) phi_s1->unk_1C * 0.01f;
-    phi_s1->unk_10 = temp_f12;
-    camera->fov = Camera_Lerpf(temp_f12, camera->fov, phi_s1->unk_14, 0.1f);
+    phi_s1[1].y = temp_f12;
+    camera->fov = Camera_Lerpf(temp_f12, camera->fov, phi_s1[1].z, 0.1f);
     camera->atLERPStepScale = func_800CD288(camera, 1.0f);
     func_800CB6C8(camera, sp34);
     camera->animState = 1;
@@ -8133,8 +8133,8 @@ s32 Camera_ModeSUBJ1(Camera *camera) {
     sp82 = sp66 + 0x8000;
     sp80 = sp64;
     sp90.unk_0 = sp58.unk_0;
-    sp90.unk_4 = (s32) sp58.unk_4;
-    sp90.unk_8 = (s32) sp58.unk_8;
+    (&sp90)[1] = (&sp58)[1];
+    (&sp90)[2] = (&sp58)[2];
     sp94 += camera->unk_0;
     OLib_VecSphAddToVec3f((Vec3f *) &sp84, (Vec3f *) &sp90, (VecSph *) temp_a2);
     temp_s1 = &camera->at;
@@ -8323,8 +8323,8 @@ s32 Camera_ModeUNIQ2(Camera *camera) {
         Camera_ClearFlags(camera, 4);
     }
     sp70.unk_0 = camera->playerPosRot.pos.x;
-    sp70.unk_4 = (f32) camera->playerPosRot.pos.y;
-    sp70.unk_8 = (f32) camera->playerPosRot.pos.z;
+    (&sp70)[1] = camera->playerPosRot.pos.y;
+    (&sp70)[2] = camera->playerPosRot.pos.z;
     if ((camera->unk_10 & 1) != 0) {
         phi_f16 = 1.0f;
     } else {
@@ -8509,7 +8509,7 @@ s32 Camera_ModeUNIQ0(Camera *camera) {
         sp40 = &camera->playerPosRot;
         temp_v0_5 = func_800CC7A8(camera, camera->camDataIdx);
         temp_s1_2 = &camera->paramData[12];
-        temp_a0 = temp_s1_2 + 0x1C;
+        temp_a0 = &temp_s1_2[28];
         sp28 = temp_a0;
         sp78 = temp_v0_5;
         func_800CB60C(temp_a0, temp_v0_5);
@@ -8523,7 +8523,7 @@ s32 Camera_ModeUNIQ0(Camera *camera) {
         sp30->x = sp44.unk_0;
         sp30->y = sp44.unk_4;
         sp30->z = sp44.unk_8;
-        temp_s1_2->unk_34 = (unaligned s32) sp78->unk_6;
+        temp_s1_2[52] = (unaligned s32) sp78->unk_6;
         temp_s1_2->unk_38 = (u16) sp78->unk_A;
         temp_v1 = sp78->unk_C;
         if (temp_v1 != -1) {
@@ -8567,17 +8567,17 @@ s32 Camera_ModeUNIQ0(Camera *camera) {
 block_23:
         temp_s1_3 = &camera->paramData[12];
         sp40 = &camera->playerPosRot;
-        sp28 = temp_s1_3 + 0x1C;
+        sp28 = &temp_s1_3[28];
         sp84 = OLib_Vec3fDist((Vec3f *) &sp8C, sp30);
         sp8A = temp_s1_3->unk_36;
         sp88 = (s16) -(s32) temp_s1_3->unk_34;
-        OLib_VecSphGeoToVec3f((Vec3f *) (temp_s1_3 + 0x28), (VecSph *) &sp84);
-        temp_a2_2 = temp_s1_3 + 0xC;
+        OLib_VecSphGeoToVec3f((Vec3f *) &temp_s1_3[40], (VecSph *) &sp84);
+        temp_a2_2 = &temp_s1_3[12];
         sp38 = temp_a2_2;
         func_80179A44(sp28, sp40, temp_a2_2);
-        sp34->x = temp_s1_3[0xC];
-        sp34->y = temp_s1_3[0xC].unk_4;
-        sp34->z = temp_s1_3[0xC].unk_8;
+        sp34->x = temp_a2_2->unk_0;
+        sp34->y = temp_a2_2->unk_4;
+        sp34->z = temp_a2_2->unk_8;
         if ((sp98->stateFlags1 * 4) < 0) {
             temp_s1_3->unk_0 = (f32) sp40->pos.x;
             temp_s1_3->unk_4 = (f32) sp40->pos.y;
@@ -8751,8 +8751,8 @@ s32 Camera_ModeDEMO1(Camera *camera) {
     if (camera->animState == 0) {
         temp_s1 = &camera->eye;
         temp_s2->unk_1C = 0;
-        OLib_Vec3fDiffToVecSphGeo((VecSph *) (temp_s2 + 0xC), (Vec3f *) &camera->targetPosRot, temp_s1);
-        OLib_Vec3fDiffToVecSphGeo((VecSph *) (temp_s2 + 0x14), &camera->at, temp_s1);
+        OLib_Vec3fDiffToVecSphGeo((VecSph *) &temp_s2[12], (Vec3f *) &camera->targetPosRot, temp_s1);
+        OLib_Vec3fDiffToVecSphGeo((VecSph *) &temp_s2[20], &camera->at, temp_s1);
         func_800B81E0(&sp60, (Player *) camera->target);
         func_800B8214((PosRot *) &sp74, camera->target);
         camera->targetPosRot.pos.x = (sp74 + sp60) * 0.5f;
@@ -8823,7 +8823,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
         if (temp_s2_2->unk_1C == 0) {
             temp_t6 = &sp98;
             sp98 = temp_v1;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, (Vec3f *) temp_t4, (f32 *) (temp_s2_2 + 0x14), temp_t6, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, (Vec3f *) temp_t4, (f32 *) &temp_s2_2[20], temp_t6, (s16) 1);
         }
         Camera_LerpVec3f(sp38, sp3C, 0.1f, 0.1f, 0.1f);
         temp_a1_2 = &camera->eyeNext;
@@ -8841,7 +8841,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
         if (temp_s2_2->unk_1C == 0) {
             sp98 = temp_v1;
             temp_s2_2->unk_14 = (f32) temp_s2_2->unk_C;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) (temp_s2_2 + 0x14), &sp98, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) &temp_s2_2[20], &sp98, (s16) 1);
         }
         Camera_LerpVec3f(sp38, sp3C, 0.1f, 0.1f, 0.1f);
         temp_a1_3 = &camera->eyeNext;
@@ -8860,7 +8860,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
         if (temp_s2_2->unk_1C == 0) {
             temp_t2 = &sp98;
             sp98 = temp_v1;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, (Vec3f *) temp_t0, (f32 *) (temp_s2_2 + 0xC), temp_t2, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, (Vec3f *) temp_t0, (f32 *) &temp_s2_2[12], temp_t2, (s16) 1);
         }
         sp3C->x = sp38->x;
         sp3C->y = sp38->y;
@@ -8884,7 +8884,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
             temp_s2_2->unk_12 = (s16) temp_v1->shape.rot.y;
             sp98 = camera->target;
             temp_s2_2->unk_C = (f32) temp_s2_2->unk_14;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) (temp_s2_2 + 0xC), temp_t8, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) &temp_s2_2[12], temp_t8, (s16) 1);
         }
         Camera_LerpVec3f(sp38, sp3C, 0.1f, 0.1f, 0.1f);
         temp_a1_4 = &camera->eyeNext;
@@ -8902,7 +8902,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
         if (temp_s2_2->unk_1C == 0) {
             temp_s2_2->unk_12 = (s16) temp_v1->shape.rot.y;
             sp98 = camera->target;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) (temp_s2_2 + 0xC), &sp98, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) &temp_s2_2[12], &sp98, (s16) 1);
         }
         sp3C->x = sp38->x;
         sp3C->y = sp38->y;
@@ -8924,7 +8924,7 @@ s32 Camera_ModeDEMO1(Camera *camera) {
         if (temp_s2_2->unk_1C == 0) {
             temp_s2_2->unk_12 = (s16) temp_v1->shape.rot.y;
             sp98 = camera->target;
-            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) (temp_s2_2 + 0xC), &sp98, (s16) 1);
+            func_800CC260(camera, (Vec3f *) temp_s2_2, sp38, (f32 *) &temp_s2_2[12], &sp98, (s16) 1);
         }
         Camera_LerpVec3f(sp38, sp3C, 0.1f, 0.1f, 0.1f);
         temp_a1_5 = &camera->eyeNext;
@@ -9121,13 +9121,13 @@ s32 Camera_ModeDEMO2(Camera *camera) {
         temp_f2 = phi_a3->x;
         temp_a1_2 = &sp64;
         temp_f0_2 = (f32) (temp_s0_2->unk_10 - 2) * 0.006849315f;
-        sp64 = ((phi_a3->unk_C - temp_f2) * temp_f0_2) + temp_f2;
+        sp64 = ((phi_a3[1].x - temp_f2) * temp_f0_2) + temp_f2;
         temp_f12 = phi_a3->y;
-        sp68 = ((phi_a3->unk_10 - temp_f12) * temp_f0_2) + temp_f12;
+        sp68 = ((phi_a3[1].y - temp_f12) * temp_f0_2) + temp_f12;
         temp_f14 = phi_a3->z;
         sp60 = temp_f0_2;
         sp4C = phi_t0;
-        sp6C = ((phi_a3->unk_14 - temp_f14) * temp_f0_2) + temp_f14;
+        sp6C = ((phi_a3[1].z - temp_f14) * temp_f0_2) + temp_f14;
         OLib_Vec3fToVecSphGeo((VecSph *) &sp88, (Vec3f *) temp_a1_2);
         temp_t7 = &camera->playerPosRot;
         sp28 = temp_t7;
@@ -9151,18 +9151,18 @@ s32 Camera_ModeDEMO2(Camera *camera) {
         break;
     case 2:
         temp_s0_3 = &camera->paramData[12];
-        temp_f2_3 = phi_a3->unk_C;
+        temp_f2_3 = phi_a3[1].x;
         temp_a1_3 = &sp64;
         temp_f0_3 = (f32) (temp_s0_3->unk_10 - 0x94) * 0.1f;
-        sp64 = ((phi_a3->unk_18 - temp_f2_3) * temp_f0_3) + temp_f2_3;
-        temp_f14_2 = phi_a3->unk_10 - temp_f16;
-        temp_f6_2 = ((phi_a3->unk_1C - temp_f14_2) * temp_f0_3) + temp_f14_2;
+        sp64 = ((phi_a3[2].x - temp_f2_3) * temp_f0_3) + temp_f2_3;
+        temp_f14_2 = phi_a3[1].y - temp_f16;
+        temp_f6_2 = ((phi_a3[2].y - temp_f14_2) * temp_f0_3) + temp_f14_2;
         sp68 = temp_f6_2;
         sp68 = temp_f6_2 + temp_f16;
-        temp_f12_2 = phi_a3->unk_14;
+        temp_f12_2 = phi_a3[1].z;
         sp60 = temp_f0_3;
         sp4C = phi_t0;
-        sp6C = ((phi_a3->unk_20 - temp_f12_2) * temp_f0_3) + temp_f12_2;
+        sp6C = ((phi_a3[2].z - temp_f12_2) * temp_f0_3) + temp_f12_2;
         OLib_Vec3fToVecSphGeo((VecSph *) &sp88, (Vec3f *) temp_a1_3);
         temp_v1_3 = &camera->playerPosRot;
         sp28 = temp_v1_3;
@@ -9186,18 +9186,18 @@ s32 Camera_ModeDEMO2(Camera *camera) {
         break;
     case 3:
         temp_s0_4 = &camera->paramData[12];
-        temp_f2_5 = phi_a3->unk_18;
+        temp_f2_5 = phi_a3[2].x;
         temp_a1_4 = &sp64;
         temp_f0_4 = (f32) (temp_s0_4->unk_10 - 0x9F) * 0.11111111f;
-        sp64 = ((phi_a3->unk_24 - temp_f2_5) * temp_f0_4) + temp_f2_5;
-        temp_f12_3 = phi_a3->unk_1C;
-        temp_f18 = ((phi_a3->unk_28 - temp_f12_3) * temp_f0_4) + temp_f12_3;
+        sp64 = ((phi_a3[3].x - temp_f2_5) * temp_f0_4) + temp_f2_5;
+        temp_f12_3 = phi_a3[2].y;
+        temp_f18 = ((phi_a3[3].y - temp_f12_3) * temp_f0_4) + temp_f12_3;
         sp68 = temp_f18;
         sp68 = temp_f18 + temp_f16;
-        temp_f14_3 = phi_a3->unk_20;
+        temp_f14_3 = phi_a3[2].z;
         sp60 = temp_f0_4;
         sp4C = phi_t0;
-        sp6C = ((phi_a3->unk_2C - temp_f14_3) * temp_f0_4) + temp_f14_3;
+        sp6C = ((phi_a3[3].z - temp_f14_3) * temp_f0_4) + temp_f14_3;
         OLib_Vec3fToVecSphGeo((VecSph *) &sp88, (Vec3f *) temp_a1_4);
         temp_v1_5 = &camera->playerPosRot;
         sp28 = temp_v1_5;
@@ -9426,7 +9426,7 @@ s32 Camera_ModeDEMO4(Camera *camera) {
         temp_s0->unk_4 = (f32) sp34->y;
         temp_s0->unk_8 = (f32) sp34->z;
         temp_s0->unk_18 = (f32) sp74.unk_0;
-        temp_s0->unk_1C = (f32) sp74.unk_4;
+        temp_s0->unk_1C = (f32) (&sp74)[1];
         temp_s0->unk_14 = (f32) camera->fov;
     }
     func_800B81E0(&sp5C, camera->player);
@@ -9544,11 +9544,11 @@ s32 Camera_ModeDEMO4(Camera *camera) {
             break;
         case 4:
             temp_s0_6 = &camera->paramData[4];
-            sp30 = (PosRot *) (temp_s0_6 + 0x18);
+            sp30 = (PosRot *) &temp_s0_6[24];
             sp60 -= (sp60 - camera->playerPosRot.pos.y) * 0.1f;
             Camera_LerpVec3f((Vec3f *) &sp5C, sp34, 0.1f, 0.1f, 0.1f);
             sp74.unk_0 = sp30->pos.x;
-            sp74.unk_4 = (f32) sp30->pos.y;
+            (&sp74)[1] = sp30->pos.y;
             camera->roll = 0;
             camera->fov = temp_s0_6->unk_14;
             break;
@@ -9603,7 +9603,7 @@ s32 Camera_ModeDEMO5(Camera *camera) {
         temp_s0->unk_4 = (f32) sp34->y;
         temp_s0->unk_8 = (f32) sp34->z;
         temp_s0->unk_1C = (s32) sp74.unk_0;
-        temp_s0->unk_20 = (s32) sp74.unk_4;
+        temp_s0->unk_20 = (s32) (&sp74)[1];
         temp_s0->unk_18 = (f32) camera->fov;
     }
     func_800B81E0(&sp5C, camera->player);
@@ -9624,12 +9624,12 @@ s32 Camera_ModeDEMO5(Camera *camera) {
                     }
                 } else {
                     temp_s0_4 = &camera->paramData[4];
-                    sp30 = temp_s0_4 + 0x1C;
+                    sp30 = &temp_s0_4[28];
                     sp60 -= (sp60 - camera->playerPosRot.pos.y) * 0.1f;
                     Camera_LerpVec3f((Vec3f *) &sp5C, sp34, 0.1f, 0.1f, 0.1f);
                     camera->roll = 0;
                     sp74.unk_0 = sp30->unk_0;
-                    sp74.unk_4 = (s32) sp30->unk_4;
+                    (&sp74)[1] = sp30->unk_4;
                     camera->fov = temp_s0_4->unk_18;
                 }
             } else {
@@ -9675,8 +9675,8 @@ s32 Camera_ModeDEMO5(Camera *camera) {
         sp5C = temp_v0_4->pos.x;
         sp64 = temp_v0_4->pos.z;
         sp34->x = temp_t3->unk_0;
-        sp34->y = temp_t3->unk_4;
-        sp34->z = temp_t3->unk_8;
+        sp34->y = temp_t3[1];
+        sp34->z = temp_t3[2];
 block_11:
         temp_s0_5 = &camera->paramData[4];
         temp_s0_5->unk_26 = (s16) (temp_s0_5->unk_26 - 1);
@@ -9755,14 +9755,14 @@ s32 Camera_ModeDEMO0(Camera *camera) {
         temp_v0 = &camera->paramData[4];
         temp_a2 = &temp_t0->eye;
         sp20 = temp_a2;
-        temp_a0 = temp_v0 + 4;
+        temp_a0 = &temp_v0[4];
         sp1C = temp_v0;
         camera = camera;
         sp40 = temp_t0;
         OLib_Vec3fDiffToVecSphGeo((VecSph *) temp_a0, temp_a1, temp_a2);
         temp_a2_2 = &camera->eye;
         sp24 = temp_a2_2;
-        OLib_Vec3fDiffToVecSphGeo((VecSph *) (temp_v0 + 0xC), &camera->at, temp_a2_2);
+        OLib_Vec3fDiffToVecSphGeo((VecSph *) &temp_v0[12], &camera->at, temp_a2_2);
         if (temp_v0->unk_4 < 50.0f) {
             temp_v0->unk_4 = 50.0f;
             if ((s32) temp_v0->unk_8 < 0x7D0) {
@@ -10077,8 +10077,8 @@ s32 Camera_ModeSPEC8(Camera *camera) {
                 camera->eyeNext.y = (Vec3f *) &camera->paramData[32]->y;
                 camera->eyeNext.z = (Vec3f *) &camera->paramData[32]->z;
                 camera->at.x = sp68.unk_0;
-                camera->at.y = sp68.unk_4;
-                camera->at.z = sp68.unk_8;
+                camera->at.y = (&sp68)[1];
+                camera->at.z = (&sp68)[2];
             }
         }
         temp_f0_2 = camera->paramData[12].unk_8;
@@ -10734,7 +10734,7 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
     ? spAC;
     f32 spA4;
     f32 spA0;
-    s32 sp9C;
+    f32 sp9C;
     s32 sp98;
     s32 sp94;
     CollisionPoly *sp90;
@@ -10766,9 +10766,9 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
     s16 temp_v0_5;
     s16 temp_v0_6;
     s16 temp_v0_7;
+    s16 temp_v0_8;
     s16 temp_v0_9;
     s16 temp_v1_2;
-    s32 temp_v0_8;
     s32 temp_v1_3;
     f32 phi_f0;
 
@@ -10814,13 +10814,13 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
                     }
                 } else {
                     spA0.unk_0 = sp68.unk_0;
-                    spA0.unk_4 = (f32) sp68.unk_4;
-                    spA0.unk_8 = (f32) sp68.unk_8;
+                    (&spA0)[1] = (&sp68)[1];
+                    (&spA0)[2] = (&sp68)[2];
                     spA4 += func_800CB700(camera);
                     temp_a0_2 = camera->globalCtx;
                     temp_f0 = func_800C41E4(temp_a0_2, &temp_a0_2->colCtx, &sp90, &sp9C, camera->player, &spA0);
                     if (temp_f0 != -32000.0f) {
-                        camera->bgCheckId = (s16) sp9C;
+                        camera->bgCheckId = (bitwise s16) sp9C;
                         camera->playerGroundY = temp_f0;
                         sp98 = 2;
                     }
@@ -10845,10 +10845,10 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
                 camera->xzSpeed = OLib_ClampMaxDist(temp_f0_2, sp88);
                 camera->speedRatio = OLib_ClampMaxDist(sp84 / sp88, 1.8f);
                 camera->playerPosRot.pos.x = sp68.unk_0;
-                camera->playerPosRot.pos.y = sp68.unk_4;
-                camera->playerPosRot.pos.z = sp68.unk_8;
-                camera->unk_A0 = (s32) sp68.unk_C;
-                camera->unk_A4 = (s32) sp68.unk_10;
+                camera->playerPosRot.pos.y = (&sp68)[1];
+                camera->playerPosRot.pos.z = (&sp68)[2];
+                camera->unk_A0 = (f32) (&sp68)[3];
+                camera->unk_A4 = (f32) (&sp68)[4];
                 if (camera->thisIdx == 0) {
                     func_800DE324(camera);
                     func_800DE840(camera);
@@ -10861,7 +10861,7 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
                     camera->nextCamDataIdx = -1;
                 }
                 sp94 = 0;
-                sp9C = (s32) camera->bgCheckId;
+                sp9C = (bitwise f32) camera->bgCheckId;
                 temp_v0_4 = camera->flags2;
                 if (((temp_v0_4 & 1) != 0) && ((temp_v0_4 & 4) != 0) && ((temp_v0_4 & 0x400) == 0)) {
                     if ((temp_v0_4 & 0x200) != 0) {
@@ -10871,7 +10871,7 @@ Vec3s *Camera_Update(Vec3s *param_1, Camera *camera) {
                     } else {
 block_31:
                         if ((((u32) camera->flags2 >> 0xF) == 0) && (func_800CB7F8(camera) == 0) && (func_800DE954(camera) == 0) && (func_800CB828(camera) == 0) && (sp98 != 0)) {
-                            temp_v0_5 = func_800CC804(camera, &sp9C, sp90);
+                            temp_v0_5 = func_800CC804(camera, (s32 *) &sp9C, sp90);
                             if ((temp_v0_5 != -1) && (camera->bgCheckId == 0x32)) {
                                 sp3A = temp_v0_5;
                                 if (func_800CBC00(camera) == 0) {
@@ -10879,13 +10879,13 @@ block_31:
                                 }
                             }
                             spA0.unk_0 = sp68.unk_0;
-                            spA0.unk_4 = (f32) sp68.unk_4;
-                            spA0.unk_8 = (f32) sp68.unk_8;
+                            (&spA0)[1] = (&sp68)[1];
+                            (&spA0)[2] = (&sp68)[2];
                             spA4 += func_800CB700(camera);
                             temp_f0_3 = func_800C4488(&camera->globalCtx->colCtx, (Vec3f *) &sp8C, &sp9C, &spA0);
-                            if ((temp_f0_3 != -32000.0f) && (sp8C != sp90) && (sp9C == 0x32) && ((camera->playerGroundY - 2.0f) < temp_f0_3)) {
-                                temp_v0_6 = func_800CC804(camera, &sp9C, sp8C);
-                                if ((temp_v0_6 != -1) && (sp9C == 0x32)) {
+                            if ((temp_f0_3 != -32000.0f) && (sp8C != sp90) && ((bitwise s32) sp9C == 0x32) && ((camera->playerGroundY - 2.0f) < temp_f0_3)) {
+                                temp_v0_6 = func_800CC804(camera, (s32 *) &sp9C, sp8C);
+                                if ((temp_v0_6 != -1) && ((bitwise s32) sp9C == 0x32)) {
                                     camera->nextCamDataIdx = temp_v0_6 | 0x1000;
                                     sp94 = 1;
                                 }
@@ -10901,7 +10901,7 @@ block_31:
                         sp94 = 5;
                     }
                 }
-                if (((camera->thisIdx == 0) || ((camera->flags2 & 0x40) != 0)) && ((camera->bgCheckId == 0x32) || ((sp9C == 0x32) && (sp94 != 0))) && (camera->nextCamDataIdx != -1) && (camera->unk150 == 0) && ((Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) || (sp94 != 0)) && (((camera->flags2 & 0x200) == 0) || (func_800CBB58(camera) != 0))) {
+                if (((camera->thisIdx == 0) || ((camera->flags2 & 0x40) != 0)) && ((camera->bgCheckId == 0x32) || (((bitwise s32) sp9C == 0x32) && (sp94 != 0))) && (camera->nextCamDataIdx != -1) && (camera->unk150 == 0) && ((Camera_fabsf(camera->playerPosRot.pos.y - camera->playerGroundY) < 11.0f) || (sp94 != 0)) && (((camera->flags2 & 0x200) == 0) || (func_800CBB58(camera) != 0))) {
                     func_800DFB14(camera, (u32) camera->nextCamDataIdx);
                     temp_v1_2 = camera->timer;
                     camera->nextCamDataIdx = -1;
@@ -10943,7 +10943,7 @@ block_66:
                 param_1->z = (s16) (u16) camera->inputDir.z;
             } else {
                 temp_v0_8 = Quake_Calc(camera, (QuakeCamCalc *) &sp48);
-                sp9C = temp_v0_8;
+                sp9C = (bitwise f32) temp_v0_8;
                 if (temp_v0_8 != 0) {
                     temp_a1_3 = &spB8;
                     temp_a2 = &spC4;
@@ -10958,11 +10958,11 @@ block_66:
                     phi_f0 = camera->fov + ((f32) sp62 * 0.00549325f);
                 } else if (D_801B9E54 != 0) {
                     spC4.unk_0 = camera->at.x;
-                    spC4.unk_4 = (f32) camera->at.y;
-                    spC4.unk_8 = (f32) camera->at.z;
+                    (&spC4)[1] = camera->at.y;
+                    (&spC4)[2] = camera->at.z;
                     spB8.unk_0 = camera->eye.x;
-                    spB8.unk_4 = (f32) camera->eye.y;
-                    spB8.unk_8 = (f32) camera->eye.z;
+                    (&spB8)[1] = camera->eye.y;
+                    (&spB8)[2] = camera->eye.z;
                     OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp3C, (Vec3f *) &spB8, (Vec3f *) &spC4);
                     temp_v1_4 = &camera->up;
                     spAC.unk_0 = (f32) temp_v1_4->x;
@@ -10971,11 +10971,11 @@ block_66:
                     phi_f0 = camera->fov;
                 } else {
                     spC4.unk_0 = camera->at.x;
-                    spC4.unk_4 = (f32) camera->at.y;
-                    spC4.unk_8 = (f32) camera->at.z;
+                    (&spC4)[1] = camera->at.y;
+                    (&spC4)[2] = camera->at.z;
                     spB8.unk_0 = camera->eye.x;
-                    spB8.unk_4 = (f32) camera->eye.y;
-                    spB8.unk_8 = (f32) camera->eye.z;
+                    (&spB8)[1] = camera->eye.y;
+                    (&spB8)[2] = camera->eye.z;
                     OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp3C, (Vec3f *) &spB8, (Vec3f *) &spC4);
                     func_800CD04C(&spAC, sp40, sp42, camera->roll);
                     phi_f0 = camera->fov;
@@ -10992,8 +10992,8 @@ block_66:
                     camera->up.z = spAC.unk_8;
                 }
                 camera->skyboxOffset.x = sp54.unk_0;
-                camera->skyboxOffset.y = sp54.unk_4;
-                camera->skyboxOffset.z = sp54.unk_8;
+                camera->skyboxOffset.y = (&sp54)[1];
+                camera->skyboxOffset.z = (&sp54)[2];
                 sp80 = phi_f0;
                 View_SetScale(&camera->globalCtx->view, ((f32) gGameInfo->data[259] * 0.01f) + 1.0f);
                 camera->globalCtx->view.fovy = phi_f0;
@@ -11308,7 +11308,7 @@ block_8:
 
 s16 *func_800DFC1C(s16 *arg0, Camera *arg1) {
     arg0->unk_0 = (unaligned s32) arg1->unk_134;
-    arg0->unk_4 = (u16) arg1->inputDir.z;
+    arg0[2] = arg1->inputDir.z;
     return arg0;
 }
 
@@ -11328,7 +11328,7 @@ s32 func_800DFC68(Camera *camera) {
 
 s16 *func_800DFC90(s16 *arg0, Camera *arg1) {
     arg0->unk_0 = (unaligned s32) arg1->unk_13A;
-    arg0->unk_4 = (u16) arg1->camDir.z;
+    arg0[2] = arg1->camDir.z;
     return arg0;
 }
 

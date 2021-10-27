@@ -107,7 +107,7 @@ s32 func_809A3448(Actor *arg0) {
     s16 temp_v0;
     s32 phi_v0;
 
-    temp_f2 = arg0->unk_148;
+    temp_f2 = arg0[1].flags;
     if (fabsf(temp_f2) > 0.1f) {
         temp_v0 = arg0->unk_150 + 0x2000;
         phi_v0 = (s32) temp_v0;
@@ -170,7 +170,7 @@ s32 func_809A34E0(Actor *arg0, s32 arg1) {
     if (temp_v0 == 6) {
         temp_v0_4 = arg1 == 0;
         phi_v0 = temp_v0_4;
-        if (arg0->unk_176 != 0) {
+        if (arg0[1].world.rot.y != 0) {
             if (temp_v0_4 == 0) {
                 return arg1 == 1;
             }
@@ -179,7 +179,7 @@ s32 func_809A34E0(Actor *arg0, s32 arg1) {
         }
         temp_v0_5 = arg1 == 2;
         phi_v0 = temp_v0_5;
-        if (arg0->unk_178 != 0) {
+        if (arg0[1].world.rot.z != 0) {
             if (temp_v0_5 == 0) {
                 return arg1 == 3;
             }
@@ -208,19 +208,19 @@ s32 func_809A35EC(Actor *arg0, s32 arg1) {
     temp_v0 = arg0->home.rot.z & 7;
     temp_v1 = arg0->home.rot.x & 0xF;
     if (temp_v0 == 0) {
-        return (s32) arg0->unk_176 < temp_v1;
+        return (s32) arg0[1].world.rot.y < temp_v1;
     }
     if (temp_v0 == 1) {
-        return -temp_v1 < (s32) arg0->unk_176;
+        return -temp_v1 < (s32) arg0[1].world.rot.y;
     }
     if (temp_v0 == 2) {
-        return (s32) arg0->unk_178 < temp_v1;
+        return (s32) arg0[1].world.rot.z < temp_v1;
     }
     if (temp_v0 == 3) {
-        return -temp_v1 < (s32) arg0->unk_178;
+        return -temp_v1 < (s32) arg0[1].world.rot.z;
     }
     if (temp_v0 == 4) {
-        temp_a1_4 = *(&D_809A4050 + (arg1 * 2)) + arg0->unk_176;
+        temp_a1_4 = *(&D_809A4050 + (arg1 * 2)) + arg0[1].world.rot.y;
         temp_v0_2 = (temp_v1 < temp_a1_4) ^ 1;
         phi_v0 = temp_v0_2;
         if (temp_v0_2 != 0) {
@@ -230,7 +230,7 @@ s32 func_809A35EC(Actor *arg0, s32 arg1) {
         return phi_v0;
     }
     if (temp_v0 == 5) {
-        temp_a1_3 = *(&D_809A4058 + (arg1 * 2)) + arg0->unk_178;
+        temp_a1_3 = *(&D_809A4058 + (arg1 * 2)) + arg0[1].world.rot.z;
         temp_v0_3 = (temp_v1 < temp_a1_3) ^ 1;
         phi_v0 = temp_v0_3;
         if (temp_v0_3 != 0) {
@@ -241,7 +241,7 @@ s32 func_809A35EC(Actor *arg0, s32 arg1) {
     }
     if (temp_v0 == 6) {
         if ((arg1 == 0) || (arg1 == 1)) {
-            temp_a1_2 = *(&D_809A4050 + (arg1 * 2)) + arg0->unk_176;
+            temp_a1_2 = *(&D_809A4050 + (arg1 * 2)) + arg0[1].world.rot.y;
             temp_v0_5 = (temp_v1 < temp_a1_2) ^ 1;
             phi_v0 = temp_v0_5;
             if (temp_v0_5 != 0) {
@@ -250,7 +250,7 @@ s32 func_809A35EC(Actor *arg0, s32 arg1) {
             /* Duplicate return node #22. Try simplifying control flow for better match */
             return phi_v0;
         }
-        temp_a1 = *(&D_809A4058 + (arg1 * 2)) + arg0->unk_178;
+        temp_a1 = *(&D_809A4058 + (arg1 * 2)) + arg0[1].world.rot.z;
         temp_v0_4 = (temp_v1 < temp_a1) ^ 1;
         phi_v0 = temp_v0_4;
         if (temp_v0_4 != 0) {
@@ -267,14 +267,14 @@ void func_809A376C(Actor *arg0, s16 arg1) {
     s32 temp_v0;
 
     temp_v0 = arg1 * 2;
-    arg0->unk_176 = (s16) (arg0->unk_176 + *(&D_809A4050 + temp_v0));
-    arg0->unk_178 = (s16) (arg0->unk_178 + *(&D_809A4058 + temp_v0));
+    arg0[1].world.rot.y += *(&D_809A4050 + temp_v0);
+    arg0[1].world.rot.z += *(&D_809A4058 + temp_v0);
     if ((arg1 == 0) || (arg1 == 1)) {
         arg0->unk_164 = (void *) (arg0 + 0x24);
-        arg0->unk_168 = (f32) (arg0->home.pos.x + (f32) (arg0->unk_176 * 0x3C));
+        arg0[1].world.pos.x = arg0->home.pos.x + (f32) (arg0[1].world.rot.y * 0x3C);
     } else {
         arg0->unk_164 = (void *) (arg0 + 0x2C);
-        arg0->unk_168 = (f32) (arg0->home.pos.z + (f32) (arg0->unk_178 * 0x3C));
+        arg0[1].world.pos.x = arg0->home.pos.z + (f32) (arg0[1].world.rot.z * 0x3C);
     }
     arg0->unk_16C = arg1;
 }
@@ -374,7 +374,7 @@ void func_809A3A74(Actor *arg0, GlobalContext *arg1) {
     if (temp_v0 != -1) {
         if (((s32) (arg0 + (temp_v0 * 2))->unk_16E >= 0xB) && (func_809A34E0(arg0, sp20, 8, temp_a3) != 0) && (func_809A35EC(arg0, sp20) != 0)) {
             phi_v0 = 0x78;
-            if (arg0->unk_148 > 0.0f) {
+            if (arg0[1].flags > 0.0f) {
                 phi_v0 = 0x5A;
             }
             if (func_809A33E0(arg0, arg1, phi_v0) == 0) {
@@ -387,7 +387,7 @@ void func_809A3A74(Actor *arg0, GlobalContext *arg1) {
 block_14:
         temp_v0_2 = arg1->actorCtx.actorList[2].first;
         temp_v0_2->unk_A70 = (s32) (temp_v0_2->unk_A70 & ~0x10);
-        arg0->unk_148 = 0.0f;
+        arg0[1].flags = 0.0f;
         /* Duplicate return node #15. Try simplifying control flow for better match */
     }
 }
@@ -402,7 +402,7 @@ void func_809A3BC0(Actor *arg0, GlobalContext *arg1) {
     s32 sp20;
     s32 temp_v0;
 
-    if (Math_StepToF(arg0->unk_164, arg0->unk_168, 2.3f) != 0) {
+    if (Math_StepToF(arg0->unk_164, arg0[1].world.pos.x, 2.3f) != 0) {
         sp2C = arg1->actorCtx.actorList[2].first;
         sp20 = 0;
         temp_v0 = arg0->home.rot.z & 7;
@@ -420,7 +420,7 @@ void func_809A3BC0(Actor *arg0, GlobalContext *arg1) {
             sp20 = 1;
         }
         sp2C->unk_A70 = (s32) (sp2C->unk_A70 & ~0x10);
-        arg0->unk_148 = 0.0f;
+        arg0[1].flags = 0;
         if (sp20 == 0) {
             func_809A3A48((ObjPzlblock *) arg0);
             return;
@@ -439,10 +439,10 @@ void func_809A3D1C(ObjPzlblock *arg0) {
 void func_809A3D38(Actor *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
-    if (fabsf(arg0->unk_148) > 0.1f) {
+    if (fabsf(arg0[1].flags) > 0.1f) {
         temp_v0 = arg1->actorCtx.actorList[2].first;
         temp_v0->unk_A70 = (s32) (temp_v0->unk_A70 & ~0x10);
-        arg0->unk_148 = 0.0f;
+        arg0[1].flags = 0.0f;
     }
 }
 
@@ -494,18 +494,18 @@ void func_809A3F0C(Actor *this, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp28 = temp_a3;
     sp24 = sp24;
     sp1C = temp_v0_2;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_3 + 8;
+    sp24->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFA000000;
     temp_v0_3->words.w1 = (temp_a3->unk_0 << 0x18) | (temp_a3->unk_1 << 0x10) | (temp_a3->unk_2 << 8) | 0xFF;
     temp_v0_4 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_4 + 8;
+    sp24->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = sp2C->unk_8;
 }

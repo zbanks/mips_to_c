@@ -355,7 +355,7 @@ s32 func_80BC00AC(Actor *arg0, GlobalContext *arg1) {
     s16 temp_a1;
     s32 phi_v1;
 
-    temp_a0 = arg0->unk_288;
+    temp_a0 = arg0[2].id;
     temp_a1 = func_80BC0050(arg0, 0);
     phi_v1 = 0;
     switch (temp_a0) {
@@ -368,7 +368,7 @@ s32 func_80BC00AC(Actor *arg0, GlobalContext *arg1) {
         case 6:
         case 8:
             func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(temp_a1)), arg0);
-            arg0->unk_288 = (s16) (arg0->unk_288 + 1);
+            arg0[2].id += 1;
             phi_v1 = 1;
         }
         break;
@@ -380,12 +380,12 @@ s32 func_80BC00AC(Actor *arg0, GlobalContext *arg1) {
         if ((temp_v0 != 0) && (temp_v0->update != 0)) {
             func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(temp_a1)), arg0->child);
         }
-        arg0->unk_288 = (s16) (arg0->unk_288 + 1);
+        arg0[2].id += 1;
         phi_v1 = 1;
         break;
     case 9:
         ActorCutscene_Stop(temp_a1);
-        arg0->unk_288 = (s16) (arg0->unk_288 + 1);
+        arg0[2].id += 1;
         phi_v1 = 1;
         break;
     }
@@ -400,19 +400,19 @@ s32 func_80BC01DC(Actor *arg0, GlobalContext *arg1) {
     s16 phi_v1_2;
 
     sp2C = 0;
-    temp_t6 = arg0->unk_288;
+    temp_t6 = arg0[2].id;
     switch (temp_t6) {
     case 0:
         if (Player_GetMask(arg1) == 3) {
-            arg0->unk_288 = 1U;
+            arg0[2].id = 1;
         } else {
-            arg0->unk_288 = 5U;
+            arg0[2].id = 5;
         }
         break;
     case 1:
         func_8016A268(arg1, 1, 0, 0, 0, 0);
         arg0->unk_286 = 0x28;
-        arg0->unk_288 = (u16) ((s16) arg0->unk_288 + 1);
+        arg0[2].id = (s16) arg0[2].id + 1;
         break;
     case 2:
         temp_v0 = 0x14 - arg0->unk_286;
@@ -437,17 +437,17 @@ s32 func_80BC01DC(Actor *arg0, GlobalContext *arg1) {
             phi_v1_2 = arg0->unk_286;
         }
         if (phi_v1_2 == 0) {
-            arg0->unk_288 = (u16) ((s16) arg0->unk_288 + 1);
+            arg0[2].id = (s16) arg0[2].id + 1;
         }
         break;
     case 3:
         arg1->interfaceCtx.unk_31A = 4;
-        arg0->unk_288 = (u16) ((s16) arg0->unk_288 + 1);
+        arg0[2].id = (s16) arg0[2].id + 1;
         sp2C = 1;
         break;
     case 4:
         arg1->interfaceCtx.unk_31A = 5;
-        arg0->unk_288 = (u16) ((s16) arg0->unk_288 + 1);
+        arg0[2].id = (s16) arg0[2].id + 1;
         /* fallthrough */
     case 5:
         if ((gSaveContext.eventInf[4] & 4) == 0) {
@@ -456,7 +456,7 @@ s32 func_80BC01DC(Actor *arg0, GlobalContext *arg1) {
         } else {
             func_800FE658(120.0f);
         }
-        arg0->unk_288 = (u16) ((s16) arg0->unk_288 + 1);
+        arg0[2].id = (s16) arg0[2].id + 1;
         arg1->nextEntranceIndex = 0xBC20;
         gSaveContext.nextCutsceneIndex = 0;
         arg1->sceneLoadFlag = 0x14;
@@ -470,18 +470,18 @@ s32 func_80BC01DC(Actor *arg0, GlobalContext *arg1) {
 
 ? *func_80BC045C(Actor *arg0, GlobalContext *arg1) {
     if ((gSaveContext.eventInf[4] & 8) != 0) {
-        arg0->unk_28C = func_80BC01DC;
+        arg0[2].flags = func_80BC01DC;
         goto block_7;
     }
     if (arg0->unk_1DC == 2) {
-        arg0->unk_28C = func_80BC00AC;
+        arg0[2].flags = func_80BC00AC;
         return &D_80BC1574;
     }
     arg0 = arg0;
     if (Player_GetMask(arg1) == 2) {
         return &D_80BC15C8;
     }
-    arg0->unk_28C = func_80BC01DC;
+    arg0[2].flags = func_80BC01DC;
 block_7:
     return &D_80BC1464;
 }
@@ -496,13 +496,13 @@ s32 func_80BC04FC(Actor *arg0, GlobalContext *arg1) {
         phi_v1 = sp24;
         if (func_800B84D0(arg0, arg1) != 0) {
             arg0->unk_262 = (u16) (arg0->unk_262 | 0x20);
-            func_8013AED4(arg0 + 0x262, 0U, 7U);
-            arg0->unk_288 = 0;
-            arg0->unk_28C = 0;
-            arg0->child = arg0->unk_1E8;
-            arg0->unk_1E0 = func_80BC045C(arg0, arg1);
+            func_8013AED4((u16 *) &arg0[1].dropFlag, 0U, 7U);
+            arg0[2].id = 0;
+            arg0[2].flags = 0;
+            arg0->child = (bitwise Actor *) arg0[1].colChkInfo.displacement.x;
+            arg0[1].yDistToPlayer = (bitwise f32) func_80BC045C(arg0, arg1);
             arg0->unk_262 = (u16) (arg0->unk_262 | 0x20);
-            arg0->unk_188 = func_80BC0EAC;
+            arg0[1].focus.pos.z = (bitwise f32) func_80BC0EAC;
             phi_v1 = 1;
         }
     }
@@ -519,7 +519,7 @@ void func_80BC05A8(Vec3s *arg0, GlobalContext *arg1) {
     temp_v0 = func_80152498(arg1 + 0x4908);
     sp28 = temp_v0;
     temp_a0 = arg1->msgCtx.unk11F04;
-    if ((arg0 == sp2C->unk_A88) && (((s32) temp_a0 < 0xFF) || ((s32) temp_a0 >= 0x201)) && (temp_v0 == 3) && (arg0->unk_298 == 3)) {
+    if ((arg0 == sp2C[8].velocity.y) && (((s32) temp_a0 < 0xFF) || ((s32) temp_a0 >= 0x201)) && (temp_v0 == 3) && (arg0->unk_298 == 3)) {
         if (((u32) arg1->state.frames % 3U) == 0) {
             if (arg0->unk_26C == 120.0f) {
                 arg0->unk_26C = 0.0f;
@@ -933,11 +933,11 @@ void func_80BC1278(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 5) {
         func_8013AD9C((s16) (arg2->unk_27C + 0x4000), (s16) (arg2->unk_27E + arg2->shape.rot.y + 0x4000), arg2 + 0x1F0, arg2 + 0x1FC, phi_v0, phi_v1);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_1F0, arg2->unk_1F4, arg2->unk_1F8, 0);
+        SysMatrix_InsertTranslation(arg2[1].colChkInfo.displacement.z, arg2->unk_1F4, arg2->unk_1F8, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
         Matrix_RotateY(arg2->unk_1FE, 1U);
         SysMatrix_InsertXRotation_s(arg2->unk_1FC, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_200, 1);
+        SysMatrix_InsertZRotation_s(arg2[1].shape.rot.x, 1);
         SysMatrix_StatePush();
     }
 }

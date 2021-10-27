@@ -154,8 +154,8 @@ loop_1:
     if (phi_v1->unk_0 == 0) {
         phi_v1->unk_0 = 1U;
         phi_v1->unk_4 = (s32) arg1->unk_0;
-        phi_v1->unk_8 = (s32) arg1->unk_4;
-        phi_v1->unk_C = (s32) arg1->unk_8;
+        phi_v1->unk_8 = (s32) arg1[1];
+        phi_v1->unk_C = (s32) arg1[2];
         phi_v1->unk_10 = (s32) D_80A5AFB0.unk_0;
         phi_v1->unk_14 = (s32) D_80A5AFB0.unk_4;
         phi_v1->unk_18 = (s32) D_80A5AFB0.unk_8;
@@ -499,21 +499,21 @@ void EnWaterEffect_Draw(Actor *thisx, GlobalContext *globalCtx) {
             if (phi_s4 == 0) {
                 temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0U);
                 temp_v0_3 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_3 + 8;
+                temp_s0->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDB060020;
                 temp_v0_3->words.w1 = Lib_SegmentedToVirtual((void *) D_0408DBE0);
                 temp_v0_4 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_4 + 8;
+                temp_s0->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = (u32) &D_06004260;
                 temp_v0_4->words.w0 = 0xDE000000;
                 temp_v0_5 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_5 + 8;
+                temp_s0->polyXlu.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = 0xFAFAFF00;
                 temp_v0_5->words.w0 = 0xFB000000;
                 phi_s4 = (phi_s4 + 1) & 0xFF;
             }
             temp_v1 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1 + 8;
+            temp_s0->polyXlu.p = &temp_v1[1];
             temp_v1->words.w0 = 0xFA000000;
             temp_f0 = phi_s2->unk_38;
             temp_v1->words.w1 = (((u32) (temp_f0 + 55.0f) & 0xFF) << 0x10) | ((u32) temp_f0 << 0x18) | 0xE196;
@@ -526,11 +526,11 @@ void EnWaterEffect_Draw(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_Scale(phi_s2->unk_2C, phi_s2->unk_30, 1.0f, 1);
             SysMatrix_InsertZRotation_f(phi_s2->unk_34, 1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(temp_s0);
             temp_v0_7 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_7 + 8;
+            temp_s0->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_060042B0;
             temp_v0_7->words.w0 = 0xDE000000;
         }
@@ -544,21 +544,21 @@ void EnWaterEffect_Draw(Actor *thisx, GlobalContext *globalCtx) {
             if (phi_s4_2 == 0) {
                 func_8012C448(temp_s0);
                 temp_v0_8 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_8 + 8;
+                temp_s0->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w0 = 0xDB060020;
                 temp_v0_8->words.w1 = Lib_SegmentedToVirtual((void *) D_0408DBE0);
                 temp_v0_9 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_9 + 8;
+                temp_s0->polyXlu.p = &temp_v0_9[1];
                 temp_v0_9->words.w0 = 0xFB000000;
                 temp_v0_9->words.w1 = 0xFAFAFF00;
                 temp_v0_10 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_10 + 8;
+                temp_s0->polyXlu.p = &temp_v0_10[1];
                 temp_v0_10->words.w1 = (u32) &D_06004260;
                 temp_v0_10->words.w0 = 0xDE000000;
                 phi_s4_2 = (phi_s4_2 + 1) & 0xFF;
             }
             temp_v1_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1_2 + 8;
+            temp_s0->polyXlu.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xFA000000;
             temp_f0_2 = phi_s2_2->unk_38;
             temp_v1_2->words.w1 = (((u32) (temp_f0_2 + 55.0f) & 0xFF) << 0x10) | ((u32) temp_f0_2 << 0x18) | 0xE100 | (phi_s2_2->unk_3C & 0xFF);
@@ -567,11 +567,11 @@ void EnWaterEffect_Draw(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
             SysMatrix_InsertYRotation_f(phi_s2_2->unk_34, 1);
             temp_v0_11 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_11 + 8;
+            temp_s0->polyXlu.p = &temp_v0_11[1];
             temp_v0_11->words.w0 = 0xDA380003;
             temp_v0_11->words.w1 = Matrix_NewMtx(temp_s0);
             temp_v0_12 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_12 + 8;
+            temp_s0->polyXlu.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = (u32) &D_060042F8;
             temp_v0_12->words.w0 = 0xDE000000;
         }
@@ -595,8 +595,8 @@ loop_1:
     if (phi_s0->unk_0 == 0) {
         phi_s0->unk_0 = 4U;
         phi_s0->unk_4 = (s32) arg1->unk_0;
-        phi_s0->unk_8 = (s32) arg1->unk_4;
-        phi_s0->unk_C = (s32) arg1->unk_8;
+        phi_s0->unk_8 = (s32) arg1[1];
+        phi_s0->unk_C = (s32) arg1[2];
         phi_s0->unk_1C = (f32) D_80A5AFB0.unk_0;
         phi_s0->unk_20 = (f32) D_80A5AFB0.unk_4;
         phi_s0->unk_24 = (f32) D_80A5AFB0.unk_8;
@@ -668,7 +668,7 @@ void func_80A59C04(Actor *this, GlobalContext *globalCtx) {
     temp_s3 = globalCtx->actorCtx.actorList[2].first;
     phi_v0 = temp_v0;
     phi_v0_2 = temp_v0;
-    phi_s1 = this + 0x144;
+    phi_s1 = &this[1];
     if (temp_v0 != 0) {
 loop_1:
         phi_v0_2 = phi_v0;
@@ -791,6 +791,7 @@ loop_1:
 }
 
 void func_80A5A184(Actor *this, GlobalContext *globalCtx) {
+    Actor *temp_s1;
     Gfx *temp_s2;
     Gfx *temp_v0;
     Gfx *temp_v0_2;
@@ -811,28 +812,29 @@ void func_80A5A184(Actor *this, GlobalContext *globalCtx) {
     s16 phi_s5;
 
     temp_a0 = globalCtx->state.gfxCtx;
+    temp_s1 = &this[1];
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    phi_s1 = this + 0x144;
+    phi_s1 = temp_s1;
     phi_s7 = 0;
     phi_s5 = 0;
     do {
         if (phi_s1->unk_0 == 4) {
             if (phi_s7 == 0) {
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_06004340;
                 temp_v0->words.w0 = 0xDE000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = 0xFF0A0000;
                 temp_v0_2->words.w0 = 0xFB000000;
                 temp_s0->polyOpa.p = Gfx_SetFog(temp_s0->polyOpa.p, 0xFF, 0, 0, 0xFF, 0x1F4, 0xE10);
                 phi_s7 = (phi_s7 + 1) & 0xFF;
             }
             temp_v1 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1 + 8;
+            temp_s0->polyXlu.p = &temp_v1[1];
             temp_v1->words.w0 = 0xFA008080;
             temp_f4 = phi_s1->unk_38;
             temp_f6 = (s32) temp_f4;
@@ -851,7 +853,7 @@ block_7:
             }
             temp_v1->words.w1 = (phi_t7 << 0x18) | phi_s1->unk_3D;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDB060020;
             temp_v0_3->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) phi_s1->unk_1 * -0x14) & 0x1FF, 0x20, 0x80);
             SysMatrix_InsertTranslation(phi_s1->flags, phi_s1->home.pos.x, phi_s1->home.pos.y, 0);
@@ -865,11 +867,11 @@ block_7:
                 SysMatrix_InsertYRotation_f(3.1415927f, 1);
             }
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDA380003;
             temp_v0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_060043E8;
             temp_v0_5->words.w0 = 0xDE000000;
             if ((phi_s1->unk_2A & 1) == 0) {
@@ -878,11 +880,11 @@ block_7:
                 temp_f12 = phi_s1->unk_34;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_s2 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_s2 + 8;
+                temp_s0->polyOpa.p = &temp_s2[1];
                 temp_s2->words.w0 = 0xDA380003;
                 temp_s2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v1_2 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v1_2 + 8;
+                temp_s0->polyOpa.p = &temp_v1_2[1];
                 temp_v1_2->words.w1 = (u32) &D_0406AB30;
                 temp_v1_2->words.w0 = 0xDE000000;
             }
@@ -910,26 +912,26 @@ void func_80A5A534(Actor *this, GlobalContext *globalCtx) {
     if ((s32) this->unk_DC4 >= 0) {
         do {
             temp_a0 = phi_a0 + 4;
-            phi_v1->unk_DD0 = (f32) (phi_v1->unk_DD0 + phi_v0->unk_E08);
-            phi_v0->unk_E08 = (f32) (phi_v0->unk_E08 + phi_v0->unk_E18);
+            phi_v1[884] += phi_v0[898];
+            phi_v0[898] += phi_v0[902];
             phi_a0 = temp_a0;
-            if (phi_v1->unk_DD0 <= 0.0f) {
-                phi_v1->unk_DD0 = 0.0f;
-                phi_v0->unk_E08 = 0.0f;
+            if (phi_v1[884] <= 0.0f) {
+                phi_v1[884] = 0.0f;
+                phi_v0[898] = 0.0f;
             }
             phi_v1 += 0xC;
             phi_v0 += 4;
         } while (temp_a0 != 0x10);
-        Math_ApproachF(this + 0xDD8, 20.0f, 1.0f, 0.025f);
-        Math_ApproachF(this + 0xDE4, 20.0f, 1.0f, 0.075f);
-        Math_ApproachF(this + 0xDF0, 20.0f, 1.0f, 0.1f);
+        Math_ApproachF((f32 *) &this[10].init, 20.0f, 1.0f, 0.025f);
+        Math_ApproachF((f32 *) &this[10].draw, 20.0f, 1.0f, 0.075f);
+        Math_ApproachF((f32 *) &this[11].flags, 20.0f, 1.0f, 0.1f);
         if ((s32) this->unk_DC4 >= 0x18) {
-            Math_ApproachF(this + 0xDFC, 2.0f, 0.1f, 0.2f);
-            Math_ApproachZeroF(this + 0xE2C, 1.0f, 26.0f);
-            Math_ApproachZeroF(this + 0xE30, 1.0f, 26.0f);
-            Math_ApproachZeroF(this + 0xE34, 1.0f, 24.0f);
+            Math_ApproachF(&this[11].home.pos.z, 2.0f, 0.1f, 0.2f);
+            Math_ApproachZeroF(&this[11].focus.pos.y, 1.0f, 26.0f);
+            Math_ApproachZeroF(&this[11].focus.pos.z, 1.0f, 26.0f);
+            Math_ApproachZeroF((f32 *) &this[11].focus.rot, 1.0f, 24.0f);
             if ((s32) this->unk_DC4 >= 0x32) {
-                Math_ApproachZeroF(this + 0xE38, 1.0f, 3.75f);
+                Math_ApproachZeroF((f32 *) &this[11].focus.rot.z, 1.0f, 3.75f);
             }
         }
     }
@@ -944,6 +946,7 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
     Gfx *sp40;
     ? *sp34;
     ? *sp30;
+    Actor *temp_s2;
     Gfx *temp_v0;
     Gfx *temp_v0_10;
     Gfx *temp_v0_11;
@@ -965,70 +968,70 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
     Gfx *temp_v1_5;
     GraphicsContext *temp_s0;
     f32 temp_f0;
-    f32 temp_f12;
-    f32 temp_f12_2;
-    f32 temp_f12_3;
     f32 temp_f12_4;
     f32 temp_f12_5;
     s16 temp_a0;
     s16 temp_a0_2;
     s16 temp_s1;
+    u32 temp_f12_3;
+    void (*temp_f12)(Actor *, GlobalContext *);
+    void (*temp_f12_2)(Actor *, GlobalContext *);
     Actor *phi_s2;
     s32 phi_s4;
     s16 phi_s1;
 
+    temp_s2 = &this[1];
     temp_s0 = globalCtx->state.gfxCtx;
     SysMatrix_InsertTranslation(this->world.pos.x, this->world.pos.y, this->world.pos.z, 0);
     Matrix_RotateY(this->shape.rot.y, 1U);
     Matrix_Scale(this->scale.x, this->scale.y, this->scale.z, 1);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFB000000;
     temp_v0->words.w1 = 0xA5EBFF80;
     SysMatrix_StatePush();
     SysMatrix_StatePush();
     SysMatrix_StatePush();
     temp_a0 = this->params;
-    phi_s2 = this + 0x144;
     phi_s4 = 0;
     if ((temp_a0 == 0x309) || (temp_a0 == 0x30A)) {
-        if (this->unk_E2C > 1.0f) {
+        if (this[11].focus.pos.y > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000DE0));
-            temp_f12 = this->unk_DD8;
-            Matrix_Scale(temp_f12, this->unk_DDC, temp_f12, 1);
+            temp_f12 = this[10].init;
+            Matrix_Scale((bitwise f32) temp_f12, (bitwise f32) this[10].destroy, (bitwise f32) temp_f12, 1);
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDA380003;
             sp80 = temp_v0_2;
             sp80->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v1 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1 + 8;
+            temp_s0->polyXlu.p = &temp_v1[1];
             temp_v1->words.w0 = 0xFA000000;
-            temp_v1->words.w1 = ((u32) this->unk_E2C & 0xFF) | ~0xFF;
+            temp_v1->words.w1 = ((u32) this[11].focus.pos.y & 0xFF) | ~0xFF;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (u32) &D_06000420;
             temp_v0_3->words.w0 = 0xDE000000;
         }
         SysMatrix_StatePop();
-        if (this->unk_E30 > 1.0f) {
+        if (this[11].focus.pos.z > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E0C));
-            temp_f12_2 = this->unk_DE4;
-            Matrix_Scale(temp_f12_2, this->unk_DE8, temp_f12_2, 1);
+            temp_f12_2 = this[10].draw;
+            Matrix_Scale((bitwise f32) temp_f12_2, (bitwise f32) this[10].overlayEntry, (bitwise f32) temp_f12_2, 1);
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDA380003;
             sp74 = temp_v0_4;
             sp74->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v1_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v1_2 + 8;
+            temp_s0->polyXlu.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xFA000000;
-            temp_v1_2->words.w1 = ((u32) this->unk_E30 & 0xFF) | ~0xFF;
+            temp_v1_2->words.w1 = ((u32) this[11].focus.pos.z & 0xFF) | ~0xFF;
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_06000730;
             temp_v0_5->words.w0 = 0xDE000000;
         }
@@ -1040,19 +1043,19 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
     if ((this->unk_E34 > 1.0f) && (this->params != 0x30C)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E40));
-        temp_f12_3 = this->unk_DF0;
-        Matrix_Scale(temp_f12_3, this->unk_DF4, temp_f12_3, 1);
+        temp_f12_3 = this[11].flags;
+        Matrix_Scale((bitwise f32) temp_f12_3, this[11].home.pos.x, (bitwise f32) temp_f12_3, 1);
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         sp68 = temp_v0_6;
         sp68->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_3 + 8;
+        temp_s0->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFA000000;
         temp_v1_3->words.w1 = ((u32) this->unk_E34 & 0xFF) | ~0xFF;
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = (u32) &D_06000A48;
         temp_v0_7->words.w0 = 0xDE000000;
     }
@@ -1061,24 +1064,25 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
     if ((temp_a0_2 == 0x309) || (temp_a0_2 == 0x30C)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E58));
-        temp_f12_4 = this->unk_DFC;
+        temp_f12_4 = this[11].home.pos.z;
         Matrix_Scale(temp_f12_4, this->unk_E00, temp_f12_4, 1);
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xDA380003;
         sp5C = temp_v0_8;
         sp5C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_4 + 8;
+        temp_s0->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xFA000000;
         temp_v1_4->words.w1 = ((u32) this->unk_E38 & 0xFF) | ~0xFF;
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = (u32) &D_06000CD8;
         temp_v0_9->words.w0 = 0xDE000000;
     }
     if (this->params == 0x309) {
         func_8012C2DC(globalCtx->state.gfxCtx);
+        phi_s2 = temp_s2;
         phi_s1 = 0;
         do {
             if (phi_s2->unk_0 == 3) {
@@ -1087,22 +1091,22 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
                     sp34 = &D_06004260;
                     func_8012C448(globalCtx->state.gfxCtx);
                     temp_v0_10 = temp_s0->polyXlu.p;
-                    temp_s0->polyXlu.p = temp_v0_10 + 8;
+                    temp_s0->polyXlu.p = &temp_v0_10[1];
                     temp_v0_10->words.w0 = 0xDB060020;
                     sp50 = temp_v0_10;
                     sp50->words.w1 = Lib_SegmentedToVirtual((void *) D_0408DBE0);
                     temp_v0_11 = temp_s0->polyXlu.p;
-                    temp_s0->polyXlu.p = temp_v0_11 + 8;
+                    temp_s0->polyXlu.p = &temp_v0_11[1];
                     temp_v0_11->words.w1 = 0xFAFAFF00;
                     temp_v0_11->words.w0 = 0xFB000000;
                     temp_v0_12 = temp_s0->polyXlu.p;
-                    temp_s0->polyXlu.p = temp_v0_12 + 8;
+                    temp_s0->polyXlu.p = &temp_v0_12[1];
                     temp_v0_12->words.w0 = 0xDE000000;
                     temp_v0_12->words.w1 = (u32) sp34;
                     phi_s4 = (phi_s4 + 1) & 0xFF;
                 }
                 temp_v1_5 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v1_5 + 8;
+                temp_s0->polyXlu.p = &temp_v1_5[1];
                 temp_v1_5->words.w0 = 0xFA000000;
                 temp_f0 = phi_s2->unk_38;
                 temp_v1_5->words.w1 = (((u32) (temp_f0 + 55.0f) & 0xFF) << 0x10) | ((u32) temp_f0 << 0x18) | 0xE100 | (phi_s2->unk_3C & 0xFF);
@@ -1111,12 +1115,12 @@ void func_80A5A6B8(Actor *this, GlobalContext *globalCtx) {
                 Matrix_Scale(temp_f12_5, 1.0f, temp_f12_5, 1);
                 SysMatrix_InsertYRotation_f(phi_s2->unk_34, 1);
                 temp_v0_13 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_13 + 8;
+                temp_s0->polyXlu.p = &temp_v0_13[1];
                 temp_v0_13->words.w0 = 0xDA380003;
                 sp40 = temp_v0_13;
                 sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_14 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_14 + 8;
+                temp_s0->polyXlu.p = &temp_v0_14[1];
                 temp_v0_14->words.w0 = 0xDE000000;
                 temp_v0_14->words.w1 = (u32) sp30;
             }

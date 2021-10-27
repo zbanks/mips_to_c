@@ -170,7 +170,7 @@ loop_1:
             return phi_v1;
         }
         phi_v1 += 0x10;
-        if (phi_v1->unk_14 == 0) {
+        if (phi_v1[1].vromEnd == 0) {
             /* Duplicate return node #5. Try simplifying control flow for better match */
             return NULL;
         }
@@ -328,7 +328,7 @@ void DmaMgr_Start(void) {
             phi_v0 += 0x10;
             phi_v1 = temp_v1;
             phi_v1_2 = temp_v1;
-        } while (phi_v0->unk_14 != 0);
+        } while (phi_v0[1].vromEnd != 0);
     }
     numDmaEntries = phi_v1;
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, 0x20);

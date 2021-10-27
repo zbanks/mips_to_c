@@ -133,24 +133,24 @@ void func_808E0FE0(Actor *arg0, s32 arg1) {
     temp_f2 = temp_v0->unk_4;
     phi_v0 = temp_v0;
     if (temp_f0 < temp_f2) {
-        arg0->unk_168 = 0xFFU;
+        arg0[1].world.pos.x = 0xFF;
         phi_v0 = (arg0->unk_174 * 0x10) + &D_808E1490;
     } else {
         temp_f12 = temp_v0->unk_8;
         if (temp_f0 <= (temp_f12 + temp_f2)) {
-            arg0->unk_168 = (u32) ((((temp_f2 - temp_f0) / temp_f12) * 255.0f) + 255.0f);
+            arg0[1].world.pos.x = (u32) ((((temp_f2 - temp_f0) / temp_f12) * 255.0f) + 255.0f);
         } else {
-            arg0->unk_168 = 0U;
+            arg0[1].world.pos.x = 0;
             phi_v0 = (arg0->unk_174 * 0x10) + &D_808E1490;
         }
     }
     temp_f2_2 = phi_v0->unk_C;
     if (temp_f0 < temp_f2_2) {
-        arg0->unk_16C = 0xFFU;
+        arg0[1].world.pos.y = 0xFF;
     } else if (temp_f0 < (temp_f2_2 + 10.0f)) {
-        arg0->unk_16C = (u32) ((((temp_f2_2 - temp_f0) / 10.0f) * 255.0f) + 255.0f);
+        arg0[1].world.pos.y = (u32) ((((temp_f2_2 - temp_f0) / 10.0f) * 255.0f) + 255.0f);
     } else {
-        arg0->unk_16C = 0U;
+        arg0[1].world.pos.y = 0;
     }
     if (temp_f0 > 30.0f) {
         temp_v0_2 = arg0->unk_170;
@@ -191,12 +191,12 @@ void DemoTreLgt_Update(Actor *thisx, GlobalContext *globalCtx) {
     sp44->words.w1 = Gfx_TwoTexScroll(arg0->unk_0, 0, (temp_v1 * 2) & 0xFF, 0U, 0x40, 0x20, 1, (temp_v1 * -2) & 0xFF, 0U, 0x40, 0x20);
     if (arg2 == 1) {
         temp_v0_2 = temp_t0->polyXlu.p;
-        temp_t0->polyXlu.p = temp_v0_2 + 8;
+        temp_t0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA000080;
         temp_v0_2->words.w1 = (arg3->unk_168 & 0xFF) | ~0x4BFF;
     } else if ((arg2 == 0xD) || (arg2 == 7) || (arg2 == 4) || (arg2 == 0xA)) {
         temp_v0_3 = temp_t0->polyXlu.p;
-        temp_t0->polyXlu.p = temp_v0_3 + 8;
+        temp_t0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFA000080;
         temp_v0_3->words.w1 = (arg3->unk_16C & 0xFF) | ~0x4BFF;
     }
@@ -214,7 +214,7 @@ void DemoTreLgt_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp2C = temp_a2;
         func_8012C2DC(temp_a2);
         temp_v1 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_v1 + 8;
+        temp_a2->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = 0xC8FF0000;
         temp_v1->words.w0 = 0xFB000000;
         func_800F2CD8(this, globalCtx, &this->unk_144, func_808E12A4, 0, 1, this);

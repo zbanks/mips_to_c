@@ -1,3 +1,68 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ s8 unk_3A;                          /* inferred */
+    /* 0x03B */ s8 unk_3B;                          /* inferred */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct BgDblueBalance {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 unk_144;                        /* inferred */
@@ -324,18 +389,18 @@ void func_80B8264C(BgDblueBalance *arg0) {
             temp_f0 = (sp80 - 135.0f) * 1.8962963f;
             if (temp_f0 > 255.0f) {
                 phi_s0->unk_E = 0xFFU;
-                phi_s0->unk_10 = 0.1f;
+                phi_s0[1].y = 0.1f;
             } else if (temp_f0 < 1.0f) {
                 phi_s0->unk_E = 0U;
-                phi_s0->unk_10 = 0.0f;
+                phi_s0[1].y = 0.0f;
             } else {
                 phi_s0->unk_E = (u8) (u32) temp_f0;
-                phi_s0->unk_10 = (f32) (temp_f0 * 0.000390625f);
+                phi_s0[1].y = temp_f0 * 0.000390625f;
             }
         } else {
             phi_s0->unk_E = 0U;
         }
-        phi_s0 += 0x14;
+        phi_s0 = (Vec3f *) &phi_s0[1].z;
     } while (temp_s1 != 8);
 }
 
@@ -385,8 +450,8 @@ void func_80B8296C(GlobalContext *arg0, f32 *arg1, f32 arg2) {
     phi_s0 = D_80B83A90;
     do {
         sp60 = ((Rand_ZeroOne() - 0.5f) * temp_f20) + arg1->unk_0;
-        sp64 = arg1->unk_4;
-        sp68 = ((Rand_ZeroOne() - 0.5f) * temp_f20) + arg1->unk_8;
+        sp64 = arg1[1];
+        sp68 = ((Rand_ZeroOne() - 0.5f) * temp_f20) + arg1[2];
         EffectSsGRipple_Spawn(arg0, (Vec3f *) temp_s4, 0x1F4, 0x7D0, (s16) (s32) *phi_s0);
         temp_s0 = phi_s0 + 1;
         phi_s0 = temp_s0;
@@ -400,14 +465,14 @@ void func_80B8296C(GlobalContext *arg0, f32 *arg1, f32 arg2) {
             phi_f20 = -temp_f20_2;
         }
         sp60 = (phi_f20 * arg2) + arg1->unk_0;
-        sp64 = arg1->unk_4;
+        sp64 = arg1[1];
         temp_f0_2 = Rand_ZeroOne();
         temp_f20_3 = 1.0f - (temp_f0_2 * temp_f0_2);
         phi_f20_2 = temp_f20_3;
         if (Rand_Next() > 0) {
             phi_f20_2 = -temp_f20_3;
         }
-        sp68 = (phi_f20_2 * arg2) + arg1->unk_8;
+        sp68 = (phi_f20_2 * arg2) + arg1[2];
         EffectSsGRipple_Spawn(arg0, (Vec3f *) temp_s4, 0x190, 0x320, (s16) (s32) *phi_s0_2);
         temp_s0_2 = phi_s0_2 + 1;
         phi_s0_2 = temp_s0_2;
@@ -800,25 +865,25 @@ void func_80B833C4(BgDblueBalance *this, GlobalContext *globalCtx) {
 void func_80B83518(Actor *arg0, GlobalContext *arg1) {
     s8 temp_v0;
 
-    arg0->unk_170 = Flags_GetSwitch(arg1, arg0->params & 0x7F);
-    arg0->unk_168(arg0, arg1);
-    temp_v0 = arg0->unk_17F;
+    arg0[1].world.pos.z = Flags_GetSwitch(arg1, arg0->params & 0x7F);
+    arg0[1].world.pos.x(arg0, arg1);
+    temp_v0 = arg0[1].unk_3B;
     if (temp_v0 == 2) {
-        arg0->unk_17E = (s8) (arg0->unk_17E - 1);
-        if ((s32) arg0->unk_17E <= 0) {
+        arg0[1].unk_3A += -1;
+        if ((s32) arg0[1].unk_3A <= 0) {
             ActorCutscene_Stop((s16) arg0->cutscene);
-            arg0->unk_17F = 0;
+            arg0[1].unk_3B = 0;
         }
     } else if ((temp_v0 != 0) && (temp_v0 == 1)) {
         if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
             ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
-            arg0->unk_17F = 2;
-            arg0->unk_17E = 0x50;
+            arg0[1].unk_3B = 2;
+            arg0[1].unk_3A = 0x50;
         } else {
             ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
         }
     }
-    arg0->unk_16C = (u32) arg0->unk_170;
+    arg0[1].world.pos.y = arg0[1].world.pos.z;
 }
 
 void BgDblueBalance_Draw(Actor *thisx, GlobalContext *globalCtx) {
@@ -845,20 +910,20 @@ void BgDblueBalance_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_a2 = globalCtx->state.gfxCtx;
         temp_v1 = temp_a2->polyXlu.p;
         temp_v1->words.w0 = 0xDE000000;
-        temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-        temp_v1_2 = temp_v1 + 8;
+        temp_v1->words.w1 = (u32) &sSetupDL[150];
+        temp_v1_2 = &temp_v1[1];
         temp_v1_2->words.w0 = 0xDA380003;
-        temp_v1_3 = temp_v1_2 + 8;
+        temp_v1_3 = &temp_v1_2[1];
         sp30 = temp_a2;
         sp24 = temp_v1_2;
         sp34 = temp_v1_3;
         temp_v1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_3->words.w0 = 0xFB000000;
-        temp_v1_4 = temp_v1_3 + 8;
+        temp_v1_4 = &temp_v1_3[1];
         temp_v1_3->words.w1 = (u32) this->unk_183;
         temp_v1_4->words.w1 = (u32) &D_0600D110;
         temp_v1_4->words.w0 = 0xDE000000;
-        temp_a2->polyXlu.p = temp_v1_4 + 8;
+        temp_a2->polyXlu.p = &temp_v1_4[1];
     }
 }
 
@@ -914,9 +979,9 @@ void func_80B83758(void *arg0, GlobalContext *arg1) {
             sp4C = temp_t5;
             temp_s1 = temp_t5->polyXlu.p;
             temp_s1->words.w0 = 0xDE000000;
-            temp_s1->words.w1 = (u32) (sSetupDL + 0x4B0);
+            temp_s1->words.w1 = (u32) &sSetupDL[150];
             phi_s0 = arg0 + 0x188;
-            phi_s1 = temp_s1 + 8;
+            phi_s1 = &temp_s1[1];
             phi_s3 = 0;
             do {
                 phi_s1_2 = phi_s1;

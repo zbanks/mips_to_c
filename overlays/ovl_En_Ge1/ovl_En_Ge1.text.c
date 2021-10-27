@@ -219,7 +219,7 @@ void func_80945924(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     Math_SmoothStepToS(arg0 + 0x2A4, 0, 6, 0x1838, (s16) 0x64);
-    Math_SmoothStepToS(arg0 + 0x2A6, 0, 6, 0x1838, (s16) 0x64);
+    Math_SmoothStepToS((s16 *) &arg0[2].objBankIndex, 0, 6, 0x1838, (s16) 0x64);
 }
 
 void func_80945A00(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
@@ -231,7 +231,7 @@ void func_80945A00(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     temp_a1 = &actor->world;
     sp24 = temp_a1;
     Math_Vec3f_Copy((Vec3f *) &sp2C, (Vec3f *) temp_a1);
-    Math_Vec3f_Copy((Vec3f *) sp24, actor + 0x1D8);
+    Math_Vec3f_Copy((Vec3f *) sp24, (Vec3f *) &actor[1].xyzDistToPlayerSq);
     func_800B4AEC(globalCtx, actor, 50.0f);
     temp_f0 = actor->floorHeight;
     if (sp30 < temp_f0) {
@@ -285,11 +285,11 @@ s32 func_80945B60(Actor *arg0) {
     void *temp_v1;
     s32 phi_v0;
 
-    temp_v1 = arg0->unk_2B0;
+    temp_v1 = arg0[2].world.pos.y;
     if (temp_v1 == 0) {
         return 1;
     }
-    Math_Vec3s_ToVec3f((Vec3f *) &sp30, Lib_SegmentedToVirtual(temp_v1->unk_4) + (arg0->unk_2B4 * 6));
+    Math_Vec3s_ToVec3f((Vec3f *) &sp30, Lib_SegmentedToVirtual(temp_v1->unk_4) + (arg0[2].world.pos.z * 6));
     temp_a0 = arg0 + 0x24;
     sp28 = temp_a0;
     sp2E = Math_Vec3f_Yaw(temp_a0, (Vec3f *) &sp30);
@@ -473,9 +473,9 @@ s32 func_80946238(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 
     if (arg1 == 0xF) {
         arg4->x += arg5->unk_2A6;
-        arg4->z += arg5->unk_2A4;
+        arg4->z += arg5[2].params;
     }
-    if ((arg5->unk_2BE == 0) && ((arg1 == 8) || (arg1 == 0xA) || (arg1 == 0xD))) {
+    if ((arg5[2].world.unk_12 == 0) && ((arg1 == 8) || (arg1 == 0xA) || (arg1 == 0xD))) {
         temp_v1 = arg1 * 0x32;
         sp18 = temp_v1;
         arg4->y += (s32) (Math_SinS((s16) (arg0->state.frames * (temp_v1 + 0x814))) * 200.0f);
@@ -514,7 +514,7 @@ void EnGe1_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80946548 + (this->unk_2B8 * 4)));

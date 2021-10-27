@@ -196,7 +196,7 @@ void func_80BE887C(EnBaisen *this, GlobalContext *globalCtx) {
         goto block_9;
     }
 block_9:
-    (Actor *) this->textId = *(&D_80BE8E3C + ((Actor *) this->unk_2A0 * 2));
+    (Actor *) this->textId = *(&D_80BE8E3C + ((Actor *) this[2].home.rot.z * 2));
     func_800B8614((Actor *) this, globalCtx, 70.0f);
 }
 

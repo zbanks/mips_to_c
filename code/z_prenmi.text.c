@@ -72,11 +72,11 @@ void PreNMI_Draw(PreNMIContext *prenmiCtx) {
     func_8012CF0C(temp_a0, 1, 1, 0U, (u8) 0, (u8) 0);
     func_8012C470(temp_a0);
     temp_v1 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v1 + 8;
+    temp_a0->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = -1;
     temp_v1->words.w0 = 0xF7000000;
     temp_v1_2 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v1_2 + 8;
+    temp_a0->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = (((prenmiCtx->timer + 0x64) & 0x3FF) * 4) | 0xF64FC000;
     temp_v1_2->words.w1 = ((prenmiCtx->timer + 0x64) & 0x3FF) * 4;
 }

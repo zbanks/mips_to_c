@@ -265,7 +265,7 @@ void func_80AC18EC(EnPoFusen *arg0) {
 
     temp_v0 = arg0->actor.parent;
     if ((temp_v0 != 0) && (temp_v0->id == 0x1A4)) {
-        temp_v0->unk_338 = (s16) (temp_v0->unk_338 + 1);
+        temp_v0[2].colChkInfo.cylRadius += 1;
     }
     arg0->actor.draw = NULL;
     arg0->actionFunc = func_80AC192C;
@@ -319,13 +319,13 @@ s32 func_80AC1A68(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     s16 phi_t3;
 
     if (arg1 == 2) {
-        temp_f2 = (Math_CosS(arg5->unk_25C) * 0.08f) + 1.0f;
+        temp_f2 = (Math_CosS(arg5[1].freezeTimer) * 0.08f) + 1.0f;
         sp28 = temp_f2;
         sp20 = temp_f2;
-        temp_f2_2 = (Math_SinS(arg5->unk_25C) * 0.08f) + 1.0f;
+        temp_f2_2 = (Math_SinS(arg5[1].freezeTimer) * 0.08f) + 1.0f;
         sp24 = temp_f2_2 * temp_f2_2;
-        sp18 = (s16) (s32) (Math_SinS(arg5->unk_25E) * 2730.0f);
-        temp_f4 = (s32) (Math_CosS(arg5->unk_25E) * 2730.0f);
+        sp18 = (s16) (s32) (Math_SinS(arg5[1].colorFilterParams) * 2730.0f);
+        temp_f4 = (s32) (Math_CosS(arg5[1].colorFilterParams) * 2730.0f);
         temp_a2 = (s16) temp_f4;
         sp1C = (s16) temp_f4;
         SysMatrix_InsertRotation(sp18, 0, temp_a2, 1);

@@ -503,10 +503,10 @@ Gfx *func_8013A860(GlobalContext *arg0, s32 arg1, void **arg2, Vec3s *arg3, s32 
             arg9 = temp_t5_2 + 8;
             temp_t5_2->words.w0 = 0xDE000000;
             temp_t5_2->words.w1 = sp58;
-            *arg8 += 0x40;
+            *arg8 = &(*arg8)[1];
         } else if (sp54 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*arg8);
-            *arg8 += 0x40;
+            *arg8 = &(*arg8)[1];
         }
         SysMatrix_StatePop();
     }
@@ -552,7 +552,7 @@ Gfx *func_8013AB00(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
     if (skeleton == 0) {
         return NULL;
     }
-    gfx = temp_t2 + 8;
+    gfx = &temp_t2[1];
     temp_t2->words.w0 = 0xDB060034;
     temp_t2->words.w1 = (u32) sp48;
     SysMatrix_StatePush();
@@ -564,7 +564,7 @@ Gfx *func_8013AB00(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
     sp58 = (f32) limbDrawTable->y;
     sp5C = (f32) limbDrawTable->z;
     sp4C.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-    sp4C.unk_4 = (u16) limbDrawTable->unk_A;
+    sp4C.unk_4 = (u16) limbDrawTable[1].z;
     sp64 = temp_v0_2->unk_8;
     sp60 = temp_v0_2->unk_8;
     if ((func1 == 0) || (((s32 (*)(GlobalContext *, ?, u32 *, f32 *, ? *, Actor *, Gfx **)) func1)(globalCtx, 1, temp_a2, temp_a3, &sp4C, actor, &gfx) == 0)) {
@@ -574,17 +574,17 @@ Gfx *func_8013AB00(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
         if (sp64 != 0) {
             SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
             temp_t0 = gfx;
-            gfx = temp_t0 + 8;
+            gfx = &temp_t0[1];
             temp_t0->words.w0 = 0xDA380003;
             temp_t0->words.w1 = (u32) sp48;
             temp_t4 = gfx;
-            gfx = temp_t4 + 8;
+            gfx = &temp_t4[1];
             temp_t4->words.w0 = 0xDE000000;
             temp_t4->words.w1 = sp64;
-            sp48 += 0x40;
+            sp48 = &sp48[8];
         } else if (sp60 != 0) {
             SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
-            sp48 += 0x40;
+            sp48 = &sp48[8];
         }
         SysMatrix_StatePop();
     }
@@ -630,8 +630,8 @@ s32 func_8013AD6C(GlobalContext *globalCtx) {
     arg2->unk_8 = (s32) sp7C.unk_8;
     if ((arg4 == 0) && (arg5 == 0)) {
         arg3->unk_0 = sp68;
-        arg3->unk_2 = sp6A;
-        arg3->unk_4 = sp6C;
+        arg3[1] = sp6A;
+        arg3[2] = sp6C;
         return 1;
     }
     if (arg5 != 0) {
@@ -639,8 +639,8 @@ s32 func_8013AD6C(GlobalContext *globalCtx) {
         sp6A = arg1;
     }
     Math_SmoothStepToS(arg3, sp68, 3, 0x2AA8, (s16) 0xB6);
-    Math_SmoothStepToS(arg3 + 2, sp6A, 3, 0x2AA8, (s16) 0xB6);
-    Math_SmoothStepToS(arg3 + 4, sp6C, 3, 0x2AA8, (s16) 0xB6);
+    Math_SmoothStepToS(&arg3[1], sp6A, 3, 0x2AA8, (s16) 0xB6);
+    Math_SmoothStepToS(&arg3[2], sp6C, 3, 0x2AA8, (s16) 0xB6);
     return 1;
 }
 
@@ -1556,7 +1556,7 @@ loop_6:
         if ((*(&D_801C5D10 + (((s32) gSaveContext.day % 5) * 2)) & temp_v1->unk_2) != 0) {
             phi_v0 = 1;
         } else {
-            temp_a1_2 = temp_v1->unk_1;
+            temp_a1_2 = temp_v1[1];
             phi_a1 = temp_a1_2;
             if (temp_a1_2 != 0xFF) {
                 goto loop_6;
@@ -1653,7 +1653,7 @@ s32 func_8013C068(u8 *arg0, s32 arg1, ? *arg2, f32 arg3, s32 arg4) {
             temp_s2 = phi_s2 + 4;
             temp_s3 = phi_s3 + 4;
             temp_s3->unk_-4 = (f32) temp_v1->unk_0;
-            temp_s2->unk_-4 = (f32) temp_v1->unk_4;
+            temp_s2->unk_-4 = (f32) temp_v1[2];
             phi_s1 = phi_s1_2 - 1;
             phi_s3 = temp_s3;
             phi_s2 = temp_s2;
@@ -1688,7 +1688,7 @@ s32 func_8013C068(u8 *arg0, s32 arg1, ? *arg2, f32 arg3, s32 arg4) {
             temp_s2_2 = phi_s2_2 + 4;
             temp_s3_2 = phi_s3_2 + 4;
             temp_s3_2->unk_-4 = (f32) temp_v1_2->unk_0;
-            temp_s2_2->unk_-4 = (f32) temp_v1_2->unk_4;
+            temp_s2_2->unk_-4 = (f32) temp_v1_2[2];
             phi_s1_3 = phi_s1_4 + 1;
             phi_s3_2 = temp_s3_2;
             phi_s2_2 = temp_s2_2;
@@ -1821,8 +1821,8 @@ block_22:
     }
     temp_v1 = (arg1 * 6) + Lib_SegmentedToVirtual(arg0->unk_4);
     arg2->unk_0 = (f32) temp_v1->unk_0;
-    arg2->unk_4 = (f32) temp_v1->unk_2;
-    arg2->unk_8 = (f32) temp_v1->unk_4;
+    arg2->unk_4 = (f32) temp_v1[1];
+    arg2->unk_8 = (f32) temp_v1[2];
     return 1;
 }
 
@@ -2013,56 +2013,56 @@ void func_8013CF04(void *arg0, GraphicsContext **arg1, u32 arg2) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0 + 8;
+    temp_a0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0x64;
     temp_v0->words.w0 = 0xFA000000;
     temp_v0_2 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_2 + 8;
+    temp_a0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xFB000000;
     sp30 = temp_a0;
     SysMatrix_InsertTranslation(arg0->unk_24, 0.0f, arg0->unk_2C, 0);
     Matrix_Scale(0.6f, 1.0f, 0.6f, 1);
     temp_v0_3 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_3 + 8;
+    temp_a0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp30 = temp_a0;
     sp1C = temp_v0_3;
     sp1C->words.w1 = Matrix_NewMtx(temp_a0);
     temp_v0_4 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_4 + 8;
+    temp_a0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_801C5D60;
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_5 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_5 + 8;
+    temp_a0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFD900000;
     temp_v0_5->words.w1 = arg2;
     temp_v0_6 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_6 + 8;
+    temp_a0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0x7098260;
     temp_v0_6->words.w0 = 0xF5900000;
     temp_v0_7 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_7 + 8;
+    temp_a0->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0;
     temp_v0_7->words.w0 = 0xE6000000;
     temp_v0_8 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_8 + 8;
+    temp_a0->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0x77FF100;
     temp_v0_8->words.w0 = 0xF3000000;
     temp_v0_9 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_9 + 8;
+    temp_a0->polyOpa.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0;
     temp_v0_9->words.w0 = 0xE7000000;
     temp_v0_10 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_10 + 8;
+    temp_a0->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w1 = 0x98260;
     temp_v0_10->words.w0 = 0xF5881000;
     temp_v0_11 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_11 + 8;
+    temp_a0->polyOpa.p = &temp_v0_11[1];
     temp_v0_11->words.w0 = 0xF2000000;
     temp_v0_11->words.w1 = 0xFC0FC;
     temp_v0_12 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_12 + 8;
+    temp_a0->polyOpa.p = &temp_v0_12[1];
     temp_v0_12->words.w1 = (u32) &D_801C5D80;
     temp_v0_12->words.w0 = 0xDE000000;
 }
@@ -2170,30 +2170,30 @@ void func_8013D2E0(Vec3f *arg0, PosRot *arg1, ActorShape *arg2, s16 *arg3, s16 *
     sp2C = temp_f12;
     sp3C = Math_FAtan2F(temp_f12, temp_f14);
     Math_SmoothStepToS(arg3, Math_FAtan2F(sqrtf((sp34 * sp34) + (sp2C * sp2C)), arg0->y - arg1->pos.y), 4, 0x2710, (s16) 0);
-    Math_SmoothStepToS(arg3 + 2, sp3C, 4, 0x2710, (s16) 0);
-    func_8013D0E0(arg5, arg6->unk_10, func_8013D0E0(arg4, arg6->unk_0, arg3->unk_0, (f32) arg6->unk_2, (f32) arg6->unk_4, (f32) arg6->unk_6), (f32) arg6->unk_2, (f32) arg6->unk_14, (f32) arg6->unk_16);
-    temp_v1 = arg3->unk_2 - arg2->rot.y;
-    if ((s32) arg6->unk_C < 0) {
+    Math_SmoothStepToS(&arg3[1], sp3C, 4, 0x2710, (s16) 0);
+    func_8013D0E0(arg5, arg6[8], func_8013D0E0(arg4, arg6->unk_0, arg3->unk_0, (f32) (u16) arg6[1], (f32) (u16) arg6[2], (f32) (u16) arg6[3]), (f32) (u16) arg6[1], (f32) (u16) arg6[10], (f32) (u16) arg6[11]);
+    temp_v1 = arg3[1] - arg2->rot.y;
+    if ((s32) (u16) arg6[6] < 0) {
 
     }
-    temp_t1 = arg6->unk_E;
+    temp_t1 = (u16) arg6[7];
     temp_f4 = (f32) temp_t1;
     phi_f4 = temp_f4;
     if ((s32) temp_t1 < 0) {
         phi_f4 = temp_f4 + 4294967296.0f;
     }
     sp38 = temp_v1;
-    func_8013D0E0(arg4 + 2, arg6->unk_8, (s16) (temp_v1 - arg5->unk_2), (f32) arg6->unk_A, phi_f4);
-    if ((s32) arg6->unk_1C < 0) {
+    func_8013D0E0(&arg4[1], arg6[4], (s16) (temp_v1 - arg5[1]), (f32) (u16) arg6[5], phi_f4);
+    if ((s32) (u16) arg6[14] < 0) {
 
     }
-    temp_t6 = arg6->unk_1E;
+    temp_t6 = (u16) arg6[15];
     temp_f10 = (f32) temp_t6;
     phi_f10 = temp_f10;
     if ((s32) temp_t6 < 0) {
         phi_f10 = temp_f10 + 4294967296.0f;
     }
-    func_8013D0E0(arg5 + 2, arg6->unk_18, (s16) (temp_v1 - arg4->unk_2), (f32) arg6->unk_1A, phi_f10);
+    func_8013D0E0(&arg5[1], arg6[12], (s16) (temp_v1 - arg4[1]), (f32) (u16) arg6[13], phi_f10);
 }
 
 s32 func_8013D5E8(s16 arg0, s32 arg1, s16 arg2) {
@@ -2231,8 +2231,8 @@ s32 func_8013D68C(Path *path, s16 arg1, void *arg2) {
     }
     temp_v1 = ((s32) arg1 * 6) + Lib_SegmentedToVirtual((void *) path->points);
     arg2->unk_0 = (f32) temp_v1->unk_0;
-    arg2->unk_4 = (f32) temp_v1->unk_2;
-    arg2->unk_8 = (f32) temp_v1->unk_4;
+    arg2->unk_4 = (f32) temp_v1[1];
+    arg2->unk_8 = (f32) temp_v1[2];
     return 1;
 }
 
@@ -2453,8 +2453,8 @@ u8 func_8013DB90(GlobalContext *globalCtx, void *arg1, f32 arg2) {
 
     temp_v1 = Lib_SegmentedToVirtual(((arg1 * 8) + arg0)->unk_4) + (arg2 * 6);
     arg3->unk_0 = (f32) temp_v1->unk_0;
-    arg3->unk_4 = (f32) temp_v1->unk_2;
-    arg3->unk_8 = (f32) temp_v1->unk_4;
+    arg3->unk_4 = (f32) temp_v1[1];
+    arg3->unk_8 = (f32) temp_v1[2];
     return 0;
 }
 
@@ -2906,7 +2906,7 @@ s32 func_8013E7C0(GlobalContext *arg0, Actor *arg1, s16 *arg2) {
     } else {
         phi_a0 = (s32) temp_v0 * -0x10000;
     }
-    temp_v0_2 = arg2->unk_2;
+    temp_v0_2 = arg2[1];
     phi_v1 = (s16) -(s32) temp_v0_2;
     phi_a3 = 0;
     if ((s32) temp_v0_2 >= 0) {

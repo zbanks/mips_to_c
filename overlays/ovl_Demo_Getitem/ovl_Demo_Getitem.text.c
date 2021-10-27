@@ -125,5 +125,5 @@ void DemoGetitem_Update(Actor *thisx, GlobalContext *globalCtx) {
 void func_80A4FCF0(Actor *this, GlobalContext *globalCtx) {
     func_800B8050(this, globalCtx, 0);
     func_800B8118(this, globalCtx, 0);
-    GetItem_Draw(globalCtx, this->unk_144);
+    GetItem_Draw(globalCtx, this[1].id);
 }

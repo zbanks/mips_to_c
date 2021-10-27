@@ -961,7 +961,7 @@ void EnSth2_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80BF7688(Actor *this, GlobalContext *globalCtx) {
-    this->unk_24C();
+    (bitwise ? (*)()) this[1].prevPos.x();
 }
 
 s32 func_80BF76AC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4) {
@@ -1006,15 +1006,15 @@ void func_80BF7814(Actor *this, GlobalContext *globalCtx) {
     sp34 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0 + 8;
+    sp34->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = sp34;
     sp2C = temp_v0;
     sp2C->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) D_80BFA01C.unk_3, (s32) D_80BFA01C.unk_4, (s32) D_80BFA01C.unk_5, 0xFF);
     temp_v0_2 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0_2 + 8;
+    sp34->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp28 = temp_v0_2;
     sp28->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x5A, 0x6E, 0x82, 0xFF);
-    SkelAnime_DrawSV(globalCtx, this->unk_148, this->unk_164, (s32) this->unk_146, func_80BF76AC, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80BF77AC, this);
+    SkelAnime_DrawSV(globalCtx, (void **) this[1].flags, this->unk_164, (s32) this[1].category, func_80BF76AC, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80BF77AC, this);
 }

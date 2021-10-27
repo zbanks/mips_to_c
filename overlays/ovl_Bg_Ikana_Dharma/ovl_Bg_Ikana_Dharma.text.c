@@ -47,7 +47,7 @@ struct _mips2c_stack_func_80BEC5C4 {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80BEC5E0 {
     /* 0x00 */ char pad_0[0x18];
-    /* 0x18 */ ColliderCylinder *sp18;              /* inferred */
+    /* 0x18 */ s16 *sp18;                           /* inferred */
     /* 0x1C */ char pad_1C[0xC];                    /* maybe part of sp18[4]? */
     /* 0x28 */ void *sp28;                          /* inferred */
     /* 0x2C */ char pad_2C[0x4];
@@ -200,8 +200,8 @@ void func_80BEC5C4(BgIkanaDharma *arg0) {
 
 void func_80BEC5E0(Actor *arg0, GlobalContext *arg1) {
     void *sp28;
-    ColliderCylinder *sp18;
-    ColliderCylinder *temp_a3_2;
+    s16 *sp18;
+    s16 *temp_a3_2;
     s16 temp_a1;
     s16 temp_v0_2;
     s16 temp_v0_3;
@@ -230,7 +230,7 @@ void func_80BEC5E0(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if (((arg0->flags & 0x40) == 0x40) && (D_80BECBD0 == 0) && (arg0->xzDistToPlayer < 420.0f)) {
-        temp_a3_2 = arg0 + 0x15C;
+        temp_a3_2 = &arg0[1].home.rot.z;
         temp_v0_3 = arg0->yawTowardsPlayer - temp_a3->shape.rot.y;
         phi_v0 = (s32) temp_v0_3;
         if ((s32) temp_v0_3 < 0) {
@@ -238,7 +238,7 @@ void func_80BEC5E0(Actor *arg0, GlobalContext *arg1) {
         }
         if (phi_v0 >= 0x4001) {
             sp18 = temp_a3_2;
-            Collider_UpdateCylinder(arg0, temp_a3_2);
+            Collider_UpdateCylinder(arg0, (ColliderCylinder *) temp_a3_2);
             CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) sp18);
         }
     }
@@ -246,7 +246,7 @@ void func_80BEC5E0(Actor *arg0, GlobalContext *arg1) {
 
 void func_80BEC758(Actor *arg0) {
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
-    arg0->unk_1A8 = func_80BEC790;
+    arg0[1].velocity.x = func_80BEC790;
 }
 
 void func_80BEC790(Actor *arg0, ? arg1) {
@@ -269,7 +269,7 @@ void func_80BEC790(Actor *arg0, ? arg1) {
 
 void func_80BEC7EC(Actor *arg0) {
     arg0->unk_1AC = 0xA;
-    arg0->unk_1A8 = func_80BEC808;
+    arg0[1].velocity.x = func_80BEC808;
 }
 
 void func_80BEC808(Actor *arg0, GlobalContext *arg1) {

@@ -141,6 +141,7 @@ static ColliderJntSphInit D_8091BDA8 = {{0xA, 0, 0, 0x19, 0x10, 0}, 1, &D_8091BD
 static ? D_8091BDB8;                                /* unable to generate initializer */
 static InitChainEntry D_8091BDBC[4];                /* unable to generate initializer */
 static Vec3f D_8091BDCC = {0.0f, 0.0f, 0.0f};
+static CollisionPoly *D_8091BE14 = (CollisionPoly *)0x3E99999A; /* const */
 
 void func_8091A8A0(EnInsect *arg0) {
     arg0->unk_30C = *(&D_8091BDB8 + ((arg0->actor.params & 1) * 2));
@@ -151,7 +152,7 @@ f32 func_8091A8C4(f32 *arg0, PosRot *arg1) {
     f32 temp_f2;
 
     temp_f2 = arg0->unk_0 - arg1->pos.x;
-    temp_f12 = arg0->unk_8 - arg1->pos.z;
+    temp_f12 = arg0[2] - arg1->pos.z;
     return (temp_f2 * temp_f2) + (temp_f12 * temp_f12);
 }
 
@@ -171,7 +172,7 @@ s32 func_8091A8F4(EnInsect *arg0, GlobalContext *arg1) {
 }
 
 void func_8091A9E4(Actor *arg0) {
-    f32 temp_f0;
+    CollisionPoly *temp_f0;
     s16 temp_v0;
     f32 phi_f2;
 
@@ -181,11 +182,11 @@ void func_8091A9E4(Actor *arg0) {
         return;
     }
     Audio_PlayActorSound2(arg0, 0x39F0U);
-    temp_f0 = arg0->unk_1C0;
-    if (temp_f0 < 0.1f) {
+    temp_f0 = arg0[1].wallPoly;
+    if ((bitwise f32) temp_f0 < 0.1f) {
         phi_f2 = 0.1f;
     } else {
-        phi_f2 = temp_f0;
+        phi_f2 = (bitwise f32) temp_f0;
     }
     arg0->unk_316 = (s16) (s32) (3.0f / phi_f2);
     if ((s32) arg0->unk_316 < 2) {
@@ -421,9 +422,9 @@ void func_8091B274(Actor *arg0) {
     Actor_SetScale(arg0, 0.001f);
     arg0->draw = NULL;
     arg0->speedXZ = 0.0f;
-    arg0->unk_308 = func_8091B2D8;
+    arg0[2].floorPoly = (CollisionPoly *) func_8091B2D8;
     arg0->unk_30C = (u16) (arg0->unk_30C & 0xFEFF);
-    arg0->unk_1C0 = 0.3f;
+    arg0[1].wallPoly = (CollisionPoly *)0x3E99999A;
 }
 
 void func_8091B2D8(EnInsect *this, GlobalContext *globalCtx) {
@@ -470,11 +471,11 @@ void func_8091B3D0(Actor *arg0) {
 
     arg0->unk_312 = 0x3C;
     temp_a0 = arg0;
-    arg0->unk_1C0 = 1.9f;
+    arg0[1].wallPoly = (CollisionPoly *)0x3FF33333;
     arg0 = arg0;
     Audio_PlayActorSound2(temp_a0, 0x39E9U);
     Math_Vec3f_Copy((Vec3f *) &arg0->home, (Vec3f *) &arg0->world);
-    arg0->unk_308 = func_8091B440;
+    arg0[2].floorPoly = (CollisionPoly *) func_8091B440;
     temp_t0 = arg0->unk_30C & 0xFEFF;
     temp_t1 = temp_t0 | 8;
     arg0->unk_30C = temp_t0;

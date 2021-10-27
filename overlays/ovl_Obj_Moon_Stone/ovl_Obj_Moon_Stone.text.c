@@ -182,22 +182,22 @@ void ObjMoonStone_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001C60));
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp28 = temp_v0;
     sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000D78;
     temp_v0_2->words.w0 = 0xDE000000;
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06000C80;
     temp_v0_4->words.w0 = 0xDE000000;
 }

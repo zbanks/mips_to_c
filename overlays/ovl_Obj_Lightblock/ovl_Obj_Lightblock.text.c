@@ -197,40 +197,40 @@ void ObjLightblock_Draw(Actor *thisx, GlobalContext *globalCtx) {
     if ((s32) this->alpha < 0xFF) {
         func_8012C2DC(temp_a2);
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         temp_v0->words.w1 = (u32) D_801AEF88;
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         sp34 = temp_v0_2;
         sp34->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFA000080;
         temp_v0_3->words.w1 = this->alpha | ~0xFF;
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_06000178;
         temp_v0_4->words.w0 = 0xDE000000;
         return;
     }
     func_8012C28C(temp_a2);
     temp_v0_5 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_5 + 8;
+    temp_s0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDB060020;
     temp_v0_5->words.w1 = (u32) D_801AEFA0;
     temp_v0_6 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_6 + 8;
+    temp_s0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDA380003;
     sp24 = temp_v0_6;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_7 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_7 + 8;
+    temp_s0->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = -1;
     temp_v0_7->words.w0 = 0xFA000080;
     temp_v0_8 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_8 + 8;
+    temp_s0->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) &D_06000178;
     temp_v0_8->words.w0 = 0xDE000000;
 }

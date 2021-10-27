@@ -157,8 +157,8 @@ void EnMThunder_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_144.dim.yShift = -0x14;
     this->unk_194.info.bumper.hitPos.y = 8;
     this->unk_194.info.toucher.dmgFlags = 0;
-    this->actor.world.pos.x = temp_t0->unk_BEC;
-    this->actor.world.pos.y = temp_t0->unk_BF0;
+    this->actor.world.pos.x = temp_t0[9].floorHeight;
+    this->actor.world.pos.y = temp_t0[9].yDistToWater;
     this->unk_1A4 = 0U;
     this->unk_194.info.bumper.dmgFlags = 0;
     this->actor.world.pos.z = temp_t0->unk_BF4;
@@ -180,7 +180,7 @@ void EnMThunder_Init(Actor *thisx, GlobalContext *globalCtx) {
         temp_t0->unk_A70 = (s32) (temp_t0->unk_A70 & 0xFFFDFFFF);
         this->unk_194.info.bumperFlags = 0;
         if ((gSaveContext.weekEventReg[23] & 2) != 0) {
-            temp_t0->unk_B08 = 1.0f;
+            temp_t0[8].shape.feetPos[1].z = 1.0f;
             temp_v0_2 = this->unk_1BF;
             this->unk_1BE = 0U;
             this->unk_144.info.toucher.damage = *(&D_808B7150 + temp_v0_2);
@@ -192,7 +192,7 @@ void EnMThunder_Init(Actor *thisx, GlobalContext *globalCtx) {
                 this->unk_194.info.toucherFlags = 3;
             }
         } else {
-            temp_t0->unk_B08 = 0.5f;
+            temp_t0[8].shape.feetPos[1].z = 0.5f;
             temp_v0_3 = this->unk_1BF;
             this->unk_1BE = 1U;
             this->unk_144.info.toucher.damage = *(&D_808B714C + temp_v0_3);
@@ -204,7 +204,7 @@ void EnMThunder_Init(Actor *thisx, GlobalContext *globalCtx) {
                 this->unk_194.info.toucherFlags = 2;
             }
         }
-        if ((s32) temp_t0->unk_ADA < 0x1E) {
+        if ((s32) temp_t0[8].colChkInfo.atHitEffect < 0x1E) {
             this->unk_1BE = (u8) (this->unk_1BE + 2);
             this->actionFunc = func_808B60D4;
             this->unk_194.info.bumper.hitPos.y = 1;
@@ -245,7 +245,7 @@ void func_808B58CC(Actor *arg0, GlobalContext *arg1) {
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     if (temp_v0->unk_A70 & 0x20000) {
-        if ((s32) temp_v0->unk_ADA >= 0x1E) {
+        if ((s32) temp_v0[8].colChkInfo.atHitEffect >= 0x1E) {
             temp_a1 = temp_v0 + 0xEC;
             sp20 = temp_a1;
             func_801A5CFC(0x1823U, temp_a1, 4U, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -283,14 +283,14 @@ void func_808B5984(EnMThunder *arg0, GlobalContext *arg1) {
 
     temp_t0 = arg1->actorCtx.actorList[2].first;
     temp_v1 = arg0->actor.child;
-    arg0->unk_1B0 = (f32) temp_t0->unk_B08;
-    arg0->actor.world.pos.x = temp_t0->unk_BEC;
-    arg0->actor.world.pos.y = temp_t0->unk_BF0;
+    arg0->unk_1B0 = (f32) temp_t0[8].shape.feetPos[1].z;
+    arg0->actor.world.pos.x = temp_t0[9].floorHeight;
+    arg0->actor.world.pos.y = temp_t0[9].yDistToWater;
     arg0->actor.world.pos.z = temp_t0->unk_BF4;
     arg0->actor.shape.rot.y = temp_t0->shape.rot.y + 0x8000;
     phi_t0 = temp_t0;
     phi_v1 = temp_v1;
-    if ((arg0->unk_194.info.bumperFlags == 0) && (temp_t0->unk_B08 >= 0.1f)) {
+    if ((arg0->unk_194.info.bumperFlags == 0) && (temp_t0[8].shape.feetPos[1].z >= 0.1f)) {
         if ((gSaveContext.unk_3F28 != 0) || ((temp_v0 = (s32) (arg0->actor.params & 0xFF00) >> 8, (temp_v0 != 0)) && (sp48 = temp_v1, sp4C = temp_t0, (func_80115DB4(arg1, (s16) temp_v0, 4) == 0)))) {
             func_808B58CC((Actor *) arg0, arg1);
             arg0->actionFunc = (void (*)(EnMThunder *, GlobalContext *)) func_808B58CC;
@@ -305,7 +305,7 @@ void func_808B5984(EnMThunder *arg0, GlobalContext *arg1) {
         goto block_7;
     }
 block_7:
-    temp_f0 = phi_t0->unk_B08;
+    temp_f0 = phi_t0[8].shape.feetPos[1].z;
     if (temp_f0 >= 0.1f) {
         sp48 = phi_v1;
         sp4C = phi_t0;
@@ -317,9 +317,9 @@ block_7:
         if ((phi_v1 != 0) && (phi_v1->update != 0)) {
             phi_v1->parent = NULL;
         }
-        temp_f0_2 = phi_t0->unk_B08;
+        temp_f0_2 = phi_t0[8].shape.feetPos[1].z;
         if (temp_f0_2 <= 0.15f) {
-            if ((temp_f0_2 >= 0.1f) && ((s32) phi_t0->unk_ADA >= 0x1E)) {
+            if ((temp_f0_2 >= 0.1f) && ((s32) phi_t0[8].colChkInfo.atHitEffect >= 0x1E)) {
                 temp_a1_2 = phi_t0 + 0xEC;
                 sp44 = temp_a1_2;
                 func_801A5CFC(0x1823U, temp_a1_2, 4U, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -332,7 +332,7 @@ block_7:
         if (((s32) (arg0->actor.params & 0xFF00) >> 8) != 0) {
             gSaveContext.unk_3F28 = 1;
         }
-        if (phi_t0->unk_B08 < 0.85f) {
+        if (phi_t0[8].shape.feetPos[1].z < 0.85f) {
             temp_v0_2 = arg0->unk_1BF;
             arg0->unk_1BE = 1U;
             arg0->unk_144.info.toucher.damage = *(&D_808B714C + temp_v0_2);
@@ -355,7 +355,7 @@ block_7:
                 arg0->unk_194.info.toucherFlags = 3;
             }
         }
-        if ((s32) phi_t0->unk_ADA < 0x1E) {
+        if ((s32) phi_t0[8].colChkInfo.atHitEffect < 0x1E) {
             arg0->unk_1BE = (u8) (arg0->unk_1BE + 2);
             arg0->actionFunc = func_808B60D4;
             arg0->unk_194.info.bumper.hitPos.y = 1;
@@ -375,7 +375,7 @@ block_7:
         Actor_MarkForDeath((Actor *) arg0);
         return;
     }
-    temp_f0_3 = phi_t0->unk_B08;
+    temp_f0_3 = phi_t0[8].shape.feetPos[1].z;
     phi_f12 = 0.15f;
     if (temp_f0_3 > 0.15f) {
         arg0->unk_194.info.elemType = 0xFF;
@@ -384,16 +384,16 @@ block_7:
             Actor_SpawnAsChild(&arg1->actorCtx, (Actor *) arg0, arg1, 0x7B, arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, (s16) 0, (s16) (s32) arg0->actor.shape.rot.y, (s16) 0, 2);
         }
         temp_f0_4 = arg0->unk_194.info.bumper.dmgFlags;
-        arg0->unk_194.info.bumper.dmgFlags = (bitwise u32) ((bitwise f32) temp_f0_4 + ((((phi_t0->unk_B08 - 0.15f) * 1.5f) - (bitwise f32) temp_f0_4) * 0.5f));
+        arg0->unk_194.info.bumper.dmgFlags = (bitwise u32) ((bitwise f32) temp_f0_4 + ((((phi_t0[8].shape.feetPos[1].z - 0.15f) * 1.5f) - (bitwise f32) temp_f0_4) * 0.5f));
         phi_t0_2 = phi_t0;
         phi_f12 = 0.15f;
     } else if (temp_f0_3 > 0.1f) {
         arg0->unk_194.info.elemType = (u8) (s32) ((temp_f0_3 - 0.1f) * 255.0f * 20.0f);
-        arg0->unk_1A4 = (bitwise u32) ((phi_t0->unk_B08 - 0.1f) * 10.0f);
+        arg0->unk_1A4 = (bitwise u32) ((phi_t0[8].shape.feetPos[1].z - 0.1f) * 10.0f);
     } else {
         arg0->unk_194.info.elemType = 0;
     }
-    temp_f0_5 = phi_t0_2->unk_B08;
+    temp_f0_5 = phi_t0_2[8].shape.feetPos[1].z;
     if (temp_f0_5 > 0.85f) {
         func_8019F900(phi_f12, phi_t0_2 + 0xEC, 2);
     } else if (phi_f12 < temp_f0_5) {
@@ -450,7 +450,7 @@ void func_808B5F68(EnMThunder *arg0, GlobalContext *arg1) {
     }
     temp_v0 = (u16) arg0->unk_194.info.bumper.hitPos.y;
     if ((s32) temp_v0 > 0) {
-        arg0->actor.world.pos.x = sp2C->unk_BEC;
+        arg0->actor.world.pos.x = sp2C[9].floorHeight;
         arg0->unk_194.info.bumper.hitPos.y = temp_v0 - 1;
         arg0->actor.world.pos.z = sp2C->unk_BF4;
     }
@@ -524,11 +524,11 @@ void func_808B6310(Actor *arg0, GlobalContext *arg1) {
         Math_SmoothStepToF((f32 *) &arg0->scale, (f32) arg0->unk_1C1, 0.6f, 0.8f, 0.0f);
         Actor_SetScale(arg0, arg0->scale.x);
     }
-    temp_f0 = arg0->unk_1A4;
+    temp_f0 = arg0[1].scale.z;
     if (temp_f0 > 0.6f) {
-        arg0->unk_1A8 = 1.0f;
+        arg0[1].velocity.x = 1.0f;
     } else {
-        arg0->unk_1A8 = (f32) (temp_f0 * 1.6666666f);
+        arg0[1].velocity.x = temp_f0 * 1.6666666f;
     }
     func_808B5EEC((EnMThunder *) arg0, arg1);
 }
@@ -549,8 +549,8 @@ void func_808B65BC(Actor *arg0) {
     f32 temp_f0;
     s32 temp_v0;
 
-    arg0->unk_1B8(arg0);
-    temp_f0 = arg0->unk_1A4;
+    arg0[1].gravity(arg0);
+    temp_f0 = arg0[1].scale.z;
     temp_v0 = (u32) (temp_f0 * 255.0f) & 0xFF;
     Lights_PointNoGlowSetInfo(arg0 + 0x194, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) temp_v0, (u8) temp_v0, (u8) (u32) (temp_f0 * 100.0f), (s16) (s32) (temp_f0 * 800.0f));
 }
@@ -605,7 +605,7 @@ void EnMThunder_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     Matrix_Scale(0.02f, 0.02f, 0.02f, 1);
     temp_v0 = spA0->polyXlu.p;
-    spA0->polyXlu.p = temp_v0 + 8;
+    spA0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     spA0 = spA0;
     sp98 = temp_v0;
@@ -619,7 +619,7 @@ void EnMThunder_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
         } else {
             temp_v0_3 = spA0->polyXlu.p;
-            spA0->polyXlu.p = temp_v0_3 + 8;
+            spA0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDB060020;
             spA0 = spA0;
             sp90 = temp_v0_3;
@@ -628,7 +628,7 @@ void EnMThunder_Draw(Actor *thisx, GlobalContext *globalCtx) {
         }
     } else {
         temp_v0_4 = spA0->polyXlu.p;
-        spA0->polyXlu.p = temp_v0_4 + 8;
+        spA0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDB060020;
         temp_f0 = this->unk_194.info.toucher.dmgFlags;
         spA0 = spA0;
@@ -701,7 +701,7 @@ block_7:
         temp_v0_12->words.w1 = &D_04025EF0;
     }
     spA0 = phi_t0;
-    SysMatrix_InsertMatrix(spAC + 0xCC4, 0);
+    SysMatrix_InsertMatrix((MtxF *) &spAC[10].params, 0);
     if (this->unk_1BF == 2) {
         spA0 = phi_t0;
         SysMatrix_InsertTranslation(0.0f, 220.0f, 0.0f, 1);
@@ -715,11 +715,11 @@ block_7:
     }
     if (this->unk_1B0 >= 0.85f) {
         temp_v0_13 = spA0->polyXlu.p;
-        spA0->polyXlu.p = temp_v0_13 + 8;
+        spA0->polyXlu.p = &temp_v0_13[1];
         temp_v0_13->words.w0 = 0xFA000080;
         temp_v0_13->words.w1 = this->unk_194.info.elemType | ~0x55FF;
         temp_v0_14 = spA0->polyXlu.p;
-        spA0->polyXlu.p = temp_v0_14 + 8;
+        spA0->polyXlu.p = &temp_v0_14[1];
         temp_v0_14->words.w1 = 0xFF640080;
         temp_v0_14->words.w0 = 0xFB000000;
         phi_t2_2 = 0x28;
@@ -727,11 +727,11 @@ block_7:
         phi_f14 = (*(&D_808B715C + ((globalCtx->gameplayFrames & 7) * 4)) * 6.0f) + 1.0f;
     } else {
         temp_v0_15 = spA0->polyXlu.p;
-        spA0->polyXlu.p = temp_v0_15 + 8;
+        spA0->polyXlu.p = &temp_v0_15[1];
         temp_v0_15->words.w0 = 0xFA000080;
         temp_v0_15->words.w1 = this->unk_194.info.elemType | 0xAAFFFF00;
         temp_v0_16 = spA0->polyXlu.p;
-        spA0->polyXlu.p = temp_v0_16 + 8;
+        spA0->polyXlu.p = &temp_v0_16[1];
         temp_v0_16->words.w1 = 0x64FF80;
         temp_v0_16->words.w0 = 0xFB000000;
         phi_t2_2 = 0x14;
@@ -743,7 +743,7 @@ block_7:
     sp3C = phi_t3;
     Matrix_Scale(1.0f, phi_f14, phi_f14, 1);
     temp_v0_17 = spA0->polyXlu.p;
-    spA0->polyXlu.p = temp_v0_17 + 8;
+    spA0->polyXlu.p = &temp_v0_17[1];
     temp_v0_17->words.w0 = 0xDA380003;
     sp3C = phi_t3;
     spA4 = phi_t2_2;
@@ -751,14 +751,14 @@ block_7:
     sp4C = temp_v0_17;
     sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_18 = spA0->polyXlu.p;
-    spA0->polyXlu.p = temp_v0_18 + 8;
+    spA0->polyXlu.p = &temp_v0_18[1];
     temp_v0_18->words.w0 = 0xDB060024;
     temp_v1_5 = phi_t3->unk_840;
     spA0 = spA0;
     sp48 = temp_v0_18;
     sp48->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (temp_v1_5 * 5) & 0xFF, 0U, 0x20, 0x20, 1, (temp_v1_5 * 0x14) & 0xFF, (temp_v1_5 * phi_t2_2) & 0xFF, 8, 8);
     temp_v0_19 = spA0->polyXlu.p;
-    spA0->polyXlu.p = temp_v0_19 + 8;
+    spA0->polyXlu.p = &temp_v0_19[1];
     temp_v0_19->words.w1 = (u32) &D_040268F0;
     temp_v0_19->words.w0 = 0xDE000000;
 }

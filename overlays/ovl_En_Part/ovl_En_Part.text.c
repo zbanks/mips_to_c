@@ -148,7 +148,7 @@ void func_808654C4(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     arg0->unk_146 = (s16) (temp_v1 - 1);
-    arg0->unk_148 = (f32) (arg0->unk_148 + arg0->unk_14C);
+    arg0[1].flags = (bitwise u32) ((bitwise f32) arg0[1].flags + arg0[1].home.pos.x);
 }
 
 void EnPart_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -178,18 +178,18 @@ void EnPart_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800B8050((Actor *) this, globalCtx, 0);
     if (this->actor.params == 0xF) {
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w1 = (u32) gEmptyDL;
         temp_v0->words.w0 = 0xDB060030;
     }
     if (this->unk_150 != 0) {
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         sp24 = temp_v0_2;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = this->unk_150;
     }

@@ -144,7 +144,7 @@ void func_80C1019C(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0 + 0x144;
     sp24 = temp_a0;
     if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
-        if (&D_0600A280 == arg0->unk_14C) {
+        if (&D_0600A280 == arg0[1].home.pos.x) {
             SkelAnime_ChangeAnimTransitionStop(temp_a0, &D_0600AD98, 5.0f);
         } else {
             SkelAnime_ChangeAnimTransitionRepeat(temp_a0, &D_06009890, -4.0f);
@@ -267,7 +267,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80C106B0[this->unk_2AC];
     func_801343C0(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_80C10558, NULL, func_80C10590, (Actor *) this);

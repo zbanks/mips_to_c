@@ -1033,7 +1033,7 @@ s16 sins(u16 x) {
 
     temp_t8 = ((u32) (x & 0xFFFF) >> 4) & 0xFFFF;
     if ((temp_t8 & 0x400) != 0) {
-        phi_v1 = (s32) *(sintable + 0x7FE + -(s32) ((temp_t8 & 0x3FF) * 2));
+        phi_v1 = (s32) *(&sintable[1023] + -(s32) ((temp_t8 & 0x3FF) * 2));
     } else {
         phi_v1 = (s32) sintable[temp_t8 & 0x3FF];
     }

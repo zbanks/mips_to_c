@@ -203,21 +203,21 @@ void func_80BCEF0C(Actor *this, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     Matrix_Scale(6.0f, 5.0f, 5.0f, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp2C = temp_v0;
     sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) D_80BCF1C4);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA000080;
     temp_v0_2->words.w1 = (sp3C << 0x18) | (sp3D << 0x10) | (sp3E << 8) | 0xFF;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = (sp38 << 0x18) | (sp39 << 0x10) | (sp3A << 8) | 0xFF;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_06000140;
 }

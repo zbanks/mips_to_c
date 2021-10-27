@@ -199,7 +199,7 @@ void EnYb_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80BFA2FC(GlobalContext *arg0) {
-    if (gSaveContext.inventory.items[gItemSlots[0x43]] == 0x43) {
+    if (gSaveContext.inventory.items[gItemSlots[67]] == 0x43) {
         func_80151BB4(arg0, 0x34U);
     }
     func_80151BB4(arg0, 0xFU);
@@ -212,13 +212,13 @@ void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     f32 temp_f0;
 
     temp_a1 = &actor->world;
-    if ((s32) actor->unk_414 > 0) {
+    if ((s32) actor[3].focus.rot.x > 0) {
         if (actor->unk_412 == 2) {
-            actor->scale.x = (((27.0f - actor->unk_408) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
+            actor->scale.x = (((27.0f - actor[3].focus.pos.x) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
         }
         sp28 = temp_a1;
         Math_Vec3f_Copy((Vec3f *) &sp34, (Vec3f *) temp_a1);
-        Math_Vec3f_Copy((Vec3f *) sp28, actor + 0x404);
+        Math_Vec3f_Copy((Vec3f *) sp28, (Vec3f *) &actor[3].cutscene);
         func_800B4AEC(globalCtx, actor, 50.0f);
         temp_f0 = actor->floorHeight;
         if (sp38 < temp_f0) {
@@ -374,7 +374,7 @@ void func_80BFA9D4(EnYb *this, GlobalContext *globalCtx) {
         } else if (Player_GetMask(globalCtx) == 0xE) {
             func_801477B4(globalCtx);
             this->actionFunc = func_80BFAC88;
-        } else if (gSaveContext.inventory.items[gItemSlots[0x43]] == 0x43) {
+        } else if (gSaveContext.inventory.items[gItemSlots[67]] == 0x43) {
             func_80151938(globalCtx, 0x147DU);
             func_80BFA2FC(globalCtx);
         } else {
@@ -536,17 +536,17 @@ void EnYb_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if ((s32) temp_v0 < 0xFF) {
             if ((s32) temp_v0 >= 0x81) {
                 temp_a0 = temp_a2->polyXlu.p;
-                temp_a2->polyXlu.p = temp_a0 + 8;
+                temp_a2->polyXlu.p = &temp_a0[1];
                 func_8012C2B4(temp_a0);
                 Scene_SetRenderModeXlu(globalCtx, 2, 2U);
             } else {
                 temp_a0_2 = temp_a2->polyXlu.p;
-                temp_a2->polyXlu.p = temp_a0_2 + 8;
+                temp_a2->polyXlu.p = &temp_a0_2[1];
                 func_8012C304(temp_a0_2);
                 Scene_SetRenderModeXlu(globalCtx, 1, 2U);
             }
             temp_a0_3 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_a0_3 + 8;
+            temp_a2->polyXlu.p = &temp_a0_3[1];
             temp_a0_3->words.w0 = 0xFB000000;
             temp_a0_3->words.w1 = this->unk_414 & 0xFF;
             temp_a2->polyXlu.p = SkelAnime_DrawSV2(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, NULL, func_80BFB0E0, (Actor *) this, temp_a2->polyXlu.p);

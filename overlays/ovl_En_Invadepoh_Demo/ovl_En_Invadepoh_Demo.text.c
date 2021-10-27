@@ -372,7 +372,7 @@ void func_80C19590(Actor *arg0, void *arg1) {
     sp30 = (s32) temp_v0->unk_0;
     if (sp30 != 0) {
         Math_Vec3s_ToVec3f((Vec3f *) &sp20, (arg0->unk_15C * 6) + Lib_SegmentedToVirtual(temp_v0->unk_4));
-        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0->unk_14C) < arg0->unk_14C) {
+        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0[1].home.pos.x) < arg0[1].home.pos.x) {
             temp_t4 = arg0->unk_15C + 1;
             arg0->unk_15C = temp_t4;
             if (temp_t4 >= sp30) {
@@ -382,7 +382,7 @@ void func_80C19590(Actor *arg0, void *arg1) {
             /* Duplicate return node #5. Try simplifying control flow for better match */
             return;
         }
-        SkelAnime_FrameUpdateMatrix(arg0 + 0x170);
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &arg0[1].world.pos.z);
         /* Duplicate return node #5. Try simplifying control flow for better match */
     }
 }
@@ -401,7 +401,7 @@ void func_80C19688(Actor *arg0, void *arg1) {
     sp30 = (s32) temp_v0->unk_0;
     if (sp30 != 0) {
         Math_Vec3s_ToVec3f((Vec3f *) &sp20, (arg0->unk_15C * 6) + Lib_SegmentedToVirtual(temp_v0->unk_4));
-        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0->unk_14C) < arg0->unk_14C) {
+        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0[1].home.pos.x) < arg0[1].home.pos.x) {
             temp_t4 = arg0->unk_15C + 1;
             arg0->unk_15C = temp_t4;
             if (temp_t4 >= sp30) {
@@ -411,7 +411,7 @@ void func_80C19688(Actor *arg0, void *arg1) {
             /* Duplicate return node #5. Try simplifying control flow for better match */
             return;
         }
-        SkelAnime_FrameUpdateMatrix(arg0 + 0x170);
+        SkelAnime_FrameUpdateMatrix((SkelAnime *) &arg0[1].world.pos.z);
         /* Duplicate return node #5. Try simplifying control flow for better match */
     }
 }
@@ -450,13 +450,13 @@ void func_80C1987C(Actor *arg0, void *arg1) {
     sp38 = (s32) temp_v0->unk_0;
     temp_ret = Lib_SegmentedToVirtual(temp_v0->unk_4);
     if (sp38 != 0) {
-        temp_v0_2 = arg0->unk_154;
+        temp_v0_2 = arg0[1].home.pos.z;
         if (((temp_v0_2 == 2) && (arg1->unk_1F34 == 0x157)) || ((temp_v0_2 == 3) && (arg1->unk_1F34 == 0x1A5)) || ((temp_v0_2 == 4) && (arg1->unk_1F34 == 0x209))) {
             sp34 = temp_ret;
             Audio_PlayActorSound2(arg0, 0x28DFU);
         }
         Math_Vec3s_ToVec3f((Vec3f *) &sp28, (arg0->unk_15C * 6) + temp_ret);
-        if (Math_Vec3f_StepTo((Vec3f *) &arg0->world, (Vec3f *) &sp28, arg0->unk_14C) < arg0->unk_14C) {
+        if (Math_Vec3f_StepTo((Vec3f *) &arg0->world, (Vec3f *) &sp28, arg0[1].home.pos.x) < arg0[1].home.pos.x) {
             temp_t1 = arg0->unk_15C + 1;
             arg0->unk_15C = temp_t1;
             if (temp_t1 >= sp38) {
@@ -489,7 +489,7 @@ void func_80C199EC(Actor *arg0, void *arg1) {
     if (sp30 != 0) {
         arg0->unk_16C = (s16) (arg0->unk_16C + 0x258);
         Math_Vec3s_ToVec3f((Vec3f *) &sp20, (arg0->unk_15C * 6) + temp_v0_2);
-        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0->unk_14C) < arg0->unk_14C) {
+        if (Math_Vec3f_StepTo(arg0 + 0x24, (Vec3f *) &sp20, arg0[1].home.pos.x) < arg0[1].home.pos.x) {
             temp_t7 = arg0->unk_15C + 1;
             arg0->unk_15C = temp_t7;
             if (temp_t7 >= sp30) {
@@ -681,8 +681,8 @@ void func_80C1A038(f32 *arg0) {
 
     temp_v0 = SysMatrix_GetCurrentState();
     temp_v0->mf[3][0] = arg0->unk_0;
-    temp_v0->mf[3][1] = arg0->unk_4;
-    temp_v0->mf[3][2] = arg0->unk_8;
+    temp_v0->mf[3][1] = arg0[1];
+    temp_v0->mf[3][2] = arg0[2];
 }
 
 s32 func_80C1A070(GlobalContext *arg0, Vec3f *arg1) {
@@ -754,7 +754,7 @@ void func_80C1A244(Actor *arg0, GlobalContext *arg1) {
     AnimatedMat_Draw(arg1, Lib_SegmentedToVirtual(&D_06000560));
     Scene_SetRenderModeXlu(arg1, 0, 1U);
     temp_v1 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v1 + 8;
+    temp_s0->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = 0xFF;
     temp_v1->words.w0 = 0xFB000000;
     temp_s0->polyOpa.p = SkelAnime_DrawSV2(arg1, arg0->unk_174, arg0->unk_190, (s32) arg0->unk_172, NULL, func_80C1A168, arg0, temp_s0->polyOpa.p);
@@ -763,13 +763,13 @@ void func_80C1A244(Actor *arg0, GlobalContext *arg1) {
     temp_v1_2 = temp_a2->polyXlu.p;
     temp_v1_2->words.w0 = 0xE7000000;
     temp_v1_2->words.w1 = 0;
-    temp_v1_3 = temp_v1_2 + 8;
+    temp_v1_3 = &temp_v1_2[1];
     temp_v1_3->words.w1 = 0xF0B4643C;
     temp_v1_3->words.w0 = 0xFA0000FF;
-    temp_v1_4 = temp_v1_3 + 8;
+    temp_v1_4 = &temp_v1_3[1];
     temp_v1_4->words.w1 = -0x6A;
     temp_v1_4->words.w0 = 0xFB000000;
-    temp_v1_5 = temp_v1_4 + 8;
+    temp_v1_5 = &temp_v1_4[1];
     sp9C = temp_v1_5;
     sp98 = temp_a2;
     SysMatrix_InsertMatrix(&D_80C1AD40, 0);
@@ -777,20 +777,20 @@ void func_80C1A244(Actor *arg0, GlobalContext *arg1) {
     if (temp_v0 != 0) {
         temp_v1_5->words.w0 = 0xDA380003;
         temp_v1_5->words.w1 = (u32) temp_v0;
-        temp_v1_6 = temp_v1_5 + 8;
+        temp_v1_6 = &temp_v1_5[1];
         temp_v1_6->words.w0 = 0xDE000000;
         temp_v1_6->words.w1 = (u32) &D_06000080;
-        temp_v1_7 = temp_v1_6 + 8;
+        temp_v1_7 = &temp_v1_6[1];
         sp9C = temp_v1_7;
         SysMatrix_InsertMatrix(&D_80C1AD80, 0);
         temp_v0_2 = Matrix_NewMtx(arg1->state.gfxCtx);
         if (temp_v0_2 != 0) {
             temp_v1_7->words.w0 = 0xDA380003;
             temp_v1_7->words.w1 = (u32) temp_v0_2;
-            temp_v1_8 = temp_v1_7 + 8;
+            temp_v1_8 = &temp_v1_7[1];
             temp_v1_8->words.w0 = 0xDE000000;
             temp_v1_8->words.w1 = (u32) &D_06000080;
-            sp98->polyXlu.p = temp_v1_8 + 8;
+            sp98->polyXlu.p = &temp_v1_8[1];
         }
     }
     temp_v0_3 = arg1->state.gfxCtx;
@@ -798,28 +798,28 @@ void func_80C1A244(Actor *arg0, GlobalContext *arg1) {
     temp_v0_4 = func_8012C868(temp_v0_3->polyXlu.p);
     temp_v0_4->words.w1 = 0x80;
     temp_v0_4->words.w0 = 0xE3001803;
-    temp_s0_2 = temp_v0_4 + 8;
+    temp_s0_2 = &temp_v0_4[1];
     temp_s0_2->words.w0 = 0xFCFF97FF;
     temp_s0_2->words.w1 = 0xFF2DFEFF;
-    temp_s0_3 = temp_s0_2 + 8;
+    temp_s0_3 = &temp_s0_2[1];
     SysMatrix_InsertMatrix(&arg1->mf_187FC, 0);
     SysMatrix_GetStateTranslationAndScaledZ(90.0f, (Vec3f *) &sp68);
     SysMatrix_InsertTranslation(arg0->world.pos.x + sp68, arg0->world.pos.y + sp6C + 25.0f, arg0->world.pos.z + sp70, 0);
     Matrix_Scale(0.15f, 0.15f, 0.15f, 1);
     temp_s0_3->words.w0 = 0xDE000000;
     temp_s0_3->words.w1 = (u32) D_04029CB0;
-    temp_s0_4 = temp_s0_3 + 8;
+    temp_s0_4 = &temp_s0_3[1];
     temp_s0_4->words.w0 = 0xFA000000;
     temp_s0_4->words.w1 = 0xF0B46464;
-    temp_s0_5 = temp_s0_4 + 8;
+    temp_s0_5 = &temp_s0_4[1];
     temp_v0_5 = Matrix_NewMtx(arg1->state.gfxCtx);
     if (temp_v0_5 != 0) {
         temp_s0_5->words.w0 = 0xDA380003;
-        temp_s0_6 = temp_s0_5 + 8;
+        temp_s0_6 = &temp_s0_5[1];
         temp_s0_5->words.w1 = (u32) temp_v0_5;
         temp_s0_6->words.w0 = 0xDE000000;
         temp_s0_6->words.w1 = (u32) D_04029CF0;
-        sp54->polyXlu.p = temp_s0_6 + 8;
+        sp54->polyXlu.p = &temp_s0_6[1];
     }
     SysMatrix_StatePop();
 }
@@ -836,13 +836,13 @@ void func_80C1A590(Actor *arg0, GlobalContext *arg1) {
     sp34 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0 + 8;
+    sp34->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = sp34;
     sp2C = temp_v0;
     sp2C->words.w1 = Lib_SegmentedToVirtual(&D_06011FC8);
     temp_v0_2 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0_2 + 8;
+    sp34->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp28 = temp_v0_2;
     sp28->words.w1 = Lib_SegmentedToVirtual(&D_06012FC8);
@@ -879,8 +879,8 @@ void func_80C1A6C8(void *arg0, GlobalContext *arg1) {
     temp_a2 = arg0;
     temp_a0 = &sp64;
     temp_a0->unk_0 = D_801D15B0.x;
-    temp_a0->unk_4 = (f32) D_801D15B0.y;
-    temp_a0->unk_8 = (f32) D_801D15B0.z;
+    temp_a0[1] = D_801D15B0.y;
+    temp_a0[2] = D_801D15B0.z;
     sp64 = temp_a2->unk_24;
     sp68 = temp_a2->unk_28;
     temp_f8 = temp_a2->unk_2C;
@@ -895,24 +895,24 @@ void func_80C1A6C8(void *arg0, GlobalContext *arg1) {
     temp_v0 = Matrix_NewMtx(arg1->state.gfxCtx);
     if (temp_v0 != 0) {
         temp_v1 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v1 + 8;
+        sp5C->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) temp_v0;
         temp_v1->words.w0 = 0xDA380003;
         temp_v1_2 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v1_2 + 8;
+        sp5C->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFA00FF80;
         temp_v1_2->words.w1 = 0xFFFF00B4;
         temp_v1_3 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v1_3 + 8;
+        sp5C->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w1 = 0xFF320000;
         temp_v1_3->words.w0 = 0xFB000000;
         temp_v1_4 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v1_4 + 8;
+        sp5C->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xDE000000;
         temp_v1_4->words.w1 = (u32) D_04023210;
     }
     if (func_80C1A070(arg1, (Vec3f *) &sp64) != 0) {
-        func_800F9824(arg1, &arg1->envCtx, &arg1->view, arg1->state.gfxCtx, (bitwise Vec3f) sp64.unk_0, sp64.unk_4, sp64.unk_8, (s8) 20.0f, (s8) 9.0f, 0, 0);
+        func_800F9824(arg1, &arg1->envCtx, &arg1->view, arg1->state.gfxCtx, (bitwise Vec3f) sp64.unk_0, (&sp64)[1], (&sp64)[2], (s8) 20.0f, (s8) 9.0f, 0, 0);
     }
 }
 

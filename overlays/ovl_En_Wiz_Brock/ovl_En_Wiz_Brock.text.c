@@ -140,11 +140,11 @@ void EnWizBrock_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp54 = temp_t0;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
         temp_v1 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_v1 + 8;
+        temp_t0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w1 = 0;
         temp_v1->words.w0 = 0xE7000000;
         temp_v1_2 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_v1_2 + 8;
+        temp_t0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = -1;
         temp_v1_2->words.w0 = 0xFB000000;
         func_800BDFC0(globalCtx, &D_060010E8);
@@ -152,11 +152,11 @@ void EnWizBrock_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp54 = temp_t0;
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);
         temp_v1_3 = temp_t0->polyXlu.p;
-        temp_t0->polyXlu.p = temp_v1_3 + 8;
+        temp_t0->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w1 = 0;
         temp_v1_3->words.w0 = 0xE7000000;
         temp_v1_4 = temp_t0->polyXlu.p;
-        temp_t0->polyXlu.p = temp_v1_4 + 8;
+        temp_t0->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xFB000000;
         temp_v1_4->words.w1 = ((s32) this->unk_1AC & 0xFF) | ~0xFF;
         func_800BE03C(globalCtx, &D_060010E8);
@@ -166,32 +166,32 @@ void EnWizBrock_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp3C = temp_a2;
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06005C64));
         temp_v0 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_v0 + 8;
+        temp_a2->polyXlu.p = &temp_v0[1];
         temp_v0->words.w1 = 0;
         temp_v0->words.w0 = 0xE7000000;
         temp_v0_2 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_v0_2 + 8;
+        temp_a2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = -1;
         temp_v0_2->words.w0 = 0xFA008080;
         if (this->unk_1AA == 1) {
             temp_v0_3 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_3 + 8;
+            temp_a2->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFB000000;
             temp_v0_3->words.w1 = ((s32) this->unk_1AC & 0xFF) | 0xFF006400;
         } else {
             temp_v0_4 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_4 + 8;
+            temp_a2->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFB000000;
             temp_v0_4->words.w1 = ((s32) this->unk_1AC & 0xFF) | 0x3200FF00;
         }
         temp_v0_5 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_v0_5 + 8;
+        temp_a2->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDA380003;
         sp3C = temp_a2;
         sp24 = temp_v0_5;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_6 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_v0_6 + 8;
+        temp_a2->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = (u32) &D_06005870;
         temp_v0_6->words.w0 = 0xDE000000;
     }

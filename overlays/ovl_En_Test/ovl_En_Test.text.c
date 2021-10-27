@@ -284,11 +284,11 @@ void func_80863048(GraphicsContext **arg0, ? *arg1) {
     temp_s2 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v1 + 8;
+    temp_s2->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = -1;
     temp_v1->words.w0 = 0xFA000080;
     temp_v1_2 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v1_2 + 8;
+    temp_s2->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = -1;
     temp_v1_2->words.w0 = 0xFB000000;
     phi_s0 = arg1;
@@ -301,11 +301,11 @@ void func_80863048(GraphicsContext **arg0, ? *arg1) {
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_v0 = Matrix_NewMtx(*arg0);
             temp_v1_3 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1_3 + 8;
+            temp_s2->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w1 = (u32) temp_v0;
             temp_v1_3->words.w0 = 0xDA380003;
             temp_v1_4 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1_4 + 8;
+            temp_s2->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w1 = (u32) &D_0406AB30;
             temp_v1_4->words.w0 = 0xDE000000;
         }

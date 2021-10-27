@@ -122,7 +122,7 @@ void func_800F4C0C(GlobalContext *globalCtx) {
     temp_v1 = &globalCtx->pauseCtx;
     if ((temp_v1->state == 0) && (temp_v1->debugState == 0) && (globalCtx->gameOverCtx.state == 0) && (globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && (gSaveContext.cutscene < 0xFFF0)) {
         temp_a0 = globalCtx;
-        if (((s32) gSaveContext.nextCutsceneIndex < 0xFFF0) && ((sp1C = temp_v1, sp18 = globalCtx + 0x18000, globalCtx = globalCtx, sp24 = temp_t0, (func_801690CC(temp_a0) == 0)) || ((temp_v0 = &globalCtx->msgCtx.font.fontBuf[34328], (temp_v0->unk_1F22 != 0)) && (temp_v0->unk_1F04 == 0xFF))) && ((s32) globalCtx->unk_1887C < 2)) {
+        if (((s32) gSaveContext.nextCutsceneIndex < 0xFFF0) && ((sp1C = temp_v1, sp18 = globalCtx + 0x18000, globalCtx = globalCtx, sp24 = temp_t0, (func_801690CC(temp_a0) == 0)) || ((temp_v0 = &globalCtx->msgCtx.font.fontBuf[34328], (temp_v0[7970] != 0)) && (temp_v0->unk_1F04 == 0xFF))) && ((s32) globalCtx->unk_1887C < 2)) {
             temp_v0_2 = gSaveContext.unk_3F28;
             if ((temp_v0_2 != 8) && (temp_v0_2 != 9) && ((gSaveContext.eventInf[1] & 0x80) == 0) && ((temp_t0->unk_A6C & 0x20) == 0)) {
                 temp_v0_3 = globalCtx->actorCtx.unk5;

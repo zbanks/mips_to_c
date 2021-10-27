@@ -203,7 +203,7 @@ s32 func_80ACF8B8(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_1AC = (s16) (s32) arg0->world.pos.z;
     arg0->unk_1AA = (s16) (s32) (arg0->world.pos.y + 10.0f);
     if ((temp_v0 & 2) != 0) {
-        temp_v1 = arg0->unk_16C;
+        temp_v1 = arg0[1].world.pos.y;
         arg0->unk_172 = (u8) (temp_v0 & 0xFFFD);
         temp_a0 = *temp_v1;
         if (temp_a0 == 9) {
@@ -216,7 +216,7 @@ s32 func_80ACF8B8(Actor *arg0, GlobalContext *arg1) {
         }
         goto block_8;
     }
-    CollisionCheck_SetOC(arg1, arg1 + 0x18884, arg0 + 0x160);
+    CollisionCheck_SetOC(arg1, arg1 + 0x18884, (Collider *) &arg0[1].params);
 block_8:
     return 0;
 }
@@ -324,8 +324,8 @@ void func_80ACFA78(Actor *arg0, GlobalContext *arg1) {
     } while (temp_s4 != &D_80AD070C);
     arg0->freezeTimer = 2;
     EffectSsHahen_SpawnBurst(arg1, sp74, 17.0f, 0, (s16) 0xF, (s16) 0xD, (s16) 0x14, (s16) -1, (s16) 0xA, NULL);
-    arg0->unk_338 = 0x3C;
-    arg0->unk_33A = 1;
+    arg0[2].colChkInfo.cylRadius = 0x3C;
+    arg0[2].colChkInfo.cylHeight = 1;
     Audio_PlayActorSound2(arg0, 0x28AAU);
     func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->unk_144);
     arg0->unk_15C = func_80AD0028;
@@ -359,9 +359,9 @@ void func_80ACFDAC(EnFuKago *arg0, GlobalContext *arg1, Vec3f *arg2) {
     }
     temp_f0 = Math_Vec3f_DistXZ(arg2, &D_80AD0714);
     temp_cond = temp_f0 < 190.0f;
-    arg2->unk_18 = (f32) (arg2->unk_C * -0.1f);
-    arg2->unk_1C = (f32) (((15.0f - arg2->y) * 0.1f) - (0.2f * arg2->unk_10));
-    arg2->unk_20 = (f32) (arg2->unk_14 * -0.1f);
+    arg2[2].x = arg2[1].x * -0.1f;
+    arg2[2].y = ((15.0f - arg2->y) * 0.1f) - (0.2f * arg2[1].y);
+    arg2[2].z = arg2[1].z * -0.1f;
     if (temp_cond) {
         temp_f2 = 190.0f / temp_f0;
         arg2->x *= temp_f2;
@@ -403,17 +403,17 @@ void func_80AD0028(EnFuKago *arg0, GlobalContext *arg1) {
     phi_s1 = 0;
     do {
         func_80ACFDAC(arg0, arg1, phi_s0);
-        phi_s0->unk_C = (f32) (phi_s0->unk_C + phi_s0->unk_18);
-        phi_s0->unk_10 = (f32) (phi_s0->unk_10 + phi_s0->unk_1C);
-        phi_s0->unk_14 = (f32) (phi_s0->unk_14 + phi_s0->unk_20);
-        phi_s0->x += phi_s0->unk_C;
+        phi_s0[1].x += phi_s0[2].x;
+        phi_s0[1].y += phi_s0[2].y;
+        phi_s0[1].z += phi_s0[2].z;
+        phi_s0->x += phi_s0[1].x;
         temp_s1 = phi_s1 + 1;
-        phi_s0->y += phi_s0->unk_10;
-        phi_s0->z += phi_s0->unk_14;
+        phi_s0->y += phi_s0[1].y;
+        phi_s0->z += phi_s0[1].z;
         phi_s0->unk_30 = (s16) (phi_s0->unk_30 + phi_s0->unk_36);
         phi_s0->unk_32 = (s16) (phi_s0->unk_32 + phi_s0->unk_38);
         phi_s0->unk_34 = (s16) (phi_s0->unk_34 + phi_s0->unk_3A);
-        phi_s0 += 0x40;
+        phi_s0 = (Vec3f *) &phi_s0[5].y;
         phi_s1 = temp_s1;
     } while (temp_s1 != 6);
     temp_v0 = arg0->unk_338;
@@ -425,13 +425,13 @@ void func_80AD0028(EnFuKago *arg0, GlobalContext *arg1) {
     } else {
         if (temp_v0 == 0x3A) {
             sp34.unk_0 = arg0->unk_304;
-            sp34.unk_4 = (s32) arg0->unk_308;
-            sp34.unk_8 = (f32) arg0->unk_30C;
+            (&sp34)[1] = arg0->unk_308;
+            (&sp34)[2] = arg0->unk_30C;
             arg0->unk_304 = sp3C;
             arg0->unk_30C = -sp34;
             sp34.unk_0 = arg0->unk_244;
-            sp34.unk_4 = (s32) arg0->unk_248;
-            sp34.unk_8 = (f32) arg0->unk_24C;
+            (&sp34)[1] = arg0->unk_248;
+            (&sp34)[2] = arg0->unk_24C;
             arg0->unk_244 = -sp3C;
             arg0->unk_32E *= -1;
             arg0->unk_24C = sp34;
@@ -463,8 +463,8 @@ void func_80AD0288(Actor *arg0, GlobalContext *arg1) {
     sp24 = temp_a0;
     Math_SmoothStepToF(temp_a0, 0.0f, 0.1f, 0.005f, 0.005f);
     temp_f0 = temp_a0->unk_0;
-    temp_a0->unk_8 = temp_f0;
-    temp_a0->unk_4 = temp_f0;
+    temp_a0[2] = temp_f0;
+    temp_a0[1] = temp_f0;
     if (temp_f0 == 0.0f) {
         Actor_MarkForDeath(arg0);
     }
@@ -504,11 +504,11 @@ void func_80AD0340(s32 arg0, GraphicsContext **arg1) {
         SysMatrix_InsertTranslation(-phi_s0->unk_24, -phi_s0->unk_28, -phi_s0->unk_2C, 1);
         Matrix_Scale(temp_s4->unk_0, temp_s4->unk_4, temp_s4->unk_8, 1);
         temp_v0 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0 + 8;
+        temp_s2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *phi_s3;
         SysMatrix_StatePop();
@@ -536,33 +536,33 @@ void EnFuKago_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp24 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0 + 8;
+        sp24->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = sp24;
         sp1C = temp_v0;
         sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_2 + 8;
+        sp24->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_060006A0;
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_3 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_3 + 8;
+        sp24->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06000740;
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_4 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_4 + 8;
+        sp24->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_060007E0;
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_5 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_5 + 8;
+        sp24->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) &D_06000880;
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_6 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_6 + 8;
+        sp24->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = (u32) &D_06000920;
         temp_v0_6->words.w0 = 0xDE000000;
         temp_v0_7 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_7 + 8;
+        sp24->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = (u32) &D_060009C0;
         temp_v0_7->words.w0 = 0xDE000000;
         return;

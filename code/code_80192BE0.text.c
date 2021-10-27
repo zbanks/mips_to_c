@@ -20,7 +20,7 @@ struct _mips2c_stack_func_80192C00 {
 
 struct _mips2c_stack_func_8019319C {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ s8 *sp20;                            /* inferred */
+    /* 0x20 */ u8 *sp20;                            /* inferred */
     /* 0x24 */ char pad_24[0x8];                    /* maybe part of sp20[3]? */
     /* 0x2C */ ? (*sp2C)(s32, s32, s32, s32);       /* inferred */
     /* 0x30 */ char pad_30[0xC];                    /* maybe part of sp2C[4]? */
@@ -192,11 +192,11 @@ s32 func_8018CCA8();                                /* extern */
 ? func_80192B54();                                  /* extern */
 ? func_80194790(s32, s32, void *);                  /* extern */
 s32 func_801957B4(s32, u8, u8, ? (*)(s32, s32, s32, s32)); /* extern */
-? func_80197D24(void *, ? (*)(s32, s32, s32, s32), s8 *); /* extern */
+? func_80197D24(void *, ? (*)(s32, s32, s32, s32), u8 *); /* extern */
 ? func_8019AAF0(void *, s32);                       /* extern */
 AudioTask *func_80192C00();                         /* static */
-void func_8019319C(s8 *arg0, s8 *);                 /* static */
-void func_801936D8(u8 arg0, ? (*arg1)(s32, s32, s32, s32), s8 *); /* static */
+void func_8019319C(u8 *arg0, u8 *);                 /* static */
+void func_801936D8(u8 arg0, ? (*arg1)(s32, s32, s32, s32), u8 *); /* static */
 void func_8019372C(u8 arg0, ? (*arg1)(s32, s32, s32, s32)); /* static */
 void func_80193774();                               /* static */
 void func_8019380C(s32 *arg0, s32 *arg1);           /* static */
@@ -206,7 +206,7 @@ void func_801938A0(s32 arg1);                       /* static */
 void func_801938D0(s32 arg1);                       /* static */
 s32 func_80193900();                                /* static */
 void func_80193990();                               /* static */
-void func_801939A8(s8 *arg0);                       /* static */
+void func_801939A8(u8 *arg0);                       /* static */
 void func_80193AEC(void *arg0);                     /* static */
 u32 func_80193BA0(s32 *arg0);                       /* static */
 void func_80193C04();                               /* static */
@@ -219,8 +219,8 @@ s8 func_80193DF0(s32 arg0, s32 arg1, s32 arg2);     /* static */
 s8 func_80193E44(s32 arg0, s32 arg1);               /* static */
 void func_80193E6C(s32 arg0, ? arg1);               /* static */
 void func_80193E9C();                               /* static */
-void func_80193EA8(void *arg0, s8 *arg1);           /* static */
-void func_80194080(void *arg0, s8 *arg1);           /* static */
+void func_80193EA8(void *arg0, u8 *arg1);           /* static */
+void func_80194080(void *arg0, u8 *arg1);           /* static */
 void func_801942BC(s32 arg0, s32 arg1, s32 arg2);   /* static */
 void func_80194304();                               /* static */
 void func_80194328(s32 arg0, s32 arg1);             /* static */
@@ -241,7 +241,7 @@ static s32 D_801D5FF4 = 0;
 static u8 D_801D5FF8 = 0;
 static void *D_801D5FFC = (void *)0x12345678;
 static ? D_801D6200;                                /* unable to generate initializer */
-static s8 D_80200C70;
+static u8 D_80200C70;
 static s16 D_802034DC;
 static s16 D_802034F0;
 static s32 D_80203530[55];
@@ -407,11 +407,11 @@ AudioTask *func_80192C00(void) {
     }
     D_80200C70.unk_28C4 = 0;
     func_8018EB60();
-    func_80190B08(D_80200C70.unk_4448);
+    func_80190B08((&D_80200C70)[17480]);
     func_80192B54();
-    if ((D_80200C70.unk_4448 != 0) && (func_8018CCA8() == 0)) {
-        if (D_80200C70.unk_4448 == 0) {
-            osSendMesg(D_80200C70.unk_7988, (void *) D_80200C70.unk_4449, 0);
+    if (((&D_80200C70)[17480] != 0) && (func_8018CCA8() == 0)) {
+        if ((&D_80200C70)[17480] == 0) {
+            osSendMesg(D_80200C70.unk_7988, (void *) (&D_80200C70)[17481], 0);
         }
         D_801D5FF0 = NULL;
         return NULL;
@@ -440,7 +440,7 @@ AudioTask *func_80192C00(void) {
         temp_t0->unk_2994 = temp_v1_7;
     }
     sp3C = temp_t0;
-    if (D_80200C70.unk_4448 == 0) {
+    if ((&D_80200C70)[17480] == 0) {
         sp3C = temp_t0;
         if (osRecvMesg(D_80200C70.unk_7990, &sp4C, 0) != -1) {
             do {
@@ -450,7 +450,7 @@ AudioTask *func_80192C00(void) {
                 phi_s0_5 = temp_s0_5;
             } while (osRecvMesg(D_80200C70.unk_7990, &sp4C, 0) != -1);
         }
-        if ((phi_s0_4 == 0) && (D_80200C70.unk_797A != 0)) {
+        if ((phi_s0_4 == 0) && ((&D_80200C70)[31098] != 0)) {
             func_80193900();
         }
     }
@@ -494,10 +494,10 @@ AudioTask *func_80192C00(void) {
     return NULL;
 }
 
-void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
+void func_8019319C(u8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
     ? (*sp3C)(s32, s32, s32, s32);
     ? (*sp2C)(s32, s32, s32, s32);
-    s8 *sp20;
+    u8 *sp20;
     ? (*temp_a1_5)(s32, s32, s32, s32);
     ? (*temp_t8)(s32, s32, s32, s32);
     s16 temp_v1_5;
@@ -506,11 +506,11 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
     s32 temp_a1_3;
     s32 temp_a1_4;
     s32 temp_a2;
-    s8 *temp_v0;
-    s8 *temp_v0_5;
     s8 temp_t7;
     s8 temp_t9;
+    u8 *temp_v0;
     u8 *temp_v0_4;
+    u8 *temp_v0_5;
     u8 temp_v0_8;
     u8 temp_v1;
     u8 temp_v1_2;
@@ -522,14 +522,14 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
     void *temp_v0_7;
     void *temp_v0_9;
     void *temp_v1_3;
-    s8 *phi_v0;
+    u8 *phi_v0;
     s32 phi_a1;
     s32 phi_a0;
     s32 phi_a1_2;
     s32 phi_a2;
-    s8 *phi_v0_2;
+    u8 *phi_v0_2;
     s32 phi_a1_3;
-    s8 *phi_v0_3;
+    u8 *phi_v0_3;
     ? (*phi_a1_4)(s32, s32, s32, s32);
     s32 phi_v1;
     ? (*phi_a1_5)(s32, s32, s32, s32);
@@ -539,10 +539,10 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
     if ((s32) temp_v1 >= 0x91) {
         switch (temp_v1) {                          /* switch 1 */
         case 240:                                   /* switch 1 */
-            D_80200C70.unk_28BE = (s8) arg0->unk_4;
+            (&D_80200C70)[10430] = (u8) arg0->unk_4;
             return;
         case 241:                                   /* switch 1 */
-            temp_v1_2 = arg0->unk_1;
+            temp_v1_2 = arg0[1];
             if (temp_v1_2 == 0xFF) {
                 phi_v0 = &D_80200C70;
                 phi_a1 = 0;
@@ -550,9 +550,9 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
                     do {
                         temp_a1 = phi_a1 + 1;
                         temp_v0 = phi_v0 + 0x160;
-                        temp_t9 = phi_v0->unk_4460 | 0x20;
-                        temp_v0->unk_4300 = temp_t9;
-                        temp_v0->unk_4300 = (s8) (temp_t9 | 4);
+                        temp_t9 = phi_v0[17504] | 0x20;
+                        temp_v0[17152] = temp_t9;
+                        temp_v0[17152] = temp_t9 | 4;
                         phi_v0 = temp_v0;
                         phi_a1 = temp_a1;
                     } while (temp_a1 < (s32) D_80200C70.unk_2880);
@@ -563,7 +563,7 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
             }
             temp_v0_2 = &D_80200C70 + (temp_v1_2 * 0x160);
             temp_v0_2->unk_4460 = (u8) (temp_v0_2->unk_4460 | 0x20);
-            temp_v0_3 = &D_80200C70 + (arg0->unk_1 * 0x160);
+            temp_v0_3 = &D_80200C70 + (arg0[1] * 0x160);
             temp_v0_3->unk_4460 = (u8) (temp_v0_3->unk_4460 | 4);
             return;
         case 242:                                   /* switch 1 */
@@ -588,7 +588,7 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
                     } while (temp_a1_2 < phi_a2);
                 }
             }
-            temp_v1_4 = arg0->unk_1;
+            temp_v1_4 = arg0[1];
             if (temp_v1_4 == 0xFF) {
                 phi_v0_2 = &D_80200C70;
                 phi_a1_3 = 0;
@@ -596,9 +596,9 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
                     do {
                         temp_a1_3 = phi_a1_3 + 1;
                         temp_v0_5 = phi_v0_2 + 0x160;
-                        temp_t7 = phi_v0_2->unk_4460 & 0xFFDF;
-                        temp_v0_5->unk_4300 = temp_t7;
-                        temp_v0_5->unk_4300 = (s8) (temp_t7 | 4);
+                        temp_t7 = phi_v0_2[17504] & 0xFFDF;
+                        temp_v0_5[17152] = temp_t7;
+                        temp_v0_5[17152] = temp_t7 | 4;
                         phi_v0_2 = temp_v0_5;
                         phi_a1_3 = temp_a1_3;
                     } while (temp_a1_3 < (s32) D_80200C70.unk_2880);
@@ -609,33 +609,33 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
             }
             temp_v0_6 = &D_80200C70 + (temp_v1_4 * 0x160);
             temp_v0_6->unk_4460 = (u8) (temp_v0_6->unk_4460 & 0xFFDF);
-            temp_v0_7 = &D_80200C70 + (arg0->unk_1 * 0x160);
+            temp_v0_7 = &D_80200C70 + (arg0[1] * 0x160);
             temp_v0_7->unk_4460 = (u8) (temp_v0_7->unk_4460 | 4);
             return;
         case 243:                                   /* switch 1 */
-            func_8018F6F0(arg0->unk_1, arg0->unk_2, arg0->unk_3);
+            func_8018F6F0(arg0[1], arg0[2], arg0[3]);
             return;
         case 244:                                   /* switch 1 */
-            func_8018F83C(arg0->unk_1, arg0->unk_2, arg0->unk_3, &D_80202AB0);
+            func_8018F83C(arg0[1], arg0[2], arg0[3], &D_80202AB0);
             return;
         case 245:                                   /* switch 1 */
-            func_8018F880(arg0->unk_1, arg0->unk_2, arg0->unk_3, &D_80202AB0);
+            func_8018F880(arg0[1], arg0[2], arg0[3], &D_80202AB0);
             return;
         case 252:                                   /* switch 1 */
-            func_8018F7F8(arg0->unk_1, arg0->unk_2, arg0->unk_3, &D_80202AB0);
+            func_8018F7F8(arg0[1], arg0[2], arg0[3], &D_80202AB0);
             return;
         case 246:                                   /* switch 1 */
-            func_8018F908(arg0->unk_2);
+            func_8018F908(arg0[2]);
             return;
         case 249:                                   /* switch 1 */
-            D_80200C70.unk_4448 = 5;
-            D_80200C70.unk_4449 = (s8) arg0->unk_4;
+            (&D_80200C70)[17480] = 5;
+            (&D_80200C70)[17481] = (u8) arg0->unk_4;
             return;
         case 251:                                   /* switch 1 */
             D_80208E68 = arg0->unk_4;
             return;
         case 228:                                   /* switch 1 */
-            temp_v0_8 = arg0->unk_3;
+            temp_v0_8 = arg0[3];
             if (temp_v0_8 == 0xFF) {
                 D_80208E70 = arg0->unk_4;
                 return;
@@ -649,7 +649,7 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
         case 224:                                   /* switch 1 */
         case 225:                                   /* switch 1 */
         case 226:                                   /* switch 1 */
-            if (func_801957B4(temp_v1 - 0xE0, arg0->unk_2, arg0->unk_3, arg0->unk_4) != 0) {
+            if (func_801957B4(temp_v1 - 0xE0, arg0[2], arg0[3], arg0->unk_4) != 0) {
                 return;
             }
             /* Duplicate return node #54. Try simplifying control flow for better match */
@@ -684,29 +684,29 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
             func_8018B7BC(arg0->unk_4);
             return;
         case 229:                                   /* switch 1 */
-            func_8018FA60(arg0->unk_1, arg0->unk_2, arg0->unk_3, arg0->unk_4);
+            func_8018FA60(arg0[1], arg0[2], arg0[3], arg0->unk_4);
             return;
         case 230:                                   /* switch 1 */
-            func_8018E344(arg0->unk_2, arg0->unk_1, arg0->unk_4, 0);
+            func_8018E344(arg0[2], arg0[1], arg0->unk_4, 0);
             /* Duplicate return node #54. Try simplifying control flow for better match */
             return;
         }
     } else {
         switch (temp_v1) {                          /* switch 2 */
         case 129:                                   /* switch 2 */
-            func_8018F588(arg0->unk_2, arg0->unk_3, arg0->unk_4, &D_80202AB0);
+            func_8018F588(arg0[2], arg0[3], arg0->unk_4, &D_80202AB0);
             return;
         case 130:                                   /* switch 2 */
-            func_8018FAD0(arg0->unk_1, arg0->unk_2, arg0->unk_3);
-            func_8019372C(arg0->unk_1, arg0->unk_4);
+            func_8018FAD0(arg0[1], arg0[2], arg0[3]);
+            func_8019372C(arg0[1], arg0->unk_4);
             return;
         case 133:                                   /* switch 2 */
-            func_8018FB20(arg0->unk_1, arg0->unk_2, arg0->unk_4);
-            func_8019372C(arg0->unk_1, (? (*)(s32, s32, s32, s32))0x1F4);
-            func_8019AAF0(&D_80200C70 + (arg0->unk_1 * 0x160) + 0x4460, 0x160);
+            func_8018FB20(arg0[1], arg0[2], arg0->unk_4);
+            func_8019372C(arg0[1], (? (*)(s32, s32, s32, s32))0x1F4);
+            func_8019AAF0(&D_80200C70 + (arg0[1] * 0x160) + 0x4460, 0x160);
             return;
         case 131:                                   /* switch 2 */
-            temp_v1_6 = arg0->unk_1;
+            temp_v1_6 = arg0[1];
             temp_v0_9 = &D_80200C70 + (temp_v1_6 * 0x160);
             if (((u32) temp_v0_9->unk_4460 >> 0x1F) != 0) {
                 temp_a1_5 = arg0->unk_4;
@@ -721,7 +721,7 @@ void func_8019319C(s8 *arg0, ? (*arg1)(s32, s32, s32, s32)) {
         default:                                    /* switch 1 */
             return;
         case 144:                                   /* switch 2 */
-            (&D_80200C70 + (arg0->unk_1 * 2))->unk_797C = (u16) arg0->unk_4;
+            (&D_80200C70 + (arg0[1] * 2))->unk_797C = (u16) arg0->unk_4;
             return;
         }
     }
@@ -755,9 +755,9 @@ void func_8019372C(u8 arg0, s16 arg1) {
 }
 
 void func_80193774(void) {
-    D_80200C70.unk_7978 = 0;
-    D_80200C70.unk_7979 = 0;
-    D_80200C70.unk_797A = 0;
+    (&D_80200C70)[31096] = 0;
+    (&D_80200C70)[31097] = 0;
+    (&D_80200C70)[31098] = 0;
     D_80200C70.unk_798C = &D_80208604;
     D_80200C70.unk_7990 = &D_8020861C;
     D_80200C70.unk_7988 = &D_80208634;
@@ -771,14 +771,14 @@ void func_8019380C(s32 *arg0, s32 *arg1) {
     u8 temp_t1;
     void *temp_v0;
 
-    temp_v0 = &D_80200C70 + (D_80200C70.unk_7978 * 8);
+    temp_v0 = &D_80200C70 + ((&D_80200C70)[31096] * 8);
     temp_v0->unk_79F4 = arg0;
     (temp_v0 + 0x79F4)->unk_4 = (s32) *arg1;
-    temp_t1 = D_80200C70.unk_7978 + 1;
+    temp_t1 = (&D_80200C70)[31096] + 1;
     temp_v1 = temp_t1 & 0xFF;
-    D_80200C70.unk_7978 = temp_t1;
-    if (D_80200C70.unk_7979 == temp_v1) {
-        D_80200C70.unk_7978 = (u8) (temp_v1 - 1);
+    (&D_80200C70)[31096] = temp_t1;
+    if ((&D_80200C70)[31097] == temp_v1) {
+        (&D_80200C70)[31096] = temp_v1 - 1;
     }
 }
 
@@ -809,22 +809,22 @@ s32 func_80193900(void) {
     u8 temp_a3;
     u8 temp_v0;
 
-    temp_v0 = D_80200C70.unk_7978;
-    temp_a3 = D_80200C70.unk_7979;
+    temp_v0 = (&D_80200C70)[31096];
+    temp_a3 = (&D_80200C70)[31097];
     temp_a0 = ((temp_v0 - temp_a3) + 0x100) & 0xFF;
     if (D_801D5FF4 < temp_a0) {
         D_801D5FF4 = temp_a0;
     }
     if (osSendMesg(D_80200C70.unk_7990, (void *) (((temp_a3 & 0xFF) << 8) | (temp_v0 & 0xFF)), 0) != -1) {
-        D_80200C70.unk_7979 = (u8) D_80200C70.unk_7978;
+        (&D_80200C70)[31097] = (&D_80200C70)[31096];
         return 0;
     }
     return -1;
 }
 
 void func_80193990(void) {
-    D_80200C70.unk_797A = 0;
-    D_80200C70.unk_7979 = (u8) D_80200C70.unk_7978;
+    (&D_80200C70)[31098] = 0;
+    (&D_80200C70)[31097] = (&D_80200C70)[31096];
 }
 
 void func_801939A8(u8 *arg0) {
@@ -841,7 +841,7 @@ void func_801939A8(u8 *arg0) {
         func_8019319C(&D_80200C70);
         return;
     }
-    temp_a0 = arg0->unk_1;
+    temp_a0 = arg0[1];
     if ((s32) temp_a0 < (s32) D_80200C70.unk_2880) {
         temp_s4 = &D_80200C70 + (temp_a0 * 0x160) + 0x4460;
         if ((temp_v0 & 0x80) != 0) {
@@ -852,7 +852,7 @@ void func_801939A8(u8 *arg0) {
             func_80193EA8(temp_s4, arg0);
             return;
         }
-        temp_v0_2 = arg0->unk_2;
+        temp_v0_2 = arg0[2];
         if ((s32) temp_v0_2 < 0x10) {
             func_80194080((temp_s4 + (temp_v0_2 * 4))->unk_38, arg0);
             return;
@@ -878,20 +878,20 @@ void func_80193AEC(u32 arg0) {
     u8 temp_v1;
     void *temp_s0;
 
-    if (D_80200C70.unk_797A == 0) {
+    if ((&D_80200C70)[31098] == 0) {
         D_801D5FF8 = (u8) (arg0 >> 8);
     }
 loop_3:
     temp_v1 = D_801D5FF8;
     if ((arg0 & 0xFF) == temp_v1) {
-        D_80200C70.unk_797A = 0U;
+        (&D_80200C70)[31098] = 0;
         return;
     }
     temp_s0 = &D_80200C70 + ((temp_v1 & 0xFF) * 8);
     D_801D5FF8 = temp_v1 + 1;
     temp_s0_2 = temp_s0 + 0x79F4;
     if (temp_s0->unk_79F4 == 0xF8) {
-        D_80200C70.unk_797A = 1U;
+        (&D_80200C70)[31098] = 1;
         return;
     }
     func_801939A8(temp_s0_2);
@@ -950,15 +950,15 @@ s32 func_80193D08(s32 arg0) {
     u8 temp_v0;
 
     func_80193CB4();
-    temp_v0 = D_80200C70.unk_4448;
+    temp_v0 = (&D_80200C70)[17480];
     if (temp_v0 != 0) {
         sp24 = (s32) temp_v0;
         func_80193990();
-        if (arg0 == D_80200C70.unk_4449) {
+        if (arg0 == (&D_80200C70)[17481]) {
             return -2;
         }
         if ((s32) temp_v0 >= 3) {
-            D_80200C70.unk_4449 = (u8) arg0;
+            (&D_80200C70)[17481] = (u8) arg0;
             return -3;
         }
         osRecvMesg(D_80200C70.unk_7988, &sp20, 1);
@@ -974,7 +974,7 @@ void func_80193DA4(void) {
     D_80200C70.unk_29A4 = 1;
     if (D_801D5FE8 != 0) {
         func_80193D08(0);
-        D_80200C70.unk_4448 = 0;
+        (&D_80200C70)[17480] = 0;
     }
 }
 
@@ -1033,13 +1033,13 @@ void func_80193EA8(void *arg0, u8 *arg1) {
         arg0->unk_C = (bitwise s16) arg1->unk_4;
         return;
     case 72:
-        arg0->unk_E = (s16) (bitwise s8) arg1->unk_4;
+        arg0->unk_E = (s16) (bitwise s8) arg1[4];
         return;
     case 70:
-        (arg0 + arg1->unk_3)->unk_158 = (bitwise s8) arg1->unk_4;
+        (arg0 + arg1[3])->unk_158 = (bitwise s8) arg1[4];
         return;
     case 74:
-        phi_f0 = (f32) arg1->unk_2 / 127.0f;
+        phi_f0 = (f32) arg1[2] / 127.0f;
 block_11:
         if (arg0->unk_1 != 2) {
             temp_f2 = arg0->unk_1C;
@@ -1057,7 +1057,7 @@ block_11:
         /* Duplicate return node #22. Try simplifying control flow for better match */
         return;
     case 75:
-        phi_f0 = ((f32) arg1->unk_2 / 100.0f) * arg0->unk_1C;
+        phi_f0 = ((f32) arg1[2] / 100.0f) * arg0->unk_1C;
         goto block_11;
     case 76:
         if (arg0->unk_1 != 2) {
@@ -1120,7 +1120,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 3:
-        temp_v0 = (bitwise s8) arg1->unk_4;
+        temp_v0 = (bitwise s8) arg1[4];
         if (temp_v0 != arg0->unk_A) {
             arg0->unk_A = (u8) temp_v0;
             arg0->unk_1 = (u8) (arg0->unk_1 | 0x20);
@@ -1129,7 +1129,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 7:
-        temp_v0_2 = (bitwise s8) arg1->unk_4;
+        temp_v0_2 = (bitwise s8) arg1[4];
         if (temp_v0_2 != arg0->unk_A) {
             arg0->unk_B = temp_v0_2;
             arg0->unk_1 = (u8) (arg0->unk_1 | 0x20);
@@ -1147,7 +1147,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 5:
-        temp_v0_3 = (bitwise s8) arg1->unk_4;
+        temp_v0_3 = (bitwise s8) arg1[4];
         if (temp_v0_3 != arg0->unk_4) {
             arg0->unk_4 = (u8) temp_v0_3;
             return;
@@ -1155,7 +1155,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 17:
-        temp_v0_4 = (bitwise s8) arg1->unk_4;
+        temp_v0_4 = (bitwise s8) arg1[4];
         if (temp_v0_4 != arg0->unk_8) {
             arg0->unk_8 = (u8) temp_v0_4;
             return;
@@ -1163,38 +1163,38 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 18:
-        arg0->unk_10 = (bitwise s8) arg1->unk_4;
+        arg0->unk_10 = (bitwise s8) arg1[4];
         return;
     case 6:
-        temp_v0_5 = arg1->unk_3;
+        temp_v0_5 = arg1[3];
         if ((s32) temp_v0_5 < 8) {
-            (arg0 + temp_v0_5)->unk_C8 = (bitwise s8) arg1->unk_4;
+            (arg0 + temp_v0_5)->unk_C8 = (bitwise s8) arg1[4];
             return;
         }
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 8:
-        arg0->unk_0 = (u8) ((((bitwise s8) arg1->unk_4 * 0x10) & 0x10) | (arg0->unk_0 & 0xFFEF));
+        arg0->unk_0 = (u8) ((((bitwise s8) arg1[4] * 0x10) & 0x10) | (arg0->unk_0 & 0xFFEF));
         return;
     case 9:
-        arg0->unk_3 = (bitwise s8) arg1->unk_4;
+        arg0->unk_3 = (bitwise s8) arg1[4];
         return;
     case 10:
         arg0->unk_1C = 1;
-        arg0->unk_18 = (s16) ((bitwise u8) arg1->unk_4 * 8);
+        arg0->unk_18 = (s16) ((bitwise u8) arg1[4] * 8);
         return;
     case 11:
         arg0->unk_1A = 1;
-        arg0->unk_16 = (s16) ((bitwise u8) arg1->unk_4 << 5);
+        arg0->unk_16 = (s16) ((bitwise u8) arg1[4] << 5);
         return;
     case 12:
-        arg0->unk_F = (bitwise u8) arg1->unk_4;
+        arg0->unk_F = (bitwise u8) arg1[4];
         return;
     case 13:
         arg0->unk_22 = (bitwise u16) arg1->unk_4;
         return;
     case 14:
-        arg0->unk_D8 = (bitwise u8) arg1->unk_4;
+        arg0->unk_D8 = (bitwise u8) arg1[4];
         return;
     case 15:
         arg0->unk_DC = (f32) arg1->unk_4;
@@ -1204,7 +1204,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         return;
     case 19:
         temp_v0_6 = arg1->unk_4;
-        temp_v1 = arg1->unk_3;
+        temp_v1 = arg1[3];
         if ((bitwise s32) temp_v0_6 != 0) {
             arg0->unk_D4 = temp_v0_6;
         }
@@ -1216,7 +1216,7 @@ void func_80194080(void *arg0, u8 *arg1) {
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     case 20:
-        arg0->unk_C = (bitwise u8) arg1->unk_4;
+        arg0->unk_C = (bitwise u8) arg1[4];
         /* Duplicate return node #33. Try simplifying control flow for better match */
         return;
     }

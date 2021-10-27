@@ -1,3 +1,15 @@
+typedef struct {
+    /* 0x00 */ Vec3s rot;
+    /* 0x06 */ s16 face;
+    /* 0x08 */ f32 yOffset;
+    /* 0x0C */ void (*shadowDraw)(Actor *, Lights *, GlobalContext *);
+    /* 0x10 */ f32 shadowScale;
+    /* 0x14 */ u8 shadowAlpha;
+    /* 0x15 */ u8 feetFloorFlags;
+    /* 0x16 */ s16 unk_16;                          /* inferred */
+    /* 0x18 */ Vec3f feetPos[2];
+} ActorShape;                                       /* size = 0x30 */
+
 typedef struct EnVm {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime unk_144;                  /* inferred */
@@ -24,6 +36,14 @@ typedef struct EnVm {
     /* 0x2E0 */ ColliderTris unk_2E0;               /* inferred */
     /* 0x300 */ ColliderTrisElement unk_300;        /* inferred */
 } EnVm;                                             /* size = 0x35C */
+
+typedef struct Lights {
+    /* 0x00 */ u8 enablePosLights;
+    /* 0x01 */ u8 numLights;
+    /* 0x02 */ char pad_2[0x2];                     /* maybe part of numLights[3]? */
+    /* 0x04 */ CollisionCheckContext unk_4;         /* inferred */
+    /* 0x08 */ Lightsn l;                           /* overlap */
+} Lights;                                           /* size = 0x80 */
 
 struct _mips2c_stack_EnVm_Destroy {
     /* 0x00 */ char pad_0[0x18];
@@ -74,7 +94,7 @@ struct _mips2c_stack_func_808CC788 {
 struct _mips2c_stack_func_808CC820 {
     /* 0x00 */ char pad_0[0x24];
     /* 0x24 */ Vec3f *sp24;                         /* inferred */
-    /* 0x28 */ Vec3f *sp28;                         /* inferred */
+    /* 0x28 */ PosRot *sp28;                        /* inferred */
     /* 0x2C */ char pad_2C[0x6];                    /* maybe part of sp28[2]? */
     /* 0x32 */ s16 sp32;                            /* inferred */
     /* 0x34 */ s32 sp34;                            /* inferred */
@@ -130,13 +150,13 @@ void func_808CC490(Actor *arg0, GlobalContext *arg1); /* static */
 void func_808CC5C4(Actor *arg0);                    /* static */
 void func_808CC610(EnVm *arg0, void *arg1);         /* static */
 void func_808CC788(EnVm *arg0);                     /* static */
-void func_808CC820(EnVm *arg0, GlobalContext *arg1); /* static */
+void func_808CC820(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
 void func_808CCA10(Actor *arg0);                    /* static */
-void func_808CCAA4(void *arg0, ? arg1);             /* static */
-void func_808CCB08(void *arg0);                     /* static */
+void func_808CCAA4(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
+void func_808CCB08(Actor *arg0);                    /* static */
 void func_808CCB50(EnVm *arg0, ? arg1);             /* static */
 void func_808CCBE4(Actor *arg0, GlobalContext *arg1); /* static */
-void func_808CCCF0(Actor *arg0, GlobalContext *arg1); /* static */
+void func_808CCCF0(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
 void func_808CCDE4(Actor *arg0, GlobalContext *arg1); /* static */
 s32 func_808CD020(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5); /* static */
 void func_808CD08C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4); /* static */
@@ -268,7 +288,7 @@ void func_808CC490(Actor *arg0, GlobalContext *arg1) {
     Math_ApproachS(arg0 + 0x216, 0, 0xA, 0x5DC);
     arg0->unk_218 = (s16) (arg0->unk_218 - 0x1F4);
     func_800B9010(arg0, 0x3170U);
-    if (arg0->xzDistToPlayer <= arg0->unk_21C) {
+    if (arg0->xzDistToPlayer <= arg0[1].shape.feetPos[0].y) {
         temp_f0 = arg0->yDistToPlayer;
         if ((temp_f0 <= 80.0f) && (temp_f0 >= -160.0f)) {
             temp_v1 = (arg0->yawTowardsPlayer - arg0->unk_218) - arg0->shape.rot.y;
@@ -296,10 +316,10 @@ void func_808CC5C4(Actor *arg0) {
     arg0 = arg0;
     SkelAnime_ChangeAnimPlaybackRepeat(temp_a0, &D_06000068, 2.0f);
     arg0->unk_214 = 0xA;
-    arg0->unk_20C = func_808CC610;
+    arg0[1].shape.shadowDraw = func_808CC610;
 }
 
-void func_808CC610(EnVm *arg0, void *arg1) {
+void func_808CC610(EnVm *arg0, Lights *arg1) {
     s32 sp3C;
     s16 sp3A;
     s16 sp38;
@@ -308,7 +328,7 @@ void func_808CC610(EnVm *arg0, void *arg1) {
     s16 phi_v0;
     s16 phi_a1;
 
-    sp3C = arg1->unk_1CCC;
+    sp3C = arg1[57].unk_4.colAT[17];
     SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
     temp_v0 = Math_Vec3f_Pitch(arg0 + 0x3C, sp3C + 0x24);
     phi_a1 = (s16) temp_v0;
@@ -338,19 +358,19 @@ void func_808CC610(EnVm *arg0, void *arg1) {
 
 void func_808CC788(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x3973U);
-    SkelAnime_ChangeAnim((SkelAnime *) (arg0 + 0x144), &D_06000068, 3.0f, 3.0f, 7.0f, (u8) 2, 0.0f);
+    SkelAnime_ChangeAnim((SkelAnime *) &arg0[1], &D_06000068, 3.0f, 3.0f, 7.0f, (u8) 2, 0.0f);
     arg0->unk_214 = 0x131;
     arg0->unk_2F0 = (u8) (arg0->unk_2F0 & 0xFFFD);
-    arg0->unk_20C = func_808CC820;
-    arg0->unk_220 = 0.06f;
+    arg0[1].shape.shadowDraw = func_808CC820;
+    arg0[1].shape.feetPos[0].z = 0.06f;
 }
 
-void func_808CC820(EnVm *arg0, GlobalContext *arg1) {
+void func_808CC820(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     s32 sp34;
     s16 sp32;
-    Vec3f *sp28;
+    PosRot *sp28;
     Vec3f *sp24;
-    Vec3f *temp_a0;
+    PosRot *temp_a0;
     Vec3f *temp_a1;
     f32 temp_f2;
     s16 temp_v0_3;
@@ -358,50 +378,50 @@ void func_808CC820(EnVm *arg0, GlobalContext *arg1) {
     u8 temp_v0_2;
     s16 phi_v1;
 
-    sp34 = arg1->actorCtx.actorList[2].first;
-    if (SkelAnime_FrameUpdateMatrix(arg0 + 0x144) != 0) {
-        arg0->unk_144.animCurrentFrame = arg0->unk_144.initialFrame;
+    sp34 = mapper[57].unk_4.colAT[17];
+    if (SkelAnime_FrameUpdateMatrix((SkelAnime *) &actor[1]) != 0) {
+        actor->unk_15C = (f32) actor[1].home.pos.y;
     }
-    temp_a0 = arg0 + 0x3C;
+    temp_a0 = &actor->focus;
     sp28 = temp_a0;
     temp_a1 = sp34 + 0x24;
     sp24 = temp_a1;
-    temp_v0 = Math_Vec3f_Pitch(temp_a0, temp_a1);
+    temp_v0 = Math_Vec3f_Pitch((Vec3f *) temp_a0, temp_a1);
     phi_v1 = (s16) temp_v0;
     if (temp_v0 >= 0x1B92) {
         phi_v1 = 0x1B91;
     }
-    temp_v0_2 = arg0->unk_2E0.base.atFlags;
+    temp_v0_2 = actor->unk_2F0;
     if ((temp_v0_2 & 2) != 0) {
-        arg0->unk_2E0.base.atFlags = temp_v0_2 & 0xFFFD;
-        arg0->unk_214 = 0;
-        if (arg0->unk_220 > 0.01f) {
-            arg0->unk_220 = 0.01f;
+        actor->unk_2F0 = (u8) (temp_v0_2 & 0xFFFD);
+        actor->unk_214 = 0;
+        if (actor[1].shape.feetPos[0].z > 0.01f) {
+            actor[1].shape.feetPos[0].z = 0.01f;
         }
     }
-    if (((s32) arg0->unk_216 < 0xAAA) || (sp32 = phi_v1, (Player_GetMask(arg1) == 0x10)) || (temp_v0_3 = arg0->unk_214, (temp_v0_3 == 0))) {
-        arg0->unk_214 = 0;
-        if (Math_StepToF(arg0 + 0x220, 0.0f, 0.003f) != 0) {
-            arg0->unk_210 = 0;
-            arg0->unk_224 = 0.0f;
-            func_808CC420(arg0);
+    if (((s32) actor[1].shape.unk_16 < 0xAAA) || (sp32 = phi_v1, (Player_GetMask((GlobalContext *) mapper) == 0x10)) || (temp_v0_3 = actor->unk_214, (temp_v0_3 == 0))) {
+        actor->unk_214 = 0;
+        if (Math_StepToF(&actor[1].shape.feetPos[0].z, 0.0f, 0.003f) != 0) {
+            actor->unk_210 = 0U;
+            actor[1].shape.feetPos[1].x = 0.0f;
+            func_808CC420((EnVm *) actor);
             return;
         }
         /* Duplicate return node #17. Try simplifying control flow for better match */
         return;
     }
-    arg0->unk_214 = temp_v0_3 - 1;
-    if ((s32) arg0->unk_214 < 0x12D) {
-        Math_ApproachS(arg0 + 0x218, (s16) (arg0->actor.yawTowardsPlayer - arg0->actor.shape.rot.y), 0xA, 0xDAC);
-        Math_ApproachS(arg0 + 0x216, sp32, 0xA, 0xDAC);
-        temp_f2 = Math_Vec3f_DistXYZ(sp28, sp24) + 40.0f;
-        if (arg0->unk_224 < temp_f2) {
-            Math_StepToF(arg0 + 0x224, temp_f2, 40.0f);
+    actor->unk_214 = (s16) (temp_v0_3 - 1);
+    if ((s32) actor->unk_214 < 0x12D) {
+        Math_ApproachS((s16 *) actor[1].shape.feetPos, (s16) (actor->yawTowardsPlayer - actor->shape.rot.y), 0xA, 0xDAC);
+        Math_ApproachS(&actor[1].shape.unk_16, sp32, 0xA, 0xDAC);
+        temp_f2 = Math_Vec3f_DistXYZ((Vec3f *) sp28, sp24) + 40.0f;
+        if (actor[1].shape.feetPos[1].x < temp_f2) {
+            Math_StepToF((f32 *) &actor[1].shape.feetPos[1], temp_f2, 40.0f);
         }
-        Math_StepToF(arg0 + 0x220, 0.01f, 0.012f);
-        CollisionCheck_SetAT(arg1, &arg1->colChkCtx, arg0 + 0x2E0);
-        if (arg0->unk_210 == 0) {
-            arg0->unk_210 = 1;
+        Math_StepToF(&actor[1].shape.feetPos[0].z, 0.01f, 0.012f);
+        CollisionCheck_SetAT((GlobalContext *) mapper, &mapper[785].unk_4, (Collider *) &actor[2].scale);
+        if (actor->unk_210 == 0) {
+            actor->unk_210 = 1U;
         }
     }
 }
@@ -410,36 +430,36 @@ void func_808CCA10(Actor *arg0) {
     SkelAnime_ChangeAnim(arg0 + 0x144, &D_06000068, -1.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_06000068), 0.0f, (u8) 2, 0.0f);
     arg0->unk_214 = 0x64;
     arg0->unk_210 = 0;
-    arg0->unk_224 = 0.0f;
-    arg0->unk_220 = 0.0f;
+    arg0[1].shape.feetPos[1].x = 0.0f;
+    arg0[1].shape.feetPos[0].z = 0.0f;
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_20C = func_808CCAA4;
+    arg0[1].shape.shadowDraw = func_808CCAA4;
 }
 
-void func_808CCAA4(void *arg0, ? arg1) {
+void func_808CCAA4(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     s16 temp_v0;
 
-    Math_ApproachS(arg0 + 0x216, 0, 0xA, 0x5DC);
-    SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
-    temp_v0 = arg0->unk_214;
+    Math_ApproachS(&actor[1].shape.unk_16, 0, 0xA, 0x5DC);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &actor[1]);
+    temp_v0 = actor->unk_214;
     if (temp_v0 == 0) {
-        func_808CCB08(arg0);
+        func_808CCB08(actor);
         return;
     }
-    arg0->unk_214 = (s16) (temp_v0 - 1);
+    actor->unk_214 = (s16) (temp_v0 - 1);
 }
 
-void func_808CCB08(void *arg0) {
+void func_808CCB08(Actor *arg0) {
     SkelAnime *temp_a0;
 
     temp_a0 = arg0 + 0x144;
     arg0 = arg0;
     SkelAnime_ChangeAnimDefaultStop(temp_a0, &D_06000068);
     arg0->unk_214 = -1;
-    arg0->unk_20C = func_808CCB50;
+    arg0[1].shape.shadowDraw = func_808CCB50;
 }
 
-void func_808CCB50(EnVm *arg0, ? arg1) {
+void func_808CCB50(EnVm *arg0, Lights *arg1) {
     s16 temp_v0;
 
     Math_ApproachS(arg0 + 0x216, 0, 0xA, 0x5DC);
@@ -470,8 +490,8 @@ void func_808CCBE4(Actor *arg0, GlobalContext *arg1) {
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x21);
     temp_f0 = arg0->focus.pos.y;
     arg0->unk_214 = 0x21;
-    arg0->unk_220 = 0.0f;
-    arg0->unk_224 = 0.0f;
+    arg0[1].shape.feetPos[0].z = 0.0f;
+    arg0[1].shape.feetPos[1].x = 0.0f;
     temp_f16 = (arg0->world.pos.y - temp_f0) * 71.428566f;
     arg0->world.pos.y = temp_f0;
     arg0->velocity.y = 8.0f;
@@ -481,21 +501,21 @@ void func_808CCBE4(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_210 = 0;
     arg0->speedXZ = temp_f8;
     arg0->flags |= 0x10;
-    arg0->unk_20C = func_808CCCF0;
+    arg0[1].shape.shadowDraw = func_808CCCF0;
 }
 
-void func_808CCCF0(Actor *arg0, GlobalContext *arg1) {
+void func_808CCCF0(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     Actor *temp_v0_2;
     s16 temp_v0;
 
-    arg0->unk_216 = (s16) (arg0->unk_216 + 0x5DC);
-    arg0->unk_218 = (s16) (arg0->unk_218 + 0x9C4);
-    Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-    Actor_UpdateBgCheckInfo(arg1, arg0, 30.0f, 20.0f, 40.0f, 7U);
-    arg0->unk_214 = (s16) (arg0->unk_214 - 1);
-    temp_v0 = arg0->unk_214;
+    actor[1].shape.unk_16 += 0x5DC;
+    actor->unk_218 = (s16) (actor->unk_218 + 0x9C4);
+    Actor_SetVelocityAndMoveYRotationAndGravity(actor);
+    Actor_UpdateBgCheckInfo((GlobalContext *) mapper, actor, 30.0f, 20.0f, 40.0f, 7U);
+    actor->unk_214 = (s16) (actor->unk_214 - 1);
+    temp_v0 = actor->unk_214;
     if (temp_v0 == 1) {
-        temp_v0_2 = Actor_Spawn(&arg1->actorCtx, arg1, 9, arg0->world.pos.x, arg0->world.pos.y, arg0->world.pos.z, (s16) 0, (s16) 0, (s16) 0x6FF, (s16) 0);
+        temp_v0_2 = Actor_Spawn((ActorContext *) &mapper[57].unk_4.colAT[6], (GlobalContext *) mapper, 9, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, (s16) 0, (s16) 0, (s16) 0x6FF, (s16) 0);
         if (temp_v0_2 != 0) {
             temp_v0_2->unk_1F0 = 0;
             return;
@@ -504,8 +524,8 @@ void func_808CCCF0(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if (temp_v0 == 0) {
-        Item_DropCollectibleRandom(arg1, arg0, (Vec3f *) &arg0->world, 0xB0);
-        Actor_MarkForDeath(arg0);
+        Item_DropCollectibleRandom((GlobalContext *) mapper, actor, (Vec3f *) &actor->world, 0xB0);
+        Actor_MarkForDeath(actor);
     }
 }
 
@@ -555,7 +575,7 @@ loop_2:
                 func_808CCBE4(arg0, arg1);
                 return;
             }
-            if ((phi_v1 == 0) && (func_808CCAA4 != arg0->unk_20C)) {
+            if ((phi_v1 == 0) && (func_808CCAA4 != arg0[1].shape.shadowDraw)) {
                 temp_v0 = (arg0->world.rot.y - arg0->shape.rot.y) - arg0->unk_218;
                 phi_v1_2 = (s32) temp_v0;
                 if ((s32) temp_v0 < 0) {
@@ -607,9 +627,9 @@ void EnVm_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_808CD020(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 2) {
-        arg4->x += arg5->unk_216;
+        arg4->x += arg5[1].shape.unk_16;
         arg4->y += arg5->unk_218;
-    } else if ((arg1 == 0xA) && (func_808CCCF0 == arg5->unk_20C)) {
+    } else if ((arg1 == 0xA) && (func_808CCCF0 == arg5[1].shape.shadowDraw)) {
         *arg2 = NULL;
     }
     return 0;
@@ -633,18 +653,18 @@ void func_808CD08C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
         SysMatrix_GetStateTranslation(temp_s1);
         SysMatrix_GetStateTranslationAndScaledZ(1600.0f, arg4 + 0x228);
         temp_s2 = arg4 + 0x234;
-        SysMatrix_GetStateTranslationAndScaledZ(arg4->unk_224 * 71.428566f, temp_s2);
+        SysMatrix_GetStateTranslationAndScaledZ(arg4[1].shape.feetPos[1].x * 71.428566f, temp_s2);
         if (func_800C55C4(arg0 + 0x830, temp_s1, temp_s2, (Vec3f *) &sp5C, &sp4C, 1U, 1U, 0U, 1U, &sp48) != 0) {
             temp_f0 = Math_Vec3f_DistXYZ(temp_s1, (Vec3f *) &sp5C);
             arg4->unk_210 = 2U;
-            arg4->unk_224 = (f32) (temp_f0 - 5.0f);
+            arg4[1].shape.feetPos[1].x = temp_f0 - 5.0f;
             Math_Vec3f_Copy(temp_s2, (Vec3f *) &sp5C);
         } else if (arg4->unk_210 != 0) {
             arg4->unk_210 = 1U;
         }
-        sp50 = (Math_CosS((s16) (arg4->shape.rot.y + arg4->unk_218)) * 5.0f) + arg4->unk_234;
-        sp54 = arg4->unk_238;
-        sp58 = arg4->unk_23C - (Math_SinS((s16) (arg4->shape.rot.y + arg4->unk_218)) * 5.0f);
+        sp50 = (Math_CosS((s16) (arg4->shape.rot.y + arg4->unk_218)) * 5.0f) + arg4[1].projectedPos.y;
+        sp54 = arg4[1].projectedPos.z;
+        sp58 = arg4[1].projectedW - (Math_SinS((s16) (arg4->shape.rot.y + arg4->unk_218)) * 5.0f);
         Collider_SetTrisVertices(arg4 + 0x2E0, 0, temp_s1, temp_s2, (Vec3f *) &sp50);
     }
 }
@@ -661,29 +681,29 @@ void EnVm_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0 = globalCtx->state.gfxCtx;
     temp_s0 = temp_v0->polyOpa.p;
     temp_s0->words.w0 = 0xDE000000;
-    temp_s0->words.w1 = (u32) (sSetupDL + 0x4B0);
-    temp_v0->polyOpa.p = temp_s0 + 8;
+    temp_s0->words.w1 = (u32) &sSetupDL[150];
+    temp_v0->polyOpa.p = &temp_s0[1];
     sp28 = temp_v0;
     SkelAnime_Draw(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, func_808CD020, func_808CD08C, (Actor *) this);
     if (this->unk_210 == 2) {
         temp_s0_2 = sp28->polyXlu.p;
-        temp_s0_2->words.w1 = (u32) (sSetupDL + 0xB40);
+        temp_s0_2->words.w1 = (u32) &sSetupDL[360];
         temp_s0_2->words.w0 = 0xDE000000;
-        temp_s0_2->unk_C = 0xC0;
-        temp_s0_2->unk_8 = 0xE3001801;
+        temp_s0_2[1].words.w1 = 0xC0;
+        temp_s0_2[1].words.w0 = 0xE3001801;
         SysMatrix_InsertTranslation(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, 0);
         Matrix_Scale(0.8f, 0.8f, 0.8f, 1);
-        temp_s0_2->unk_10 = 0xDA380003;
-        temp_s0_2->unk_14 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_s0_2->unk_1C = -0x58;
-        temp_s0_2->unk_18 = 0xFA000000;
-        temp_s0_2->unk_24 = 0xFF00;
-        temp_s0_2->unk_20 = 0xFB000000;
-        temp_s0_2->unk_28 = 0xDB060020;
-        temp_s0_2->unk_2C = (void *) D_808CD58C[globalCtx->gameplayFrames & 7];
-        temp_s0_2->unk_30 = 0xDE000000;
-        temp_s0_2->unk_34 = &D_04044300;
-        sp28->polyXlu.p = temp_s0_2 + 0x38;
+        temp_s0_2[2].words.w0 = 0xDA380003;
+        temp_s0_2[2].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_s0_2[3].words.w1 = -0x58;
+        temp_s0_2[3].words.w0 = 0xFA000000;
+        temp_s0_2[4].words.w1 = 0xFF00;
+        temp_s0_2[4].words.w0 = 0xFB000000;
+        temp_s0_2[5].words.w0 = 0xDB060020;
+        temp_s0_2[5].words.w1 = (u32) D_808CD58C[globalCtx->gameplayFrames & 7];
+        temp_s0_2[6].words.w0 = 0xDE000000;
+        temp_s0_2[6].words.w1 = (u32) &D_04044300;
+        sp28->polyXlu.p = &temp_s0_2[7];
     }
     if (this->unk_224 > 0.0f) {
         temp_s0_3 = sp28->polyOpa.p;
@@ -693,10 +713,10 @@ void EnVm_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_InsertRotation(this->unk_216, (s16) (this->unk_218 + this->actor.shape.rot.y), 0, 1);
         temp_f12 = this->unk_220;
         Matrix_Scale(temp_f12, temp_f12, this->unk_224 * 0.0015f, 1);
-        temp_s0_3->unk_8 = 0xDA380003;
-        temp_s0_3->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_s0_3->unk_10 = 0xDE000000;
-        temp_s0_3->unk_14 = &D_06002728;
-        sp28->polyOpa.p = temp_s0_3 + 0x18;
+        temp_s0_3[1].words.w0 = 0xDA380003;
+        temp_s0_3[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_s0_3[2].words.w0 = 0xDE000000;
+        temp_s0_3[2].words.w1 = (u32) &D_06002728;
+        sp28->polyOpa.p = &temp_s0_3[3];
     }
 }

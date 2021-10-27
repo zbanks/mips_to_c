@@ -46,6 +46,12 @@ typedef struct Boss06 {
     /* 0xA2C */ f32 unk_A2C;                        /* inferred */
 } Boss06;                                           /* size = 0xA30 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_Boss06_Destroy {};             /* size 0x0 */
 
 struct _mips2c_stack_Boss06_Draw {
@@ -280,7 +286,7 @@ void func_809F23CC(Boss06 *arg0) {
     temp_v0 = temp_a1->unk_14C.base.acFlags;
     if ((temp_v0 & 2) != 0) {
         temp_a1->unk_14C.base.acFlags = temp_v0 & 0xFFFD;
-        if ((temp_a1->unk_1C9 == 0) && (D_809F4970->unk_68A == 0)) {
+        if ((temp_a1->unk_1C9 == 0) && (D_809F4970[5].world.unk_12 == 0)) {
             temp_a0 = temp_a1;
             if (temp_a1->actor.colChkInfo.damageEffect == 2) {
                 arg0 = temp_a1;
@@ -727,8 +733,8 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp68 = temp_f2;
     if ((this->unk_144 & 2) != 0) {
         sp68 = temp_f2;
-        temp_s0 = (s16) (s32) (Math_SinS(D_809F4970->unk_144) * 1000.0f);
-        temp_f0_2 = Math_CosS(D_809F4970->unk_144);
+        temp_s0 = (s16) (s32) (Math_SinS(D_809F4970[1].id) * 1000.0f);
+        temp_f0_2 = Math_CosS(D_809F4970[1].id);
         temp_v0_2 = gSegments[(u32) ((s32) &D_06018BD0 * 0x10) >> 0x1C] + ((s32) &D_06018BD0 & 0xFFFFFF) + 0x80000000;
         temp_v0_2->unk_2 = (s16) ((s32) this->unk_1A0 + 0xE92);
         temp_a1 = temp_s0 + 0x2A3;
@@ -769,29 +775,29 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
         SysMatrix_InsertTranslation(0.0f, 0.0f, -1112.0f, 1);
         temp_s0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_s0_2 + 8;
+        temp_s2->polyXlu.p = &temp_s0_2[1];
         temp_s0_2->words.w0 = 0xDA380003;
         temp_s0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_3 + 8;
+        temp_s2->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFA00009B;
         temp_v0_3->words.w1 = 0xFFFF0000 | (((u32) ((140.0f * sp68) + 115.0f) & 0xFF) << 8) | spD3;
         temp_v1 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1 + 8;
+        temp_s2->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) &D_06018CF0;
         temp_v1->words.w0 = 0xDE000000;
         temp_v0_4 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_4 + 8;
+        temp_s2->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFA0000FF;
         temp_v0_4->words.w1 = 0xFFFF0000 | (((u32) ((100.0f * sp68) + 65.0f) & 0xFF) << 8) | spD2;
         temp_v1_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1_2 + 8;
+        temp_s2->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = (u32) &D_06018DE0;
         temp_v1_2->words.w0 = 0xDE000000;
     }
     if ((this->unk_144 & 1) != 0) {
         temp_v0_5 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_5 + 8;
+        temp_s2->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDB060020;
         sp68 = sp68;
         temp_v0_5->words.w1 = Lib_SegmentedToVirtual((void *) &this->unk_200);
@@ -799,11 +805,11 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, 1);
         Matrix_RotateY(this->actor.shape.rot.y, 1U);
         temp_v0_6 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_6 + 8;
+        temp_s2->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         temp_v0_6->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_7 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_7 + 8;
+        temp_s2->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDE000000;
         temp_v0_7->words.w1 = (u32) &D_060193B0;
         if (this->unk_1D8 > 0.0f) {
@@ -811,11 +817,11 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_RotateY(this->actor.shape.rot.y, 1U);
             func_809F2120(1, 0x71A5, 0x263A);
             temp_v1_3 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_3 + 8;
+            temp_s2->polyXlu.p = &temp_v1_3[1];
             temp_v1_3->words.w1 = 0xFF0A0000;
             temp_v1_3->words.w0 = 0xFB000000;
             temp_v1_4 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_4 + 8;
+            temp_s2->polyXlu.p = &temp_v1_4[1];
             temp_v1_4->words.w0 = 0xFA008080;
             temp_v1_4->words.w1 = 0xFFFF00E6;
             phi_s0 = &D_809F4370;
@@ -829,7 +835,7 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
                     sp58 = globalCtx + 0x18000;
                     SysMatrix_StatePush();
                     temp_v1_5 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v1_5 + 8;
+                    temp_s2->polyXlu.p = &temp_v1_5[1];
                     temp_v1_5->words.w0 = 0xDB060020;
                     sp90 = temp_v1_5;
                     sp90->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) (sp58->unk_840 + sp60) * -0x14) & 0x1FF, 0x20, 0x80);
@@ -840,12 +846,12 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
                     }
                     Matrix_Scale(-0.0019999999f, -this->unk_1D8, 1.0f, 1);
                     temp_v1_6 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v1_6 + 8;
+                    temp_s2->polyXlu.p = &temp_v1_6[1];
                     temp_v1_6->words.w0 = 0xDA380003;
                     sp8C = temp_v1_6;
                     sp8C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                     temp_v1_7 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v1_7 + 8;
+                    temp_s2->polyXlu.p = &temp_v1_7[1];
                     temp_v1_7->words.w0 = 0xDE000000;
                     temp_v1_7->words.w1 = (u32) sp5C;
                     SysMatrix_StatePop();
@@ -864,26 +870,26 @@ void Boss06_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp64 = ((u32) ((100.0f * sp68) + 65.0f) & 0xFF) << 8;
         SysMatrix_InsertTranslation(this->actor.world.pos.x + this->unk_1B0, this->actor.world.pos.y + 84.0f + this->unk_1B4, (this->actor.world.pos.z - 2.0f) + spE0, 0);
         temp_v1_8 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1_8 + 8;
+        temp_s2->polyXlu.p = &temp_v1_8[1];
         temp_v1_8->words.w0 = 0xDE000000;
         temp_v1_8->words.w1 = (u32) &D_04023348;
         temp_v1_9 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1_9 + 8;
+        temp_s2->polyXlu.p = &temp_v1_9[1];
         temp_v1_9->words.w0 = 0xFA000000;
         temp_v1_9->words.w1 = (((u32) ((140.0f * sp68) + 115.0f) & 0xFF) << 8) | 0xFFFF0000 | (temp_s0_3 & 0xFF);
         temp_v1_10 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1_10 + 8;
+        temp_s2->polyXlu.p = &temp_v1_10[1];
         temp_v1_10->words.w0 = 0xFB000000;
         temp_v1_10->words.w1 = sp64 | 0xFFCD0000 | 0x80;
         temp_f12 = this->unk_1DC;
         Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
         SysMatrix_InsertZRotation_s((s16) (sp58->unk_840 << 6), 1);
         temp_s0_4 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_s0_4 + 8;
+        temp_s2->polyXlu.p = &temp_s0_4[1];
         temp_s0_4->words.w0 = 0xDA380003;
         temp_s0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_11 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1_11 + 8;
+        temp_s2->polyXlu.p = &temp_v1_11[1];
         temp_v1_11->words.w0 = 0xDE000000;
         temp_v1_11->words.w1 = (u32) &D_04023428;
     }

@@ -158,7 +158,7 @@ loop_1:
     if ((phi_v0_2 >= 0xF) && (Object_GetIndex(&globalCtx->objectCtx, 2) >= 0)) {
         phi_s0_2 = phi_s0_3 + 6;
     }
-    temp_v0_2 = Object_GetIndex(&globalCtx->objectCtx, phi_s0_2->unk_4);
+    temp_v0_2 = Object_GetIndex(&globalCtx->objectCtx, phi_s0_2[2]);
     if (temp_v0_2 < 0) {
         Actor_MarkForDeath((Actor *) this);
     } else {
@@ -270,7 +270,7 @@ void func_80AC21A0(Actor *arg0, GlobalContext *arg1) {
                 } else {
                     temp_a3->unk_37D = (s8) (s32) -1.0f;
                 }
-                temp_a3->unk_380 = arg0;
+                temp_a3[2].projectedW = arg0;
                 temp_a3->unk_37C = -1;
             }
         }
@@ -350,16 +350,16 @@ void func_80AC24A8(Actor *this, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(-2900.0f, 0.0f, 0.0f, 1);
     SysMatrix_InsertZRotation_s(this->unk_1A4, 1);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_04020BB8;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_04020D00;
     temp_v0_3->words.w0 = 0xDE000000;
 }

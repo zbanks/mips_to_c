@@ -329,7 +329,7 @@ void func_80A9AEB8(BgHakuginPost *arg0, GlobalContext *arg1, void *arg2) {
         do {
             temp_a2 = phi_s0->unk_4;
             if ((temp_a2 != 0) && (phi_s0->unk_34 == 1)) {
-                temp_a2->unk_46 = (s16) (s32) (phi_s0->unk_14 + arg0->dyna.actor.home.pos.x);
+                temp_a2[2].unk_16 = (s16) (s32) (phi_s0->unk_14 + arg0->dyna.actor.home.pos.x);
                 temp_a2->unk_48 = (s16) (s32) (phi_s0->unk_18 + arg0->unk_16C);
                 temp_a2->unk_4A = (s16) (s32) (phi_s0->unk_1C + arg0->dyna.actor.home.pos.z);
                 CollisionCheck_SetAC(arg1, arg1 + 0x18884, temp_a2);
@@ -434,8 +434,8 @@ void func_80A9B160(void *arg0, GlobalContext *arg1) {
                 Actor_UnsetSwitchFlag(arg1, (s32) phi_s0->unk_2E);
             }
             temp_s1 = phi_s1 + 1;
-            phi_s2 += 0x38;
-            phi_s3 += 0x38;
+            phi_s2 = (Vec3f *) &phi_s2[4].z;
+            phi_s3 = (Vec3f *) &phi_s3[4].z;
             phi_s0 += 0x38;
             phi_s1 = temp_s1;
         } while (temp_s1 < arg0->unk_2A0);
@@ -552,8 +552,8 @@ void func_80A9B384(f32 *arg0) {
 
     temp_v0 = SysMatrix_GetCurrentState();
     temp_v0->mf[3][0] = arg0->unk_0;
-    temp_v0->mf[3][1] = arg0->unk_4;
-    temp_v0->mf[3][2] = arg0->unk_8;
+    temp_v0->mf[3][1] = arg0[1];
+    temp_v0->mf[3][2] = arg0[2];
 }
 
 void func_80A9B3BC(BgHakuginPost *arg0, GlobalContext *arg1) {
@@ -1635,15 +1635,15 @@ void func_80A9D61C(Actor *thisx, GlobalContext *globalCtx) {
             if ((temp_v0 != 5) && (temp_v0 != 4)) {
                 temp_a0_3 = &sp68;
                 sp68 = phi_s0->unk_14 + thisx->home.pos.x;
-                sp6C = phi_s0->unk_18 + thisx->unk_16C;
+                sp6C = phi_s0->unk_18 + thisx[1].world.pos.y;
                 sp70 = phi_s0->unk_1C + thisx->home.pos.z;
                 func_80A9B384(temp_a0_3);
                 temp_v0_2 = temp_s3->polyOpa.p;
-                temp_s3->polyOpa.p = temp_v0_2 + 8;
+                temp_s3->polyOpa.p = &temp_v0_2[1];
                 temp_v0_2->words.w0 = 0xDA380003;
                 temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_3 = temp_s3->polyOpa.p;
-                temp_s3->polyOpa.p = temp_v0_3 + 8;
+                temp_s3->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDE000000;
                 temp_v0_3->words.w1 = *(&D_80A9D900 + (phi_s0->unk_0 * 4));
                 phi_a0 = *D_80A9E2C8;
@@ -1662,11 +1662,11 @@ void func_80A9D61C(Actor *thisx, GlobalContext *globalCtx) {
                 temp_f12 = temp_s0->unk_0;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_v0_4 = temp_s3->polyOpa.p;
-                temp_s3->polyOpa.p = temp_v0_4 + 8;
+                temp_s3->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDA380003;
                 temp_v0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_5 = temp_s3->polyOpa.p;
-                temp_s3->polyOpa.p = temp_v0_5 + 8;
+                temp_s3->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDE000000;
                 temp_v0_5->words.w1 = *(&D_80A9D91C + (temp_s0->unk_2D * 4));
             }

@@ -84,44 +84,44 @@ void func_80196A00(u32 *arg0, u32 arg1, s32 arg2) {
 
     phi_a3 = arg0;
     if (((arg0->unk_0 << 9) < 0) || (arg1 != 0)) {
-        temp_v0 = arg0->unk_50;
-        temp_f0 = arg0->unk_30 * arg0->unk_2C * temp_v0->unk_30;
+        temp_v0 = arg0[20];
+        temp_f0 = arg0[12] * arg0[11] * temp_v0->unk_30;
         phi_f0 = temp_f0;
         if (((temp_v0->unk_0 * 4) < 0) && ((arg0->unk_3 & 0x20) != 0)) {
             phi_f0 = temp_v0->unk_28 * temp_f0;
         }
-        arg0->unk_38 = (f32) (phi_f0 * phi_f0);
+        arg0[14] = phi_f0 * phi_f0;
     }
     if (arg0->unk_0 & 0x200000) {
-        arg0->unk_34 = (s32) (arg0->unk_A * arg0->unk_B);
+        arg0[13] = arg0->unk_A * arg0->unk_B;
     }
-    temp_f0_2 = arg0->unk_3C;
+    temp_f0_2 = arg0[15];
     phi_f0_2 = temp_f0_2;
     if (arg2 != 0) {
         arg0->unk_1 = (u8) (arg0->unk_1 | 0x80);
-        phi_f0_2 = temp_f0_2 * arg0->unk_50->unk_34;
+        phi_f0_2 = temp_f0_2 * arg0[20]->unk_34;
     }
     phi_a2 = 0;
     do {
-        temp_v1 = phi_a3->unk_54;
+        temp_v1 = phi_a3[21];
         temp_a2 = phi_a2 + 4;
         phi_a2 = temp_a2;
         if ((temp_v1 != 0) && (((u32) temp_v1->unk_0 >> 0x1F) != 0) && (temp_v1->unk_3C != 0)) {
             temp_v0_2 = (u8) temp_v1->unk_0;
             if ((temp_v0_2 & 1) != 0) {
                 temp_v1->unk_54 = (f32) (temp_v1->unk_40 * phi_f0_2);
-                temp_v1->unk_50 = (f32) (temp_v1->unk_48 * arg0->unk_38);
+                temp_v1->unk_50 = (f32) (temp_v1->unk_48 * arg0[14]);
                 temp_v1->unk_0 = (s8) (temp_v0_2 & 0xFFFE);
-                temp_v1->unk_7 = (s8) ((s32) (arg0->unk_34 + (temp_v1->unk_6 * (0x80 - arg0->unk_B))) >> 7);
+                temp_v1->unk_7 = (s8) ((s32) (arg0[13] + (temp_v1->unk_6 * (0x80 - arg0->unk_B))) >> 7);
             } else {
                 if ((s32) (s8) arg0->unk_1 < 0) {
                     temp_v1->unk_54 = (f32) (temp_v1->unk_40 * phi_f0_2);
                 }
                 if (((arg0->unk_0 << 9) < 0) || (arg1 != 0)) {
-                    temp_v1->unk_50 = (f32) (temp_v1->unk_48 * arg0->unk_38);
+                    temp_v1->unk_50 = (f32) (temp_v1->unk_48 * arg0[14]);
                 }
                 if (arg0->unk_0 & 0x200000) {
-                    temp_v1->unk_7 = (s8) ((s32) (arg0->unk_34 + (temp_v1->unk_6 * (0x80 - arg0->unk_B))) >> 7);
+                    temp_v1->unk_7 = (s8) ((s32) (arg0[13] + (temp_v1->unk_6 * (0x80 - arg0->unk_B))) >> 7);
                 }
             }
         }
@@ -320,19 +320,19 @@ void func_80197048(void *arg0) {
     temp_a1 = temp_a0->unk_A;
     phi_v1->unk_18 = temp_a1;
     if (temp_a1 == 0) {
-        phi_v1->unk_C = (f32) temp_a0->unk_6;
+        phi_v1[3] = (f32) temp_a0->unk_6;
     } else {
-        phi_v1->unk_C = (f32) temp_a0->unk_2;
+        phi_v1[3] = (f32) temp_a0->unk_2;
     }
     temp_a1_2 = temp_a0->unk_8;
     phi_v1->unk_16 = temp_a1_2;
     if (temp_a1_2 == 0) {
-        phi_v1->unk_10 = (f32) temp_a0->unk_4;
+        phi_v1[4] = (f32) temp_a0->unk_4;
     } else {
-        phi_v1->unk_10 = (f32) temp_a0->unk_0;
+        phi_v1[4] = (f32) temp_a0->unk_0;
     }
     phi_v0->unk_C = 1.0f;
-    phi_v1->unk_4 = 0;
+    phi_v1[1] = NULL;
     phi_v1->unk_1A = (u16) temp_a0->unk_C;
 }
 

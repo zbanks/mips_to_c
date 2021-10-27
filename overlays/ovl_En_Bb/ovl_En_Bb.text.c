@@ -149,7 +149,7 @@ struct _mips2c_stack_func_808C3324 {
     /* 0x34 */ char pad_34[0xC];
 };                                                  /* size = 0x40 */
 
-? func_800BE568(Actor *, void *);                   /* extern */
+? func_800BE568(Actor *, f32 *);                    /* extern */
 void func_808C1E94(Actor *arg0);                    /* static */
 void func_808C1F00(Actor *arg0);                    /* static */
 void func_808C1F74(Actor *arg0, GlobalContext *arg1); /* static */
@@ -215,6 +215,8 @@ static InitChainEntry D_808C37F4[2];                /* unable to generate initia
 static ? D_808C37FC;                                /* unable to generate initializer */
 static ? D_808C380B;                                /* unable to generate initializer */
 static Vec3f D_808C380C = {1000.0f, -700.0f, 0.0f};
+static Actor *D_808C3840 = (Actor *)0x3ECCCCCD;     /* const */
+static Actor *D_808C3854 = (Actor *)0x3ECCCCCD;     /* const */
 
 void EnBb_Init(Actor *thisx, GlobalContext *globalCtx) {
     s32 temp_v0;
@@ -266,18 +268,18 @@ void func_808C1E94(Actor *arg0) {
 
 void func_808C1F00(Actor *arg0) {
     arg0->unk_24D = 0xA;
-    arg0->unk_270 = 0.4f;
+    arg0[1].next = (Actor *)0x3ECCCCCD;
     arg0->unk_250 = 0x50;
     arg0->flags &= -0x201;
-    arg0->unk_274 = 0.6f;
-    arg0->unk_26C = 1.0f;
+    arg0[1].init = (void (*)(Actor *, GlobalContext *))0x3F19999A;
+    arg0[1].prev = (Actor *)0x3F800000;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
 
 void func_808C1F74(Actor *arg0, GlobalContext *arg1) {
     if (arg0->unk_24D == 0xA) {
         arg0->unk_24D = 0U;
-        arg0->unk_26C = 0.0f;
+        arg0[1].prev = NULL;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x278), 5, 2, 0.2f, 0.15f);
         arg0->flags |= 0x200;
     }
@@ -310,10 +312,10 @@ void func_808C20D4(Actor *arg0) {
     s32 temp_t0;
 
     sp28 = func_808C2238;
-    if (func_808C2238 != arg0->unk_248) {
+    if (func_808C2238 != arg0[1].uncullZoneDownward) {
         SkelAnime_ChangeAnimDefaultRepeat(arg0 + 0x144, &D_06000444);
     }
-    if (func_808C23EC == arg0->unk_248) {
+    if (func_808C23EC == arg0[1].uncullZoneDownward) {
         arg0->unk_252 = 0x28;
     } else {
         arg0->unk_252 = 0;
@@ -331,7 +333,7 @@ void func_808C20D4(Actor *arg0) {
     }
     arg0->unk_304 = (u8) (arg0->unk_304 | 1);
     arg0->unk_258 = (f32) (Rand_ZeroFloat(1.5f) + 1.0f);
-    arg0->unk_248 = sp28;
+    arg0[1].uncullZoneDownward = (bitwise f32) sp28;
 }
 
 void func_808C2238(Actor *arg0, GlobalContext *arg1) {
@@ -371,7 +373,7 @@ void func_808C2344(Actor *arg0) {
     arg0->unk_254 = (s16) arg0->yawTowardsPlayer;
     arg0->unk_25C = (f32) (temp_f8 + 30.0f);
     temp_f4 = Rand_ZeroFloat(1.5f) + 4.0f;
-    arg0->unk_248 = func_808C23EC;
+    arg0[1].uncullZoneDownward = func_808C23EC;
     arg0->unk_258 = temp_f4;
 }
 
@@ -406,11 +408,11 @@ void func_808C254C(Actor *arg0) {
     arg0->unk_250 = 0x8C;
     arg0->unk_305 = (u8) (arg0->unk_305 | 1);
     arg0->speedXZ = 2.0f;
-    arg0->unk_268 = 0.0f;
-    arg0->unk_264 = 0.0f;
+    arg0[1].child = NULL;
+    arg0[1].parent = NULL;
     arg0->gravity = -2.0f;
     Audio_PlayActorSound2(arg0, 0x38CDU);
-    arg0->unk_248 = func_808C25E0;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808C25E0;
     arg0->world.rot.y = arg0->shape.rot.y;
 }
 
@@ -456,13 +458,13 @@ block_7:
 void func_808C272C(Actor *arg0, GlobalContext *arg1) {
     f32 sp70;
     Vec3f *temp_s5;
+    f32 *temp_s0;
     f32 temp_f0;
     s32 temp_s1;
     u32 temp_t1;
-    void *temp_s0;
     Vec3f *phi_s2;
     f32 phi_f2;
-    void *phi_s0;
+    f32 *phi_s0;
     s32 phi_s1;
 
     func_800BE568(arg0, arg0 + 0x2F4);
@@ -476,8 +478,8 @@ void func_808C272C(Actor *arg0, GlobalContext *arg1) {
     arg0->speedXZ = 0.0f;
     arg0->unk_24C = 1;
     arg0->gravity = -1.5f;
-    phi_s2 = arg0 + 0x278;
-    phi_s0 = arg0 + 0x2B4;
+    phi_s2 = (Vec3f *) &arg0[1].destroy;
+    phi_s0 = &arg0[2].world.pos.z;
     phi_s1 = 0;
     do {
         Math_Vec3f_Diff(phi_s2, temp_s5, (Vec3f *) &sp70);
@@ -486,19 +488,19 @@ void func_808C272C(Actor *arg0, GlobalContext *arg1) {
         if (temp_f0 > 1.0f) {
             phi_f2 = 2.5f / temp_f0;
         }
-        phi_s0->unk_0 = (f32) (sp70 * phi_f2);
-        phi_s0->unk_8 = (f32) (sp78 * phi_f2);
+        phi_s0->unk_0 = sp70 * phi_f2;
+        phi_s0[2] = sp78 * phi_f2;
         temp_s1 = phi_s1 + 0xC;
         temp_s0 = phi_s0 + 0xC;
         temp_s0->unk_-8 = (f32) (Rand_ZeroFloat(3.5f) + 10.0f);
-        phi_s2 += 0xC;
+        phi_s2 = &phi_s2[1];
         phi_s0 = temp_s0;
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x3C);
     temp_t1 = arg0->flags | 0x10;
     arg0->flags = temp_t1;
     arg0->flags = temp_t1 & ~1;
-    arg0->unk_248 = func_808C28CC;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808C28CC;
 }
 
 void func_808C28CC(EnBb *this, GlobalContext *globalCtx) {
@@ -524,7 +526,7 @@ void func_808C28CC(EnBb *this, GlobalContext *globalCtx) {
             func_800B3030(globalCtx, phi_s0, &D_801D15B0, &D_801D15B0, (s16) 0x28, (s16) 7, 2);
             Audio_PlaySoundAtPosition(globalCtx, phi_s0, 0xB, 0x3878U);
             temp_s1 = phi_s1 + 0xC;
-            phi_s0 += 0xC;
+            phi_s0 = &phi_s0[1];
             phi_s1 = temp_s1;
         } while (temp_s1 != 0x3C);
         func_808C2C38(this);
@@ -536,8 +538,8 @@ void func_808C28CC(EnBb *this, GlobalContext *globalCtx) {
         temp_s2 = phi_s2 + 1;
         temp_s1_2 = phi_s1_2 + 0xC;
         temp_s1_2->unk_2AC = phi_s1_2->unk_2B4.y + this->actor.gravity;
-        phi_s0_2 += 0xC;
-        phi_s3 += 0xC;
+        phi_s0_2 = &phi_s0_2[1];
+        phi_s3 = &phi_s3[1];
         phi_s1_2 = temp_s1_2;
         phi_s2 = temp_s2;
     } while (temp_s2 != 5);
@@ -548,13 +550,13 @@ void func_808C2A00(Actor *arg0) {
 
     arg0->unk_305 = (u8) (arg0->unk_305 & 0xFFFE);
     Audio_PlayActorSound2(arg0, 0x38E3U);
-    func_800BE568(arg0, arg0 + 0x2F4);
+    func_800BE568(arg0, &arg0[2].velocity.z);
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 5) {
         func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
         arg0->unk_24D = 0x20;
-        arg0->unk_26C = 2.0f;
-        arg0->unk_270 = 0.4f;
+        arg0[1].prev = (Actor *)0x40000000;
+        arg0[1].next = (Actor *)0x3ECCCCCD;
     } else if (temp_v0 == 1) {
         func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x14);
         arg0->speedXZ = 0.0f;
@@ -564,7 +566,7 @@ void func_808C2A00(Actor *arg0) {
         func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x14);
         arg0->speedXZ = 7.0f;
     }
-    arg0->unk_248 = func_808C2B1C;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808C2B1C;
     arg0->gravity = -1.0f;
 }
 
@@ -581,7 +583,7 @@ void func_808C2B94(Actor *arg0) {
         arg0->velocity.y = 0.0f;
     }
     arg0->gravity = -2.0f;
-    arg0->unk_248 = func_808C2BD0;
+    arg0[1].uncullZoneDownward = func_808C2BD0;
 }
 
 void func_808C2BD0(EnBb *this, GlobalContext *globalCtx) {
@@ -674,10 +676,10 @@ void func_808C2E34(Actor *arg0, GlobalContext *arg1) {
         temp_t0 = arg0->unk_304 & 0xFFF9;
         arg0->unk_304 = temp_t0;
         arg0->unk_304 = (u8) (temp_t0 & 0xFFFE);
-        if ((arg0->unk_24D != 0xA) || ((*arg0->unk_330 & 0xDB0B3) == 0)) {
+        if ((arg0->unk_24D != 0xA) || ((*arg0[2].colChkInfo.displacement.y & 0xDB0B3) == 0)) {
             func_800BE258(arg0, arg0 + 0x30C);
-            arg0->unk_268 = 0.0f;
-            arg0->unk_264 = 0.0f;
+            arg0[1].child = NULL;
+            arg0[1].parent = NULL;
             func_808C1F74(arg0, arg1);
             if (Actor_ApplyDamage(arg0) == 0) {
                 Enemy_StartFinishingBlow(arg1, arg0);
@@ -695,10 +697,10 @@ void func_808C2E34(Actor *arg0, GlobalContext *arg1) {
                 func_808C2A00(arg0);
             }
             if (arg0->colChkInfo.damageEffect == 4) {
-                arg0->unk_26C = 4.0f;
+                arg0[1].prev = (Actor *)0x40800000;
                 arg0->unk_24D = 0x14U;
-                arg0->unk_270 = 0.4f;
-                Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0->unk_31A, (f32) arg0->unk_31C, (f32) arg0->unk_31E, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
+                arg0[1].next = (Actor *)0x3ECCCCCD;
+                Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0[2].yawTowardsPlayer, (f32) arg0->unk_31C, (f32) arg0->unk_31E, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
                 return;
             }
             /* Duplicate return node #22. Try simplifying control flow for better match */
@@ -710,7 +712,7 @@ void func_808C2E34(Actor *arg0, GlobalContext *arg1) {
     temp_v0_2 = arg0->unk_304;
     if ((temp_v0_2 & 4) != 0) {
         arg0->unk_304 = (u8) (temp_v0_2 & 0xFFF9);
-        if (func_808C25E0 != arg0->unk_248) {
+        if (func_808C25E0 != (bitwise s32) arg0[1].uncullZoneDownward) {
             arg0->world.rot.y = arg0->yawTowardsPlayer + 0x8000;
             arg0->shape.rot.y = arg0->world.rot.y;
             func_808C254C(arg0);
@@ -724,10 +726,10 @@ void func_808C2E34(Actor *arg0, GlobalContext *arg1) {
         arg0->world.rot.y = arg0->yawTowardsPlayer + 0x8000;
         arg0->shape.rot.y = arg0->world.rot.y;
         Audio_PlayActorSound2(arg0, 0x38CBU);
-        if (arg0->unk_264 > 0.0f) {
+        if ((bitwise f32) arg0[1].parent > 0.0f) {
             gSaveContext.unk_1016 = 0x4B0;
         }
-        if (func_808C23EC == arg0->unk_248) {
+        if (func_808C23EC == (bitwise s32) arg0[1].uncullZoneDownward) {
             func_808C20D4((EnBb *) arg0);
         }
     }
@@ -857,9 +859,9 @@ void func_808C3324(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         sp28 = temp_v0_5;
         sp28->words.w1 = Matrix_NewMtx(*arg0);
         temp_v0_6 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_6 + 8;
+        sp30->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDE000000;
-        temp_v0_6->words.w1 = arg4->unk_2F0;
+        temp_v0_6->words.w1 = arg4[2].velocity.y;
     }
 }
 
@@ -879,9 +881,9 @@ void EnBb_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_s0 = globalCtx->state.gfxCtx;
     temp_v0 = temp_s0->polyOpa.p;
-    temp_v0->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_v0->words.w1 = (u32) &sSetupDL[150];
     temp_v0->words.w0 = 0xDE000000;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     SkelAnime_Draw(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, func_808C32EC, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_808C3324, (Actor *) this);
     if (this->unk_264 > 0.0f) {
         temp_v0_2 = SysMatrix_GetCurrentState();
@@ -890,26 +892,26 @@ void EnBb_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY((s16) ((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000), 1U);
         Matrix_Scale(this->unk_264, this->unk_268, 1.0f, 1);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = -1;
         temp_v0_3->words.w0 = 0xFA008080;
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0xFF00;
         temp_v0_4->words.w0 = 0xFB000000;
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDB060020;
         sp50 = temp_v0_5;
         sp50->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80);
         temp_v0_2->mf[3][1] -= 47.0f * this->unk_268;
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         sp4C = temp_v0_6;
         sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = (u32) D_0407D590;
         temp_v0_7->words.w0 = 0xDE000000;
     }

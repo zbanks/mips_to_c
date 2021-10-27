@@ -372,21 +372,21 @@ void DemoEffect_Update(Actor *thisx, GlobalContext *globalCtx) {
     s32 temp_t1;
     void *temp_v0_4;
 
-    temp_t1 = arg0->unk_18840;
+    temp_t1 = arg0[25104];
     temp_a0 = arg0->unk_0;
     sp4C = temp_t1;
     sp48 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp48->polyXlu.p;
-    sp48->polyXlu.p = temp_v0 + 8;
+    sp48->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA000080;
     temp_v0->words.w1 = 0xAAFFFFFF;
     temp_v0_2 = sp48->polyXlu.p;
-    sp48->polyXlu.p = temp_v0_2 + 8;
+    sp48->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_2->words.w1 = (arg3->unk_16A << 8) | (arg3->unk_168 << 0x18) | (arg3->unk_169 << 0x10) | 0xFF;
     temp_v0_3 = sp48->polyXlu.p;
-    sp48->polyXlu.p = temp_v0_3 + 8;
+    sp48->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp38 = temp_v0_3;
     sp38->words.w1 = Gfx_TwoTexScroll(arg0->unk_0, 0, (temp_t1 * 6) & 0x3FF, 0xFF - ((temp_t1 * 0x10) & 0xFF), 0x100, 0x40, 1, (temp_t1 * 4) & 0x1FF, 0x7F - ((temp_t1 * 0xC) & 0x7F), 0x80, 0x20);
@@ -407,7 +407,7 @@ void func_808CDFF8(Actor *this, GlobalContext *globalCtx) {
     sp2C = temp_v1;
     temp_v1->polyXlu.p = Gfx_CallSetupDL(temp_v1->polyXlu.p, 0x19U);
     Matrix_Scale(2.0f, 2.0f, 2.0f, 1);
-    func_800F2CD8(this, globalCtx, this + 0x144, func_808CDE78, 0, 1, this);
+    func_800F2CD8(this, globalCtx, &this[1], func_808CDE78, 0, 1, this);
 }
 
 void func_808CE078(Actor *this, GlobalContext *globalCtx) {
@@ -429,35 +429,35 @@ void func_808CE078(Actor *this, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = -1;
     temp_v0->words.w0 = 0xFA008080;
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_2->words.w1 = (this->unk_16A << 8) | (this->unk_168 << 0x18) | (this->unk_169 << 0x10) | 0xFF;
     SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
     SysMatrix_StatePush();
     SysMatrix_InsertZRotation_s(sp46, 1);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp30 = temp_v0_3;
     sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_04023288;
     temp_v0_4->words.w0 = 0xDE000000;
     sp20 = &D_04023288;
     SysMatrix_StatePop();
     SysMatrix_InsertZRotation_s((s16) ((s32) sp46 * -1), 1);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDA380003;
     sp28 = temp_v0_5;
     sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDE000000;
     temp_v0_6->words.w1 = (u32) sp20;
     D_801F4E32 = 1;

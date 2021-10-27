@@ -283,7 +283,7 @@ void func_80865F38(Actor *this, GlobalContext *globalCtx) {
         if ((s32) temp_t4 < 0) {
             phi_f10 = temp_f10 + 4294967296.0f;
         }
-        Lights_PointSetColorAndRadius(this + 0x14C, (u32) (phi_f18 * temp_f2) & 0xFF, (u32) (phi_f6_3 * temp_f2) & 0xFF, (u32) (phi_f10 * temp_f2) & 0xFF, (s16) (s32) (300.0f * sp30));
+        Lights_PointSetColorAndRadius((LightInfo *) &this[1].home, (u32) (phi_f18 * temp_f2) & 0xFF, (u32) (phi_f6_3 * temp_f2) & 0xFF, (u32) (phi_f10 * temp_f2) & 0xFF, (s16) (s32) (300.0f * sp30));
     }
     func_80865BF8((EnLight *) this, globalCtx);
     if (((s32) this->params >= 0) && (sp2C == 1)) {
@@ -318,34 +318,34 @@ void EnLight_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     if ((s32) this->actor.params >= 0) {
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp6C = temp_t0;
         sp5C = temp_v0;
         sp5C->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) this->unk_144 * -0x14) & 0x1FF, 0x20, 0x80);
         sp68 = D_0407D590;
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA008080;
         temp_v0_2->words.w1 = (temp_t0->unk_0 << 0x18) | (temp_t0->unk_1 << 0x10) | (temp_t0->unk_2 << 8) | temp_t0->unk_3;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = (temp_t0->unk_4 << 0x18) | (temp_t0->unk_5 << 0x10) | (temp_t0->unk_6 << 8);
     } else {
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDB060020;
         temp_v1 = this->unk_144;
         sp50 = temp_v0_4;
         sp50->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x10, 0x20, 1, (temp_v1 * 2) & 0x3F, ((s32) temp_v1 * -6) & 0x7F, 0x10, 0x20);
         sp68 = &D_0401ACF0;
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0xFFC80000;
         temp_v0_5->words.w0 = 0xFA00C0C0;
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0xFF000000;
         temp_v0_6->words.w0 = 0xFB000000;
     }
@@ -355,12 +355,12 @@ void EnLight_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDA380003;
     sp44 = temp_v0_7;
     sp44->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_8 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_8 + 8;
+    temp_s0->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDE000000;
     temp_v0_8->words.w1 = (u32) sp68;
 }

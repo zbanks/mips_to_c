@@ -93,7 +93,7 @@ struct _mips2c_stack_func_809CE830 {
 
 struct _mips2c_stack_func_809CEBC0 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ Vec3f *sp24;                         /* inferred */
+    /* 0x24 */ s8 *sp24;                            /* inferred */
     /* 0x28 */ f32 sp28;                            /* inferred */
     /* 0x2C */ char pad_2C[0x4];
     /* 0x30 */ f32 sp30;                            /* inferred */
@@ -223,7 +223,7 @@ void func_809CE068(BgSpdweb *arg0) {
             phi_s0 = (Vec3f *) &sp64;
 loop_3:
             SysMatrix_MultiplyVector3fByState(arg0->unk_168.elements + phi_s2 + phi_s1 + 0x28, phi_s0);
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             phi_s1 += 0xC;
             phi_s0 = temp_s0;
             if (temp_s0 != &arg0) {
@@ -242,12 +242,12 @@ void func_809CE15C(BgSpdweb *arg0) {
 
     temp_f18 = (s32) ((arg0->actor.home.pos.y - arg0->actor.world.pos.y) * 10.0f);
     arg0->unk_2F8->unk_5C = (s16) temp_f18;
-    arg0->unk_2F8->unk_56 = (s16) temp_f18;
-    arg0->unk_2F8->unk_50 = (s16) temp_f18;
-    arg0->unk_2F8->unk_4A = (s16) temp_f18;
-    arg0->unk_2F8->unk_44 = (s16) temp_f18;
-    arg0->unk_2F8->unk_3E = (s16) temp_f18;
-    arg0->unk_2F8->unk_14 = (s16) temp_f18;
+    arg0->unk_2F8[14].y = (s16) temp_f18;
+    arg0->unk_2F8[13].y = (s16) temp_f18;
+    arg0->unk_2F8[12].y = (s16) temp_f18;
+    arg0->unk_2F8[11].y = (s16) temp_f18;
+    arg0->unk_2F8[10].y = (s16) temp_f18;
+    arg0->unk_2F8[3].y = (s16) temp_f18;
     arg0->unk_2F8->y = (s16) temp_f18;
 }
 
@@ -372,7 +372,7 @@ void func_809CE4C8(BgSpdweb *arg0, GlobalContext *arg1) {
     sp3A = temp_v0->unk_B6A;
     if (func_80123F48(arg1, &sp40, 0x428C0000, 50.0f) != 0) {
         arg0->actor.home.pos.x = sp4C->unk_B9C;
-        arg0->actor.home.pos.z = sp4C->unk_BA4;
+        arg0->actor.home.pos.z = sp4C[9].focus.pos.y;
         func_809CEE74(arg0);
         return;
     }
@@ -580,17 +580,17 @@ void func_809CEBC0(BgSpdweb *arg0, GlobalContext *arg1) {
     f32 sp34;
     f32 sp30;
     f32 sp28;
-    Vec3f *sp24;
+    s8 *sp24;
     Actor *temp_v0;
-    Vec3f *temp_a0;
-    Vec3f *temp_v1;
     f32 temp_f0;
     f32 temp_f10;
     f32 temp_f18;
     f32 temp_f8;
+    s8 *temp_a0;
+    s8 *temp_v1;
     ColliderTrisElement *phi_v0;
-    Vec3f *phi_v1;
-    Vec3f *phi_v1_2;
+    s8 *phi_v1;
+    s8 *phi_v1_2;
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     phi_v1 = NULL;
@@ -618,11 +618,11 @@ loop_2:
             arg0->actor.home.pos.z = (Math_CosS(arg0->actor.shape.rot.y) * (90.0f * sp28)) + arg0->actor.world.pos.z;
         }
         func_809CEE74(arg0);
-    } else if (temp_v0->unk_147 == 7) {
-        temp_a0 = temp_v0 + 0xB9C;
+    } else if (temp_v0[1].room == 7) {
+        temp_a0 = &temp_v0[9].cutscene;
         if (temp_v0->unk_B28 != 0) {
             sp24 = temp_a0;
-            Math_Vec3f_Diff(temp_a0, (Vec3f *) &arg0->actor.world, (Vec3f *) &sp3C);
+            Math_Vec3f_Diff((Vec3f *) temp_a0, (Vec3f *) &arg0->actor.world, (Vec3f *) &sp3C);
             sp38 = Math_SinS((s16) ((s32) arg0->actor.shape.rot.x * -1));
             sp34 = Math_CosS((s16) ((s32) arg0->actor.shape.rot.x * -1));
             sp30 = Math_SinS((s16) ((s32) arg0->actor.shape.rot.y * -1));
@@ -632,7 +632,7 @@ loop_2:
             temp_f10 = sp3C * temp_f0;
             sp58 = temp_f8;
             if ((fabsf(temp_f10 + (sp44 * sp30)) < 70.0f) && (fabsf(temp_f8) < 10.0f) && (temp_f18 < 160.0f) && (temp_f18 > 20.0f)) {
-                Math_Vec3f_Copy((Vec3f *) &arg0->actor.home, sp24);
+                Math_Vec3f_Copy((Vec3f *) &arg0->actor.home, (Vec3f *) sp24);
                 func_809CEE74(arg0);
             }
         }
@@ -677,20 +677,20 @@ void BgSpdweb_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_t6 = globalCtx->state.gfxCtx;
     sp20 = temp_t6;
     temp_s0 = temp_t6->polyXlu.p;
-    temp_s0->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s0->words.w1 = (u32) &sSetupDL[150];
     temp_s0->words.w0 = 0xDE000000;
     if (this->actor.params == 1) {
-        temp_s0->unk_8 = 0xDA380003;
-        temp_s0->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_s0->unk_10 = 0xDE000000;
-        temp_s0->unk_14 = &D_06000060;
+        temp_s0[1].words.w0 = 0xDA380003;
+        temp_s0[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_s0[2].words.w0 = 0xDE000000;
+        temp_s0[2].words.w1 = (u32) &D_06000060;
     } else {
         SysMatrix_InsertTranslation(0.0f, (this->actor.home.pos.y - this->actor.world.pos.y) * 10.0f, 0.0f, 1);
         Matrix_Scale(1.0f, ((this->actor.home.pos.y - this->actor.world.pos.y) + 10.0f) * 0.1f, 1.0f, 1);
-        temp_s0->unk_8 = 0xDA380003;
-        temp_s0->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        temp_s0->unk_10 = 0xDE000000;
-        temp_s0->unk_14 = &D_060012F0;
+        temp_s0[1].words.w0 = 0xDA380003;
+        temp_s0[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        temp_s0[2].words.w0 = 0xDE000000;
+        temp_s0[2].words.w1 = (u32) &D_060012F0;
     }
-    sp20->polyXlu.p = temp_s0 + 0x18;
+    sp20->polyXlu.p = &temp_s0[3];
 }

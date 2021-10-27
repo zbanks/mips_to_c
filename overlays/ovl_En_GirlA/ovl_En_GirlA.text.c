@@ -239,7 +239,7 @@ s32 EnGirlA_CanBuyArrows(GlobalContext *globalCtx, EnGirlA *this) {
     if (((u32) (temp_v1 & temp_a1) >> temp_a2) == 0) {
         return 6;
     }
-    if ((s32) gSaveContext.inventory.ammo[gItemSlots[1]] >= (s32) *(gUpgradeShifts + 8 + (((u32) (temp_v1 & temp_a1) >> temp_a2) * 2))) {
+    if ((s32) gSaveContext.inventory.ammo[gItemSlots[1]] >= (s32) *(&gUpgradeShifts[8] + (((u32) (temp_v1 & temp_a1) >> temp_a2) * 2))) {
         return 7;
     }
     if ((s32) gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -251,7 +251,7 @@ s32 EnGirlA_CanBuyArrows(GlobalContext *globalCtx, EnGirlA *this) {
 s32 EnGirlA_CanBuyNuts(GlobalContext *globalCtx, EnGirlA *this) {
     u16 temp_v0;
 
-    temp_v0 = (*(gUpgradeCapacities + 0x30))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x1C)) >> gUpgradeShifts[7]];
+    temp_v0 = gUpgradeCapacities[6][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[7]) >> gUpgradeShifts[7]];
     if ((temp_v0 != 0) && ((s32) gSaveContext.inventory.ammo[gItemSlots[9]] >= (s32) temp_v0)) {
         return 2;
     }
@@ -265,7 +265,7 @@ s32 EnGirlA_CanBuyNuts(GlobalContext *globalCtx, EnGirlA *this) {
 }
 
 s32 EnGirlA_CanBuyShieldHero(GlobalContext *globalCtx, EnGirlA *this) {
-    if (((s32) (gSaveContext.equips.equipment & *(gEquipMasks + 2)) >> gEquipShifts[1]) != 0) {
+    if (((s32) (gSaveContext.equips.equipment & gEquipMasks[1]) >> gEquipShifts[1]) != 0) {
         return 2;
     }
     if ((s32) gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -277,7 +277,7 @@ s32 EnGirlA_CanBuyShieldHero(GlobalContext *globalCtx, EnGirlA *this) {
 s32 EnGirlA_CanBuyStick(GlobalContext *globalCtx, EnGirlA *this) {
     u16 temp_v0;
 
-    temp_v0 = (*(gUpgradeCapacities + 0x28))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x18)) >> gUpgradeShifts[6]];
+    temp_v0 = gUpgradeCapacities[5][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[6]) >> gUpgradeShifts[6]];
     if ((temp_v0 != 0) && ((s32) gSaveContext.inventory.ammo[gItemSlots[8]] >= (s32) temp_v0)) {
         return 2;
     }
@@ -298,7 +298,7 @@ s32 EnGirlA_CanBuyMaskAllNight(GlobalContext *globalCtx, EnGirlA *this) {
 }
 
 s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext *globalCtx, EnGirlA *this) {
-    if ((u32) ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 4)) >> gUpgradeShifts[1]) >= 2U) {
+    if ((u32) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]) >= 2U) {
         return 5;
     }
     if ((s32) gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -312,7 +312,7 @@ s32 EnGirlA_CanBuyBombBag20BombShop(GlobalContext *globalCtx, EnGirlA *this) {
     u32 temp_v1;
     u8 temp_a1;
 
-    temp_v1 = *(gUpgradeMasks + 4);
+    temp_v1 = gUpgradeMasks[1];
     temp_v0 = gSaveContext.inventory.upgrades;
     temp_a1 = gUpgradeShifts[1];
     if (((u32) (temp_v0 & temp_v1) >> temp_a1) == 1) {
@@ -332,7 +332,7 @@ s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext *globalCtx, EnGirlA *this) {
     u32 temp_v1;
     u8 temp_a1;
 
-    temp_v1 = *(gUpgradeMasks + 4);
+    temp_v1 = gUpgradeMasks[1];
     temp_v0 = gSaveContext.inventory.upgrades;
     temp_a1 = gUpgradeShifts[1];
     if (((u32) (temp_v0 & temp_v1) >> temp_a1) == 2) {
@@ -352,7 +352,7 @@ s32 EnGirlA_CanBuyBombchus(GlobalContext *globalCtx, EnGirlA *this) {
     u32 temp_v1;
     u8 temp_a2;
 
-    temp_a1 = *(gUpgradeMasks + 4);
+    temp_a1 = gUpgradeMasks[1];
     temp_v1 = gSaveContext.inventory.upgrades;
     temp_a2 = gUpgradeShifts[1];
     if (((u32) (temp_v1 & temp_a1) >> temp_a2) == 0) {
@@ -375,7 +375,7 @@ s32 EnGirlA_CanBuyBombs(GlobalContext *globalCtx, EnGirlA *this) {
     u32 temp_v1;
     u8 temp_a2;
 
-    temp_a1 = *(gUpgradeMasks + 4);
+    temp_a1 = gUpgradeMasks[1];
     temp_v1 = gSaveContext.inventory.upgrades;
     temp_a2 = gUpgradeShifts[1];
     if (((u32) (temp_v1 & temp_a1) >> temp_a2) == 0) {
@@ -405,7 +405,7 @@ s32 EnGirlA_CanBuySword(GlobalContext *globalCtx, EnGirlA *this) {
 }
 
 s32 EnGirlA_CanBuyShieldMirror(GlobalContext *globalCtx, EnGirlA *this) {
-    if (((s32) (gSaveContext.equips.equipment & *(gEquipMasks + 2)) >> gEquipShifts[1]) != 0) {
+    if (((s32) (gSaveContext.equips.equipment & gEquipMasks[1]) >> gEquipShifts[1]) != 0) {
         return 2;
     }
     if ((s32) gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {

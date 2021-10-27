@@ -1,3 +1,67 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ char pad_3A[0x2];                   /* maybe part of unk39[3]? */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ s16 unk_52;                         /* inferred */
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct Boss04 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime unk_144;                  /* inferred */
@@ -650,7 +714,7 @@ void func_809ECF58(Boss04 *this, GlobalContext *globalCtx) {
 
 void func_809ED224(Actor *arg0) {
     arg0->unk_204 = func_809ED2A0;
-    arg0->unk_1F8 = 0x3C;
+    arg0[1].colChkInfo.cylYShift = 0x3C;
     arg0->unk_1FA = 0x64;
     arg0->speedXZ = 0.0f;
     arg0->unk_2C8 = 0xC8;
@@ -708,7 +772,7 @@ void func_809ED45C(Actor *arg0, GlobalContext *arg1) {
     u8 temp_v1;
     void *temp_v0;
 
-    if ((arg0->unk_1FE == 0) && (temp_v0 = arg0->unk_224, temp_a0 = arg0, temp_v1 = temp_v0->unk_16, ((temp_v1 & 2) != 0))) {
+    if ((arg0->unk_1FE == 0) && (temp_v0 = arg0[1].shape.feetPos[1].x, temp_a0 = arg0, temp_v1 = temp_v0->unk_16, ((temp_v1 & 2) != 0))) {
         temp_v0->unk_16 = (u8) (temp_v1 & 0xFFFD);
         arg0 = arg0;
         Audio_PlayActorSound2(temp_a0, 0x3A13U);
@@ -718,13 +782,13 @@ void func_809ED45C(Actor *arg0, GlobalContext *arg1) {
             arg0 = arg0;
             func_809ED224((Boss04 *) temp_a0_2);
             arg0->unk_1FE = 0x64;
-            arg0->unk_200 = 0x64;
+            arg0[1].shape.rot.x = 0x64;
             Enemy_StartFinishingBlow(arg1, arg0);
             return;
         }
-        arg0->unk_2DA = 0xF;
+        arg0[2].unk_52 = 0xF;
         arg0->unk_1FE = 0xF;
-        arg0->unk_200 = 0xF;
+        arg0[1].shape.rot.x = 0xF;
         /* Duplicate return node #5. Try simplifying control flow for better match */
     }
 }
@@ -774,7 +838,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(0.3926991f);
         SysMatrix_GetStateTranslationAndScaledZ(100.0f, phi_s1);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 < 0xC0);
     SysMatrix_StatePop();
@@ -785,7 +849,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(0.41887903f);
         SysMatrix_GetStateTranslationAndScaledZ(92.0f, phi_s1_2);
         temp_s0_2 = phi_s0_2 + 0xC;
-        phi_s1_2 += 0xC;
+        phi_s1_2 = &phi_s1_2[1];
         phi_s0_2 = temp_s0_2;
     } while (temp_s0_2 < 0xB4);
     SysMatrix_StatePop();
@@ -796,7 +860,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(0.41887903f);
         SysMatrix_GetStateTranslationAndScaledZ(92.0f, phi_s1_3);
         temp_s0_3 = phi_s0_3 + 0xC;
-        phi_s1_3 += 0xC;
+        phi_s1_3 = &phi_s1_3[1];
         phi_s0_3 = temp_s0_3;
     } while (temp_s0_3 < 0xB4);
     SysMatrix_StatePop();
@@ -807,7 +871,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(0.5711987f);
         SysMatrix_GetStateTranslationAndScaledZ(71.0f, phi_s1_4);
         temp_s0_4 = phi_s0_4 + 0xC;
-        phi_s1_4 += 0xC;
+        phi_s1_4 = &phi_s1_4[1];
         phi_s0_4 = temp_s0_4;
     } while (temp_s0_4 < 0x84);
     SysMatrix_StatePop();
@@ -818,7 +882,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(0.5711987f);
         SysMatrix_GetStateTranslationAndScaledZ(71.0f, phi_s1_5);
         temp_s0_5 = phi_s0_5 + 0xC;
-        phi_s1_5 += 0xC;
+        phi_s1_5 = &phi_s1_5[1];
         phi_s0_5 = temp_s0_5;
     } while (temp_s0_5 < 0x84);
     SysMatrix_StatePop();
@@ -829,7 +893,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(1.0471976f);
         SysMatrix_GetStateTranslationAndScaledZ(38.0f, phi_s1_6);
         temp_s0_6 = phi_s0_6 + 0xC;
-        phi_s1_6 += 0xC;
+        phi_s1_6 = &phi_s1_6[1];
         phi_s0_6 = temp_s0_6;
     } while (temp_s0_6 < 0x48);
     SysMatrix_StatePop();
@@ -840,7 +904,7 @@ void func_809ED50C(Boss04 *arg0) {
         SysMatrix_RotateStateAroundXAxis(1.0471976f);
         SysMatrix_GetStateTranslationAndScaledZ(38.0f, phi_s1_7);
         temp_s0_7 = phi_s0_7 + 0xC;
-        phi_s1_7 += 0xC;
+        phi_s1_7 = &phi_s1_7[1];
         phi_s0_7 = temp_s0_7;
     } while (temp_s0_7 != 0x48);
     SysMatrix_StatePop();
@@ -978,7 +1042,7 @@ void Boss04_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_809EDCCC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == gGameInfo->data[1280]) {
-        if ((arg5->unk_1F4 & 3) == 0) {
+        if ((arg5[1].colChkInfo.cylRadius & 3) == 0) {
             *arg2 = NULL;
         }
         arg4->x += gGameInfo->data[1281] << 8;
@@ -986,14 +1050,14 @@ s32 func_809EDCCC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         arg4->z += gGameInfo->data[1283] << 8;
     }
     if ((arg1 == 5) || (arg1 == 7)) {
-        arg4->y = (arg4->y + (s32) arg5->unk_2CC) - 0x500;
+        arg4->y = (arg4->y + (s32) arg5[2].focus.pos.z) - 0x500;
     }
     if (arg1 == 4) {
-        arg4->y += arg5->unk_2D8;
-        arg4->z += arg5->unk_2D4;
-        if (arg5->unk_2DA != 0) {
-            arg4->y += (s32) (Math_SinS((s16) (arg5->unk_1F4 * 0x3000)) * (f32) (arg5->unk_2DA * 0x1F4));
-            arg4->z += (s32) (Math_SinS((s16) (arg5->unk_1F4 * 0x3500)) * (f32) (arg5->unk_2DA * 0x12C));
+        arg4->y += arg5[2].sfx;
+        arg4->z += arg5[2].focus.rot.z;
+        if (arg5[2].unk_52 != 0) {
+            arg4->y += (s32) (Math_SinS((s16) (arg5[1].colChkInfo.cylRadius * 0x3000)) * (f32) (arg5[2].unk_52 * 0x1F4));
+            arg4->z += (s32) (Math_SinS((s16) (arg5[1].colChkInfo.cylRadius * 0x3500)) * (f32) (arg5[2].unk_52 * 0x12C));
         }
     }
     return 0;
@@ -1033,11 +1097,11 @@ void Boss04_Draw(Actor *thisx, GlobalContext *globalCtx) {
     if (func_809EC568 != this->actionFunc) {
         func_8012C448(globalCtx->state.gfxCtx);
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w1 = 0x96;
         temp_v0->words.w0 = 0xFA000000;
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = (u32) &D_06004510;
         SysMatrix_InsertTranslation(this->unk_6BC, this->actor.floorHeight, this->unk_6C4, 0);
@@ -1045,11 +1109,11 @@ void Boss04_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_InsertTranslation(0.0f, 0.0f, -20.0f, 1);
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, 1);
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_4 + 8;
+        temp_s1->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = (u32) &D_06004550;
     }

@@ -122,7 +122,7 @@ void EnDs2n_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80AE1874(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 0x12) {
-        SysMatrix_InsertXRotation_s(arg5->unk_226, 1);
+        SysMatrix_InsertXRotation_s(arg5[91].z, 1);
     }
     return 0;
 }
@@ -159,13 +159,13 @@ void EnDs2n_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp40 = sp40;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80AE1AF4 + (this->unk_230 * 4)));
     temp_v0_2 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_2 + 8;
+    sp40->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80AE1AF4 + (this->unk_230 * 4)));

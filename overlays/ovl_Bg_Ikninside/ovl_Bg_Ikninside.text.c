@@ -98,7 +98,7 @@ void func_80C07220(s32 arg0, ? arg1) {
 
 void func_80C07230(Actor *arg0, GlobalContext *arg1) {
     if (arg0->cutscene == -1) {
-        arg0->unk_1AC = func_80C07220;
+        arg0[1].velocity.y = func_80C07220;
         return;
     }
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -108,7 +108,7 @@ void func_80C07230(Actor *arg0, GlobalContext *arg1) {
     }
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
-        arg0->unk_1AC = func_80C07220;
+        arg0[1].velocity.y = (bitwise f32) func_80C07220;
         return;
     }
     ActorCutscene_SetIntentToPlay((s16) arg0->cutscene);
@@ -194,7 +194,7 @@ void BgIkninside_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v0 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0 + 8;
+    temp_a2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_a2;
     sp1C = temp_v0;
@@ -202,7 +202,7 @@ void BgIkninside_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a2;
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_2 + 8;
+    temp_a2->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_0600CC78;
 }

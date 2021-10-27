@@ -526,7 +526,7 @@ s32 func_80C056D4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     }
     if (arg1 == 0x11) {
         arg4->x += arg5->unk_28A;
-        arg4->z += arg5->unk_288;
+        arg4->z += arg5[2].id;
     }
     if ((arg1 == 0xF) || (arg1 == 0x13) || (arg1 == 0x14)) {
         *arg2 = NULL;
@@ -550,17 +550,17 @@ void EnBombers2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C05914 + (this->unk_2BC * 4)));
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(D_80C05920);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(D_80C05910);

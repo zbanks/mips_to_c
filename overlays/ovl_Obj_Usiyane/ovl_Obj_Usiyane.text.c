@@ -229,15 +229,15 @@ loop_2:
         sp94 *= 5.0f;
         sp9C *= 5.0f;
         phi_s4->unk_0 = (f32) temp_t5->unk_0;
-        phi_s4->unk_4 = (s32) temp_t5->unk_4;
-        phi_s4->unk_8 = (s32) temp_t5->unk_8;
+        phi_s4->unk_4 = (f32) temp_t5[1];
+        phi_s4->unk_8 = (f32) temp_t5[2];
         phi_s0->unk_186 = (s16) (s32) (Rand_Centered() * 4000.0f);
         phi_s0->unk_188 = (s16) (s32) (Rand_Centered() * 4000.0f);
         temp_s1 = phi_s1 + 1;
         temp_s0_2 = phi_s0 + 0x90;
         temp_s0_2->unk_FA = (s16) (s32) (Rand_Centered() * 4000.0f);
         phi_s1 = temp_s1;
-        phi_s2 += 0x90;
+        phi_s2 = &phi_s2[12];
         phi_s3 += 0x90;
         phi_s0 = temp_s0_2;
         phi_s4 += 0x90;
@@ -252,8 +252,8 @@ loop_2:
         phi_s7 += 0x14;
     } while (temp_t9 != 0x90);
     Audio_PlayActorSound2(arg0, 0x2928U);
-    arg0->unk_740 = 0;
-    arg0->unk_744 = (s32) (arg0->unk_744 | 4);
+    arg0[5].projectedPos.x = 0.0f;
+    arg0[5].projectedPos.y = (bitwise f32) ((bitwise s32) arg0[5].projectedPos.y | 4);
 }
 
 void func_80C081C8(Actor *arg0, ? arg1) {
@@ -268,8 +268,8 @@ void func_80C081C8(Actor *arg0, ? arg1) {
     s32 phi_v0_2;
     Actor *phi_a2;
 
-    temp_v0 = arg0->unk_740;
-    arg0->unk_744 = (s32) (arg0->unk_744 | 1);
+    temp_v0 = arg0[5].projectedPos.x;
+    arg0[5].projectedPos.y |= 1;
     phi_a1 = 0;
     phi_v0_2 = temp_v0;
     phi_a2 = arg0;
@@ -302,10 +302,10 @@ loop_3:
         arg0 = arg0;
         Actor_MarkForDeath(temp_a0);
 block_8:
-        phi_v0_2 = arg0->unk_740;
+        phi_v0_2 = arg0[5].projectedPos.x;
         phi_a2 = arg0;
     }
-    phi_a2->unk_740 = (s32) (phi_v0_2 + 1);
+    phi_a2[5].projectedPos.x = phi_v0_2 + 1;
 }
 
 void func_80C082CC(ObjUsiyane *arg0, GlobalContext *arg1) {
@@ -391,8 +391,8 @@ void ObjUsiyane_Draw(Actor *thisx, GlobalContext *globalCtx) {
             temp_s1 = phi_s1 + 0xC;
             this->unk_708 = sp74;
             this->unk_70C = sp7C;
-            phi_s0 += 0x14;
-            phi_s2 += 0xC;
+            phi_s0 = (Vec3f *) &phi_s0[1].z;
+            phi_s2 = &phi_s2[1];
             phi_s1 = temp_s1;
         } while (temp_s1 != 0x30);
         this->unk_744 |= 2;

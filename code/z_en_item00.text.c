@@ -869,7 +869,7 @@ u8 sDropTableAmounts[272] = {
 void EnItem00_SetObject(Actor *arg0, GlobalContext *arg1, f32 *arg2, f32 *arg3) {
     Actor_SetObjectSegment(arg1, arg0);
     Actor_SetScale(arg0, 0.5f);
-    arg0->unk_154 = 0.5f;
+    arg0[1].home.pos.z = 0.5f;
     *arg2 = 0.0f;
     *arg3 = 0.6f;
     arg0->world.rot.x = 0x4000;
@@ -1274,7 +1274,7 @@ void EnItem00_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnItem00 *this = (EnItem00 *) thisx;
 
     sp34 = 0;
-    sp38 = globalCtx->actorCtx.actorList[2].first->unk_A74 & 0x1000;
+    sp38 = (bitwise s32) globalCtx->actorCtx.actorList[2].first[8].targetArrowOffset & 0x1000;
     temp_v0 = this->unk152;
     if ((s32) temp_v0 > 0) {
         this->unk152 = temp_v0 - 1;
@@ -1535,18 +1535,18 @@ void EnItem00_DrawRupee(EnItem00 *this, GlobalContext *globalCtx) {
         phi_a1 = (s32) temp_v0;
     }
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp30 = phi_a1;
     sp24 = temp_v0_2;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp20 = temp_v0_3;
     sp20->words.w1 = Lib_SegmentedToVirtual(D_801ADF30[phi_a1]);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) D_040622C0;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -1589,17 +1589,17 @@ void EnItem00_DrawSprite(EnItem00 *this, GlobalContext *globalCtx) {
     sp34 = phi_a2;
     temp_s0->polyOpa.p = func_8012C724(temp_s0->polyOpa.p);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp28 = temp_v0;
     sp28->words.w1 = Lib_SegmentedToVirtual(D_801ADF44[phi_a2]);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp24 = temp_v0_2;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) D_0405F6F0;
     temp_v0_3->words.w0 = 0xDE000000;
 }
@@ -1618,16 +1618,16 @@ void EnItem00_DrawHeartContainer(EnItem00 *this, GlobalContext *globalCtx) {
         func_8012C2DC(temp_a0);
         Matrix_Scale(20.0f, 20.0f, 20.0f, 1);
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = temp_v0;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06001290;
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06001470;
         temp_v0_3->words.w0 = 0xDE000000;
     }
@@ -1645,12 +1645,12 @@ void EnItem00_DrawHeartPiece(EnItem00 *this, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     func_800B8118((Actor *) this, globalCtx, 0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) D_0405AAB0;
     temp_v0_2->words.w0 = 0xDE000000;
 }
@@ -1943,14 +1943,14 @@ block_16:
             }
             phi_s7 = 0xA0;
             phi_s2_2 = 8;
-            if ((s32) gSaveContext.inventory.ammo[gItemSlots->unk_1] < 6) {
+            if ((s32) gSaveContext.inventory.ammo[gItemSlots[1]] < 6) {
                 phi_s1 = 8U;
                 phi_s3 = 1;
                 goto block_36;
             }
             phi_s7 = 0xB0;
             phi_s2_2 = 4;
-            if ((s32) gSaveContext.inventory.ammo[gItemSlots->unk_6] < 6) {
+            if ((s32) gSaveContext.inventory.ammo[gItemSlots[6]] < 6) {
                 phi_s1 = 4U;
                 phi_s3 = 1;
                 goto block_36;

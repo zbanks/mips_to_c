@@ -253,7 +253,7 @@ void func_80BD6314(Actor *arg0, GlobalContext *arg1) {
 
 void func_80BD63B4(Actor *arg0) {
     arg0->unk_1AC = 0x1E;
-    arg0->unk_1A8 = func_80BD63D0;
+    arg0[1].velocity.x = func_80BD63D0;
 }
 
 void func_80BD63D0(Actor *arg0, ? arg1) {

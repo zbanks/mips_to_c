@@ -207,17 +207,19 @@ void func_80B9C5E8(DynaPolyActor *arg0, GlobalContext *arg1) {
     s16 temp_t0;
     s16 temp_v0;
     s16 temp_v0_2;
+    u16 temp_v0_3;
     void *temp_s1;
+    u16 phi_v0;
 
     temp_s1 = arg1->actorCtx.actorList[2].first;
     if ((arg0->actor.xzDistToPlayer < (45.0f * arg0->actor.scale.x * 10.0f)) && (arg0->actor.yDistToPlayer < -21.0f)) {
         if (func_800CAF70(arg0) != 0) {
-            arg0->unk_18C = (s16) (arg0->unk_18C + 1);
-            arg0->unk_172 = (u16) (arg0->unk_172 & 0xFFF7);
-            arg0->unk_19C = 0.0f;
-            arg0->unk_1A0 = 0.0f;
-            if ((s32) arg0->unk_18C >= 3) {
-                arg0->unk_18C = 0;
+            arg0[1].actor.world.rot.x += 1;
+            arg0[1].actor.home.rot.y = (u16) arg0[1].actor.home.rot.y & 0xFFF7;
+            arg0[1].actor.focus.pos.y = 0.0f;
+            arg0[1].actor.focus.pos.z = 0.0f;
+            if ((s32) arg0[1].actor.world.rot.x >= 3) {
+                arg0[1].actor.world.rot.x = 0;
                 Math_Vec3f_Copy((Vec3f *) &sp40, temp_s1 + 0x24);
                 sp40 += randPlusMinusPoint5Scaled(10.0f);
                 sp48 += randPlusMinusPoint5Scaled(10.0f);
@@ -228,11 +230,11 @@ void func_80B9C5E8(DynaPolyActor *arg0, GlobalContext *arg1) {
             /* Duplicate return node #23. Try simplifying control flow for better match */
             return;
         }
-        arg0->unk_18C = (s16) (arg0->unk_18C + 1);
-        arg0->unk_172 = (u16) (arg0->unk_172 | 8);
-        if ((s32) arg0->unk_18C >= 3) {
+        arg0[1].actor.world.rot.x += 1;
+        arg0[1].actor.home.rot.y = (u16) arg0[1].actor.home.rot.y | 8;
+        if ((s32) arg0[1].actor.world.rot.x >= 3) {
             Math_Vec3f_Copy((Vec3f *) &sp40, temp_s1 + 0x24);
-            arg0->unk_18C = 0;
+            arg0[1].actor.world.rot.x = 0;
             sp40 += randPlusMinusPoint5Scaled(10.0f);
             sp48 += randPlusMinusPoint5Scaled(10.0f);
             sp44 += Rand_ZeroFloat(45.0f);
@@ -248,7 +250,7 @@ void func_80B9C5E8(DynaPolyActor *arg0, GlobalContext *arg1) {
         }
         if (((s32) temp_t0 < 0x4000) && ((s32) temp_t0 >= -0x3FFF)) {
             temp_f16 = arg0->actor.xzDistToPlayer;
-            arg0->unk_1A4 = (s16) (temp_s1->world.rot.y + 0x8000);
+            arg0[1].actor.focus.rot.x = temp_s1->world.rot.y + 0x8000;
             temp_f10 = 45.0f * arg0->actor.scale.x * 10.0f;
             if ((temp_f16 / temp_f10) > 1.0f) {
 
@@ -257,30 +259,33 @@ void func_80B9C5E8(DynaPolyActor *arg0, GlobalContext *arg1) {
             temp_v0_2 = arg0->unk_160;
             if ((temp_v0_2 == 5) || (temp_v0_2 == 6)) {
                 sp38 = temp_f16 / temp_f10;
-                Math_ApproachF(arg0 + 0x1A0, 4.5f, 2.0f, 1.0f);
-                Math_ApproachF(arg0 + 0x19C, arg0->unk_1A0, 2.0f, 0.3f * (temp_f16 / temp_f10));
+                Math_ApproachF(&arg0[1].actor.focus.pos.z, 4.5f, 2.0f, 1.0f);
+                Math_ApproachF(&arg0[1].actor.focus.pos.y, arg0[1].actor.focus.pos.z, 2.0f, 0.3f * (temp_f16 / temp_f10));
             } else {
                 sp38 = temp_f16 / temp_f10;
-                Math_ApproachF(arg0 + 0x1A0, 3.0f, 1.0f, 1.0f);
-                Math_ApproachF(arg0 + 0x19C, arg0->unk_1A0, 1.0f, 0.3f * (temp_f16 / temp_f10));
+                Math_ApproachF(&arg0[1].actor.focus.pos.z, 3.0f, 1.0f, 1.0f);
+                Math_ApproachF(&arg0[1].actor.focus.pos.y, arg0[1].actor.focus.pos.z, 1.0f, 0.3f * (temp_f16 / temp_f10));
             }
         } else {
-            arg0->unk_1A4 = temp_s1->world.rot.y;
+            arg0[1].actor.focus.rot.x = temp_s1->world.rot.y;
             temp_s1->unk_AD0 = (f32) (temp_s1->unk_AD0 * 0.5f);
-            Math_ApproachF(arg0 + 0x1A0, 3.0f, 1.0f, 1.0f);
-            Math_ApproachF(arg0 + 0x19C, arg0->unk_1A0, 1.0f, 0.1f);
+            Math_ApproachF(&arg0[1].actor.focus.pos.z, 3.0f, 1.0f, 1.0f);
+            Math_ApproachF(&arg0[1].actor.focus.pos.y, arg0[1].actor.focus.pos.z, 1.0f, 0.1f);
         }
-        temp_s1->unk_B84 = (s16) arg0->unk_1A4;
-        temp_s1->unk_B80 = (f32) arg0->unk_19C;
+        temp_s1[9].unk20 = arg0[1].actor.focus.rot.x;
+        temp_s1->unk_B80 = (f32) arg0[1].actor.focus.pos.y;
         return;
     }
-    if ((arg0->unk_172 & 8) != 0) {
-        temp_s1->unk_AD0 = (f32) (arg0->unk_19C + temp_s1->unk_AD0);
-        temp_s1->unk_AD4 = (s16) arg0->unk_1A4;
+    temp_v0_3 = (u16) arg0[1].actor.home.rot.y;
+    phi_v0 = temp_v0_3;
+    if ((temp_v0_3 & 8) != 0) {
+        temp_s1->unk_AD0 = (f32) (arg0[1].actor.focus.pos.y + temp_s1->unk_AD0);
+        temp_s1[8].colChkInfo.cylYShift = arg0[1].actor.focus.rot.x;
+        phi_v0 = (u16) arg0[1].actor.home.rot.y;
     }
-    arg0->unk_1A0 = 0.0f;
-    arg0->unk_19C = 0.0f;
-    arg0->unk_172 = (u16) (arg0->unk_172 & 0xFFF7);
+    arg0[1].actor.focus.pos.z = 0.0f;
+    arg0[1].actor.focus.pos.y = 0.0f;
+    arg0[1].actor.home.rot.y = phi_v0 & 0xFFF7;
 }
 
 void ObjHunsui_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -320,8 +325,8 @@ void ObjHunsui_Init(Actor *thisx, GlobalContext *globalCtx) {
         if (this->unk_160 != 6) {
             goto block_15;
         }
-        if (D_80B9DED8.unk_2 == 0) {
-            D_80B9DED8.unk_2 = 1U;
+        if ((&D_80B9DED8)[2] == 0) {
+            (&D_80B9DED8)[2] = 1;
             temp_t2 = this->actor.room;
             temp_t3 = this->actor.world.rot.z;
             this->actor.world.rot.z = 0;
@@ -335,8 +340,8 @@ void ObjHunsui_Init(Actor *thisx, GlobalContext *globalCtx) {
         Actor_MarkForDeath((Actor *) this);
         return;
     }
-    if (D_80B9DED8.unk_1 == 0) {
-        D_80B9DED8.unk_1 = 1U;
+    if ((&D_80B9DED8)[1] == 0) {
+        (&D_80B9DED8)[1] = 1;
         temp_t7 = this->actor.room;
         temp_t8 = this->actor.world.rot.z;
         this->actor.world.rot.z = 0;
@@ -522,7 +527,7 @@ void func_80B9CE64(ObjHunsui *arg0, GlobalContext *arg1) {
 void func_80B9D094(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_18A = (s16) (arg0->unk_18A + 0x71C);
     Math_SmoothStepToF(arg0 + 0x190, arg0->unk_194, 1.0f, 0.2f, 0.01f);
-    arg0->unk_198 = (f32) (arg0->unk_190 * Math_SinS(arg0->unk_18A));
+    arg0[1].targetArrowOffset = arg0->unk_190 * Math_SinS(arg0->unk_18A);
 }
 
 void func_80B9D0FC(ObjHunsui *arg0, GlobalContext *arg1) {
@@ -542,7 +547,7 @@ void func_80B9D120(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t1;
 
     temp_a3 = arg1;
-    temp_a2 = arg0->unk_160;
+    temp_a2 = arg0[1].params;
     if (((temp_a2 == 5) || (temp_a2 == 6)) && (temp_v1 = temp_a3->roomCtx.currRoom.num, temp_a0 = arg0->unk_16C, (temp_v1 != temp_a0)) && (temp_a1 = temp_a3->roomCtx.prevRoom.num, (temp_a1 != temp_a0)) && (temp_v0 = arg0->unk_16D, (temp_v1 != temp_v0)) && (temp_a1 != temp_v0)) {
         if (temp_a2 != 5) {
             if (temp_a2 != 6) {
@@ -560,16 +565,16 @@ void func_80B9D120(Actor *arg0, GlobalContext *arg1) {
     arg1 = temp_a3;
     func_80B9D094(arg0, temp_a1_2, temp_a2, temp_a3);
     if ((arg0->unk_172 & 0x40) == 0) {
-        Math_SmoothStepToF(arg0 + 0x178, arg0->unk_174, 0.6f, 10.5f, 0.05f);
+        Math_SmoothStepToF((f32 *) &arg0[1].world.rot.z, arg0->unk_174, 0.6f, 10.5f, 0.05f);
     }
     temp_f0 = arg0->unk_178;
-    arg0->world.pos.y = arg0->unk_198 + (arg0->home.pos.y + temp_f0);
+    arg0->world.pos.y = arg0[1].targetArrowOffset + (arg0->home.pos.y + temp_f0);
     if (arg0->unk_174 == temp_f0) {
         temp_t1 = arg0->unk_172 & 0xFFEF;
         arg0->unk_172 = temp_t1;
         arg0->unk_172 = (u16) (temp_t1 | 2);
     }
-    if (func_80B9C450(arg1, arg0->unk_168, arg0->unk_164) != 0) {
+    if (func_80B9C450(arg1, (bitwise s32) arg0[1].world.pos.x, arg0->unk_164) != 0) {
         arg0->unk_172 = (u16) (arg0->unk_172 | 0x40);
         arg0->unk_17C = (s16) arg0->unk_170;
         func_80B9D4D0((ObjHunsui *) arg0, arg1);
@@ -798,27 +803,27 @@ void func_80B9DA60(Actor *this, GlobalContext *globalCtx) {
         func_8019FAD8(&this->projectedPos, 0x216EU, 1.0f + (((this->unk_178 - 240.0f) / 270.0f) + 1.0f));
     }
     if (((this->flags & 0x40) != 0) && ((this->unk_172 & 2) == 0)) {
-        temp_v0 = this->unk_160;
+        temp_v0 = this[1].params;
         if ((temp_v0 == 6) || (temp_v0 == 5)) {
             temp_t0 = globalCtx->state.gfxCtx;
             temp_v0_2 = temp_t0->polyXlu.p;
-            temp_t0->polyXlu.p = temp_v0_2 + 8;
+            temp_t0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060020;
             temp_v1 = globalCtx->gameplayFrames & 0x7F;
             sp50 = temp_t0;
             sp48 = temp_v0_2;
             sp48->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, temp_v1 * -9, 0x20, 0x20, 1, 0U, temp_v1 * -8, 0x20, 0x20);
             temp_v0_3 = temp_t0->polyXlu.p;
-            temp_t0->polyXlu.p = temp_v0_3 + 8;
+            temp_t0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDB060024;
             sp44 = temp_v0_3;
-            sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, (u32) (s32) this->unk_1AC, 0x20, 0x20, 1, 0U, (u32) (s32) this->unk_1B0, 0x20, 0x20);
+            sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, (u32) (s32) this[1].velocity.y, 0x20, 0x20, 1, 0U, (u32) (s32) this[1].velocity.z, 0x20, 0x20);
         } else {
             AnimatedMat_DrawXlu(globalCtx, (AnimatedMaterial *) D_80B9DED4);
         }
         temp_a0 = globalCtx->state.gfxCtx;
         temp_v1_2 = temp_a0->polyXlu.p;
-        temp_a0->polyXlu.p = temp_v1_2 + 8;
+        temp_a0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = -0x81;
         temp_v1_2->words.w0 = 0xFA00007F;
         func_800BE03C(globalCtx, &D_06000EC0);

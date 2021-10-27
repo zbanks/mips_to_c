@@ -143,7 +143,7 @@ void func_80A70A08(Actor *arg0, s32 arg1) {
     f32 temp_f0;
 
     func_800B9010(arg0, 0x2143U);
-    Math_SmoothStepToF(arg0 + 0x160, arg0->unk_164, 2.0f, arg0->unk_16C, 0.01f);
+    Math_SmoothStepToF((f32 *) &arg0[1].params, arg0->unk_164, 2.0f, arg0[1].world.pos.y, 0.01f);
     temp_f0 = arg0->unk_160;
     arg0->world.pos.y = arg0->home.pos.y + temp_f0;
     if (arg0->unk_164 == temp_f0) {
@@ -191,7 +191,7 @@ void BgCraceMovebg_Update(Actor *thisx, GlobalContext *globalCtx) {
     this = temp_a2;
     sp1C = temp_a3;
     temp_a2->actionFunc(temp_a2, globalCtx);
-    Math_Vec3f_Copy(&this->unk_188, temp_a3 + 0xBEC);
+    Math_Vec3f_Copy(&this->unk_188, (Vec3f *) &temp_a3[9].floorHeight);
 }
 
 void func_80A70C04(Actor *arg0, GlobalContext *arg1) {
@@ -204,13 +204,13 @@ void func_80A70C04(Actor *arg0, GlobalContext *arg1) {
     f32 temp_f0;
 
     if (((arg0->params & 0xF) != 2) && (temp_a0 = arg0 + 8, temp_v1 = arg1->actorCtx.actorList[2].first + 0xBEC, sp28 = temp_v1, sp2C = temp_a0, (func_8013E5CC(temp_a0, arg0 + 0x14, &D_80A710AC, arg0 + 0x188, temp_v1, (Vec3f *) &sp3C) != 0)) && (Matrix_RotateY((s16) ((s32) arg0->home.rot.y * -1), 0U), Math_Vec3f_Diff(sp28, sp2C, (Vec3f *) &sp30), SysMatrix_MultiplyVector3fByState((Vec3f *) &sp30, arg0 + 0x178), (fabsf(arg0->unk_178) < 100.0f)) && (temp_f0 = arg0->unk_17C, (temp_f0 >= -10.0f)) && (temp_f0 <= 180.0f)) {
-        if (arg0->unk_180 < 0.0f) {
+        if (arg0[1].focus.pos.x < 0.0f) {
             Actor_SetSwitchFlag(arg1, (((s32) arg0->params >> 4) & 0x7F) + 1);
-            arg0->unk_170 = (s32) (arg0->unk_170 | 2);
+            arg0[1].world.pos.z |= 2;
             return;
         }
         Actor_UnsetSwitchFlag(arg1, (((s32) arg0->params >> 4) & 0x7F) + 1);
-        arg0->unk_170 = (s32) (arg0->unk_170 & ~2);
+        arg0[1].world.pos.z &= -3;
         /* Duplicate return node #8. Try simplifying control flow for better match */
     }
 }
@@ -225,7 +225,7 @@ void func_80A70D74(void *arg0, ? arg1) {
 void func_80A70DA8(Actor *arg0, GlobalContext *arg1) {
     arg0->world.pos.y = arg0->home.pos.y + arg0->unk_160;
     func_80A70C04(arg0, arg1);
-    if ((arg0->unk_170 & 1) != 0) {
+    if ((arg0[1].world.pos.z & 1) != 0) {
         func_80A70E2C(arg0, arg1);
     }
     if (Flags_GetSwitch(arg1, ((s32) arg0->params >> 4) & 0x7F) != 0) {
@@ -274,7 +274,7 @@ void func_80A70F2C(Actor *arg0, GlobalContext *arg1) {
     arg0->world.pos.y = arg0->home.pos.y + arg0->unk_160;
     func_80A70C04(arg0, arg1);
     if (Math_StepToF(arg0 + 0x160, 0.0f, 1.0f) != 0) {
-        if (((arg0->unk_170 & 2) == 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 4) & 0x7F) + 1) == 0)) {
+        if (((arg0[1].world.pos.z & 2) == 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 4) & 0x7F) + 1) == 0)) {
             arg1->unk_18845 = 1;
             func_80169FDC(arg1);
             play_sound(0x5801U);

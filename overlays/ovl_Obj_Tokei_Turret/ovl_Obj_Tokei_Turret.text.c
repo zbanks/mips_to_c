@@ -84,17 +84,17 @@ void ObjTokeiTurret_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_a3 = globalCtx->state.gfxCtx;
         temp_v1 = temp_a3->polyOpa.p;
         temp_v1->words.w0 = 0xDE000000;
-        temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-        temp_v1_2 = temp_v1 + 8;
+        temp_v1->words.w1 = (u32) &sSetupDL[150];
+        temp_v1_2 = &temp_v1[1];
         temp_v1_2->words.w0 = 0xDA380003;
-        temp_v1_3 = temp_v1_2 + 8;
+        temp_v1_3 = &temp_v1_2[1];
         sp28 = temp_v1_3;
         sp24 = temp_a3;
         sp18 = temp_v1_2;
         temp_v1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_3->words.w0 = 0xDE000000;
         temp_v1_3->words.w1 = (u32) &D_06002A88;
-        temp_a3->polyOpa.p = temp_v1_3 + 8;
+        temp_a3->polyOpa.p = &temp_v1_3[1];
         return;
     }
     if (temp_v0 == 0) {

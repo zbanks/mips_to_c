@@ -103,7 +103,7 @@ struct _mips2c_stack_func_80AD1634 {
 
 struct _mips2c_stack_func_80AD16A8 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ SkelAnime *sp24;                     /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ u32 sp28;                            /* inferred */
     /* 0x2C */ char pad_2C[0x4];
 };                                                  /* size = 0x30 */
@@ -301,7 +301,7 @@ void func_80AD0998(Actor *arg0) {
     s16 sp1E;
     u8 temp_t8;
 
-    sp1E = (s16) (s32) arg0->unk_1A8;
+    sp1E = (s16) (s32) arg0[1].velocity.x;
     temp_t8 = arg0->unk_1EC;
     arg0 = arg0;
     if ((arg0->unk_1EC == 0x12) && (sp1E == SkelAnime_GetFrameCount(*(D_80AD22C0 + (temp_t8 * 0x18))))) {
@@ -314,7 +314,7 @@ void func_80AD0A24(Actor *arg0) {
     s16 sp1E;
     u8 temp_t8;
 
-    sp1E = (s16) (s32) arg0->unk_1A8;
+    sp1E = (s16) (s32) arg0[1].velocity.x;
     temp_t8 = arg0->unk_1EC;
     arg0 = arg0;
     if ((arg0->unk_1EC == 0x15) && (sp1E == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80AD22C0[temp_t8].animation))) {
@@ -328,14 +328,14 @@ void func_80AD0AB0(Actor *arg0) {
     u8 temp_t2;
     u8 temp_t8;
 
-    sp1E = (s16) (s32) arg0->unk_1A8;
+    sp1E = (s16) (s32) arg0[1].velocity.x;
     temp_t8 = arg0->unk_1EC;
     arg0 = arg0;
     if (sp1E == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80AD22C0[temp_t8].animation)) {
-        temp_t2 = arg0->unk_1FC - 8;
-        arg0->unk_1FC = temp_t2;
+        temp_t2 = arg0[1].colChkInfo.damage - 8;
+        arg0[1].colChkInfo.damage = temp_t2;
         if ((temp_t2 & 0xFF) < 8) {
-            arg0->unk_1FC = 0U;
+            arg0[1].colChkInfo.damage = 0;
             Actor_MarkForDeath(arg0);
         }
     }
@@ -530,11 +530,11 @@ s16 func_80AD0E10(Actor *arg0, GlobalContext *arg1) {
     u8 temp_a0_2;
     u8 temp_v0_2;
 
-    if ((gSaveContext.inventory.items[0] != 0xFF) && ((*(gBitFlags + 0x34) & gSaveContext.inventory.questItems) != 0)) {
+    if ((gSaveContext.inventory.items[0] != 0xFF) && ((gBitFlags[13] & gSaveContext.inventory.questItems) != 0)) {
         temp_v1 = arg0->unk_1EA;
         if ((temp_v1 & 1) != 0) {
             arg0->unk_1EA = (u16) (temp_v1 | 0x20);
-            if ((gSaveContext.inventory.items[0] != 0xFF) && (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) {
+            if ((gSaveContext.inventory.items[0] != 0xFF) && (gSaveContext.inventory.items[gItemSlots[50]] == 0x32)) {
                 if ((gSaveContext.day == 3) && (temp_v0 = gSaveContext.time, (((s32) temp_v0 < 0x3555) == 0)) && ((s32) temp_v0 < 0x4000)) {
                     return 0x2006;
                 }
@@ -619,39 +619,39 @@ void func_80AD10FC(Actor *arg0, GlobalContext *arg1) {
     s16 phi_t0;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_1F4;
+    temp_a3 = temp_a2[1].colChkInfo.cylRadius;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     switch (temp_a3) {
     case 8136:
-        temp_a2->unk_1F4 = 0x1FC9U;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FC9;
         phi_a3 = 0x1FC9U & 0xFFFF;
         break;
     case 8137:
-        temp_a2->unk_1F4 = 0x1FCAU;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FCA;
         phi_a3 = 0x1FCAU & 0xFFFF;
         break;
     case 8138:
         if ((gSaveContext.day == 3) && (temp_v0 = gSaveContext.time, (((s32) temp_v0 < 0x3555) == 0)) && ((s32) temp_v0 < 0x4000)) {
-            temp_a2->unk_1F4 = 0x2007U;
+            temp_a2[1].colChkInfo.cylRadius = 0x2007;
         } else {
-            temp_a2->unk_1F4 = 0x1FCBU;
+            temp_a2[1].colChkInfo.cylRadius = 0x1FCB;
         }
-        phi_a3 = temp_a2->unk_1F4;
+        phi_a3 = temp_a2[1].colChkInfo.cylRadius;
         break;
     case 8139:
     case 8199:
-        temp_a2->unk_1F4 = 0x1FCCU;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FCC;
         temp_a2->unk_1EA = (u16) (temp_a2->unk_1EA | 0x20);
         phi_a3 = 0x1FCCU & 0xFFFF;
         break;
     case 8142:
     case 8144:
-        temp_a2->unk_1F4 = 0x1FCFU;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FCF;
         phi_a3 = 0x1FCFU & 0xFFFF;
         break;
     case 8143:
-        temp_a2->unk_1F4 = 0x1FCAU;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FCA;
         phi_a3 = 0x1FCAU & 0xFFFF;
         break;
     case 8145:
@@ -659,90 +659,90 @@ void func_80AD10FC(Actor *arg0, GlobalContext *arg1) {
         arg0 = temp_a2;
         temp_v0_2 = func_80AD08B0(arg1, temp_a2, temp_a3);
         temp_a3_2 = temp_v0_2 & 0xFFFF;
-        arg0->unk_1F4 = temp_v0_2;
+        arg0[1].colChkInfo.cylRadius = temp_v0_2;
         phi_a3 = temp_a3_2;
         phi_a2 = arg0;
         break;
     case 8150:
-        temp_a2->unk_1F4 = 0x1FD7;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FD7;
         phi_a3 = 0x1FD7 & 0xFFFF;
         break;
     case 8152:
-        temp_a2->unk_1F4 = 0x1FD9;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FD9;
         phi_a3 = 0x1FD9 & 0xFFFF;
         break;
     case 8154:
-        temp_a2->unk_1F4 = 0x1FDB;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FDB;
         phi_a3 = 0x1FDB & 0xFFFF;
         break;
     case 8156:
-        temp_a2->unk_1F4 = 0x1FDD;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FDD;
         phi_t0 = 0x1FDD;
 block_38:
         phi_a3 = phi_t0 & 0xFFFF;
         break;
     case 8158:
-        temp_a2->unk_1F4 = 0x1FDF;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FDF;
         phi_a3 = 0x1FDF & 0xFFFF;
         break;
     case 8160:
-        temp_a2->unk_1F4 = 0x1FE1;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FE1;
         phi_a3 = 0x1FE1 & 0xFFFF;
         break;
     case 8162:
-        temp_a2->unk_1F4 = 0x1FE3;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FE3;
         phi_a3 = 0x1FE3 & 0xFFFF;
         break;
     case 8164:
-        temp_a2->unk_1F4 = 0x1FE5;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FE5;
         phi_a3 = 0x1FE5 & 0xFFFF;
         break;
     case 8166:
-        temp_a2->unk_1F4 = 0x1FE7;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FE7;
         phi_a3 = 0x1FE7 & 0xFFFF;
         break;
     case 8168:
-        temp_a2->unk_1F4 = 0x1FE9;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FE9;
         phi_a3 = 0x1FE9 & 0xFFFF;
         break;
     case 8170:
-        temp_a2->unk_1F4 = 0x1FEB;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FEB;
         phi_a3 = 0x1FEB & 0xFFFF;
         break;
     case 8172:
-        temp_a2->unk_1F4 = 0x1FED;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FED;
         phi_a3 = 0x1FED & 0xFFFF;
         break;
     case 8174:
-        temp_a2->unk_1F4 = 0x1FEF;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FEF;
         phi_a3 = 0x1FEF & 0xFFFF;
         break;
     case 8176:
-        temp_a2->unk_1F4 = 0x1FF1;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FF1;
         phi_t0 = 0x1FF1;
         goto block_38;
     case 8178:
-        temp_a2->unk_1F4 = 0x1FF3;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FF3;
         phi_a3 = 0x1FF3 & 0xFFFF;
         break;
     case 8180:
-        temp_a2->unk_1F4 = 0x1FF5;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FF5;
         phi_a3 = 0x1FF5 & 0xFFFF;
         break;
     case 8182:
-        temp_a2->unk_1F4 = 0x1FF7;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FF7;
         phi_a3 = 0x1FF7 & 0xFFFF;
         break;
     case 8184:
-        temp_a2->unk_1F4 = 0x1FF9;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FF9;
         phi_a3 = 0x1FF9 & 0xFFFF;
         break;
     case 8186:
-        temp_a2->unk_1F4 = 0x1FFB;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FFB;
         phi_a3 = 0x1FFB & 0xFFFF;
         break;
     case 8188:
-        temp_a2->unk_1F4 = 0x1FFD;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FFD;
         phi_a3 = 0x1FFD & 0xFFFF;
         break;
     case 8151:
@@ -756,7 +756,7 @@ block_38:
     case 8183:
     case 8185:
     case 8187:
-        temp_a2->unk_1F4 = 0x1FD3;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FD3;
         phi_a3 = 0x1FD3 & 0xFFFF;
         break;
     case 8153:
@@ -767,17 +767,17 @@ block_38:
     case 8175:
     case 8181:
     case 8189:
-        temp_a2->unk_1F4 = 0x1FD4;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FD4;
         phi_a3 = 0x1FD4 & 0xFFFF;
         break;
     case 8165:
-        temp_a2->unk_1F4 = 0x1FFE;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FFE;
         phi_a3 = 0x1FFE & 0xFFFF;
         break;
     case 8147:
     case 8148:
     case 8190:
-        temp_a2->unk_1F4 = 0x1FD5;
+        temp_a2[1].colChkInfo.cylRadius = 0x1FD5;
         temp_a2->unk_1EA = (u16) (temp_a2->unk_1EA | 0x20);
         phi_t0 = 0x1FD5;
         goto block_38;
@@ -790,7 +790,7 @@ void func_80AD1398(EnOsn *arg0) {
     s16 temp_a0_2;
 
     arg0->unk_1EE = (s16) arg0->actor.cutscene;
-    if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) && ((temp_a0 = arg0->unk_1EE, arg0 = arg0, arg0->unk_1EE = ActorCutscene_GetAdditionalCutscene(temp_a0), (gSaveContext.inventory.items[0] != 0xFF)) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
+    if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[50]] == 0x32)) && ((temp_a0 = arg0->unk_1EE, arg0 = arg0, arg0->unk_1EE = ActorCutscene_GetAdditionalCutscene(temp_a0), (gSaveContext.inventory.items[0] != 0xFF)) || (gSaveContext.inventory.items[gItemSlots[50]] == 0x32))) {
         temp_a0_2 = arg0->unk_1EE;
         arg0 = arg0;
         arg0->unk_1EE = ActorCutscene_GetAdditionalCutscene(temp_a0_2);
@@ -817,7 +817,7 @@ void func_80AD14C8(Actor *arg0, GlobalContext *arg1) {
     s16 temp_v1;
 
     temp_v1 = arg0->yawTowardsPlayer - arg0->shape.rot.y;
-    if ((gSaveContext.inventory.items[0] != 0xFF) && ((*(gBitFlags + 0x34) & gSaveContext.inventory.questItems) == 0)) {
+    if ((gSaveContext.inventory.items[0] != 0xFF) && ((gBitFlags[13] & gSaveContext.inventory.questItems) == 0)) {
         sp26 = temp_v1;
         if (func_800B84D0(arg0, arg1) != 0) {
             arg0->unk_1D4 = func_80AD1634;
@@ -834,7 +834,7 @@ void func_80AD14C8(Actor *arg0, GlobalContext *arg1) {
     sp26 = temp_v1;
     if (func_800B84D0(arg0, arg1) != 0) {
         temp_v0 = func_80AD0E10(arg0, arg1);
-        arg0->unk_1F4 = temp_v0;
+        arg0[1].colChkInfo.cylRadius = temp_v0;
         func_801518B0(arg1, temp_v0 & 0xFFFF, arg0);
         arg0->unk_1D4 = func_80AD19A0;
         return;
@@ -858,8 +858,8 @@ void func_80AD1634(Actor *arg0, GlobalContext *arg1) {
 
 void func_80AD16A8(Actor *arg0, GlobalContext *arg1) {
     u32 sp28;
-    SkelAnime *sp24;
-    SkelAnime *temp_a0_2;
+    s16 *sp24;
+    s16 *temp_a0_2;
     u16 temp_a0;
     u16 temp_t1;
     u32 temp_v0;
@@ -961,8 +961,8 @@ void func_80AD16A8(Actor *arg0, GlobalContext *arg1) {
             func_80AD0AB0(arg0);
             phi_v0_3 = arg0->unk_1EC;
         }
-        temp_a0_2 = arg0 + 0x190;
-        if ((phi_v0_3 == 0x14) && ((sp24 = temp_a0_2, (func_801378B8(temp_a0_2, 17.0f) != 0)) || (func_801378B8(temp_a0_2, 27.0f) != 0) || (func_801378B8(sp24, 37.0f) != 0) || (func_801378B8(sp24, 47.0f) != 0) || (func_801378B8(sp24, 57.0f) != 0) || (func_801378B8(sp24, 67.0f) != 0))) {
+        temp_a0_2 = &arg0[1].focus.rot.z;
+        if ((phi_v0_3 == 0x14) && ((sp24 = temp_a0_2, (func_801378B8((SkelAnime *) temp_a0_2, 17.0f) != 0)) || (func_801378B8((SkelAnime *) temp_a0_2, 27.0f) != 0) || (func_801378B8((SkelAnime *) sp24, 37.0f) != 0) || (func_801378B8((SkelAnime *) sp24, 47.0f) != 0) || (func_801378B8((SkelAnime *) sp24, 57.0f) != 0) || (func_801378B8((SkelAnime *) sp24, 67.0f) != 0))) {
             Audio_PlayActorSound2(arg0, 0x29B3U);
         }
         func_800EDF24(arg0, arg1, sp28);
@@ -1094,7 +1094,7 @@ s32 func_80AD1DA8(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     u8 temp_v0;
 
     if ((arg5->unk_1F0 != 0) && (arg1 == 0xB)) {
-        SysMatrix_InsertXRotation_s(arg5->unk_1DA, 1);
+        SysMatrix_InsertXRotation_s(arg5[79].x, 1);
     }
     temp_v0 = arg5->unk_1EC;
     if (((temp_v0 == 9) || (temp_v0 == 8)) && (arg1 == 0xA)) {
@@ -1115,7 +1115,7 @@ void func_80AD1E28(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
     sp30.unk_4 = (s32) D_80AD2574.unk_4;
     sp30.unk_8 = (s32) D_80AD2574.unk_8;
     sp28.unk_0 = (s32) D_80AD2580.unk_0;
-    sp28.unk_4 = (u16) D_80AD2580.unk_4;
+    (&sp28)[2] = D_80AD2580.unk_4;
     if (arg1 == 0xB) {
         arg1 = arg1;
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp30, arg4 + 0x3C);
@@ -1131,11 +1131,11 @@ void func_80AD1E28(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         *arg5 = temp_v0_2 + 8;
         *temp_v0_2 = 0xDA380003;
         sp24 = temp_v0_2;
-        sp24->unk_4 = Matrix_NewMtx(*arg0);
+        sp24[1] = Matrix_NewMtx(*arg0);
         temp_v0_3 = *arg5;
         *arg5 = temp_v0_3 + 8;
-        temp_v0_3->unk_4 = &D_060192A0;
-        temp_v0_3->unk_0 = 0xDE000000;
+        temp_v0_3[1] = &D_060192A0;
+        temp_v0_3->unk_0 = (Mtx *)0xDE000000;
         SysMatrix_StatePop();
     }
 }
@@ -1171,40 +1171,40 @@ void EnOsn_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0 = this->unk_1EC;
         if ((temp_v0 == 0xB) || (temp_v0 == 0xC) || (temp_v0 == 0x17) || (globalCtx->msgCtx.unk11F04 == 0x1FCA)) {
             temp_v0_6 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_6 + 8;
+            temp_s0->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDB060020;
             sp54 = temp_v0_6;
             sp54->words.w1 = Lib_SegmentedToVirtual(D_80AD258C);
             temp_v0_7 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_7 + 8;
+            temp_s0->polyOpa.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xDB060024;
             sp50 = temp_v0_7;
             sp50->words.w1 = Lib_SegmentedToVirtual(D_80AD2594);
         } else if ((temp_v0 == 7) || (temp_v0 == 3) || (temp_v0 == 0xD)) {
             temp_v0_4 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_4 + 8;
+            temp_s0->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDB060020;
             sp4C = temp_v0_4;
             sp4C->words.w1 = Lib_SegmentedToVirtual(D_80AD2590);
             temp_v0_5 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_5 + 8;
+            temp_s0->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDB060024;
             sp48 = temp_v0_5;
             sp48->words.w1 = Lib_SegmentedToVirtual(D_80AD2598);
         } else {
             temp_v0_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_2 + 8;
+            temp_s0->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060020;
             sp44 = temp_v0_2;
             sp44->words.w1 = Lib_SegmentedToVirtual(D_80AD2588);
             temp_v0_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_3 + 8;
+            temp_s0->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDB060024;
             sp40 = temp_v0_3;
             sp40->words.w1 = Lib_SegmentedToVirtual(D_80AD2594);
         }
         temp_v0_8 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_8 + 8;
+        temp_s0->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = -1;
         temp_v0_8->words.w0 = 0xFB000000;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
@@ -1213,17 +1213,17 @@ void EnOsn_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     func_8012C2DC(temp_a2);
     temp_v0_9 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_9 + 8;
+    temp_s0->polyXlu.p = &temp_v0_9[1];
     temp_v0_9->words.w0 = 0xDB060020;
     sp38 = temp_v0_9;
     sp38->words.w1 = Lib_SegmentedToVirtual(D_80AD2588);
     temp_v0_10 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_10 + 8;
+    temp_s0->polyXlu.p = &temp_v0_10[1];
     temp_v0_10->words.w0 = 0xDB060024;
     sp34 = temp_v0_10;
     sp34->words.w1 = Lib_SegmentedToVirtual(D_80AD2594);
     temp_v0_11 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_11 + 8;
+    temp_s0->polyXlu.p = &temp_v0_11[1];
     temp_v0_11->words.w0 = 0xFB000000;
     temp_v0_11->words.w1 = this->unk_1FC | ~0xFF;
     Scene_SetRenderModeXlu(globalCtx, 1, 2U);

@@ -138,7 +138,7 @@ void func_80A44DE8(EnSekihi *this, GlobalContext *globalCtx) {
         }
         sp28 = temp_t8 + &sp2C;
         this->unk_144 = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, (DynaPolyActor *) this, sp44);
-        if (((temp_t8 + &sp2C) == &sp3C) && (gSaveContext.inventory.items[gItemSlots[0x34]] != 0x34)) {
+        if (((temp_t8 + &sp2C) == &sp3C) && (gSaveContext.inventory.items[gItemSlots[52]] != 0x34)) {
             Actor_MarkForDeath((Actor *) this);
         }
     }
@@ -241,24 +241,24 @@ void func_80A45164(Actor *this, GlobalContext *globalCtx) {
     temp_s0 = globalCtx->state.gfxCtx;
     if (this->unk_160 != 0) {
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp28 = temp_v0;
         sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = this->unk_160;
     }
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = temp_v0_3;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = this->unk_15C;
 }

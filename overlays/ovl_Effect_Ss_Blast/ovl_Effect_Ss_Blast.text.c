@@ -62,23 +62,23 @@ void EffectSsBlast_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     sp3C = (f32) this->regs[9] * 0.0025f;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFB000000;
     temp_v0->words.w1 = (this->regs[7] & 0xFF) | (this->regs[4] << 0x18) | ((this->regs[5] & 0xFF) << 0x10) | ((this->regs[6] & 0xFF) << 8);
     func_801691F0(globalCtx, &sp44, this);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA000000;
     temp_v0_2->words.w1 = (this->regs[3] & 0xFF) | (this->regs[0] << 0x18) | ((this->regs[1] & 0xFF) << 0x10) | ((this->regs[2] & 0xFF) << 8);
     SysMatrix_SetCurrentState((MtxF *) &sp44);
     Matrix_Scale(sp3C, sp3C, sp3C, 1);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp28 = temp_v0_3;
     sp28->words.w1 = Matrix_NewMtx(temp_s1);
     temp_v0_4 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_4 + 8;
+    temp_s1->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) this->gfx;
 }

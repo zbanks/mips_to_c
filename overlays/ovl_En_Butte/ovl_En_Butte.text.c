@@ -220,20 +220,20 @@ void func_8091C178(EnButte *arg0, GlobalContext *arg1) {
     temp_f12 = D_8091D39C;
     Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp34 = temp_v0;
     sp34->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA008080;
     temp_v0_2->words.w1 = (sp48 & 0xFF) | 0xC8C8B400;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0xC8C8D2FF;
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) D_04023210;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -423,7 +423,7 @@ void func_8091C794(EnButte *this, GlobalContext *globalCtx) {
     if ((s32) this->unk_24C <= 0) {
         func_8091C0A0(this, (this->unk_24E * 0x14) + &D_8091D324);
     }
-    if (((this->actor.params & 1) == 1) && (sp44->unk_147 == 7) && ((s32) this->unk_252 <= 0) && ((Math3D_XZDistanceSquared(sp44->world.pos.x, sp44->world.pos.z, this->actor.home.pos.x, this->actor.home.pos.z) < 14400.0f) || (this->actor.xzDistToPlayer < 60.0f))) {
+    if (((this->actor.params & 1) == 1) && (sp44[1].room == 7) && ((s32) this->unk_252 <= 0) && ((Math3D_XZDistanceSquared(sp44->world.pos.x, sp44->world.pos.z, this->actor.home.pos.x, this->actor.home.pos.z) < 14400.0f) || (this->actor.xzDistToPlayer < 60.0f))) {
         func_8091CB68(this);
         this->unk_24F = 2;
         return;
@@ -465,8 +465,8 @@ void func_8091CBB4(EnButte *this, GlobalContext *globalCtx) {
     sp40 = 0.0f;
     if ((this->unk_24E != 0) && ((s32) this->unk_24C < 0xC)) {
         sp48 = (Math_SinS(temp_s1->shape.rot.y) * 10.0f) + temp_s1->unk_B9C;
-        sp4C = temp_s1->unk_BA0;
-        sp50 = (Math_CosS(temp_s1->shape.rot.y) * 10.0f) + temp_s1->unk_BA4;
+        sp4C = temp_s1[9].focus.pos.x;
+        sp50 = (Math_CosS(temp_s1->shape.rot.y) * 10.0f) + temp_s1[9].focus.pos.y;
         sp38 = Math_Vec3f_Yaw((Vec3f *) &this->actor.world, (Vec3f *) &sp48);
         if (Math_ScaledStepToS(&this->actor.world.rot.y, (s16) ((s32) (Rand_ZeroOne() * (f32) D_8091D3F0) + sp38), 0x7D0) != 0) {
             if ((globalCtx->gameplayFrames & 0x30) == 0x30) {
@@ -476,7 +476,7 @@ void func_8091CBB4(EnButte *this, GlobalContext *globalCtx) {
             sp40 = 0.3f;
         }
     }
-    temp_f0 = temp_s1->unk_BA0;
+    temp_f0 = temp_s1[9].focus.pos.x;
     temp_f2 = temp_s1->world.pos.y + 30.0f;
     if (temp_f0 < temp_f2) {
         this->unk_25C = temp_f2;
@@ -503,11 +503,11 @@ void func_8091CBB4(EnButte *this, GlobalContext *globalCtx) {
         D_8091D3F0 = -(s32) D_8091D3F0;
     }
     temp_f0_2 = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x, this->actor.home.pos.z);
-    if ((temp_s1->unk_147 != 7) || !(fabsf(temp_s1->speedXZ) < 1.8f) || ((s32) this->unk_252 > 0) || !(temp_f0_2 < 102400.0f)) {
+    if ((temp_s1[1].room != 7) || !(fabsf(temp_s1->speedXZ) < 1.8f) || ((s32) this->unk_252 > 0) || !(temp_f0_2 < 102400.0f)) {
         func_8091C748(this);
         return;
     }
-    if ((temp_f0_2 > 57600.0f) && (Math3D_XZDistanceSquared(temp_s1->unk_B9C, temp_s1->unk_BA4, this->actor.world.pos.x, this->actor.world.pos.z) < 3600.0f)) {
+    if ((temp_f0_2 > 57600.0f) && (Math3D_XZDistanceSquared(temp_s1->unk_B9C, temp_s1[9].focus.pos.y, this->actor.world.pos.x, this->actor.world.pos.z) < 3600.0f)) {
         func_8091CF64(this);
     }
 }
@@ -571,7 +571,7 @@ void EnButte_Update(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_256 += 0x1000;
     this->unk_258 += 0x600;
     if ((this->actor.params & 1) == 1) {
-        if (globalCtx->actorCtx.actorList[2].first->unk_ADB == 0) {
+        if ((s8) globalCtx->actorCtx.actorList[2].first[8].colChkInfo.acHitEffect == 0) {
             temp_v0_3 = this->unk_252;
             if ((s32) temp_v0_3 > 0) {
                 this->unk_252 = temp_v0_3 - 1;

@@ -290,16 +290,16 @@ s32 func_80BD2BE8(Actor *arg0, GlobalContext *arg1) {
 
     temp_a0 = arg0;
     phi_v1 = 0;
-    if ((arg0->unk_2D8 & 7) != 0) {
+    if ((arg0[2].sfx & 7) != 0) {
         sp1C = 0;
         arg0 = arg0;
         phi_v1 = sp1C;
         if (func_800B84D0(temp_a0, arg1) != 0) {
-            temp_a0_2 = arg0 + 0x2D8;
+            temp_a0_2 = &arg0[2].sfx;
             arg0 = arg0;
             func_8013AED4(temp_a0_2, 0U, 7U);
-            arg0->unk_188 = func_80BD3768;
-            arg0->unk_2D8 = (u16) (arg0->unk_2D8 | 8);
+            arg0[1].focus.pos.z = (bitwise f32) func_80BD3768;
+            arg0[2].sfx |= 8;
             phi_v1 = 1;
         }
     }
@@ -840,7 +840,7 @@ void func_80BD3AF8(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     s32 phi_v1;
     s32 phi_v0;
 
-    temp_v0 = arg2->unk_2D8;
+    temp_v0 = arg2[2].sfx;
     phi_v1 = 0;
     if ((temp_v0 & 0x80) == 0) {
         if ((temp_v0 & 0x20) != 0) {
@@ -856,11 +856,11 @@ void func_80BD3AF8(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 7) {
         func_8013AD9C((s16) (arg2->unk_2EC + arg2->unk_2F0 + 0x4000), (s16) (arg2->unk_2EE + arg2->unk_2F2 + arg2->shape.rot.y + 0x4000), arg2 + 0x1E8, arg2 + 0x200, phi_v1, phi_v0);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_1E8, arg2->unk_1EC, arg2->unk_1F0, 0);
+        SysMatrix_InsertTranslation(arg2[1].colChkInfo.displacement.x, arg2[1].colChkInfo.displacement.y, arg2[1].colChkInfo.displacement.z, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-        Matrix_RotateY(arg2->unk_202, 1U);
-        SysMatrix_InsertXRotation_s(arg2->unk_200, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_204, 1);
+        Matrix_RotateY(arg2[1].shape.rot.y, 1U);
+        SysMatrix_InsertXRotation_s(arg2[1].shape.rot.x, 1);
+        SysMatrix_InsertZRotation_s(arg2[1].shape.rot.z, 1);
         SysMatrix_StatePush();
         return;
     }
@@ -870,7 +870,7 @@ void func_80BD3AF8(GlobalContext *arg0, s32 arg1, Actor *arg2) {
         SysMatrix_InsertTranslation(arg2->unk_1F4, arg2->unk_1F8, arg2->unk_1FC, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
         Matrix_RotateY(arg2->unk_208, 1U);
-        SysMatrix_InsertXRotation_s(arg2->unk_206, 1);
+        SysMatrix_InsertXRotation_s(arg2[1].shape.face, 1);
         SysMatrix_InsertZRotation_s(arg2->unk_20A, 1);
         SysMatrix_StatePush();
     }
@@ -890,13 +890,13 @@ void EnAh_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp40 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0 + 8;
+        sp40->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp40 = sp40;
         sp38 = temp_v0;
         sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80BD3F14 + (this->unk_2FA * 4)));
         temp_v0_2 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0_2 + 8;
+        sp40->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060024;
         sp34 = temp_v0_2;
         sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80BD3F0C + (this->unk_2FC * 4)));

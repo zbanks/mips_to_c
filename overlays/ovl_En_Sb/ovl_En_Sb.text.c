@@ -530,8 +530,8 @@ void EnSb_Draw(Actor *thisx, GlobalContext *globalCtx) {
             temp_v1_2 = ((temp_v0 & 3) * 0xC) + &D_808E4E68;
             sp34 = temp_v1_2;
             sp40 = temp_f0 + (this->actor.world.pos.x + *temp_v1_2);
-            sp44 = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.y + sp34->unk_4);
-            sp48 = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.z + sp34->unk_8);
+            sp44 = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.y + sp34[1]);
+            sp48 = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.z + sp34[2]);
             EffectSsEnFire_SpawnVec3f(globalCtx, (Actor *) this, (Vec3f *) &sp40, 0x64, (s16) 0, (s16) 0, (s16) -1);
         }
     }

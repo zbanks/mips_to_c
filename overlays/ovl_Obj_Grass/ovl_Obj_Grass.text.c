@@ -139,7 +139,7 @@ static ? D_809AAB8C;                                /* unable to generate initia
 static ? D_809AAB94;                                /* unable to generate initializer */
 static void *D_809AADA0;
 static f32 D_809AADB0;
-static void *D_809AADC0[20];
+static Actor *D_809AADC0[20];
 static f32 D_809AAE10[20];
 
 s32 func_809A9110(GlobalContext *arg0, Vec3f *arg1) {
@@ -193,7 +193,7 @@ void func_809A91FC(f32 *arg0) {
             phi_v1->mf[0][0] = phi_f18 + phi_a0->unk_0;
             temp_a0 = phi_a0 + 0x10;
             temp_v1 = phi_v1 + 0x10;
-            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0->unk_4);
+            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0[1]);
             temp_v1->unk_-8 = (f32) (phi_v1->mf[0][2] + temp_a0->unk_-8);
             temp_v1->unk_-4 = (f32) (phi_v1->mf[0][3] + temp_a0->unk_-4);
             phi_f18 = temp_f18_2;
@@ -270,7 +270,7 @@ void ObjGrass_Init(Actor *thisx, GlobalContext *globalCtx) {
         Collider_InitCylinder(globalCtx, phi_s0);
         Collider_SetCylinder(globalCtx, phi_s0, (Actor *) this, &D_809AAB20);
         temp_s1 = phi_s1 + 0x50;
-        phi_s0 += 0x50;
+        phi_s0 = (ColliderCylinder *) &phi_s0[1].base.at;
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x640);
     this->actor.colChkInfo.mass = 0xFF;
@@ -296,7 +296,7 @@ void ObjGrass_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     do {
         Collider_DestroyCylinder(globalCtx, phi_s1);
         temp_s0 = phi_s0 + 0x50;
-        phi_s1 += 0x50;
+        phi_s1 = (ColliderCylinder *) &phi_s1[1].base.at;
         phi_s0 = temp_s0;
     } while (temp_s0 < 0x640);
     phi_v1 = this;
@@ -337,6 +337,8 @@ void func_809A9790(ObjGrass *arg0, GlobalContext *arg1) {
 
 void func_809A983C(ObjGrass *arg0, GlobalContext *arg1) {
     void **sp48;
+    Actor **temp_s3;
+    Actor *temp_s0_3;
     CollisionCheckContext *temp_s4_3;
     ObjGrass *temp_a2;
     Vec3f *temp_s3_2;
@@ -371,9 +373,7 @@ void func_809A983C(ObjGrass *arg0, GlobalContext *arg1) {
     u32 temp_v0;
     u32 temp_v0_2;
     void **temp_a0;
-    void **temp_s3;
     void **temp_t4;
-    void *temp_s0_3;
     void *temp_s1;
     void *temp_s6;
     void *temp_s7;
@@ -382,7 +382,7 @@ void func_809A983C(ObjGrass *arg0, GlobalContext *arg1) {
     void *temp_v0_8;
     void *temp_v1_2;
     void *temp_v1_4;
-    void **phi_s3;
+    Actor **phi_s3;
     f32 *phi_v0;
     void **phi_a0;
     f32 *phi_v0_2;
@@ -418,7 +418,7 @@ void func_809A983C(ObjGrass *arg0, GlobalContext *arg1) {
     s32 phi_v0_10;
     s32 phi_s2_4;
     ObjGrass *phi_s2_5;
-    void **phi_s3_2;
+    Actor **phi_s3_2;
     Collider *phi_s1_2;
     s32 phi_s5;
     s32 phi_s0_4;
@@ -515,8 +515,8 @@ loop_14:
                             temp_s0 = phi_s0 - 1;
                             temp_v1 = phi_v1_2 - 4;
                             temp_v0_5 = phi_v0_6 - 4;
-                            temp_v1->unk_8 = (f32) *phi_v1_2;
-                            temp_v0_5->unk_8 = (s32) *phi_v0_6;
+                            temp_v1[2] = *phi_v1_2;
+                            temp_v0_5[2] = *phi_v0_6;
                             phi_v1_2 = temp_v1;
                             phi_v0_6 = temp_v0_5;
                             phi_s0 = temp_s0;
@@ -550,7 +550,7 @@ block_22:
                 *(&D_809AADA0 + phi_a2) = phi_s1;
             }
             temp_s4_2 = phi_s4_2 + 1;
-            phi_s1 += 0x100;
+            phi_s1 = (Vec3f *) &phi_s1[21].y;
             phi_s4_2 = temp_s4_2;
         } while (temp_s4_2 < (s32) arg0->unk_2944);
     }
@@ -601,8 +601,8 @@ loop_31:
                                         temp_a0_2 = phi_a0_2 - 1;
                                         temp_v1_3 = phi_v1_4 - 4;
                                         temp_v0_7 = phi_v0_8 - 4;
-                                        temp_v1_3->unk_8 = (f32) *phi_v1_4;
-                                        temp_v0_7->unk_8 = (s32) *phi_v0_8;
+                                        temp_v1_3[2] = *phi_v1_4;
+                                        temp_v0_7[2] = *phi_v0_8;
                                         phi_v1_4 = temp_v1_3;
                                         phi_v0_8 = temp_v0_7;
                                         phi_a0_2 = temp_a0_2;
@@ -665,20 +665,20 @@ block_39:
         temp_s0_3 = *phi_s3_2;
         if (temp_s0_3 != 0) {
             temp_s4_3 = arg1 + 0x18884;
-            phi_s1_2->unk_46 = (s16) (s32) temp_s0_3->unk_0;
-            phi_s1_2->unk_48 = (s16) (s32) temp_s0_3->unk_4;
-            phi_s1_2->unk_4A = (s16) (s32) temp_s0_3->unk_8;
+            phi_s1_2[2].unk_16 = (s16) (s32) temp_s0_3->unk_0;
+            phi_s1_2->unk_48 = (s16) (s32) temp_s0_3->flags;
+            phi_s1_2->unk_4A = (s16) (s32) temp_s0_3->home.pos.x;
             CollisionCheck_SetAC(arg1, temp_s4_3, phi_s1_2);
             CollisionCheck_SetOC(arg1, temp_s4_3, phi_s1_2);
             temp_s0_3->unk_F = (u8) (temp_s0_3->unk_F | 2);
-            phi_s1_2->unk_4C = temp_s0_3;
+            phi_s1_2[3].at = temp_s0_3;
         } else {
-            phi_s1_2->unk_4C = NULL;
+            phi_s1_2[3].at = NULL;
         }
         temp_s5_2 = phi_s5 + 0x50;
         phi_s2_5 += 0x50;
         phi_s3_2 += 4;
-        phi_s1_2 += 0x50;
+        phi_s1_2 = (Collider *) &phi_s1_2[3].ac;
         phi_s5 = temp_s5_2;
     } while (temp_s5_2 != 0x640);
 }
@@ -865,7 +865,7 @@ void func_809AA278(ObjGrass *arg0, GlobalContext *arg1) {
                 phi_s2 = 0;
                 if ((s32) phi_s6->unk_FC > 0) {
                     phi_s1 = phi_s6;
-                    phi_s0 = phi_s6 + 0xC;
+                    phi_s0 = &phi_s6[1];
                     do {
                         if ((phi_s1->unk_1B & 4) != 0) {
                             phi_s0->unk_10 = 0xFF;
@@ -887,7 +887,7 @@ void func_809AA278(ObjGrass *arg0, GlobalContext *arg1) {
                         }
                         temp_s2 = phi_s2 + 1;
                         phi_s1 += 0x14;
-                        phi_s0 += 0x14;
+                        phi_s0 = (Vec3f *) &phi_s0[1].z;
                         phi_s2 = temp_s2;
                     } while (temp_s2 < (s32) phi_s6->unk_FC);
                 }
@@ -895,7 +895,7 @@ void func_809AA278(ObjGrass *arg0, GlobalContext *arg1) {
                 phi_s6->unk_FE = (u8) (phi_s6->unk_FE & ~1);
             }
             temp_fp = phi_fp + 1;
-            phi_s6 += 0x100;
+            phi_s6 = (Vec3f *) &phi_s6[21].y;
             phi_fp = temp_fp;
         } while (temp_fp < (s32) arg0->unk_2944);
     }
@@ -932,11 +932,11 @@ void func_809AA54C(ObjGrass *arg0, GlobalContext *arg1) {
     temp_s4 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s4->polyOpa.p;
-    temp_s4->polyOpa.p = temp_v0 + 8;
+    temp_s4->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = -1;
     temp_v0->words.w0 = 0xFA000000;
     temp_v0_2 = temp_s4->polyOpa.p;
-    temp_s4->polyOpa.p = temp_v0_2 + 8;
+    temp_s4->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_809AA9F0;
     phi_v0 = arg0;
@@ -968,11 +968,11 @@ void func_809AA54C(ObjGrass *arg0, GlobalContext *arg1) {
                                 func_809A91FC(arg0 + (phi_s3 << 6) + 0x2F88);
                             }
                             temp_v0_4 = temp_s4->polyOpa.p;
-                            temp_s4->polyOpa.p = temp_v0_4 + 8;
+                            temp_s4->polyOpa.p = &temp_v0_4[1];
                             temp_v0_4->words.w0 = 0xDA380003;
                             temp_v0_4->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
                             temp_v0_5 = temp_s4->polyOpa.p;
-                            temp_s4->polyOpa.p = temp_v0_5 + 8;
+                            temp_s4->polyOpa.p = &temp_v0_5[1];
                             temp_v0_5->words.w1 = (u32) &D_809AAAE0;
                             temp_v0_5->words.w0 = 0xDE000000;
                         }
@@ -985,7 +985,7 @@ void func_809AA54C(ObjGrass *arg0, GlobalContext *arg1) {
             temp_v1 = sp7C + 1;
             phi_v0 = sp4C + 0x100;
             phi_v1 = temp_v1;
-            phi_a2 = sp48 + 0x100;
+            phi_a2 = (Vec3f *) &sp48[21].y;
         } while (temp_v1 < (s32) sp8C->unk_2944);
     }
 }
@@ -1017,7 +1017,7 @@ void func_809AA798(ObjGrass *arg0, GraphicsContext **arg1) {
     temp_s3 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s3->polyXlu.p;
-    temp_s3->polyXlu.p = temp_v0 + 8;
+    temp_s3->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) &D_809AAA68;
     temp_v0->words.w0 = 0xDE000000;
     sp78 = 0;
@@ -1038,15 +1038,15 @@ void func_809AA798(ObjGrass *arg0, GraphicsContext **arg1) {
                                 SysMatrix_SetStateRotationAndTranslation(temp_s0->unk_0, temp_s0->unk_4, temp_s0->unk_8, (Vec3s *) &sp6C);
                                 Matrix_Scale(arg0->actor.scale.x, arg0->actor.scale.y, arg0->actor.scale.z, 1);
                                 temp_v0_3 = temp_s3->polyXlu.p;
-                                temp_s3->polyXlu.p = temp_v0_3 + 8;
+                                temp_s3->polyXlu.p = &temp_v0_3[1];
                                 temp_v0_3->words.w0 = 0xDA380003;
                                 temp_v0_3->words.w1 = Matrix_NewMtx(*arg1);
                                 temp_v0_4 = temp_s3->polyXlu.p;
-                                temp_s3->polyXlu.p = temp_v0_4 + 8;
+                                temp_s3->polyXlu.p = &temp_v0_4[1];
                                 temp_v0_4->words.w0 = 0xFA000000;
                                 temp_v0_4->words.w1 = temp_s0->unk_10 | ~0xFF;
                                 temp_v0_5 = temp_s3->polyXlu.p;
-                                temp_s3->polyXlu.p = temp_v0_5 + 8;
+                                temp_s3->polyXlu.p = &temp_v0_5[1];
                                 temp_v0_5->words.w1 = (u32) &D_809AAAE0;
                                 temp_v0_5->words.w0 = 0xDE000000;
                             }

@@ -87,29 +87,29 @@ void func_80BC47B0(GlobalContext *arg0, GlobalContext *arg1) {
         if (temp_s1 != 0) {
             do {
                 if ((phi_s1->actor.id == 0x246) && (arg0->unk_3 == phi_s1->actor.room) && (phi_s1->actor.update != 0)) {
-                    phi_s1->unk_15F = (s8) phi_s1->unk_15E;
+                    phi_s1[1].actor.room = phi_s1[1].actor.category;
                     temp_v0 = func_800CAFB8(phi_s1);
-                    if ((phi_s1->unk_15E != 0) && (func_80BC4B94 == phi_s1->unk_164)) {
+                    if (((s8) phi_s1[1].actor.category != 0) && (func_80BC4B94 == (bitwise s32) phi_s1[1].actor.home.pos.x)) {
                         if ((temp_v0 != 0) || (sp40 != 0)) {
-                            phi_s1->unk_15C = 6;
+                            phi_s1[1].actor.id = 6;
                         } else {
-                            temp_v1 = phi_s1->unk_15C;
+                            temp_v1 = phi_s1[1].actor.id;
                             if ((s32) temp_v1 > 0) {
-                                phi_s1->unk_15C = (s16) (temp_v1 - 1);
+                                phi_s1[1].actor.id = temp_v1 - 1;
                             } else {
                                 goto block_13;
                             }
                         }
                     } else {
 block_13:
-                        phi_s1->unk_15E = (s8) temp_v0;
+                        phi_s1[1].actor.category = (u8) temp_v0;
                     }
-                    if (phi_s1->unk_15E != 0) {
+                    if ((s8) phi_s1[1].actor.category != 0) {
                         temp_s0 = (s32) (phi_s1->actor.params & 0xFE00) >> 9;
                         if ((temp_s0 >= 0) && (temp_s0 < 0x80)) {
                             temp_v0_2 = &sp58 + (((s32) (temp_s0 & ~0x1F) >> 5) * 4);
                             *temp_v0_2 |= 1 << (temp_s0 & 0x1F);
-                            if ((phi_s1->unk_15F == 0) && (func_80BC4D30 == phi_s1->unk_164) && (Flags_GetSwitch(arg1, temp_s0) == 0)) {
+                            if ((phi_s1[1].actor.room == 0) && (func_80BC4D30 == (bitwise s32) phi_s1[1].actor.home.pos.x) && (Flags_GetSwitch(arg1, temp_s0) == 0)) {
                                 phi_s1->unk_160 = 1;
                             }
                         }

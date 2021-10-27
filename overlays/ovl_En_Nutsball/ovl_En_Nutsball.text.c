@@ -116,7 +116,7 @@ void EnNutsball_Update(Actor *thisx, GlobalContext *globalCtx) {
             if ((globalCtx->actorCtx.actorList[2].first->unk_144 == 1) && (temp_v0_2 = this->collider.base.atFlags, ((temp_v0_2 & 2) != 0)) && ((temp_v0_2 & 0x10) != 0) && ((temp_v0_2 & 4) != 0)) {
                 sp6C = globalCtx->actorCtx.actorList[2].first;
                 EnNutsball_InitColliderParams(this);
-                func_8018219C(globalCtx->actorCtx.actorList[2].first + 0xD04, (Vec3s *) &sp58, 0);
+                func_8018219C((MtxF *) &globalCtx->actorCtx.actorList[2].first[10].scale.y, (Vec3s *) &sp58, 0);
                 this->actor.world.rot.y = sp5A + 0x8000;
                 this->timer = 0x14;
             } else {
@@ -183,12 +183,12 @@ void EnNutsball_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
     SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) D_04058BA0;
     temp_v0_2->words.w0 = 0xDE000000;
 }

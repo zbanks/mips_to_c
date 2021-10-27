@@ -153,8 +153,8 @@ void OceffWipe_Draw(Actor *thisx, GlobalContext *globalCtx) {
     spA4 = globalCtx->state.frames & 0xFF;
     temp_t5 = globalCtx->cameraPtrs[globalCtx->activeCamera];
     sp84.unk_0 = temp_t5->eye.x;
-    sp84.unk_4 = (f32) temp_t5->eye.y;
-    sp84.unk_8 = (f32) temp_t5->eye.z;
+    (&sp84)[1] = temp_t5->eye.y;
+    (&sp84)[2] = temp_t5->eye.z;
     func_800E01B8(&sp74, globalCtx->cameraPtrs[globalCtx->activeCamera]);
     temp_v1 = this->unk_144;
     temp_s0 = globalCtx->state.gfxCtx;
@@ -201,42 +201,42 @@ void OceffWipe_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertXRotation_s(0x708, 1);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -sp9C, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp68 = temp_v0;
     sp68->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     if (this->actor.params != 0) {
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = 0xAAFFFFFF;
         temp_v0_2->words.w0 = 0xFA000000;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = 0x96FF80;
     } else {
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = -0x3701;
         temp_v0_4->words.w0 = 0xFA000000;
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x6400FF80;
         temp_v0_5->words.w0 = 0xFB000000;
     }
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = (u32) &D_80977020;
     temp_v0_6->words.w0 = 0xDE000000;
     temp_v0_7 = temp_s0->polyXlu.p;
     temp_a3_2 = spA4 * -2;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDE000000;
     temp_a2_2 = -spA4;
     sp50 = temp_v0_7;
     sp50->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (u32) temp_a2_2, temp_a3_2, 0x20, 0x20, 1, (u32) temp_a2_2, temp_a3_2, 0x20, 0x20);
     temp_v0_8 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_8 + 8;
+    temp_s0->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) &D_809770A8;
     temp_v0_8->words.w0 = 0xDE000000;
 }

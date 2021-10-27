@@ -20,6 +20,12 @@ typedef struct EnMm3 {
     /* 0x2B6 */ char pad_2B6[0x2];
 } EnMm3;                                            /* size = 0x2B8 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnMm3_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -227,10 +233,10 @@ void func_80A6F2C8(Actor *arg0, GlobalContext *arg1) {
     } else if (func_80A6F22C(arg0) != 0) {
         func_800B8614(arg0, arg1, 100.0f);
     }
-    Math_SmoothStepToS(arg0 + 0x2A0, 0, 5, 0x1000, (s16) 0x100);
-    Math_SmoothStepToS(arg0 + 0x2A2, 0, 5, 0x1000, (s16) 0x100);
-    Math_SmoothStepToS(arg0 + 0x2A6, 0, 5, 0x1000, (s16) 0x100);
-    Math_SmoothStepToS(arg0 + 0x2A8, 0, 5, 0x1000, (s16) 0x100);
+    Math_SmoothStepToS(&arg0[2].home.rot.z, 0, 5, 0x1000, (s16) 0x100);
+    Math_SmoothStepToS(&arg0[2].home.unk_12, 0, 5, 0x1000, (s16) 0x100);
+    Math_SmoothStepToS((s16 *) &arg0[2].objBankIndex, 0, 5, 0x1000, (s16) 0x100);
+    Math_SmoothStepToS(&arg0[2].unk20, 0, 5, 0x1000, (s16) 0x100);
 }
 
 void func_80A6F3B4(Actor *arg0, GlobalContext *arg1) {
@@ -328,9 +334,9 @@ void func_80A6F5E4(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_2B4 = 0x278BU;
                 }
             }
-            arg0->unk_1DC = 0;
+            arg0[1].xzDistToPlayer = 0.0f;
             arg0->unk_2B0 = (u16) (arg0->unk_2B0 | 1);
-            func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A70428, 7);
+            func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A70428, 7);
             return;
         case 10123:
         case 10144:
@@ -475,15 +481,15 @@ void func_80A6F9DC(Actor *arg0, GlobalContext *arg1) {
         }
         break;
     }
-    temp_a0 = arg0 + 0x144;
+    temp_a0 = &arg0[1];
     if (arg0->unk_145 == 2) {
         sp20 = temp_a0;
-        if (func_801378B8((SkelAnime *) temp_a0, arg0->unk_154) != 0) {
+        if (func_801378B8((SkelAnime *) temp_a0, arg0[1].home.pos.z) != 0) {
             func_800BDC5C((SkelAnime *) temp_a0, (ActorAnimationEntry []) D_80A70428, 2);
         }
     }
     temp_v0_3 = arg0->unk_2B4;
-    if (((temp_v0_3 == 0x279D) || (temp_v0_3 == 0x27A0) || (temp_v0_3 == 0x278B)) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 8.0f) != 0) && (arg0->unk_2AE == 0)) {
+    if (((temp_v0_3 == 0x279D) || (temp_v0_3 == 0x27A0) || (temp_v0_3 == 0x278B)) && (func_801378B8((SkelAnime *) &arg0[1], 8.0f) != 0) && (arg0->unk_2AE == 0)) {
         Audio_PlayActorSound2(arg0, 0x2991U);
         arg0->unk_2AE = 1;
     }
@@ -708,11 +714,11 @@ void EnMm3_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80A701E0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 8) {
-        arg4->x += arg5->unk_2A8;
+        arg4->x += arg5[2].unk20;
         arg4->y -= arg5->unk_2A6;
     } else if (arg1 == 0xF) {
-        arg4->x += arg5->unk_2A2;
-        arg4->z += arg5->unk_2A0;
+        arg4->x += arg5[2].home.unk_12;
+        arg4->z += arg5[2].home.rot.z;
         if (((arg5->unk_2B0 & 2) != 0) && (((u32) arg0->gameplayFrames % 3U) == 0)) {
             SysMatrix_InsertTranslation(40.0f, 0.0f, 0.0f, 1);
         }
@@ -738,13 +744,13 @@ void EnMm3_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp38 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0 + 8;
+    sp38->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = sp38;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80A704FC + (this->unk_1DC * 4)));
     temp_v0_2 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0_2 + 8;
+    sp38->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060030;
     temp_v0_2->words.w1 = (u32) &D_80A704E8;
     SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80A701E0, func_80A702B0, (Actor *) this);

@@ -289,8 +289,8 @@ void func_80BB6BD8(EnTanron2 *this, GlobalContext *globalCtx) {
             temp_v1 = this->unk_158;
             temp_f0_2 = this->actor.world.pos.x;
             temp_f2_2 = this->actor.world.pos.z;
-            temp_f12 = temp_v0->unk_6BC - temp_f0_2;
-            temp_f14 = temp_v0->unk_6C4 - temp_f2_2;
+            temp_f12 = temp_v0[5].velocity.y - temp_f0_2;
+            temp_f14 = temp_v0[5].speedXZ - temp_f2_2;
             if (temp_v1 != 0) {
                 if (temp_v1 != 1) {
                     if (temp_v1 != 2) {
@@ -339,8 +339,8 @@ void func_80BB6BD8(EnTanron2 *this, GlobalContext *globalCtx) {
     Math_ApproachF(&this->actor.scale.y, 0.75f, 0.75f, 1.5f);
     if (this->unk_14E == 1) {
         temp_v0_2 = D_80BB8450;
-        temp_f12_2 = temp_v0_2->unk_6BC - this->actor.world.pos.x;
-        temp_f14_2 = temp_v0_2->unk_6C4 - this->actor.world.pos.z;
+        temp_f12_2 = temp_v0_2[5].velocity.y - this->actor.world.pos.x;
+        temp_f14_2 = temp_v0_2[5].speedXZ - this->actor.world.pos.z;
         if ((this->unk_158 != 0) && (((temp_f12_2 * temp_f12_2) + (temp_f14_2 * temp_f14_2)) < 14400.0f)) {
             func_80BB69C0((bitwise EnTanron2 *) temp_f12_2, temp_f14_2, this);
             return;
@@ -383,7 +383,7 @@ void func_80BB6F78(EnTanron2 *this, GlobalContext *globalCtx) {
             if (this->actor.world.pos.y <= temp_f2) {
                 this->actor.world.pos.y = temp_f2;
                 Audio_PlayActorSound2((Actor *) this, 0x3A10U);
-                if (D_80BB8450->unk_6F8 > 0.1f) {
+                if (D_80BB8450[5].colChkInfo.displacement.x > 0.1f) {
                     Audio_PlayActorSound2((Actor *) this, 0x28C6U);
                 }
                 temp_f0_2 = Rand_ZeroFloat(5.0f);
@@ -402,7 +402,7 @@ void func_80BB6F78(EnTanron2 *this, GlobalContext *globalCtx) {
         Math_ApproachF((f32 *) &this->actor.scale, 1.2f, 0.75f, 1.5f);
         Math_ApproachF(&this->actor.scale.y, 0.75f, 0.75f, 1.5f);
         if (this->unk_14E == 1) {
-            if (D_80BB8450->unk_708 == 3) {
+            if (D_80BB8450[5].colChkInfo.cylYShift == 3) {
                 func_80BB6B80(this, 0x3A0FU);
                 this->unk_158 = 1;
                 this->unk_159 = 0;
@@ -416,7 +416,7 @@ void func_80BB6F78(EnTanron2 *this, GlobalContext *globalCtx) {
         /* Duplicate return node #20. Try simplifying control flow for better match */
         return;
     }
-    if (D_80BB8450->unk_708 == 0xD) {
+    if (D_80BB8450[5].colChkInfo.cylYShift == 0xD) {
         this->unk_158 = 0xA;
         this->unk_14E = (s16) (s32) Rand_ZeroFloat(50.0f);
     }
@@ -526,9 +526,9 @@ void func_80BB7578(EnTanron2 *arg0, GlobalContext *arg1) {
             func_80BB6B80(arg0, (u16) temp_a2);
             arg0->unk_158 = 1;
             Audio_PlayActorSound2((Actor *) arg0, 0x3A11U);
-            temp_v0_2 = temp_a2->unk_730;
+            temp_v0_2 = temp_a2[5].shape.feetPos[0].z;
             if ((temp_v0_2 != 0) && (arg0 != temp_v0_2)) {
-                temp_a2->unk_730 = arg0;
+                temp_a2[5].shape.feetPos[0].z = arg0;
                 arg1->actorCtx.targetContext.unk38 = arg0;
                 arg1->actorCtx.targetContext.unk3C = arg0;
             }
@@ -574,7 +574,7 @@ block_18:
         func_80BB6B80(arg0);
         arg0->unk_158 = 2;
         temp_v0_4 = D_80BB8450;
-        Matrix_RotateY(Math_Atan2S(arg0->actor.world.pos.x - temp_v0_4->unk_6BC, arg0->actor.world.pos.z - temp_v0_4->unk_6C4), 0U);
+        Matrix_RotateY(Math_Atan2S(arg0->actor.world.pos.x - temp_v0_4[5].velocity.y, arg0->actor.world.pos.z - temp_v0_4[5].speedXZ), 0U);
         SysMatrix_GetStateTranslationAndScaledZ(10.0f, sp24);
         arg0->unk_152 = (s16) (s32) (Rand_ZeroFloat(100.0f) + 200.0f);
         return;
@@ -635,13 +635,13 @@ void EnTanron2_Update(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0_6 = D_80BB8450;
         temp_f0 = this->actor.world.pos.x;
         phi_v0 = temp_v0_6;
-        if ((temp_f0 < (temp_v0_6->unk_6D8 + 20.0f)) || ((temp_v0_6->unk_6DC - 20.0f) < temp_f0)) {
+        if ((temp_f0 < (temp_v0_6->unk_6D8 + 20.0f)) || ((temp_v0_6[5].floorHeight - 20.0f) < temp_f0)) {
             this->actor.world.pos.x = this->actor.prevPos.x;
             this->actor.velocity.x *= -1.0f;
             phi_v0 = D_80BB8450;
         }
         temp_f0_2 = this->actor.world.pos.z;
-        if ((temp_f0_2 < (phi_v0->unk_6E0 + 20.0f)) || ((phi_v0->unk_6E4 - 20.0f) < temp_f0_2)) {
+        if ((temp_f0_2 < (phi_v0[5].yDistToWater + 20.0f)) || ((phi_v0->unk_6E4 - 20.0f) < temp_f0_2)) {
             this->actor.world.pos.z = this->actor.prevPos.z;
             this->actor.velocity.z *= -1.0f;
         }
@@ -675,7 +675,7 @@ void EnTanron2_Update(Actor *thisx, GlobalContext *globalCtx) {
         }
         if (sp28 == this->actionFunc) {
             temp_v0_8 = D_80BB8450;
-            temp_v1 = D_80BB8450->yawTowardsPlayer - Math_Atan2S(this->actor.world.pos.x - temp_v0_8->unk_6BC, this->actor.world.pos.z - temp_v0_8->unk_6C4);
+            temp_v1 = D_80BB8450->yawTowardsPlayer - Math_Atan2S(this->actor.world.pos.x - temp_v0_8[5].velocity.y, this->actor.world.pos.z - temp_v0_8[5].speedXZ);
             phi_a0 = (s32) temp_v1;
             if ((s32) temp_v1 < 0) {
                 phi_a0 = -(s32) temp_v1;
@@ -767,11 +767,11 @@ void EnTanron2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s2 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0 + 8;
+    temp_s2->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) &D_06003450;
     temp_v0->words.w0 = 0xDE000000;
     temp_v0_2 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_2 + 8;
+    temp_s2->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = -0x6A;
     temp_v0_2->words.w0 = 0xFA000000;
     temp_s1 = globalCtx->actorCtx.actorList[9].first;
@@ -864,11 +864,11 @@ block_14:
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, 1);
             SysMatrix_InsertZRotation_s((s16) ((s32) (*phi_s0_3)->unk_14A * -1), 1);
             temp_v0_5 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_5 + 8;
+            temp_s2->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_6 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_6 + 8;
+            temp_s2->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDE000000;
             temp_v0_6->words.w1 = (u32) sp3C;
         }
@@ -877,11 +877,11 @@ block_14:
     } while (temp_s0_3 != &func_80BB85A0);
     func_8012C448(globalCtx->state.gfxCtx);
     temp_v0_7 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_7 + 8;
+    temp_s2->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0x96;
     temp_v0_7->words.w0 = 0xFA000000;
     temp_v0_8 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_8 + 8;
+    temp_s2->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) &D_06004510;
     temp_v0_8->words.w0 = 0xDE000000;
     temp_s1_4 = globalCtx->actorCtx.actorList[9].first;
@@ -893,11 +893,11 @@ block_14:
                 SysMatrix_InsertTranslation(phi_s1_2->world.pos.x, D_80BB8450->floorHeight, phi_s1_2->world.pos.z, 0);
                 Matrix_Scale(0.6f, 0.0f, 0.6f, 1);
                 temp_v0_9 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_9 + 8;
+                temp_s2->polyXlu.p = &temp_v0_9[1];
                 temp_v0_9->words.w0 = 0xDA380003;
                 temp_v0_9->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_10 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_10 + 8;
+                temp_s2->polyXlu.p = &temp_v0_10[1];
                 temp_v0_10->words.w0 = 0xDE000000;
                 temp_v0_10->words.w1 = (u32) sp40;
             }
@@ -907,19 +907,19 @@ block_14:
     }
     func_8012C974(globalCtx->state.gfxCtx);
     temp_v0_11 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_11 + 8;
+    temp_s2->polyXlu.p = &temp_v0_11[1];
     temp_v0_11->words.w1 = -1;
     temp_v0_11->words.w0 = 0xFA000000;
     temp_v0_12 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_12 + 8;
+    temp_s2->polyXlu.p = &temp_v0_12[1];
     temp_v0_12->words.w1 = -1;
     temp_v0_12->words.w0 = 0xFB000000;
     temp_v0_13 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_13 + 8;
+    temp_s2->polyXlu.p = &temp_v0_13[1];
     temp_v0_13->words.w1 = 0x20;
     temp_v0_13->words.w0 = 0xE3001A01;
     temp_v0_14 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_14 + 8;
+    temp_s2->polyXlu.p = &temp_v0_14[1];
     temp_v0_14->words.w1 = 0x80;
     temp_v0_14->words.w0 = 0xE3001801;
     temp_s1_6 = globalCtx->actorCtx.actorList[9].first;
@@ -932,11 +932,11 @@ block_14:
                 temp_f12 = D_80BB8454;
                 Matrix_Scale(temp_f12, 0.0f, temp_f12, 1);
                 temp_v0_15 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_15 + 8;
+                temp_s2->polyXlu.p = &temp_v0_15[1];
                 temp_v0_15->words.w0 = 0xDA380003;
                 temp_v0_15->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_16 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_16 + 8;
+                temp_s2->polyXlu.p = &temp_v0_16[1];
                 temp_v0_16->words.w0 = 0xDE000000;
                 temp_v0_16->words.w1 = (u32) sp40;
             }

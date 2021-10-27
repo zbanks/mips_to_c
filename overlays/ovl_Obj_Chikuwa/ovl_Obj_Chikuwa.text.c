@@ -135,14 +135,14 @@ void func_809B17D0(GlobalContext *arg0, ObjChikuwa *arg1, Vec3f *arg2) {
         temp_s0->x = (Rand_ZeroOne() * 0.05f) + 0.01f;
         temp_s0->y = (Rand_ZeroOne() * 0.16f) + 0.04f;
         temp_s0->z = (Rand_ZeroOne() * 0.05f) + 0.01f;
-        temp_s0->unk_C = (f32) ((Math_CosS(arg1->actor.shape.rot.y) * phi_f24) + arg2->x);
-        temp_s0->unk_10 = (f32) arg2->y;
-        temp_s0->unk_14 = (f32) ((Math_SinS(arg1->actor.shape.rot.y) * phi_f24) + arg2->z);
-        temp_s0->unk_18 = (f32) ((2.0f * Rand_ZeroOne()) - 1.0f);
-        temp_s0->unk_1C = (f32) ((Rand_ZeroOne() * 4.0f) - 1.0f);
-        temp_s0->unk_20 = (f32) ((2.0f * Rand_ZeroOne()) - 1.0f);
+        temp_s0[1].x = (Math_CosS(arg1->actor.shape.rot.y) * phi_f24) + arg2->x;
+        temp_s0[1].y = arg2->y;
+        temp_s0[1].z = (Math_SinS(arg1->actor.shape.rot.y) * phi_f24) + arg2->z;
+        temp_s0[2].x = (2.0f * Rand_ZeroOne()) - 1.0f;
+        temp_s0[2].y = (Rand_ZeroOne() * 4.0f) - 1.0f;
+        temp_s0[2].z = (2.0f * Rand_ZeroOne()) - 1.0f;
         temp_f20 = Math3D_Vec3fMagnitude(temp_s0);
-        temp_s0->unk_24 = (f32) ((-Rand_ZeroOne() * 0.5f) - (temp_f20 * 25.0f));
+        temp_s0[3].x = (-Rand_ZeroOne() * 0.5f) - (temp_f20 * 25.0f);
         temp_s0->unk_28 = (s16) arg1->actor.shape.rot.x;
         temp_s0->unk_2A = (s16) arg1->actor.shape.rot.y;
         temp_s0->unk_2C = (s16) arg1->actor.shape.rot.z;
@@ -152,7 +152,7 @@ void func_809B17D0(GlobalContext *arg0, ObjChikuwa *arg1, Vec3f *arg2) {
         temp_s0->unk_34 = 0x50;
         temp_s0->unk_32 = (s16) (s32) (temp_f18 * 5000.0f);
         temp_f20_2 = Rand_ZeroOne();
-        func_800B1210(arg0, temp_s0 + 0xC, &D_809B1FDC, &D_809B1FD0, (s16) (s32) ((temp_f20_2 * 60.0f) + 80.0f), (s16) (s32) ((Rand_ZeroOne() * 30.0f) + 60.0f));
+        func_800B1210(arg0, &temp_s0[1], &D_809B1FDC, &D_809B1FD0, (s16) (s32) ((temp_f20_2 * 60.0f) + 80.0f), (s16) (s32) ((Rand_ZeroOne() * 30.0f) + 60.0f));
         temp_s2 = phi_s2 + 1;
         arg1->unk_9A4 = (arg1->unk_9A4 + 1) & 0x1F;
         phi_f24 += 22.5f;
@@ -281,11 +281,11 @@ void ObjChikuwa_Draw(Actor *thisx, GlobalContext *globalCtx) {
                     SysMatrix_SetStateRotationAndTranslation(temp_v0_2->unk_0, temp_v0_2->unk_4, temp_v0_2->unk_8, (Vec3s *) &this->actor.shape);
                     Matrix_Scale(0.15f, 0.2f, 0.05f, 1);
                     temp_v0_3 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_3 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_3[1];
                     temp_v0_3->words.w0 = 0xDA380003;
                     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                     temp_v0_4 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_4 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_4[1];
                     temp_v0_4->words.w1 = (u32) &D_06000D10;
                     temp_v0_4->words.w0 = 0xDE000000;
                 }
@@ -304,11 +304,11 @@ void ObjChikuwa_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 SysMatrix_SetStateRotationAndTranslation(temp_s0->unk_C, temp_s0->unk_10, temp_s0->unk_14, temp_s0 + 0x28);
                 Matrix_Scale(temp_s0->unk_0, temp_s0->unk_4, temp_s0->unk_8, 1);
                 temp_v0_5 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_5 + 8;
+                temp_s1->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDA380003;
                 temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_6 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_6 + 8;
+                temp_s1->polyOpa.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = (u32) &D_06000D10;
                 temp_v0_6->words.w0 = 0xDE000000;
             }

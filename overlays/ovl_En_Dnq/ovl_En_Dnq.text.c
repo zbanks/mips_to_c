@@ -345,7 +345,7 @@ s32 func_80A52648(EnDnq *arg0, GlobalContext *arg1) {
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_v1 = arg1->msgCtx.unk11F04;
-    if (((temp_v0->unk_A6C & 0x40) != 0) && (arg0 == temp_v0->unk_A88)) {
+    if (((temp_v0->unk_A6C & 0x40) != 0) && (arg0 == temp_v0[8].velocity.y)) {
         switch (temp_v1) {
         case 2203:
             func_80A5257C(arg0, 0x12);
@@ -409,8 +409,8 @@ s32 func_80A52D44(Actor *arg0, GlobalContext *arg1) {
         sp24 = 0;
         phi_v1 = sp24;
         if (func_800B84D0(arg0, arg1) != 0) {
-            func_8013AED4(arg0 + 0x37C, 0U, 7U);
-            arg0->unk_380 = func_80A52CF8(arg0, arg1);
+            func_8013AED4((u16 *) &arg0[2].projectedPos.z, 0U, 7U);
+            arg0[2].projectedW = (bitwise f32) func_80A52CF8(arg0, arg1);
             arg0->unk_18C = func_80A52FB8;
             phi_v1 = 1;
         }

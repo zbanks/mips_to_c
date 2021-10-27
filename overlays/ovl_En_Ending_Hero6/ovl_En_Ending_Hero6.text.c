@@ -126,7 +126,7 @@ void func_80C23F14(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) 
     void *temp_a1;
     void *temp_v0;
 
-    temp_v1 = arg4->unk_280;
+    temp_v1 = arg4[1].draw;
     temp_v0 = *arg0;
     if ((temp_v1 >= 4) && (arg1 == 0xF)) {
         temp_a1 = temp_v0->unk_2B0;
@@ -166,46 +166,46 @@ void EnEndingHero6_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp58 = sp58;
             if (Object_IsLoaded(&globalCtx->objectCtx, (s32) temp_a1) != 0) {
                 temp_v0 = sp58->polyOpa.p;
-                sp58->polyOpa.p = temp_v0 + 8;
+                sp58->polyOpa.p = &temp_v0[1];
                 temp_v0->words.w0 = 0xDB060018;
                 temp_v0->words.w1 = (u32) globalCtx->objectCtx.status[this->unk_284].segment;
                 temp_v0_2 = this->unk_280;
                 switch (temp_v0_2) {
                 case 4:
                     temp_v0_3 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_3 + 8;
+                    sp58->polyOpa.p = &temp_v0_3[1];
                     temp_v0_3->words.w0 = 0xFB000000;
                     temp_v0_3->words.w1 = 0xAA0A46FF;
 block_10:
                     break;
                 case 5:
                     temp_v0_4 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_4 + 8;
+                    sp58->polyOpa.p = &temp_v0_4[1];
                     temp_v0_4->words.w0 = 0xFB000000;
                     temp_v0_4->words.w1 = 0xAAC8FFFF;
                     goto block_10;
                 case 6:
                     temp_v0_5 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_5 + 8;
+                    sp58->polyOpa.p = &temp_v0_5[1];
                     temp_v0_5->words.w0 = 0xFB000000;
                     temp_v0_5->words.w1 = 0xE646FF;
                     goto block_10;
                 case 7:
                     temp_v0_6 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_6 + 8;
+                    sp58->polyOpa.p = &temp_v0_6[1];
                     temp_v0_6->words.w0 = 0xFB000000;
                     temp_v0_6->words.w1 = 0xC80096FF;
                     goto block_10;
                 case 8:
                     temp_v0_7 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_7 + 8;
+                    sp58->polyOpa.p = &temp_v0_7[1];
                     temp_v0_7->words.w0 = 0xFB000000;
                     temp_v0_7->words.w1 = 0xF59B00FF;
                     goto block_10;
                 }
                 if (this->unk_280 == 0) {
                     temp_v0_8 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_8 + 8;
+                    sp58->polyOpa.p = &temp_v0_8[1];
                     temp_v0_8->words.w0 = 0xDB060020;
                     sp58 = sp58;
                     sp38 = temp_v0_8;
@@ -215,7 +215,7 @@ block_10:
                         sp5C = (s32) temp_v0_9;
                     }
                     temp_v0_10 = sp58->polyOpa.p;
-                    sp58->polyOpa.p = temp_v0_10 + 8;
+                    sp58->polyOpa.p = &temp_v0_10[1];
                     temp_v0_10->words.w0 = 0xDB060024;
                     sp34 = temp_v0_10;
                     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80C24294 + (sp5C * 4)));

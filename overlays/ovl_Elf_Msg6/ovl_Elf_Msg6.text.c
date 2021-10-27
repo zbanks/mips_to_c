@@ -26,13 +26,13 @@ struct _mips2c_stack_func_80BA1C88 {
 
 struct _mips2c_stack_func_80BA1CF8 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ void *sp20;                          /* inferred */
+    /* 0x20 */ f32 sp20;                            /* inferred */
     /* 0x24 */ Actor *sp24;                         /* inferred */
 };                                                  /* size = 0x28 */
 
 struct _mips2c_stack_func_80BA1E30 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ void *sp20;                          /* inferred */
+    /* 0x20 */ f32 sp20;                            /* inferred */
     /* 0x24 */ Actor *sp24;                         /* inferred */
 };                                                  /* size = 0x28 */
 
@@ -68,13 +68,13 @@ s32 func_80BA15A0(void) {
     if (((gBitFlags->unk_0 & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x10) == 0)) {
         return 1;
     }
-    if (((gBitFlags->unk_4 & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x20) == 0)) {
+    if (((gBitFlags[1] & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x20) == 0)) {
         return 1;
     }
-    if (((gBitFlags->unk_8 & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x40) == 0)) {
+    if (((gBitFlags[2] & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x40) == 0)) {
         return 1;
     }
-    if (((gBitFlags->unk_C & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x80) == 0)) {
+    if (((gBitFlags[3] & temp_v0) != 0) && ((gSaveContext.weekEventReg[87] & 0x80) == 0)) {
         return 1;
     }
     return 0;
@@ -88,16 +88,16 @@ void func_80BA165C(void) {
         gSaveContext.weekEventReg[87] |= 0x10;
     }
     phi_v0 = gSaveContext.inventory.questItems;
-    if ((gBitFlags->unk_4 & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[1] & gSaveContext.inventory.questItems) != 0) {
         gSaveContext.weekEventReg[87] |= 0x20;
         phi_v0 = gSaveContext.inventory.questItems;
     }
     phi_v0_2 = phi_v0;
-    if ((gBitFlags->unk_8 & phi_v0) != 0) {
+    if ((gBitFlags[2] & phi_v0) != 0) {
         gSaveContext.weekEventReg[87] |= 0x40;
         phi_v0_2 = gSaveContext.inventory.questItems;
     }
-    if ((gBitFlags->unk_C & phi_v0_2) != 0) {
+    if ((gBitFlags[3] & phi_v0_2) != 0) {
         gSaveContext.weekEventReg[87] |= 0x80;
     }
 }
@@ -106,7 +106,7 @@ s32 func_80BA16F4(ElfMsg6 *arg0, GlobalContext *arg1) {
     u32 temp_v0;
     s32 phi_v0;
 
-    if (((gSaveContext.weekEventReg[31] & 4) == 0) && (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) {
+    if (((gSaveContext.weekEventReg[31] & 4) == 0) && (gSaveContext.inventory.items[gItemSlots[50]] == 0x32)) {
         arg0->actor.textId = 0x216;
         return 0;
     }
@@ -118,7 +118,7 @@ s32 func_80BA16F4(ElfMsg6 *arg0, GlobalContext *arg1) {
         arg0->actor.textId = 0x256;
         return 0;
     }
-    if ((gBitFlags->unk_4 & temp_v0) == 0) {
+    if ((gBitFlags[1] & temp_v0) == 0) {
         if ((gSaveContext.weekEventReg[31] & 1) != 0) {
             arg0->actor.textId = 0x257;
             return 0;
@@ -126,7 +126,7 @@ s32 func_80BA16F4(ElfMsg6 *arg0, GlobalContext *arg1) {
         arg0->actor.textId = 0x231;
         return 0;
     }
-    if ((gBitFlags->unk_8 & temp_v0) == 0) {
+    if ((gBitFlags[2] & temp_v0) == 0) {
         if ((gSaveContext.weekEventReg[31] & 2) != 0) {
             arg0->actor.textId = 0x258;
             return 0;
@@ -135,7 +135,7 @@ s32 func_80BA16F4(ElfMsg6 *arg0, GlobalContext *arg1) {
         return 0;
     }
     phi_v0 = 1;
-    if ((gBitFlags->unk_C & temp_v0) == 0) {
+    if ((gBitFlags[3] & temp_v0) == 0) {
         phi_v0 = 0;
         if ((gSaveContext.weekEventReg[80] & 4) != 0) {
             arg0->actor.textId = 0x259;
@@ -261,7 +261,7 @@ block_35:
         return;
     case 3:
         temp_a1_2 = (s32) (temp_v1_2 & 0xFE00) >> 9;
-        if (((temp_a1_2 != 0x7F) && (this = temp_a2, phi_a2_3 = this, phi_a2_4 = (Actor *) this, (Flags_GetSwitch(globalCtx, temp_a1_2) != 0))) || (phi_a2_4 = (Actor *) phi_a2_3, ((gSaveContext.weekEventReg[88] & 0x10) != 0)) || ((gSaveContext.weekEventReg[91] & 1) != 0) || (gSaveContext.inventory.items[gItemSlots[0x34]] == 0x34)) {
+        if (((temp_a1_2 != 0x7F) && (this = temp_a2, phi_a2_3 = this, phi_a2_4 = (Actor *) this, (Flags_GetSwitch(globalCtx, temp_a1_2) != 0))) || (phi_a2_4 = (Actor *) phi_a2_3, ((gSaveContext.weekEventReg[88] & 0x10) != 0)) || ((gSaveContext.weekEventReg[91] & 1) != 0) || (gSaveContext.inventory.items[gItemSlots[52]] == 0x34)) {
             Actor_MarkForDeath(phi_a2_4);
             return;
         }
@@ -324,7 +324,7 @@ void func_80BA1C88(ElfMsg6 *arg0, GlobalContext *arg1, s16 arg2) {
     void *temp_v1;
 
     temp_v1 = arg1->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A80;
+    temp_v0 = temp_v1[8].scale.z;
     if (temp_v0 != 0) {
         temp_v1->unk_A84 = arg2;
         sp18 = temp_v0;
@@ -339,15 +339,15 @@ void func_80BA1C88(ElfMsg6 *arg0, GlobalContext *arg1, s16 arg2) {
 
 void func_80BA1CF8(ElfMsg6 *this, GlobalContext *globalCtx) {
     Actor *sp24;
-    void *sp20;
+    f32 sp20;
     Actor *temp_v1;
+    f32 temp_v0;
     u16 temp_v0_2;
-    void *temp_v0;
 
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A80;
+    temp_v0 = temp_v1[8].scale.z;
     sp20 = temp_v0;
-    if (temp_v0 != 0) {
+    if ((bitwise s32) temp_v0 != 0) {
         sp24 = temp_v1;
         if (func_800B84D0((Actor *) this, globalCtx) != 0) {
             temp_v0_2 = this->actor.textId;
@@ -382,15 +382,15 @@ void func_80BA1CF8(ElfMsg6 *this, GlobalContext *globalCtx) {
 
 void func_80BA1E30(ElfMsg6 *this, GlobalContext *globalCtx) {
     Actor *sp24;
-    void *sp20;
+    f32 sp20;
     Actor *temp_v1;
+    f32 temp_v0;
     u16 temp_v0_2;
-    void *temp_v0;
 
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A80;
+    temp_v0 = temp_v1[8].scale.z;
     sp20 = temp_v0;
-    if (temp_v0 != 0) {
+    if ((bitwise s32) temp_v0 != 0) {
         sp24 = temp_v1;
         if (func_800B84D0((Actor *) this, globalCtx) != 0) {
             temp_v0_2 = this->actor.textId;
@@ -450,12 +450,12 @@ void func_80BA2038(ElfMsg6 *this, GlobalContext *globalCtx) {
 }
 
 void func_80BA2048(ElfMsg6 *this, GlobalContext *globalCtx) {
+    f32 temp_v0;
     s32 temp_a1;
     s32 temp_a1_2;
-    void *temp_v0;
 
     if (func_800B84D0((Actor *) this, globalCtx) != 0) {
-        temp_v0 = globalCtx->actorCtx.actorList[2].first->unk_A80;
+        temp_v0 = globalCtx->actorCtx.actorList[2].first[8].scale.z;
         temp_v0->unk_264 = (u16) (temp_v0->unk_264 | 0x20);
         temp_a1 = (s32) (this->actor.params & 0xFE00) >> 9;
         if (temp_a1 != 0x7F) {
@@ -465,7 +465,7 @@ void func_80BA2048(ElfMsg6 *this, GlobalContext *globalCtx) {
         return;
     }
     temp_a1_2 = (s32) (this->actor.params & 0xFE00) >> 9;
-    if (((temp_a1_2 != 0x7F) && (Flags_GetSwitch(globalCtx, temp_a1_2) != 0)) || ((gSaveContext.weekEventReg[88] & 0x10) != 0) || ((gSaveContext.weekEventReg[91] & 1) != 0) || (gSaveContext.inventory.items[gItemSlots[0x34]] == 0x34)) {
+    if (((temp_a1_2 != 0x7F) && (Flags_GetSwitch(globalCtx, temp_a1_2) != 0)) || ((gSaveContext.weekEventReg[88] & 0x10) != 0) || ((gSaveContext.weekEventReg[91] & 1) != 0) || (gSaveContext.inventory.items[gItemSlots[52]] == 0x34)) {
         Actor_MarkForDeath((Actor *) this);
         return;
     }
@@ -489,12 +489,12 @@ void func_80BA215C(ElfMsg6 *this, GlobalContext *globalCtx) {
 }
 
 void func_80BA21C4(ElfMsg6 *this, GlobalContext *globalCtx) {
+    f32 temp_v0;
     s32 temp_a1;
     s32 temp_a1_2;
-    void *temp_v0;
 
     if (func_800B84D0((Actor *) this, globalCtx) != 0) {
-        temp_v0 = globalCtx->actorCtx.actorList[2].first->unk_A80;
+        temp_v0 = globalCtx->actorCtx.actorList[2].first[8].scale.z;
         temp_v0->unk_264 = (u16) (temp_v0->unk_264 | 0x20);
         temp_a1 = (s32) (this->actor.params & 0xFE00) >> 9;
         if (temp_a1 != 0x7F) {
@@ -504,7 +504,7 @@ void func_80BA21C4(ElfMsg6 *this, GlobalContext *globalCtx) {
         return;
     }
     temp_a1_2 = (s32) (this->actor.params & 0xFE00) >> 9;
-    if (((temp_a1_2 != 0x7F) && (Flags_GetSwitch(globalCtx, temp_a1_2) != 0)) || ((*(gBitFlags + 0x38) & gSaveContext.inventory.questItems) != 0)) {
+    if (((temp_a1_2 != 0x7F) && (Flags_GetSwitch(globalCtx, temp_a1_2) != 0)) || ((gBitFlags[14] & gSaveContext.inventory.questItems) != 0)) {
         Actor_MarkForDeath((Actor *) this);
         return;
     }

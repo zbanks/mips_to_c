@@ -95,7 +95,7 @@ void BgIcefloe_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_v0 = &D_80AC4F30;
         do {
             temp_v0 = phi_v0 + 4;
-            temp_v0->unk_-4 = (s32) phi_v0->unk_4;
+            temp_v0->unk_-4 = (s32) phi_v0[1];
             phi_v0 = temp_v0;
         } while (temp_v0 != &D_80AC4F38);
         D_80AC4F38 = this;

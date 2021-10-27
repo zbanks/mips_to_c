@@ -108,7 +108,7 @@ void func_809CCDE0(EnBji01 *this, GlobalContext *globalCtx) {
     sp4C = temp_a3;
     sp64 = temp_v0;
     Math_Vec3f_Copy((Vec3f *) &sp58, (Vec3f *) temp_a3);
-    sp5C = temp_v0->unk_C44 + 3.0f;
+    sp5C = temp_v0[9].shape.feetPos[1].x + 3.0f;
     func_8013E950((Vec3f *) &this->actor.world, (Vec3f *) &this->actor.focus, this->actor.shape.rot.y, (Vec3f *) temp_a3, (Vec3f *) &sp58, &this->headZRotAdj, &this->headXRotAdj, &this->torsoZRotAdj, &this->torsoXRotAdj, (u16) 0x1554, (u16) 0x1FFE, (u16) 0xE38, (u16) 0x1C70);
 }
 
@@ -459,12 +459,12 @@ s32 func_809CDA4C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         if (arg1 != 0xF) {
 
         } else {
-            arg4->x += arg5->unk_2A8;
+            arg4->x += arg5[2].unk20;
             arg4->z += arg5->unk_2A6;
         }
     } else {
-        arg4->x += arg5->unk_2A4;
-        arg4->z += arg5->unk_2A2;
+        arg4->x += arg5[2].params;
+        arg4->z += arg5[2].home.unk_12;
     }
     return 0;
 }
@@ -498,7 +498,7 @@ void EnBji01_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp38 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0 + 8;
+    sp38->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_809CDCD4 + (this->eyeTexIndex * 4)));

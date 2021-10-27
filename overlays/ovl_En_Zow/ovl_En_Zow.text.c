@@ -224,14 +224,14 @@ void func_80BDC2D8(EnZow *arg0, ColliderCylinder *arg1, f32 *arg2) {
 loop_1:
     temp_v0 = phi_v0 + 1;
     phi_v0 = temp_v0;
-    if ((phi_a1->unk_0 == 0) && !((arg0->actor.world.pos.y + arg0->actor.yDistToWater) <= arg2->unk_4)) {
+    if ((phi_a1->unk_0 == 0) && !((arg0->actor.world.pos.y + arg0->actor.yDistToWater) <= arg2[1])) {
         phi_a1->unk_0 = 3U;
         phi_a1->unk_14 = (s32) arg2->unk_0;
-        phi_a1->info.toucher.dmgFlags = arg2->unk_4;
-        phi_a1->unk_1C = (s32) arg2->unk_8;
+        phi_a1->info.toucher.dmgFlags = arg2[1];
+        phi_a1->unk_1C = (s32) arg2[2];
         phi_a1->info.bumper.dmgFlags = arg2->unk_0;
-        phi_a1->unk_24 = (f32) arg2->unk_4;
-        phi_a1->unk_28 = (s32) arg2->unk_8;
+        phi_a1->unk_24 = (f32) arg2[1];
+        phi_a1->unk_28 = (f32) arg2[2];
         phi_a1->unk_2C = (s32) D_80BDDD1C.unk_0;
         phi_a1->info.atHit = D_80BDDD1C.unk_4;
         phi_a1->info.acHit = D_80BDDD1C.unk_8;
@@ -259,14 +259,14 @@ loop_1:
     if (phi_a0->unk_0 != 2) {
         phi_a0->unk_0 = 2U;
         phi_a0->unk_14 = (s32) arg1->unk_0;
-        phi_a0->info.toucher.dmgFlags = arg1->unk_4;
-        phi_a0->unk_1C = (s32) arg1->unk_8;
+        phi_a0->info.toucher.dmgFlags = arg1[1];
+        phi_a0->unk_1C = (s32) arg1[2];
         phi_a0->info.bumper.dmgFlags = D_80BDDD28.unk_0;
         phi_a0->unk_24 = (s32) D_80BDDD28.unk_4;
         phi_a0->unk_28 = (s32) D_80BDDD28.unk_8;
         phi_a0->unk_2C = (s32) arg2->unk_0;
-        phi_a0->info.atHit = arg2->unk_4;
-        phi_a0->info.acHit = arg2->unk_8;
+        phi_a0->info.atHit = arg2[1];
+        phi_a0->info.acHit = arg2[2];
         arg0 = phi_a0;
         arg0->unk_F = (s8) (u32) ((Rand_ZeroOne() * 100.0f) + 100.0f);
         arg0->base.at = arg3;
@@ -393,32 +393,32 @@ void func_80BDC830(ColliderCylinder *arg0, GraphicsContext **arg1) {
         if (phi_s2->unk_0 == 1) {
             if (phi_s6 == 0) {
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = 0;
                 temp_v0->words.w0 = 0xE7000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = (u32) &D_0600D220;
                 temp_v0_2->words.w0 = 0xDE000000;
                 temp_v0_3 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_3 + 8;
+                temp_s0->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = 0x9B9B9B00;
                 temp_v0_3->words.w0 = 0xFB000000;
                 phi_s6 = 1;
             }
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFA000000;
             temp_v0_4->words.w1 = phi_s2->unk_F | ~0xFF;
             SysMatrix_InsertTranslation(phi_s2->unk_14, phi_s2->info.toucher.dmgFlags, phi_s2->unk_1C, 0);
             temp_f12 = phi_s2->base.at;
             Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_0600D288;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -453,19 +453,19 @@ void func_80BDC9DC(ColliderCylinder *arg0, GraphicsContext **arg1) {
         if (phi_s2->unk_0 == 3) {
             if (phi_s6 == 0) {
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_060029F0;
                 temp_v0->words.w0 = 0xDE000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = 0;
                 temp_v0_2->words.w0 = 0xE7000000;
                 temp_v0_3 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_3 + 8;
+                temp_s0->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = 0x96969600;
                 temp_v0_3->words.w0 = 0xFB000000;
                 temp_v0_4 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_4 + 8;
+                temp_s0->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = -1;
                 temp_v0_4->words.w0 = 0xFA000000;
                 phi_s6 = 1;
@@ -475,11 +475,11 @@ void func_80BDC9DC(ColliderCylinder *arg0, GraphicsContext **arg1) {
             temp_f12 = phi_s2->base.at;
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_06002A50;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -514,21 +514,21 @@ void func_80BDCB84(ColliderCylinder *arg0, GraphicsContext **arg1) {
         if (phi_s2->unk_0 == 2) {
             if (phi_s6 == 0) {
                 temp_v0 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0 + 8;
+                temp_s0->polyXlu.p = &temp_v0[1];
                 temp_v0->words.w1 = (u32) &D_06002BA0;
                 temp_v0->words.w0 = 0xDE000000;
                 temp_v0_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_2 + 8;
+                temp_s0->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = 0;
                 temp_v0_2->words.w0 = 0xE7000000;
                 temp_v0_3 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_3 + 8;
+                temp_s0->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = 0xC8C8C800;
                 temp_v0_3->words.w0 = 0xFB000000;
                 phi_s6 = 1;
             }
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFA000000;
             temp_v0_4->words.w1 = phi_s2->unk_F | 0xB4B4B400;
             SysMatrix_InsertTranslation(phi_s2->unk_14, phi_s2->info.toucher.dmgFlags, phi_s2->unk_1C, 0);
@@ -536,11 +536,11 @@ void func_80BDCB84(ColliderCylinder *arg0, GraphicsContext **arg1) {
             temp_f12 = phi_s2->base.at;
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_06002C10;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -586,8 +586,8 @@ void func_80BDCDA8(EnZow *arg0, ColliderCylinder *arg1) {
         temp_a1 = &sp84;
         sp80 = temp_f18;
         sp84.unk_0 = temp_s3->unk_0;
-        sp84.unk_4 = (s32) temp_s3->unk_4;
-        sp84.unk_8 = (s32) temp_s3->unk_8;
+        (&sp84)[1] = temp_s3->unk_4;
+        (&sp84)[2] = temp_s3->unk_8;
         temp_f4 = sp8C + (temp_f18 * 6.0f);
         sp84 += sp78 * 6.0f;
         sp8C = temp_f4;
@@ -899,8 +899,8 @@ void EnZow_Update(Actor *thisx, GlobalContext *globalCtx) {
     if (this->unk_2CE != 0) {
         if ((globalCtx->state.frames & 8) != 0) {
             sp34.unk_0 = this->actor.world.pos.x;
-            sp34.unk_4 = (f32) this->actor.world.pos.y;
-            sp34.unk_8 = (f32) this->actor.world.pos.z;
+            (&sp34)[1] = this->actor.world.pos.y;
+            (&sp34)[2] = this->actor.world.pos.z;
             sp38 += ((Rand_ZeroOne() - 0.5f) * 10.0f) + 18.0f;
             sp34 += (Rand_ZeroOne() - 0.5f) * 28.0f;
             sp3C += (Rand_ZeroOne() - 0.5f) * 28.0f;
@@ -984,17 +984,17 @@ void EnZow_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp4C = temp_a0_2;
             func_8012C28C(temp_a0_2);
             temp_v0_2 = sp4C->polyOpa.p;
-            sp4C->polyOpa.p = temp_v0_2 + 8;
+            sp4C->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = 0xFF;
             temp_v0_2->words.w0 = 0xFB000000;
             temp_v0_3 = sp4C->polyOpa.p;
-            sp4C->polyOpa.p = temp_v0_3 + 8;
+            sp4C->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDB060020;
             sp4C = sp4C;
             sp40 = temp_v0_3;
             sp40->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_2C4 * 4))->unk_54);
             temp_v0_4 = sp4C->polyOpa.p;
-            sp4C->polyOpa.p = temp_v0_4 + 8;
+            sp4C->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDB060030;
             sp3C = temp_v0_4;
             sp3C->words.w1 = func_80BDDA7C(globalCtx->state.gfxCtx, sp4C);
@@ -1002,7 +1002,7 @@ void EnZow_Draw(Actor *thisx, GlobalContext *globalCtx) {
             return;
         }
         temp_v0_5 = temp_a0_2->polyXlu.p;
-        temp_a0_2->polyXlu.p = temp_v0_5 + 8;
+        temp_a0_2->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDB060020;
         sp38 = temp_v0_5;
         sp38->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_2C4 * 4))->unk_54);

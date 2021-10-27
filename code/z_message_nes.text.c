@@ -887,193 +887,193 @@ loop_7:
                     play_sound(0U);
                 }
                 temp_t1 = sp134;
-                sp134 = temp_t1 + 8;
-                temp_t1->unk_4 = 0;
+                sp134 = &temp_t1[2];
+                temp_t1[1] = 0;
                 temp_t1->unk_0 = 0xE7000000;
                 temp_t4 = sp134;
-                sp134 = temp_t4 + 8;
+                sp134 = &temp_t4[2];
                 temp_t4->unk_0 = 0xFC119623;
-                temp_t4->unk_4 = 0xFF2FFFFF;
+                temp_t4[1] = 0xFF2FFFFF;
                 temp_t8 = sp134;
-                sp134 = temp_t8 + 8;
+                sp134 = &temp_t8[2];
                 temp_t8->unk_0 = 0xFA000000;
-                temp_t8->unk_4 = (s32) (phi_s0->unk_201E & 0xFF);
+                temp_t8[1] = phi_s0->unk_201E & 0xFF;
                 temp_t4_2 = sp134;
-                sp134 = temp_t4_2 + 8;
+                sp134 = &temp_t4_2[2];
                 temp_t4_2->unk_0 = 0xFD900000;
-                temp_t4_2->unk_4 = (s32) (phi_s0->unk_1EF8 + 0x1000);
+                temp_t4_2[1] = phi_s0->unk_1EF8 + 0x1000;
                 temp_t9 = sp134;
-                sp134 = temp_t9 + 8;
-                temp_t9->unk_4 = 0x7000000;
+                sp134 = &temp_t9[2];
+                temp_t9[1] = 0x7000000;
                 temp_t9->unk_0 = 0xF5900000;
                 temp_t4_3 = sp134;
-                sp134 = temp_t4_3 + 8;
-                temp_t4_3->unk_4 = 0;
+                sp134 = &temp_t4_3[2];
+                temp_t4_3[1] = 0;
                 temp_t4_3->unk_0 = 0xE6000000;
                 temp_t7 = sp134;
-                sp134 = temp_t7 + 8;
-                temp_t7->unk_4 = 0x747F156;
+                sp134 = &temp_t7[2];
+                temp_t7[1] = 0x747F156;
                 temp_t7->unk_0 = 0xF3000000;
                 temp_t2_2 = sp134;
-                sp134 = temp_t2_2 + 8;
-                temp_t2_2->unk_4 = 0;
+                sp134 = &temp_t2_2[2];
+                temp_t2_2[1] = 0;
                 temp_t2_2->unk_0 = 0xE7000000;
                 temp_t5 = sp134;
-                sp134 = temp_t5 + 8;
-                temp_t5->unk_4 = 0;
+                sp134 = &temp_t5[2];
+                temp_t5[1] = 0;
                 temp_t5->unk_0 = 0xF5800C00;
                 temp_t8_2 = sp134;
-                sp134 = temp_t8_2 + 8;
-                temp_t8_2->unk_4 = 0x17C0BC;
+                sp134 = &temp_t8_2[2];
+                temp_t8_2[1] = 0x17C0BC;
                 temp_t8_2->unk_0 = 0xF2000000;
                 temp_v0_2 = sp134;
-                sp134 = temp_v0_2 + 8;
+                sp134 = &temp_v0_2[2];
                 temp_v0_2->unk_0 = ((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_s0->unk_2012 + 0x31) * 4) & 0xFFF);
-                temp_v0_2->unk_4 = (s32) ((((phi_s0->unk_1FF4 * 4) & 0xFFF) << 0xC) | (((phi_s0->unk_2012 + 1) * 4) & 0xFFF));
+                temp_v0_2[1] = (((phi_s0->unk_1FF4 * 4) & 0xFFF) << 0xC) | (((phi_s0->unk_2012 + 1) * 4) & 0xFFF);
                 temp_t7_2 = sp134;
-                sp134 = temp_t7_2 + 8;
+                sp134 = &temp_t7_2[2];
                 temp_t7_2->unk_0 = 0xE1000000;
-                temp_t7_2->unk_4 = 0;
+                temp_t7_2[1] = 0;
                 temp_t3 = sp134;
-                sp134 = temp_t3 + 8;
+                sp134 = &temp_t3[2];
                 temp_t3->unk_0 = 0xF1000000;
-                temp_t3->unk_4 = 0x4000400;
+                temp_t3[1] = 0x4000400;
                 temp_t5_2 = sp134;
-                sp134 = temp_t5_2 + 8;
+                sp134 = &temp_t5_2[2];
                 temp_t5_2->unk_0 = 0xFD900000;
-                temp_t5_2->unk_4 = (s32) (phi_s0->unk_1EF8 + 0x1900);
+                temp_t5_2[1] = phi_s0->unk_1EF8 + 0x1900;
                 temp_t3_2 = sp134;
-                sp134 = temp_t3_2 + 8;
-                temp_t3_2->unk_4 = 0x7000000;
+                sp134 = &temp_t3_2[2];
+                temp_t3_2[1] = 0x7000000;
                 temp_t3_2->unk_0 = 0xF5900000;
                 temp_t5_3 = sp134;
-                sp134 = temp_t5_3 + 8;
-                temp_t5_3->unk_4 = 0;
+                sp134 = &temp_t5_3[2];
+                temp_t5_3[1] = 0;
                 temp_t5_3->unk_0 = 0xE6000000;
                 temp_t8_3 = sp134;
-                sp134 = temp_t8_3 + 8;
-                temp_t8_3->unk_4 = 0x747F156;
+                sp134 = &temp_t8_3[2];
+                temp_t8_3[1] = 0x747F156;
                 temp_t8_3->unk_0 = 0xF3000000;
                 temp_t1_2 = sp134;
-                sp134 = temp_t1_2 + 8;
-                temp_t1_2->unk_4 = 0;
+                sp134 = &temp_t1_2[2];
+                temp_t1_2[1] = 0;
                 temp_t1_2->unk_0 = 0xE7000000;
                 temp_t6 = sp134;
-                sp134 = temp_t6 + 8;
-                temp_t6->unk_4 = 0;
+                sp134 = &temp_t6[2];
+                temp_t6[1] = 0;
                 temp_t6->unk_0 = 0xF5800C00;
                 temp_t9_2 = sp134;
-                sp134 = temp_t9_2 + 8;
-                temp_t9_2->unk_4 = 0x17C0BC;
+                sp134 = &temp_t9_2[2];
+                temp_t9_2[1] = 0x17C0BC;
                 temp_t9_2->unk_0 = 0xF2000000;
                 temp_v0_3 = sp134;
-                sp134 = temp_v0_3 + 8;
+                sp134 = &temp_v0_3[2];
                 temp_v0_3->unk_0 = ((((phi_s0->unk_1FF4 + 0xC1) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_s0->unk_2012 + 0x31) * 4) & 0xFFF);
-                temp_v0_3->unk_4 = (s32) (((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | (((phi_s0->unk_2012 + 1) * 4) & 0xFFF));
+                temp_v0_3[1] = ((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | (((phi_s0->unk_2012 + 1) * 4) & 0xFFF);
                 temp_t9_3 = sp134;
-                sp134 = temp_t9_3 + 8;
+                sp134 = &temp_t9_3[2];
                 temp_t9_3->unk_0 = 0xE1000000;
-                temp_t9_3->unk_4 = 0;
+                temp_t9_3[1] = 0;
                 temp_t5_4 = sp134;
-                sp134 = temp_t5_4 + 8;
+                sp134 = &temp_t5_4[2];
                 temp_t5_4->unk_0 = 0xF1000000;
-                temp_t5_4->unk_4 = 0x4000400;
+                temp_t5_4[1] = 0x4000400;
                 temp_t7_3 = sp134;
-                sp134 = temp_t7_3 + 8;
-                temp_t7_3->unk_4 = 0;
+                sp134 = &temp_t7_3[2];
+                temp_t7_3[1] = 0;
                 temp_t7_3->unk_0 = 0xE7000000;
                 temp_t3_3 = sp134;
-                sp134 = temp_t3_3 + 8;
+                sp134 = &temp_t3_3[2];
                 temp_t3_3->unk_0 = 0xFA000000;
-                temp_t3_3->unk_4 = (s32) ((phi_s0->unk_201E & 0xFF) | 0xFF3C0000);
+                temp_t3_3[1] = (phi_s0->unk_201E & 0xFF) | 0xFF3C0000;
                 temp_t7_4 = sp134;
-                sp134 = temp_t7_4 + 8;
+                sp134 = &temp_t7_4[2];
                 temp_t7_4->unk_0 = 0xFD900000;
-                temp_t7_4->unk_4 = (s32) (phi_s0->unk_1EF8 + 0x1000);
+                temp_t7_4[1] = phi_s0->unk_1EF8 + 0x1000;
                 temp_t5_5 = sp134;
-                sp134 = temp_t5_5 + 8;
-                temp_t5_5->unk_4 = 0x7000000;
+                sp134 = &temp_t5_5[2];
+                temp_t5_5[1] = 0x7000000;
                 temp_t5_5->unk_0 = 0xF5900000;
                 temp_t7_5 = sp134;
-                sp134 = temp_t7_5 + 8;
-                temp_t7_5->unk_4 = 0;
+                sp134 = &temp_t7_5[2];
+                temp_t7_5[1] = 0;
                 temp_t7_5->unk_0 = 0xE6000000;
                 temp_t3_4 = sp134;
-                sp134 = temp_t3_4 + 8;
-                temp_t3_4->unk_4 = 0x747F156;
+                sp134 = &temp_t3_4[2];
+                temp_t3_4[1] = 0x747F156;
                 temp_t3_4->unk_0 = 0xF3000000;
                 temp_t6_2 = sp134;
-                sp134 = temp_t6_2 + 8;
-                temp_t6_2->unk_4 = 0;
+                sp134 = &temp_t6_2[2];
+                temp_t6_2[1] = 0;
                 temp_t6_2->unk_0 = 0xE7000000;
                 temp_t8_4 = sp134;
-                sp134 = temp_t8_4 + 8;
-                temp_t8_4->unk_4 = 0;
+                sp134 = &temp_t8_4[2];
+                temp_t8_4[1] = 0;
                 temp_t8_4->unk_0 = 0xF5800C00;
                 temp_t1_3 = sp134;
-                sp134 = temp_t1_3 + 8;
-                temp_t1_3->unk_4 = 0x17C0BC;
+                sp134 = &temp_t1_3[2];
+                temp_t1_3[1] = 0x17C0BC;
                 temp_t1_3->unk_0 = 0xF2000000;
                 temp_v0_4 = sp134;
-                sp134 = temp_v0_4 + 8;
+                sp134 = &temp_v0_4[2];
                 temp_v0_4->unk_0 = ((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_s0->unk_2012 + 0x30) * 4) & 0xFFF);
-                temp_v0_4->unk_4 = (s32) ((((phi_s0->unk_1FF4 * 4) & 0xFFF) << 0xC) | ((phi_s0->unk_2012 * 4) & 0xFFF));
+                temp_v0_4[1] = (((phi_s0->unk_1FF4 * 4) & 0xFFF) << 0xC) | ((phi_s0->unk_2012 * 4) & 0xFFF);
                 temp_t9_4 = sp134;
-                sp134 = temp_t9_4 + 8;
+                sp134 = &temp_t9_4[2];
                 temp_t9_4->unk_0 = 0xE1000000;
-                temp_t9_4->unk_4 = 0;
+                temp_t9_4[1] = 0;
                 temp_t5_6 = sp134;
-                sp134 = temp_t5_6 + 8;
+                sp134 = &temp_t5_6[2];
                 temp_t5_6->unk_0 = 0xF1000000;
-                temp_t5_6->unk_4 = 0x4000400;
+                temp_t5_6[1] = 0x4000400;
                 temp_t4_4 = sp134;
-                sp134 = temp_t4_4 + 8;
+                sp134 = &temp_t4_4[2];
                 temp_t4_4->unk_0 = 0xFD900000;
-                temp_t4_4->unk_4 = (s32) (phi_s0->unk_1EF8 + 0x1900);
+                temp_t4_4[1] = phi_s0->unk_1EF8 + 0x1900;
                 temp_t5_7 = sp134;
-                sp134 = temp_t5_7 + 8;
-                temp_t5_7->unk_4 = 0x7000000;
+                sp134 = &temp_t5_7[2];
+                temp_t5_7[1] = 0x7000000;
                 temp_t5_7->unk_0 = 0xF5900000;
                 temp_t4_5 = sp134;
-                sp134 = temp_t4_5 + 8;
-                temp_t4_5->unk_4 = 0;
+                sp134 = &temp_t4_5[2];
+                temp_t4_5[1] = 0;
                 temp_t4_5->unk_0 = 0xE6000000;
                 temp_t3_5 = sp134;
-                sp134 = temp_t3_5 + 8;
-                temp_t3_5->unk_4 = 0x747F156;
+                sp134 = &temp_t3_5[2];
+                temp_t3_5[1] = 0x747F156;
                 temp_t3_5->unk_0 = 0xF3000000;
                 temp_t7_6 = sp134;
-                sp134 = temp_t7_6 + 8;
-                temp_t7_6->unk_4 = 0;
+                sp134 = &temp_t7_6[2];
+                temp_t7_6[1] = 0;
                 temp_t7_6->unk_0 = 0xE7000000;
                 temp_t8_5 = sp134;
-                sp134 = temp_t8_5 + 8;
-                temp_t8_5->unk_4 = 0;
+                sp134 = &temp_t8_5[2];
+                temp_t8_5[1] = 0;
                 temp_t8_5->unk_0 = 0xF5800C00;
                 temp_t1_4 = sp134;
-                sp134 = temp_t1_4 + 8;
-                temp_t1_4->unk_4 = 0x17C0BC;
+                sp134 = &temp_t1_4[2];
+                temp_t1_4[1] = 0x17C0BC;
                 temp_t1_4->unk_0 = 0xF2000000;
                 temp_v0_5 = sp134;
-                sp134 = temp_v0_5 + 8;
+                sp134 = &temp_v0_5[2];
                 temp_v0_5->unk_0 = ((((phi_s0->unk_1FF4 + 0xC0) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_s0->unk_2012 + 0x30) * 4) & 0xFFF);
-                temp_v0_5->unk_4 = (s32) (((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | ((phi_s0->unk_2012 * 4) & 0xFFF));
+                temp_v0_5[1] = ((((phi_s0->unk_1FF4 + 0x60) * 4) & 0xFFF) << 0xC) | ((phi_s0->unk_2012 * 4) & 0xFFF);
                 temp_t3_6 = sp134;
-                sp134 = temp_t3_6 + 8;
+                sp134 = &temp_t3_6[2];
                 temp_t3_6->unk_0 = 0xE1000000;
-                temp_t3_6->unk_4 = 0;
+                temp_t3_6[1] = 0;
                 temp_t7_7 = sp134;
-                sp134 = temp_t7_7 + 8;
+                sp134 = &temp_t7_7[2];
                 temp_t7_7->unk_0 = 0xF1000000;
-                temp_t7_7->unk_4 = 0x4000400;
+                temp_t7_7[1] = 0x4000400;
                 temp_t8_6 = sp134;
-                sp134 = temp_t8_6 + 8;
-                temp_t8_6->unk_4 = 0;
+                sp134 = &temp_t8_6[2];
+                temp_t8_6[1] = 0;
                 temp_t8_6->unk_0 = 0xE7000000;
                 temp_t1_5 = sp134;
-                sp134 = temp_t1_5 + 8;
+                sp134 = &temp_t1_5[2];
                 temp_t1_5->unk_0 = 0xFCFF97FF;
-                temp_t1_5->unk_4 = 0xFF2DFEFF;
+                temp_t1_5[1] = 0xFF2DFEFF;
                 temp_s1->unk_11FF4 = (s16) (phi_s0->unk_1FF4 + 0x20);
                 goto block_210;
             case 194:                               /* switch 1 */
@@ -1593,16 +1593,16 @@ void func_8015B198(GlobalContext *arg0) {
     GameInfo *temp_v0_20;
     f32 temp_f0;
     s16 *temp_s0_10;
-    s16 *temp_s0_12;
-    s16 *temp_s0_14;
+    s16 *temp_s0_11;
+    s16 *temp_s0_13;
     s16 *temp_s0_15;
-    s16 *temp_s0_2;
+    s16 *temp_s0_16;
     s16 *temp_s0_3;
     s16 *temp_s0_4;
     s16 *temp_s0_5;
     s16 *temp_s0_6;
     s16 *temp_s0_7;
-    s16 *temp_s0_9;
+    s16 *temp_s0_8;
     s16 *temp_s5;
     s16 temp_a0_3;
     s16 temp_a0_4;
@@ -1645,8 +1645,8 @@ void func_8015B198(GlobalContext *arg0) {
     s16 temp_a3_8;
     s16 temp_a3_9;
     s16 temp_s0;
-    s16 temp_s0_11;
-    s16 temp_s0_8;
+    s16 temp_s0_12;
+    s16 temp_s0_9;
     s16 temp_s1;
     s16 temp_s1_10;
     s16 temp_s1_11;
@@ -1750,6 +1750,7 @@ void func_8015B198(GlobalContext *arg0) {
     u32 temp_a3_25;
     u32 temp_v0_15;
     u32 temp_v0_3;
+    u8 *temp_s0_2;
     u8 *temp_v0_4;
     u8 temp_s2;
     u8 temp_s2_2;
@@ -1759,7 +1760,7 @@ void func_8015B198(GlobalContext *arg0) {
     u8 temp_v0_17;
     u8 temp_v0_23;
     u8 temp_v0_5;
-    void *temp_s0_13;
+    void *temp_s0_14;
     void *temp_s3;
     void *temp_s6;
     void *temp_t0_2;
@@ -2000,8 +2001,9 @@ block_68:
                                                 spCE = temp_a3;
                                                 spC6 = 2;
                                                 spD0 = 2;
+                                                temp_s0_2 = &_message_texture_staticSegmentRomStart[2304];
                                                 DmaMgr_SendRequest0(sp70->unk_1EF8 + 0x1000, (u32) _message_texture_staticSegmentRomStart, 0x900U);
-                                                DmaMgr_SendRequest0(sp70->unk_1EF8 + 0x1900, (u32) (_message_texture_staticSegmentRomStart + 0x900), 0x900U);
+                                                DmaMgr_SendRequest0(sp70->unk_1EF8 + 0x1900, (u32) temp_s0_2, 0x900U);
                                                 temp_s6->unk_12012 = (s16) (sp70->unk_206A + 8);
                                                 temp_s6->unk_11F18 = 1;
                                                 temp_s6->unk_12010 = (s16) gGameInfo->data[1391];
@@ -2068,10 +2070,10 @@ block_68:
                                                             spCE = temp_a3_2;
                                                         }
                                                         do {
-                                                            temp_s0_2 = &temp_s5[phi_s1_3];
-                                                            Font_LoadCharNES(arg0, (*temp_s0_2 + 0x30) & 0xFF, spBC);
+                                                            temp_s0_3 = &temp_s5[phi_s1_3];
+                                                            Font_LoadCharNES(arg0, (*temp_s0_3 + 0x30) & 0xFF, spBC);
                                                             spBC += 0x80;
-                                                            (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_2 + 0x30);
+                                                            (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_3 + 0x30);
                                                             spDA += 1;
                                                             if (phi_s1_3 == 1) {
                                                                 Font_LoadCharNES(arg0, 0x22U, spBC);
@@ -2139,10 +2141,10 @@ block_127:
                                                                 phi_s2_3 = 1;
                                                             }
                                                             if (phi_s2_3 != 0) {
-                                                                temp_s0_3 = &temp_s5[phi_s1_4];
-                                                                Font_LoadCharNES(arg0, (*temp_s0_3 + 0x30) & 0xFF, spBC);
+                                                                temp_s0_4 = &temp_s5[phi_s1_4];
+                                                                Font_LoadCharNES(arg0, (*temp_s0_4 + 0x30) & 0xFF, spBC);
                                                                 spBC += 0x80;
-                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_3 + 0x30);
+                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_4 + 0x30);
                                                                 spDA += 1;
                                                                 spA4 += 16.0f * sp70->unk_2098;
                                                             }
@@ -2590,10 +2592,10 @@ block_268:
                                                                 phi_s2_10 = 1;
                                                             }
                                                             if (phi_s2_10 != 0) {
-                                                                temp_s0_4 = &temp_s5[phi_s1_17];
-                                                                Font_LoadCharNES(arg0, (*temp_s0_4 + 0x30) & 0xFF, spBC);
+                                                                temp_s0_5 = &temp_s5[phi_s1_17];
+                                                                Font_LoadCharNES(arg0, (*temp_s0_5 + 0x30) & 0xFF, spBC);
                                                                 spBC += 0x80;
-                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_4 + 0x30);
+                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_5 + 0x30);
                                                                 spDA += 1;
                                                                 spA4 += 16.0f * sp70->unk_2098;
                                                             }
@@ -2653,10 +2655,10 @@ block_283:
                                                                 phi_s2_11 = 1;
                                                             }
                                                             if (phi_s2_11 != 0) {
-                                                                temp_s0_5 = &temp_s5[phi_s1_18];
-                                                                Font_LoadCharNES(arg0, (*temp_s0_5 + 0x30) & 0xFF, spBC);
+                                                                temp_s0_6 = &temp_s5[phi_s1_18];
+                                                                Font_LoadCharNES(arg0, (*temp_s0_6 + 0x30) & 0xFF, spBC);
                                                                 spBC += 0x80;
-                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_5 + 0x30);
+                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_6 + 0x30);
                                                                 spDA += 1;
                                                                 spA4 += 16.0f * sp70->unk_2098;
                                                             }
@@ -2678,7 +2680,7 @@ block_283:
                                                                 spCC = 0;
                                                                 spCA = 0;
                                                                 spC8 = 0;
-                                                                temp_a0_2 = spDC->unk_146;
+                                                                temp_a0_2 = spDC[1].category;
                                                                 phi_s1_19 = 0;
                                                                 phi_s2_12 = 0;
                                                                 if (temp_a0_2 == 0) {
@@ -2728,10 +2730,10 @@ block_283:
                                                                         phi_s2_12 = 1;
                                                                     }
                                                                     if (phi_s2_12 != 0) {
-                                                                        temp_s0_6 = &temp_s5[phi_s1_19];
-                                                                        Font_LoadCharNES(arg0, (*temp_s0_6 + 0x30) & 0xFF, spBC);
+                                                                        temp_s0_7 = &temp_s5[phi_s1_19];
+                                                                        Font_LoadCharNES(arg0, (*temp_s0_7 + 0x30) & 0xFF, spBC);
                                                                         spBC += 0x80;
-                                                                        (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_6 + 0x30);
+                                                                        (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_7 + 0x30);
                                                                         spDA += 1;
                                                                         spA4 += 16.0f * sp70->unk_2098;
                                                                     }
@@ -2743,12 +2745,12 @@ block_283:
                                                                 spCE = temp_a3;
                                                                 phi_s1_20 = 0;
                                                                 do {
-                                                                    temp_s0_7 = &temp_s5[phi_s1_20];
-                                                                    *temp_s0_7 = (s16) gSaveContext.bomberCode[phi_s1_20];
-                                                                    Font_LoadCharNES(arg0, (*temp_s0_7 + 0x30) & 0xFF, spBC);
+                                                                    temp_s0_8 = &temp_s5[phi_s1_20];
+                                                                    *temp_s0_8 = (s16) gSaveContext.bomberCode[phi_s1_20];
+                                                                    Font_LoadCharNES(arg0, (*temp_s0_8 + 0x30) & 0xFF, spBC);
                                                                     temp_s1_20 = phi_s1_20 + 1;
                                                                     spBC += 0x80;
-                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_7 + 0x30);
+                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_8 + 0x30);
                                                                     spDA += 1;
                                                                     spA4 += 16.0f * sp70->unk_2098;
                                                                     phi_s1_20 = temp_s1_20;
@@ -2763,10 +2765,10 @@ block_283:
                                                                 if ((s32) temp_s2_3 > 0) {
                                                                     do {
                                                                         func_80158988(arg0, *(&D_801D08E8 + ((gSaveContext.spiderHouseMaskOrder[temp_t5_5] * 6) + phi_s0_3)), &spBC, &spA4, (s16) (s32) spDA);
-                                                                        temp_s0_8 = phi_s0_3 + 1;
+                                                                        temp_s0_9 = phi_s0_3 + 1;
                                                                         spDA += 1;
-                                                                        phi_s0_3 = temp_s0_8;
-                                                                    } while ((s32) temp_s0_8 < (s32) temp_s2_3);
+                                                                        phi_s0_3 = temp_s0_9;
+                                                                    } while ((s32) temp_s0_9 < (s32) temp_s2_3);
                                                                 }
                                                                 (temp_s6 + spDA)->unk_11F24 = 0;
                                                             } else if (temp_s2 == 0xE7) {
@@ -2865,10 +2867,10 @@ block_283:
                                                                                 spCE = temp_a3_31;
                                                                             }
                                                                             do {
-                                                                                temp_s0_12 = &temp_s5[phi_s1_26];
-                                                                                Font_LoadCharNES(arg0, (*temp_s0_12 + 0x30) & 0xFF, spBC);
+                                                                                temp_s0_13 = &temp_s5[phi_s1_26];
+                                                                                Font_LoadCharNES(arg0, (*temp_s0_13 + 0x30) & 0xFF, spBC);
                                                                                 spBC += 0x80;
-                                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_12 + 0x30);
+                                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_13 + 0x30);
                                                                                 spDA += 1;
                                                                                 if (phi_s1_26 == 1) {
                                                                                     Font_LoadCharNES(arg0, 0x22U, spBC);
@@ -2935,10 +2937,10 @@ block_417:
                                                                                     phi_s2_14 = 1;
                                                                                 }
                                                                                 if (phi_s2_14 != 0) {
-                                                                                    temp_s0_9 = &temp_s5[phi_s1_22];
-                                                                                    Font_LoadCharNES(arg0, (*temp_s0_9 + 0x30) & 0xFF, spBC);
+                                                                                    temp_s0_10 = &temp_s5[phi_s1_22];
+                                                                                    Font_LoadCharNES(arg0, (*temp_s0_10 + 0x30) & 0xFF, spBC);
                                                                                     spBC += 0x80;
-                                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_9 + 0x30);
+                                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_10 + 0x30);
                                                                                     spDA += 1;
                                                                                     spA4 += 16.0f * sp70->unk_2098;
                                                                                 }
@@ -2954,10 +2956,10 @@ block_417:
 loop_426:
                                                                             phi_s0_5 = (s32) phi_s0_4;
                                                                             if (((temp_a0_3 * 8) + &gSaveContext + phi_s0_4)->unk_DD == 0x3E) {
-                                                                                temp_s0_11 = phi_s0_4 - 1;
-                                                                                phi_s0_4 = temp_s0_11;
-                                                                                phi_s0_5 = (s32) temp_s0_11;
-                                                                                if ((s32) temp_s0_11 > 0) {
+                                                                                temp_s0_12 = phi_s0_4 - 1;
+                                                                                phi_s0_4 = temp_s0_12;
+                                                                                phi_s0_5 = (s32) temp_s0_12;
+                                                                                if ((s32) temp_s0_12 > 0) {
                                                                                     goto loop_426;
                                                                                 }
                                                                             }
@@ -3039,10 +3041,10 @@ block_445:
                                                                                     phi_s2_15 = 1;
                                                                                 }
                                                                                 if (phi_s2_15 != 0) {
-                                                                                    temp_s0_10 = &temp_s5[phi_s1_23];
-                                                                                    Font_LoadCharNES(arg0, (*temp_s0_10 + 0x30) & 0xFF, spBC);
+                                                                                    temp_s0_11 = &temp_s5[phi_s1_23];
+                                                                                    Font_LoadCharNES(arg0, (*temp_s0_11 + 0x30) & 0xFF, spBC);
                                                                                     spBC += 0x80;
-                                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_10 + 0x30);
+                                                                                    (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_11 + 0x30);
                                                                                     spDA += 1;
                                                                                     spA4 += 16.0f * sp70->unk_2098;
                                                                                 }
@@ -3171,10 +3173,10 @@ block_376:
                                                                                 phi_s2_16 = 1;
                                                                             }
                                                                             if (phi_s2_16 != 0) {
-                                                                                temp_s0_13 = (phi_s1_27 * 2) + &spA8;
-                                                                                Font_LoadCharNES(arg0, temp_s0_13->unk_1, spBC);
+                                                                                temp_s0_14 = (phi_s1_27 * 2) + &spA8;
+                                                                                Font_LoadCharNES(arg0, temp_s0_14->unk_1, spBC);
                                                                                 spBC += 0x80;
-                                                                                (temp_s6 + spDA)->unk_11F24 = (s8) temp_s0_13->unk_0;
+                                                                                (temp_s6 + spDA)->unk_11F24 = (s8) temp_s0_14->unk_0;
                                                                                 spDA += 1;
                                                                             } else {
                                                                                 phi_f20 = phi_f20_2 - 1.0f;
@@ -3256,10 +3258,10 @@ block_365:
                                                                             phi_s2_17 = 1;
                                                                         }
                                                                         if (phi_s2_17 != 0) {
-                                                                            temp_s0_14 = &temp_s5[phi_s1_28];
-                                                                            Font_LoadCharNES(arg0, (*temp_s0_14 + 0x30) & 0xFF, spBC);
+                                                                            temp_s0_15 = &temp_s5[phi_s1_28];
+                                                                            Font_LoadCharNES(arg0, (*temp_s0_15 + 0x30) & 0xFF, spBC);
                                                                             spBC += 0x80;
-                                                                            (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_14 + 0x30);
+                                                                            (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_15 + 0x30);
                                                                             spDA += 1;
                                                                             spA4 += 16.0f * sp70->unk_2098;
                                                                         }
@@ -3286,11 +3288,11 @@ block_291:
                                                                 spCC = temp_v0_15 & 0xF;
                                                             }
                                                             do {
-                                                                temp_s0_15 = &temp_s5[phi_s1_29];
-                                                                Font_LoadCharNES(arg0, (*temp_s0_15 + 0x30) & 0xFF, spBC);
+                                                                temp_s0_16 = &temp_s5[phi_s1_29];
+                                                                Font_LoadCharNES(arg0, (*temp_s0_16 + 0x30) & 0xFF, spBC);
                                                                 temp_s1_29 = phi_s1_29 + 1;
                                                                 spBC += 0x80;
-                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_15 + 0x30);
+                                                                (temp_s6 + spDA)->unk_11F24 = (s8) (*temp_s0_16 + 0x30);
                                                                 spDA += 1;
                                                                 spA4 += 16.0f * sp70->unk_2098;
                                                                 phi_s1_29 = temp_s1_29;

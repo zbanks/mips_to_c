@@ -98,8 +98,8 @@ s32 osPfsInitPak(OSMesgQueue *arg0, void *arg1, s32 arg2) {
     }
 block_19:
     bcopy((void *) sp44, arg1 + 0xC, 0x20U);
-    arg1->unk_4C = (s32) sp44->unk_1B;
-    temp_t6 = sp44->unk_1A;
+    arg1->unk_4C = (s32) sp44[27];
+    temp_t6 = sp44[26];
     arg1->unk_50 = 0x10;
     arg1->unk_54 = 8;
     temp_v0_7 = temp_t6 & 0xFF;
@@ -145,9 +145,9 @@ s32 __osPfsCheckRamArea(void *arg0) {
     do {
         phi_v1->unk_0 = phi_v0;
         temp_v0_5 = phi_v0 + 4;
-        phi_v1->unk_3 = (s8) (phi_v0 + 3);
-        phi_v1->unk_2 = (s8) (phi_v0 + 2);
-        phi_v1->unk_1 = (s8) (phi_v0 + 1);
+        phi_v1[3] = phi_v0 + 3;
+        phi_v1[2] = phi_v0 + 2;
+        phi_v1[1] = phi_v0 + 1;
         phi_v0 = temp_v0_5;
         phi_v1 += 4;
     } while (temp_v0_5 != 0x20);

@@ -603,9 +603,9 @@ void func_80A42AB8(EnTest4 *this, GlobalContext *globalCtx) {
                         func_80A41FA4(this, globalCtx, temp_a2, temp_a3);
                     } else {
                         gSaveContext.unk_3F64 = 0.0f;
-                        func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0) & 0xFFFF, (s32) sp54->unk_3CE, 0xBFF, sp54 + 0x3C0, (s16) (s32) sp54->unk_3CC);
+                        func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0) & 0xFFFF, (s32) (s8) sp54[3].category, 0xBFF, (Vec3f *) &sp54[2].update, (s16) (s32) sp54[3].id);
                         func_80169EFC(globalCtx);
-                        if ((sp54->unk_A6C & 0x800000) && ((temp_v1_2 = sp54->unk_390->unk_150, (temp_v1_2 == 0)) || (temp_v1_2 == 2))) {
+                        if ((sp54->unk_A6C & 0x800000) && ((temp_v1_2 = sp54[2].prevPos.x->unk_150, (temp_v1_2 == 0)) || (temp_v1_2 == 2))) {
                             if (((s32) gSaveContext.day % 5) < 3) {
                                 D_801BDA9C = 1;
                             } else {
@@ -646,7 +646,7 @@ block_24:
                     } else {
                         phi_v0 = 0xBFF;
                     }
-                    func_80169DCC(globalCtx, 1, gSaveContext.entranceIndex & 0xFFFF, (s32) sp54->unk_3CE, phi_v0, sp54 + 0x3C0, (s16) (s32) sp54->unk_3CC);
+                    func_80169DCC(globalCtx, 1, gSaveContext.entranceIndex & 0xFFFF, (s32) (s8) sp54[3].category, phi_v0, (Vec3f *) &sp54[2].update, (s16) (s32) sp54[3].id);
                     temp_v0_4 = globalCtx->sceneNum;
                     if ((temp_v0_4 == 0x29) || (temp_v0_4 == 0x2D)) {
                         globalCtx->nextEntranceIndex = 0x5400;

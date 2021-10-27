@@ -561,7 +561,7 @@ void Padmgr_ParseState(void) {
             phi_s0->rel.button |= temp_v1_2 & temp_a0;
             Padmgr_CalcStickEdges(phi_s0);
             temp_s1 = phi_s1 + 1;
-            phi_s0 += 0x18;
+            phi_s0 = &phi_s0[1];
             phi_s1 = temp_s1;
             phi_s2 += 6;
         } while (temp_s1 < (s32) padmgrContext->maxNumControllers);
@@ -779,7 +779,7 @@ void func_80175E68(Input *input, s32 param_2) {
         }
         temp_s2 = phi_s2 + 1;
         phi_s1 += 0x18;
-        phi_s0 += 0x18;
+        phi_s0 = &phi_s0[1];
         phi_s2 = temp_s2;
     } while (temp_s2 != 4);
 }

@@ -91,17 +91,17 @@ void EnScopecoin_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_800B8050((Actor *) this, globalCtx, 0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp20 = temp_v0_2;
     sp20->words.w1 = Lib_SegmentedToVirtual(*(&D_80BFD280 + (this->unk148 * 4)));
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) D_040622C0;
     temp_v0_3->words.w0 = 0xDE000000;
 }

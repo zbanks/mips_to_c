@@ -368,15 +368,15 @@ s32 func_808F30B0(SkelAnime *arg0, s16 arg1) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    sp27 = arg0->unk_260;
-    sp26 = arg0->unk_261;
+    sp27 = arg0[1].colorFilterTimer;
+    sp26 = arg0[1].isDrawn;
     temp_v0 = func_8013DB90(arg1, arg0 + 0x248, -6.0f);
-    arg0->unk_260 = temp_v0;
+    arg0[1].colorFilterTimer = temp_v0;
     if (((temp_v0 & 0xFF) != 0) && (sp27 == 0) && ((temp_v0 & 0xFF) != 0)) {
         Audio_PlayActorSound2(arg0, 0x802U);
     }
-    temp_v0_2 = func_8013DB90(arg1, arg0 + 0x254, -6.0f);
-    arg0->unk_261 = temp_v0_2;
+    temp_v0_2 = func_8013DB90(arg1, (void *) &arg0[1].prevPos.z, -6.0f);
+    arg0[1].isDrawn = temp_v0_2;
     if (((temp_v0_2 & 0xFF) != 0) && (sp26 == 0) && ((temp_v0_2 & 0xFF) != 0)) {
         Audio_PlayActorSound2(arg0, 0x802U);
     }
@@ -463,12 +463,12 @@ void func_808F3414(Actor *arg0, GlobalContext *arg1) {
 
     if (arg0->unk_23D == 0) {
         sp3C = arg1->actorCtx.actorList[2].first;
-        arg0->unk_494 = SkelAnime_FrameUpdateMatrix(arg0 + 0x148);
+        arg0[3].shape.shadowDraw = SkelAnime_FrameUpdateMatrix(arg0 + 0x148);
     }
     sp3C = arg1->actorCtx.actorList[2].first;
     if (func_8013D5E8(arg0->shape.rot.y, 0x2710, arg0->yawTowardsPlayer) != 0) {
         sp30 = arg1->actorCtx.actorList[2].first->world.pos.x;
-        sp34 = arg1->actorCtx.actorList[2].first->unk_C44 + 3.0f;
+        sp34 = arg1->actorCtx.actorList[2].first[9].shape.feetPos[1].x + 3.0f;
         sp38 = arg1->actorCtx.actorList[2].first->world.pos.z;
         func_8013D2E0((Vec3f *) &sp30, arg0 + 0x3C, arg0 + 0xBC, arg0 + 0x352, arg0 + 0x358, arg0 + 0x35E, D_808F6C0C);
     } else {
@@ -481,7 +481,7 @@ void func_808F3414(Actor *arg0, GlobalContext *arg1) {
     }
     func_808F322C(arg0, 3);
     func_808F3178(arg0, arg1);
-    func_8013D9C8(arg1, arg0 + 0x376, arg0 + 0x39E, 0x14);
+    func_8013D9C8(arg1, arg0 + 0x376, (s16 *) &arg0[2].textId, 0x14);
 }
 
 void func_808F35AC(EnIn *arg0, GlobalContext *arg1) {
@@ -497,8 +497,8 @@ void func_808F35AC(EnIn *arg0, GlobalContext *arg1) {
 void func_808F35D8(Actor *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
-    temp_v0 = arg0->unk_4A4;
-    arg0->unk_4AC = (s32) (arg0->unk_4AC & ~0x10);
+    temp_v0 = arg0[3].shape.feetPos[0].y;
+    arg0[3].shape.feetPos[1].x &= -0x11;
     if (temp_v0 != 0) {
         temp_v0->unk_4AC = (s32) (temp_v0->unk_4AC & ~0x10);
     }
@@ -563,7 +563,7 @@ void func_808F374C(Actor *arg0, GlobalContext *arg1) {
     sp40.unk_14 = (s32) D_808F6C2C.unk_14;
     sp40.unk_1C = (s32) D_808F6C2C.unk_1C;
     sp40.unk_18 = (s32) D_808F6C2C.unk_18;
-    temp_v0 = arg0->unk_150;
+    temp_v0 = arg0[1].home.pos.y;
     if ((&D_06016484 == temp_v0) || (&D_060170DC == temp_v0)) {
         temp_a0 = arg0 + 0xEC;
         if (func_801378B8(arg0 + 0x148, 8.0f) != 0) {
@@ -577,14 +577,14 @@ void func_808F374C(Actor *arg0, GlobalContext *arg1) {
     }
     temp_t2 = arg0 + 0x148;
     sp38 = temp_t2;
-    if ((&D_060198A8 == arg0->unk_150) && (func_801378B8((SkelAnime *) temp_t2, 20.0f) != 0)) {
+    if ((&D_060198A8 == arg0[1].home.pos.y) && (func_801378B8((SkelAnime *) temp_t2, 20.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x6854U);
     }
     if (SkelAnime_FrameUpdateMatrix((SkelAnime *) sp38) != 0) {
-        arg0->unk_488 = (s16) ((s32) arg0->unk_488 % 8);
-        temp_v0_2 = arg0->unk_488;
+        arg0[3].shape.rot.x = (s16) ((s32) arg0[3].shape.rot.x % 8);
+        temp_v0_2 = arg0[3].shape.rot.x;
         arg0->unk_486 = temp_v0_2;
-        SkelAnime_ChangeAnim((SkelAnime *) sp38, (sp + (arg0->unk_488 * 4))->unk_40, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((sp + (temp_v0_2 * 4))->unk_40), (u8) 2, -10.0f);
+        SkelAnime_ChangeAnim((SkelAnime *) sp38, (sp + (arg0[3].shape.rot.x * 4))->unk_40, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((sp + (temp_v0_2 * 4))->unk_40), (u8) 2, -10.0f);
     }
 }
 
@@ -606,7 +606,7 @@ block_3:
 }
 
 void func_808F395C(Actor *arg0, GlobalContext *arg1) {
-    if (arg0->unk_4B0 == 0) {
+    if (arg0[3].shape.feetPos[1].y == 0) {
         arg0->unk_144 = func_808F5A94;
     }
     if (func_800B84D0(arg0, arg1) != 0) {
@@ -663,7 +663,7 @@ void func_808F39DC(Actor *arg0, GlobalContext *arg1) {
     arg0->flags |= 0x10000;
     arg0->textId = phi_a2;
     arg0->unk_144 = func_808F395C;
-    if (arg0->unk_4B0 == 2) {
+    if (arg0[3].shape.feetPos[1].y == 2) {
         Audio_PlayActorSound2(arg0, 0x6855U);
         return;
     }
@@ -767,7 +767,7 @@ u16 func_808F3DD4(GlobalContext *arg0, Actor *arg1, u32 arg2) {
             return 0x34A9U;
         }
         phi_v1_2 = 0x34AFU;
-        if ((arg1->unk_4AC & 8) != 0) {
+        if ((arg1[3].shape.feetPos[1].x & 8) != 0) {
             return 0x34B1U;
         }
         goto block_49;
@@ -876,10 +876,10 @@ void func_808F4054(GlobalContext *arg0, Actor *arg1, u32 arg2, u16 arg3) {
 }
 
 void func_808F4108(Actor *arg0, GlobalContext *arg1, u16 arg2) {
-    func_800B86C8(arg0, arg1, arg0->unk_4A4);
+    func_800B86C8(arg0, arg1, arg0[3].shape.feetPos[0].y);
     arg0->textId = 0;
-    arg0->unk_4A4->textId = arg2;
-    arg0->unk_4A4->unk_48C = 2;
+    arg0[3].shape.feetPos[0].y->unk_116 = arg2;
+    arg0[3].shape.feetPos[0].y->unk_48C = 2;
     arg0->unk_48C = 0;
 }
 
@@ -893,7 +893,7 @@ void func_808F4108(Actor *arg0, GlobalContext *arg1, u16 arg2) {
             func_801159EC((s16) (temp_v0 * -1));
             if ((gSaveContext.weekEventReg[57] & 1) == 0) {
                 func_808F4108(arg1, arg0, 0x3474U);
-            } else if ((arg1->unk_4AC & 8) != 0) {
+            } else if (((bitwise s32) arg1[3].shape.feetPos[1].x & 8) != 0) {
                 func_808F4108(arg1, arg0, 0x3475U);
             } else {
                 func_800E8EA0(arg0, arg1, 0x3475U);
@@ -1221,8 +1221,8 @@ block_10:
             break;
         case 13430:                                 /* switch 6 */
             func_800E8EA0(arg0, arg1, 0x3477U);
-            func_808F30B0(arg1 + 0x148, 1);
-            func_808F30B0(arg1->unk_4A4 + 0x148, 7);
+            func_808F30B0((SkelAnime *) &arg1[1].flags, 1);
+            func_808F30B0((bitwise s32) arg1[3].shape.feetPos[0].y + 0x148, 7);
             phi_s2 = 0;
             break;
         case 13431:                                 /* switch 6 */
@@ -1231,9 +1231,9 @@ block_10:
             phi_s2 = 0;
             break;
         case 13434:                                 /* switch 6 */
-            func_808F30B0(arg1 + 0x148, 1);
-            func_808F30B0(arg1->unk_4A4 + 0x148, 7);
-            if (gSaveContext.inventory.items[gItemSlots[0x3B]] == 0x3B) {
+            func_808F30B0((SkelAnime *) &arg1[1].flags, 1);
+            func_808F30B0((bitwise s32) arg1[3].shape.feetPos[0].y + 0x148, 7);
+            if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
                 func_800E8EA0(arg0, arg1, 0x347EU);
                 phi_s2 = 0;
             } else {
@@ -1411,9 +1411,9 @@ block_153:
                     phi_s2 = 0;
                     break;
                 case 13469:                         /* switch 9 */
-                    func_808F30B0(arg1 + 0x148, 1);
-                    func_808F30B0(arg1->unk_4A4 + 0x148, 7);
-                    if (gSaveContext.inventory.items[gItemSlots[0x3B]] == 0x3B) {
+                    func_808F30B0((SkelAnime *) &arg1[1].flags, 1);
+                    func_808F30B0((bitwise s32) arg1[3].shape.feetPos[0].y + 0x148, 7);
+                    if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
                         func_800E8EA0(arg0, arg1, 0x34A1U);
                         phi_s2 = 0;
                     } else {
@@ -1453,8 +1453,8 @@ block_153:
                     break;
                 case 13465:                         /* switch 9 */
                     func_800E8EA0(arg0, arg1, 0x349AU);
-                    func_808F30B0(arg1 + 0x148, 1);
-                    func_808F30B0(arg1->unk_4A4 + 0x148, 7);
+                    func_808F30B0((SkelAnime *) &arg1[1].flags, 1);
+                    func_808F30B0((bitwise s32) arg1[3].shape.feetPos[0].y + 0x148, 7);
                     phi_s2 = 0;
                     break;
                 case 13466:                         /* switch 9 */
@@ -1692,16 +1692,16 @@ SaveContext *func_808F5B58(Actor *arg0, GlobalContext *arg1) {
             if (gSaveContext.day == 3) {
                 return func_808F5728(arg1, arg0, 6U, arg0 + 0x48C);
             }
-            return func_808F5728(arg1, arg0, 2U, arg0 + 0x48C);
+            return func_808F5728(arg1, arg0, 2U, (s32 *) &arg0[3].shape.rot.z);
         }
         /* Duplicate return node #13. Try simplifying control flow for better match */
         return phi_v0;
     }
     if ((Player_GetMask(arg1) != 8) || ((phi_v0 = &gSaveContext, (Player_GetMask(arg1) == 8)) && (phi_v0 = &gSaveContext, ((gSaveContext.weekEventReg[63] & 0x40) != 0)))) {
         if (gSaveContext.day == 3) {
-            return func_808F5728(arg1, arg0, 4U, arg0 + 0x48C);
+            return func_808F5728(arg1, arg0, 4U, (s32 *) &arg0[3].shape.rot.z);
         }
-        phi_v0 = func_808F5728(arg1, arg0, 0U, arg0 + 0x48C);
+        phi_v0 = func_808F5728(arg1, arg0, 0U, (s32 *) &arg0[3].shape.rot.z);
         /* Duplicate return node #13. Try simplifying control flow for better match */
         return phi_v0;
     }
@@ -1709,30 +1709,30 @@ SaveContext *func_808F5B58(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_808F5C98(Actor *arg0, GlobalContext *arg1) {
-    s32 temp_v0;
+    f32 temp_v0;
 
-    if (arg0->unk_4B0 == 0) {
+    if (arg0[3].shape.feetPos[1].y == 0) {
         arg0->unk_144 = func_808F5B58;
     }
     if (((Player_GetMask(arg1) == 8) && ((gSaveContext.weekEventReg[63] & 0x40) != 0)) || ((gSaveContext.weekEventReg[56] & 8) != 0)) {
         if (gSaveContext.day != 3) {
             func_808F5728(arg1, arg0, 2U, arg0 + 0x48C);
         } else {
-            func_808F5728(arg1, arg0, 6U, arg0 + 0x48C);
+            func_808F5728(arg1, arg0, 6U, (s32 *) &arg0[3].shape.rot.z);
         }
     }
-    temp_v0 = arg0->unk_4A8;
-    if (temp_v0 == 2) {
-        if (arg0->unk_4B0 == 2) {
+    temp_v0 = arg0[3].shape.feetPos[0].z;
+    if ((bitwise s32) temp_v0 == 2) {
+        if ((bitwise s32) arg0[3].shape.feetPos[1].y == 2) {
             Audio_PlayActorSound2(arg0, 0x6855U);
         } else {
             Audio_PlayActorSound2(arg0, 0x687CU);
         }
-        arg0->unk_4A8 = 3;
+        arg0[3].shape.feetPos[0].z = 4e-45.0f;
         return;
     }
-    if (temp_v0 < 3) {
-        arg0->unk_4A8 = (s32) (temp_v0 + 1);
+    if ((bitwise s32) temp_v0 < 3) {
+        arg0[3].shape.feetPos[0].z = (bitwise f32) ((bitwise s32) temp_v0 + 1);
     }
 }
 
@@ -1888,40 +1888,40 @@ void *func_808F6334(Actor *arg0, GlobalContext *arg1) {
 
     sp24 = arg1->actorCtx.actorList[2].first;
     temp_v1 = func_80152498(arg1 + 0x4908);
-    if (arg0->unk_4C0 != 0.0f) {
+    if (arg0[3].projectedPos.z != 0.0f) {
         phi_f0 = 40.0f;
     } else {
         phi_f0 = -40.0f;
     }
-    arg0->unk_4C4 = (f32) (arg0->unk_4C4 + phi_f0);
-    temp_f2 = arg0->unk_4C4;
+    arg0[3].projectedW += phi_f0;
+    temp_f2 = arg0[3].projectedW;
     if (temp_f2 < 0.0f) {
-        arg0->unk_4C4 = 0.0f;
+        arg0[3].projectedW = 0.0f;
     } else {
         if (temp_f2 > 80.0f) {
             phi_f0_2 = 80.0f;
         } else {
             phi_f0_2 = temp_f2;
         }
-        arg0->unk_4C4 = phi_f0_2;
+        arg0[3].projectedW = phi_f0_2;
     }
     arg1 = arg1;
     sp20 = (s32) temp_v1;
-    SysMatrix_InsertTranslation(arg0->unk_4C4, 0.0f, 0.0f, 1);
+    SysMatrix_InsertTranslation(arg0[3].projectedW, 0.0f, 0.0f, 1);
     phi_v0 = arg1 + 0x10000;
-    if ((arg0 == sp24->unk_A88) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0->unk_4C8 == (void *)3))) {
+    if ((arg0 == sp24[8].velocity.y) && ((temp_v0 = arg1->msgCtx.unk11F04, (((s32) temp_v0 < 0xFF) != 0)) || (phi_v0 = (void *)3, (((s32) temp_v0 < 0x201) == 0))) && (phi_v0 = (void *)3, phi_v0 = (void *)3, (temp_v1 == (void *)3)) && (phi_v0 = (void *)3, (arg0[3].uncullZoneForward == (void *)3))) {
         if ((arg1->state.frames & 1) == 0) {
-            if (arg0->unk_4C0 != 0.0f) {
+            if (arg0[3].projectedPos.z != 0.0f) {
                 phi_v0 = (void *)3;
                 goto block_18;
             }
-            arg0->unk_4C0 = 1.0f;
+            arg0[3].projectedPos.z = 1.0f;
         }
     } else {
 block_18:
-        arg0->unk_4C0 = 0.0f;
+        arg0[3].projectedPos.z = 0.0f;
     }
-    arg0->unk_4C8 = (s32) temp_v1;
+    arg0[3].uncullZoneForward = (s32) temp_v1;
     return phi_v0;
 }
 
@@ -1955,14 +1955,14 @@ s32 EnIn_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3
         phi_t9 = temp_t9;
     } while (temp_t6 != (D_808F6C54 + 0x48));
     temp_t9->unk_0 = (s32) temp_t6->unk_0;
-    temp_t9->unk_4 = (s32) temp_t6->unk_4;
+    temp_t9->unk_4 = (s32) temp_t6[1];
     if ((arg5->unk_23C != 0) && (arg1 != 0x10)) {
         temp_v0 = *(&sp50 + (arg1 * 4));
         if (temp_v0 != 0) {
             *arg2 = temp_v0;
         }
     }
-    if (((arg5->unk_4AC & 4) != 0) && (arg1 == 0x10)) {
+    if (((arg5[3].shape.feetPos[1].x & 4) != 0) && (arg1 == 0x10)) {
         *arg2 = &D_0601C528;
     }
     temp_v1 = arg0->state.gfxCtx;
@@ -1976,22 +1976,22 @@ s32 EnIn_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3
         *temp_v0_2 = 0xDB060020;
         sp4C = temp_v1;
         sp34 = temp_v0_2;
-        sp34->unk_4 = Lib_SegmentedToVirtual(*(&sp38 + (arg5->unk_482 * 4)));
+        sp34[1] = Lib_SegmentedToVirtual(*(&sp38 + (arg5->unk_482 * 4)));
         temp_v0_3 = temp_v1->polyOpa.p;
         temp_v1->polyOpa.p = temp_v0_3 + 8;
-        *temp_v0_3 = 0xDB060024;
+        *temp_v0_3 = (void *)0xDB060024;
         sp30 = temp_v0_3;
-        sp30->unk_4 = Lib_SegmentedToVirtual(&D_06003520);
+        sp30[1] = Lib_SegmentedToVirtual(&D_06003520);
     } else {
         phi_a2 = 0U;
-        if ((arg5->unk_4AC & 8) != 0) {
+        if ((arg5[3].shape.feetPos[1].x & 8) != 0) {
             phi_a2 = 1U;
         }
         AnimatedMat_DrawStep(arg0, Lib_SegmentedToVirtual(&D_06001C30), phi_a2);
     }
     if (arg1 == 0x10) {
         SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
-        SysMatrix_InsertXRotation_s(arg5->unk_35A, 1);
+        SysMatrix_InsertXRotation_s(arg5[2].shape.unk_16, 1);
         SysMatrix_InsertZRotation_s((s16) ((s32) arg5->unk_358 * -1), 1);
         SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
         func_808F6334(arg5, arg0);
@@ -2006,7 +2006,7 @@ s32 EnIn_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3
         arg4->y += (s32) (Math_SinS(temp_v1_2->unk_376) * 200.0f);
         arg4->z += (s32) (Math_CosS(temp_v1_2->unk_39E) * 200.0f);
     }
-    if ((arg5->unk_4AC & 0x40) != 0) {
+    if ((arg5[3].shape.feetPos[1].x & 0x40) != 0) {
         if (arg1 == 0x12) {
             arg4->x = 0x1F40;
             arg4->y = -0x3E8;
@@ -2065,7 +2065,7 @@ void EnIn_PostLimbDraw(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *ar
             phi_a2 = arg1;
         }
         phi_a2_2 = phi_a2;
-        if ((arg4->unk_23C == 0) && ((arg4->unk_4AC & 8) == 0)) {
+        if ((arg4->unk_23C == 0) && ((arg4[3].shape.feetPos[1].x & 8) == 0)) {
             temp_a0 = *arg0;
             if (phi_a2 == 0xC) {
                 temp_v1 = temp_a0->unk_2B0;
@@ -2081,7 +2081,7 @@ void EnIn_PostLimbDraw(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *ar
             }
         }
     }
-    if ((arg4->unk_4AC & 0x20) != 0) {
+    if ((arg4[3].shape.feetPos[1].x & 0x20) != 0) {
         temp_a0_2 = *arg0;
         if (phi_a2_2 == 0xC) {
             temp_v1_3 = temp_a0_2->unk_2B0;
@@ -2102,7 +2102,7 @@ void EnIn_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v1 + 8;
+    sp28->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xE7000000;
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, EnIn_OverrideLimbDraw, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) EnIn_PostLimbDraw, (Actor *) this);

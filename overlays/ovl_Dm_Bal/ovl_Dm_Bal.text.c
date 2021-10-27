@@ -156,7 +156,7 @@ void func_80C1EAE8(Actor *arg0, GlobalContext *arg1) {
                 }
             } else {
                 arg0->unk_336 = 0;
-                arg0->unk_198 = 0;
+                arg0[1].targetArrowOffset = 0.0f;
                 func_800BDC5C(arg0 + 0x144, (ActorAnimationEntry []) D_80C1F170, 0);
             }
         } else {
@@ -167,7 +167,7 @@ void func_80C1EAE8(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_336 = 1;
                 } else if (func_801378B8(temp_a0_2, 29.0f) != 0) {
                     arg0->unk_336 = 0;
-                    arg0->unk_198 = 0;
+                    arg0[1].targetArrowOffset = 0.0f;
                 }
             }
         }
@@ -178,7 +178,7 @@ void func_80C1EAE8(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     arg0->unk_336 = 0;
-    arg0->unk_198 = 0;
+    arg0[1].targetArrowOffset = 0.0f;
     D_80C1F2C0 = 0x63;
 }
 
@@ -220,11 +220,11 @@ void func_80C1ED0C(DmBal *arg0) {
 void func_80C1ED64(DmBal *arg0, GlobalContext *arg1, f32 *arg2, f32 *arg3, f32 arg4) {
     Actor *temp_v0;
 
-    temp_v0 = Actor_Spawn(arg1 + 0x1CA0, arg1, 0x2A4, arg2->unk_0, arg2->unk_4, arg2->unk_8, (s16) 0, (s16) 0, (s16) 0, (s16) 0);
+    temp_v0 = Actor_Spawn(arg1 + 0x1CA0, arg1, 0x2A4, arg2->unk_0, arg2[1], arg2[2], (s16) 0, (s16) 0, (s16) 0, (s16) 0);
     if (temp_v0 != 0) {
         temp_v0->velocity.x = arg3->unk_0;
-        temp_v0->velocity.y = arg3->unk_4;
-        temp_v0->velocity.z = arg3->unk_8;
+        temp_v0->velocity.y = arg3[1];
+        temp_v0->velocity.z = arg3[2];
         temp_v0->gravity = arg4;
     }
 }
@@ -244,11 +244,11 @@ void DmBal_Update(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     if ((func_801378B8(temp_a0, 29.0f) != 0) && (&D_06001804 == this->unk_144.animCurrentSeg)) {
         sp3C.unk_0 = this->actor.world.pos.x;
-        sp3C.unk_4 = (f32) this->actor.world.pos.y;
-        sp3C.unk_8 = (f32) this->actor.world.pos.z;
+        (&sp3C)[1] = this->actor.world.pos.y;
+        (&sp3C)[2] = this->actor.world.pos.z;
         sp30.unk_0 = D_80C1F2C4.unk_0;
-        sp30.unk_4 = (s32) D_80C1F2C4.unk_4;
-        sp30.unk_8 = (s32) D_80C1F2C4.unk_8;
+        (&sp30)[1] = D_80C1F2C4.unk_4;
+        (&sp30)[2] = D_80C1F2C4.unk_8;
         temp_f10 = sp3C + (7.0f * Math_SinS(this->actor.shape.rot.y));
         sp40 += 2.5f;
         sp3C = temp_f10;
@@ -272,8 +272,8 @@ s32 func_80C1EF80(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     s32 temp_f18;
 
     if (arg1 == 6) {
-        sp1C = (s16) (s32) (Math_SinS(arg5->unk_33A) * 3640.0f);
-        temp_f18 = (s32) (Math_CosS(arg5->unk_33A) * 3640.0f);
+        sp1C = (s16) (s32) (Math_SinS(arg5[137].z) * 3640.0f);
+        temp_f18 = (s32) (Math_CosS(arg5[137].z) * 3640.0f);
         temp_a2 = (s16) temp_f18;
         sp20 = (s16) temp_f18;
         SysMatrix_InsertRotation(sp1C, 0, temp_a2, 1);
@@ -299,7 +299,7 @@ void DmBal_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80C1F2D0 + (this->unk_198 * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;

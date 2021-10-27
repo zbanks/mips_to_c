@@ -120,8 +120,8 @@ void func_809A41C0(void *arg0, s32 arg1) {
 
     temp_a1 = arg0;
     sp1C.unk_0 = temp_a1->unk_24;
-    sp1C.unk_4 = (s32) temp_a1->unk_28;
-    sp1C.unk_8 = (s32) temp_a1->unk_2C;
+    (&sp1C)[1] = temp_a1->unk_28;
+    (&sp1C)[2] = temp_a1->unk_2C;
     arg0 = temp_a1;
     sp20 += 10.0f;
     sp24 += 10.0f;

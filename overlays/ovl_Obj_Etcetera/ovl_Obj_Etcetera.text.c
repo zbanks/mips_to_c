@@ -171,12 +171,12 @@ void func_80A7BF08(ObjEtcetera *this, GlobalContext *globalCtx) {
     Actor *sp30;
     Actor *temp_v1;
     f32 temp_f0;
+    f32 temp_v0;
     s16 temp_v0_2;
-    s32 temp_v0;
 
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A74;
-    if (((temp_v0 & 0x200) != 0) && (this->actor.xzDistToPlayer < 20.0f)) {
+    temp_v0 = temp_v1[8].targetArrowOffset;
+    if ((((bitwise s32) temp_v0 & 0x200) != 0) && (this->actor.xzDistToPlayer < 20.0f)) {
         SkelAnime_ChangeAnim(&this->unk_15C, (AnimationHeader *) &D_0400EB7C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_0400EB7C), (u8) 2, 0.0f);
         this->actor.draw = func_80A7C718;
         this->actionFunc = func_80A7C1F0;
@@ -185,7 +185,7 @@ void func_80A7BF08(ObjEtcetera *this, GlobalContext *globalCtx) {
         this->unk_274 = 0x1E;
         this->unk_276 &= 0xFFFE;
         this->unk_270 = 0.003f;
-    } else if (((temp_v0 & 0x2000) != 0) && (this->actor.xzDistToPlayer < 30.0f) && (temp_f0 = this->actor.yDistToPlayer, (temp_f0 > 0.0f))) {
+    } else if ((((bitwise s32) temp_v0 & 0x2000) != 0) && (this->actor.xzDistToPlayer < 30.0f) && (temp_f0 = this->actor.yDistToPlayer, (temp_f0 > 0.0f))) {
         temp_v0_2 = 0xA - (s32) (temp_f0 * 0.05f);
         if ((s32) this->unk_274 < (s32) temp_v0_2) {
             this->unk_274 = temp_v0_2;
@@ -198,7 +198,7 @@ void func_80A7BF08(ObjEtcetera *this, GlobalContext *globalCtx) {
                 func_80A7BE8C(this);
                 goto block_15;
             }
-            if ((temp_v1->speedXZ > 0.1f) || ((temp_v1->unk_ABC < 0.0f) && ((temp_v1->unk_A74 & 0x100) == 0))) {
+            if ((temp_v1->speedXZ > 0.1f) || ((temp_v1[8].yDistToPlayer < 0.0f) && (((bitwise s32) temp_v1[8].targetArrowOffset & 0x100) == 0))) {
                 this->unk_274 = 0xA;
 block_15:
             }
@@ -380,7 +380,7 @@ void func_80A7C690(Actor *this, GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v0 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0 + 8;
+    temp_a2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_a2;
     sp18 = temp_v0;
@@ -388,9 +388,9 @@ void func_80A7C690(Actor *this, GlobalContext *globalCtx) {
     sp20 = temp_a2;
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_2 + 8;
+    temp_a2->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
-    temp_v0_2->words.w1 = this->unk_27C;
+    temp_v0_2->words.w1 = (u32) this[1].update;
 }
 
 void func_80A7C718(Actor *this, GlobalContext *globalCtx) {

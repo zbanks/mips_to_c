@@ -164,12 +164,12 @@ void EffectSsKakera_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     if (this->regs[10] != -1) {
         if (((((s32) this->regs[4] >> 7) & 1) << 7) == 0x80) {
             temp_v0 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0 + 8;
+            temp_s0->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDB060018;
             temp_v0->words.w1 = (u32) globalCtx->objectCtx.status[this->regs[11]].segment;
         } else {
             temp_v0_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_2 + 8;
+            temp_s0->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060018;
             temp_v0_2->words.w1 = (u32) globalCtx->objectCtx.status[this->regs[11]].segment;
         }
@@ -180,7 +180,7 @@ void EffectSsKakera_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     Matrix_Scale(sp44, sp44, sp44, 1);
     if (((((s32) this->regs[4] >> 7) & 1) << 7) == 0x80) {
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp2C = temp_v0_3;
         sp2C->words.w1 = Matrix_NewMtx(temp_s0);
@@ -188,18 +188,18 @@ void EffectSsKakera_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
         if (sp40 >= 0) {
             temp_v0_4 = temp_s0->polyXlu.p;
             temp_v1 = (sp40 * 4) + &D_8097EAD8;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = temp_v1->unk_0 | 0xFA000000;
             temp_v0_4->words.w1 = (temp_v1->unk_3 << 8) | (temp_v1->unk_1 << 0x18) | (temp_v1->unk_2 << 0x10) | 0xFF;
         }
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = (u32) this->gfx;
         return;
     }
     temp_v0_6 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_6 + 8;
+    temp_s0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDA380003;
     sp20 = temp_v0_6;
     sp20->words.w1 = Matrix_NewMtx(temp_s0);
@@ -207,12 +207,12 @@ void EffectSsKakera_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     if (sp40 >= 0) {
         temp_v0_7 = temp_s0->polyOpa.p;
         temp_v1_2 = (sp40 * 4) + &D_8097EAD8;
-        temp_s0->polyOpa.p = temp_v0_7 + 8;
+        temp_s0->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = temp_v1_2->unk_0 | 0xFA000000;
         temp_v0_7->words.w1 = (temp_v1_2->unk_3 << 8) | (temp_v1_2->unk_1 << 0x18) | (temp_v1_2->unk_2 << 0x10) | 0xFF;
     }
     temp_v0_8 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_8 + 8;
+    temp_s0->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDE000000;
     temp_v0_8->words.w1 = (u32) this->gfx;
 }
@@ -339,7 +339,7 @@ s32 func_8097E420(EffectSs *arg0, f32 *arg1, f32 arg2) {
         } else {
             phi_f0 = 1.0f;
         }
-        arg0->accel.x += temp_v1->unk_-4 * arg1->unk_8 * phi_f0;
+        arg0->accel.x += temp_v1->unk_-4 * arg1[2] * phi_f0;
         arg0->accel.z -= temp_v1->unk_-4 * arg1->unk_0 * phi_f0;
     }
     return 1;
@@ -369,7 +369,7 @@ s32 func_8097E4F0(EffectSs *arg0, f32 *arg1, f32 arg2) {
             phi_f0 = 1.0f;
         }
         arg0->accel.x -= arg1->unk_0 * temp_v1->unk_-4 * phi_f0;
-        arg0->accel.z -= arg1->unk_8 * temp_v1->unk_-4 * phi_f0;
+        arg0->accel.z -= arg1[2] * temp_v1->unk_-4 * phi_f0;
     }
     return 1;
 }
@@ -459,12 +459,12 @@ void func_8097E7E0(Vec3f *arg0, GlobalContext *arg1) {
                 temp_v0_2 = arg0->unk_52;
                 arg0->unk_40 = 0;
                 arg0->unk_48 = (s16) (temp_v1 & 0xFF9F);
-                arg0->unk_20 = 0.0f;
-                arg0->unk_1C = 0.0f;
-                arg0->unk_18 = 0.0f;
-                arg0->unk_14 = 0.0f;
-                arg0->unk_10 = 0.0f;
-                arg0->unk_C = 0.0f;
+                arg0[2].z = 0.0f;
+                arg0[2].y = 0.0f;
+                arg0[2].x = 0.0f;
+                arg0[1].z = 0.0f;
+                arg0[1].y = 0.0f;
+                arg0[1].x = 0.0f;
                 arg0->unk_4A = temp_v0_2;
                 arg0->unk_42 = temp_v0_2;
                 return;
@@ -492,7 +492,7 @@ void func_8097E7E0(Vec3f *arg0, GlobalContext *arg1) {
             /* Duplicate return node #17. Try simplifying control flow for better match */
             return;
         }
-        if ((arg0->unk_10 < 0.0f) && (func_800C5A20(arg1 + 0x830, arg0, *(&D_8097EB64 + ((((s32) temp_v1_2 >> 2) & 3) * 4))) != 0) && (arg0->unk_C = (f32) (arg0->unk_C * func_8097DE30(0.9f, 0.2f)), arg0->unk_10 = (f32) (arg0->unk_10 * -0.8f), temp_v0_4 = arg0->unk_50, arg0->unk_14 = (f32) (arg0->unk_14 * func_8097DE30(0.9f, 0.2f)), ((s32) temp_v0_4 > 0))) {
+        if ((arg0[1].y < 0.0f) && (func_800C5A20(arg1 + 0x830, arg0, *(&D_8097EB64 + ((((s32) temp_v1_2 >> 2) & 3) * 4))) != 0) && (arg0[1].x *= func_8097DE30(0.9f, 0.2f), arg0[1].y *= -0.8f, temp_v0_4 = arg0->unk_50, arg0[1].z *= func_8097DE30(0.9f, 0.2f), ((s32) temp_v0_4 > 0))) {
             arg0->unk_50 = (s16) (temp_v0_4 - 1);
             return;
         }

@@ -76,7 +76,7 @@ s32 osVoiceStartReadData(? *);                      /* extern */
 s32 osVoiceStopReadData(? *);                       /* extern */
 s32 func_801A5228(void *arg0);                      /* static */
 s32 func_801A5390();                                /* static */
-void *func_801A53DC();                              /* static */
+? *func_801A53DC();                                 /* static */
 void func_801A53E8(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u16 arg4); /* static */
 void func_801A541C(s32 arg0, s32 arg1);             /* static */
 s32 func_801A5488(s32 arg0);                        /* static */
@@ -88,7 +88,7 @@ void func_801A5A10();                               /* static */
 void func_801A5A1C(s8 *arg0);                       /* static */
 static ? D_801D8E50;                                /* unable to generate initializer */
 static ? D_801D8F70;                                /* unable to generate initializer */
-static void *D_801FD5A0;
+static ? *D_801FD5A0;
 static s8 D_801FD5A4[20];
 static ? D_801FD5B8;
 static u8 D_801FD5C4;
@@ -127,7 +127,7 @@ s32 func_801A5228(void *arg0) {
     s32 phi_s3;
 
     D_801FD5A0.unk_4 = 0;
-    D_801FD5A0.unk_8 = 0;
+    (&D_801FD5A0)[2] = NULL;
     D_801FD5A0.unk_C = 0x3E8;
     D_801FD5A0.unk_E = 5;
     D_801FD5A0.unk_10 = 0;
@@ -173,8 +173,8 @@ s32 func_801A5390(void) {
     s32 sp18;
     s32 temp_t6;
 
-    temp_t6 = D_801FD5A0.unk_8;
-    D_801FD5A0.unk_8 = 0;
+    temp_t6 = (&D_801FD5A0)[2];
+    (&D_801FD5A0)[2] = NULL;
     sp1C = temp_t6;
     sp18 = func_80175008();
     osVoiceStartReadData(&D_801FD5B8);
@@ -182,7 +182,7 @@ s32 func_801A5390(void) {
     return sp1C;
 }
 
-void *func_801A53DC(void) {
+? *func_801A53DC(void) {
     return D_801FD5A0;
 }
 
@@ -229,13 +229,13 @@ s32 func_801A54D0(s32 arg0, ? *arg1, s32 arg2, s32 arg3) {
     u8 sp22;
     s32 sp1C;
     s32 sp18;
+    ? *temp_v0;
     s32 temp_a0;
     s32 temp_a0_2;
     s32 temp_a2;
     u8 *temp_v0_2;
     u8 *temp_v1;
     u8 temp_a0_3;
-    void *temp_v0;
     s32 phi_t1;
     s32 phi_v1;
     s32 phi_a0;
@@ -307,6 +307,7 @@ s32 func_801A5680(s32 arg0) {
     u8 sp22;
     s32 sp1C;
     s32 sp18;
+    ? *temp_v0;
     s32 temp_a0;
     s32 temp_a2;
     s32 temp_a2_2;
@@ -314,7 +315,6 @@ s32 func_801A5680(s32 arg0) {
     s32 temp_v0_2;
     u8 *temp_v1;
     u8 temp_a0_2;
-    void *temp_v0;
     u8 phi_t0;
     s32 phi_v0;
     s32 phi_a3;
@@ -389,7 +389,7 @@ void func_801A5808(void) {
             } else {
                 if (((D_801FD5C8.unk_0 & D_801FD5A0.unk_10) == 0) && ((s32) D_801FD5A0.unk_E >= (s32) D_801FD5C8.unk_2) && ((s32) D_801FD5A0.unk_C >= (s32) D_801FD5C8.unk_14) && ((s32) D_801FD5C8.unk_4 >= (s32) D_801FD5A0.unk_12) && ((s32) D_801FD5C8.unk_6 >= (s32) D_801FD5A0.unk_14)) {
                     D_801FD5E8.unk_0 = (s32) D_801FD5C8.unk_0;
-                    D_801FD5A0.unk_8 = &D_801FD5E8;
+                    (&D_801FD5A0)[2] = &D_801FD5E8;
                     D_801FD5E8.unk_8 = (s32) D_801FD5C8.unk_8;
                     D_801FD5E8.unk_4 = (s32) D_801FD5C8.unk_4;
                     D_801FD5E8.unk_10 = (s32) D_801FD5C8.unk_10;
@@ -465,7 +465,7 @@ void func_801A5A1C(s8 *arg0) {
         do {
             temp_t8 = arg0[phi_a1];
             sp28 = temp_t8;
-            temp_t6 = arg0[phi_a2].unk_1;
+            temp_t6 = (&arg0[phi_a2])[1];
             temp_v0_2 = temp_t8 & 0xFF;
             sp29 = temp_t6;
             if (temp_v0_2 == 0x83) {

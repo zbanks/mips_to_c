@@ -84,7 +84,7 @@ void EnEndingHero_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80C1E970 + (this->unk242 * 4)));
@@ -93,7 +93,7 @@ void EnEndingHero_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp40 = (s32) temp_v0_2;
     }
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060024;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80C1E984 + (sp40 * 4)));

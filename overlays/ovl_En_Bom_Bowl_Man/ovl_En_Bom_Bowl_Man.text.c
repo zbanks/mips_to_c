@@ -208,7 +208,7 @@ void EnBomBowlMan_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_29A = ((s32) this->actor.params >> 8) & 0xFF;
     this->unk_294 = func_8013D648(globalCtx, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
-    if ((gSaveContext.entranceIndex == 0xD220) && ((gSaveContext.weekEventReg[73] & 0x80) != 0) && ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) == 0)) {
+    if ((gSaveContext.entranceIndex == 0xD220) && ((gSaveContext.weekEventReg[73] & 0x80) != 0) && ((gBitFlags[18] & gSaveContext.inventory.questItems) == 0)) {
         this->unk_2D6 = (s16) this->actor.cutscene;
         if (this->unk_2D6 == 0) {
             Actor_MarkForDeath((Actor *) this);
@@ -228,10 +228,10 @@ void func_809C493C(Actor *arg0, s32 arg1, f32 arg2) {
     f32 temp_f0;
     s32 temp_v1;
 
-    arg0->unk_2F8 = arg1;
+    arg0[2].speedXZ = arg1;
     temp_f0 = (f32) SkelAnime_GetFrameCount(*(&D_809C6128 + (arg1 * 4)));
-    temp_v1 = arg0->unk_2F8;
-    arg0->unk_2C4 = temp_f0;
+    temp_v1 = arg0[2].speedXZ;
+    arg0[2].focus.pos.x = temp_f0;
     SkelAnime_ChangeAnim(arg0 + 0x144, *(&D_809C6128 + (temp_v1 * 4)), arg2, 0.0f, temp_f0, (u8) (s32) *(&D_809C6178 + temp_v1), -4.0f);
 }
 
@@ -241,30 +241,30 @@ void func_809C49CC(Actor *arg0) {
     SkelAnime *temp_s0;
 
     temp_s0 = arg0 + 0x144;
-    if ((arg0->unk_2F8 == 5) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
+    if ((arg0[2].speedXZ == 5) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    temp_s0_2 = arg0 + 0x144;
-    if ((arg0->unk_2F8 == 0xB) && ((func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 8.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 12.0f) != 0))) {
+    temp_s0_2 = &arg0[1];
+    if (((bitwise s32) arg0[2].speedXZ == 0xB) && ((func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 8.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 12.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    temp_s0_3 = arg0 + 0x144;
-    if ((arg0->unk_2F8 == 0x12) && ((func_801378B8((SkelAnime *) temp_s0_3, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 6.0f) != 0))) {
+    temp_s0_3 = &arg0[1];
+    if (((bitwise s32) arg0[2].speedXZ == 0x12) && ((func_801378B8((SkelAnime *) temp_s0_3, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_3, 6.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    if ((arg0->unk_2F8 == 0xF) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 15.0f) != 0)) {
+    if (((bitwise s32) arg0[2].speedXZ == 0xF) && (func_801378B8((SkelAnime *) &arg0[1], 15.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
-    if ((arg0->unk_2F8 == 6) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 8.0f) != 0)) {
+    if (((bitwise s32) arg0[2].speedXZ == 6) && (func_801378B8((SkelAnime *) &arg0[1], 8.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
 }
 
 void func_809C4B50(Actor *arg0) {
-    arg0->unk_2B8 = 0;
-    arg0->unk_2BC = 0;
-    arg0->unk_2BA = 0;
-    arg0->unk_29E = 0;
+    arg0[2].world.rot.x = 0;
+    arg0[2].world.rot.z = 0;
+    arg0[2].world.rot.y = 0;
+    arg0[2].home.rot.y = 0;
     arg0->unk_290 = 0;
 }
 
@@ -274,7 +274,7 @@ void func_809C4B6C(Actor *arg0) {
     void *temp_a2;
 
     if (arg0->unk_29A != -1) {
-        temp_a0 = arg0->unk_294;
+        temp_a0 = arg0[2].home.pos.y;
         temp_a2 = arg0 + 0x2A0;
         if (temp_a0 != 0) {
             temp_a1 = arg0->unk_298;
@@ -315,24 +315,24 @@ void func_809C4BC4(Actor *arg0, GlobalContext *arg1) {
                 (arg0 + (temp_s0 * 4))->unk_2D8 = temp_v0;
             }
         }
-        temp_s1 = phi_s1 + 0xC;
+        temp_s1 = &phi_s1[1];
         phi_s4 += 1;
         phi_s1 = temp_s1;
     } while (temp_s1 != &D_809C61DC);
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg0->unk_2D0);
-    } else if (ActorCutscene_GetCanPlayNext(arg0->unk_2D0) == 0) {
-        ActorCutscene_SetIntentToPlay(arg0->unk_2D0);
+        ActorCutscene_SetIntentToPlay(arg0[2].focus.rot.x);
+    } else if (ActorCutscene_GetCanPlayNext(arg0[2].focus.rot.x) == 0) {
+        ActorCutscene_SetIntentToPlay(arg0[2].focus.rot.x);
     }
     func_809C493C(arg0, 3, 1.0f);
     temp_v0_2 = arg0->yawTowardsPlayer;
-    arg0->unk_2D4 = temp_v0_2;
+    arg0[2].focus.rot.z = temp_v0_2;
     arg0->unk_290 = temp_v0_2;
     gSaveContext.weekEventReg[73] &= 0xEF;
     gSaveContext.weekEventReg[85] &= 0xFD;
-    arg0->unk_29C = 0;
-    arg0->unk_284 = func_809C4DA4;
+    arg0[2].home.rot.x = 0;
+    arg0[1].overlayEntry = (ActorOverlay *) func_809C4DA4;
 }
 
 void func_809C4DA4(EnBomBowlMan *this, GlobalContext *globalCtx) {
@@ -401,7 +401,7 @@ block_31:
             func_809C493C((Actor *) this, 3, 1.0f);
             this->unk_2C0 = 2;
             this->unk_2D4 = this->actor.yawTowardsPlayer;
-            if ((sp30->unk_14B == 4) && ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0)) {
+            if ((sp30->unk_14B == 4) && ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0)) {
                 this->unk_2C0 = 4;
             }
             goto block_31;
@@ -564,7 +564,7 @@ void func_809C5524(Actor *arg0, GlobalContext *arg1) {
     arg0 = temp_a3;
     func_809C493C(temp_a0, 3, 1.0f, temp_a3);
     func_801518B0(arg1, arg0->textId, arg0);
-    arg0->unk_284 = func_809C5598;
+    arg0[1].overlayEntry = (ActorOverlay *) func_809C5598;
 }
 
 void func_809C5598(EnBomBowlMan *this, GlobalContext *globalCtx) {
@@ -695,8 +695,8 @@ void func_809C5738(EnBomBowlMan *this, GlobalContext *globalCtx) {
 
 void func_809C59A4(Actor *arg0, GlobalContext *arg1) {
     func_800B8A1C(arg0, arg1, 0x50, 300.0f, 300.0f);
-    arg0->unk_29C = 1;
-    arg0->unk_284 = func_809C59F0;
+    arg0[2].home.rot.x = 1;
+    arg0[1].overlayEntry = (ActorOverlay *) func_809C59F0;
 }
 
 void func_809C59F0(EnBomBowlMan *this, GlobalContext *globalCtx) {
@@ -871,17 +871,17 @@ void EnBomBowlMan_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_809C6214 + (this->unk_2F0 * 4)));
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_809C6220 + (this->unk_2F4 * 4)));
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_809C6200 + (this->unk_2F4 * 4)));

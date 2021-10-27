@@ -66,7 +66,7 @@ void Opening_Init(GameState *thisx) {
     Game_SetFramerateDivisor(thisx, 1);
     SysMatrix_StateAlloc(thisx);
     ShrinkWindow_Init();
-    View_Init(thisx + 0xA8, thisx->gfxCtx);
+    View_Init((View *) &thisx[1].main, thisx->gfxCtx);
     thisx->main = Opening_Main;
     thisx->destroy = Opening_Destroy;
     gSaveContext.respawnFlag = 0;

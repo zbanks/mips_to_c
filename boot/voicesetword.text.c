@@ -58,7 +58,7 @@ s32 osVoiceSetWord(void *arg0, u8 *arg1) {
             phi_v0 += 2;
             phi_a2 = temp_a2;
             phi_a2_2 = temp_a2;
-        } while (phi_v0->unk_2 != 0);
+        } while (phi_v0[2] != 0);
     }
     sp50 = phi_a2;
     bzero((void *) &sp20, 0x28);
@@ -71,7 +71,7 @@ s32 osVoiceSetWord(void *arg0, u8 *arg1) {
             temp_a0_2 = phi_a0 + 2;
             *phi_v0_2 = phi_v1->unk_0;
             temp_v0_4 = phi_v0_2 + 2;
-            temp_v0_4->unk_-3 = (u8) phi_v1->unk_1;
+            temp_v0_4->unk_-3 = (u8) phi_v1[1];
             phi_v1 += 2;
             phi_v0_2 = temp_v0_4;
             phi_a0 = temp_a0_2;

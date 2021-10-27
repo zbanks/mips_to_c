@@ -854,7 +854,7 @@ void func_80928F18(ObjTsubo *this, GlobalContext *globalCtx) {
     if (((temp_v0_3 & 0xB) != 0) || (temp_v1 != 0) || ((s32) this->unk_194 <= 0)) {
         temp_v0_5 = (temp_a2 << 5) + &D_80929530;
         sp28 = temp_v0_5;
-        temp_v0_5->unk_14(this, globalCtx, temp_a2);
+        (bitwise ? (*)(ObjTsubo *, GlobalContext *, s32)) temp_v0_5[1].pos.x(this, globalCtx, temp_a2);
         if (temp_v0_5 == &D_80929590) {
             func_8092762C(this, globalCtx);
         } else {
@@ -871,7 +871,7 @@ void func_80928F18(ObjTsubo *this, GlobalContext *globalCtx) {
     if ((temp_v0_3 & 0x40) != 0) {
         temp_v0_4 = (temp_a2 << 5) + &D_80929530;
         sp28 = temp_v0_4;
-        temp_v0_4->unk_18(this, globalCtx, temp_a2);
+        temp_v0_4[1].pos.y(this, globalCtx, temp_a2);
         if (temp_v0_4 == &D_80929590) {
             func_8092762C(this, globalCtx);
         } else {
@@ -918,7 +918,7 @@ void func_809291DC(Actor *arg0) {
     temp_v1 = arg0->home.rot.y;
     arg0->shape.rot.z = 0;
     arg0->world.rot.z = 0;
-    arg0->unk_197 = 0;
+    arg0[1].unk_53 = 0;
     arg0->shape.rot.x = temp_v0;
     arg0->world.rot.x = temp_v0;
     arg0->velocity.y = 0.0f;

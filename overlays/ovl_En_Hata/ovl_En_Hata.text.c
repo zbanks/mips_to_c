@@ -131,8 +131,8 @@ void EnHata_Update(Actor *thisx, GlobalContext *globalCtx) {
     Math_ApproachF(&this->unk_2A8, sp38, phi_f0_3, 1000.0f);
     Math_ApproachF(&this->unk_2AC, sp3C, phi_f0_3, 1000.0f);
     sp34.unk_0 = sp24->unk_0;
-    sp34.unk_4 = (s32) sp24->unk_4;
-    sp34.unk_8 = (s32) sp24->unk_8;
+    (&sp34)[1] = sp24[1];
+    (&sp34)[2] = sp24[2];
     this->unk_29C = Math_Vec3f_Pitch(&D_801D15B0, (Vec3f *) &sp34);
     this->unk_29C = (s16) -(s32) this->unk_29C;
     this->unk_2A0 = Math_Vec3f_Yaw(&D_801D15B0, (Vec3f *) &sp34);
@@ -142,8 +142,8 @@ void EnHata_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_8089EC68(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if ((arg1 == 4) || (arg1 == 0xD)) {
-        arg4->y += arg5->unk_29C;
-        arg4->z += arg5->unk_2A0;
+        arg4->y += arg5[2].home.rot.x;
+        arg4->z += arg5[2].home.rot.z;
     }
     return 0;
 }

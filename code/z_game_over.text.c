@@ -224,7 +224,7 @@ void func_801AA68C(GlobalContext *arg0) {
             gSaveContext.health = 0x30;
             temp_v0_2 = &arg0->gameOverCtx;
             temp_v0_2->state += 1;
-            if (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32) {
+            if (gSaveContext.inventory.items[gItemSlots[50]] == 0x32) {
                 gSaveContext.playerForm = 4;
                 gSaveContext.equippedMask = 0;
             }

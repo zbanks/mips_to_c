@@ -201,7 +201,7 @@ static ActorAnimationEntryS sAnimations[26] = {
                     Audio_PlayActorSound2(arg0, 0x3983U);
                 }
             } else {
-                temp_a0_4 = arg0 + 0x144;
+                temp_a0_4 = &arg0[1];
                 if (temp_v0 == 8) {
                     sp1C = (SkelAnime *) temp_a0_4;
                     arg0 = arg0;
@@ -211,21 +211,21 @@ static ActorAnimationEntryS sAnimations[26] = {
                     if (func_801378B8(sp1C, 18.0f) != 0) {
                         Audio_PlayActorSound2(arg0, 0x3983U);
                     }
-                } else if ((temp_v0 == 0x11) && (temp_a0_5 = arg0 + 0x144, (temp_v0 == 0x12))) {
+                } else if ((temp_v0 == 0x11) && (temp_a0_5 = &arg0[1], (temp_v0 == 0x12))) {
                     sp1C = (SkelAnime *) temp_a0_5;
                     arg0 = arg0;
                     if ((func_801378B8((SkelAnime *) temp_a0_5, 7.0f) != 0) || (func_801378B8((SkelAnime *) temp_a0_5, 15.0f) != 0)) {
                         Audio_PlayActorSound2(arg0, 0x3980U);
                     }
                 } else {
-                    temp_a0_6 = arg0 + 0x144;
+                    temp_a0_6 = &arg0[1];
                     if (temp_v0 == 0x15) {
                         arg0 = arg0;
                         if (func_801378B8((SkelAnime *) temp_a0_6, 17.0f) != 0) {
                             Audio_PlayActorSound2(arg0, 0x3980U);
                         }
                     } else {
-                        temp_a0_7 = arg0 + 0x144;
+                        temp_a0_7 = &arg0[1];
                         if (temp_v0 == 0x17) {
                             arg0 = arg0;
                             if (func_801378B8((SkelAnime *) temp_a0_7, 3.0f) != 0) {
@@ -374,7 +374,7 @@ s32 func_80B3CF60(Actor *arg0, GlobalContext *arg1) {
     if (((arg0->unk_322 & 7) != 0) && (sp24 = 0, phi_v1 = sp24, (func_800B84D0(arg0, arg1) != 0))) {
         func_8013AED4(arg0 + 0x322, 0U, 7U);
         arg0->unk_322 = (u16) (arg0->unk_322 | 8);
-        arg0->unk_188 = func_80B3D3F8;
+        arg0[1].focus.pos.z = (bitwise f32) func_80B3D3F8;
         goto block_6;
     }
     phi_v1_2 = phi_v1;
@@ -386,7 +386,7 @@ s32 func_80B3CF60(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_322 = (u16) (arg0->unk_322 & 0xFAFF);
             arg0->parent = NULL;
             arg0->unk_32E = 0;
-            arg0->unk_188 = func_80B3D338;
+            arg0[1].focus.pos.z = (bitwise f32) func_80B3D338;
 block_6:
             phi_v1_2 = 1;
         }
@@ -529,7 +529,7 @@ void func_80B3D47C(Actor *arg0, GlobalContext *arg1) {
             temp_t4 = arg0->unk_322 & 0xFFEF;
             arg0->unk_322 = temp_t4;
             arg0->unk_322 = (u16) (temp_t4 | 0x400);
-            arg0->unk_188 = func_80B3D558;
+            arg0[1].focus.pos.z = func_80B3D558;
             arg0->scale.x = 0.0085f;
         }
     }
@@ -653,12 +653,12 @@ void EnDnp_Update(Actor *thisx, GlobalContext *globalCtx) {
             sp6E = arg1;
         }
         Math_SmoothStepToS(arg3, sp6C, 3, 0x2AA8, (s16) 0xB6);
-        Math_SmoothStepToS(arg3 + 2, sp6E, 3, 0x2AA8, (s16) 0xB6);
-        Math_SmoothStepToS(arg3 + 4, sp70, 3, 0x2AA8, (s16) 0xB6);
+        Math_SmoothStepToS(&arg3[1], sp6E, 3, 0x2AA8, (s16) 0xB6);
+        Math_SmoothStepToS(&arg3[2], sp70, 3, 0x2AA8, (s16) 0xB6);
     } else {
         arg3->unk_0 = sp6C;
-        arg3->unk_2 = sp6E;
-        arg3->unk_4 = sp70;
+        arg3[1] = sp6E;
+        arg3[2] = sp70;
     }
     return 1;
 }
@@ -688,7 +688,7 @@ block_4:
     if (arg1 == 0xC) {
         func_80B3D974((s16) (arg2->unk_330 + 0x4000), (s16) (arg2->unk_332 + arg2->shape.rot.y + 0x4000), arg2 + 0x1D8, arg2 + 0x1E4, phi_v1, phi_v0);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_1D8, arg2->unk_1DC, arg2->unk_1E0, 0);
+        SysMatrix_InsertTranslation(arg2[1].xyzDistToPlayerSq, arg2[1].xzDistToPlayer, arg2[1].yDistToPlayer, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
         Matrix_RotateY(arg2->unk_1E6, 1U);
         SysMatrix_InsertXRotation_s(arg2->unk_1E4, 1);
@@ -709,7 +709,7 @@ void EnDnp_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp38 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = sp38->polyOpa.p;
-        sp38->polyOpa.p = temp_v0 + 8;
+        sp38->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp30 = temp_v0;
         sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80B3DEAC + (this->unk_336 * 4)));

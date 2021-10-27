@@ -244,7 +244,7 @@ void EffLastday_Draw(Actor *thisx, GlobalContext *globalCtx) {
             func_80BEC0A4(this->unk_14E, temp_a2);
         } else {
             temp_v1 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v1 + 8;
+            temp_a2->polyXlu.p = &temp_v1[1];
             temp_v1->words.w0 = 0xFA000080;
             temp_v1->words.w1 = (this->unk_14E & 0xFF) | ~0x55FF;
         }

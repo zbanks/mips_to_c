@@ -441,8 +441,8 @@ void func_80A20670(Actor *arg0) {
     Audio_PlayActorSound2(temp_a0, 0x386CU);
     arg0->velocity.y = 20.0f;
     arg0->speedXZ = 5.0f;
-    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A20F14, 2);
-    arg0->unk_294 = func_80A206DC;
+    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A20F14, 2);
+    arg0[2].home.pos.y = (bitwise f32) func_80A206DC;
 }
 
 void func_80A206DC(EnSyatekiWf *this, GlobalContext *globalCtx) {
@@ -481,8 +481,8 @@ void func_80A2079C(Actor *arg0) {
     temp_a3->speedXZ = 0.0f;
     arg0 = temp_a3;
     Audio_PlayActorSound2(temp_a3, 0x383CU);
-    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A20F14, 5);
-    arg0->unk_294 = func_80A20800;
+    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A20F14, 5);
+    arg0[2].home.pos.y = (bitwise f32) func_80A20800;
 }
 
 void func_80A20800(EnSyatekiWf *this, GlobalContext *globalCtx) {
@@ -508,9 +508,9 @@ void func_80A20858(Actor *arg0, GlobalContext *arg1) {
     arg0->speedXZ = 0.0f;
     EffectSsExtra_Spawn(arg1, arg0 + 0x24, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Audio_PlayActorSound2(arg0, 0x384BU);
-    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A20F14, 6);
+    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A20F14, 6);
     sp2C->unk_280 = (s16) (sp2C->unk_280 + 0x64);
-    arg0->unk_294 = func_80A208F8;
+    arg0[2].home.pos.y = (bitwise f32) func_80A208F8;
 }
 
 void func_80A208F8(EnSyatekiWf *this, GlobalContext *globalCtx) {
@@ -623,9 +623,9 @@ void func_80A20D10(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     Collider_UpdateSpheres(arg1, arg4 + 0x34C);
     if (arg1 == 6) {
         SysMatrix_MultiplyVector3fByState(&D_80A20FD0, (Vec3f *) &sp18);
-        arg4->unk_346 = (s16) (s32) sp18;
-        arg4->unk_348 = (s16) (s32) sp1C;
-        arg4->unk_34A = (s16) (s32) sp20;
+        arg4[2].shape.rot.y = (s16) (s32) sp18;
+        arg4[2].shape.rot.z = (s16) (s32) sp1C;
+        arg4[2].shape.face = (s16) (s32) sp20;
     }
 }
 
@@ -640,7 +640,7 @@ void EnSyatekiWf_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp38 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0 + 8;
+    sp38->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80A20FDC + (this->unk_2B0 * 4)));

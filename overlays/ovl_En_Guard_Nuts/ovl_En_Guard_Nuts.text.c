@@ -99,8 +99,8 @@ void func_80ABB2D4(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80ABB540(Actor *arg0);                    /* static */
 void func_80ABB590(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80ABB854(EnGuardNuts *arg0, GlobalContext *arg1, s32); /* static */
-void func_80ABB91C(void *arg0, ? arg1);             /* static */
-void func_80ABB990(Actor *arg0, GlobalContext *arg1); /* static */
+void func_80ABB91C(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
+void func_80ABB990(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
 s32 func_80ABBC60(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5); /* static */
 extern ? D_06002700;
 extern SkeletonHeader D_06002848;
@@ -145,10 +145,10 @@ void func_80ABB210(Actor *arg0, s32 arg1) {
     f32 temp_f0;
     s32 temp_v1;
 
-    arg0->unk_218 = arg1;
+    arg0[1].shape.feetPos[0].x = arg1;
     temp_f0 = (f32) SkelAnime_GetFrameCount(*(&D_80ABBE4C + (arg1 * 4)));
-    temp_v1 = arg0->unk_218;
-    arg0->unk_240 = temp_f0;
+    temp_v1 = arg0[1].shape.feetPos[0].x;
+    arg0[1].uncullZoneForward = temp_f0;
     SkelAnime_ChangeAnim(arg0 + 0x144, *(&D_80ABBE4C + (temp_v1 * 4)), 1.0f, 0.0f, temp_f0, (u8) (s32) *(&D_80ABBE5C + temp_v1), -2.0f);
 }
 
@@ -190,16 +190,16 @@ void func_80ABB2D4(Actor *arg0, GlobalContext *arg1) {
     phi_v1 = 1;
     phi_a2_2 = 3;
     if (sp2C->unk_14B == 3) {
-        arg0->unk_220 = 0;
+        arg0[1].shape.feetPos[0].z = 0.0f;
         if (((gSaveContext.weekEventReg[17] & 4) != 0) && (arg0->unk_224 == 0)) {
-            arg0->unk_220 = 7;
+            arg0[1].shape.feetPos[0].z = 1e-44.0f;
         } else if ((gSaveContext.weekEventReg[12] & 0x40) != 0) {
-            arg0->unk_220 = 4;
+            arg0[1].shape.feetPos[0].z = 6e-45.0f;
         }
     } else {
-        arg0->unk_220 = 3;
+        arg0[1].shape.feetPos[0].z = (bitwise f32) 3;
     }
-    arg0->textId = *(&D_80ABBE24 + (arg0->unk_220 * 2));
+    arg0->textId = *(&D_80ABBE24 + ((bitwise s32) arg0[1].shape.feetPos[0].z * 2));
     temp_v0 = D_80ABBE20;
     phi_a1 = arg0->world.rot.y;
     if (temp_v0 == 2) {
@@ -207,7 +207,7 @@ void func_80ABB2D4(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if (temp_v0 == 1) {
-        if (arg0->unk_218 != 1) {
+        if ((bitwise s32) arg0[1].shape.feetPos[0].x != 1) {
             func_80ABB210(arg0, 1, 3);
         }
         phi_a1 = (s16) (arg0->home.rot.y + 0x8000);
@@ -216,7 +216,7 @@ void func_80ABB2D4(Actor *arg0, GlobalContext *arg1) {
     }
     if (fabsf((f32) (arg0->shape.rot.y - phi_a1)) < 100.0f) {
         arg0->shape.rot.y = phi_a1;
-        if ((phi_v1 == D_80ABBE20) && (phi_a2_2 != arg0->unk_218)) {
+        if ((phi_v1 == D_80ABBE20) && (phi_a2_2 != (bitwise s32) arg0[1].shape.feetPos[0].x)) {
             func_80ABB210(arg0, 3, phi_a2_2, 0xBB8);
         }
     } else {
@@ -238,7 +238,7 @@ void func_80ABB540(Actor *arg0) {
     arg0->unk_23C = 0;
     arg0->unk_214 = 0x10;
     arg0->unk_21C = 1;
-    arg0->unk_20C = func_80ABB590;
+    arg0[1].shape.shadowDraw = func_80ABB590;
     arg0->unk_23A = (s16) arg0->unk_23C;
 }
 
@@ -246,10 +246,10 @@ void func_80ABB590(Actor *arg0, GlobalContext *arg1) {
     s16 sp36;
     MessageContext *sp2C;
     MessageContext *temp_a0;
+    f32 temp_v0;
+    f32 temp_v0_2;
     s16 temp_v1;
     s32 temp_t6;
-    s32 temp_v0;
-    s32 temp_v0_2;
     s16 phi_v0;
 
     phi_v0 = arg0->yawTowardsPlayer;
@@ -258,7 +258,7 @@ void func_80ABB590(Actor *arg0, GlobalContext *arg1) {
     }
     if (fabsf((f32) (arg0->shape.rot.y - phi_v0)) < 100.0f) {
         arg0->shape.rot.y = phi_v0;
-        if ((arg0->unk_15C < arg0->unk_240) || (arg0->unk_220 >= 7)) {
+        if ((arg0->unk_15C < arg0[1].uncullZoneForward) || (arg0[1].shape.feetPos[0].z >= 7)) {
             SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
         }
     } else {
@@ -271,14 +271,14 @@ void func_80ABB590(Actor *arg0, GlobalContext *arg1) {
     if (func_80152498(temp_a0) == 5) {
         arg0->unk_23C = 0;
         arg0->unk_23A = 0;
-        if ((arg0->unk_220 == 3) && (arg0->unk_218 == 0)) {
+        if ((arg0[1].shape.feetPos[0].z == 3) && (arg0[1].shape.feetPos[0].x == 0)) {
             func_80ABB210(arg0, 0);
         }
         if (func_80147624(arg1) != 0) {
-            temp_v0 = arg0->unk_220;
-            temp_v1 = *(&D_80ABBE38 + (temp_v0 * 2));
+            temp_v0 = arg0[1].shape.feetPos[0].z;
+            temp_v1 = *(&D_80ABBE38 + ((bitwise s32) temp_v0 * 2));
             if (temp_v1 != 1) {
-                temp_t6 = temp_v0 + 1;
+                temp_t6 = (bitwise s32) temp_v0 + 1;
                 if (temp_v1 == 2) {
                     func_801477B4(arg1);
                     D_80ABBE20 = 2;
@@ -286,20 +286,20 @@ void func_80ABB590(Actor *arg0, GlobalContext *arg1) {
                     func_80ABB854((EnGuardNuts *) arg0, arg1);
                     return;
                 }
-                arg0->unk_220 = temp_t6;
+                arg0[1].shape.feetPos[0].z = (bitwise f32) temp_t6;
                 func_801518B0(arg1, *(&D_80ABBE24 + (temp_t6 * 2)), arg0);
-                if (*(&D_80ABBE38 + (arg0->unk_220 * 2)) == 2) {
+                if (*(&D_80ABBE38 + ((bitwise s32) arg0[1].shape.feetPos[0].z * 2)) == 2) {
                     D_80ABBE20 = 1;
                 }
                 arg0->unk_214 = 0x10;
                 return;
             }
-            if (temp_v0 != 3) {
+            if ((bitwise s32) temp_v0 != 3) {
                 arg0->unk_23A = 0;
                 arg0->unk_23C = (s16) arg0->unk_23A;
                 func_801477B4(arg1);
                 arg0->unk_21C = 4;
-                arg0->unk_20C = func_80ABB990;
+                arg0[1].shape.shadowDraw = func_80ABB990;
                 return;
             }
             func_801477B4(arg1);
@@ -310,8 +310,8 @@ void func_80ABB590(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if ((func_80152498(temp_a0) >= 3) && (D_80ABBE20 == 0)) {
-        temp_v0_2 = arg0->unk_220;
-        if ((temp_v0_2 == 0) || (temp_v0_2 == 3) || (temp_v0_2 >= 7)) {
+        temp_v0_2 = arg0[1].shape.feetPos[0].z;
+        if (((bitwise s32) temp_v0_2 == 0) || ((bitwise s32) temp_v0_2 == 3) || ((bitwise s32) temp_v0_2 >= 7)) {
             if (arg0->unk_214 == 0) {
                 arg0->unk_214 = 2;
                 arg0->unk_23C = (s16) (arg0->unk_23C ^ 0x2000);
@@ -341,52 +341,52 @@ void func_80ABB854(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_23A = (s16) arg0->unk_23C;
     Audio_PlayActorSound2(arg0, 0x387DU);
     Audio_PlayActorSound2(arg0, 0x387CU);
-    arg0->unk_20C = func_80ABB91C;
+    arg0[1].shape.shadowDraw = func_80ABB91C;
 }
 
-void func_80ABB91C(void *arg0, ? arg1) {
+void func_80ABB91C(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     f32 sp1C;
+    Actor *temp_a1;
     f32 temp_f4;
     s16 temp_v0;
-    void *temp_a1;
 
-    temp_a1 = arg0;
+    temp_a1 = actor;
     temp_f4 = temp_a1->unk_15C;
-    arg0 = temp_a1;
+    actor = temp_a1;
     sp1C = temp_f4;
-    SkelAnime_FrameUpdateMatrix(temp_a1 + 0x144);
-    if (arg0->unk_240 <= sp1C) {
-        temp_v0 = arg0->unk_16;
-        arg0->unk_21C = 3;
-        arg0->unk_20C = func_80ABB990;
-        arg0->unk_32 = temp_v0;
-        arg0->unk_BE = temp_v0;
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &temp_a1[1]);
+    if (actor[1].uncullZoneForward <= sp1C) {
+        temp_v0 = actor->home.rot.y;
+        actor->unk_21C = 3;
+        actor[1].shape.shadowDraw = func_80ABB990;
+        actor->world.rot.y = temp_v0;
+        actor->shape.rot.y = temp_v0;
     }
 }
 
-void func_80ABB990(Actor *arg0, GlobalContext *arg1) {
+void func_80ABB990(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     f32 sp44;
     ? sp40;
     s16 temp_v0;
     s32 phi_v1;
 
     if ((gSaveContext.weekEventReg[23] & 0x20) == 0) {
-        temp_v0 = arg0->yawTowardsPlayer - arg0->home.rot.y;
+        temp_v0 = actor->yawTowardsPlayer - actor->home.rot.y;
         phi_v1 = temp_v0 << 0x10;
         if ((s32) temp_v0 < 0) {
             phi_v1 = (s32) temp_v0 * -0x10000;
         }
-        if (((phi_v1 >> 0x10) < 0x4000) && ((D_80ABBE20 == 0) || (arg0->xzDistToPlayer > 150.0f))) {
-            Math_Vec3f_Copy((Vec3f *) &sp40, arg0 + 0x24);
-            sp44 = arg0->floorHeight;
-            EffectSsHahen_SpawnBurst(arg1, (Vec3f *) &sp40, 4.0f, 0, (s16) 0xA, (s16) 3, (s16) 0xF, (s16) -1, (s16) 0xA, NULL);
-            Audio_PlayActorSound2(arg0, 0x387CU);
+        if (((phi_v1 >> 0x10) < 0x4000) && ((D_80ABBE20 == 0) || (actor->xzDistToPlayer > 150.0f))) {
+            Math_Vec3f_Copy((Vec3f *) &sp40, (Vec3f *) &actor->world);
+            sp44 = actor->floorHeight;
+            EffectSsHahen_SpawnBurst((GlobalContext *) mapper, (Vec3f *) &sp40, 4.0f, 0, (s16) 0xA, (s16) 3, (s16) 0xF, (s16) -1, (s16) 0xA, NULL);
+            Audio_PlayActorSound2(actor, 0x387CU);
             D_80ABBE20 = 0;
-            if (arg0->unk_220 == 9) {
-                arg0->unk_224 = 1;
+            if ((bitwise s32) actor[1].shape.feetPos[0].z == 9) {
+                actor->unk_224 = 1;
             }
-            arg0->flags &= 0xF7FFFFFF;
-            func_80ABB29C((EnGuardNuts *) arg0);
+            actor->flags &= 0xF7FFFFFF;
+            func_80ABB29C((EnGuardNuts *) actor);
         }
     }
 }
@@ -456,7 +456,7 @@ void EnGuardNuts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp28 = temp_v0;
     sp28->words.w1 = Lib_SegmentedToVirtual(*(&D_80ABBE60 + (this->unk_210 * 4)));
@@ -464,11 +464,11 @@ void EnGuardNuts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(this->unk_228.x, this->actor.floorHeight, this->unk_228.z, 0);
     Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_06002700;
 }

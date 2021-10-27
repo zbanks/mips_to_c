@@ -309,8 +309,8 @@ loop_3:
             temp_v0 = phi_v0 + 0x20;
             temp_v0->unk_-10 = (f32) phi_v1->unk_10;
             phi_v1->unk_10 = (f32) phi_v0->unk_10;
-            temp_f2_2 = phi_a2->unk_10;
-            phi_a2->unk_10 = (f32) phi_a3->unk_10;
+            temp_f2_2 = phi_a2[4];
+            phi_a2[4] = phi_a3[4];
             temp_a3 = phi_a3 + 0x20;
             temp_a3->unk_-10 = temp_f2_2;
             phi_v1 += 0x20;
@@ -324,11 +324,11 @@ loop_3:
     temp_a0->unk_0 = (f32) (temp_a0->unk_0 / temp_f0_2);
     temp_a1->unk_0 /= temp_f0_2;
     temp_a0->unk_10 = (f32) (temp_a0->unk_10 / temp_f0_2);
-    temp_a1->unk_10 = (f32) (temp_a1->unk_10 / temp_f0_2);
+    temp_a1[4] /= temp_f0_2;
     temp_a0->unk_20 = (f32) (temp_a0->unk_20 / temp_f0_2);
-    temp_a1->unk_20 = (f32) (temp_a1->unk_20 / temp_f0_2);
+    temp_a1[8] /= temp_f0_2;
     temp_a0->unk_30 = (f32) (temp_a0->unk_30 / temp_f0_2);
-    temp_a1->unk_30 = (f32) (temp_a1->unk_30 / temp_f0_2);
+    temp_a1[12] /= temp_f0_2;
     phi_t1_3 = 0;
     do {
         temp_t0 = phi_t1_3 * 4;
@@ -339,11 +339,11 @@ loop_3:
             temp_v0_2->unk_0 = (f32) (temp_v0_2->unk_0 - (temp_a0->unk_0 * temp_f0_3));
             temp_v1->unk_0 -= temp_a1->unk_0 * temp_f0_3;
             temp_v0_2->unk_10 = (f32) (temp_v0_2->unk_10 - (temp_a0->unk_10 * temp_f0_3));
-            temp_v1->unk_10 = (f32) (temp_v1->unk_10 - (temp_a1->unk_10 * temp_f0_3));
+            temp_v1[4] -= temp_a1[4] * temp_f0_3;
             temp_v0_2->unk_20 = (f32) (temp_v0_2->unk_20 - (temp_a0->unk_20 * temp_f0_3));
-            temp_v1->unk_20 = (f32) (temp_v1->unk_20 - (temp_a1->unk_20 * temp_f0_3));
+            temp_v1[8] -= temp_a1[8] * temp_f0_3;
             temp_v0_2->unk_30 = (f32) (temp_v0_2->unk_30 - (temp_a0->unk_30 * temp_f0_3));
-            temp_v1->unk_30 = (f32) (temp_v1->unk_30 - (temp_a1->unk_30 * temp_f0_3));
+            temp_v1[12] -= temp_a1[12] * temp_f0_3;
         }
         temp_t1_2 = phi_t1_3 + 1;
         phi_t1_3 = temp_t1_2;

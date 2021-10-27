@@ -239,12 +239,12 @@ s32 func_80C227E8(Actor *arg0, GlobalContext *arg1) {
         if (temp_v0 != 2) {
             return NULL;
         }
-        arg0->unk_1A8 = func_80C224D8;
+        arg0[1].velocity.x = func_80C224D8;
         return &D_80C22BFC;
     }
     temp_v0_2 = gSaveContext.time - 0x3FFC;
     if ((temp_v0_2 >= 0xA54B) && (temp_v0_2 < 0xB54A) && (gSaveContext.day == 2)) {
-        arg0->unk_1A8 = func_80C227E8;
+        arg0[1].velocity.x = func_80C227E8;
         return &D_80C22BF0;
     }
     return &D_80C22C30;
@@ -255,14 +255,14 @@ s32 func_80C2291C(Actor *arg0, GlobalContext *arg1) {
     s32 phi_v1;
 
     phi_v1 = 0;
-    if ((arg0->unk_18C & 7) != 0) {
+    if ((arg0[1].focus.rot.x & 7) != 0) {
         sp24 = 0;
         phi_v1 = sp24;
         if (func_800B84D0(arg0, arg1) != 0) {
-            arg0->unk_18C = (u16) (arg0->unk_18C | 8);
-            func_8013AED4(arg0 + 0x18C, 0U, 7U);
+            arg0[1].focus.rot.x = (u16) arg0[1].focus.rot.x | 8;
+            func_8013AED4((u16 *) &arg0[1].focus.rot, 0U, 7U);
             arg0->unk_190 = func_80C22880(arg0, arg1);
-            arg0->unk_188 = func_80C229FC;
+            arg0[1].focus.pos.z = (bitwise f32) func_80C229FC;
             phi_v1 = 1;
         }
     }

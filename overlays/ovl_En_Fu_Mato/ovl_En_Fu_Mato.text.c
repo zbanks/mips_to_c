@@ -6,8 +6,8 @@ typedef struct EnFuMato {
     /* 0x160 */ ColliderSphere unk_160;             /* inferred */
     /* 0x1B8 */ char pad_1B8[0x138];                /* maybe part of unk_160[4]? */
     /* 0x2F0 */ s32 unk_2F0;                        /* inferred */
-    /* 0x2F4 */ s32 unk_2F4;                        /* inferred */
-    /* 0x2F8 */ s32 unk_2F8;                        /* inferred */
+    /* 0x2F4 */ f32 unk_2F4;                        /* inferred */
+    /* 0x2F8 */ f32 unk_2F8;                        /* inferred */
     /* 0x2FC */ char pad_2FC[0x6];                  /* maybe part of unk_2F8[2]? */
     /* 0x302 */ s16 unk_302;                        /* inferred */
     /* 0x304 */ s16 unk_304;                        /* inferred */
@@ -178,14 +178,14 @@ loop_2:
         return;
     }
     temp_v0 = this->actor.parent;
-    if (temp_v0->unk_542 == 2) {
+    if (temp_v0[4].world.rot.y == 2) {
         this->unk_160.info.elemType = 0;
         this->unk_160.dim.worldSphere.radius = 0x1E;
     } else {
         this->unk_160.dim.worldSphere.radius = 0x11;
-        this->unk_2F8 = temp_v0->unk_538;
+        this->unk_2F8 = temp_v0[4].world.pos.y;
         this->unk_2F0 = (s32) this->actor.params;
-        this->unk_2F4 = temp_v0->unk_520;
+        this->unk_2F4 = temp_v0[4].home.pos.z;
     }
     this->unk_302 = 0;
     this->unk_304 = 0;
@@ -212,7 +212,7 @@ void func_80ACE4C8(EnFuMato *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     temp_v0 = arg0->actor.parent;
-    if ((temp_v0->unk_54A == 0) && (temp_v0->unk_542 == 0)) {
+    if ((temp_v0[4].unk_3A == 0) && (temp_v0[4].world.rot.y == 0)) {
         func_80ACE508();
     }
 }
@@ -234,24 +234,24 @@ void func_80ACE51C(Actor *arg0, ? arg1) {
     temp_s1 = arg0 + 0x24;
     sp3C = arg0->parent;
     temp_a1 = &sp30;
-    sp30 = (f32) *(arg0->unk_2F8 + (arg0->unk_2F0 * 6));
-    sp34 = (f32) (arg0->unk_2F8 + (arg0->unk_2F0 * 6))->unk_2;
-    sp38 = (f32) (arg0->unk_2F8 + (arg0->unk_2F0 * 6))->unk_4;
+    sp30 = (f32) *(arg0[2].speedXZ + (arg0[2].velocity.y * 6));
+    sp34 = (f32) (arg0[2].speedXZ + (arg0[2].velocity.y * 6))->unk_2;
+    sp38 = (f32) (arg0[2].speedXZ + (arg0[2].velocity.y * 6))->unk_4;
     sp2C = Math_Vec3f_DistXZ(temp_s1, (Vec3f *) temp_a1);
     arg0->world.rot.y = Math_Vec3f_Yaw(temp_s1, (Vec3f *) &sp30);
     arg0->world.rot.x = Math_Vec3f_Pitch(temp_s1, (Vec3f *) &sp30);
     if (sp2C < 10.0f) {
-        temp_v0 = arg0->unk_2F0;
-        if (temp_v0 < (arg0->unk_2F4 - 1)) {
-            arg0->unk_2F0 = (s32) (temp_v0 + 1);
+        temp_v0 = arg0[2].velocity.y;
+        if (temp_v0 < (arg0[2].velocity.z - 1)) {
+            arg0[2].velocity.y = temp_v0 + 1;
         } else {
-            arg0->unk_2F0 = 0;
+            arg0[2].velocity.y = 0;
         }
     }
     arg0->speedXZ = 2.0f;
     arg0->shape.rot.y = Math_Vec3f_Yaw(temp_s1, arg0->parent + 0x24);
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
-    if (sp3C->unk_54A != 0) {
+    if (sp3C[4].unk_3A != 0) {
         func_80ACE4B4((EnFuMato *) arg0);
     }
 }
@@ -382,25 +382,25 @@ void func_80ACEB2C(Actor *arg0) {
     do {
         temp_t9 = phi_t9 + 0xC;
         temp_t6 = phi_t6 + 0xC;
-        temp_t6->unk_-C = (s32) phi_t9->unk_1B8;
-        temp_t6->unk_-8 = (s32) temp_t9->unk_1B0;
-        temp_t6->unk_-4 = (s32) temp_t9->unk_1B4;
+        temp_t6->unk_-C = (s32) phi_t9[1].gravity;
+        temp_t6->unk_-8 = (s32) temp_t9[1].velocity.z;
+        temp_t6->unk_-4 = (s32) temp_t9[1].speedXZ;
         phi_t9 = temp_t9;
         phi_t6 = temp_t6;
     } while (temp_t9 != (arg0 + 0x30));
-    temp_t6->unk_0 = temp_t9->unk_1B8;
+    temp_t6->unk_0 = temp_t9[1].gravity;
     phi_t9_2 = arg0;
     phi_t4 = &sp4C;
     do {
         temp_t9_2 = phi_t9_2 + 0xC;
         temp_t4 = phi_t4 + 0xC;
-        temp_t4->unk_-C = (s32) phi_t9_2->unk_1EC;
-        temp_t4->unk_-8 = (s32) temp_t9_2->unk_1E4;
-        temp_t4->unk_-4 = (s32) temp_t9_2->unk_1E8;
+        temp_t4->unk_-C = (s32) phi_t9_2[1].colChkInfo.displacement.y;
+        temp_t4->unk_-8 = (s32) temp_t9_2[1].colChkInfo.damageTable;
+        temp_t4->unk_-4 = (s32) temp_t9_2[1].colChkInfo.displacement.x;
         phi_t9_2 = temp_t9_2;
         phi_t4 = temp_t4;
     } while (temp_t9_2 != (arg0 + 0x30));
-    temp_t4->unk_0 = (s32) temp_t9_2->unk_1EC;
+    temp_t4->unk_0 = (s32) temp_t9_2[1].colChkInfo.displacement.y;
     phi_a2 = &sp18;
     do {
         phi_v1 = phi_v0 - 1;
@@ -416,7 +416,7 @@ void func_80ACEB2C(Actor *arg0) {
 loop_10:
         temp_t4_2 = phi_t4_2 + 0xC;
         temp_t8 = phi_t8 + 0xC;
-        temp_t8->unk_1AC = (s32) *phi_t4_2;
+        temp_t8->unk_1AC = (f32) *phi_t4_2;
         temp_t8->unk_1B0 = (s32) temp_t4_2->unk_-8;
         temp_t8->unk_1B4 = (s32) temp_t4_2->unk_-4;
         phi_t4_2 = temp_t4_2;
@@ -430,7 +430,7 @@ loop_10:
 loop_12:
         temp_t8_2 = phi_t8_2 + 0xC;
         temp_t7 = phi_t7 + 0xC;
-        temp_t7->unk_1AC = (s32) *phi_t8_2;
+        temp_t7->unk_1AC = (f32) *phi_t8_2;
         temp_t7->unk_1B0 = (s32) temp_t8_2->unk_-8;
         temp_t7->unk_1B4 = (s32) temp_t8_2->unk_-4;
         phi_t8_2 = temp_t8_2;
@@ -444,7 +444,7 @@ loop_12:
 loop_14:
         temp_t7_2 = phi_t7_2 + 0xC;
         temp_t3 = phi_t3 + 0xC;
-        temp_t3->unk_1AC = (s32) *phi_t7_2;
+        temp_t3->unk_1AC = (f32) *phi_t7_2;
         temp_t3->unk_1B0 = (s32) temp_t7_2->unk_-8;
         temp_t3->unk_1B4 = (s32) temp_t7_2->unk_-4;
         phi_t7_2 = temp_t7_2;
@@ -544,8 +544,8 @@ void func_80ACEFD8(Actor *arg0, ? arg1) {
     sp24 = temp_a0;
     Math_SmoothStepToF(temp_a0, 0.0f, 0.1f, 0.005f, 0.005f);
     temp_f0 = temp_a0->unk_0;
-    temp_a0->unk_8 = temp_f0;
-    temp_a0->unk_4 = temp_f0;
+    temp_a0[2] = temp_f0;
+    temp_a0[1] = temp_f0;
     if (temp_f0 == 0.0f) {
         Actor_MarkForDeath(arg0);
     }
@@ -568,7 +568,7 @@ void func_80ACEFD8(Actor *arg0, ? arg1) {
     temp_a3->unk_1AA = (s16) (s32) temp_a3->world.pos.y;
     temp_a3->unk_1AC = (s16) (s32) temp_a3->world.pos.z;
     if (temp_a3->unk_302 == 0) {
-        temp_a0 = temp_v1->unk_542;
+        temp_a0 = temp_v1[4].world.rot.y;
         if ((temp_a0 != 0) || ((temp_a3->unk_171 & 2) == 0)) {
             if ((temp_a0 == 2) && ((temp_a3->unk_172 & 2) != 0)) {
                 goto block_6;
@@ -582,8 +582,8 @@ block_6:
         sp24 = temp_v1;
         Audio_PlayActorSound2(temp_a3, 0x4807U);
         temp_v1->unk_548 = (s16) (temp_v1->unk_548 + 1);
-        if ((temp_v1->unk_542 == 2) || (gSaveContext.playerForm == 3)) {
-            temp_v1->unk_546 = 1;
+        if ((temp_v1[4].world.rot.y == 2) || (gSaveContext.playerForm == 3)) {
+            temp_v1[4].world.unk_12 = 1;
             func_80ACE680(arg0);
             return 1;
         }
@@ -638,41 +638,41 @@ void func_80ACF1F4(EnFuMato *arg0, GraphicsContext **arg1) {
         SysMatrix_SetStateRotationAndTranslation(phi_s3->unk_0, phi_s3->unk_4, phi_s3->unk_8, phi_s3 + 0x24);
         Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s0->polyOpa.p;
         temp_a0_2 = D_80ACF63C + (phi_s4 * 4);
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = temp_a0_2->unk_0;
         if (phi_s4 != 0) {
             if (phi_s4 != 5) {
                 temp_v0_3 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_3 + 8;
+                temp_s0->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDE000000;
                 temp_v0_3->words.w1 = temp_a0_2->unk_-4;
                 temp_v0_4 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_4 + 8;
+                temp_s0->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDE000000;
                 temp_v0_4->words.w1 = temp_a0_2->unk_4;
             } else {
                 temp_v0_5 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_5 + 8;
+                temp_s0->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDE000000;
                 temp_v0_5->words.w1 = temp_a0_2->unk_-4;
                 temp_v0_6 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_6 + 8;
+                temp_s0->polyOpa.p = &temp_v0_6[1];
                 temp_v0_6->words.w0 = 0xDE000000;
                 temp_v0_6->words.w1 = D_80ACF63C->unk_0;
             }
         } else {
             temp_v0_7 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_7 + 8;
+            temp_s0->polyOpa.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xDE000000;
-            temp_v0_7->words.w1 = D_80ACF63C->unk_14;
+            temp_v0_7->words.w1 = D_80ACF63C[5];
             temp_v0_8 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_8 + 8;
+            temp_s0->polyOpa.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xDE000000;
             temp_v0_8->words.w1 = temp_a0_2->unk_4;
         }
@@ -705,11 +705,11 @@ void func_80ACF3F4(EnFuMato *arg0, GraphicsContext **arg1) {
         SysMatrix_SetStateRotationAndTranslation(phi_s0->unk_0, phi_s0->unk_4, phi_s0->unk_8, phi_s0 + 0x24);
         Matrix_Scale(temp_s4->unk_0, temp_s4->unk_4, temp_s4->unk_8, 1);
         temp_v0 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0 + 8;
+        temp_s2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *phi_s3;
         SysMatrix_StatePop();
@@ -733,7 +733,7 @@ void EnFuMato_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     this = this;
@@ -742,7 +742,7 @@ void EnFuMato_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0_2 = this->unk_302;
     if ((temp_v0_2 == 0) || (temp_v0_2 == 3)) {
         temp_v0_3 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_3 + 8;
+        sp24->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06002720;
         temp_v0_3->words.w0 = 0xDE000000;
         return;

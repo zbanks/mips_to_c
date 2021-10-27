@@ -196,9 +196,9 @@ void EnDemoheishi_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80BE9974(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0x10) {
-        arg4->x += arg5->unk_25A;
+        arg4->x += arg5[1].textId;
         arg4->y += arg5->unk_258;
-        arg4->z += arg5->unk_25C;
+        arg4->z += arg5[1].freezeTimer;
     }
     return 0;
 }

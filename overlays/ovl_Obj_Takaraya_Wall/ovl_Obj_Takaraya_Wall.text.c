@@ -352,9 +352,9 @@ void ObjTakarayaWall_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_v1 = 0;
 loop_2:
         temp_v1 = phi_v1 + 4;
-        phi_v0->unk_4 = 0.0f;
-        phi_v0->unk_8 = 0.0f;
-        phi_v0->unk_C = 0.0f;
+        phi_v0[1] = 0.0f;
+        phi_v0[2] = 0.0f;
+        phi_v0[3] = 0.0f;
         temp_v0 = phi_v0 + 0x10;
         temp_v0->unk_-10 = 0.0f;
         phi_v0 = temp_v0;
@@ -429,7 +429,7 @@ void ObjTakarayaWall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 loop_2:
         func_801A72CC(phi_s1);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
         if (temp_s0 != 0x60) {
             goto loop_2;
@@ -516,7 +516,7 @@ loop_10:
             }
         }
         temp_s1 = phi_s1 + 1;
-        phi_s3 += 4;
+        phi_s3 = &phi_s3[1];
         phi_s1 = temp_s1;
         phi_v0 = phi_v0_2;
         phi_v0 = phi_v0_2;
@@ -595,14 +595,14 @@ void ObjTakarayaWall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp7C = globalCtx->state.gfxCtx;
     temp_s4 = SysMatrix_GetCurrentState();
     temp_s2 = sp7C->polyOpa.p;
-    temp_s2->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s2->words.w1 = (u32) &sSetupDL[150];
     temp_s2->words.w0 = 0xDE000000;
-    temp_s2_2 = temp_s2 + 8;
+    temp_s2_2 = &temp_s2[1];
     temp_s2_2->words.w1 = -1;
     temp_s2_2->words.w0 = 0xFA000000;
     sp60 = &D_80ADA988;
     phi_s7 = 0;
-    phi_s2 = temp_s2_2 + 8;
+    phi_s2 = &temp_s2_2[1];
     do {
         phi_s6 = sp60;
         phi_s1 = 0;
@@ -648,7 +648,7 @@ loop_2:
             goto loop_2;
         }
         temp_s7 = phi_s7 + 1;
-        sp60 += 0x20;
+        sp60 = &sp60[8];
         phi_s7 = temp_s7;
     } while (temp_s7 != 0xB);
     sp7C->polyOpa.p = phi_s2_2;

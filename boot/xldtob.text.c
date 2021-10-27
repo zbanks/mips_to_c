@@ -184,31 +184,31 @@ void _Genld(_Pft *px, u8 code, u8 *p, s16 nsig, s16 xexp) {
             px->n1 += nsig;
             px->nz1 = px->prec - nsig;
         }
-        temp_s1 = &px->s[px->n1];
-        temp_s1[1].unk_-1 = code;
+        temp_s1 = &(&px->s[px->n1])[1];
+        temp_s1->unk_-1 = code;
         phi_t0 = (s32) xexp;
         if ((s32) xexp >= 0) {
-            temp_s1[1] = 0x2B;
+            temp_s1->unk_0 = 0x2B;
         } else {
-            temp_s1[1] = 0x2D;
+            temp_s1->unk_0 = 0x2D;
             phi_t0 = (s32) (s16) ((s32) xexp * -1);
         }
         phi_t0_2 = phi_t0;
-        phi_s1_2 = &temp_s1[1].unk_1;
+        phi_s1_2 = &temp_s1[1];
         phi_t0_3 = phi_t0;
-        phi_s1_3 = &temp_s1[1].unk_1;
+        phi_s1_3 = &temp_s1[1];
         if (phi_t0 >= 0x64) {
             if (phi_t0 >= 0x3E8) {
-                temp_s1[1].unk_1 = (phi_t0 / 0x3E8) + 0x30;
+                temp_s1[1] = (phi_t0 / 0x3E8) + 0x30;
                 phi_t0_2 = (s32) (s16) (phi_t0 % 0x3E8);
-                phi_s1_2 = &temp_s1[1].unk_1 + 1;
+                phi_s1_2 = &temp_s1[1] + 1;
             }
             *phi_s1_2 = (phi_t0_2 / 0x64) + 0x30;
             phi_t0_3 = (s32) (s16) (phi_t0_2 % 0x64);
             phi_s1_3 = phi_s1_2 + 1;
         }
         phi_s1_3->unk_0 = (phi_t0_3 / 0xA) + 0x30;
-        phi_s1_3->unk_1 = (s8) ((s16) (phi_t0_3 % 0xA) + 0x30);
+        phi_s1_3[1] = (s16) (phi_t0_3 % 0xA) + 0x30;
         px->n2 = ((phi_s1_3 + 2) - px->s) - px->n1;
     }
     if ((px->flags & 0x14) == 0x10) {

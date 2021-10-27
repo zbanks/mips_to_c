@@ -36,6 +36,18 @@ typedef struct ActorContext {
     /* 0x27A */ char pad_27A[0xA];                  /* maybe part of unk278[6]? */
 } ActorContext;                                     /* size = 0x284 */
 
+typedef struct {
+    /* 0x00 */ Vec3s rot;
+    /* 0x06 */ s16 face;
+    /* 0x08 */ f32 yOffset;
+    /* 0x0C */ void (*shadowDraw)(Actor *, Lights *, GlobalContext *);
+    /* 0x10 */ f32 shadowScale;
+    /* 0x14 */ u8 shadowAlpha;
+    /* 0x15 */ u8 feetFloorFlags;
+    /* 0x16 */ s16 unk_16;                          /* inferred */
+    /* 0x18 */ Vec3f feetPos[2];
+} ActorShape;                                       /* size = 0x30 */
+
 typedef struct BossHakugin {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime unk_144;                 /* inferred */
@@ -117,6 +129,13 @@ typedef struct BossHakugin {
     /* 0x37B4 */ f32 unk_37B4;                      /* inferred */
     /* 0x37B8 */ ColliderSphere unk_37B8;           /* inferred */
 } BossHakugin;                                      /* size = 0x3810 */
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ char pad_12[0x1];
+    /* 0x13 */ u8 unk_13;                           /* inferred */
+} PosRot;                                           /* size = 0x14 */
 
 struct _mips2c_stack_BossHakugin_Destroy {
     /* 0x00 */ char pad_0[0x30];
@@ -693,7 +712,7 @@ struct _mips2c_stack_func_80B0DFA8 {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80B0E548 {
     /* 0x00 */ char pad_0[0x18];
-    /* 0x18 */ Collider *sp18;                      /* inferred */
+    /* 0x18 */ u8 *sp18;                            /* inferred */
     /* 0x1C */ CollisionCheckContext *sp1C;         /* inferred */
     /* 0x20 */ char pad_20[0x8];
 };                                                  /* size = 0x28 */
@@ -717,7 +736,7 @@ void func_80B05CBC(BossHakugin *arg0, Actor *arg1); /* static */
 void func_80B05D4C(BossHakugin *arg0);              /* static */
 void func_80B05EE0(BossHakugin *arg0, GlobalContext *arg1); /* static */
 void func_80B0607C(BossHakugin *arg0, GlobalContext *arg1); /* static */
-void func_80B06558(void *arg0);                     /* static */
+void func_80B06558(s16 *arg0);                      /* static */
 void func_80B06600(Actor *arg0, Vec3f *arg1, GlobalContext *arg2); /* static */
 void func_80B0696C(Actor *arg0, Vec3f *arg1);       /* static */
 void func_80B06B20(Actor *arg0, Vec3f *arg1);       /* static */
@@ -988,8 +1007,8 @@ void BossHakugin_Init(Actor *thisx, GlobalContext *globalCtx) {
         Collider_InitAndSetTris(globalCtx, phi_s0, (Actor *) this, &D_80B0E9F8, phi_s1);
         temp_t0 = phi_t0 + 0x90;
         phi_t0 = temp_t0;
-        phi_s0 += 0x90;
-        phi_s1 += 0x90;
+        phi_s0 = (ColliderTris *) &phi_s0[4].base.atFlags;
+        phi_s1 = (ColliderTrisElement *) &phi_s1[1].dim.vtx[1];
     } while (temp_t0 < 0xB40);
     Collider_InitAndSetSphere(globalCtx, &this->unk_37B8, (Actor *) this, &D_80B0EA08);
     this->unk_37B8.dim.worldSphere.radius = 0x28;
@@ -1078,7 +1097,7 @@ void BossHakugin_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     do {
         Collider_DestroyTris(globalCtx, phi_s1);
         temp_s0 = phi_s0 + 0x90;
-        phi_s1 += 0x90;
+        phi_s1 = (ColliderTris *) &phi_s1[4].base.atFlags;
         phi_s0 = temp_s0;
     } while (temp_s0 != 0xB40);
     Collider_DestroySphere(globalCtx, &this->unk_37B8);
@@ -1248,7 +1267,7 @@ void func_80B05B04(BossHakugin *arg0, GlobalContext *arg1) {
 void func_80B05CBC(BossHakugin *arg0, Actor *arg1) {
     f32 temp_f0;
 
-    if ((arg0->unk_194 == 0) && (arg1->unk_A74 & 0x80000) && ((arg1->bgCheckFlags & 1) == 0) && (temp_f0 = arg1->velocity.y, (temp_f0 > 5.0f))) {
+    if ((arg0->unk_194 == 0) && (arg1[8].targetArrowOffset & 0x80000) && ((arg1->bgCheckFlags & 1) == 0) && (temp_f0 = arg1->velocity.y, (temp_f0 > 5.0f))) {
         arg1->velocity.y = temp_f0 * 1.3f;
         arg1->unk_AD0 = (f32) (arg1->unk_AD0 * 1.3f);
         arg0->unk_194 = 1;
@@ -1346,7 +1365,7 @@ void func_80B05EE0(Actor *arg0, GlobalContext *arg1) {
         phi_f12 = -160.0f;
         phi_f2 = -1400.0f;
     }
-    sp50 = (f32) arg0->unk_1B4 * 300.0f;
+    sp50 = (f32) arg0[1].speedXZ * 300.0f;
     sp68 = phi_f14;
     sp64 = phi_f12;
     sp60 = phi_f2;
@@ -1445,7 +1464,7 @@ void func_80B0607C(BossHakugin *arg0, GlobalContext *arg1) {
     }
 }
 
-void func_80B06558(void *arg0) {
+void func_80B06558(s16 *arg0) {
     ? sp5C;
     ? sp50;
     ? sp44;
@@ -1460,8 +1479,8 @@ void func_80B06558(void *arg0) {
     phi_s0 = (Vec3f *) &sp38;
     do {
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s0);
-        temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        temp_s0 = &phi_s0[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != &sp5C);
     Collider_SetTrisVertices(arg0 + 0x14, 0, (Vec3f *) &sp38, (Vec3f *) &sp44, (Vec3f *) &sp50);
@@ -1492,7 +1511,7 @@ void func_80B06600(Actor *arg0, Vec3f *arg1, GlobalContext *arg2) {
     s16 temp_s1_2;
     s16 temp_s3;
     void *temp_s0;
-    void *phi_s0;
+    s16 *phi_s0;
     s16 phi_s3;
 
     temp_s0 = arg2->actorCtx.actorList[2].first;
@@ -1501,47 +1520,47 @@ void func_80B06600(Actor *arg0, Vec3f *arg1, GlobalContext *arg2) {
     spC0 = temp_s0->world.pos.y + 40.0f;
     spC4 = temp_s0->world.pos.z - (Math_CosS(arg0->shape.rot.y) * 50.0f);
     Actor_CalcOffsetOrientedToDrawRotation(arg0, (Vec3f *) &sp98, (Vec3f *) &spBC);
-    func_8019F1C0(arg0 + 0x458, 0x384DU);
+    func_8019F1C0((Vec3f *) &arg0[3].yDistToWater, 0x384DU);
     temp_s6 = &spB0;
-    phi_s0 = arg0 + 0x2618;
+    phi_s0 = &arg0[30].unk20;
     phi_s3 = 0x113;
     do {
         Actor_CalcOffsetOrientedToDrawRotation(arg0, (Vec3f *) &sp8C, (Vec3f *) &spC8);
         if (spA0 < sp94) {
-            phi_s0->unk_10 = (s16) ((Rand_Next() >> 0x13) + arg0->shape.rot.y);
+            phi_s0[8] = (Rand_Next() >> 0x13) + arg0->shape.rot.y;
         } else {
             temp_s1 = Math_Vec3f_Yaw((Vec3f *) &spC8, (Vec3f *) &spBC);
-            phi_s0->unk_10 = (s16) ((Rand_Next() >> 0x13) + temp_s1);
+            phi_s0[8] = (Rand_Next() >> 0x13) + temp_s1;
         }
         temp_s1_2 = Math_Vec3f_Pitch((Vec3f *) &spC8, (Vec3f *) &spBC);
-        phi_s0->unk_E = (s16) ((Rand_Next() >> 0x13) + temp_s1_2);
-        phi_s0->unk_12 = 0;
-        temp_f20 = Math_CosS(phi_s0->unk_E);
-        phi_s0->unk_0 = (f32) ((Math_SinS(phi_s0->unk_10) * (80.0f * temp_f20)) + spC8);
-        phi_s0->unk_4 = (f32) (spCC - (Math_SinS(phi_s0->unk_E) * 80.0f));
-        temp_f20_2 = Math_CosS(phi_s0->unk_E);
+        phi_s0[7] = (Rand_Next() >> 0x13) + temp_s1_2;
+        phi_s0[9] = 0;
+        temp_f20 = Math_CosS(phi_s0[7]);
+        phi_s0->unk_0 = (f32) ((Math_SinS(phi_s0[8]) * (80.0f * temp_f20)) + spC8);
+        phi_s0->unk_4 = (f32) (spCC - (Math_SinS(phi_s0[7]) * 80.0f));
+        temp_f20_2 = Math_CosS(phi_s0[7]);
         temp_a2 = temp_s6;
-        phi_s0->unk_8 = (f32) ((Math_CosS(phi_s0->unk_10) * (80.0f * temp_f20_2)) + spD0);
+        phi_s0->unk_8 = (f32) ((Math_CosS(phi_s0[8]) * (80.0f * temp_f20_2)) + spD0);
         spB0 = (2.0f * phi_s0->unk_0) - spC8;
         spB4 = (2.0f * phi_s0->unk_4) - spCC;
         spB8 = (2.0f * phi_s0->unk_8) - spD0;
         if (func_800C55C4(arg2 + 0x830, (Vec3f *) &spC8, (Vec3f *) temp_a2, (Vec3f *) &spA4, &spD4, 0U, 1U, 0U, 1U, &sp84) != 0) {
-            phi_s0->unk_E = (s16) (phi_s0->unk_E - 0x2000);
-            temp_f20_3 = Math_CosS(phi_s0->unk_E);
-            phi_s0->unk_0 = (f32) ((Math_SinS(phi_s0->unk_10) * (80.0f * temp_f20_3)) + spC8);
-            phi_s0->unk_4 = (f32) (spCC - (Math_SinS(phi_s0->unk_E) * 80.0f));
-            temp_f20_4 = Math_CosS(phi_s0->unk_E);
-            phi_s0->unk_8 = (f32) ((Math_CosS(phi_s0->unk_10) * (80.0f * temp_f20_4)) + spD0);
+            phi_s0[7] += -0x2000;
+            temp_f20_3 = Math_CosS(phi_s0[7]);
+            phi_s0->unk_0 = (f32) ((Math_SinS(phi_s0[8]) * (80.0f * temp_f20_3)) + spC8);
+            phi_s0->unk_4 = (f32) (spCC - (Math_SinS(phi_s0[7]) * 80.0f));
+            temp_f20_4 = Math_CosS(phi_s0[7]);
+            phi_s0->unk_8 = (f32) ((Math_CosS(phi_s0[8]) * (80.0f * temp_f20_4)) + spD0);
             spC8 = (2.0f * phi_s0->unk_0) - spC8;
             spCC = (2.0f * phi_s0->unk_4) - spCC;
             spD0 = (2.0f * phi_s0->unk_8) - spD0;
         } else {
             Math_Vec3f_Copy((Vec3f *) &spC8, (Vec3f *) temp_s6);
         }
-        phi_s0->unk_C = phi_s3;
+        phi_s0[6] = phi_s3;
         func_80B06558(phi_s0);
         temp_s3 = phi_s3 + 0x14;
-        phi_s0->unk_12 = (s16) (Rand_Next() >> 0x10);
+        phi_s0[9] = (s16) (Rand_Next() >> 0x10);
         phi_s0 += 0x90;
         phi_s3 = temp_s3;
     } while (temp_s3 != 0x2A3);
@@ -1568,17 +1587,17 @@ loop_1:
         sp2E = (Rand_Next() >> 0x12) + arg0->shape.rot.y + 0x8000;
         sp28 = Rand_ZeroFloat(5.0f) + 7.0f;
         sp24 = Math_CosS(sp2C);
-        temp_s0->unk_C = (f32) (Math_SinS(sp2E) * (sp28 * sp24));
-        temp_s0->unk_10 = (f32) (Math_SinS(sp2C) * sp28);
+        temp_s0[1].x = Math_SinS(sp2E) * (sp28 * sp24);
+        temp_s0[1].y = Math_SinS(sp2C) * sp28;
         sp24 = Math_CosS(sp2C);
-        temp_s0->unk_14 = (f32) (Math_CosS(sp2E) * (sp28 * sp24));
-        temp_s0->x = (Rand_ZeroFloat(3.0f) * temp_s0->unk_C) + arg1->x;
-        temp_s0->y = (Rand_ZeroFloat(3.0f) * temp_s0->unk_10) + arg1->y;
-        temp_s0->z = (Rand_ZeroFloat(3.0f) * temp_s0->unk_14) + arg1->z;
+        temp_s0[1].z = Math_CosS(sp2E) * (sp28 * sp24);
+        temp_s0->x = (Rand_ZeroFloat(3.0f) * temp_s0[1].x) + arg1->x;
+        temp_s0->y = (Rand_ZeroFloat(3.0f) * temp_s0[1].y) + arg1->y;
+        temp_s0->z = (Rand_ZeroFloat(3.0f) * temp_s0[1].z) + arg1->z;
         temp_f6 = Rand_ZeroFloat(6.0f) + 15.0f;
         temp_s0->unk_18 = 0x28;
         temp_s0->unk_1A = 0;
-        temp_s0->unk_24 = (f32) (temp_f6 * 0.0001f);
+        temp_s0[3].x = temp_f6 * 0.0001f;
         return;
     }
     temp_v1 = phi_v1 + 0x28;
@@ -1598,10 +1617,10 @@ void func_80B06B20(Actor *arg0, Vec3f *arg1) {
     Actor *phi_v1;
     s32 phi_v0;
 
-    if ((arg0->unk_454 < -200.0f) && (arg0->speedXZ > 10.0f) && (arg0->unk_18D == 0) && (phi_v1 = arg0, phi_v0 = 0, (Rand_ZeroOne() < 0.4f))) {
+    if ((arg0[3].floorHeight < -200.0f) && (arg0->speedXZ > 10.0f) && (arg0->unk_18D == 0) && (phi_v1 = arg0, phi_v0 = 0, (Rand_ZeroOne() < 0.4f))) {
         arg0->unk_18D = 4U;
 loop_8:
-        temp_a2 = phi_v1->unk_9B0;
+        temp_a2 = phi_v1[7].shape.feetPos[0].x;
         temp_v0 = phi_v0 + 4;
         phi_v0 = temp_v0;
         if (temp_a2->unk_1C == 0) {
@@ -1637,12 +1656,12 @@ void func_80B06C08(Actor *arg0) {
 
     if ((arg0->unk_18E == 0) && ((s32) arg0->colChkInfo.health < 0x14) && (arg0 = arg0, (Rand_ZeroOne() < 0.35f))) {
         arg0->unk_18E = 4U;
-        temp_v0 = arg0->unk_9D0;
+        temp_v0 = arg0[7].projectedPos.z;
         if (temp_v0->unk_1C == 0) {
             temp_v0->unk_1C = 2;
             return;
         }
-        temp_v0_2 = arg0->unk_9D4;
+        temp_v0_2 = arg0[7].projectedW;
         phi_v1 = arg0 + 8;
         phi_a0 = 8;
         if (temp_v0_2->unk_1C == 0) {
@@ -1700,7 +1719,7 @@ void func_80B06D38(Actor *arg0, GlobalContext *arg1) {
     if ((arg0->speedXZ > 10.0f) && ((s32) arg0->colChkInfo.health < 0xA) && (arg0->unk_18F == 0) && (Rand_ZeroOne() < 0.35f)) {
         arg0->unk_18F = 4U;
         sp38 = Math_SinS(arg0->shape.rot.y);
-        temp_v0 = arg0->unk_4A0;
+        temp_v0 = arg0[3].shape.feetPos[0].x;
         temp_v0_2 = Actor_Spawn(arg1 + 0x1CA0, arg1, 9, (f32) temp_v0->unk_70 - (sp38 * 100.0f), (f32) temp_v0->unk_72 + 100.0f, (f32) temp_v0->unk_74 - (Math_CosS(arg0->shape.rot.y) * 100.0f), (s16) 0, (s16) 0, (s16) 0, (s16) 0);
         if (temp_v0_2 != 0) {
             temp_a2 = arg0->yawTowardsPlayer;
@@ -2030,9 +2049,9 @@ s32 func_80B0791C(BossHakugin *arg0, GlobalContext *arg1) {
 }
 
 void func_80B07B88(Actor *arg0, GlobalContext *arg1) {
-    if (arg0->unk_196 == 0xA) {
-        arg0->unk_196 = 0U;
-        arg0->unk_1E4 = 0.0f;
+    if (arg0[1].unk_52 == 0xA) {
+        arg0[1].unk_52 = 0;
+        arg0[1].colChkInfo.damageTable = NULL;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x398), 0xF, 3, 0.7f, 0.5f);
     }
 }
@@ -2115,15 +2134,15 @@ void func_80B07EEC(Actor *arg0, GlobalContext *arg1) {
     sp20 = temp_s1->focus.pos.x;
     sp24 = temp_s1->focus.pos.y;
     sp28 = temp_s1->focus.pos.z;
-    arg0->unk_38C = (f32) ((Math_SinS(temp_s1->shape.rot.y) * 70.0f) + temp_s1->focus.pos.x);
-    arg0->unk_390 = (f32) (temp_s1->focus.pos.y + 20.0f);
-    arg0->unk_394 = (f32) ((Math_CosS(temp_s1->shape.rot.y) * 70.0f) + temp_s1->focus.pos.z);
+    arg0[2].uncullZoneDownward = (Math_SinS(temp_s1->shape.rot.y) * 70.0f) + temp_s1->focus.pos.x;
+    arg0[2].prevPos.x = temp_s1->focus.pos.y + 20.0f;
+    arg0[2].prevPos.y = (Math_CosS(temp_s1->shape.rot.y) * 70.0f) + temp_s1->focus.pos.z;
     Play_CameraSetAtEye(arg1, arg0->unk_1AC, (Vec3f *) &sp20, arg0 + 0x38C);
     arg0->unk_37A = Math_FAtan2F(70.0f, -20.0f);
     arg0->unk_37C = (s16) (temp_s1->shape.rot.y + 0x8000);
     func_800B7298(arg1, arg0, 0x15U);
     arg0->unk_19C = 0;
-    arg0->unk_188 = func_80B08018;
+    arg0[1].focus.pos.z = (bitwise f32) func_80B08018;
 }
 
 void func_80B08018(BossHakugin *this, GlobalContext *globalCtx) {
@@ -2318,17 +2337,17 @@ void func_80B08550(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_37A = -0x1F00;
     arg0->unk_37C = -0x4000;
     arg0->unk_19C = 0x46;
-    arg0->unk_38C = 680.0f;
-    arg0->unk_390 = 370.0f;
-    arg0->unk_394 = -1600.0f;
+    arg0[2].uncullZoneDownward = 680.0f;
+    arg0[2].prevPos.x = 370.0f;
+    arg0[2].prevPos.y = -1600.0f;
     temp_v0->world.pos.x = 250.0f;
     temp_v0->world.pos.z = -1560.0f;
     temp_v0->shape.rot.y = arg0->yawTowardsPlayer + 0x8000;
     temp_v1 = temp_v0->shape.rot.y;
     temp_v0->world.rot.y = temp_v1;
-    temp_v0->unk_AD4 = temp_v1;
+    temp_v0[8].colChkInfo.cylYShift = temp_v1;
     func_800B7298(arg1, arg0, 0x83U);
-    arg0->unk_188 = func_80B0863C;
+    arg0[1].focus.pos.z = (bitwise f32) func_80B0863C;
 }
 
 void func_80B0863C(BossHakugin *this, GlobalContext *globalCtx) {
@@ -2398,9 +2417,9 @@ void func_80B08848(Actor *arg0, GlobalContext *arg1) {
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_a1 = &sp30;
-    arg0->unk_38C = (f32) (temp_v0->world.pos.x - 150.0f);
-    arg0->unk_390 = (f32) (temp_v0->world.pos.y + 30.0f);
-    arg0->unk_394 = (f32) (temp_v0->world.pos.z - 30.0f);
+    arg0[2].uncullZoneDownward = temp_v0->world.pos.x - 150.0f;
+    arg0[2].prevPos.x = temp_v0->world.pos.y + 30.0f;
+    arg0[2].prevPos.y = temp_v0->world.pos.z - 30.0f;
     sp30 = arg0->world.pos.x - 100.0f;
     sp34 = arg0->world.pos.y + 100.0f;
     sp3C = temp_v0;
@@ -2412,7 +2431,7 @@ void func_80B08848(Actor *arg0, GlobalContext *arg1) {
     func_800B7298(arg1, arg0, 6U);
     temp_v0->unk_A6C = (s32) (temp_v0->unk_A6C | 0x20);
     arg1->actorCtx.unk268 = 1;
-    arg0->unk_188 = func_80B08960;
+    arg0[1].focus.pos.z = (bitwise f32) func_80B08960;
 }
 
 void func_80B08960(BossHakugin *this, GlobalContext *globalCtx) {
@@ -2782,7 +2801,7 @@ void func_80B09840(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_494 = (u8) (arg0->unk_494 & 0xFFFE);
     arg0->unk_496 = (u8) (arg0->unk_496 & 0xFFFE);
     arg0->unk_19C = 0xA;
-    arg0->unk_188 = func_80B098BC;
+    arg0[1].focus.pos.z = func_80B098BC;
 }
 
 void func_80B098BC(BossHakugin *this, GlobalContext *globalCtx) {
@@ -3294,21 +3313,21 @@ void func_80B0AC30(Actor *arg0, GlobalContext *arg1) {
 
     temp_a3 = arg0->unk_494;
     temp_a2 = arg1->actorCtx.actorList[2].first;
-    if (((temp_a3 & 2) != 0) && ((temp_v1 = arg0->unk_188, (func_80B091D8 == temp_v1)) || ((temp_a2->unk_A74 << 0xC) >= 0))) {
-        if ((func_80B091D8 == temp_v1) && ((arg0->unk_4A0->unk_15 & 2) != 0) && ((temp_a3 & 4) == 0) && (sp2C = temp_a2, (arg1->grabPlayer(arg1, temp_a2, temp_a2, temp_a3) != 0))) {
+    if (((temp_a3 & 2) != 0) && ((temp_v1 = arg0[1].focus.pos.z, (func_80B091D8 == temp_v1)) || ((temp_a2[8].targetArrowOffset << 0xC) >= 0))) {
+        if ((func_80B091D8 == temp_v1) && ((arg0[3].shape.feetPos[0].x->unk_15 & 2) != 0) && ((temp_a3 & 4) == 0) && (sp2C = temp_a2, (arg1->grabPlayer(arg1, temp_a2, temp_a2, temp_a3) != 0))) {
             func_80B09840(arg0, arg1, temp_a2);
             return;
         }
-        if ((arg1->actorCtx.actorList[2].first->unk_A74 & 0x1000) != 0) {
+        if ((arg1->actorCtx.actorList[2].first[8].targetArrowOffset & 0x1000) != 0) {
             arg1->actorCtx.actorList[2].first->unk_AD0 = -5.0f;
-            arg1->actorCtx.actorList[2].first->unk_B08 = -5.0f;
+            arg1->actorCtx.actorList[2].first[8].shape.feetPos[1].z = -5.0f;
             temp_v0 = arg1->actorCtx.actorList[2].first->world.rot.y;
             arg1->actorCtx.actorList[2].first->unk_B8C = 4;
-            arg1->actorCtx.actorList[2].first->unk_AD4 = temp_v0;
+            arg1->actorCtx.actorList[2].first[8].colChkInfo.cylYShift = temp_v0;
             arg1->actorCtx.actorList[2].first->home.rot.y = temp_v0;
             arg1->actorCtx.actorList[2].first->shape.rot.y = temp_v0;
             arg1->actorCtx.actorList[2].first->velocity.y = 10.0f;
-            arg1->actorCtx.actorList[2].first->unk_B0C = (f32) (arg1->actorCtx.actorList[2].first->unk_B0C + (-5.0f * 0.05f));
+            arg1->actorCtx.actorList[2].first[8].projectedPos.x += -5.0f * 0.05f;
             return;
         }
         if ((arg0->unk_494 & 4) == 0) {
@@ -3345,7 +3364,7 @@ void func_80B0B238(BossHakugin *arg0) {
         temp_s0 = phi_s1 + 0x9F8;
         if ((s32) phi_s1->unk_A10 >= 0) {
             temp_s0->unk_18 = (s16) (temp_s0->unk_18 - 1);
-            temp_s0->unk_10 = (f32) (temp_s0->unk_10 + -1.0f);
+            temp_s0[1].y += -1.0f;
             Math_Vec3f_Sum(temp_s0, temp_s0 + 0xC, temp_s0);
             if (temp_s0->y < -500.0f) {
                 temp_s0->unk_18 = -1;
@@ -3377,7 +3396,7 @@ void func_80B0B34C(BossHakugin *arg0) {
         Math_StepToF(phi_s3, phi_s0->unk_A04, phi_s0->unk_A08);
         temp_f0 = phi_s1->unk_10;
         temp_s2 = phi_s2 + 0x28;
-        phi_s3 += 0x28;
+        phi_s3 = &phi_s3[10];
         phi_s0 += 0x28;
         phi_s2 = temp_s2;
         if (temp_f0 > 0.0f) {
@@ -3774,11 +3793,11 @@ s32 func_80B0C000(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     s32 temp_v0;
     s32 phi_v0;
 
-    if (func_80B0A8C4 == arg5->unk_188) {
+    if (func_80B0A8C4 == arg5[1].focus.pos.z) {
         if (arg1 == 1) {
             arg3->y -= arg5->shape.yOffset;
         }
-        if ((arg5->unk_1B0 & (1 << (arg1 + 0x1F))) == 0) {
+        if ((arg5[1].velocity.z & (1 << (arg1 + 0x1F))) == 0) {
             *arg2 = NULL;
         }
     }
@@ -3794,7 +3813,7 @@ s32 func_80B0C000(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     }
     if (arg1 == 0x10) {
         arg4->z += arg5->unk_1A6;
-        if (func_80B0A2A4 == arg5->unk_188) {
+        if (func_80B0A2A4 == arg5[1].focus.pos.z) {
             arg4->z += arg5->unk_378;
             arg4->y += arg5->unk_376;
         }
@@ -3831,7 +3850,7 @@ void func_80B0C1BC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     temp_t0 = *temp_t1;
     phi_t1 = temp_t1;
     if ((s32) temp_t0 >= 0) {
-        temp_a3 = arg4->unk_4A0;
+        temp_a3 = arg4[3].shape.feetPos[0].x;
         phi_v0 = temp_a3;
         phi_v1 = 0;
 loop_2:
@@ -3860,7 +3879,7 @@ loop_2:
     if (phi_t1 == &D_80B0EA9C) {
         SysMatrix_GetStateTranslationAndScaledX(3500.0f, arg4 + 0x3C);
         arg4->focus.rot.y = arg4->shape.rot.y;
-        if (func_80B0A2A4 != arg4->unk_188) {
+        if (func_80B0A2A4 != arg4[1].focus.pos.z) {
             func_8018219C(SysMatrix_GetCurrentState(), arg4 + 0x374, 0);
         }
         if (arg4->unk_1C8 > 0.0f) {
@@ -3868,10 +3887,10 @@ loop_2:
             sp2E = temp_a0_2;
             sp30 = Math_CosS(temp_a0_2);
             temp_f2 = 60.0f * sp30;
-            arg4->unk_380 = (f32) (arg4->focus.pos.x - (Math_SinS(arg4->shape.rot.y) * temp_f2));
+            arg4[2].projectedW = arg4->focus.pos.x - (Math_SinS(arg4->shape.rot.y) * temp_f2);
             sp24 = (bitwise s8 *) temp_f2;
-            arg4->unk_384 = (f32) (arg4->focus.pos.y - (Math_SinS(temp_a0_2) * 60.0f));
-            arg4->unk_388 = (f32) (arg4->focus.pos.z - (Math_CosS(arg4->shape.rot.y) * (bitwise f32) sp24));
+            arg4[2].uncullZoneForward = arg4->focus.pos.y - (Math_SinS(temp_a0_2) * 60.0f);
+            arg4[2].uncullZoneScale = arg4->focus.pos.z - (Math_CosS(arg4->shape.rot.y) * (bitwise f32) sp24);
         }
     }
 }
@@ -3914,7 +3933,7 @@ void func_80B0C398(BossHakugin *arg0, GraphicsContext **arg1) {
             temp_v0_2->words.w0 = 0xDA380003;
             temp_v0_2->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_3 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_3 + 8;
+            temp_s2->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (u32) &D_06010500;
             temp_v0_3->words.w0 = 0xDE000000;
         }
@@ -3923,7 +3942,7 @@ void func_80B0C398(BossHakugin *arg0, GraphicsContext **arg1) {
         phi_s3 = temp_s3;
     } while (temp_s3 < 0x1C20);
     temp_v0_4 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v0_4 + 8;
+    temp_s2->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06011100;
     temp_v0_4->words.w0 = 0xDE000000;
     phi_s1_2 = arg0;
@@ -3934,11 +3953,11 @@ void func_80B0C398(BossHakugin *arg0, GraphicsContext **arg1) {
             temp_f12_2 = temp_s0_2->unk_24;
             Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
             temp_v0_5 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_5 + 8;
+            temp_s2->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_6 + 8;
+            temp_s2->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_06011178;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -3972,12 +3991,12 @@ void func_80B0C570(BossHakugin *arg0, GlobalContext *arg1) {
     temp_s2 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0 + 8;
+    temp_s2->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDE000000;
     temp_v0->words.w1 = (u32) &D_04051180;
     temp_s7 = func_800DFCDC((arg1 + (arg1->activeCamera * 4))->unk_800) + 0x8000;
     temp_v0_2 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_2 + 8;
+    temp_s2->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_2->words.w1 = 0x1010180;
     sp98 = 0;
@@ -3989,11 +4008,11 @@ loop_2:
         temp_s0 = phi_s3 + 0x3158;
         if ((s32) phi_s3->unk_3168 > 0) {
             temp_v0_3 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_3 + 8;
+            temp_s2->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFA000000;
             temp_v0_3->words.w1 = temp_s0->unk_10 & 0xFF;
             temp_v0_4 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_4 + 8;
+            temp_s2->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDB060020;
             temp_v1 = temp_s0->unk_12;
             temp_v0_4->words.w1 = Gfx_TwoTexScroll(arg1->state.gfxCtx, 0, temp_v1 * 3, temp_v1 * 0xF, 0x20, 0x40, 1, 0U, 0U, 0x20, 0x20);
@@ -4002,11 +4021,11 @@ loop_2:
             temp_f12 = temp_s0->unk_C;
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             temp_v0_5 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_5 + 8;
+            temp_s2->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
             temp_v0_6 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_6 + 8;
+            temp_s2->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_04051238;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -4051,15 +4070,15 @@ void func_80B0C7B0(BossHakugin *arg0, GraphicsContext **arg1) {
     phi_s2 = -1;
     if (arg0->unk_1C8 > 0.0f) {
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFB000000;
         temp_v0->words.w1 = (D_80B0EAD0.unk_0 << 0x18) | (D_80B0EAD0.unk_1 << 0x10) | (D_80B0EAD0.unk_2 << 8);
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06011208;
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = -1;
         temp_v0_3->words.w0 = 0xFA000000;
         sp54 = arg0 + 0x374;
@@ -4072,21 +4091,21 @@ void func_80B0C7B0(BossHakugin *arg0, GraphicsContext **arg1) {
             Matrix_Scale(0.62f, 0.62f, arg0->unk_1D0, 1);
             SysMatrix_InsertTranslation(0.0f, 0.0f, arg0->unk_1CC * (f32) phi_s2, 1);
             temp_v0_4 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_4 + 8;
+            temp_s1->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDA380003;
             temp_v0_4->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_5 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_5 + 8;
+            temp_s1->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_06011278;
             temp_v0_5->words.w0 = 0xDE000000;
             SysMatrix_InsertZRotation_s(0x4000, 1);
             temp_v0_6 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_6 + 8;
+            temp_s1->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_7 = temp_s1->polyXlu.p;
             temp_s2 = phi_s2 + 2;
-            temp_s1->polyXlu.p = temp_v0_7 + 8;
+            temp_s1->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_06011278;
             temp_v0_7->words.w0 = 0xDE000000;
             phi_s4 += 0x2800;
@@ -4094,11 +4113,11 @@ void func_80B0C7B0(BossHakugin *arg0, GraphicsContext **arg1) {
             phi_s2 = temp_s2;
         } while (temp_s2 != 3);
         temp_v0_8 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_8 + 8;
+        temp_s1->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0;
         temp_v0_8->words.w0 = 0xE7000000;
         temp_v0_9 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_9 + 8;
+        temp_s1->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xFB000000;
         temp_v0_9->words.w1 = (D_80B0EACC.unk_0 << 0x18) | (D_80B0EACC.unk_1 << 0x10) | (D_80B0EACC.unk_2 << 8);
         SysMatrix_InsertTranslation(arg0->unk_380.x, arg0->unk_380.y, arg0->unk_380.z, 0);
@@ -4107,15 +4126,15 @@ void func_80B0C7B0(BossHakugin *arg0, GraphicsContext **arg1) {
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         SysMatrix_InsertZRotation_s(arg0->unk_198, 1);
         temp_v0_10 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_10 + 8;
+        temp_s1->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w0 = 0xDA380003;
         temp_v0_10->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_11 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_11 + 8;
+        temp_s1->polyXlu.p = &temp_v0_11[1];
         temp_v0_11->words.w0 = 0xDE000000;
         temp_v0_11->words.w1 = (u32) &D_06012ED0;
         temp_v0_12 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_12 + 8;
+        temp_s1->polyXlu.p = &temp_v0_12[1];
         temp_v0_12->words.w0 = 0xDE000000;
         temp_v0_12->words.w1 = (u32) &D_06012F40;
     }
@@ -4140,11 +4159,11 @@ void func_80B0CAF0(BossHakugin *arg0, GraphicsContext **arg1) {
     temp_s1 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFB000000;
     temp_v0->words.w1 = (D_80B0EAD0.unk_0 << 0x18) | (D_80B0EAD0.unk_1 << 0x10) | (D_80B0EAD0.unk_2 << 8);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06011208;
     temp_v0_2->words.w0 = 0xDE000000;
     phi_s2 = arg0;
@@ -4155,24 +4174,24 @@ void func_80B0CAF0(BossHakugin *arg0, GraphicsContext **arg1) {
             SysMatrix_SetStateRotationAndTranslation(temp_s0->unk_0, temp_s0->unk_4, temp_s0->unk_8, temp_s0 + 0xE);
             Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
             temp_v0_3 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_3 + 8;
+            temp_s1->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFA000000;
             temp_v0_3->words.w1 = (temp_s0->unk_C & 0xFF) | ~0xFF;
             temp_v0_4 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_4 + 8;
+            temp_s1->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDA380003;
             temp_v0_4->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_5 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_5 + 8;
+            temp_s1->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = (u32) &D_06011278;
             temp_v0_5->words.w0 = 0xDE000000;
             SysMatrix_InsertZRotation_s(0x4000, 1);
             temp_v0_6 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_6 + 8;
+            temp_s1->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_7 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_7 + 8;
+            temp_s1->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_06011278;
             temp_v0_7->words.w0 = 0xDE000000;
         }
@@ -4214,11 +4233,11 @@ block_4:
         temp_s2 = temp_a0;
         func_8012C2DC(temp_a0);
         temp_v0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_2 + 8;
+        temp_s2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFB000000;
         temp_v0_2->words.w1 = (D_80B0EACC.unk_0 << 0x18) | (D_80B0EACC.unk_1 << 0x10) | (D_80B0EACC.unk_2 << 8);
         temp_v0_3 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_3 + 8;
+        temp_s2->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06012ED0;
         temp_v0_3->words.w0 = 0xDE000000;
         phi_s4 = 0xD7 - (phi_s0 * 0xF);
@@ -4230,7 +4249,7 @@ block_4:
             do {
                 temp_s5 = phi_s0_2 - 1;
                 temp_v0_4 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_4 + 8;
+                temp_s2->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xFA000000;
                 temp_v0_4->words.w1 = (phi_s4 & 0xFF) | ~0xFF;
                 SysMatrix_InsertTranslation(phi_s1->unk_0, phi_s1->unk_4, phi_s1->unk_8, 0);
@@ -4238,11 +4257,11 @@ block_4:
                 Matrix_Scale(phi_f20, phi_f20, phi_f20, 1);
                 SysMatrix_InsertZRotation_s(phi_s3, 1);
                 temp_v0_5 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_5 + 8;
+                temp_s2->polyXlu.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDA380003;
                 temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
                 temp_v0_6 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_6 + 8;
+                temp_s2->polyXlu.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = (u32) &D_06012F40;
                 temp_v0_6->words.w0 = 0xDE000000;
                 phi_s4 += 0xF;
@@ -4270,28 +4289,28 @@ void func_80B0CF24(Actor *arg0, GlobalContext *arg1) {
     temp_s0 = temp_a0;
     func_8012C2DC(temp_a0);
     func_800B8118(arg0, arg1, 0);
-    SysMatrix_InsertTranslation((f32) arg0->unk_9AA, (f32) arg0->unk_9AC, (f32) arg0->unk_9AE, 0);
+    SysMatrix_InsertTranslation((f32) arg0->unk_9AA, (f32) arg0->unk_9AC, (f32) arg0[7].shape.unk_16, 0);
     Matrix_Scale(4.0f, arg0->unk_1D4, 4.0f, 1);
     Matrix_RotateY(0xF00, 1U);
     SysMatrix_InsertXRotation_s(0x500, 1);
     SysMatrix_InsertZRotation_s(-0x500, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp50 = temp_v0;
     sp50->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     temp_v1 = arg1->gameplayFrames;
     sp4C = temp_v0_2;
     sp4C->words.w1 = Gfx_TwoTexScroll(arg1->state.gfxCtx, 0, 0U, temp_v1 & 0xFF, 0x20, 0x10, 1, 0U, (temp_v1 * 2) & 0xFF, 0x40, 0x20);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
-    temp_v0_3->words.w1 = arg0->unk_193 | 0x326400;
+    temp_v0_3->words.w1 = arg0[1].focus.unk_13 | 0x326400;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_04050D10;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -4315,7 +4334,7 @@ void BossHakugin_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0_2;
     func_8012C28C(temp_a0_2);
     temp_v1 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v1 + 8;
+    sp40->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80B0EA88;
     SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80B0C000, func_80B0C1BC, (Actor *) this);
@@ -4625,11 +4644,11 @@ void func_80B0D750(u32 arg0, BossHakugin *arg1, GlobalContext *arg2) {
         phi_f0_2 = 1.0f;
     }
     temp_v0 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0 + 8;
+    temp_a0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA000000;
     temp_v0->words.w1 = (s32) (phi_f0_2 * 80.0f) & 0xFF;
     temp_v0_2 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_2 + 8;
+    temp_a0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xFB000000;
     temp_a0_2 = arg1->actor.floorPoly;
@@ -4641,45 +4660,45 @@ void func_80B0D750(u32 arg0, BossHakugin *arg1, GlobalContext *arg2) {
     spA0 = arg2->state.gfxCtx;
     Matrix_Scale(4.25f, 1.0f, 4.25f, 1);
     temp_v0_3 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_3 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     spA0 = arg2->state.gfxCtx;
     sp4C = temp_v0_3;
     sp4C->words.w1 = Matrix_NewMtx(arg2->state.gfxCtx);
     temp_v0_4 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_4 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_801C5D60;
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_5 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_5 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFD900000;
     temp_v0_5->words.w1 = arg0;
     temp_v0_6 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_6 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0x7098260;
     temp_v0_6->words.w0 = 0xF5900000;
     temp_v0_7 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_7 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0;
     temp_v0_7->words.w0 = 0xE6000000;
     temp_v0_8 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_8 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0x77FF100;
     temp_v0_8->words.w0 = 0xF3000000;
     temp_v0_9 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_9 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0;
     temp_v0_9->words.w0 = 0xE7000000;
     temp_v0_10 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_10 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w0 = 0xF5881000;
     temp_v0_10->words.w1 = 0x98260;
     temp_v0_11 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_11 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_11[1];
     temp_v0_11->words.w0 = 0xF2000000;
     temp_v0_11->words.w1 = 0xFC0FC;
     temp_v0_12 = arg2->state.gfxCtx->polyOpa.p;
-    arg2->state.gfxCtx->polyOpa.p = temp_v0_12 + 8;
+    arg2->state.gfxCtx->polyOpa.p = &temp_v0_12[1];
     temp_v0_12->words.w1 = (u32) &D_801C5D80;
     temp_v0_12->words.w0 = 0xDE000000;
 }
@@ -4693,14 +4712,14 @@ void func_80B0D9CC(void *arg0) {
     f32 sp84;
     f32 sp80;
     f32 sp68;
-    Vec3f *temp_s0;
-    Vec3f *temp_s0_2;
-    Vec3f *temp_s0_3;
-    Vec3f *temp_s0_4;
     Vec3f *temp_s0_5;
     Vec3f *temp_s0_6;
     Vec3f *temp_s0_7;
     f32 *temp_a1;
+    f32 *temp_s0;
+    f32 *temp_s0_2;
+    f32 *temp_s0_3;
+    f32 *temp_s0_4;
     f32 temp_f0;
     f32 temp_f0_2;
     f32 temp_f0_3;
@@ -4750,15 +4769,15 @@ void func_80B0D9CC(void *arg0) {
     Vec3f *phi_s0;
     s32 phi_s1;
     f32 phi_f12;
-    Vec3f *phi_s0_2;
+    f32 *phi_s0_2;
     f32 phi_f14;
     s32 phi_v1;
     f32 phi_f12_2;
-    Vec3f *phi_s0_3;
+    f32 *phi_s0_3;
     f32 phi_f14_2;
     s32 phi_v1_2;
     s32 phi_v1_3;
-    Vec3f *phi_s0_4;
+    f32 *phi_s0_4;
     f32 phi_f26;
     Vec3f *phi_s0_5;
     f32 phi_f28;
@@ -4789,12 +4808,12 @@ loop_1:
     spCC = arg0->unk_28 + (85.0f * (f32) (4 - phi_s3)) + 20.0f;
     spD0 = (arg0->unk_2C - (temp_f24 * temp_f30)) + sp80;
     temp_f22 = ((temp_f24 * 4.5f) + 22.0f) * 0.001f;
-    phi_s0->unk_24 = temp_f22;
+    phi_s0[3].x = temp_f22;
     Math_Vec3f_Copy(phi_s0, (Vec3f *) temp_a1);
     temp_a0 = phi_s1 >> 1;
     spB4 = spB4;
     if (temp_a0 != 0) {
-        temp_s0 = phi_s0 + 0x28;
+        temp_s0 = &phi_s0[3].y;
         temp_a1_2 = temp_a0 & 3;
         temp_f28_2 = temp_f30 + spB4;
         temp_f26 = temp_f24 / (f32) temp_a0;
@@ -4807,7 +4826,7 @@ loop_1:
         phi_v1_2 = 0;
         phi_v1_3 = 0;
         phi_s0_4 = temp_s0;
-        phi_s0_8 = temp_s0;
+        phi_s0_8 = (Vec3f *) temp_s0;
         if (temp_a0 > 0) {
             if (temp_a1_2 != 0) {
                 temp_f16 = temp_f24 * spAC;
@@ -4820,7 +4839,7 @@ loop_1:
                 phi_f14_2 = temp_f14;
                 if (temp_v0 != 0) {
                     do {
-                        phi_s0_2->x = phi_f12;
+                        *phi_s0_2 = phi_f12;
                         temp_v1 = phi_v1 + 1;
                         temp_s0_2 = phi_s0_2 + 0x28;
                         temp_f14_2 = (f32) (temp_a0 - temp_v1);
@@ -4838,7 +4857,7 @@ loop_1:
                         phi_v1_2 = temp_v1;
                     } while (temp_v0 != temp_v1);
                 }
-                phi_s0_3->x = phi_f12_2;
+                *phi_s0_3 = phi_f12_2;
                 temp_v1_2 = phi_v1_2 + 1;
                 temp_s0_3 = phi_s0_3 + 0x28;
                 temp_s0_3->unk_-24 = (f32) (temp_f16 + spCC);
@@ -4846,7 +4865,7 @@ loop_1:
                 temp_s0_3->unk_-20 = (f32) ((phi_f14_2 * temp_f20) + spD0);
                 phi_v1_3 = temp_v1_2;
                 phi_s0_4 = temp_s0_3;
-                phi_s0_8 = temp_s0_3;
+                phi_s0_8 = (Vec3f *) temp_s0_3;
                 if (temp_v1_2 != temp_a0) {
                     goto block_7;
                 }
@@ -4879,7 +4898,7 @@ block_7:
                     temp_s0_4->unk_-20 = (f32) ((temp_f14_3 * temp_f20) + spD0);
                     phi_v1_3 = temp_v1_3;
                     phi_s0_4 = temp_s0_4;
-                    phi_s0_8 = temp_s0_4;
+                    phi_s0_8 = (Vec3f *) temp_s0_4;
                 } while (temp_v1_3 != temp_a0);
             }
         }
@@ -5051,7 +5070,7 @@ void *func_80B0DFA8(BossHakugin *arg0) {
     temp_a1_3->unk_30 = (s16) (s32) temp_a3->unk_9F8;
     temp_a1_3->unk_32 = (s16) (s32) temp_a3->unk_9FC;
     temp_a1_3->unk_34 = (s16) (s32) temp_a3->unk_A00;
-    temp_a1_3->unk_16 = (s8) (temp_a1_2->unk_56 & 0xFFBF);
+    temp_a1_3->unk_16 = (s8) (temp_a1_2[1].info.bumperFlags & 0xFFBF);
     temp_a1_3->unk_14 = 0;
     temp_a1_3->unk_8 = 0xF3CFBBFFU;
     temp_a1_3->unk_36 = (s16) (s32) (temp_a3->unk_A1C * 3000.0f);
@@ -5177,17 +5196,17 @@ void *func_80B0DFA8(BossHakugin *arg0) {
 
 void func_80B0E548(Actor *this, GlobalContext *globalCtx) {
     CollisionCheckContext *sp1C;
-    Collider *sp18;
-    Collider *temp_a2;
+    u8 *sp18;
     CollisionCheckContext *temp_a1;
+    u8 *temp_a2;
 
     func_80B0DFA8((BossHakugin *) this);
     temp_a1 = &globalCtx->colChkCtx;
-    temp_a2 = this + 0x484;
+    temp_a2 = &this[3].colChkInfo.damage;
     sp18 = temp_a2;
     sp1C = temp_a1;
-    CollisionCheck_SetAC(globalCtx, temp_a1, temp_a2);
-    CollisionCheck_SetOC(globalCtx, temp_a1, temp_a2);
+    CollisionCheck_SetAC(globalCtx, temp_a1, (Collider *) temp_a2);
+    CollisionCheck_SetOC(globalCtx, temp_a1, (Collider *) temp_a2);
 }
 
 void func_80B0E5A4(Actor *this, GlobalContext *globalCtx) {
@@ -5200,35 +5219,35 @@ void func_80B0E5A4(Actor *this, GlobalContext *globalCtx) {
     s32 temp_s3;
     Actor *phi_s0;
     Vec3s *phi_s5;
-    void *phi_s4;
+    u8 *phi_s4;
     s32 phi_s3;
 
     temp_a0 = globalCtx->state.gfxCtx;
     temp_s2 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v0 + 8;
+    temp_s2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDE000000;
     temp_v0->words.w1 = (u32) &D_06010488;
     phi_s0 = this;
-    phi_s5 = this + 0xA14;
-    phi_s4 = this + 0x9F8;
+    phi_s5 = (Vec3s *) &this[7].update;
+    phi_s4 = &this[7].colorFilterTimer;
     phi_s3 = 0;
     do {
-        SysMatrix_SetStateRotationAndTranslation(phi_s0->unk_9F8, phi_s0->unk_9FC, phi_s0->unk_A00, phi_s5);
+        SysMatrix_SetStateRotationAndTranslation(phi_s0->unk_9F8, phi_s0[7].parent, phi_s0[7].child, phi_s5);
         temp_f12 = phi_s4->unk_24;
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s2->polyOpa.p;
         temp_s3 = phi_s3 + 0x28;
-        temp_s2->polyOpa.p = temp_v0_3 + 8;
+        temp_s2->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06010500;
         temp_v0_3->words.w0 = 0xDE000000;
         phi_s0 += 0x28;
-        phi_s5 += 0x28;
+        phi_s5 = (Vec3s *) &phi_s5[6].z;
         phi_s4 += 0x28;
         phi_s3 = temp_s3;
     } while (temp_s3 != 0x5A0);

@@ -72,7 +72,7 @@ void EffectSsEnFire_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     temp_f12 = (f32) this->regs[1] * 0.00005f * Math_SinS((s16) (this->life * 0x333));
     Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp50 = temp_v0;
     sp50->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -84,29 +84,29 @@ void EffectSsEnFire_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     sp5E = phi_a1;
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v1 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v1 + 8;
+    temp_s0->polyXlu.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFB000000;
     temp_a0 = (u32) ((f32) phi_a1 * 12.7f) & 0xFF;
     temp_a2 = temp_a0 << 0x18;
     temp_v1->words.w1 = temp_a2;
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = temp_a2 | (temp_a0 << 0x10) | 0xFF;
     temp_v0_2->words.w0 = 0xFA000080;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp44 = temp_v0_3;
     sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) this->regs[9] * -0x14) & 0x1FF, 0x20, 0x80);
     if (((this->regs[8] & 0x7FFF) != 0) || ((s32) this->life < 0x12)) {
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) &D_0407D650;
         temp_v0_5->words.w0 = 0xDE000000;
         return;
     }
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) D_0407D590;
     temp_v0_4->words.w0 = 0xDE000000;
 }

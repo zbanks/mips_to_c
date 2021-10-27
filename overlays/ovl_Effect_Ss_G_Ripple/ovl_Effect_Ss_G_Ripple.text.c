@@ -96,38 +96,38 @@ void func_80979C38(GraphicsContext **arg0, s32 *arg1, ? arg2) {
     if ((temp_a1 != -1) && (temp_v0 != 0) && ((s32) temp_a1 < (s32) temp_v0->numWaterBoxes)) {
         phi_f2 = func_800CA568(temp_a0, temp_a1, arg1->unk_58);
     } else {
-        phi_f2 = arg1->unk_4;
+        phi_f2 = arg1[1];
     }
-    SkinMatrix_SetTranslate((MtxF *) &spD4, arg1->unk_0, phi_f2, arg1->unk_8);
+    SkinMatrix_SetTranslate((MtxF *) &spD4, arg1->unk_0, phi_f2, arg1[2]);
     SkinMatrix_SetScale((MtxF *) &sp94, sp118, sp118, sp118);
     SkinMatrix_MtxFMtxFMult((MtxF *) &spD4, (MtxF *) &sp94, (MtxF *) &sp54);
     temp_v0_2 = SkinMatrix_MtxFToNewMtx(temp_s1, (MtxF *) &sp54);
     if (temp_v0_2 != 0) {
         temp_v1 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1 + 8;
+        temp_s1->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) temp_v0_2;
         temp_v1->words.w0 = 0xDA380003;
         func_8012C974(temp_s1);
         temp_v1_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_2 + 8;
+        temp_s1->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFA000000;
         temp_v1_2->words.w1 = (arg1->unk_4C & 0xFF) | (arg1->unk_46 << 0x18) | ((arg1->unk_48 & 0xFF) << 0x10) | ((arg1->unk_4A & 0xFF) << 8);
         temp_v1_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_3 + 8;
+        temp_s1->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFB000000;
         temp_v1_3->words.w1 = (arg1->unk_54 & 0xFF) | (arg1->unk_4E << 0x18) | ((arg1->unk_50 & 0xFF) << 0x10) | ((arg1->unk_52 & 0xFF) << 8);
         temp_v1_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_4 + 8;
+        temp_s1->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w1 = 0x20;
         temp_v1_4->words.w0 = 0xE3001A01;
         temp_v1_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_5 + 8;
+        temp_s1->polyXlu.p = &temp_v1_5[1];
         temp_v1_5->words.w1 = 0x80;
         temp_v1_5->words.w0 = 0xE3001801;
         temp_v1_6 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_6 + 8;
+        temp_s1->polyXlu.p = &temp_v1_6[1];
         temp_v1_6->words.w0 = 0xDE000000;
-        temp_v1_6->words.w1 = arg1->unk_38;
+        temp_v1_6->words.w1 = arg1[14];
     }
 }
 

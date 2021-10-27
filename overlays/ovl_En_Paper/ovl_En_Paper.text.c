@@ -135,18 +135,18 @@ void func_80C1F55C(EnPaper *arg0, Vec3f *arg1) {
     temp_a1 = arg1 + 0xC;
     sp24 = temp_a1;
     SysMatrix_MultiplyVector3fByState(&D_80C1FC60, temp_a1);
-    arg1->unk_18 = (f32) arg0->actor.world.pos.x;
-    arg1->unk_1C = (f32) arg0->actor.world.pos.y;
-    arg1->unk_20 = (f32) arg0->actor.world.pos.z;
-    arg1->unk_18 = (f32) (arg1->unk_18 + (Rand_Centered() * 4.0f));
-    arg1->unk_1C = (f32) (arg1->unk_1C + (Rand_Centered() * 4.0f));
-    arg1->unk_20 = (f32) (arg1->unk_20 + (Rand_Centered() * 4.0f));
-    arg1->unk_24 = (f32) arg0->actor.velocity.x;
-    arg1->unk_28 = (f32) arg0->actor.velocity.y;
-    arg1->unk_2C = (f32) arg0->actor.velocity.z;
-    arg1->unk_24 = (f32) (arg1->unk_24 + (Rand_Centered() * 9.0f));
-    arg1->unk_28 = (f32) (arg1->unk_28 + (Rand_ZeroOne() * 6.0f));
-    arg1->unk_2C = (f32) (arg1->unk_2C + (Rand_Centered() * 9.0f));
+    arg1[2].x = arg0->actor.world.pos.x;
+    arg1[2].y = arg0->actor.world.pos.y;
+    arg1[2].z = arg0->actor.world.pos.z;
+    arg1[2].x += Rand_Centered() * 4.0f;
+    arg1[2].y += Rand_Centered() * 4.0f;
+    arg1[2].z += Rand_Centered() * 4.0f;
+    arg1[3].x = arg0->actor.velocity.x;
+    arg1[3].y = arg0->actor.velocity.y;
+    arg1[3].z = arg0->actor.velocity.z;
+    arg1[3].x += Rand_Centered() * 9.0f;
+    arg1[3].y += Rand_ZeroOne() * 6.0f;
+    arg1[3].z += Rand_Centered() * 9.0f;
     arg1->unk_30 = Rand_Next();
     arg1->unk_32 = (s16) ((Rand_Next() >> 4) + 0x16C);
     SysMatrix_InsertRotationAroundUnitVector_s(arg1->unk_30, temp_a1, 0);
@@ -171,24 +171,24 @@ void func_80C1F6E0(EnPaper *arg0, Vec3f *arg1) {
     sp1C = Math_CosS(arg1->unk_30);
     sp18 = Math_SinS(arg1->unk_30);
     temp_f16 = 1.0f - sp1C;
-    if (!(arg1->unk_1C < (arg0->actor.floorHeight - 40.0f))) {
-        temp_f12 = arg1->unk_24;
+    if (!(arg1[2].y < (arg0->actor.floorHeight - 40.0f))) {
+        temp_f12 = arg1[3].x;
         temp_f0 = fabsf(arg1->x);
-        arg1->unk_28 = (f32) (arg1->unk_28 + arg0->actor.gravity);
-        temp_f2 = arg1->unk_28;
-        temp_f14 = arg1->unk_2C;
+        arg1[3].y += arg0->actor.gravity;
+        temp_f2 = arg1[3].y;
+        temp_f14 = arg1[3].z;
         temp_f6 = 0.2f * fabsf(arg1->y);
         temp_f0_2 = fabsf(arg1->z);
-        temp_f12_2 = arg1->unk_14;
-        arg1->unk_24 = (f32) (temp_f12 - (0.2f * temp_f0 * (temp_f12 + arg0->unk_D78)));
-        temp_f0_3 = arg1->unk_C;
-        temp_f2_2 = arg1->unk_10;
-        arg1->unk_28 = (f32) (temp_f2 - (temp_f6 * (temp_f2 + arg0->unk_D7C)));
+        temp_f12_2 = arg1[1].z;
+        arg1[3].x = temp_f12 - (0.2f * temp_f0 * (temp_f12 + arg0->unk_D78));
+        temp_f0_3 = arg1[1].x;
+        temp_f2_2 = arg1[1].y;
+        arg1[3].y = temp_f2 - (temp_f6 * (temp_f2 + arg0->unk_D7C));
         arg1->unk_30 = (s16) (arg1->unk_30 + arg1->unk_32);
-        arg1->unk_2C = (f32) (temp_f14 - (0.2f * temp_f0_2 * (temp_f14 + arg0->unk_D80)));
-        arg1->unk_18 = (f32) (arg1->unk_18 + arg1->unk_24);
-        arg1->unk_1C = (f32) (arg1->unk_1C + arg1->unk_28);
-        arg1->unk_20 = (f32) (arg1->unk_20 + arg1->unk_2C);
+        arg1[3].z = temp_f14 - (0.2f * temp_f0_2 * (temp_f14 + arg0->unk_D80));
+        arg1[2].x += arg1[3].x;
+        arg1[2].y += arg1[3].y;
+        arg1[2].z += arg1[3].z;
         arg1->x = (temp_f0_3 * temp_f16 * temp_f12_2) - (temp_f2_2 * sp18);
         arg1->y = (temp_f2_2 * temp_f16 * temp_f12_2) + (temp_f0_3 * sp18);
         arg1->z = (temp_f12_2 * temp_f16 * temp_f12_2) + sp1C;
@@ -267,15 +267,15 @@ void EnPaper_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s2 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v0 + 8;
+    temp_s2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xE200001C;
     temp_v0->words.w1 = 0xC8112078;
     temp_v0_2 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v0_2 + 8;
+    temp_s2->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFCFFFE60;
     temp_v0_2->words.w1 = 0xFFFE79F8;
     temp_v0_3 = temp_s2->polyOpa.p;
-    temp_s2->polyOpa.p = temp_v0_3 + 8;
+    temp_s2->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xD9000000;
     temp_v0_3->words.w1 = 0x230405;
     phi_s4 = 0;
@@ -283,36 +283,36 @@ void EnPaper_Draw(Actor *thisx, GlobalContext *globalCtx) {
     do {
         if (phi_s4 == 0) {
             temp_v0_4 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_4 + 8;
+            temp_s2->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = -1;
             temp_v0_4->words.w0 = 0xFA000000;
         } else if (phi_s4 == 0x1E) {
             temp_v0_5 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_5 + 8;
+            temp_s2->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = 0xFF2020FF;
             temp_v0_5->words.w0 = 0xFA000000;
         } else if (phi_s4 == 0x28) {
             temp_v0_6 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_6 + 8;
+            temp_s2->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = 0x4080FFFF;
             temp_v0_6->words.w0 = 0xFA000000;
         } else if (phi_s4 == 0x32) {
             temp_v0_7 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_7 + 8;
+            temp_s2->polyOpa.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = 0x40FF80FF;
             temp_v0_7->words.w0 = 0xFA000000;
         }
-        if ((this->actor.floorHeight - 40.0f) < phi_s3->unk_1C) {
+        if ((this->actor.floorHeight - 40.0f) < phi_s3[2].y) {
             temp_s1 = globalCtx->state.gfxCtx;
             temp_s0 = temp_s1->polyOpa.d - 0x40;
             temp_s1->polyOpa.d = temp_s0;
-            func_8017842C(temp_s0, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, (s32) phi_s3->unk_30, phi_s3->unk_C, phi_s3->unk_10, phi_s3->unk_14, phi_s3->unk_18, phi_s3->unk_1C, phi_s3->unk_20);
+            func_8017842C(temp_s0, this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, (s32) phi_s3->unk_30, phi_s3[1].x, phi_s3[1].y, phi_s3[1].z, phi_s3[2].x, phi_s3[2].y, phi_s3[2].z);
             temp_v0_8 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_8 + 8;
+            temp_s2->polyOpa.p = &temp_v0_8[1];
             temp_v0_8->words.w1 = (u32) temp_s0;
             temp_v0_8->words.w0 = 0xDA380003;
             temp_v0_9 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_9 + 8;
+            temp_s2->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w1 = (u32) &D_0600D5A0;
             temp_v0_9->words.w0 = 0xDE000000;
         }

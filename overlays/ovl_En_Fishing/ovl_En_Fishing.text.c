@@ -50,8 +50,8 @@ typedef struct EnFishing {
     /* 0x1B0 */ f32 unk_1B0;                        /* inferred */
     /* 0x1B4 */ f32 unk_1B4;                        /* inferred */
     /* 0x1B8 */ f32 unk_1B8;                        /* inferred */
-    /* 0x1BC */ s32 unk_1BC;                        /* inferred */
-    /* 0x1C0 */ s32 unk_1C0;                        /* inferred */
+    /* 0x1BC */ f32 unk_1BC;                        /* inferred */
+    /* 0x1C0 */ f32 unk_1C0;                        /* inferred */
     /* 0x1C4 */ char pad_1C4[0x6];                  /* maybe part of unk_1C0[2]? */
     /* 0x1CA */ u8 unk_1CA;                         /* inferred */
     /* 0x1CB */ char pad_1CB[0x2];                  /* maybe part of unk_1CA[3]? */
@@ -964,11 +964,11 @@ loop_4:
         if ((temp_v0 == 0) || (temp_v0 == 5) || (temp_v0 == 7) || (temp_v0 == 8)) {
             phi_a1->unk_24 = 2U;
             phi_a1->unk_0 = (s32) arg2->unk_0;
-            phi_a1->unk_4 = (s32) arg2->unk_4;
-            phi_a1->unk_8 = (s32) arg2->unk_8;
+            phi_a1->unk_4 = (s32) arg2[1];
+            phi_a1->unk_8 = (s32) arg2[2];
             phi_a1->unk_C = (s32) arg3->unk_0;
-            phi_a1->unk_10 = (s32) arg3->unk_4;
-            phi_a1->unk_14 = (s32) arg3->unk_8;
+            phi_a1->unk_10 = (s32) arg3[1];
+            phi_a1->unk_14 = (s32) arg3[2];
             phi_a1->unk_18 = (s32) sp20.unk_0;
             phi_a1->unk_1C = (s32) sp20.unk_4;
             phi_a1->unk_20 = (s32) sp20.unk_8;
@@ -1005,8 +1005,8 @@ loop_3:
         if (phi_a1->unk_24 == 0) {
             phi_a1->unk_24 = 3U;
             phi_a1->unk_0 = (s32) arg2->unk_0;
-            phi_a1->unk_4 = (s32) arg2->unk_4;
-            phi_a1->unk_8 = (s32) arg2->unk_8;
+            phi_a1->unk_4 = (s32) arg2[1];
+            phi_a1->unk_8 = (s32) arg2[2];
             phi_a1->unk_C = (s32) D_8090CF1C->x;
             phi_a1->unk_10 = (s32) D_8090CF1C->y;
             phi_a1->unk_14 = (s32) D_8090CF1C->z;
@@ -1049,8 +1049,8 @@ loop_3:
         if (phi_a1->unk_24 == 0) {
             phi_a1->unk_24 = 4U;
             phi_a1->unk_0 = (s32) arg2->unk_0;
-            phi_a1->unk_4 = (s32) arg2->unk_4;
-            phi_a1->unk_8 = (s32) arg2->unk_8;
+            phi_a1->unk_4 = (s32) arg2[1];
+            phi_a1->unk_8 = (s32) arg2[2];
             phi_a1->unk_C = (s32) sp20.unk_0;
             phi_a1->unk_10 = (s32) sp20.unk_4;
             phi_a1->unk_14 = (s32) sp20.unk_8;
@@ -1091,16 +1091,16 @@ loop_1:
     if (phi_a3->unk_24 == 0) {
         phi_a3->unk_24 = 5U;
         phi_a3->unk_0 = (s32) arg1->unk_0;
-        phi_a3->unk_4 = (s32) arg1->unk_4;
-        phi_a3->unk_8 = (s32) arg1->unk_8;
+        phi_a3->unk_4 = (s32) arg1[1];
+        phi_a3->unk_8 = (s32) arg1[2];
         phi_a3->unk_18 = (s32) D_8090CF1C->x;
         phi_a3->unk_1C = (s32) D_8090CF1C->y;
         phi_a3->unk_20 = (s32) D_8090CF1C->z;
         phi_a3->unk_34 = (f32) arg2->unk_0;
-        phi_a3->unk_38 = (f32) arg2->unk_4;
-        phi_a3->unk_3C = (f32) arg2->unk_8;
+        phi_a3->unk_38 = (f32) arg2[1];
+        phi_a3->unk_3C = (f32) arg2[2];
         arg0 = phi_a3;
-        SysMatrix_InsertYRotation_f(arg2->unk_4, 0);
+        SysMatrix_InsertYRotation_f(arg2[1], 0);
         SysMatrix_RotateStateAroundXAxis(arg2->unk_0);
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp18, arg0 + 0xC);
         return;
@@ -1755,7 +1755,7 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             spF8 = temp_v0_5;
             spF8->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_6 + 8;
+            temp_s0->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_06008678;
             temp_v0_6->words.w0 = 0xDE000000;
         }
@@ -1769,17 +1769,17 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             sp6C = &D_06003680;
             if (phi_s4_2 == 0) {
                 temp_v0_7 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_7 + 8;
+                temp_s0->polyXlu.p = &temp_v0_7[1];
                 temp_v0_7->words.w1 = (u32) &D_06003610;
                 temp_v0_7->words.w0 = 0xDE000000;
                 temp_v0_8 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_8 + 8;
+                temp_s0->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w1 = 0xC8C8C800;
                 temp_v0_8->words.w0 = 0xFB000000;
                 phi_s4_2 = (phi_s4_2 + 1) & 0xFF;
             }
             temp_v0_9 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_9 + 8;
+            temp_s0->polyXlu.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xFA000000;
             temp_v0_9->words.w1 = (phi_s1_2->unk_2A & 0xFF) | 0xB4B4B400;
             SysMatrix_InsertTranslation(phi_s1_2->unk_0, phi_s1_2->unk_4, phi_s1_2->unk_8, 0);
@@ -1787,12 +1787,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             temp_f12_2 = phi_s1_2->unk_30;
             Matrix_Scale(temp_f12_2, temp_f12_2, 1.0f, 1);
             temp_v0_10 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_10 + 8;
+            temp_s0->polyXlu.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0xDA380003;
             spE4 = temp_v0_10;
             spE4->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_11 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_11 + 8;
+            temp_s0->polyXlu.p = &temp_v0_11[1];
             temp_v0_11->words.w0 = 0xDE000000;
             temp_v0_11->words.w1 = (u32) sp6C;
         }
@@ -1806,21 +1806,21 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             sp6C = &D_06008970;
             if (phi_s4_3 == 0) {
                 temp_v0_12 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_12 + 8;
+                temp_s0->polyOpa.p = &temp_v0_12[1];
                 temp_v0_12->words.w1 = (u32) &D_060088C0;
                 temp_v0_12->words.w0 = 0xDE000000;
                 temp_v0_13 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_13 + 8;
+                temp_s0->polyOpa.p = &temp_v0_13[1];
                 temp_v0_13->words.w1 = 0x285A5080;
                 temp_v0_13->words.w0 = 0xFB000000;
                 phi_s4_3 = (phi_s4_3 + 1) & 0xFF;
             }
             temp_v0_14 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_14 + 8;
+            temp_s0->polyOpa.p = &temp_v0_14[1];
             temp_v0_14->words.w0 = 0xFA000000;
             temp_v0_14->words.w1 = (phi_s1_3->unk_2A & 0xFF) | 0x285A5000;
             temp_v0_15 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_15 + 8;
+            temp_s0->polyOpa.p = &temp_v0_15[1];
             temp_v0_15->words.w0 = 0xDB060020;
             temp_v1 = phi_s1_3->unk_25 + (phi_s3_3 * 3);
             spD0 = temp_v0_15;
@@ -1830,12 +1830,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             temp_f12_3 = phi_s1_3->unk_30;
             Matrix_Scale(temp_f12_3, temp_f12_3, 1.0f, 1);
             temp_v0_16 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_16 + 8;
+            temp_s0->polyOpa.p = &temp_v0_16[1];
             temp_v0_16->words.w0 = 0xDA380003;
             spCC = temp_v0_16;
             spCC->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_17 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_17 + 8;
+            temp_s0->polyOpa.p = &temp_v0_17[1];
             temp_v0_17->words.w0 = 0xDE000000;
             temp_v0_17->words.w1 = (u32) sp6C;
         }
@@ -1849,15 +1849,15 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             sp6C = &D_060034C0;
             if (phi_s4_4 == 0) {
                 temp_v0_18 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_18 + 8;
+                temp_s0->polyXlu.p = &temp_v0_18[1];
                 temp_v0_18->words.w1 = (u32) &D_06003460;
                 temp_v0_18->words.w0 = 0xDE000000;
                 temp_v0_19 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_19 + 8;
+                temp_s0->polyXlu.p = &temp_v0_19[1];
                 temp_v0_19->words.w1 = 0x96969600;
                 temp_v0_19->words.w0 = 0xFB000000;
                 temp_v0_20 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_20 + 8;
+                temp_s0->polyXlu.p = &temp_v0_20[1];
                 temp_v0_20->words.w1 = -1;
                 temp_v0_20->words.w0 = 0xFA000000;
                 phi_s4_4 = (phi_s4_4 + 1) & 0xFF;
@@ -1867,12 +1867,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             temp_f12_4 = phi_s1_4->unk_30;
             Matrix_Scale(temp_f12_4, temp_f12_4, 1.0f, 1);
             temp_v0_21 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_21 + 8;
+            temp_s0->polyXlu.p = &temp_v0_21[1];
             temp_v0_21->words.w0 = 0xDA380003;
             spB8 = temp_v0_21;
             spB8->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_22 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_22 + 8;
+            temp_s0->polyXlu.p = &temp_v0_22[1];
             temp_v0_22->words.w0 = 0xDE000000;
             temp_v0_22->words.w1 = (u32) sp6C;
         }
@@ -1891,11 +1891,11 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             if (phi_s4_5 == 0) {
                 temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0x14U);
                 temp_v0_23 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_23 + 8;
+                temp_s0->polyXlu.p = &temp_v0_23[1];
                 temp_v0_23->words.w0 = 0xFCFFFFFF;
                 temp_v0_23->words.w1 = 0xFFFDF6FB;
                 temp_v0_24 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_24 + 8;
+                temp_s0->polyXlu.p = &temp_v0_24[1];
                 temp_v0_24->words.w1 = 0x96FFFF1E;
                 temp_v0_24->words.w0 = 0xFA000000;
                 phi_s4_5 = (phi_s4_5 + 1) & 0xFF;
@@ -1906,12 +1906,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             SysMatrix_InsertZRotation_f(phi_s1_5->unk_3C, 1);
             Matrix_Scale(0.002f, 1.0f, 0.1f, 1);
             temp_v0_25 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_25 + 8;
+            temp_s0->polyXlu.p = &temp_v0_25[1];
             temp_v0_25->words.w0 = 0xDA380003;
             spA8 = temp_v0_25;
             spA8->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_26 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_26 + 8;
+            temp_s0->polyXlu.p = &temp_v0_26[1];
             temp_v0_26->words.w1 = (u32) &D_06003760;
             temp_v0_26->words.w0 = 0xDE000000;
         }
@@ -1925,15 +1925,15 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
         if (phi_s1_6->unk_24 == 7) {
             if (phi_s4_6 == 0) {
                 temp_v0_27 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_27 + 8;
+                temp_s0->polyXlu.p = &temp_v0_27[1];
                 temp_v0_27->words.w1 = (u32) &D_06008610;
                 temp_v0_27->words.w0 = 0xDE000000;
                 temp_v0_28 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_28 + 8;
+                temp_s0->polyXlu.p = &temp_v0_28[1];
                 temp_v0_28->words.w1 = 0x9B9B9B00;
                 temp_v0_28->words.w0 = 0xFB000000;
                 temp_v0_29 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_29 + 8;
+                temp_s0->polyXlu.p = &temp_v0_29[1];
                 temp_v0_29->words.w1 = -0x7E;
                 temp_v0_29->words.w0 = 0xFA000000;
                 phi_s4_6 = (phi_s4_6 + 1) & 0xFF;
@@ -1942,12 +1942,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             temp_f12_5 = phi_s1_6->unk_30;
             Matrix_Scale(temp_f12_5, 1.0f, temp_f12_5, 1);
             temp_v0_30 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_30 + 8;
+            temp_s0->polyXlu.p = &temp_v0_30[1];
             temp_v0_30->words.w0 = 0xDA380003;
             sp94 = temp_v0_30;
             sp94->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_31 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_31 + 8;
+            temp_s0->polyXlu.p = &temp_v0_31[1];
             temp_v0_31->words.w1 = (u32) &D_06008678;
             temp_v0_31->words.w0 = 0xDE000000;
         }
@@ -1961,11 +1961,11 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             sp6C = &D_06003A18;
             if (phi_s4_7 == 0) {
                 temp_v0_32 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_32 + 8;
+                temp_s0->polyXlu.p = &temp_v0_32[1];
                 temp_v0_32->words.w1 = (u32) &D_060039A8;
                 temp_v0_32->words.w0 = 0xDE000000;
                 temp_v0_33 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_v0_33 + 8;
+                temp_s0->polyXlu.p = &temp_v0_33[1];
                 temp_v0_33->words.w0 = 0xFA000000;
                 temp_v0_33->words.w1 = ((gGameInfo->data[1267] + 0x50) & 0xFF) | ~0xFF;
                 phi_s4_7 = (phi_s4_7 + 1) & 0xFF;
@@ -1981,12 +1981,12 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
             temp_f12_6 = phi_s1_7->unk_30;
             Matrix_Scale(temp_f12_6, temp_f12_6, 1.0f, 1);
             temp_v0_34 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_34 + 8;
+            temp_s0->polyXlu.p = &temp_v0_34[1];
             temp_v0_34->words.w0 = 0xDA380003;
             sp84 = temp_v0_34;
             sp84->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_35 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_35 + 8;
+            temp_s0->polyXlu.p = &temp_v0_35[1];
             temp_v0_35->words.w0 = 0xDE000000;
             temp_v0_35->words.w1 = (u32) sp6C;
         }
@@ -1996,19 +1996,19 @@ void func_808FE3F8(void *arg0, GraphicsContext **arg1) {
     } while ((s32) temp_s3_7 < 0x82);
     if (sp114->unk_24 == 6) {
         SysMatrix_InsertTranslation(sp114->unk_0, sp114->unk_4, sp114->unk_8, 0);
-        SysMatrix_InsertYRotation_f(((f32) D_809171EC.unk_2 * 3.1415927f) / 32768.0f, 1);
+        SysMatrix_InsertYRotation_f(((f32) (&D_809171EC)[1] * 3.1415927f) / 32768.0f, 1);
         SysMatrix_RotateStateAroundXAxis(((f32) D_809171EC.unk_0 * 3.1415927f) / 32768.0f);
-        SysMatrix_InsertZRotation_f(((f32) D_809171EC.unk_4 * 3.1415927f) / 32768.0f, 1);
+        SysMatrix_InsertZRotation_f(((f32) (&D_809171EC)[2] * 3.1415927f) / 32768.0f, 1);
         temp_f12_7 = sp114->unk_30;
         Matrix_Scale(temp_f12_7, temp_f12_7, temp_f12_7, 1);
         SysMatrix_InsertTranslation(-1250.0f, 0.0f, 0.0f, 1);
         SysMatrix_RotateStateAroundXAxis(1.5707964f);
         temp_v0_36 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_36 + 8;
+        temp_s0->polyOpa.p = &temp_v0_36[1];
         temp_v0_36->words.w0 = 0xDA380003;
         temp_v0_36->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_37 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_37 + 8;
+        temp_s0->polyOpa.p = &temp_v0_37[1];
         temp_v0_37->words.w1 = (u32) &D_060074C8;
         temp_v0_37->words.w0 = 0xDE000000;
     }
@@ -2029,22 +2029,22 @@ void func_808FEE1C(GraphicsContext **arg0) {
     temp_v0 = temp_s0->polyXlu.p;
     temp_s0->polyXlu.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDB060024;
-    temp_v1 = arg0->unk_18840;
+    temp_v1 = arg0[25104];
     sp48 = temp_v0;
     sp48->words.w1 = Gfx_TwoTexScroll(arg0->unk_0, 0, (u32) temp_v1, temp_v1 * 8, 0x20, 0x40, 1, temp_v1 * -2, 0U, 0x10, 0x10);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0xC3E1EB32;
     temp_v0_2->words.w0 = 0xFA000000;
     SysMatrix_InsertTranslation(670.0f, -24.0f, -600.0f, 0);
     Matrix_Scale(0.02f, 1.0f, 0.02f, 1);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp40 = temp_v0_3;
     sp40->words.w1 = Matrix_NewMtx(arg0->unk_0);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06003230;
     temp_v0_4->words.w0 = 0xDE000000;
 }
@@ -2121,11 +2121,11 @@ void func_808FF064(GlobalContext *arg0, Vec3f *arg1, ? *arg2, ? *arg3) {
     phi_s1 = 0;
     if (D_8090CD24 != 0) {
         spA8.unk_0 = arg1->x;
-        spA8.unk_4 = (s32) arg1->y;
-        spA8.unk_8 = (s32) arg1->z;
+        (&spA8)[1] = arg1->y;
+        (&spA8)[2] = arg1->z;
         sp9C.unk_0 = arg2->unk_954;
-        sp9C.unk_4 = (s32) arg2->unk_958;
-        sp9C.unk_8 = (s32) arg2->unk_95C;
+        (&sp9C)[1] = arg2->unk_958;
+        (&sp9C)[2] = arg2->unk_95C;
         temp_f26 = sp9C - spA8;
         temp_f12 = spA0 - spAC;
         temp_f14 = spA4 - spB0;
@@ -2376,19 +2376,19 @@ void func_808FF750(void *arg0, void *arg1, void *arg2, u8 arg3) {
     sp7C = temp_v0;
     sp7C->words.w1 = Matrix_NewMtx(arg0->unk_0);
     temp_v0_2 = sp84->polyOpa.p;
-    sp84->polyOpa.p = temp_v0_2 + 8;
+    sp84->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06012160;
     temp_v0_2->words.w0 = 0xDE000000;
     sp20 = &D_06012160;
     SysMatrix_InsertZRotation_f(1.5707964f, 1);
     temp_v0_3 = sp84->polyOpa.p;
-    sp84->polyOpa.p = temp_v0_3 + 8;
+    sp84->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = &D_06012160;
     sp74 = temp_v0_3;
     sp74->words.w1 = Matrix_NewMtx(arg0->unk_0);
     temp_v0_4 = sp84->polyOpa.p;
-    sp84->polyOpa.p = temp_v0_4 + 8;
+    sp84->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06012160;
     temp_v0_4->words.w0 = 0xDE000000;
     if ((arg3 == 1) && (D_8090CD0C != 0)) {
@@ -2405,23 +2405,23 @@ void func_808FF750(void *arg0, void *arg1, void *arg2, u8 arg3) {
             D_8090CD0C = 0;
             sp6C->unk_24 = 6;
             sp6C->unk_2C = 0;
-            sp6C->unk_C = (f32) D_8090CF1C->x;
-            sp6C->unk_10 = (f32) D_8090CF1C->y;
-            sp6C->unk_14 = (f32) D_8090CF1C->z;
-            sp6C->unk_18 = (f32) D_8090CF1C->x;
-            sp6C->unk_1C = (f32) D_8090CF1C->y;
-            sp6C->unk_20 = (f32) D_8090CF1C->z;
+            sp6C[1].x = D_8090CF1C->x;
+            sp6C[1].y = D_8090CF1C->y;
+            sp6C[1].z = D_8090CF1C->z;
+            sp6C[2].x = D_8090CF1C->x;
+            sp6C[2].y = D_8090CF1C->y;
+            sp6C[2].z = D_8090CF1C->z;
         }
         SysMatrix_StatePop();
         SysMatrix_InsertTranslation(-1250.0f, 0.0f, 0.0f, 1);
         SysMatrix_RotateStateAroundXAxis(1.5707964f);
         temp_v0_5 = sp84->polyOpa.p;
-        sp84->polyOpa.p = temp_v0_5 + 8;
+        sp84->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDA380003;
         sp28 = temp_v0_5;
         sp28->words.w1 = Matrix_NewMtx(arg0->unk_0);
         temp_v0_6 = sp84->polyOpa.p;
-        sp84->polyOpa.p = temp_v0_6 + 8;
+        sp84->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = (u32) &D_060074C8;
         temp_v0_6->words.w0 = 0xDE000000;
     }
@@ -2537,7 +2537,7 @@ void func_808FFF3C(GlobalContext *arg0) {
     if (D_8091720C < (f32) arg0->colCtx.colHeader->unk_28->unk_2) {
         func_8012C28C(arg0->state.gfxCtx);
         temp_v0 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0 + 8;
+        temp_s2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDE000000;
         temp_v0->words.w1 = (u32) &D_0600B950;
         phi_s0 = 0x13;
@@ -2549,11 +2549,11 @@ void func_808FFF3C(GlobalContext *arg0) {
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 SysMatrix_NormalizeXYZ(arg0 + 0x187FC);
                 temp_v0_3 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_3 + 8;
+                temp_s2->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDA380003;
                 temp_v0_3->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                 temp_v0_4 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_4 + 8;
+                temp_s2->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = (u32) &D_0600B9C0;
                 temp_v0_4->words.w0 = 0xDE000000;
             }
@@ -2564,7 +2564,7 @@ void func_808FFF3C(GlobalContext *arg0) {
     }
     func_8012C2DC(arg0->state.gfxCtx);
     temp_v0_5 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_5 + 8;
+    temp_s2->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDE000000;
     temp_v0_5->words.w1 = (u32) &D_0600B950;
     phi_s0_2 = 0x13;
@@ -2576,11 +2576,11 @@ void func_808FFF3C(GlobalContext *arg0) {
             Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
             SysMatrix_NormalizeXYZ(arg0 + 0x187FC);
             temp_v0_7 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_7 + 8;
+            temp_s2->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xDA380003;
             temp_v0_7->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
             temp_v0_8 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_8 + 8;
+            temp_s2->polyXlu.p = &temp_v0_8[1];
             temp_v0_8->words.w1 = (u32) &D_0600B9C0;
             temp_v0_8->words.w0 = 0xDE000000;
         }
@@ -2673,25 +2673,25 @@ void func_80900A04(GlobalContext *arg0) {
         if ((temp_s1->unk_15 == 0) && (D_8090CD48 != 0)) {
             D_8090CD34 = 0.0f;
         }
-        temp_f10 = spB0->unk_B0C;
+        temp_f10 = spB0[8].projectedPos.x;
         spC0 = temp_f10;
         Math_SmoothStepToF(spB0 + 0xB0C, (f32) temp_s1->unk_15 * 0.02f, 0.3f, 5.0f, 0.0f);
-        spC0 = spB0->unk_B0C - temp_f10;
-        temp_f12 = spB0->unk_B08;
+        spC0 = spB0[8].projectedPos.x - temp_f10;
+        temp_f12 = spB0[8].shape.feetPos[1].z;
         spBC = temp_f12;
         Math_SmoothStepToF(spB0 + 0xB08, (f32) temp_s1->unk_14 * 0.02f, 0.3f, 5.0f, 0.0f);
-        temp_f2 = spB0->unk_B08;
+        temp_f2 = spB0[8].shape.feetPos[1].z;
         if (temp_f2 > 1.0f) {
-            spB0->unk_B08 = 1.0f;
+            spB0[8].shape.feetPos[1].z = 1.0f;
         }
-        if (spB0->unk_B0C > 1.0f) {
-            spB0->unk_B0C = 1.0f;
+        if (spB0[8].projectedPos.x > 1.0f) {
+            spB0[8].projectedPos.x = 1.0f;
         }
-        if (spB0->unk_B08 < -1.0f) {
-            spB0->unk_B08 = -1.0f;
+        if (spB0[8].shape.feetPos[1].z < -1.0f) {
+            spB0[8].shape.feetPos[1].z = -1.0f;
         }
-        if (spB0->unk_B0C < -1.0f) {
-            spB0->unk_B0C = -1.0f;
+        if (spB0[8].projectedPos.x < -1.0f) {
+            spB0[8].projectedPos.x = -1.0f;
         }
         Math_ApproachF(&D_8090CD28, (temp_f2 - temp_f12) * 70.0f * -0.01f, 1.0f, D_8090CD30);
         Math_ApproachF(&D_8090CD30, 1.0f, 1.0f, 0.1f);
@@ -2712,11 +2712,11 @@ void func_80900A04(GlobalContext *arg0) {
     }
     func_8012C28C(arg0->state.gfxCtx);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_060113D0;
     temp_v0_5 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_5 + 8;
+    temp_s0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFA000000;
     temp_v0_5->words.w1 = 0xFF9B00FF;
     SysMatrix_InsertMatrix(spB0 + 0xCC4, 0);
@@ -2731,10 +2731,10 @@ void func_80900A04(GlobalContext *arg0) {
         SysMatrix_InsertYRotation_f(1.288053f, 1);
     }
     SysMatrix_RotateStateAroundXAxis(-0.6283185f);
-    SysMatrix_InsertZRotation_f((spB0->unk_B08 * 0.5f) + 0.4712389f, 1);
+    SysMatrix_InsertZRotation_f((spB0[8].shape.feetPos[1].z * 0.5f) + 0.4712389f, 1);
     SysMatrix_RotateStateAroundXAxis((D_8090CD40 + 20.0f) * 0.01f * 3.1415927f);
     Matrix_Scale(0.70000005f, 0.70000005f, 0.70000005f, 1);
-    spB8 = ((((spB0->unk_B0C - 1.0f) * -0.25f) + 0.5f) * D_8090CD3C) + (D_8090CD2C + D_8090CD38);
+    spB8 = ((((spB0[8].projectedPos.x - 1.0f) * -0.25f) + 0.5f) * D_8090CD3C) + (D_8090CD2C + D_8090CD38);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -1300.0f, 1);
     sp2C = &D_06011410;
     phi_s1_2 = 0;
@@ -2749,100 +2749,100 @@ void func_80900A04(GlobalContext *arg0) {
         temp_f12_2 = *(&D_8090D558 + sp34);
         Matrix_Scale(temp_f12_2, temp_f12_2, 0.52f, 1);
         temp_v0_7 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_7 + 8;
+        temp_s0->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDA380003;
         sp94 = temp_v0_7;
         sp94->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
         if (phi_s1_2 < 5) {
             temp_v0_8 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_8 + 8;
+            temp_s0->polyOpa.p = &temp_v0_8[1];
             temp_v0_8->words.w1 = (u32) &D_06011170;
             temp_v0_8->words.w0 = 0xFD100000;
             temp_v0_9 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_9 + 8;
+            temp_s0->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w1 = 0x700C040;
             temp_v0_9->words.w0 = 0xF5100000;
             temp_v0_10 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_10 + 8;
+            temp_s0->polyOpa.p = &temp_v0_10[1];
             temp_v0_10->words.w1 = 0;
             temp_v0_10->words.w0 = 0xE6000000;
             temp_v0_11 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_11 + 8;
+            temp_s0->polyOpa.p = &temp_v0_11[1];
             temp_v0_11->words.w1 = 0x707F200;
             temp_v0_11->words.w0 = 0xF3000000;
             temp_v0_12 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_12 + 8;
+            temp_s0->polyOpa.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0;
             temp_v0_12->words.w0 = 0xE7000000;
             temp_v0_13 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_13 + 8;
+            temp_s0->polyOpa.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0xC040;
             temp_v0_13->words.w0 = 0xF5100800;
             temp_v0_14 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_14 + 8;
+            temp_s0->polyOpa.p = &temp_v0_14[1];
             temp_v0_14->words.w0 = 0xF2000000;
             temp_v0_14->words.w1 = 0x3C01C;
         } else if ((phi_s1_2 < 8) || ((phi_s1_2 & 1) == 0)) {
             temp_v0_22 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_22 + 8;
+            temp_s0->polyOpa.p = &temp_v0_22[1];
             temp_v0_22->words.w1 = (u32) &D_06011270;
             temp_v0_22->words.w0 = 0xFD100000;
             temp_v0_23 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_23 + 8;
+            temp_s0->polyOpa.p = &temp_v0_23[1];
             temp_v0_23->words.w1 = 0x700C040;
             temp_v0_23->words.w0 = 0xF5100000;
             temp_v0_24 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_24 + 8;
+            temp_s0->polyOpa.p = &temp_v0_24[1];
             temp_v0_24->words.w1 = 0;
             temp_v0_24->words.w0 = 0xE6000000;
             temp_v0_25 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_25 + 8;
+            temp_s0->polyOpa.p = &temp_v0_25[1];
             temp_v0_25->words.w1 = 0x707F200;
             temp_v0_25->words.w0 = 0xF3000000;
             temp_v0_26 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_26 + 8;
+            temp_s0->polyOpa.p = &temp_v0_26[1];
             temp_v0_26->words.w1 = 0;
             temp_v0_26->words.w0 = 0xE7000000;
             temp_v0_27 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_27 + 8;
+            temp_s0->polyOpa.p = &temp_v0_27[1];
             temp_v0_27->words.w1 = 0xC040;
             temp_v0_27->words.w0 = 0xF5100800;
             temp_v0_28 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_28 + 8;
+            temp_s0->polyOpa.p = &temp_v0_28[1];
             temp_v0_28->words.w0 = 0xF2000000;
             temp_v0_28->words.w1 = 0x3C01C;
         } else {
             temp_v0_15 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_15 + 8;
+            temp_s0->polyOpa.p = &temp_v0_15[1];
             temp_v0_15->words.w1 = (u32) &D_06011070;
             temp_v0_15->words.w0 = 0xFD100000;
             temp_v0_16 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_16 + 8;
+            temp_s0->polyOpa.p = &temp_v0_16[1];
             temp_v0_16->words.w1 = 0x700C040;
             temp_v0_16->words.w0 = 0xF5100000;
             temp_v0_17 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_17 + 8;
+            temp_s0->polyOpa.p = &temp_v0_17[1];
             temp_v0_17->words.w1 = 0;
             temp_v0_17->words.w0 = 0xE6000000;
             temp_v0_18 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_18 + 8;
+            temp_s0->polyOpa.p = &temp_v0_18[1];
             temp_v0_18->words.w1 = 0x707F200;
             temp_v0_18->words.w0 = 0xF3000000;
             temp_v0_19 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_19 + 8;
+            temp_s0->polyOpa.p = &temp_v0_19[1];
             temp_v0_19->words.w1 = 0;
             temp_v0_19->words.w0 = 0xE7000000;
             temp_v0_20 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_20 + 8;
+            temp_s0->polyOpa.p = &temp_v0_20[1];
             temp_v0_20->words.w1 = 0xC040;
             temp_v0_20->words.w0 = 0xF5100800;
             temp_v0_21 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_21 + 8;
+            temp_s0->polyOpa.p = &temp_v0_21[1];
             temp_v0_21->words.w0 = 0xF2000000;
             temp_v0_21->words.w1 = 0x3C01C;
         }
         temp_v0_29 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_29 + 8;
+        temp_s0->polyOpa.p = &temp_v0_29[1];
         temp_v0_29->words.w0 = 0xDE000000;
         temp_v0_29->words.w1 = (u32) sp2C;
         SysMatrix_StatePop();
@@ -3078,7 +3078,7 @@ void func_80901480(Actor *arg0, GlobalContext *arg1) {
             /* Duplicate return node #171. Try simplifying control flow for better match */
             return;
         }
-        D_80917228.unk_4 = (f32) D_80910B48.unk_94C;
+        (&D_80917228)[1] = D_80910B48.unk_94C;
         D_80917228.unk_0 = D_80910B48.unk_948 + 3.1415927f;
         if (temp_v0_9 == 0x12) {
             D_8090CD14 = 1;
@@ -3138,14 +3138,14 @@ void func_80901480(Actor *arg0, GlobalContext *arg1) {
         phi_f18 = temp_f18_2;
         phi_v1 = &D_80917238;
         if (D_80917202 != 0) {
-            D_80917228.unk_4 = (f32) phi_t0->unk_94C;
+            (&D_80917228)[1] = phi_t0->unk_94C;
             D_80917228.unk_0 = phi_t0->unk_948 + 3.1415927f;
         } else {
             spD4 = temp_f18_2 - temp_f8;
             spD0 = temp_f12_2;
             spD8 = temp_f14;
             D_80917228.unk_0 = 0.0f;
-            D_80917228.unk_4 = (f32) (Math_Acot2F(temp_f12_2, temp_f14) + 3.1415927f);
+            (&D_80917228)[1] = Math_Acot2F(temp_f12_2, temp_f14) + 3.1415927f;
             sp38 = D_8091720C;
             sp34 = D_80917210;
             phi_f18 = D_8091720C;
@@ -3243,8 +3243,8 @@ void func_80901480(Actor *arg0, GlobalContext *arg1) {
                         spA4 = __cosf(sp78) * sp7C;
                         spA0 = Rand_ZeroFloat(3.0f) + 3.0f;
                         spA8.unk_0 = D_80917208.x;
-                        spA8.unk_4 = (f32) D_80917208.y;
-                        spA8.unk_8 = (f32) D_80917208.z;
+                        (&spA8)[1] = D_80917208.y;
+                        (&spA8)[2] = D_80917208.z;
                         spA8 += sp9C * 3.0f;
                         spAC = (f32) arg1->colCtx.colHeader->waterBoxes->ySurface;
                         spB0 += spA4 * 3.0f;
@@ -3253,8 +3253,8 @@ void func_80901480(Actor *arg0, GlobalContext *arg1) {
                         phi_s0_2 = temp_s0_3;
                     } while ((s32) temp_s0_3 < 0x32);
                     spA8.unk_0 = D_80917208.x;
-                    spA8.unk_4 = (f32) D_80917208.y;
-                    spA8.unk_8 = (f32) D_80917208.z;
+                    (&spA8)[1] = D_80917208.y;
+                    (&spA8)[2] = D_80917208.z;
                     spAC = (f32) arg1->colCtx.colHeader->waterBoxes->ySurface;
                     func_808FC964(NULL, sp40->unk_870, (bitwise f32) &spA8, 100.0f, (s16) 800.0f, (s16) 0x96, 0x5A);
                     sp38 = D_8091720C;
@@ -3420,9 +3420,9 @@ block_92:
         Math_ApproachS(&D_809101B8, (s16) (s32) ((D_809101B0 * 32768.0f) / 3.1415927f), 3, spDC);
         sp90 = 0.0f;
         sp94 = 0.0f;
-        D_80917228.unk_4 = (f32) (((f32) D_809101B8 / 32768.0f) * 3.1415927f);
+        (&D_80917228)[1] = ((f32) D_809101B8 / 32768.0f) * 3.1415927f;
         sp98 = D_809101B4;
-        SysMatrix_InsertYRotation_f(D_80917228.unk_4, 0);
+        SysMatrix_InsertYRotation_f((&D_80917228)[1], 0);
         if (D_80917206 == 2) {
             SysMatrix_MultiplyVector3fByState((Vec3f *) &sp90, (Vec3f *) &sp64);
             D_80917278.x = sp64;
@@ -3540,8 +3540,8 @@ block_92:
             }
             if ((D_809171FE & phi_v0_2) == 0) {
                 spA8.unk_0 = D_80917208.x;
-                spA8.unk_4 = (f32) D_80917208.y;
-                spA8.unk_8 = (f32) D_80917208.z;
+                (&spA8)[1] = D_80917208.y;
+                (&spA8)[2] = D_80917208.z;
                 spAC = (f32) arg1->colCtx.colHeader->waterBoxes->ySurface;
                 func_808FC964(NULL, arg1->specialEffects, (bitwise f32) &spA8, 30.0f, (s16) 300.0f, (s16) 0x96, 0x5A);
                 return;
@@ -3601,7 +3601,7 @@ s32 func_809033F0(EnFishing *arg0, EnFishing *arg1, s32 arg2) {
     f32 phi_f26;
     s16 phi_s0;
 
-    if ((arg0->actor.world.pos.y < ((f32) arg1->unk_830->unk_28->unk_2 - 10.0f)) && ((arg2 & 0xFF) == 0)) {
+    if ((arg0->actor.world.pos.y < ((f32) arg1[1].unk_2E8->unk_28->unk_2 - 10.0f)) && ((arg2 & 0xFF) == 0)) {
         return 0;
     }
     temp_s2 = arg0 + 0x24;
@@ -3624,21 +3624,21 @@ s32 func_809033F0(EnFishing *arg0, EnFishing *arg1, s32 arg2) {
             spA0 = __cosf(temp_f24) * temp_f20;
             sp9C = (Rand_ZeroFloat(3.0f) + 3.0f) * phi_f26;
             temp_s1->unk_0 = temp_s2->unk_0;
-            temp_s1->unk_4 = (f32) temp_s2->unk_4;
-            temp_s1->unk_8 = (s32) temp_s2->unk_8;
+            temp_s1[1] = temp_s2->unk_4;
+            temp_s1[2] = temp_s2->unk_8;
             spA4 += sp98 * 3.0f;
             spAC += spA0 * 3.0f;
-            spA8 = (f32) arg1->unk_830->unk_28->unk_2;
-            func_808FCABC(arg0 + 0xEC, arg1->unk_18870, temp_s1, temp_s5, (Rand_ZeroFloat(0.02f) + 0.025f) * phi_f26);
+            spA8 = (f32) arg1[1].unk_2E8->unk_28->unk_2;
+            func_808FCABC(arg0 + 0xEC, arg1[74].unk_1A0, temp_s1, temp_s5, (Rand_ZeroFloat(0.02f) + 0.025f) * phi_f26);
             temp_s0 = phi_s0 + 1;
             phi_s0 = temp_s0;
         } while ((s32) temp_s0 < phi_s6);
     }
     spA4.unk_0 = arg0->actor.world.pos.x;
-    spA4.unk_4 = (f32) arg0->actor.world.pos.y;
-    spA4.unk_8 = (s32) arg0->actor.world.pos.z;
-    spA8 = (f32) arg1->unk_830->unk_28->unk_2;
-    func_808FC964(arg0 + 0xEC, arg1->unk_18870, (bitwise f32) &spA4, 100.0f, (s16) 800.0f, (s16) 0x96, 0x5A);
+    (&spA4)[1] = arg0->actor.world.pos.y;
+    (&spA4)[2] = arg0->actor.world.pos.z;
+    spA8 = (f32) arg1[1].unk_2E8->unk_28->unk_2;
+    func_808FC964(arg0 + 0xEC, arg1[74].unk_1A0, (bitwise f32) &spA4, 100.0f, (s16) 800.0f, (s16) 0x96, 0x5A);
     arg0->unk_149 = 0x1E;
     return 1;
 }
@@ -3684,8 +3684,8 @@ void func_809036BC(EnFishing *arg0, GlobalContext *arg1) {
             temp_f18 = Rand_ZeroFloat(2.0f) + 2.0f;
             sp8C = temp_f18;
             temp_s1->unk_0 = temp_s2->unk_0;
-            temp_s1->unk_4 = (s32) temp_s2->unk_4;
-            temp_s1->unk_8 = (s32) temp_s2->unk_8;
+            temp_s1[1] = temp_s2->unk_4;
+            temp_s1[2] = temp_s2->unk_8;
             temp_f4 = sp98 + (temp_f18 * 3.0f);
             sp94 += sp88 * 3.0f;
             sp98 = temp_f4;
@@ -3790,7 +3790,7 @@ void func_80903C60(Actor *arg0, s32 arg1) {
     u16 phi_a1;
 
     if (arg0->unk_148 == 0) {
-        temp_f4 = arg0->unk_1A4;
+        temp_f4 = arg0[1].scale.z;
         temp_f6 = (s32) temp_f4;
         if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
             if ((MIPS2C_ERROR(cfc1) & 0x78) == 0) {
@@ -3805,7 +3805,7 @@ block_4:
             phi_v1 = -1 & 0xFF;
         }
     } else {
-        phi_v1 = (u32) (2.0f * arg0->unk_1A4) & 0xFF;
+        phi_v1 = (u32) (2.0f * arg0[1].scale.z) & 0xFF;
     }
     if ((arg1 & 0xFF) == 0) {
         if (phi_v1 >= 0x32) {
@@ -4186,7 +4186,7 @@ void EnFishing_Update(Actor *thisx, GlobalContext *globalCtx) {
             spC8 = 40.0f;
             spC4 = temp_f8;
             spCC = randPlusMinusPoint5Scaled(5.0f) + 1280.0f;
-            func_808FCDBC(NULL, sp48->unk_870, &spC4, Rand_ZeroFloat(0.02f) + 0.03f, (u8) 1);
+            func_808FCDBC(NULL, sp48[108].pos.x, &spC4, Rand_ZeroFloat(0.02f) + 0.03f, (u8) 1);
         }
         Math_ApproachS(&this->unk_16A, (s16) (s32) ((Math_SinS((s16) (this->unk_154 << 0xB)) * 2500.0f) + 2500.0f), 2, 0x7D0);
         Math_ApproachS(&this->unk_16C, (s16) (s32) (Math_SinS((s16) (this->unk_154 * 0xA00)) * 1500.0f), 2, 0x7D0);
@@ -4366,14 +4366,14 @@ void EnFishing_Update(Actor *thisx, GlobalContext *globalCtx) {
                 this->unk_150 = -0x19;
                 this->unk_1A8 = 0.0f;
                 spB8.unk_0 = (f32) this->unk_1B8;
-                spB8.unk_4 = (s32) this->unk_1BC;
+                spB8.unk_4 = (f32) this->unk_1BC;
                 temp_a0_4 = &this->actor.projectedPos;
-                spB8.unk_8 = (s32) this->unk_1C0;
+                spB8.unk_8 = (f32) this->unk_1C0;
                 sp48 = globalCtx + 0x18000;
                 sp4C = (bitwise f32) temp_a0_4;
                 spBC = (f32) globalCtx->colCtx.colHeader->waterBoxes->ySurface;
                 func_808FC964(temp_a0_4, globalCtx->specialEffects, (bitwise f32) &spB8, 10.0f, (s16) 300.0f, (s16) 0x96, 0x5A);
-                func_808FC964(temp_a0_4, sp48->unk_870, (bitwise f32) &spB8, 30.0f, (s16) 400.0f, (s16) 0x96, 0x5A);
+                func_808FC964(temp_a0_4, sp48[108].pos.x, (bitwise f32) &spB8, 30.0f, (s16) 400.0f, (s16) 0x96, 0x5A);
                 Audio_PlayActorSound2((Actor *) this, 0x836U);
             } else {
 block_110:
@@ -4850,8 +4850,8 @@ loop_266:
             Math_ApproachF(&D_8090CD3C, sp100, 0.3f, 0.1f);
         }
         D_80910B3C.unk_0 = this->unk_1B8;
-        D_80910B3C.unk_4 = (s32) this->unk_1BC;
-        D_80910B3C.unk_8 = (s32) this->unk_1C0;
+        (&D_80910B3C)[1] = this->unk_1BC;
+        (&D_80910B3C)[2] = this->unk_1C0;
         temp_f2_9 = D_809101E8.unk_948;
         temp_f10_3 = D_809101E8.unk_954 - temp_f2_9;
         sp10C = temp_f10_3;
@@ -4917,12 +4917,12 @@ loop_266:
                 D_80911F28.y += spE0->world.pos.y;
                 D_80911F28.z += spE0->world.pos.z;
                 D_80911F38.unk_0 = spE0->world.pos.x;
-                D_80911F38.unk_4 = (f32) spE0->world.pos.y;
-                D_80911F38.unk_8 = (f32) spE0->world.pos.z;
+                (&D_80911F38)[1] = spE0->world.pos.y;
+                (&D_80911F38)[2] = spE0->world.pos.z;
                 if (D_809171C9 != 1) {
-                    D_80911F38.unk_4 = (f32) (D_80911F38.unk_4 + 40.0f);
+                    (&D_80911F38)[1] += 40.0f;
                 } else {
-                    D_80911F38.unk_4 = (f32) (D_80911F38.unk_4 + 25.0f);
+                    (&D_80911F38)[1] += 25.0f;
                 }
                 if (this->unk_172 == 0x5A) {
                     func_801A89A8(0x8924);
@@ -4956,8 +4956,8 @@ loop_266:
                 sp110 = -10.0f;
                 sp114 = 5.0f;
                 SysMatrix_MultiplyVector3fByState((Vec3f *) temp_a0_5, (Vec3f *) &sp100);
-                Math_ApproachF((f32 *) sp48, spE0->unk_CA0 + sp100, 1.0f, 6.0f);
-                Math_ApproachF(sp44, spE0->unk_CA4 + sp104, 1.0f, 6.0f);
+                Math_ApproachF((f32 *) sp48, (bitwise f32) spE0[9].draw + sp100, 1.0f, 6.0f);
+                Math_ApproachF(sp44, (bitwise f32) spE0[9].overlayEntry + sp104, 1.0f, 6.0f);
                 Math_ApproachF(sp3C, spE0->unk_CA8 + sp108, 1.0f, 6.0f);
                 D_809101C0 = 188.0f;
                 if ((s32) this->unk_172 < 0x33) {
@@ -5262,7 +5262,7 @@ block_403:
                         sp74 = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
                         sp7C = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
                         sp78 = this->actor.floorHeight + 5.0f;
-                        func_808FCC0C((bitwise void *) sp4C, sp48->unk_870, &sp74, (this->unk_1A4 * 0.005f) + 0.15f);
+                        func_808FCC0C((bitwise void *) sp4C, (bitwise void *) sp48[108].pos.x, &sp74, (this->unk_1A4 * 0.005f) + 0.15f);
                     }
                 }
             }
@@ -5279,7 +5279,7 @@ block_403:
             sp64 = randPlusMinusPoint5Scaled(sp60) + this->actor.world.pos.x;
             sp68 = randPlusMinusPoint5Scaled(sp60) + this->actor.world.pos.y;
             sp6C = randPlusMinusPoint5Scaled(sp60) + this->actor.world.pos.z;
-            func_808FCDBC((bitwise void *) sp4C, sp48->unk_870, &sp64, Rand_ZeroFloat(0.035f) + 0.04f, (u8) 0);
+            func_808FCDBC((bitwise void *) sp4C, (bitwise void *) sp48[108].pos.x, &sp64, Rand_ZeroFloat(0.035f) + 0.04f, (u8) 0);
             temp_v0_31 = sp72 + 1;
             sp72 = temp_v0_31;
         } while ((s32) temp_v0_31 < 2);
@@ -5290,7 +5290,7 @@ s32 func_80908554(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     if (arg1 == 0xD) {
         arg4->z = (arg4->z - arg5->unk_168) + 0x2AF8;
     } else if ((arg1 == 2) || (arg1 == 3)) {
-        arg4->y += arg5->unk_164;
+        arg4->y += arg5[1].unk20;
     } else if (arg1 == 4) {
         arg4->y += arg5->unk_16E;
     } else if (arg1 == 0xE) {
@@ -5360,7 +5360,7 @@ void func_809089B8(Vec3f *arg0, void *arg1) {
     temp_f2 = sqrtf((temp_f14 * temp_f14) + (temp_f12 * temp_f12));
     if (temp_f2 <= 20.0f) {
         sp1C = temp_f2;
-        arg0->unk_10 = Math_Acot2F(temp_f12, temp_f14);
+        arg0[1].y = Math_Acot2F(temp_f12, temp_f14);
         Math_ApproachF(arg0 + 0xC, (20.0f - temp_f2) * 0.03f, 0.2f, 0.2f);
     }
 }
@@ -5412,11 +5412,11 @@ void func_80908B4C(GlobalContext *arg0) {
             phi_s1->unk_34 = 0;
             phi_s1->unk_32 = (s16) (phi_s1->unk_32 + 1);
             SkinMatrix_Vec3fMtxFMultXYZW(arg0 + 0x187B0, phi_s1, phi_s1 + 0x18, &D_80911F24);
-            temp_f2 = phi_s1->unk_20;
-            if ((temp_f2 < phi_s1->unk_38) && (fabsf(phi_s1->unk_18) < (100.0f + temp_f2))) {
+            temp_f2 = phi_s1[2].z;
+            if ((temp_f2 < phi_s1[4].z) && (fabsf(phi_s1[2].x) < (100.0f + temp_f2))) {
                 phi_s1->unk_34 = 1;
             }
-            if ((phi_s1->unk_20 < 500.0f) && (fabsf(phi_s1->unk_18) < (100.0f + phi_s1->unk_20))) {
+            if ((phi_s1[2].z < 500.0f) && (fabsf(phi_s1[2].x) < (100.0f + phi_s1[2].z))) {
                 temp_v0 = phi_s1->unk_30;
                 if (temp_v0 == 1) {
                     func_809089B8(phi_s1, temp_s5 + 0x24);
@@ -5433,7 +5433,7 @@ void func_80908B4C(GlobalContext *arg0) {
                             phi_s0 = temp_s0_2;
                         } while (temp_s0_2 != 0);
                     }
-                    Math_ApproachZeroF((f32 *) (phi_s1 + 0xC), 0.05f, 0.05f);
+                    Math_ApproachZeroF((f32 *) &phi_s1[1], 0.05f, 0.05f);
                 } else if (temp_v0 == 2) {
                     func_80908A64(phi_s1, temp_s5 + 0x24, 0U);
                     temp_s0_3 = arg0->actorCtx.actorList[4].first;
@@ -5449,14 +5449,14 @@ void func_80908B4C(GlobalContext *arg0) {
                             phi_s0_2 = temp_s0_4;
                         } while (temp_s0_4 != 0);
                     }
-                    Math_ApproachS(phi_s1 + 0x28, 0, 0x14, 0x50);
-                    phi_s1->y = (Math_SinS((s16) (phi_s1->unk_32 << 0xC)) * phi_s1->unk_2C) + ((f32) arg0->colCtx.colHeader->unk_28->unk_2 + 2.0f);
-                    Math_ApproachZeroF(phi_s1 + 0x2C, 0.1f, 0.02f);
+                    Math_ApproachS((s16 *) &phi_s1[3].y, 0, 0x14, 0x50);
+                    phi_s1->y = (Math_SinS((s16) (phi_s1->unk_32 << 0xC)) * phi_s1[3].z) + ((f32) arg0->colCtx.colHeader->unk_28->unk_2 + 2.0f);
+                    Math_ApproachZeroF(&phi_s1[3].z, 0.1f, 0.02f);
                 }
             }
         }
         temp_s4 = phi_s4 + 1;
-        phi_s1 += 0x3C;
+        phi_s1 = &phi_s1[5];
         phi_s4 = temp_s4;
     } while ((s32) temp_s4 < 0x8C);
     if (D_80911F44 == 0) {
@@ -5531,7 +5531,7 @@ void func_80908E08(GraphicsContext **arg0) {
                 temp_v0_2->words.w0 = 0xDA380003;
                 temp_v0_2->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_3 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_3 + 8;
+                temp_s2->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = (u32) &D_060140B0;
                 temp_v0_3->words.w0 = 0xDE000000;
             }
@@ -5545,7 +5545,7 @@ void func_80908E08(GraphicsContext **arg0) {
         if (phi_s0_2->unk_30 == 4) {
             if (phi_s5_2 == 0) {
                 temp_v0_4 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_4 + 8;
+                temp_s2->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = (u32) &D_06013F50;
                 temp_v0_4->words.w0 = 0xDE000000;
                 phi_s5_2 = (phi_s5_2 + 1) & 0xFF;
@@ -5555,11 +5555,11 @@ void func_80908E08(GraphicsContext **arg0) {
                 temp_f12_2 = phi_s0_2->unk_24;
                 Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
                 temp_v0_5 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_5 + 8;
+                temp_s2->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDA380003;
                 temp_v0_5->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_6 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_6 + 8;
+                temp_s2->polyOpa.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = (u32) &D_06013FD0;
                 temp_v0_6->words.w0 = 0xDE000000;
             }
@@ -5573,7 +5573,7 @@ void func_80908E08(GraphicsContext **arg0) {
         if (phi_s0_3->unk_30 == 2) {
             if (phi_s5_3 == 0) {
                 temp_v0_7 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_7 + 8;
+                temp_s2->polyXlu.p = &temp_v0_7[1];
                 temp_v0_7->words.w1 = (u32) &D_06013330;
                 temp_v0_7->words.w0 = 0xDE000000;
                 phi_s5_3 = (phi_s5_3 + 1) & 0xFF;
@@ -5586,11 +5586,11 @@ void func_80908E08(GraphicsContext **arg0) {
                 SysMatrix_InsertTranslation(0.0f, 0.0f, 20.0f, 1);
                 SysMatrix_InsertYRotation_f(phi_s0_3->unk_10, 1);
                 temp_v0_8 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_8 + 8;
+                temp_s2->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w0 = 0xDA380003;
                 temp_v0_8->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_9 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_9 + 8;
+                temp_s2->polyXlu.p = &temp_v0_9[1];
                 temp_v0_9->words.w1 = (u32) &D_060133B0;
                 temp_v0_9->words.w0 = 0xDE000000;
             }
@@ -5604,7 +5604,7 @@ void func_80908E08(GraphicsContext **arg0) {
         if (phi_s0_4->unk_30 == 3) {
             if (phi_s5_4 == 0) {
                 temp_v0_10 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_10 + 8;
+                temp_s2->polyOpa.p = &temp_v0_10[1];
                 temp_v0_10->words.w1 = (u32) &D_06013590;
                 temp_v0_10->words.w0 = 0xDE000000;
                 phi_s5_4 = (phi_s5_4 + 1) & 0xFF;
@@ -5615,11 +5615,11 @@ void func_80908E08(GraphicsContext **arg0) {
                 Matrix_Scale(temp_f12_4, temp_f12_4, temp_f12_4, 1);
                 SysMatrix_InsertYRotation_f(phi_s0_4->unk_10, 1);
                 temp_v0_11 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_11 + 8;
+                temp_s2->polyOpa.p = &temp_v0_11[1];
                 temp_v0_11->words.w0 = 0xDA380003;
                 temp_v0_11->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_12 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_12 + 8;
+                temp_s2->polyOpa.p = &temp_v0_12[1];
                 temp_v0_12->words.w1 = (u32) &D_06013610;
                 temp_v0_12->words.w0 = 0xDE000000;
             }
@@ -5871,7 +5871,7 @@ void func_80909AD0(GraphicsContext **arg0) {
                 temp_v0_3->words.w0 = 0xDA380003;
                 temp_v0_3->words.w1 = Matrix_NewMtx(*arg0);
                 temp_v0_4 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_4 + 8;
+                temp_s2->polyOpa.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = (u32) &D_0600C298;
                 temp_v0_4->words.w0 = 0xDE000000;
             }
@@ -6385,7 +6385,7 @@ void func_8090AB6C(Actor *this, GlobalContext *globalCtx) {
         Math_ApproachS(temp_a0, 0xC8, 1, 0x28);
     }
     spD4->shape.shadowAlpha = (u8) spE8;
-    SkelAnime_FrameUpdateMatrix(this + 0x1D0);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &this[1].yDistToWater);
     if ((D_8090CD04 != 0) || (func_80152498(&globalCtx->msgCtx) != 0)) {
         this->flags &= -2;
     } else {
@@ -6413,12 +6413,12 @@ block_10:
     Math_ApproachS(phi_v0 + 0x15C, phi_a1_2, 3, 0x1388);
     sp28 = globalCtx + 0x18000;
     if (((globalCtx->gameplayFrames & 0x1F) == 0) && (Rand_ZeroOne() < 0.3f)) {
-        this->unk_15A = 4;
+        this[1].home.rot.y = 4;
     }
-    temp_v0_2 = this->unk_15A;
-    this->unk_158 = (s16) *(&D_8090D644 + (temp_v0_2 * 2));
+    temp_v0_2 = this[1].home.rot.y;
+    this[1].home.rot.x = *(&D_8090D644 + (temp_v0_2 * 2));
     if (temp_v0_2 != 0) {
-        this->unk_15A = (s16) (temp_v0_2 - 1);
+        this[1].home.rot.y = temp_v0_2 - 1;
     }
     temp_v0_3 = D_8090CD04;
     if (temp_v0_3 != 0) {
@@ -6599,8 +6599,8 @@ block_115:
             temp_v0_11->eyeNext.y = D_80911F28.y;
             temp_v0_11->eyeNext.z = D_80911F28.z;
             temp_v0_11->at.x = D_80911F38.unk_0;
-            temp_v0_11->at.y = D_80911F38.unk_4;
-            temp_v0_11->at.z = D_80911F38.unk_8;
+            temp_v0_11->at.y = (&D_80911F38)[1];
+            temp_v0_11->at.z = (&D_80911F38)[2];
             func_80169AFC(globalCtx, D_80911F44, 0);
             func_800EA0EC(globalCtx, &globalCtx->csCtx);
             D_8090CD4C = 0;
@@ -6641,8 +6641,8 @@ block_115:
                 temp_v0_13->eyeNext.y = D_80911F28.y;
                 temp_v0_13->eyeNext.z = D_80911F28.z;
                 temp_v0_13->at.x = D_80911F38.unk_0;
-                temp_v0_13->at.y = D_80911F38.unk_4;
-                temp_v0_13->at.z = D_80911F38.unk_8;
+                temp_v0_13->at.y = (&D_80911F38)[1];
+                temp_v0_13->at.z = (&D_80911F38)[2];
                 func_80169AFC(globalCtx, D_80911F44, 0);
                 func_800EA0EC(globalCtx, sp34);
                 func_800B7298(globalCtx, this, 6U);
@@ -6664,8 +6664,8 @@ block_115:
             D_80911F28.y = temp_v0_14->eye.y;
             D_80911F28.z = temp_v0_14->eye.z;
             D_80911F38.unk_0 = temp_v0_14->at.x;
-            D_80911F38.unk_4 = (f32) temp_v0_14->at.y;
-            D_80911F38.unk_8 = (f32) temp_v0_14->at.z;
+            (&D_80911F38)[1] = temp_v0_14->at.y;
+            (&D_80911F38)[2] = temp_v0_14->at.z;
             func_801518B0(globalCtx, 0x409AU, NULL);
             D_8090CD4C = 0x15;
             D_80911F48 = 45.0f;
@@ -6712,12 +6712,12 @@ block_115:
             temp_a0_6 = &globalCtx->msgCtx;
             D_80911F28.z += spD4->world.pos.z;
             D_80911F38.unk_0 = spD4->world.pos.x;
-            D_80911F38.unk_4 = (f32) spD4->world.pos.y;
-            D_80911F38.unk_8 = (f32) spD4->world.pos.z;
+            (&D_80911F38)[1] = spD4->world.pos.y;
+            (&D_80911F38)[2] = spD4->world.pos.z;
             if (D_809171C9 != 1) {
-                D_80911F38.unk_4 = (f32) (D_80911F38.unk_4 + 62.0f);
+                (&D_80911F38)[1] += 62.0f;
             } else {
-                D_80911F38.unk_4 = (f32) (D_80911F38.unk_4 + 40.0f);
+                (&D_80911F38)[1] += 40.0f;
             }
             if ((D_8090CD50 == 0) && ((sp34 = (CutsceneContext *) temp_a0_6, (func_80152498(temp_a0_6) == 4)) || (func_80152498(temp_a0_6) == 0)) && (func_80147624(globalCtx) != 0)) {
                 spAC = Play_GetCamera(globalCtx, 0);
@@ -6733,8 +6733,8 @@ block_115:
                 spAC->eyeNext.y = D_80911F28.y;
                 spAC->eyeNext.z = D_80911F28.z;
                 spAC->at.x = D_80911F38.unk_0;
-                spAC->at.y = D_80911F38.unk_4;
-                spAC->at.z = D_80911F38.unk_8;
+                spAC->at.y = (&D_80911F38)[1];
+                spAC->at.z = (&D_80911F38)[2];
                 func_80169AFC(globalCtx, D_80911F44, 0);
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, this, 6U);
@@ -6794,8 +6794,8 @@ block_115:
             sp8C = temp_f4_2;
             sp88 = Rand_ZeroFloat(3.0f) + 2.0f;
             sp90.unk_0 = sp34->unk_0;
-            sp90.unk_4 = (void *) sp34->segment;
-            sp90.unk_8 = (s32) sp34->unk_8;
+            (&sp90)[1] = sp34->segment;
+            (&sp90)[2] = sp34->unk_8;
             temp_f4_3 = temp_f4_2;
             sp90 += 2.0f * sp84;
             sp94 = (f32) globalCtx->colCtx.colHeader->waterBoxes->ySurface;
@@ -6898,7 +6898,7 @@ block_115:
 
 s32 func_8090C884(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, s16 *arg4, Actor *arg5) {
     if (arg1 == 8) {
-        *arg4 -= arg5->unk_15C;
+        *arg4 -= arg5[1].home.rot.z;
     }
     return 0;
 }
@@ -6954,11 +6954,11 @@ void func_8090C96C(Actor *this, GlobalContext *globalCtx) {
     temp_f2 = this->projectedPos.z;
     if ((temp_f2 < 1500.0f) && (fabsf(this->projectedPos.x) < (100.0f + temp_f2))) {
         temp_v0 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0 + 8;
+        sp40->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp38 = temp_v0;
-        sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_8090D674 + (this->unk_158 * 4)));
-        SkelAnime_DrawSV(globalCtx, this->unk_1D4, this->unk_1F0, (s32) this->unk_1D2, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_8090C884, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_8090C8BC, this);
+        sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_8090D674 + (this[1].home.rot.x * 4)));
+        SkelAnime_DrawSV(globalCtx, this->unk_1D4, (bitwise Vec3s *) this[1].colChkInfo.displacement.z, (s32) this->unk_1D2, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_8090C884, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_8090C8BC, this);
     }
     func_80908E08((GraphicsContext **) globalCtx);
     func_808FE3F8(globalCtx->specialEffects, (GraphicsContext **) globalCtx);
@@ -6993,21 +6993,21 @@ void func_8090C96C(Actor *this, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(130.0f, 40.0f, 1300.0f, 0);
     Matrix_Scale(0.08f, 0.12f, 0.14f, 1);
     temp_v0_4 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_4 + 8;
+    sp40->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDA380003;
     sp34 = temp_v0_4;
     sp34->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_5 = sp40->polyXlu.p;
-    sp40->polyXlu.p = temp_v0_5 + 8;
+    sp40->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDA380003;
     sp30 = temp_v0_5;
     sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_6 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_6 + 8;
+    sp40->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = (u32) &D_060153D0;
     temp_v0_6->words.w0 = 0xDE000000;
     temp_v0_7 = sp40->polyXlu.p;
-    sp40->polyXlu.p = temp_v0_7 + 8;
+    sp40->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = (u32) &D_06015470;
     temp_v0_7->words.w0 = 0xDE000000;
     if ((D_809171FC != 0) && (D_80917206 == 2)) {

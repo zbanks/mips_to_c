@@ -54,15 +54,15 @@ void guRotateF(f32 (*mf)[4], f32 a, f32 x, f32 y, f32 z) {
     sp28 = y * sp44;
     sp24 = temp_f4;
     mf[0][0] = ((1.0f - temp_f2_2) * sp40) + temp_f2_2;
-    mf->unk_24 = (f32) (sp38 - temp_f0_2);
-    mf->unk_18 = (f32) (sp38 + temp_f0_2);
+    mf[2][1] = sp38 - temp_f0_2;
+    mf[1][2] = sp38 + temp_f0_2;
     temp_f12_2 = y * y;
-    mf->unk_14 = (f32) (((1.0f - temp_f12_2) * sp40) + temp_f12_2);
-    mf->unk_20 = (f32) (sp34 + sp28);
+    mf[1][1] = ((1.0f - temp_f12_2) * sp40) + temp_f12_2;
+    mf[2][0] = sp34 + sp28;
     mf[0][2] = sp34 - sp28;
     temp_f0_3 = z * z;
-    mf->unk_28 = (f32) (((1.0f - temp_f0_3) * sp40) + temp_f0_3);
-    mf->unk_10 = (f32) (temp_f18 - temp_f4);
+    mf[2][2] = ((1.0f - temp_f0_3) * sp40) + temp_f0_3;
+    mf[1][0] = temp_f18 - temp_f4;
     mf[0][1] = temp_f18 + sp24;
 }
 

@@ -255,9 +255,9 @@ void ObjBombiwa_Init(Actor *thisx, GlobalContext *globalCtx) {
         }
         func_80939594((Actor *) this, globalCtx);
     }
-    ActorShape_Init(&this->actor.shape, -200.0f, sp28->unk_4, 9.8f);
+    ActorShape_Init(&this->actor.shape, -200.0f, sp28[1], 9.8f);
     this->actor.world.pos.y = this->actor.home.pos.y + 20.0f;
-    this->actor.draw = sp28->unk_8;
+    this->actor.draw = sp28[2];
     if (func_8093951C(this, globalCtx) != 0) {
         this->unk_203 |= 1;
     }
@@ -568,17 +568,17 @@ void func_8093A418(void *arg0, GlobalContext *arg1) {
         sp24 = temp_a1;
         func_8012C2DC(temp_a0);
         temp_v0 = temp_a1->polyXlu.p;
-        temp_a1->polyXlu.p = temp_v0 + 8;
+        temp_a1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = temp_a1;
         sp1C = temp_v0;
         sp1C->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_2 = temp_a1->polyXlu.p;
-        temp_a1->polyXlu.p = temp_v0_2 + 8;
+        temp_a1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA000000;
         temp_v0_2->words.w1 = ((s32) sp28 & 0xFF) | ~0xFF;
         temp_v0_3 = temp_a1->polyXlu.p;
-        temp_a1->polyXlu.p = temp_v0_3 + 8;
+        temp_a1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06000AF0;
         temp_v0_3->words.w0 = 0xDE000000;
         return;
@@ -616,28 +616,28 @@ void func_8093A608(void *arg0, GraphicsContext **arg1) {
         if ((temp_f0 <= 2200.0f) || (((arg0->unk_203 & 1) != 0) && (temp_f0 < 2300.0f))) {
             func_8012C28C(temp_a2);
             temp_v1 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_v1 + 8;
+            temp_s5->polyOpa.p = &temp_v1[1];
             temp_v1->words.w0 = 0xDB060020;
             temp_v1->words.w1 = (u32) D_801AEFA0;
             temp_s0 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_s0 + 8;
+            temp_s5->polyOpa.p = &temp_s0[1];
             temp_s0->words.w0 = 0xDA380003;
             temp_s0->words.w1 = Matrix_NewMtx(*arg1);
             temp_v1_2 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_v1_2 + 8;
+            temp_s5->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w1 = -1;
             temp_v1_2->words.w0 = 0xFA00009B;
             temp_v1_3 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_v1_3 + 8;
+            temp_s5->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xDE000000;
             temp_v1_3->words.w1 = (u32) &D_06004560;
             func_8012C2DC(*arg1);
             temp_v0_5 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0_5 + 8;
+            temp_s5->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_6 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0_6 + 8;
+            temp_s5->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDE000000;
             temp_v0_6->words.w1 = (u32) &D_06004688;
             return;
@@ -646,19 +646,19 @@ void func_8093A608(void *arg0, GraphicsContext **arg1) {
             sp38 = (2300.0f - temp_f0) * 2.55f;
             func_8012C2DC(temp_a2);
             temp_v0 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0 + 8;
+            temp_s5->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDB060020;
             temp_v0->words.w1 = (u32) D_801AEF88;
             temp_v0_2 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0_2 + 8;
+            temp_s5->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDA380003;
             temp_v0_2->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_3 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0_3 + 8;
+            temp_s5->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFA00009B;
             temp_v0_3->words.w1 = ((s32) sp38 & 0xFF) | ~0xFF;
             temp_v0_4 = temp_s5->polyXlu.p;
-            temp_s5->polyXlu.p = temp_v0_4 + 8;
+            temp_s5->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = (u32) &D_06004560;
             temp_v0_4->words.w0 = 0xDE000000;
             return;
@@ -676,11 +676,11 @@ void func_8093A608(void *arg0, GraphicsContext **arg1) {
             temp_f12 = temp_s0_2->unk_0;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_s0_3 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_s0_3 + 8;
+            temp_s5->polyOpa.p = &temp_s0_3[1];
             temp_s0_3->words.w0 = 0xDA380003;
             temp_s0_3->words.w1 = Matrix_NewMtx(*arg1);
             temp_v1_4 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_v1_4 + 8;
+            temp_s5->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w1 = (u32) &D_06005990;
             temp_v1_4->words.w0 = 0xDE000000;
         }

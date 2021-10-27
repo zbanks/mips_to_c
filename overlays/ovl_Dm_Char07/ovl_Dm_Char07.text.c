@@ -130,7 +130,7 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp5C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp5C->polyOpa.p;
-    sp5C->polyOpa.p = temp_v0 + 8;
+    sp5C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     this = this;
     sp5C = sp5C;
@@ -144,21 +144,21 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
                 } else {
                     temp_v0_3 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_3 + 8;
+                    sp5C->polyOpa.p = &temp_v0_3[1];
                     temp_v0_3->words.w1 = (u32) &D_06010D68;
                     temp_v0_3->words.w0 = 0xDE000000;
                 }
             } else {
                 if ((this->spotlightFlags & 1) != 0) {
                     temp_v0_4 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_4 + 8;
+                    sp5C->polyOpa.p = &temp_v0_4[1];
                     temp_v0_4->words.w1 = (u32) &D_06000240;
                     temp_v0_4->words.w0 = 0xDE000000;
                 }
                 phi_v1 = this->spotlightFlags;
                 if ((this->spotlightFlags & 2) != 0) {
                     temp_v0_5 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_5 + 8;
+                    sp5C->polyOpa.p = &temp_v0_5[1];
                     temp_v0_5->words.w1 = (u32) &D_06000790;
                     temp_v0_5->words.w0 = 0xDE000000;
                     phi_v1 = this->spotlightFlags;
@@ -166,7 +166,7 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 phi_v1_2 = phi_v1;
                 if ((phi_v1 & 4) != 0) {
                     temp_v0_6 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_6 + 8;
+                    sp5C->polyOpa.p = &temp_v0_6[1];
                     temp_v0_6->words.w1 = (u32) &D_06000CC0;
                     temp_v0_6->words.w0 = 0xDE000000;
                     phi_v1_2 = this->spotlightFlags;
@@ -174,14 +174,14 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 phi_v1_3 = phi_v1_2;
                 if ((phi_v1_2 & 8) != 0) {
                     temp_v0_7 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_7 + 8;
+                    sp5C->polyOpa.p = &temp_v0_7[1];
                     temp_v0_7->words.w1 = (u32) &D_06001210;
                     temp_v0_7->words.w0 = 0xDE000000;
                     phi_v1_3 = this->spotlightFlags;
                 }
                 if ((phi_v1_3 & 0x10) != 0) {
                     temp_v0_8 = sp5C->polyOpa.p;
-                    sp5C->polyOpa.p = temp_v0_8 + 8;
+                    sp5C->polyOpa.p = &temp_v0_8[1];
                     temp_v0_8->words.w1 = (u32) &D_060016B8;
                     temp_v0_8->words.w0 = 0xDE000000;
                 }
@@ -191,33 +191,33 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
             this = this;
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060105F8));
             temp_v0_9 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_9 + 8;
+            sp5C->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w1 = (u32) &D_06007918;
             temp_v0_9->words.w0 = 0xDE000000;
             temp_v0_10 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_10 + 8;
+            sp5C->polyOpa.p = &temp_v0_10[1];
             temp_v0_10->words.w1 = (u32) &D_06000240;
             temp_v0_10->words.w0 = 0xDE000000;
             temp_v0_11 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_11 + 8;
+            sp5C->polyOpa.p = &temp_v0_11[1];
             temp_v0_11->words.w1 = (u32) &D_06000790;
             temp_v0_11->words.w0 = 0xDE000000;
             temp_v0_12 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_12 + 8;
+            sp5C->polyOpa.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = (u32) &D_06000CC0;
             temp_v0_12->words.w0 = 0xDE000000;
             temp_v0_13 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_13 + 8;
+            sp5C->polyOpa.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = (u32) &D_06001210;
             temp_v0_13->words.w0 = 0xDE000000;
             temp_v0_14 = sp5C->polyOpa.p;
-            sp5C->polyOpa.p = temp_v0_14 + 8;
+            sp5C->polyOpa.p = &temp_v0_14[1];
             temp_v0_14->words.w1 = (u32) &D_060016B8;
             temp_v0_14->words.w0 = 0xDE000000;
         }
     } else {
         temp_v0_15 = sp5C->polyOpa.p;
-        sp5C->polyOpa.p = temp_v0_15 + 8;
+        sp5C->polyOpa.p = &temp_v0_15[1];
         temp_v0_15->words.w1 = (u32) &D_06002CD0;
         temp_v0_15->words.w0 = 0xDE000000;
     }
@@ -225,7 +225,7 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp5C = sp5C;
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0_16 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_16 + 8;
+    sp5C->polyXlu.p = &temp_v0_16[1];
     temp_v0_16->words.w0 = 0xDA380003;
     this = this;
     sp5C = sp5C;
@@ -243,14 +243,14 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
             }
             if ((this->spotlightFlags & 1) != 0) {
                 temp_v0_18 = sp5C->polyOpa.p;
-                sp5C->polyOpa.p = temp_v0_18 + 8;
+                sp5C->polyOpa.p = &temp_v0_18[1];
                 temp_v0_18->words.w1 = (u32) &D_06000100;
                 temp_v0_18->words.w0 = 0xDE000000;
             }
             phi_v1_4 = this->spotlightFlags;
             if ((this->spotlightFlags & 2) != 0) {
                 temp_v0_19 = sp5C->polyOpa.p;
-                sp5C->polyOpa.p = temp_v0_19 + 8;
+                sp5C->polyOpa.p = &temp_v0_19[1];
                 temp_v0_19->words.w1 = (u32) &D_06000650;
                 temp_v0_19->words.w0 = 0xDE000000;
                 phi_v1_4 = this->spotlightFlags;
@@ -258,7 +258,7 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_v1_5 = phi_v1_4;
             if ((phi_v1_4 & 4) != 0) {
                 temp_v0_20 = sp5C->polyOpa.p;
-                sp5C->polyOpa.p = temp_v0_20 + 8;
+                sp5C->polyOpa.p = &temp_v0_20[1];
                 temp_v0_20->words.w1 = (u32) &D_06000B80;
                 temp_v0_20->words.w0 = 0xDE000000;
                 phi_v1_5 = this->spotlightFlags;
@@ -266,47 +266,47 @@ void DmChar07_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_v1_6 = phi_v1_5;
             if ((phi_v1_5 & 8) != 0) {
                 temp_v0_21 = sp5C->polyOpa.p;
-                sp5C->polyOpa.p = temp_v0_21 + 8;
+                sp5C->polyOpa.p = &temp_v0_21[1];
                 temp_v0_21->words.w1 = (u32) &D_060010D0;
                 temp_v0_21->words.w0 = 0xDE000000;
                 phi_v1_6 = this->spotlightFlags;
             }
             if ((phi_v1_6 & 0x10) != 0) {
                 temp_v0_22 = sp5C->polyOpa.p;
-                sp5C->polyOpa.p = temp_v0_22 + 8;
+                sp5C->polyOpa.p = &temp_v0_22[1];
                 temp_v0_22->words.w1 = (u32) &D_060015E0;
                 temp_v0_22->words.w0 = 0xDE000000;
             }
             return;
         }
         temp_v0_23 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_23 + 8;
+        sp5C->polyXlu.p = &temp_v0_23[1];
         temp_v0_23->words.w1 = (u32) &D_060076A0;
         temp_v0_23->words.w0 = 0xDE000000;
         temp_v0_24 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_24 + 8;
+        sp5C->polyXlu.p = &temp_v0_24[1];
         temp_v0_24->words.w1 = (u32) &D_06000100;
         temp_v0_24->words.w0 = 0xDE000000;
         temp_v0_25 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_25 + 8;
+        sp5C->polyXlu.p = &temp_v0_25[1];
         temp_v0_25->words.w1 = (u32) &D_06000650;
         temp_v0_25->words.w0 = 0xDE000000;
         temp_v0_26 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_26 + 8;
+        sp5C->polyXlu.p = &temp_v0_26[1];
         temp_v0_26->words.w1 = (u32) &D_06000B80;
         temp_v0_26->words.w0 = 0xDE000000;
         temp_v0_27 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_27 + 8;
+        sp5C->polyXlu.p = &temp_v0_27[1];
         temp_v0_27->words.w1 = (u32) &D_060010D0;
         temp_v0_27->words.w0 = 0xDE000000;
         temp_v0_28 = sp5C->polyXlu.p;
-        sp5C->polyXlu.p = temp_v0_28 + 8;
+        sp5C->polyXlu.p = &temp_v0_28[1];
         temp_v0_28->words.w1 = (u32) &D_060015E0;
         temp_v0_28->words.w0 = 0xDE000000;
         return;
     }
     temp_v0_29 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_29 + 8;
+    sp5C->polyXlu.p = &temp_v0_29[1];
     temp_v0_29->words.w1 = (u32) &D_06002BA0;
     temp_v0_29->words.w0 = 0xDE000000;
 }

@@ -264,12 +264,12 @@ void EnMm_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY((s16) ((s32) temp_a0_2 * -1), 1U);
     }
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_04055628;
     temp_v0_2->words.w0 = 0xDE000000;
 }

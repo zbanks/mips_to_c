@@ -266,7 +266,7 @@ void EnPr_Init(Actor *thisx, GlobalContext *globalCtx) {
             temp_s1 = phi_v0 + 1;
             temp_v0 = Actor_SpawnAsChild(&globalCtx->actorCtx, (Actor *) this, globalCtx, 0x181, this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, (s16) 0, (s16) (s32) this->actor.world.rot.y, (s16) 0, temp_s1);
             if (temp_v0 != 0) {
-                temp_v0->unk_220 = (EnPr *) this->unk_2F8;
+                temp_v0[1].shape.feetPos[0].z = (bitwise f32) this->unk_2F8;
                 this->unk_2F8 = (EnPr *) temp_v0;
             }
             phi_v0 = temp_s1;
@@ -569,7 +569,7 @@ void func_80A32D28(EnPr *this, GlobalContext *globalCtx) {
 
 void func_80A32E60(Actor *arg0) {
     func_80A3242C((EnPr *)4);
-    arg0->unk_206 = 6;
+    arg0[1].shape.face = 6;
     arg0->unk_200 = func_80A32EA4;
     arg0->speedXZ = 0.0f;
 }
@@ -631,11 +631,11 @@ void func_80A33098(Actor *arg0, GlobalContext *arg1) {
     s16 temp_v0_3;
     u8 temp_v0_2;
 
-    temp_v0 = arg0->unk_206;
+    temp_v0 = arg0[1].shape.face;
     if ((temp_v0 != 7) && (temp_v0 != 6)) {
-        temp_v0_2 = arg0->unk_30D;
+        temp_v0_2 = arg0[2].floorBgId;
         if ((temp_v0_2 & 2) != 0) {
-            arg0->unk_30D = (u8) (temp_v0_2 & 0xFFFD);
+            arg0[2].floorBgId = temp_v0_2 & 0xFFFD;
             if (arg0->colChkInfo.damageEffect == 4) {
                 arg0->unk_22E = 0x28;
                 arg0->unk_230 = 0x14;
@@ -646,7 +646,7 @@ void func_80A33098(Actor *arg0, GlobalContext *arg1) {
                 arg0->unk_22E = 0x28;
                 arg0->unk_230 = 0x1F;
             }
-            temp_v0_3 = arg0->unk_206;
+            temp_v0_3 = arg0[1].shape.face;
             if ((temp_v0_3 != 6) && (temp_v0_3 != 7)) {
                 Actor_ApplyDamage(arg0);
                 func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 8);
@@ -768,11 +768,11 @@ void func_80A335B4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp24, arg4 + 0x2D4);
     }
     if ((arg1 == 0) || (arg1 == 1) || (arg1 == 2) || (arg1 == 3) || (arg1 == 4) || (arg1 == 5) || (arg1 == 6) || (arg1 == 7) || (arg1 == 8) || (arg1 == 9)) {
-        SysMatrix_GetStateTranslation(arg4 + (arg4->unk_228 * 0xC) + 0x23C);
-        temp_t3 = arg4->unk_228 + 1;
-        arg4->unk_228 = temp_t3;
+        SysMatrix_GetStateTranslation(arg4 + (arg4[1].shape.feetPos[1].y * 0xC) + 0x23C);
+        temp_t3 = arg4[1].shape.feetPos[1].y + 1;
+        arg4[1].shape.feetPos[1].y = temp_t3;
         if (temp_t3 >= 0xA) {
-            arg4->unk_228 = 0;
+            arg4[1].shape.feetPos[1].y = 0;
         }
     }
 }
@@ -795,27 +795,27 @@ void EnPr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     if (this->unk_2D2 == 0) {
         temp_v0 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0 + 8;
+        temp_s1->polyOpa.p = &temp_v0[1];
         temp_v0->words.w1 = 0;
         temp_v0->words.w0 = 0xE7000000;
         temp_v0_2 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_2 + 8;
+        temp_s1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA000000;
         temp_v1 = this->unk_208 & 0xFF;
         temp_v0_2->words.w1 = (temp_v1 << 0x18) | (temp_v1 << 0x10) | (temp_v1 << 8) | (this->unk_2D0 & 0xFF);
         temp_v0_3 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_3 + 8;
+        temp_s1->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = this->unk_2D0 & 0xFF;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
         SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80A3357C, func_80A335B4, (Actor *) this);
     } else {
         temp_v1_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_2 + 8;
+        temp_s1->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = 0;
         temp_v1_2->words.w0 = 0xE7000000;
         temp_v1_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v1_3 + 8;
+        temp_s1->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFB000000;
         temp_v1_3->words.w1 = this->unk_2D0 & 0xFF;
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);

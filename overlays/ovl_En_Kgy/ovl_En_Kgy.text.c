@@ -838,7 +838,7 @@ void func_80B419B0(EnKgy *arg0, GlobalContext *globalCtx) {
 
     sp20 = globalCtx->actorCtx.actorList[2].first;
     func_80B4163C(arg0);
-    if ((func_800B84D0((Actor *) arg0, globalCtx) != 0) || (arg0 == sp20->unk_A88)) {
+    if ((func_800B84D0((Actor *) arg0, globalCtx) != 0) || (arg0 == (bitwise s32) sp20[8].velocity.y)) {
         func_80B411DC(arg0, globalCtx, 4U);
         func_80B40E18(arg0, arg0->actor.textId);
         if (arg0->actor.textId == 0xC37) {
@@ -936,7 +936,7 @@ void func_80B41C54(Actor *arg0, GlobalContext *arg1) {
     arg0 = arg0;
     SkelAnime_FrameUpdateMatrix(temp_a0);
     if (func_800B867C(arg0, arg1) != 0) {
-        arg0->unk_304 = func_80B41C30;
+        arg0[2].wallPoly = (CollisionPoly *) func_80B41C30;
         arg0->flags &= -0x101;
     }
     func_80B40EE8((EnKgy *) arg0, arg1, arg0);
@@ -947,7 +947,7 @@ void func_80B41CBC(Actor *arg0, GlobalContext *arg1) {
     if (func_800B84D0(arg0, arg1) != 0) {
         arg0->flags &= 0xFFFEFFFF;
         func_80B40E18((EnKgy *) arg0, arg0->textId);
-        arg0->unk_304 = func_80B41E18;
+        arg0[2].wallPoly = (CollisionPoly *) func_80B41E18;
         func_80B411DC((EnKgy *) arg0, arg1, 4U);
         return;
     }
@@ -957,7 +957,7 @@ void func_80B41CBC(Actor *arg0, GlobalContext *arg1) {
 void func_80B41D64(Actor *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
     if (Actor_HasParent(arg0, arg1) != 0) {
-        arg0->unk_304 = func_80B41CBC;
+        arg0[2].wallPoly = (CollisionPoly *) func_80B41CBC;
         arg0->flags |= 0x10000;
         func_800B8500(arg0, arg1, 1000.0f, 1000.0f, -1);
     } else {
@@ -1195,7 +1195,7 @@ void func_80B42508(EnKgy *this, GlobalContext *globalCtx) {
     this->actor.focus.pos.x = this->unk_2A8.x;
     this->actor.focus.pos.y = this->unk_2A8.y;
     this->actor.focus.pos.z = this->unk_2A8.z;
-    if ((func_800B84D0((Actor *) this, globalCtx) != 0) || (this == sp20->unk_A88)) {
+    if ((func_800B84D0((Actor *) this, globalCtx) != 0) || (this == (bitwise s32) sp20[8].velocity.y)) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4U);
         func_80B40E18(this, this->actor.textId);
@@ -1242,7 +1242,7 @@ void func_80B42714(EnKgy *this, GlobalContext *globalCtx) {
     this->actor.focus.pos.x = this->unk_2A8.x;
     this->actor.focus.pos.y = this->unk_2A8.y;
     this->actor.focus.pos.z = this->unk_2A8.z;
-    if ((func_800B84D0((Actor *) this, globalCtx) != 0) || (this == sp20->unk_A88)) {
+    if ((func_800B84D0((Actor *) this, globalCtx) != 0) || (this == (bitwise s32) sp20[8].velocity.y)) {
         func_80B411DC(this, globalCtx, 4U);
         func_80B40E18(this, this->actor.textId);
         if (this->actor.textId == 0xC37) {
@@ -1461,7 +1461,7 @@ void EnKgy_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 s32 func_80B42FA0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, s16 *arg4, Actor *arg5) {
-    if ((arg5->unk_29C & 1) == 0) {
+    if ((arg5[2].home.rot.x & 1) == 0) {
         if (arg1 == 0x11) {
             goto block_4;
         }
@@ -1509,17 +1509,17 @@ void func_80B43074(Actor *arg0, GlobalContext *arg1) {
     temp_v1->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     sp20 = temp_v1;
     if (func_80B40D8C(arg1) != 0) {
-        temp_v1->unk_C = &D_04001D00;
-        temp_v1->unk_8 = 0xDE000000;
-        temp_v1->unk_14 = &D_0600F180;
-        temp_v1->unk_10 = 0xDE000000;
+        temp_v1[1].words.w1 = (u32) &D_04001D00;
+        temp_v1[1].words.w0 = 0xDE000000;
+        temp_v1[2].words.w1 = (u32) &D_0600F180;
+        temp_v1[2].words.w0 = 0xDE000000;
     } else {
-        temp_v1->unk_C = &D_040021A8;
-        temp_v1->unk_8 = 0xDE000000;
-        temp_v1->unk_14 = &D_0600E8F0;
-        temp_v1->unk_10 = 0xDE000000;
+        temp_v1[1].words.w1 = (u32) &D_040021A8;
+        temp_v1[1].words.w0 = 0xDE000000;
+        temp_v1[2].words.w1 = (u32) &D_0600E8F0;
+        temp_v1[2].words.w0 = 0xDE000000;
     }
-    sp1C->polyOpa.p = temp_v1 + 0x18;
+    sp1C->polyOpa.p = &temp_v1[3];
     SysMatrix_StatePop();
 }
 

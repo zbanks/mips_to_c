@@ -205,8 +205,8 @@ void func_808AEAE0(EnBombf *this, GlobalContext *globalCtx) {
                 return;
             }
             temp_v1->child = NULL;
-            temp_v1->unk_34C = 0;
-            temp_v1->unk_388 = 0;
+            temp_v1[2].shape.yOffset = 0.0f;
+            temp_v1[2].uncullZoneScale = 0.0f;
             this->actor.parent = NULL;
             temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C & ~0x800);
             return;
@@ -246,8 +246,8 @@ void func_808AEAE0(EnBombf *this, GlobalContext *globalCtx) {
             return;
         }
         temp_v1->child = NULL;
-        temp_v1->unk_34C = 0;
-        temp_v1->unk_388 = 0;
+        temp_v1[2].shape.yOffset = 0.0f;
+        temp_v1[2].uncullZoneScale = 0.0f;
         this->actor.parent = NULL;
         temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C & ~0x800);
         sp38->pos.x = this->actor.home.pos.x;
@@ -264,8 +264,8 @@ void func_808AEAE0(EnBombf *this, GlobalContext *globalCtx) {
     sp40 = temp_v1;
     if (Actor_HasParent((Actor *) this, globalCtx) != 0) {
         temp_v1->child = NULL;
-        temp_v1->unk_34C = 0;
-        temp_v1->unk_388 = 0;
+        temp_v1[2].shape.yOffset = 0.0f;
+        temp_v1[2].uncullZoneScale = 0.0f;
         this->actor.parent = NULL;
         temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C & ~0x800);
         this->actor.world.pos.x = this->actor.home.pos.x;
@@ -365,10 +365,10 @@ void func_808AEFD4(EnBombf *this, GlobalContext *globalCtx) {
     if (this->timer == 0) {
         temp_v0 = globalCtx->actorCtx.actorList[2].first;
         temp_v1_7 = temp_v0->unk_A6C;
-        if (((temp_v1_7 & 0x800) != 0) && (this == temp_v0->unk_34C)) {
+        if (((temp_v1_7 & 0x800) != 0) && (this == (bitwise s32) temp_v0[2].shape.yOffset)) {
             temp_v0->child = NULL;
-            temp_v0->unk_34C = 0;
-            temp_v0->unk_388 = 0;
+            temp_v0[2].shape.yOffset = 0.0f;
+            temp_v0[2].uncullZoneScale = 0.0f;
             temp_v0->unk_A6C = (s32) (temp_v1_7 & ~0x800);
         }
         Actor_MarkForDeath((Actor *) this);
@@ -466,8 +466,8 @@ void EnBombf_Update(Actor *thisx, GlobalContext *globalCtx) {
             sp40 = temp_t3;
             sp60 = 0.2f;
             sp68.unk_0 = temp_t3->pos.x;
-            sp68.unk_4 = (f32) temp_t3->pos.y;
-            sp68.unk_8 = (f32) temp_t3->pos.z;
+            (&sp68)[1] = temp_t3->pos.y;
+            (&sp68)[2] = temp_t3->pos.z;
             sp6C += 25.0f;
             if ((s32) this->timer < 0x7F) {
                 if ((globalCtx->gameplayFrames & 1) == 0) {
@@ -492,8 +492,8 @@ void EnBombf_Update(Actor *thisx, GlobalContext *globalCtx) {
             }
             if (this->timer == 0) {
                 sp68.unk_0 = sp40->pos.x;
-                sp68.unk_4 = (f32) sp40->pos.y;
-                sp68.unk_8 = (f32) sp40->pos.z;
+                (&sp68)[1] = sp40->pos.y;
+                (&sp68)[2] = sp40->pos.z;
                 sp6C += 10.0f;
                 if (Actor_HasParent((Actor *) this, globalCtx) != 0) {
                     sp6C += 30.0f;
@@ -561,7 +561,7 @@ s32 *func_808AF86C(GraphicsContext *arg0, GlobalContext *arg1) {
     *temp_v1 = 0xDA380003;
     sp24 = temp_v1;
     sp1C = temp_v1;
-    sp24->unk_4 = Matrix_NewMtx(arg0);
+    sp24[1] = Matrix_NewMtx(arg0);
     sp28->unk_0 = 0xDF000000;
     sp28->unk_4 = 0;
     return temp_v1;
@@ -582,8 +582,8 @@ void EnBombf_Draw(Actor *thisx, GlobalContext *globalCtx) {
     Gfx *temp_v0_9;
     GraphicsContext *temp_a2;
     GraphicsContext *temp_s0;
+    Mtx **temp_a0;
     f32 temp_f12;
-    s32 *temp_a0;
     EnBombf *this = (EnBombf *) thisx;
 
     temp_a2 = globalCtx->state.gfxCtx;
@@ -593,16 +593,16 @@ void EnBombf_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C28C(temp_a2);
         if (this->actor.params != 0) {
             temp_v0 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0 + 8;
+            temp_s0->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             sp44 = temp_v0;
             sp44->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_2 + 8;
+            temp_s0->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = (u32) &D_06000340;
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_3 + 8;
+            temp_s0->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (u32) &D_06000530;
             temp_v0_3->words.w0 = 0xDE000000;
             SysMatrix_InsertTranslation(0.0f, 1000.0f, 0.0f, 1);
@@ -610,30 +610,30 @@ void EnBombf_Draw(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         }
         temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
+        temp_s0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFA000000;
         temp_v0_4->words.w1 = 0xC8FFC8FF;
         temp_v0_5 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_5 + 8;
+        temp_s0->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0;
         temp_v0_5->words.w0 = 0xE7000000;
         temp_v0_6 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_6 + 8;
+        temp_s0->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xFB000000;
         temp_v0_6->words.w1 = ((s32) this->unk_200 << 0x18) | 0x140000 | 0xA00;
         temp_v0_7 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_7 + 8;
+        temp_s0->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDA380003;
         sp2C = temp_v0_7;
         sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_a0 = func_808AF86C(globalCtx->state.gfxCtx, globalCtx);
         temp_v0_8 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_8 + 8;
+        temp_s0->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xDB060020;
         sp24 = temp_v0_8;
         sp24->words.w1 = Lib_SegmentedToVirtual((void *) temp_a0);
         temp_v0_9 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_9 + 8;
+        temp_s0->polyOpa.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = (u32) &D_06000408;
         temp_v0_9->words.w0 = 0xDE000000;
         return;

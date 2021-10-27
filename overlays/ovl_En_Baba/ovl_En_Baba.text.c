@@ -286,7 +286,7 @@ void func_80BA886C(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_40A = (u16) (arg0->unk_40A | 1);
                     phi_a3 = 0x2A36U & 0xFFFF;
                 }
-            } else if (gSaveContext.inventory.items[gItemSlots[0x47]] == 0x47) {
+            } else if (gSaveContext.inventory.items[gItemSlots[71]] == 0x47) {
                 arg0->unk_1E0 = 0x2A36U;
                 arg0->unk_40A = (u16) (arg0->unk_40A | 1);
                 phi_a3 = 0x2A36U & 0xFFFF;
@@ -439,9 +439,9 @@ s32 func_80BA8D2C(Actor *arg0, f32 arg1) {
     sp38 = 0;
     Math_SmoothStepToF(arg0 + 0x70, arg1, 0.4f, 1000.0f, 0.0f);
     sp3E = (s16) (s32) (arg0->speedXZ * 400.0f);
-    if ((func_8013D68C(arg0->unk_1E4, arg0->unk_1E8, (void *) &sp2C) != 0) && (func_8013D768(arg0, (void *) &sp2C, sp3E) != 0)) {
+    if ((func_8013D68C(arg0[1].colChkInfo.damageTable, arg0->unk_1E8, (void *) &sp2C) != 0) && (func_8013D768(arg0, (void *) &sp2C, sp3E) != 0)) {
         arg0->unk_1E8 = (s16) (arg0->unk_1E8 + 1);
-        if ((s32) arg0->unk_1E8 >= (s32) arg0->unk_1E4->count) {
+        if ((s32) arg0->unk_1E8 >= (s32) arg0[1].colChkInfo.damageTable->attack[0]) {
             sp38 = 1;
         }
     }
@@ -461,7 +461,7 @@ void func_80BA8DF4(EnBaba *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x150);
     if ((func_8013D5E8(arg0->actor.shape.rot.y, 0x36B0, arg0->actor.yawTowardsPlayer) != 0) && (temp_a0 = &sp30, ((arg0->unk_40A & 4) == 0))) {
         sp30 = temp_v1->world.pos.x;
-        sp34 = temp_v1->unk_C44 + 3.0f;
+        sp34 = temp_v1[9].shape.feetPos[1].x + 3.0f;
         sp38 = temp_v1->world.pos.z;
         func_8013D2E0((Vec3f *) temp_a0, arg0 + 0x3C, arg0 + 0xBC, arg0 + 0x2DE, arg0 + 0x2E4, arg0 + 0x2EA, D_80BAA4B4);
     } else {
@@ -558,28 +558,28 @@ s32 func_80BA9110(u8 *arg2) {
 
     sp54 = 0;
     sp50 = 0;
-    func_8013AF00((void *) &sp7C, 3, arg0->unk_410->count + 3);
+    func_8013AF00((void *) &sp7C, 3, arg0[3].focus.pos.z->count + 3);
     temp_s1 = arg0 + 0x414;
     phi_s1 = temp_s1;
-    if (arg0->unk_438 == 0) {
+    if (arg0[3].velocity.z == 0) {
         temp_v0 = arg0 + 0x42C;
         sp58.unk_0 = D_801D15B0.x;
         temp_a1 = arg0 + 0x420;
-        sp58.unk_4 = (f32) D_801D15B0.y;
+        (&sp58)[1] = D_801D15B0.y;
         temp_a2 = arg0 + 0x430;
-        sp58.unk_8 = (f32) D_801D15B0.z;
+        (&sp58)[2] = D_801D15B0.z;
         sp44 = temp_a2;
         sp48 = temp_a1;
         sp40 = temp_v0;
-        func_8013B6B0(arg0->unk_410, temp_a1, temp_a2, arg0->unk_428, arg0->unk_424, temp_v0, (void *) &sp7C, (Vec3f *) &sp58, (s16) (s32) arg0->unk_436);
-        func_8013B878(arg1, arg0->unk_410, arg0->unk_42C, (Vec3f *) &sp58);
-        arg0->unk_438 = 1;
+        func_8013B6B0(arg0[3].focus.pos.z, temp_a1, temp_a2, arg0[3].scale.y, arg0[3].scale.x, temp_v0, (void *) &sp7C, (Vec3f *) &sp58, (s16) (s32) arg0->unk_436);
+        func_8013B878(arg1, arg0[3].focus.pos.z, arg0[3].scale.z, (Vec3f *) &sp58);
+        arg0[3].velocity.z = 1;
         arg0->world.pos.y = sp5C;
         phi_s1 = arg0 + 0x414;
     } else {
         sp58.unk_0 = temp_s1->x;
-        sp58.unk_4 = (f32) temp_s1->y;
-        sp58.unk_8 = (f32) temp_s1->z;
+        (&sp58)[1] = temp_s1->y;
+        (&sp58)[2] = temp_s1->z;
         sp40 = arg0 + 0x42C;
         sp44 = arg0 + 0x430;
         sp48 = arg0 + 0x420;
@@ -587,17 +587,17 @@ s32 func_80BA9110(u8 *arg2) {
     arg0->world.pos.x = sp58;
     arg0->world.pos.z = sp60;
     if (func_8013AD6C(arg1) != 0) {
-        sp54 = arg0->unk_430;
-        sp50 = arg0->unk_42C;
+        sp54 = arg0[3].velocity.x;
+        sp50 = arg0[3].scale.z;
         sp58.unk_0 = arg0->world.pos.x;
-        sp58.unk_4 = (f32) arg0->world.pos.y;
-        sp58.unk_8 = (f32) arg0->world.pos.z;
+        (&sp58)[1] = arg0->world.pos.y;
+        (&sp58)[2] = arg0->world.pos.z;
     }
     phi_s1->x = D_801D15B0.x;
     phi_s1->y = D_801D15B0.y;
     phi_s1->z = D_801D15B0.z;
-    if (func_8013B6B0(arg0->unk_410, sp48, sp44, arg0->unk_428, arg0->unk_424, sp40, (void *) &sp7C, phi_s1, (s16) (s32) arg0->unk_436) != 0) {
-        arg0->unk_43C = 1;
+    if (func_8013B6B0(arg0[3].focus.pos.z, sp48, sp44, arg0[3].scale.y, arg0[3].scale.x, sp40, (void *) &sp7C, phi_s1, (s16) (s32) arg0->unk_436) != 0) {
+        arg0[3].speedXZ = 1e-45.0f;
     } else {
         sp70.unk_0 = (f32) arg0->world.pos.x;
         sp70.unk_4 = (f32) arg0->world.pos.y;
@@ -608,11 +608,11 @@ s32 func_80BA9110(u8 *arg2) {
         arg0->world.rot.y = Math_Vec3f_Yaw((Vec3f *) &sp70, (Vec3f *) &sp64);
     }
     if (func_8013AD6C(arg1) != 0) {
-        arg0->unk_430 = sp54;
-        arg0->unk_42C = sp50;
+        arg0[3].velocity.x = sp54;
+        arg0[3].scale.z = sp50;
         phi_s1->x = sp58.unk_0;
-        phi_s1->y = sp58.unk_4;
-        phi_s1->z = sp58.unk_8;
+        phi_s1->y = (&sp58)[1];
+        phi_s1->z = (&sp58)[2];
     }
     return 0;
 }
@@ -628,13 +628,13 @@ void func_80BA93AC(Actor *arg0, GlobalContext *arg1) {
             func_80BA9160(arg0, arg1, arg1);
         }
     } else {
-        arg0->unk_40C = 3;
+        arg0[3].focus.pos.y = 4e-45.0f;
         arg0->unk_1E0 = 0x2A30;
         arg0->speedXZ = 0.0f;
         Enemy_StartFinishingBlow(arg1, arg0);
         arg0->unk_40A = (u16) (arg0->unk_40A | 4);
-        func_800BDC5C(arg0 + 0x150, (ActorAnimationEntry []) D_80BAA3A0, arg0->unk_40C);
-        arg0->unk_148 = func_80BA9CD4;
+        func_800BDC5C((SkelAnime *) &arg0[1].home.pos.y, (ActorAnimationEntry []) D_80BAA3A0, (bitwise s32) arg0[3].focus.pos.y);
+        arg0[1].flags = (u32) func_80BA9CD4;
     }
     Math_ApproachS(&arg0->shape.rot.y, arg0->world.rot.y, 4, 0x1554);
 }
@@ -771,7 +771,7 @@ void func_80BA98EC(EnBaba *this, GlobalContext *globalCtx) {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 if ((this->unk_40A & 8) != 0) {
-                    if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+                    if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
                         if (globalCtx->msgCtx.unk120B1 == 0) {
                             gSaveContext.weekEventReg[81] |= 2;
                             func_80BA8C4C(globalCtx, 0xD670, globalCtx, this);
@@ -968,7 +968,7 @@ s32 func_80BA9FB0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         arg4->y += (s32) (Math_SinS(temp_v1->unk_302) * 200.0f);
         arg4->z += (s32) (Math_CosS(temp_v1->unk_326) * 200.0f);
     }
-    temp_v0 = arg5->unk_40C;
+    temp_v0 = arg5[3].focus.pos.y;
     if (((temp_v0 == 1) || (temp_v0 == 3) || (temp_v0 == 4) || (((s32) (arg5->params & 0xC000) >> 0xE) == 2)) && (arg1 == 8)) {
         *arg2 = NULL;
     }
@@ -1013,7 +1013,7 @@ void EnBaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp3C = temp_a0;
         func_8012C5B0(temp_a0);
         temp_v0 = sp3C->polyOpa.p;
-        sp3C->polyOpa.p = temp_v0 + 8;
+        sp3C->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp34 = temp_v0;
         sp34->words.w1 = Lib_SegmentedToVirtual(&D_060092A0);
@@ -1027,8 +1027,8 @@ void EnBaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 sp54 = this->actor.world.pos.z + 20.0f;
             } else {
                 sp4C.unk_0 = this->actor.world.pos.x;
-                sp4C.unk_4 = (f32) this->actor.world.pos.y;
-                sp4C.unk_8 = (f32) this->actor.world.pos.z;
+                (&sp4C)[1] = this->actor.world.pos.y;
+                (&sp4C)[2] = this->actor.world.pos.z;
             }
             temp_a1 = &sp40;
             sp48 = 0.3f;

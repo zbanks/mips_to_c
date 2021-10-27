@@ -185,11 +185,11 @@ void Lights_Draw(Lights *lights, GraphicsContext *gfxCtx) {
     s32 phi_v1_2;
 
     temp_t1 = gfxCtx->polyOpa.p;
-    gfxCtx->polyOpa.p = temp_t1 + 8;
+    gfxCtx->polyOpa.p = &temp_t1[1];
     temp_t1->words.w0 = 0xDB020000;
     temp_t1->words.w1 = lights->numLights * 0x18;
     temp_t1_2 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_t1_2 + 8;
+    gfxCtx->polyXlu.p = &temp_t1_2[1];
     temp_t1_2->words.w0 = 0xDB020000;
     temp_t1_2->words.w1 = lights->numLights * 0x18;
     phi_a3 = 0x18;
@@ -201,12 +201,12 @@ void Lights_Draw(Lights *lights, GraphicsContext *gfxCtx) {
             temp_t1_3 = gfxCtx->polyOpa.p;
             temp_a3 = phi_a3 + 0x18;
             temp_v1 = phi_v1 + 1;
-            gfxCtx->polyOpa.p = temp_t1_3 + 8;
+            gfxCtx->polyOpa.p = &temp_t1_3[1];
             temp_t0 = (((temp_a3 / 8) & 0xFF) << 8) | 0xDC080000 | 0xA;
             temp_t1_3->words.w0 = temp_t0;
             temp_t1_3->words.w1 = phi_v0;
             temp_t1_4 = gfxCtx->polyXlu.p;
-            gfxCtx->polyXlu.p = temp_t1_4 + 8;
+            gfxCtx->polyXlu.p = &temp_t1_4[1];
             temp_t1_4->words.w1 = phi_v0;
             temp_t1_4->words.w0 = temp_t0;
             phi_a3 = temp_a3;
@@ -217,12 +217,12 @@ void Lights_Draw(Lights *lights, GraphicsContext *gfxCtx) {
     }
     temp_t1_5 = gfxCtx->polyOpa.p;
     temp_v1_2 = &lights->l;
-    gfxCtx->polyOpa.p = temp_t1_5 + 8;
+    gfxCtx->polyOpa.p = &temp_t1_5[1];
     temp_t0_2 = ((((s32) ((phi_v1_2 * 0x18) + 0x18 + 0x18) / 8) & 0xFF) << 8) | 0xDC080000 | 0xA;
     temp_t1_5->words.w0 = temp_t0_2;
     temp_t1_5->words.w1 = (u32) temp_v1_2;
     temp_t1_6 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_t1_6 + 8;
+    gfxCtx->polyXlu.p = &temp_t1_6[1];
     temp_t1_6->words.w1 = (u32) temp_v1_2;
     temp_t1_6->words.w0 = temp_t0_2;
 }
@@ -574,9 +574,9 @@ void LightContext_RemoveLight(GlobalContext *globalCtx, LightContext *lightCtx, 
 Lights *Lights_NewAndDraw(GraphicsContext *gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB, u8 numLights, u8 r, u8 g, u8 b, s8 x, s8 y, s8 z) {
     Gfx *temp_s0;
     s32 temp_v1;
-    s8 temp_a1;
-    s8 temp_a2;
-    s8 temp_a3;
+    u8 temp_a1;
+    u8 temp_a2;
+    u8 temp_a3;
     void *temp_v0;
     void *phi_v0;
     s32 phi_v1;
@@ -587,16 +587,16 @@ Lights *Lights_NewAndDraw(GraphicsContext *gfxCtx, u8 ambientR, u8 ambientG, u8 
     temp_a1 = ambientR & 0xFF;
     temp_s0 = gfxCtx->polyOpa.d - 0x80;
     gfxCtx->polyOpa.d = temp_s0;
-    temp_s0->unk_8 = temp_a1;
-    temp_s0->unk_C = temp_a1;
-    temp_s0->unk_9 = temp_a2;
-    temp_s0->unk_D = temp_a2;
-    temp_s0->unk_A = temp_a3;
-    temp_s0->unk_E = temp_a3;
+    temp_s0[1].texture.cmd = temp_a1;
+    temp_s0[1].tri.tri.flag = temp_a1;
+    temp_s0[1].texture.lodscale = temp_a2;
+    temp_s0[1].tri.tri.v[0] = temp_a2;
+    temp_s0[1].texture.tile = temp_a3;
+    temp_s0[1].tri.tri.v[1] = temp_a3;
     temp_s0->texture.cmd = 0;
     temp_s0->texture.lodscale = numLights;
     phi_v1_2 = 0;
-    if (((s32) numLights > 0) && (((numLights & 1) == 0) || (temp_s0->unk_10 = r, temp_s0->unk_14 = r, temp_s0->unk_11 = g, temp_s0->unk_15 = g, temp_s0->unk_12 = b, temp_s0->unk_16 = b, temp_s0->unk_18 = x, temp_s0->unk_19 = y, temp_s0->unk_1A = z, phi_v1_2 = 1, (numLights != 1)))) {
+    if (((s32) numLights > 0) && (((numLights & 1) == 0) || (temp_s0[2].texture.cmd = r, temp_s0[2].tri.tri.flag = r, temp_s0[2].texture.lodscale = g, temp_s0[2].tri.tri.v[0] = g, temp_s0[2].texture.tile = b, temp_s0[2].tri.tri.v[1] = b, temp_s0[3].texture.cmd = (u8) x, temp_s0[3].texture.lodscale = (u8) y, temp_s0[3].texture.tile = (u8) z, phi_v1_2 = 1, (numLights != 1)))) {
         phi_v0 = temp_s0 + (phi_v1_2 * 0x10);
         phi_v1 = phi_v1_2;
         do {
@@ -630,21 +630,21 @@ Lights *Lights_NewAndDraw(GraphicsContext *gfxCtx, u8 ambientR, u8 ambientG, u8 
 
 Lights *Lights_New(GraphicsContext *gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB) {
     Gfx *temp_v0;
-    s8 temp_a1;
-    s8 temp_a2;
-    s8 temp_a3;
+    u8 temp_a1;
+    u8 temp_a2;
+    u8 temp_a3;
 
     temp_a3 = ambientB & 0xFF;
     temp_a2 = ambientG & 0xFF;
     temp_a1 = ambientR & 0xFF;
     temp_v0 = gfxCtx->polyOpa.d - 0x80;
     gfxCtx->polyOpa.d = temp_v0;
-    temp_v0->unk_8 = temp_a1;
-    temp_v0->unk_C = temp_a1;
-    temp_v0->unk_9 = temp_a2;
-    temp_v0->unk_D = temp_a2;
-    temp_v0->unk_A = temp_a3;
-    temp_v0->unk_E = temp_a3;
+    temp_v0[1].texture.cmd = temp_a1;
+    temp_v0[1].tri.tri.flag = temp_a1;
+    temp_v0[1].texture.lodscale = temp_a2;
+    temp_v0[1].tri.tri.v[0] = temp_a2;
+    temp_v0[1].texture.tile = temp_a3;
+    temp_v0[1].tri.tri.v[1] = temp_a3;
     temp_v0->texture.cmd = 0;
     temp_v0->texture.lodscale = 0;
     return (Lights *) temp_v0;
@@ -720,13 +720,13 @@ void Lights_DrawGlow(GlobalContext *globalCtx) {
         temp_v0_2 = func_8012C7FC(temp_v0->polyXlu.p);
         temp_v0_2->words.w1 = 0x80;
         temp_v0_2->words.w0 = 0xE3001803;
-        temp_s0 = temp_v0_2 + 8;
+        temp_s0 = &temp_v0_2[1];
         temp_s0->words.w0 = 0xFCFF97FF;
         temp_s0->words.w1 = 0xFF2DFEFF;
-        temp_s0_2 = temp_s0 + 8;
+        temp_s0_2 = &temp_s0[1];
         temp_s0_2->words.w1 = (u32) D_04029CB0;
         temp_s0_2->words.w0 = 0xDE000000;
-        phi_s0 = temp_s0_2 + 8;
+        phi_s0 = &temp_s0_2[1];
         do {
             temp_v1 = phi_s3->info;
             temp_v0_3 = temp_v1 + 2;

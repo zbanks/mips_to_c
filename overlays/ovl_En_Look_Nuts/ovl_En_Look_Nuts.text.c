@@ -81,7 +81,7 @@ struct _mips2c_stack_func_80A67F30 {
 
 struct _mips2c_stack_func_80A67FC4 {
     /* 0x00 */ char pad_0[0x2C];
-    /* 0x2C */ SkelAnime *sp2C;                     /* inferred */
+    /* 0x2C */ Actor *sp2C;                         /* inferred */
 };                                                  /* size = 0x30 */
 
 struct _mips2c_stack_func_80A68080 {
@@ -98,7 +98,7 @@ void func_80A67AA8(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80A67C48(Actor *arg0);                    /* static */
 void func_80A67D0C(EnLookNuts *arg0, GlobalContext *arg1); /* static */
 void func_80A67F30(Actor *arg0, GlobalContext *arg1); /* static */
-void func_80A67FC4(Actor *arg0, ? arg1);            /* static */
+void func_80A67FC4(Actor *actor, Lights *mapper, GlobalContext *globalCtx); /* static */
 void func_80A68080(Actor *arg0);                    /* static */
 void func_80A680FC(void *arg0, GlobalContext *arg1); /* static */
 extern AnimationHeader D_06000430;
@@ -196,8 +196,8 @@ void func_80A67AA8(Actor *arg0, GlobalContext *arg1) {
     f32 sp30;
     SkelAnime *sp2C;
     Path *temp_v0;
-    Path *temp_v0_2;
     SkelAnime *temp_a0;
+    f32 temp_v0_2;
 
     temp_a0 = arg0 + 0x144;
     sp2C = temp_a0;
@@ -216,13 +216,13 @@ void func_80A67AA8(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     temp_v0 = func_8013D648(arg1, arg0->unk_220, 0x1F);
-    arg0->unk_210 = temp_v0;
+    arg0[1].shape.shadowScale = (bitwise f32) temp_v0;
     if (temp_v0 != 0) {
         sp34 = (f32) func_8013D83C(temp_v0, arg0->unk_214, &arg0->world, &sp30);
     }
-    if ((sp30 < 10.0f) && (temp_v0_2 = arg0->unk_210, (temp_v0_2 != 0))) {
+    if ((sp30 < 10.0f) && (temp_v0_2 = arg0[1].shape.shadowScale, ((bitwise s32) temp_v0_2 != 0))) {
         arg0->unk_214 = (s16) (arg0->unk_214 + 1);
-        if ((s32) arg0->unk_214 >= (s32) temp_v0_2->count) {
+        if ((s32) arg0->unk_214 >= (s32) *temp_v0_2) {
             arg0->unk_214 = 0;
         }
         if (Rand_ZeroOne() < 0.6f) {
@@ -239,13 +239,13 @@ block_15:
 void func_80A67C48(Actor *arg0) {
     SkelAnime_ChangeAnim(arg0 + 0x144, (AnimationHeader *) &D_06002B6C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06002B6C), (u8) 2, -10.0f);
     arg0->unk_224 = Rand_S16Offset(1, 3);
-    arg0->unk_23C = 10000.0f;
+    arg0[1].projectedW = 10000.0f;
     if (Rand_ZeroOne() < 0.5f) {
-        arg0->unk_23C = -10000.0f;
+        arg0[1].projectedW = -10000.0f;
     }
     arg0->unk_21A = 0xA;
     arg0->unk_21C = 1;
-    arg0->unk_20C = func_80A67D0C;
+    arg0[1].shape.shadowDraw = func_80A67D0C;
 }
 
 void func_80A67D0C(EnLookNuts *arg0, GlobalContext *arg1) {
@@ -314,36 +314,36 @@ void func_80A67F30(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_21C = 2;
     arg0->unk_21A = 0x12C;
     func_801518B0(arg1, 0x833U, arg0);
-    arg0->unk_20C = func_80A67FC4;
+    arg0[1].shape.shadowDraw = func_80A67FC4;
 }
 
-void func_80A67FC4(Actor *arg0, ? arg1) {
-    SkelAnime *sp2C;
-    SkelAnime *temp_a0;
+void func_80A67FC4(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
+    Actor *sp2C;
+    Actor *temp_a0;
 
-    temp_a0 = arg0 + 0x144;
+    temp_a0 = &actor[1];
     sp2C = temp_a0;
-    SkelAnime_FrameUpdateMatrix(temp_a0);
-    if ((func_801378B8(temp_a0, 1.0f) != 0) || (func_801378B8(temp_a0, 5.0f) != 0)) {
-        Audio_PlayActorSound2(arg0, 0x387FU);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) temp_a0);
+    if ((func_801378B8((SkelAnime *) temp_a0, 1.0f) != 0) || (func_801378B8((SkelAnime *) temp_a0, 5.0f) != 0)) {
+        Audio_PlayActorSound2(actor, 0x387FU);
     }
-    arg0->speedXZ = 4.0f;
-    Math_SmoothStepToS(&arg0->world.rot.y, arg0->yawTowardsPlayer, 1, 0xBB8, (s16) 0);
-    if ((arg0->xzDistToPlayer < 70.0f) || (arg0->unk_21A == 0)) {
-        arg0->speedXZ = 0.0f;
-        func_80A68080(arg0);
+    actor->speedXZ = 4.0f;
+    Math_SmoothStepToS(&actor->world.rot.y, actor->yawTowardsPlayer, 1, 0xBB8, (s16) 0);
+    if ((actor->xzDistToPlayer < 70.0f) || (actor->unk_21A == 0)) {
+        actor->speedXZ = 0.0f;
+        func_80A68080(actor);
     }
 }
 
 void func_80A68080(Actor *arg0) {
     SkelAnime_ChangeAnim(arg0 + 0x144, (AnimationHeader *) &D_06002B6C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06002B6C), (u8) 2, -10.0f);
     arg0->unk_21C = 3;
-    arg0->unk_20C = func_80A680FC;
+    arg0[1].shape.shadowDraw = func_80A680FC;
 }
 
-void func_80A680FC(void *arg0, GlobalContext *arg1) {
+void func_80A680FC(Actor *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
-    Math_SmoothStepToS(arg0 + 0x32, arg0->unk_92, 1, 0xBB8, (s16) 0);
+    Math_SmoothStepToS(arg0 + 0x32, arg0->yawTowardsPlayer, 1, 0xBB8, (s16) 0);
     if ((func_80152498(arg1 + 0x4908) == 5) && (func_80147624(arg1) != 0)) {
         func_801477B4(arg1);
         arg1->nextEntranceIndex = Entrance_CreateIndexFromSpawn((s32) arg0->unk_226);
@@ -413,7 +413,7 @@ void EnLookNuts_Update(Actor *thisx, GlobalContext *globalCtx) {
                 }
             }
             if ((this->unk_222 == 1) || (this->actor.xzDistToPlayer < 20.0f)) {
-                if (((globalCtx->actorCtx.actorList[2].first->unk_A74 & 0x100) == 0) && (func_801690CC(globalCtx) == 0)) {
+                if ((((bitwise s32) globalCtx->actorCtx.actorList[2].first[8].targetArrowOffset & 0x100) == 0) && (func_801690CC(globalCtx) == 0)) {
                     Math_Vec3f_Copy(&this->unk_238, &D_801D15B0);
                     this->unk_21C = 2;
                     play_sound(0x482CU);
@@ -449,7 +449,7 @@ void EnLookNuts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp28 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v0 + 8;
+    sp28->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp20 = temp_v0;
     sp20->words.w1 = Lib_SegmentedToVirtual(*(&D_80A6865C + (this->unk_216 * 4)));

@@ -340,7 +340,7 @@ void func_80A3B7B8(Actor *arg0, GlobalContext *arg1) {
         temp_t8 = arg0->flags | 0x8000000;
         arg0->flags = temp_t8;
         arg0->flags = temp_t8 & ~1;
-        arg0->unk_1AC = func_80A3B220;
+        arg0[1].velocity.y = (bitwise f32) func_80A3B220;
     }
 }
 
@@ -384,11 +384,11 @@ void func_80A3B958(Actor *arg0, GlobalContext *arg1) {
     temp_s4 = &sp94;
     temp_s5 = &sp88;
     temp_s4->unk_0 = D_80A3C344.unk_0;
-    temp_s4->unk_4 = (s32) D_80A3C344.unk_4;
-    temp_s4->unk_8 = (s32) D_80A3C344.unk_8;
+    temp_s4[1] = D_80A3C344.unk_4;
+    temp_s4[2] = D_80A3C344.unk_8;
     temp_s5->unk_0 = D_80A3C350.unk_0;
-    temp_s5->unk_4 = (s32) D_80A3C350.unk_4;
-    temp_s5->unk_8 = (s32) D_80A3C350.unk_8;
+    temp_s5[1] = D_80A3C350.unk_4;
+    temp_s5[2] = D_80A3C350.unk_8;
     temp_v0 = arg0->unk_1B6;
     phi_s0_2 = 0;
     phi_s0 = 0;
@@ -430,7 +430,7 @@ void func_80A3B958(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_1F8->unk_38 = 3.0f;
             arg0->unk_1F8->unk_5 = 8;
             Item_DropCollectibleRandom(arg1, NULL, (Vec3f *) &arg0->world, 0xB0);
-            arg0->unk_1AC = func_80A3B8F8;
+            arg0[1].velocity.y = (bitwise f32) func_80A3B8F8;
         }
     }
 }
@@ -497,8 +497,8 @@ void func_80A3BE60(Actor *this, GlobalContext *globalCtx) {
     temp_v0 = Lib_SegmentedToVirtual(*(&D_80A3C35C + (this->unk_1B0 * 4)));
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) temp_v0;
-    sp2C->polyOpa.p = temp_v1 + 8;
-    SkelAnime_Draw(globalCtx, this->unk_148, this->unk_164, NULL, func_80A3BE24, this);
+    sp2C->polyOpa.p = &temp_v1[1];
+    SkelAnime_Draw(globalCtx, (void **) this[1].flags, this->unk_164, NULL, func_80A3BE24, this);
     func_80A3C17C(this, globalCtx);
 }
 
@@ -518,11 +518,11 @@ loop_1:
         phi_s0->unk_8 = (s32) arg1->pos.y;
         phi_s0->unk_C = (s32) arg1->pos.z;
         phi_s0->unk_10 = (s32) arg2->unk_0;
-        phi_s0->unk_14 = (s32) arg2->unk_4;
-        phi_s0->unk_18 = (s32) arg2->unk_8;
+        phi_s0->unk_14 = (s32) arg2[1];
+        phi_s0->unk_18 = (s32) arg2[2];
         phi_s0->unk_1C = (s32) arg3->unk_0;
-        phi_s0->unk_20 = (s32) arg3->unk_4;
-        phi_s0->unk_24 = (s32) arg3->unk_8;
+        phi_s0->unk_20 = (s32) arg3[1];
+        phi_s0->unk_24 = (s32) arg3[2];
         phi_s0->unk_30 = arg4;
         phi_s0->unk_34 = arg5;
         phi_s0->unk_28 = (s16) (s32) randPlusMinusPoint5Scaled(30000.0f);
@@ -606,15 +606,15 @@ void func_80A3C17C(Actor *arg0, GlobalContext *arg1) {
             temp_f12 = phi_s0->unk_30;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_v0 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0 + 8;
+            temp_s2->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(temp_s2);
             temp_v0_2 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_2 + 8;
+            temp_s2->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = -1;
             temp_v0_2->words.w0 = 0xFA000001;
             temp_v0_3 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_3 + 8;
+            temp_s2->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = (u32) &D_0401FA40;
             temp_v0_3->words.w0 = 0xDE000000;
         }

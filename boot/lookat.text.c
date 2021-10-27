@@ -65,23 +65,23 @@ void guLookAtF(f32 (*mf)[4], f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32
     temp_f20_2 = (f32) (1.0 / (f64) sqrtf((temp_f2_2 * temp_f2_2) + (temp_f12_2 * temp_f12_2) + (temp_f14_2 * temp_f14_2)));
     xUp = temp_f2_2 * temp_f20_2;
     mf[0][0] = temp_f22;
-    mf->unk_10 = temp_f24_2;
-    mf->unk_20 = temp_f26_2;
+    mf[1][0] = temp_f24_2;
+    mf[2][0] = temp_f26_2;
     temp_f0 = temp_f12_2 * temp_f20_2;
     temp_f2_3 = temp_f14_2 * temp_f20_2;
-    mf->unk_30 = (f32) -((xEye * temp_f22) + (yEye * temp_f24_2) + (zEye * temp_f26_2));
-    mf->unk_14 = temp_f0;
-    mf->unk_24 = temp_f2_3;
+    mf[3][0] = -((xEye * temp_f22) + (yEye * temp_f24_2) + (zEye * temp_f26_2));
+    mf[1][1] = temp_f0;
+    mf[2][1] = temp_f2_3;
     mf[0][2] = temp_f28;
-    mf->unk_18 = sp54;
+    mf[1][2] = sp54;
     mf[0][1] = xUp;
-    mf->unk_28 = sp68;
+    mf[2][2] = sp68;
     mf[0][3] = 0.0f;
-    mf->unk_1C = 0.0f;
-    mf->unk_2C = 0.0f;
-    mf->unk_34 = (f32) -((xEye * xUp) + (yEye * temp_f0) + (zEye * temp_f2_3));
-    mf->unk_3C = 1.0f;
-    mf->unk_38 = (f32) -((xEye * temp_f28) + (yEye * sp54) + (zEye * sp68));
+    mf[1][3] = 0.0f;
+    mf[2][3] = 0.0f;
+    mf[3][1] = -((xEye * xUp) + (yEye * temp_f0) + (zEye * temp_f2_3));
+    mf[3][3] = 1.0f;
+    mf[3][2] = -((xEye * temp_f28) + (yEye * sp54) + (zEye * sp68));
 }
 
 void guLookAt(Mtx *m, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp) {

@@ -7,6 +7,13 @@ typedef struct BgBreakwall {
     /* 0x160 */ void (*actionFunc)(BgBreakwall *, GlobalContext *);
 } BgBreakwall;                                      /* size = 0x164 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s8 unk_12;                           /* inferred */
+    /* 0x13 */ char pad_13[0x1];
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_BgBreakwall_Init {
     /* 0x00 */ char pad_0[0x24];
     /* 0x24 */ void *sp24;                          /* inferred */
@@ -238,10 +245,10 @@ s32 func_808B73C4(s32 arg0, ? arg1) {
     }
     func_800FEA50(arg1);
     if (gSaveContext.isNight != 0) {
-        arg0->unk_15E = 0;
+        arg0[1].home.unk_12 = 0;
         return 1;
     }
-    arg0->unk_15E = 0xFF;
+    arg0[1].home.unk_12 = 0xFF;
     return 1;
 }
 
@@ -418,36 +425,36 @@ void func_808B7B54(s32 arg0, GraphicsContext **arg1) {
     temp_s0 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp40 = temp_v0;
     sp40->words.w1 = Matrix_NewMtx(*arg1);
     func_800FE7A8(&D_808B8310, &sp50);
     func_800FE7A8(&D_808B8330, &sp4C);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA000080;
     temp_v0_2->words.w1 = (sp50 << 0x18) | (sp51 << 0x10) | (sp52 << 8) | 0xFF;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = (sp4C << 0x18) | (sp4D << 0x10) | (sp4E << 8) | 0xFF;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_06000A50;
     func_800FE7A8(&D_808B8320, &sp50);
     func_800FE7A8(&D_808B8340, &sp4C);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFA000080;
     temp_v0_5->words.w1 = (sp50 << 0x18) | (sp51 << 0x10) | (sp52 << 8) | 0xFF;
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xFB000000;
     temp_v0_6->words.w1 = (sp4C << 0x18) | (sp4D << 0x10) | (sp4E << 8) | 0xFF;
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDE000000;
     temp_v0_7->words.w1 = (u32) &D_06000C98;
 }
@@ -483,7 +490,7 @@ void func_808B7D34(void *arg0, GraphicsContext **arg1) {
     temp_v0_3 = arg0->unk_15E;
     temp_s0 = (s32) ((temp_lo + (temp_v0_3 * 0x96)) & 0xFF00) >> 8;
     temp_v0_4 = temp_t0->polyXlu.p;
-    temp_t0->polyXlu.p = temp_v0_4 + 8;
+    temp_t0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060028;
     sp48 = temp_t1;
     sp38 = temp_t0;
@@ -491,7 +498,7 @@ void func_808B7D34(void *arg0, GraphicsContext **arg1) {
     sp2C->words.w1 = Gfx_PrimColor(*arg1, 0xFF, temp_s0, temp_s0, (s32) ((temp_lo + (temp_v0_3 * 0x64)) & 0xFF00) >> 8, (s32) ((temp_lo + (temp_v0_3 * 0x4B)) & 0xFF00) >> 8);
     temp_v0_5 = arg0->unk_15E;
     temp_v0_6 = temp_t0->polyXlu.p;
-    temp_t0->polyXlu.p = temp_v0_6 + 8;
+    temp_t0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDB06002C;
     sp28 = temp_v0_6;
     sp28->words.w1 = Gfx_PrimColor(*arg1, 0xFF, 0xFF, 0xFF, (s32) (((temp_t1 * 0xB9) + (temp_v0_5 * 0x8C)) & 0xFF00) >> 8, (s32) (((temp_t1 * 0xEB) + (temp_v0_5 * 0x2D)) & 0xFF00) >> 8);
@@ -525,24 +532,24 @@ void func_808B7FE4(Actor *this, GlobalContext *globalCtx) {
     if (temp_s2->unk_4 != 0) {
         func_8012C28C(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         sp30 = temp_v0_2;
         sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = temp_s2->unk_4;
     }
     if (temp_s2->unk_8 != 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         sp28 = temp_v0_4;
         sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = temp_s2->unk_8;
     }

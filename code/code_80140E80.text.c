@@ -200,54 +200,54 @@ void func_80141200(Gfx **arg0, Gfx **arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg
     temp_t2->words.w0 = 0xEF200000;
     func_8014116C(temp_a0, arg2, arg3, arg4, arg5, 1);
     temp_t6 = sp8C;
-    sp8C = temp_t6 + 8;
+    sp8C = &temp_t6[1];
     temp_t6->words.w1 = 0;
     temp_t6->words.w0 = 0xE7000000;
     temp_t8_2 = sp8C;
-    sp8C = temp_t8_2 + 8;
+    sp8C = &temp_t8_2[1];
     temp_t8_2->words.w1 = 0;
     temp_t8_2->words.w0 = 0xEF300000;
     temp_v1 = ((arg0->unk_C << 8) & 0xF800) | ((arg0->unk_D * 8) & 0x7C0) | (((u32) arg0->unk_E >> 2) & 0x3E) | 1;
     temp_t6_2 = sp8C;
-    sp8C = temp_t6_2 + 8;
+    sp8C = &temp_t6_2[1];
     temp_t6_2->words.w0 = 0xF7000000;
     temp_t6_2->words.w1 = (temp_v1 << 0x10) | temp_v1;
     temp_v0 = sp8C;
-    sp8C = temp_v0 + 8;
+    sp8C = &temp_v0[1];
     temp_v0->words.w0 = (((arg4 - 1) & 0x3FF) << 0xE) | 0xF6000000 | (((arg5 - 1) & 0x3FF) * 4);
     temp_v0->words.w1 = 0;
     temp_t4 = sp8C;
-    sp8C = temp_t4 + 8;
+    sp8C = &temp_t4[1];
     temp_t4->words.w1 = 0;
     temp_t4->words.w0 = 0xE7000000;
     temp_t8_3 = sp8C;
-    sp8C = temp_t8_3 + 8;
-    temp_t8_3->words.w0 = ((s32) (arg0->unk_8 * 255.0f) & 0xFF) | 0xFA000000;
-    temp_t8_3->words.w1 = (u32) arg0->unk_C;
+    sp8C = &temp_t8_3[1];
+    temp_t8_3->words.w0 = ((s32) (arg0[2] * 255.0f) & 0xFF) | 0xFA000000;
+    temp_t8_3->words.w1 = (u32) arg0[3];
     temp_t6_3 = sp8C;
     if (arg0->unk_13 == 0) {
         temp_t6_4 = sp8C;
-        sp8C = temp_t6_4 + 8;
+        sp8C = &temp_t6_4[1];
         temp_t6_4->words.w0 = 0xEF002CF0;
         temp_t6_4->words.w1 = 0xA03009;
         temp_t5 = sp8C;
-        sp8C = temp_t5 + 8;
+        sp8C = &temp_t5[1];
         temp_t5->words.w0 = 0xFC377E6E;
         temp_t5->words.w1 = 0x11FCFC7E;
     } else {
-        sp8C = temp_t6_3 + 8;
+        sp8C = &temp_t6_3[1];
         temp_t6_3->words.w0 = 0xEF000CF0;
         temp_t6_3->words.w1 = 0x404340;
         temp_t5_2 = sp8C;
-        sp8C = temp_t5_2 + 8;
+        sp8C = &temp_t5_2[1];
         temp_t5_2->words.w0 = 0xFB000000;
-        temp_t5_2->words.w1 = arg0->unk_10;
+        temp_t5_2->words.w1 = arg0[4];
         temp_t6_5 = sp8C;
-        sp8C = temp_t6_5 + 8;
+        sp8C = &temp_t6_5[1];
         temp_t6_5->words.w1 = 0x5566DB6D;
         temp_t6_5->words.w0 = 0xFC30B261;
     }
-    temp_f0 = arg0->unk_4;
+    temp_f0 = arg0[1];
     if (temp_f0 > 1.0f) {
         phi_f2 = 1.0f;
     } else {
@@ -261,7 +261,7 @@ void func_80141200(Gfx **arg0, Gfx **arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg
     temp_f0_2 = 1.0f - phi_f2;
     func_801411B4((bitwise Gfx **) 0.5f, 1.0f, (bitwise f32) &sp8C, arg3, (bitwise s32) arg2, (bitwise f32) arg4, arg5, (f32) arg4 * 0.5f * temp_f0_2, (f32) arg5 * 0.5f * temp_f0_2, phi_f2, phi_f2, 0);
     temp_t5_3 = sp8C;
-    sp8C = temp_t5_3 + 8;
+    sp8C = &temp_t5_3[1];
     temp_t5_3->words.w1 = 0;
     temp_t5_3->words.w0 = 0xE7000000;
     *arg1 = sp8C;
@@ -276,10 +276,10 @@ void func_8014151C(s32 **arg0, Gfx **arg1, Gfx **arg4, f32 arg5) {
     Gfx *temp_v0;
     s32 temp_v1;
 
-    if (arg0->unk_4 < 1.0f) {
+    if (arg0[1] < 1.0f) {
         sp3C = *arg1;
         temp_t0 = sp3C;
-        if (arg0->unk_4 > 0.032f) {
+        if (arg0[1] > 0.032f) {
             func_80141200(&sp3C, arg4, arg5);
         } else {
             sp3C = temp_t0 + 8;
@@ -329,19 +329,19 @@ void func_80141678(s32 **arg0, Gfx **arg1, f32 arg2, s32 arg4) {
     temp_t5 = sp3C;
     sp3C = temp_t5 + 8;
     temp_t5->words.w0 = 0xFA000000;
-    temp_t5->words.w1 = arg0->unk_C;
+    temp_t5->words.w1 = arg0[3];
     temp_t9 = sp3C;
     sp3C = temp_t9 + 8;
     temp_t9->words.w0 = 0xFB000000;
     temp_a0 = &sp3C;
-    temp_t9->words.w1 = arg0->unk_10;
+    temp_t9->words.w1 = arg0[4];
     temp_t3 = sp3C;
     sp3C = temp_t3 + 8;
     temp_t3->words.w1 = 0x5566DB6D;
     temp_t3->words.w0 = 0xFC30B261;
     func_8014116C(temp_a0, arg2, (bitwise s32) arg2, arg4, 0);
     temp_t9_2 = sp3C;
-    sp3C = temp_t9_2 + 8;
+    sp3C = &temp_t9_2[1];
     temp_t9_2->words.w1 = 0;
     temp_t9_2->words.w0 = 0xE7000000;
     *arg1 = sp3C;
@@ -361,12 +361,12 @@ void func_80141778(u8 *arg0, s32 **arg1, Gfx **arg2) {
     sp2C = *arg1;
     temp_t8 = sp2C;
     sp2C = temp_t8 + 8;
-    temp_t8->unk_4 = (void *) (&D_801E3BB0 - 0x80000000);
-    temp_t8->unk_0 = 0xE1000000;
+    temp_t8[1] = &D_801E3BB0 - 0x80000000;
+    temp_t8->unk_0 = (void *)0xE1000000;
     temp_t2 = sp2C;
     sp2C = temp_t2 + 8;
-    temp_t2->unk_4 = (void *) (&D_801ABAB0 - 0x80000000);
-    temp_t2->unk_0 = 0xDD0007FF;
+    temp_t2[1] = &D_801ABAB0 - 0x80000000;
+    temp_t2->unk_0 = (void *)0xDD0007FF;
     temp_v0 = *arg0;
     if (temp_v0 != 1) {
         if (temp_v0 != 2) {
@@ -379,13 +379,13 @@ void func_80141778(u8 *arg0, s32 **arg1, Gfx **arg2) {
     }
     temp_t9 = sp2C;
     sp2C = temp_t9 + 8;
-    temp_t9->unk_0 = 0xE1000000;
+    temp_t9->unk_0 = (void *)0xE1000000;
     sp24 = temp_t9;
-    sp24->unk_4 = func_80182CCC();
+    sp24[1] = func_80182CCC();
     temp_t2_2 = sp2C;
     sp2C = temp_t2_2 + 8;
-    temp_t2_2->unk_0 = 0xDD0007FF;
+    temp_t2_2->unk_0 = (void *)0xDD0007FF;
     sp24 = temp_t2_2;
-    sp24->unk_4 = func_80182CBC();
+    sp24[1] = func_80182CBC();
     *arg1 = sp2C;
 }

@@ -453,7 +453,7 @@ void func_80876930(EnDodongo *arg0, GlobalContext *arg1, f32 *arg2) {
     do {
         sp88 = randPlusMinusPoint5Scaled(temp_f20) + arg2->unk_0;
         sp8C = Rand_ZeroFloat(5.0f) + arg0->actor.floorHeight;
-        sp90 = randPlusMinusPoint5Scaled(temp_f20) + arg2->unk_8;
+        sp90 = randPlusMinusPoint5Scaled(temp_f20) + arg2[2];
         D_8087933C.x = randPlusMinusPoint5Scaled(2.0f);
         D_80879344 = randPlusMinusPoint5Scaled(2.0f);
         func_800B0DE0(arg1, (Vec3f *) temp_s4, &D_801D15B0, &D_8087933C, sp80, sp7C, (s16) (s32) temp_s2, (s16) (s32) temp_s3);
@@ -502,7 +502,7 @@ void func_80876BD0(Actor *arg0, GlobalContext *arg1, s32 arg2) {
         arg0->unk_300 = 0x14;
         arg0->unk_340 = 0.75f;
         arg0->unk_33C = 4.0f;
-        temp_v0_2 = arg0->unk_3D0 + (arg2 << 6);
+        temp_v0_2 = arg0[3].flags + (arg2 << 6);
         Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) temp_v0_2->unk_E, (f32) temp_v0_2->unk_10, (f32) temp_v0_2->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
     }
 }
@@ -527,7 +527,7 @@ void func_80876D28(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_300 = 0U;
         arg0->unk_3C8 = 0;
         arg0->unk_33C = 0.0f;
-        temp_f0 = arg0->unk_334;
+        temp_f0 = arg0[2].colChkInfo.displacement.z;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x348), 9, 2, temp_f0 * 0.3f, temp_f0 * 0.2f);
         arg0->flags |= 0x400;
     }
@@ -886,7 +886,7 @@ void func_8087784C(EnDodongo *this, GlobalContext *globalCtx) {
                         temp_v1 = phi_v1 + 1;
                         temp_v0_2 = phi_v0 + 0x40;
                         temp_v0_2->unk_-10 = (s16) (s32) (this->unk_348[0].x + phi_f14);
-                        temp_f18_2 = (f32) phi_v0->unk_6C;
+                        temp_f18_2 = (f32) phi_v0[1].dim.modelSphere.center.z;
                         temp_v0_2->unk_-E = (s16) (s32) (this->unk_348[0].y + ((f32) phi_v0->dim.modelSphere.center.y * this->unk_334));
                         temp_v0_2->unk_-A = (s16) phi_v0->dim.modelSphere.radius;
                         temp_f14_2 = temp_f18_2 * temp_f2_2;
@@ -919,13 +919,13 @@ loop_10:
                     temp_v1_2 = phi_v1_3 + 4;
                     temp_v0_4 = phi_v0_3 + 0x100;
                     temp_v0_4->unk_-D0 = (s16) (s32) (this->unk_348[0].x + (temp_f0 * temp_f2_2));
-                    temp_f0_2 = (f32) phi_v0_3->unk_6C;
+                    temp_f0_2 = (f32) phi_v0_3[1].dim.modelSphere.center.z;
                     temp_v0_4->unk_-CE = (s16) (s32) (this->unk_348[0].y + ((f32) phi_v0_3->dim.modelSphere.center.y * this->unk_334));
                     temp_v0_4->unk_-CA = (s16) phi_v0_3->dim.modelSphere.radius;
                     temp_v0_4->unk_-CC = (s16) (s32) (this->unk_348[0].z + (temp_f0 * temp_f12));
                     temp_v0_4->unk_-90 = (s16) (s32) (this->unk_348[0].x + (temp_f0_2 * temp_f2_2));
                     temp_f0_3 = (f32) temp_v0_4->unk_-54;
-                    temp_v0_4->unk_-8E = (s16) (s32) (this->unk_348[0].y + ((f32) phi_v0_3->unk_6A * this->unk_334));
+                    temp_v0_4->unk_-8E = (s16) (s32) (this->unk_348[0].y + ((f32) phi_v0_3[1].dim.modelSphere.center.y * this->unk_334));
                     temp_v0_4->unk_-8A = (s16) temp_v0_4->unk_-92;
                     temp_v0_4->unk_-8C = (s16) (s32) (this->unk_348[0].z + (temp_f0_2 * temp_f12));
                     temp_v0_4->unk_-50 = (s16) (s32) (this->unk_348[0].x + (temp_f0_3 * temp_f2_2));
@@ -1177,7 +1177,7 @@ void func_80878424(EnDodongo *this, GlobalContext *globalCtx) {
 }
 
 void func_80878594(Actor *arg0) {
-    arg0->unk_2FC = func_808785B0;
+    arg0[2].gravity = func_808785B0;
     arg0->speedXZ = 0.0f;
 }
 
@@ -1339,8 +1339,8 @@ loop_2:
     if ((temp_v0_3 & 2) != 0) {
         arg0->unk_665 = (u8) (temp_a3 & 0xFFFD);
         arg0->unk_3C5 = (u8) (temp_v0_3 & 0xFFFD);
-        func_800BE2B8(arg0, arg0 + 0x3B4);
-        phi_v0_3 = arg0->unk_3D0;
+        func_800BE2B8(arg0, (ColliderJntSph *) &arg0[2].next);
+        phi_v0_3 = (void *) arg0[3].flags;
         phi_a2 = 0;
 loop_13:
         phi_a2_2 = phi_a2;
@@ -1488,7 +1488,7 @@ void func_80878EB4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     } else if (sp24 == &D_80879395) {
         SysMatrix_GetStateTranslationAndScaledX(1600.0f, arg4 + 0x320);
     }
-    if ((sp24 == &D_808793A6) && (func_80878424 == arg4->unk_2FC) && (arg4->unk_304 != arg4->unk_302)) {
+    if ((sp24 == &D_808793A6) && (func_80878424 == arg4[2].gravity) && (arg4->unk_304 != arg4->unk_302)) {
         sp24 = arg4 + 0x320;
         func_800A81F0(Effect_GetParams(arg4->unk_338), sp24, arg4 + 0x378);
         arg4->unk_304 = (s16) arg4->unk_302;

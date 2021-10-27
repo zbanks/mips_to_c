@@ -10,6 +10,13 @@ typedef struct ObjNozoki {
 } ObjNozoki;                                        /* size = 0x164 */
 
 typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ char pad_12[0x1];
+    /* 0x13 */ s8 unk_13;                           /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
+typedef struct {
     /* 0x00 */ Room currRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void *roomMemPages[2];
@@ -230,17 +237,17 @@ s32 func_80BA26A8(Actor *arg0) {
     s16 temp_a0;
     s8 temp_a2;
 
-    temp_a2 = arg0->unk_15F;
+    temp_a2 = arg0[1].home.unk_13;
     if ((s32) temp_a2 < 0) {
         return 1;
     }
     temp_a0 = (s16) temp_a2;
     arg0 = arg0;
     if (ActorCutscene_GetCanPlayNext(temp_a0) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->unk_15F, arg0);
+        ActorCutscene_StartAndSetUnkLinkFields((s16) arg0[1].home.unk_13, arg0);
         return 1;
     }
-    ActorCutscene_SetIntentToPlay((s16) arg0->unk_15F);
+    ActorCutscene_SetIntentToPlay((s16) arg0[1].home.unk_13);
     return 0;
 }
 

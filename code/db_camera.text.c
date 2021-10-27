@@ -579,15 +579,15 @@ s16 func_80161C20(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
         arg5->unk_24 = 0;
         arg5->unk_28 = 1;
         if (arg0 != 0) {
-            arg5->unk_C = (f32) arg0->x;
-            arg5->unk_10 = (f32) arg0->y;
-            arg5->unk_14 = (f32) arg0->z;
+            arg5[1].x = arg0->x;
+            arg5[1].y = arg0->y;
+            arg5[1].z = arg0->z;
         }
         if (arg1 != 0) {
-            arg5->unk_18 = (f32) *arg1;
+            arg5[2].x = *arg1;
         }
         if (arg2 != 0) {
-            arg5->unk_1C = (f32) *arg2;
+            arg5[2].y = (f32) *arg2;
         }
     }
     arg5->unk_24 = (s16) (arg5->unk_24 + 1);
@@ -599,19 +599,19 @@ s16 func_80161C20(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
     }
     temp_f0 = ((f32) arg5->unk_24 / (f32) arg3->unk_2) * (phi_f4 / 100.0f);
     if (arg0 != 0) {
-        temp_f2 = arg5->unk_C;
+        temp_f2 = arg5[1].x;
         arg0->x = temp_f2 + (((f32) arg3->unk_4 - temp_f2) * temp_f0);
-        temp_f12 = arg5->unk_10;
+        temp_f12 = arg5[1].y;
         arg0->y = temp_f12 + (((f32) arg3->unk_6 - temp_f12) * temp_f0);
-        temp_f14 = arg5->unk_14;
+        temp_f14 = arg5[1].z;
         arg0->z = temp_f14 + (((f32) arg3->unk_8 - temp_f14) * temp_f0);
     }
     if (arg1 != 0) {
-        temp_f2_2 = arg5->unk_18;
+        temp_f2_2 = arg5[2].x;
         *arg1 = temp_f2_2 + (((f32) arg4->unk_4 - temp_f2_2) * temp_f0);
     }
     if (arg2 != 0) {
-        temp_f16 = (s32) arg5->unk_1C;
+        temp_f16 = (s32) arg5[2].y;
         *arg2 = (s16) temp_f16 + (s32) ((f32) (s16) ((s16) (s32) (((f32) arg4->unk_2 * 182.04167f) + 0.5f) - (s16) temp_f16) * temp_f0);
     }
     phi_v0 = 0;
@@ -635,15 +635,15 @@ s16 func_80161E4C(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
         arg5->unk_24 = 0;
         arg5->unk_28 = 1;
         if (arg0 != 0) {
-            arg5->unk_C = (f32) arg0->x;
-            arg5->unk_10 = (f32) arg0->y;
-            arg5->unk_14 = (f32) arg0->z;
+            arg5[1].x = arg0->x;
+            arg5[1].y = arg0->y;
+            arg5[1].z = arg0->z;
         }
         if (arg1 != 0) {
-            arg5->unk_18 = (f32) *arg1;
+            arg5[2].x = *arg1;
         }
         if (arg2 != 0) {
-            arg5->unk_1C = (f32) *arg2;
+            arg5[2].y = (f32) *arg2;
         }
     }
     temp_v0 = arg3->unk_1;
@@ -656,15 +656,15 @@ s16 func_80161E4C(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
     }
     arg5->unk_24 = (s16) (arg5->unk_24 + 1);
     if (arg0 != 0) {
-        arg0->x += ((f32) arg3->unk_4 - arg5->unk_C) * phi_f2;
-        arg0->y += ((f32) arg3->unk_6 - arg5->unk_10) * phi_f2;
-        arg0->z += ((f32) arg3->unk_8 - arg5->unk_14) * phi_f2;
+        arg0->x += ((f32) arg3->unk_4 - arg5[1].x) * phi_f2;
+        arg0->y += ((f32) arg3->unk_6 - arg5[1].y) * phi_f2;
+        arg0->z += ((f32) arg3->unk_8 - arg5[1].z) * phi_f2;
     }
     if (arg1 != 0) {
-        *arg1 += ((f32) arg4->unk_4 - arg5->unk_18) * phi_f2;
+        *arg1 += ((f32) arg4->unk_4 - arg5[2].x) * phi_f2;
     }
     if (arg2 != 0) {
-        *arg2 += (s32) ((f32) (s16) ((s16) (s32) (((f32) arg4->unk_2 * 182.04167f) + 0.5f) - (s32) arg5->unk_1C) * phi_f2);
+        *arg2 += (s32) ((f32) (s16) ((s16) (s32) (((f32) arg4->unk_2 * 182.04167f) + 0.5f) - (s32) arg5[2].y) * phi_f2);
     }
     phi_v0 = 0;
     if ((s32) arg5->unk_24 >= (s32) arg3->unk_2) {
@@ -692,13 +692,13 @@ s16 func_801620CC(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
         arg5->unk_28 = 1;
         if (arg0 != 0) {
             sp2C = OLib_Vec3fDist(arg5, arg0);
-            arg5->unk_20 = (f32) (func_80086760(*arg1 * 0.017453292f) * sp2C);
+            arg5[2].z = func_80086760(*arg1 * 0.017453292f) * sp2C;
         }
         if (arg1 != 0) {
-            arg5->unk_18 = (f32) *arg1;
+            arg5[2].x = *arg1;
         }
         if (arg2 != 0) {
-            arg5->unk_1C = (f32) *arg2;
+            arg5[2].y = (f32) *arg2;
         }
     }
     temp_a0 = arg3->unk_1;
@@ -714,14 +714,14 @@ s16 func_801620CC(Vec3f *arg0, f32 *arg1, s16 *arg2, void *arg3, void *arg4, Vec
         sp3C = phi_f14;
         OLib_Vec3fDiffToVecSphGeo((VecSph *) &sp40, arg5, arg0);
         temp_a2 = &sp40;
-        sp40 = arg5->unk_20 / func_80086760(*arg1 * 0.017453292f);
+        sp40 = arg5[2].z / func_80086760(*arg1 * 0.017453292f);
         OLib_VecSphAddToVec3f(arg0, arg5, (VecSph *) temp_a2);
     }
     if (arg1 != 0) {
-        *arg1 += ((f32) arg4->unk_4 - arg5->unk_18) * phi_f14;
+        *arg1 += ((f32) arg4->unk_4 - arg5[2].x) * phi_f14;
     }
     if (arg2 != 0) {
-        *arg2 += (s32) ((f32) (s16) ((s16) (s32) (((f32) arg4->unk_2 * 182.04167f) + 0.5f) - (s32) arg5->unk_1C) * phi_f14);
+        *arg2 += (s32) ((f32) (s16) ((s16) (s32) (((f32) arg4->unk_2 * 182.04167f) + 0.5f) - (s32) arg5[2].y) * phi_f14);
     }
     phi_v0 = 0;
     if ((s32) arg5->unk_24 >= (s32) arg3->unk_2) {

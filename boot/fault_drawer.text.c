@@ -1261,16 +1261,16 @@ s32 FaultDrawer_ColorToPrintColor(u16 color) {
         return 1;
     }
 loop_4:
-    if (temp_a0 == phi_a0->unk_20) {
+    if (temp_a0 == phi_a0[16]) {
         return phi_v1;
     }
-    if (temp_a0 == phi_a0->unk_22) {
+    if (temp_a0 == phi_a0[17]) {
         return phi_v1 + 1;
     }
-    if (temp_a0 == phi_a0->unk_24) {
+    if (temp_a0 == phi_a0[18]) {
         return phi_v1 + 2;
     }
-    if (temp_a0 == phi_a0->unk_26) {
+    if (temp_a0 == phi_a0[19]) {
         return phi_v1 + 3;
     }
     temp_v1 = phi_v1 + 4;

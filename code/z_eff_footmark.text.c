@@ -34,30 +34,30 @@ void EffFootmark_Init(GlobalContext *globalCtx) {
     phi_v1 = 0;
     do {
         temp_v1 = phi_v1 + 4;
-        phi_v0->unk_A0 = 0;
-        phi_v0->unk_A4 = 0.0f;
-        phi_v0->unk_A8 = 0.0f;
-        phi_v0->unk_AC = 0.0f;
-        phi_v0->unk_B0 = 0;
-        phi_v0->unk_B1 = 0;
-        phi_v0->unk_B6 = 0;
-        phi_v0->unk_B8 = 0;
-        phi_v0->unk_100 = 0;
-        phi_v0->unk_104 = 0.0f;
-        phi_v0->unk_108 = 0.0f;
-        phi_v0->unk_10C = 0.0f;
-        phi_v0->unk_110 = 0;
-        phi_v0->unk_111 = 0;
-        phi_v0->unk_116 = 0;
-        phi_v0->unk_118 = 0;
-        phi_v0->unk_160 = 0;
-        phi_v0->unk_164 = 0.0f;
-        phi_v0->unk_168 = 0.0f;
-        phi_v0->unk_16C = 0.0f;
-        phi_v0->unk_170 = 0;
-        phi_v0->unk_171 = 0;
-        phi_v0->unk_176 = 0;
-        phi_v0->unk_178 = 0;
+        phi_v0[1].actor = NULL;
+        phi_v0[1].location.x = 0.0f;
+        phi_v0[1].location.y = 0.0f;
+        phi_v0[1].location.z = 0.0f;
+        phi_v0[1].flags = 0;
+        phi_v0[1].id = 0;
+        phi_v0[1].alpha = 0;
+        phi_v0[1].alphaChange = 0;
+        phi_v0[2].actor = NULL;
+        phi_v0[2].location.x = 0.0f;
+        phi_v0[2].location.y = 0.0f;
+        phi_v0[2].location.z = 0.0f;
+        phi_v0[2].flags = 0;
+        phi_v0[2].id = 0;
+        phi_v0[2].alpha = 0;
+        phi_v0[2].alphaChange = 0;
+        phi_v0[3].actor = NULL;
+        phi_v0[3].location.x = 0.0f;
+        phi_v0[3].location.y = 0.0f;
+        phi_v0[3].location.z = 0.0f;
+        phi_v0[3].flags = 0;
+        phi_v0[3].id = 0;
+        phi_v0[3].alpha = 0;
+        phi_v0[3].alphaChange = 0;
         temp_v0 = phi_v0 + 0x180;
         temp_v0->unk_-140 = 0;
         temp_v0->unk_-13C = 0.0f;
@@ -129,12 +129,12 @@ block_8:
         }
         id = temp_a3;
         Matrix_MtxFCopy(phi_s0_3, displayMatrix);
-        phi_s0_3->unk_40 = actor;
-        phi_s0_3->unk_44 = (f32) location->x;
-        phi_s0_3->unk_48 = (f32) location->y;
+        phi_s0_3[1].mf[0][0] = (bitwise f32) actor;
+        phi_s0_3[1].mf[0][1] = location->x;
+        phi_s0_3[1].mf[0][2] = location->y;
         phi_s0_3->unk_50 = 0;
         phi_s0_3->unk_51 = id;
-        phi_s0_3->unk_4C = (f32) location->z;
+        phi_s0_3[1].mf[0][3] = location->z;
         phi_s0_3->unk_52 = red;
         phi_s0_3->unk_54 = green;
         phi_s0_3->unk_53 = blue;
@@ -184,7 +184,7 @@ void EffFootmark_Update(GlobalContext *globalCtx) {
             }
         }
         temp_v0 = phi_v0 + 0x60;
-        if ((phi_v0->unk_A0 != 0) && ((temp_v0->unk_50 & 1) == 1)) {
+        if ((phi_v0[1].actor != 0) && ((temp_v0->unk_50 & 1) == 1)) {
             temp_a0_4 = temp_v0->unk_5E;
             if ((u32) temp_a0_4 < 0xFFFFU) {
                 temp_v0->unk_5E = (u16) (temp_a0_4 + 1);
@@ -225,13 +225,13 @@ void EffFootmark_Draw(GlobalContext *globalCtx) {
     temp_s2 = temp_a0;
     func_8012C448(temp_a0);
     temp_v0 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0 + 8;
+    temp_s2->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) D_801BC240;
     temp_v0->words.w0 = 0xDE000000;
     phi_s0 = (MtxF *) globalCtx->footprintInfo;
     phi_s3 = 0;
     do {
-        if (phi_s0->unk_40 != 0) {
+        if (phi_s0[1].mf[0][0] != 0) {
             SysMatrix_SetCurrentState(phi_s0);
             temp_t0 = phi_s0->unk_5A;
             temp_f6 = (f32) temp_t0;
@@ -242,20 +242,20 @@ void EffFootmark_Draw(GlobalContext *globalCtx) {
             temp_f0 = phi_f6 * 0.00390625f;
             Matrix_Scale(temp_f0 * 0.7f, 1.0f, temp_f0, 1);
             temp_v0_2 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_2 + 8;
+            temp_s2->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDA380003;
             temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_3 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_3 + 8;
+            temp_s2->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xFA000000;
             temp_v0_3->words.w1 = (phi_s0->unk_52 << 0x18) | (phi_s0->unk_54 << 0x10) | (phi_s0->unk_53 << 8) | (((s32) phi_s0->unk_56 >> 8) & 0xFF);
             temp_v0_4 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_4 + 8;
+            temp_s2->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = (u32) D_801BC288;
             temp_v0_4->words.w0 = 0xDE000000;
         }
         temp_s3 = phi_s3 + 1;
-        phi_s0 += 0x60;
+        phi_s0 = (MtxF *) phi_s0[1].mf[2];
         phi_s3 = temp_s3;
     } while (temp_s3 != 0x64);
 }

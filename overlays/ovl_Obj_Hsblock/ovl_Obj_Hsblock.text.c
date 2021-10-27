@@ -164,18 +164,18 @@ void ObjHsblock_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp20 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp20->polyOpa.p;
-    sp20->polyOpa.p = temp_v0 + 8;
+    sp20->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_a3;
     sp20 = sp20;
     sp18 = temp_v0;
     sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp20->polyOpa.p;
-    sp20->polyOpa.p = temp_v0_2 + 8;
+    sp20->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_2->words.w1 = (temp_a3->unk_0 << 0x18) | (temp_a3->unk_1 << 0x10) | (temp_a3->unk_2 << 8) | 0xFF;
     temp_v0_3 = sp20->polyOpa.p;
-    sp20->polyOpa.p = temp_v0_3 + 8;
+    sp20->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = *(&D_8093E358 + ((this->actor.params & 3) * 4));
 }

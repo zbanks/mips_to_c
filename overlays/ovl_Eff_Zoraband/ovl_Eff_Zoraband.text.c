@@ -96,43 +96,43 @@ void EffZoraband_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY((s16) (func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 1U);
         AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06000F38));
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp24 = temp_v0;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         if (this->actor.home.rot.z != 0) {
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xFA000080;
             temp_v0_2->words.w1 = (this->unk_144 & 0xFF) | 0xFFFF6400;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0xFFC800FF;
             temp_v0_3->words.w0 = 0xFB000000;
         } else {
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFA000080;
             temp_v0_4->words.w1 = (this->unk_144 & 0xFF) | 0x64FF00;
             temp_v0_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_5 + 8;
+            temp_s0->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w1 = 0x64FF;
             temp_v0_5->words.w0 = 0xFB000000;
         }
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = (u32) &D_06000180;
         temp_v0_6->words.w0 = 0xDE000000;
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xFA0000FF;
         temp_v0_7->words.w1 = (this->unk_144 & 0xFF) | 0xC8FFFF00;
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x64FFFF;
         temp_v0_8->words.w0 = 0xFB000000;
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = (u32) &D_060002A8;
         temp_v0_9->words.w0 = 0xDE000000;
     }

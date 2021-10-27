@@ -445,7 +445,7 @@ s32 func_80A94B98(EnAz *arg0, GlobalContext *arg1) {
     phi_s0 = NULL;
 loop_1:
     temp_v0 = func_ActorCategoryIterateById(arg1, phi_s0, 8, 0x1A5);
-    if ((temp_v0 != 0) && ((temp_v0->params & 0xF) == 1) && ((temp_v0->unk_16C & 1) == 0)) {
+    if ((temp_v0 != 0) && ((temp_v0->params & 0xF) == 1) && (((bitwise s32) temp_v0[1].world.pos.y & 1) == 0)) {
         sp28 = 1;
     } else {
         temp_s0 = temp_v0->next;
@@ -754,14 +754,14 @@ s32 func_80A95534(GlobalContext *arg0, EnDno_ActorUnkStruct *arg1) {
     Math_SmoothStepToS(temp_s0 + 0x32, arg1->unk_56, 1, 0xE38, (s16) 0);
     Math_SmoothStepToS(temp_s0 + 0xBE, temp_s0->world.rot.y, 2, 0x71C, (s16) 0);
     temp_s0->gravity = -1.0f;
-    temp_s0->unk_36C = 1.5f;
+    temp_s0[2].shape.feetPos[1].y = 1.5f;
     if (arg1->unk_18 == arg1->unk_10) {
         temp_f0 = arg1->unk_4C;
-        if (temp_f0 < temp_s0->unk_36C) {
-            temp_s0->unk_36C = temp_f0;
+        if (temp_f0 < temp_s0[2].shape.feetPos[1].y) {
+            temp_s0[2].shape.feetPos[1].y = temp_f0;
         }
     }
-    Math_SmoothStepToF(temp_s0 + 0x70, temp_s0->unk_36C, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(temp_s0 + 0x70, temp_s0[2].shape.feetPos[1].y, 0.8f, 2.0f, 0.0f);
     arg1->unk_64 = func_8013E054;
     if (arg1->unk_4C <= temp_s0->speedXZ) {
         sp28 = 1;
@@ -786,7 +786,7 @@ s32 func_80A9565C(GlobalContext *arg0, EnDno_ActorUnkStruct *arg1) {
     } else {
         temp_v0 = Math_Atan2S(-temp_s0->velocity.y, Math_CosS((s16) ((s32) temp_s0->world.rot.x * -1)) * temp_s0->speedXZ);
         temp_s0->world.rot.x = temp_v0;
-        temp_s0->unk_39E = temp_v0;
+        temp_s0[2].textId = temp_v0;
     }
     return sp20;
 }
@@ -881,7 +881,7 @@ s32 func_80A958B0(GlobalContext *arg0, EnDno_ActorUnkStruct *arg1) {
     } else {
         Math_SmoothStepToF(temp_s0 + 0x36C, 26.0f, 0.5f, 1.0f, 0.01f);
     }
-    Math_SmoothStepToF(temp_s0 + 0x70, temp_s0->unk_36C, 0.8f, 2.0f, 0.0f);
+    Math_SmoothStepToF(temp_s0 + 0x70, temp_s0[2].shape.feetPos[1].y, 0.8f, 2.0f, 0.0f);
     temp_f2 = temp_s0->speedXZ;
     temp_f12 = temp_f2 * temp_f2;
     if ((arg1->unk_4C < temp_f12) || ((bitwise f32) func_80A954AC(temp_s0) <= 0.0f)) {
@@ -993,10 +993,10 @@ void func_80A95DA0(Actor *arg0, GlobalContext *arg1) {
     sp40 = temp_a3;
     sp3C = temp_a1;
     func_8013DCE0(arg1, temp_a1, arg0, temp_a3, arg1->setupPathList, arg0->params & 0xFF, 0, 0, 1, 1);
-    arg0->unk_36C = 4.0f;
+    arg0[2].shape.feetPos[1].y = 4.0f;
     arg0->speedXZ = 4.0f;
     arg0->gravity = 0.0f;
-    func_8013E1C8(arg0 + 0x148, (struct_80B8E1A8 []) D_80A99010, 2, arg0 + 0x2FC);
+    func_8013E1C8((SkelAnime *) &arg0[1].flags, (struct_80B8E1A8 []) D_80A99010, 2, (s32 *) &arg0[2].gravity);
     arg0->flags |= 9;
     arg0->bgCheckFlags &= 0xFFDE;
     arg0->unk_374 = (u16) (arg0->unk_374 | 0x1000);
@@ -1267,7 +1267,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             func_8019F230();
                             arg0->actor.textId = 0x10E6;
                             func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 9, &arg0->unk_2FC);
-                            func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0xD, sp30 + 0x2FC);
+                            func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0xD, (s32 *) &sp30[2].gravity);
                         }
                         break;
                     case 4326:                      /* switch 2 */
@@ -1279,13 +1279,13 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                         gSaveContext.weekEventReg[24] &= 0xFB;
                         func_80A94AB8(arg0, arg1, 0);
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         func_80A979DC(arg0, arg1);
                         phi_t1 = 0;
                         break;
                     case 4328:                      /* switch 2 */
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         arg0->unk_2FA = 3;
                         phi_t1 = 0;
                         break;
@@ -1322,7 +1322,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             func_8019F230();
                             arg0->actor.textId = 0x10EC;
                             func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 7, &arg0->unk_2FC);
-                            func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0xD, sp30 + 0x2FC);
+                            func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0xD, (s32 *) &sp30[2].gravity);
                         }
                         break;
                     case 4332:                      /* switch 2 */
@@ -1359,14 +1359,14 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             gSaveContext.weekEventReg[23] |= 0x80;
                         }
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         phi_t1 = 7;
                         break;
                     case 4338:                      /* switch 2 */
                     case 4361:                      /* switch 2 */
                         gSaveContext.weekEventReg[24] &= 0xFB;
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         func_80A94AB8(arg0, arg1, 0);
                         func_80A979DC(arg0, arg1);
                         phi_t1 = 0;
@@ -1408,19 +1408,19 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             func_8019F230();
                             arg0->actor.textId = 0x10F9;
                             func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0xB, &arg0->unk_2FC);
-                            func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0xB, sp30 + 0x2FC);
+                            func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0xB, (s32 *) &sp30[2].gravity);
                         }
                         break;
                     case 4345:                      /* switch 2 */
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         arg0->unk_374 |= 0x20;
                         phi_t1 = 0;
                         break;
                     case 4346:                      /* switch 2 */
                     case 4359:                      /* switch 2 */
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         arg0->unk_2FA = 6;
                         phi_t1 = 0;
                         break;
@@ -1436,7 +1436,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                         arg0->actor.textId = 0x10FE;
                         sp34 = 3;
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 4, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         break;
                     case 4350:                      /* switch 2 */
                         if (arg1->msgCtx.choiceIndex == 0) {
@@ -1454,7 +1454,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             func_8019F230();
                             arg0->actor.textId = 0x10FF;
                             func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 9, &arg0->unk_2FC);
-                            func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0xD, sp30 + 0x2FC);
+                            func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0xD, (s32 *) &sp30[2].gravity);
                         }
                         break;
                     case 4351:                      /* switch 2 */
@@ -1464,7 +1464,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                     case 4352:                      /* switch 2 */
                         gSaveContext.weekEventReg[24] &= 0xFB;
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         func_80A94AB8(arg0, arg1, 0);
                         func_80A979DC(arg0, arg1);
                         phi_t1 = 0;
@@ -1472,7 +1472,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                     case 4353:                      /* switch 2 */
                     case 4360:                      /* switch 2 */
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         arg0->unk_2FA = 8;
                         phi_t1 = 0;
                         break;
@@ -1496,13 +1496,13 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                             gSaveContext.weekEventReg[25] |= 1;
                         }
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         phi_t1 = 7;
                         break;
                     case 4358:                      /* switch 2 */
                         gSaveContext.weekEventReg[24] &= 0xFB;
                         func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
-                        func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0, sp30 + 0x2FC);
+                        func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0, (s32 *) &sp30[2].gravity);
                         func_80A94AB8(arg0, arg1, 0);
                         func_80A979DC(arg0, arg1);
                         phi_t1 = 0;
@@ -1513,7 +1513,7 @@ s32 func_80A9617C(EnAz *arg0, GlobalContext *arg1) {
                     arg0->actor.textId = 0x10F2;
                     sp34 = 3;
                     func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0xB, &arg0->unk_2FC);
-                    func_8013E1C8(sp30 + 0x148, (struct_80B8E1A8 []) D_80A99010, 0xB, sp30 + 0x2FC);
+                    func_8013E1C8((SkelAnime *) &sp30[1].flags, (struct_80B8E1A8 []) D_80A99010, 0xB, (s32 *) &sp30[2].gravity);
                 } else {
                 default:                            /* switch 2 */
                     func_8013E1C8(&arg0->unk_148, (struct_80B8E1A8 []) D_80A99010, 0, &arg0->unk_2FC);
@@ -1811,7 +1811,7 @@ block_33:
                 Math_SmoothStepToS(temp_a0, 0, 2, 0x71C, (s16) 0);
             }
             Math_Vec3f_Copy((Vec3f *) &sp38, (Vec3f *) &sp44->world);
-            sp3C = sp44->unk_C44 + 3.0f;
+            sp3C = sp44[9].shape.feetPos[1].x + 3.0f;
             temp_v0_7 = Math_Vec3f_Pitch((Vec3f *) &arg0->actor.focus, (Vec3f *) &sp38);
             if (temp_v0_7 >= 0) {
                 phi_v1_4 = (s32) (s16) temp_v0_7;
@@ -2002,11 +2002,11 @@ void func_80A97EAC(Actor *arg0, GlobalContext *arg1) {
     u32 temp_t2;
 
     func_8013DCE0(arg1, arg0 + 0x24, arg0, arg0 + 0x300, arg1->setupPathList, arg0->params & 0xFF, 0, 0, 1, 0);
-    arg0->unk_36C = 8.0f;
+    arg0[2].shape.feetPos[1].y = 8.0f;
     arg0->speedXZ = 8.0f;
     arg0->gravity = 0.0f;
     arg0->velocity.y = 6.0f;
-    func_8013E1C8(arg0 + 0x148, (struct_80B8E1A8 []) D_80A99010, 2, arg0 + 0x2FC);
+    func_8013E1C8((SkelAnime *) &arg0[1].flags, (struct_80B8E1A8 []) D_80A99010, 2, (s32 *) &arg0[2].gravity);
     temp_t2 = arg0->flags | 0x8000000;
     arg0->flags = temp_t2;
     arg0->flags = temp_t2 & ~9;
@@ -2230,11 +2230,11 @@ void EnAz_Draw(Actor *thisx, GlobalContext *globalCtx) {
     } else {
         temp_s0_2 = globalCtx->state.gfxCtx;
         temp_v0 = temp_s0_2->polyOpa.p;
-        temp_s0_2->polyOpa.p = temp_v0 + 8;
+        temp_s0_2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         temp_v0->words.w1 = Lib_SegmentedToVirtual(*(&D_80A993F4 + (this->unk_37E * 4)));
         temp_v0_2 = temp_s0_2->polyOpa.p;
-        temp_s0_2->polyOpa.p = temp_v0_2 + 8;
+        temp_s0_2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060024;
         temp_v0_2->words.w1 = Lib_SegmentedToVirtual(*(&D_80A99404 + (this->unk_380 * 4)));
         SkelAnime_DrawSV(globalCtx, this->unk_148.skeleton, this->unk_148.limbDrawTbl, (s32) this->unk_148.dListCount, func_80A98DA4, func_80A98E48, (Actor *) this);
@@ -2265,21 +2265,21 @@ void EnAz_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 Matrix_Scale(sp98, sp9C, spA0, 1);
                 if ((this->unk_374 & 0x800) != 0) {
                     temp_v0_3 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_3 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_3[1];
                     temp_v0_3->words.w0 = 0xDB060024;
                     temp_v0_3->words.w1 = Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 0xFF, 0xFF, 0xFF, (s32) *(phi_s1 + &D_80A99194));
                 } else {
                     temp_v0_4 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_4 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_4[1];
                     temp_v0_4->words.w0 = 0xDB060024;
                     temp_v0_4->words.w1 = Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 0xFF, 0xFF, 0xFF, (s32) *(phi_s1 + &D_80A9919C));
                 }
                 temp_v0_5 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_5 + 8;
+                temp_s2->polyXlu.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0xDA380003;
                 temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_6 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_6 + 8;
+                temp_s2->polyXlu.p = &temp_v0_6[1];
                 temp_v0_6->words.w0 = 0xDE000000;
                 temp_v0_6->words.w1 = *phi_s6;
                 SysMatrix_StatePop();
@@ -2299,21 +2299,21 @@ void EnAz_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_Scale(temp_v0_7->unk_0, temp_v0_7->unk_4, 0.0f, 1);
         if ((this->unk_374 & 0x800) != 0) {
             temp_v0_8 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_8 + 8;
+            temp_s2->polyXlu.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xDB060020;
             temp_v0_8->words.w1 = Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 0xFF, 0xFF, 0xFF, 0xFF);
         } else {
             temp_v0_9 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_9 + 8;
+            temp_s2->polyXlu.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xDB060020;
             temp_v0_9->words.w1 = Gfx_PrimColor(globalCtx->state.gfxCtx, 0x80, 0xFF, 0xFF, 0xFF, 0x55);
         }
         temp_v0_10 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_10 + 8;
+        temp_s2->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w0 = 0xDA380003;
         temp_v0_10->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_11 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_11 + 8;
+        temp_s2->polyXlu.p = &temp_v0_11[1];
         temp_v0_11->words.w0 = 0xDE000000;
         temp_v0_11->words.w1 = (u32) &D_0601ABF0;
         SysMatrix_StatePop();
@@ -2322,11 +2322,11 @@ void EnAz_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0_12 = &D_80A993D0 + (this->unk_384 * 0xC);
         Matrix_Scale(temp_v0_12->unk_0, temp_v0_12->unk_4, 0.0f, 1);
         temp_v0_13 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_13 + 8;
+        temp_s2->polyXlu.p = &temp_v0_13[1];
         temp_v0_13->words.w0 = 0xDA380003;
         temp_v0_13->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_14 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_14 + 8;
+        temp_s2->polyXlu.p = &temp_v0_14[1];
         temp_v0_14->words.w0 = 0xDE000000;
         temp_v0_14->words.w1 = (u32) &D_0601AD00;
         /* Duplicate return node #16. Try simplifying control flow for better match */
@@ -2343,7 +2343,7 @@ s32 func_80A98DA4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
         rot->z = rot->z;
     }
     if (limbIndex == 3) {
-        rot->y -= actor->unk_39E;
+        rot->y -= (s16) actor[2].textId;
     }
     if (limbIndex == 5) {
         rot->x += actor->unk_3D4;
@@ -2354,13 +2354,13 @@ s32 func_80A98DA4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 
 void func_80A98E48(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor) {
     if (limbIndex == 3) {
-        SysMatrix_MultiplyVector3fByState(&D_80A99410, actor + 0x3A8);
-        Math_SmoothStepToF(actor + 0x3A4, actor->unk_3AC - actor->world.pos.y, 0.8f, 10.0f, 0.01f);
+        SysMatrix_MultiplyVector3fByState(&D_80A99410, (Vec3f *) &actor[2].parent);
+        Math_SmoothStepToF((f32 *) &actor[2].colorFilterTimer, (bitwise f32) actor[2].child - actor->world.pos.y, 0.8f, 10.0f, 0.01f);
         if ((actor->unk_374 & 2) != 0) {
-            SysMatrix_MultiplyVector3fByState(&D_80A9941C, actor + 0x3B4);
+            SysMatrix_MultiplyVector3fByState(&D_80A9941C, (Vec3f *) &actor[2].next);
             return;
         }
-        SysMatrix_MultiplyVector3fByState(&D_80A99428, actor + 0x3B4);
+        SysMatrix_MultiplyVector3fByState(&D_80A99428, (Vec3f *) &actor[2].next);
         /* Duplicate return node #4. Try simplifying control flow for better match */
     }
 }
@@ -2368,16 +2368,16 @@ void func_80A98E48(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
 void func_80A98EFC(Actor *arg0, GlobalContext *arg1, u16 arg2, s32 arg3, s32 arg4) {
     Actor *temp_s0;
 
-    temp_s0 = arg0->unk_388;
+    temp_s0 = arg0[2].uncullZoneScale;
     func_800B86C8(arg0, arg1, temp_s0);
     if (arg3 >= 0) {
-        func_8013E1C8(arg0 + 0x148, (struct_80B8E1A8 []) D_80A99010, arg3, arg0 + 0x2FC);
+        func_8013E1C8((SkelAnime *) &arg0[1].flags, (struct_80B8E1A8 []) D_80A99010, arg3, (s32 *) &arg0[2].gravity);
     }
     arg0->textId = 0;
     temp_s0->unk_378 = 5;
     temp_s0->textId = arg2;
-    if ((arg4 >= 0) && (arg4 != temp_s0->unk_2FC)) {
-        func_8013E1C8(temp_s0 + 0x148, (struct_80B8E1A8 []) D_80A99010, arg4, temp_s0 + 0x2FC);
+    if ((arg4 >= 0) && (arg4 != (bitwise s32) temp_s0[2].gravity)) {
+        func_8013E1C8((SkelAnime *) &temp_s0[1].flags, (struct_80B8E1A8 []) D_80A99010, arg4, (s32 *) &temp_s0[2].gravity);
     }
     arg0->unk_378 = 0;
 }

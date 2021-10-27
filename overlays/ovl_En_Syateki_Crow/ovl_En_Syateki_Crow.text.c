@@ -193,7 +193,7 @@ void func_809CA5D4(Actor *arg0) {
     arg0->unk_BC = (unaligned s32) arg0->unk_30;
     arg0->unk_1CC = 1;
     arg0->draw = NULL;
-    arg0->unk_1B8 = func_809CA67C;
+    arg0[1].gravity = (bitwise f32) func_809CA67C;
     arg0->prevPos.z = temp_v0->pos.z;
     arg0->shape.rot.z = (s16) (u16) arg0->world.rot.z;
 }
@@ -331,7 +331,7 @@ void func_809CAAF8(Actor *arg0) {
     arg0->bgCheckFlags &= 0xFFFE;
     Audio_PlayActorSound2(arg0, 0x38EBU);
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x28);
-    arg0->unk_1B8 = func_809CABC0;
+    arg0[1].gravity = (bitwise f32) func_809CABC0;
 }
 
 void func_809CABC0(EnSyatekiCrow *arg0, GlobalContext *arg1) {
@@ -358,7 +358,7 @@ void func_809CABC0(EnSyatekiCrow *arg0, GlobalContext *arg1) {
 }
 
 void func_809CACD0(Actor *arg0, GlobalContext *arg1) {
-    if (func_809CA8E4 == arg0->unk_1B8) {
+    if (func_809CA8E4 == arg0[1].gravity) {
         if ((arg0->unk_24D & 2) != 0) {
             arg1 = arg1;
             play_sound(0x4807U);
@@ -371,7 +371,7 @@ void func_809CACD0(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_258->unk_30 = (s16) (s32) arg0->world.pos.x;
         arg0->unk_258->unk_32 = (s16) (s32) ((f32) D_809CB0AC->unk_1C + arg0->world.pos.y);
         arg0->unk_258->unk_34 = (s16) (s32) arg0->world.pos.z;
-        CollisionCheck_SetAC(arg1, arg1 + 0x18884, arg0 + 0x23C);
+        CollisionCheck_SetAC(arg1, arg1 + 0x18884, (Collider *) &arg0[1].projectedW);
         /* Duplicate return node #4. Try simplifying control flow for better match */
     }
 }
@@ -402,7 +402,7 @@ void func_809CAF2C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
 
     if (arg1 == 2) {
         SysMatrix_MultiplyVector3fByState(&D_809CB0D8, arg4 + 0x144);
-        arg4->unk_148 = (f32) (arg4->unk_148 - 20.0f);
+        arg4[1].flags -= 20.0f;
         return;
     }
     if ((arg1 == 4) || (arg1 == 6) || (arg1 == 8)) {

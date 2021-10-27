@@ -438,8 +438,8 @@ void BgHakuginBombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     s32 temp_v0;
 
     if ((arg0->unk_16D & 2) != 0) {
-        if ((*arg0->unk_198 & 8) != 0) {
-            temp_v0 = arg0->unk_164;
+        if ((*arg0[1].actor.focus.pos.x & 8) != 0) {
+            temp_v0 = arg0[1].actor.home.pos.x;
             temp_a0 = arg0 + 0x24;
             if ((temp_v0 != 0) && (sp20 = temp_a0, (Math3D_DistanceSquared(temp_a0, temp_v0 + 0x24) < *(&D_80ABCFDC + ((((s32) arg0->actor.params >> 8) & 1) * 0x30))))) {
                 Audio_PlaySoundAtPosition(arg1, sp20, 0x32, 0x2810U);

@@ -165,23 +165,23 @@ void func_80AC8ECC(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     Matrix_Scale(sp70, sp70, sp70, 1);
     Matrix_Scale(0.05f, 0.05f, 0.05f, 1);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp60 = temp_v0;
     sp60->words.w1 = Matrix_NewMtx(temp_s1);
     func_8012C2DC(temp_s1);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xE200001C;
     temp_v0_2->words.w1 = 0xC8104E50;
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFA000080;
     temp_v0_3->words.w1 = (this->regs[3] & 0xFF) | ~0xFF;
     temp_v0_4 = this->regs[2];
     if ((s32) temp_v0_4 < 0xC) {
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDB060020;
         sp50 = temp_v0_5;
         sp50->words.w1 = Lib_SegmentedToVirtual(*(&D_80AC93B8 + (temp_v0_4 * 4)));
@@ -189,7 +189,7 @@ void func_80AC8ECC(GlobalContext *globalCtx, u32 index, EffectSs *this) {
         this->regs[1] += this->regs[0];
     } else {
         temp_v0_6 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_6 + 8;
+        temp_s1->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDB060020;
         sp4C = temp_v0_6;
         sp4C->words.w1 = Lib_SegmentedToVirtual((void *) &D_04073F00);
@@ -200,12 +200,12 @@ void func_80AC8ECC(GlobalContext *globalCtx, u32 index, EffectSs *this) {
         this->regs[1] += this->regs[0];
     }
     temp_v0_8 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_8 + 8;
+    temp_s1->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDB060024;
     sp48 = temp_v0_8;
     sp48->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, (u32) this->regs[1], 0x20, 0x20);
     temp_v0_9 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_9 + 8;
+    temp_s1->polyXlu.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = (u32) &D_04071230;
     temp_v0_9->words.w0 = 0xDE000000;
 }
@@ -232,35 +232,35 @@ void func_80AC9164(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     Matrix_Scale(sp50, sp50, sp50, 1);
     Matrix_Scale(0.05f, 0.05f, 0.05f, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp44 = temp_v0;
     sp44->words.w1 = Matrix_NewMtx(temp_s0);
     func_8012C2DC(temp_s0);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xE200001C;
     temp_v0_2->words.w1 = 0xC8104E50;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFA000080;
     temp_v0_3->words.w1 = (this->regs[3] & 0xFF) | ~0xFF;
     temp_v0_4 = this->regs[2];
     if ((s32) temp_v0_4 < 5) {
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDB060020;
         sp34 = temp_v0_5;
         sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80AC93E8 + (temp_v0_4 * 4)));
         this->regs[2] += 1;
     } else {
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDB060020;
         temp_v0_6->words.w1 = Lib_SegmentedToVirtual((void *) &D_04075400);
     }
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDE000000;
     temp_v0_7->words.w1 = (u32) &D_04074330;
 }

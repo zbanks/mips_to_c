@@ -141,26 +141,26 @@ void Effect_Init(GlobalContext *globalCtx) {
     phi_s0 = (EffCommon *) sEffTable.sparks;
     do {
         Effect_InitCommon(phi_s0);
-        temp_s0 = phi_s0 + 0x4C8;
+        temp_s0 = &phi_s0[306];
         phi_s0 = temp_s0;
     } while ((u32) temp_s0 < (u32) temp_s1);
     temp_s1_2 = sEffTable.shieldParticles;
     phi_s0_2 = (EffCommon *) sEffTable.blures;
     do {
         Effect_InitCommon(phi_s0_2);
-        temp_s0_2 = phi_s0_2 + 0x1B0;
+        temp_s0_2 = &phi_s0_2[108];
         phi_s0_2 = temp_s0_2;
     } while ((u32) temp_s0_2 < (u32) temp_s1_2);
     phi_s0_3 = (EffCommon *) sEffTable.blures;
     do {
         Effect_InitCommon(phi_s0_3);
-        temp_s0_3 = phi_s0_3 + 0x1B0;
+        temp_s0_3 = &phi_s0_3[108];
         phi_s0_3 = temp_s0_3;
     } while ((u32) temp_s0_3 < (u32) &D_801E531C);
     phi_s0_4 = (EffCommon *) sEffTable.tireMarks;
     do {
         Effect_InitCommon(phi_s0_4);
-        temp_s0_4 = phi_s0_4 + 0x610;
+        temp_s0_4 = &phi_s0_4[388];
         phi_s0_4 = temp_s0_4;
     } while (temp_s0_4 != &D_801ED890);
     sEffTable.globalCtx = globalCtx;
@@ -304,7 +304,7 @@ void Effect_DrawAll(GraphicsContext *gfxCtx) {
     phi_s0_2 = &sEffTable;
     do {
         if (phi_s0_2->blures[0].base.active != 0) {
-            sEffInfoTable->unk_24(phi_s0_2 + 0xE60, gfxCtx);
+            sEffInfoTable[1].draw(phi_s0_2 + 0xE60, gfxCtx);
         }
         temp_s0_2 = phi_s0_2 + 0x1B0;
         phi_s0_2 = temp_s0_2;
@@ -312,7 +312,7 @@ void Effect_DrawAll(GraphicsContext *gfxCtx) {
     phi_s0_3 = &sEffTable;
     do {
         if (phi_s0_3->shieldParticles[0].base.active != 0) {
-            sEffInfoTable->unk_4C(phi_s0_3 + 0x3890, gfxCtx);
+            sEffInfoTable[3].draw(phi_s0_3 + 0x3890, gfxCtx);
         }
         temp_s0_3 = phi_s0_3 + 0x1CC;
         phi_s0_3 = temp_s0_3;
@@ -320,7 +320,7 @@ void Effect_DrawAll(GraphicsContext *gfxCtx) {
     phi_s0_4 = &sEffTable;
     do {
         if (phi_s0_4->tireMarks[0].base.active != 0) {
-            sEffInfoTable->unk_60(phi_s0_4 + 0x3DF4, gfxCtx);
+            sEffInfoTable[4].draw(phi_s0_4 + 0x3DF4, gfxCtx);
         }
         temp_s0_4 = phi_s0_4 + 0x610;
         phi_s0_4 = temp_s0_4;
@@ -356,7 +356,7 @@ void Effect_UpdateAll(GlobalContext *globalCtx) {
     } while (temp_s0 < 3);
     phi_s1_2 = &sEffTable;
     do {
-        if ((phi_s1_2->blures[0].base.active != 0) && (sEffInfoTable->unk_20(phi_s1_2 + 0xE60) == 1)) {
+        if ((phi_s1_2->blures[0].base.active != 0) && (sEffInfoTable[1].update(phi_s1_2 + 0xE60) == 1)) {
             Effect_Destroy(globalCtx, phi_s0_2 + 3);
         }
         temp_s0_2 = phi_s0_2 + 1;
@@ -365,7 +365,7 @@ void Effect_UpdateAll(GlobalContext *globalCtx) {
     } while (temp_s0_2 < 0x19);
     phi_s1_3 = &sEffTable;
     do {
-        if ((phi_s1_3->shieldParticles[0].base.active != 0) && (sEffInfoTable->unk_48(phi_s1_3 + 0x3890) == 1)) {
+        if ((phi_s1_3->shieldParticles[0].base.active != 0) && (sEffInfoTable[3].update(phi_s1_3 + 0x3890) == 1)) {
             Effect_Destroy(globalCtx, phi_s0_3 + 0x1C);
         }
         temp_s0_3 = phi_s0_3 + 1;
@@ -374,7 +374,7 @@ void Effect_UpdateAll(GlobalContext *globalCtx) {
     } while (temp_s0_3 < 3);
     phi_s1_4 = &sEffTable;
     do {
-        if ((phi_s1_4->tireMarks[0].base.active != 0) && (sEffInfoTable->unk_5C(phi_s1_4 + 0x3DF4) == 1)) {
+        if ((phi_s1_4->tireMarks[0].base.active != 0) && (sEffInfoTable[4].update(phi_s1_4 + 0x3DF4) == 1)) {
             Effect_Destroy(globalCtx, phi_s0_4 + 0x1F);
         }
         temp_s0_4 = phi_s0_4 + 1;
@@ -397,19 +397,19 @@ void Effect_Destroy(GlobalContext *globalCtx, s32 index) {
         temp_a1 = index - 3;
         if (temp_a1 < 0x19) {
             sEffTable.blures[temp_a1].base.active = 0;
-            *(sEffInfoTable + 0x1C)(&sEffTable.blures[temp_a1].params, temp_a1);
+            sEffInfoTable[1].destroy((void *) &sEffTable.blures[temp_a1].params);
             return;
         }
         temp_a1_2 = temp_a1 - 0x19;
         if (temp_a1_2 < 3) {
             sEffTable.shieldParticles[temp_a1_2].base.active = 0;
-            *(sEffInfoTable + 0x44)(&sEffTable.shieldParticles[temp_a1_2].params, temp_a1_2);
+            sEffInfoTable[3].destroy((void *) &sEffTable.shieldParticles[temp_a1_2].params);
             return;
         }
         temp_a1_3 = temp_a1_2 - 3;
         if (temp_a1_3 < 0xF) {
             sEffTable.tireMarks[temp_a1_3].base.active = 0;
-            *(sEffInfoTable + 0x58)(&sEffTable.tireMarks[temp_a1_3].params, temp_a1_3);
+            sEffInfoTable[4].destroy((void *) &sEffTable.tireMarks[temp_a1_3].params);
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
     }
@@ -417,20 +417,20 @@ void Effect_Destroy(GlobalContext *globalCtx, s32 index) {
 
 void Effect_DestroyAll(GlobalContext *globalCtx) {
     EffShieldParticleParams *temp_s3_2;
-    EffTireMarkParams *temp_s0_4;
     EffTireMarkParams *temp_s3_3;
     EffectBlure *temp_s3;
-    u32 temp_s0_2;
-    u32 temp_s0_3;
     void *temp_s0;
+    void *temp_s0_2;
+    void *temp_s0_3;
+    void *temp_s0_4;
     EffTables *phi_s1;
     void *phi_s0;
     EffTables *phi_s1_2;
-    EffectBlure *phi_s0_2;
+    void *phi_s0_2;
     EffTables *phi_s1_3;
-    EffShieldParticleParams *phi_s0_3;
+    void *phi_s0_3;
     EffTables *phi_s1_4;
-    EffTireMarkParams *phi_s0_4;
+    void *phi_s0_4;
 
     temp_s3 = &sEffTable.blures[0].params;
     phi_s1 = &sEffTable;
@@ -444,29 +444,29 @@ void Effect_DestroyAll(GlobalContext *globalCtx) {
     } while ((u32) temp_s0 < (u32) temp_s3);
     temp_s3_2 = &sEffTable.shieldParticles[0].params;
     phi_s1_2 = &sEffTable;
-    phi_s0_2 = &sEffTable.blures[0].params;
+    phi_s0_2 = (void *) &sEffTable.blures[0].params;
     do {
         phi_s1_2->blures[0].base.active = 0;
-        sEffInfoTable->unk_1C(phi_s0_2);
+        sEffInfoTable[1].destroy(phi_s0_2);
         temp_s0_2 = phi_s0_2 + 0x1B0;
         phi_s1_2 += 0x1B0;
-        phi_s0_2 = (EffectBlure *) temp_s0_2;
-    } while (temp_s0_2 < (u32) temp_s3_2);
+        phi_s0_2 = temp_s0_2;
+    } while ((u32) temp_s0_2 < (u32) temp_s3_2);
     temp_s3_3 = &sEffTable.tireMarks[0].params;
     phi_s1_3 = &sEffTable;
-    phi_s0_3 = &sEffTable.shieldParticles[0].params;
+    phi_s0_3 = (void *) &sEffTable.shieldParticles[0].params;
     do {
         phi_s1_3->shieldParticles[0].base.active = 0;
-        sEffInfoTable->unk_44(phi_s0_3);
+        sEffInfoTable[3].destroy(phi_s0_3);
         temp_s0_3 = phi_s0_3 + 0x1CC;
         phi_s1_3 += 0x1CC;
-        phi_s0_3 = (EffShieldParticleParams *) temp_s0_3;
-    } while (temp_s0_3 < (u32) temp_s3_3);
+        phi_s0_3 = temp_s0_3;
+    } while ((u32) temp_s0_3 < (u32) temp_s3_3);
     phi_s1_4 = &sEffTable;
-    phi_s0_4 = &sEffTable.tireMarks[0].params;
+    phi_s0_4 = (void *) &sEffTable.tireMarks[0].params;
     do {
         phi_s1_4->tireMarks[0].base.active = 0;
-        sEffInfoTable->unk_58(phi_s0_4);
+        sEffInfoTable[4].destroy(phi_s0_4);
         temp_s0_4 = phi_s0_4 + 0x610;
         phi_s1_4 += 0x610;
         phi_s0_4 = temp_s0_4;

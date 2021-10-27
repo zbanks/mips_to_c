@@ -132,7 +132,7 @@ struct _mips2c_stack_func_80B2714C {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80B27188 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ SkelAnime *sp24;                     /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ char pad_28[0x4];
     /* 0x2C */ void *sp2C;                          /* inferred */
 };                                                  /* size = 0x30 */
@@ -333,7 +333,7 @@ void func_80B2654C(Actor *arg0, GlobalContext *arg1) {
         }
         if ((arg0->params & 0xFF) == 1) {
             func_801518B0(arg1, 0x273CU, arg0);
-            arg0->unk_288 = 0x273C;
+            arg0[2].id = 0x273C;
         } else {
             temp_v1 = gSaveContext.playerForm;
             if (temp_v1 != 4) {
@@ -352,7 +352,7 @@ void func_80B2654C(Actor *arg0, GlobalContext *arg1) {
                 temp_v1_2 = (phi_v0 * 6) + (phi_t0 * 2) + &D_80B27CE0;
                 sp24 = temp_v1_2;
                 func_801518B0(arg1, *temp_v1_2, arg0);
-                arg0->unk_288 = (s16) *temp_v1_2;
+                arg0[2].id = (s16) *temp_v1_2;
             } else {
                 temp_a0 = arg1;
                 arg1 = arg1;
@@ -363,7 +363,7 @@ void func_80B2654C(Actor *arg0, GlobalContext *arg1) {
                     temp_a1_2 = (Player_GetMask(temp_a0_3) + 0x273C) & 0xFFFF;
                     sp2E = temp_a1_2;
                     func_801518B0(arg1, temp_a1_2, arg0);
-                    arg0->unk_288 = (s16) temp_a1_2;
+                    arg0[2].id = (s16) temp_a1_2;
                 } else {
                     if (arg0->unk_28A == 0) {
                         arg0->unk_28A = 1;
@@ -374,7 +374,7 @@ void func_80B2654C(Actor *arg0, GlobalContext *arg1) {
                     temp_v1_3 = (phi_v0_2 * 6) + (phi_t0 * 2) + &D_80B27CF4;
                     sp24 = temp_v1_3;
                     func_801518B0(arg1, *temp_v1_3, arg0);
-                    arg0->unk_288 = (s16) *temp_v1_3;
+                    arg0[2].id = (s16) *temp_v1_3;
                 }
             }
         }
@@ -390,7 +390,7 @@ void func_80B26758(Actor *arg0, GlobalContext *arg1) {
     void *temp_v1;
     s16 phi_t5;
 
-    if ((func_80147624(arg1) != 0) && (arg0->unk_288 == 0x2716)) {
+    if ((func_80147624(arg1) != 0) && (arg0[2].id == 0x2716)) {
         temp_v1 = arg1 + 0x10000;
         temp_v0 = arg1->msgCtx.choiceIndex;
         if (temp_v0 != 0) {
@@ -406,34 +406,34 @@ void func_80B26758(Actor *arg0, GlobalContext *arg1) {
             if (((s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts) == 0) {
                 play_sound(0x4806U);
                 func_801518B0(arg1, 0x272CU, arg0);
-                arg0->unk_288 = 0x272C;
-                func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80B27C68, 2);
+                arg0[2].id = 0x272C;
+                func_800BDC5C((SkelAnime *) &arg0[1].focus.rot.z, (ActorAnimationEntry []) D_80B27C68, 2);
                 return;
             }
             if ((s32) gSaveContext.rupees < arg1->msgCtx.unk_12070) {
                 play_sound(0x4806U);
                 func_801518B0(arg1, 0x2718U, arg0);
-                arg0->unk_288 = 0x2718;
+                arg0[2].id = 0x2718;
                 return;
             }
             sp24 = temp_v1;
             func_8019F208();
             func_801159EC((s16) ((s32) arg1->msgCtx.unk_12070 * -1));
             func_801518B0(arg1, 0x273AU, arg0);
-            arg0->unk_288 = 0x273A;
+            arg0[2].id = 0x273A;
             return;
         }
         if (((s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts) == 0) {
             play_sound(0x4806U);
             func_801518B0(arg1, 0x272CU, arg0);
-            arg0->unk_288 = 0x272C;
-            func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80B27C68, 2);
+            arg0[2].id = 0x272C;
+            func_800BDC5C((SkelAnime *) &arg0[1].focus.rot.z, (ActorAnimationEntry []) D_80B27C68, 2);
             return;
         }
         if ((s32) gSaveContext.rupees < arg1->msgCtx.unk1206C) {
             play_sound(0x4806U);
             func_801518B0(arg1, 0x2718U, arg0);
-            arg0->unk_288 = 0x2718;
+            arg0[2].id = 0x2718;
             return;
         }
         sp24 = temp_v1;
@@ -442,7 +442,7 @@ void func_80B26758(Actor *arg0, GlobalContext *arg1) {
         func_801518B0(arg1, 0x2719U, arg0);
         phi_t5 = 0x2719;
 block_17:
-        arg0->unk_288 = phi_t5;
+        arg0[2].id = phi_t5;
         /* Duplicate return node #18. Try simplifying control flow for better match */
     }
 }
@@ -460,7 +460,7 @@ void func_80B269A4(Actor *arg0, GlobalContext *arg1) {
     arg1 = temp_a3;
     sp24 = temp_t6;
     if (func_80147624(temp_a3) != 0) {
-        temp_t7 = arg0->unk_288;
+        temp_t7 = arg0[2].id;
         switch (temp_t7) {
         case 10000:
         case 10001:
@@ -469,7 +469,7 @@ void func_80B269A4(Actor *arg0, GlobalContext *arg1) {
         case 10004:
         case 10005:
             func_801518B0(arg1, 0x2716U, arg0);
-            arg0->unk_288 = 0x2716;
+            arg0[2].id = 0x2716;
             return;
         case 10009:
             func_801477B4(arg1);
@@ -482,7 +482,7 @@ void func_80B269A4(Actor *arg0, GlobalContext *arg1) {
             return;
         case 10042:
             func_801518B0(arg1, 0x273BU, arg0);
-            arg0->unk_288 = 0x273B;
+            arg0[2].id = 0x273B;
             return;
         case 10043:
             temp_a0 = arg1;
@@ -513,7 +513,7 @@ void func_80B26AE8(Actor *arg0) {
 
 void func_80B26AFC(Actor *arg0, GlobalContext *arg1) {
     void *sp1C;
-    SkelAnime *temp_a0;
+    s16 *temp_a0;
     s16 temp_v0_2;
     u32 temp_v0;
     s16 phi_v0;
@@ -531,13 +531,13 @@ void func_80B26AFC(Actor *arg0, GlobalContext *arg1) {
     case 6:
         arg0 = arg0;
         if (func_80147624(arg1) != 0) {
-            temp_v0_2 = arg0->unk_288;
-            temp_a0 = arg0 + 0x190;
+            temp_v0_2 = arg0[2].id;
+            temp_a0 = &arg0[1].focus.rot.z;
             phi_v0 = temp_v0_2;
             if (temp_v0_2 == 0x272C) {
                 arg0 = arg0;
-                func_800BDC5C(temp_a0, (ActorAnimationEntry []) D_80B27C68, 3);
-                phi_v0 = arg0->unk_288;
+                func_800BDC5C((SkelAnime *) temp_a0, (ActorAnimationEntry []) D_80B27C68, 3);
+                phi_v0 = arg0[2].id;
             }
             if ((phi_v0 == 0x272E) || (phi_v0 == 0x272F) || (phi_v0 == 0x2730)) {
                 gSaveContext.minigameState = 3;
@@ -573,17 +573,17 @@ s32 func_80B26BF8(Actor *arg0, GlobalContext *arg1) {
         if (func_80122FCC(arg1, temp_a2, temp_a3) != 0) {
             return 0;
         }
-        if ((temp_a2->unk_ADB != 0) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_a2[8].colChkInfo.acHitEffect != 0) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             return 1;
         }
     default:
 block_51:
         return 2;
     case 1:
-        if ((temp_a2->unk_A74 * 0x10) < 0) {
+        if ((temp_a2[8].targetArrowOffset * 0x10) < 0) {
             return 0;
         }
-        if ((temp_a2->unk_ADB != 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_a2[8].colChkInfo.acHitEffect != 0) || (temp_a2->unk_A70 & 0x80000)) {
             return 1;
         }
         goto block_51;
@@ -593,51 +593,51 @@ block_51:
         if (func_80122F9C(arg1, temp_a2, temp_a3) != 0) {
             return 0;
         }
-        if ((temp_a2->unk_ADB != 0) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_a2[8].colChkInfo.acHitEffect != 0) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             return 1;
         }
         arg0->unk_28E = 0;
         goto block_51;
     case 3:
         temp_v1 = temp_a3->unk_28E;
-        if ((temp_v1 == 1) && ((temp_v0 = temp_a2->unk_ADA, (temp_v0 == 4)) || (temp_v0 == 6))) {
+        if ((temp_v1 == 1) && ((temp_v0 = temp_a2[8].colChkInfo.atHitEffect, (temp_v0 == 4)) || (temp_v0 == 6))) {
             temp_a3->unk_28E = 0;
             return 0;
         }
-        if ((temp_v1 == 1) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_v1 == 1) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             temp_a3->unk_28E = 0;
             return 1;
         }
         goto block_51;
     case 4:
         temp_v1_2 = temp_a3->unk_28E;
-        if ((temp_v1_2 == 1) && ((temp_v0_2 = temp_a2->unk_ADA, (temp_v0_2 == 0)) || (temp_v0_2 == 2))) {
+        if ((temp_v1_2 == 1) && ((temp_v0_2 = temp_a2[8].colChkInfo.atHitEffect, (temp_v0_2 == 0)) || (temp_v0_2 == 2))) {
             temp_a3->unk_28E = 0;
             return 0;
         }
-        if ((temp_v1_2 == 1) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_v1_2 == 1) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             temp_a3->unk_28E = 0;
             return 1;
         }
         goto block_51;
     case 5:
         temp_v1_3 = temp_a3->unk_28E;
-        if ((temp_v1_3 == 1) && (temp_a2->unk_ADA == 0xC)) {
+        if ((temp_v1_3 == 1) && (temp_a2[8].colChkInfo.atHitEffect == 0xC)) {
             temp_a3->unk_28E = 0;
             return 0;
         }
-        if ((temp_v1_3 == 1) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_v1_3 == 1) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             temp_a3->unk_28E = 0;
             return 1;
         }
         goto block_51;
     case 6:
         temp_v1_4 = temp_a3->unk_28E;
-        if ((temp_v1_4 == 1) && ((temp_v0_3 = temp_a2->unk_ADA, (temp_v0_3 == 0x11)) || (temp_v0_3 == 0x14))) {
+        if ((temp_v1_4 == 1) && ((temp_v0_3 = temp_a2[8].colChkInfo.atHitEffect, (temp_v0_3 == 0x11)) || (temp_v0_3 == 0x14))) {
             temp_a3->unk_28E = 0;
             return 0;
         }
-        if ((temp_v1_4 == 1) || ((temp_a2->unk_A74 * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
+        if ((temp_v1_4 == 1) || ((temp_a2[8].targetArrowOffset * 0x10) < 0) || (temp_a2->unk_A70 & 0x80000)) {
             temp_a3->unk_28E = 0;
             return 1;
         }
@@ -658,7 +658,7 @@ void func_80B26EB4(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->unk_284;
     temp_t9 = *(&D_80B27D00 + (temp_v0 * 2));
     arg0->unk_284 = (s16) (temp_v0 + 1);
-    arg0->unk_288 = temp_t9;
+    arg0[2].id = temp_t9;
 }
 
 void func_80B26F14(Actor *arg0, GlobalContext *arg1) {
@@ -669,7 +669,7 @@ void func_80B26F14(Actor *arg0, GlobalContext *arg1) {
     temp_t6 = temp_a2->unk_284;
     arg0 = temp_a2;
     func_801518B0(arg1, *(&D_80B27D10 + (temp_t6 * 2)), temp_a2);
-    arg0->unk_288 = (s16) *(&D_80B27D10 + (arg0->unk_284 * 2));
+    arg0[2].id = *(&D_80B27D10 + (arg0->unk_284 * 2));
 }
 
 s32 func_80B26F6C(Actor *arg0, GlobalContext *arg1) {
@@ -679,7 +679,7 @@ s32 func_80B26F6C(Actor *arg0, GlobalContext *arg1) {
     s32 temp_a2;
 
     temp_a3 = arg1;
-    temp_v0 = arg0->unk_288;
+    temp_v0 = arg0[2].id;
     temp_a2 = temp_a3->actorCtx.actorList[2].first;
     temp_a0 = temp_a2;
     if (temp_v0 != 0x271D) {
@@ -688,7 +688,7 @@ s32 func_80B26F6C(Actor *arg0, GlobalContext *arg1) {
         }
         if (arg0->unk_292 != 0) {
             func_801518B0(temp_a3, 0x272BU, arg0);
-            arg0->unk_288 = 0x272B;
+            arg0[2].id = 0x272B;
             return 1;
         }
         goto block_7;
@@ -696,7 +696,7 @@ s32 func_80B26F6C(Actor *arg0, GlobalContext *arg1) {
     arg1 = temp_a3;
     if (func_80124190(temp_a0, temp_a2, temp_a3) != 0) {
         func_801518B0(arg1, 0x272AU, arg0);
-        arg0->unk_288 = 0x272A;
+        arg0[2].id = 0x272A;
         return 1;
     }
 block_7:
@@ -724,7 +724,7 @@ void func_80B27030(Actor *arg0, GlobalContext *arg1) {
             sp2C->unk_A6C = (s32) (sp2C->unk_A6C & ~0x20);
             func_80B279F0(arg0, arg1, 0);
             func_801518B0(arg1, 0x271AU, arg0);
-            arg0->unk_288 = 0x271A;
+            arg0[2].id = 0x271A;
             func_80B26AE8(arg0);
             return;
         }
@@ -744,17 +744,17 @@ void func_80B2714C(Actor *arg0) {
 
 void func_80B27188(Actor *arg0, GlobalContext *arg1) {
     void *sp2C;
-    SkelAnime *sp24;
-    SkelAnime *temp_a0;
+    s16 *sp24;
+    s16 *temp_a0;
     s32 temp_v0;
 
     sp2C = arg1->actorCtx.actorList[2].first;
     if ((func_80152498(arg1 + 0x4908) == 5) && (func_80147624(arg1) != 0)) {
-        if (arg0->unk_288 == 0x2729) {
+        if (arg0[2].id == 0x2729) {
             func_80B26F14(arg0, arg1);
         } else if (func_80B26F6C(arg0, arg1) == 0) {
-            if (&D_0600016C == arg0->unk_198) {
-                func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80B27C68, 3);
+            if (&D_0600016C == (bitwise s32) arg0[1].targetArrowOffset) {
+                func_800BDC5C((SkelAnime *) &arg0[1].focus.rot.z, (ActorAnimationEntry []) D_80B27C68, 3);
             }
             arg0->unk_286 = 2;
             func_801477B4(arg1);
@@ -778,13 +778,13 @@ block_11:
                     }
                 }
             } else {
-                sp24 = arg0 + 0x190;
+                sp24 = &arg0[1].focus.rot.z;
                 Audio_PlayActorSound2(arg0, 0x4806U);
                 arg0->unk_286 = 0;
                 sp2C->unk_A6C = (s32) (sp2C->unk_A6C | 0x20);
                 func_801518B0(arg1, 0x2729U, arg0);
-                arg0->unk_288 = 0x2729;
-                func_800BDC5C(sp24, (ActorAnimationEntry []) D_80B27C68, 2);
+                arg0[2].id = 0x2729;
+                func_800BDC5C((SkelAnime *) sp24, (ActorAnimationEntry []) D_80B27C68, 2);
             }
         } else {
             arg0->unk_286 = 0;
@@ -792,11 +792,11 @@ block_11:
             sp2C->unk_A6C = (s32) (sp2C->unk_A6C | 0x20);
             func_80B26EB4(arg0, arg1);
         }
-        temp_a0 = arg0 + 0x190;
-        if (&D_060003DC == arg0->unk_198) {
+        temp_a0 = &arg0[1].focus.rot.z;
+        if (&D_060003DC == (bitwise s32) arg0[1].targetArrowOffset) {
             sp24 = temp_a0;
-            if (func_801378B8(temp_a0, arg0->unk_1A0) != 0) {
-                func_800BDC5C(temp_a0, (ActorAnimationEntry []) D_80B27C68, 1);
+            if (func_801378B8((SkelAnime *) temp_a0, arg0[1].scale.y) != 0) {
+                func_800BDC5C((SkelAnime *) temp_a0, (ActorAnimationEntry []) D_80B27C68, 1);
             }
         }
         if (arg0->unk_284 == 7) {
@@ -844,10 +844,10 @@ void func_80B274BC(Actor *arg0, GlobalContext *arg1) {
         if (arg0->unk_284 == 5) {
             if (gSaveContext.minigameScore == 0x1E) {
                 func_801518B0(arg1, 0x272DU, arg0);
-                arg0->unk_288 = 0x272D;
+                arg0[2].id = 0x272D;
             } else {
                 func_801518B0(arg1, 0x272EU, arg0);
-                arg0->unk_288 = 0x272E;
+                arg0[2].id = 0x272E;
             }
             sp24->unk_A6C = (s32) (sp24->unk_A6C | 0x20);
             gSaveContext.weekEventReg[82] = gSaveContext.weekEventReg[82] & 0xF7;
@@ -869,7 +869,7 @@ void func_80B274BC(Actor *arg0, GlobalContext *arg1) {
     }
 block_10:
     if (arg0->unk_28E == 1) {
-        temp_v0_2 = sp24->unk_ADA;
+        temp_v0_2 = sp24[8].colChkInfo.atHitEffect;
         if ((temp_v0_2 == 0x11) || (temp_v0_2 == 0x14)) {
             arg1->interfaceCtx.unk_25C = 3;
             if ((s32) gSaveContext.minigameScore >= 0x1B) {
@@ -917,10 +917,10 @@ void func_80B27774(Actor *arg0, GlobalContext *arg1) {
         if ((temp_v0 & 0x20) == 0) {
             gSaveContext.weekEventReg[63] = temp_v0 | 0x20;
             func_801518B0(arg1, 0x272FU, arg0);
-            arg0->unk_288 = 0x272F;
+            arg0[2].id = 0x272F;
         } else {
             func_801518B0(arg1, 0x2730U, arg0);
-            arg0->unk_288 = 0x2730;
+            arg0[2].id = 0x2730;
         }
         func_80B26AE8(arg0);
         sp24->unk_A6C = (s32) (sp24->unk_A6C & ~0x20);
@@ -997,7 +997,7 @@ void func_80B279F0(Actor *arg0, GlobalContext *arg1, s32 arg2) {
     void *temp_v0;
 
     temp_a1 = arg0;
-    temp_v0 = temp_a1->unk_274 + (arg2 * 6);
+    temp_v0 = temp_a1[1].init + (arg2 * 6);
     temp_f6 = temp_v0->unk_2;
     temp_f8 = temp_v0->unk_4;
     temp_f0 = (f32) temp_v0->unk_0;

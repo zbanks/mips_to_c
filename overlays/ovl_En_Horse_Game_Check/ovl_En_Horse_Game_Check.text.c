@@ -168,7 +168,7 @@ static ? D_808F9C5C;                                /* unable to generate initia
 
     sp78 = NULL;
     arg0->actor.flags |= 0x400000;
-    temp_f0 = (f32) arg0->unk_160 * 0.001f;
+    temp_f0 = (f32) arg0[1].actor.flags * 0.001f;
     arg0->actor.scale.z = temp_f0;
     arg0->actor.scale.y = temp_f0;
     arg0->actor.scale.x = temp_f0;
@@ -233,7 +233,7 @@ static ? D_808F9C5C;                                /* unable to generate initia
     sp40.unk_4 = (s32) D_808F9BA0.unk_4;
     sp40.unk_8 = (s32) D_808F9BA0.unk_8;
     arg0->unk_164 = 0;
-    arg0->unk_168 = 0;
+    arg0[1].world.pos.x = 0.0f;
     arg0->unk_174 = 0;
     if ((gSaveContext.weekEventReg[92] & 7) != 1) {
         Actor_MarkForDeath(arg0);
@@ -243,12 +243,12 @@ static ? D_808F9C5C;                                /* unable to generate initia
         temp_a0 = arg1 + 0x1CA0;
         sp3C = temp_a0;
         temp_v0 = Actor_Spawn(temp_a0, arg1, 0xD, -1149.0f, -106.0f, 470.0f, (s16) 0, (s16) 0x7FFF, (s16) 0, (s16) 0x2004);
-        arg0->unk_16C = temp_v0;
+        arg0[1].world.pos.y = (bitwise f32) temp_v0;
         if (temp_v0 == 0) {
             __assert("../z_en_horse_game_check.c", 0x5EDU);
         }
         temp_v0_2 = Actor_Spawn(sp3C, arg1, 0xD, -1376.0f, -106.0f, 470.0f, (s16) 0, (s16) 0x7FFF, (s16) 0, (s16) 0x2005);
-        arg0->unk_170 = temp_v0_2;
+        arg0[1].world.pos.z = (bitwise f32) temp_v0_2;
         if (temp_v0_2 == 0) {
             __assert("../z_en_horse_game_check.c", 0x5F6U);
         }
@@ -502,7 +502,7 @@ block_8:
     f32 temp_f14;
 
     sp78 = NULL;
-    temp_f0 = (f32) arg0->unk_160 * 0.01f;
+    temp_f0 = (f32) arg0[1].actor.flags * 0.01f;
     arg0->actor.scale.z = temp_f0;
     arg0->actor.scale.y = temp_f0;
     arg0->actor.scale.x = temp_f0;

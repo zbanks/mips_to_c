@@ -69,24 +69,24 @@ void EffectSsSolderSrchBall_Draw(GlobalContext *globalCtx, u32 index, EffectSs *
     Matrix_Scale(sp44, sp44, sp44, 1);
     temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0x14U);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual((void *) &D_04079B10);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) D_0407AB10;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE7000000;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = -1;
     temp_v0_4->words.w0 = 0xFA000000;
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = 0xFAB4FFFF;
     temp_v0_5->words.w0 = 0xFB000000;
     SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
@@ -98,12 +98,12 @@ void EffectSsSolderSrchBall_Draw(GlobalContext *globalCtx, u32 index, EffectSs *
     }
     SysMatrix_InsertZRotation_f(phi_f18 * 20.0f * 0.017453292f, 1);
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDA380003;
     sp24 = temp_v0_6;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = (u32) D_0407AB58;
     temp_v0_7->words.w0 = 0xDE000000;
 }

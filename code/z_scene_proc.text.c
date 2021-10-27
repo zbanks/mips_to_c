@@ -248,11 +248,11 @@ void Scene_DrawConfigDefault(GlobalContext *globalCtx) {
 
     temp_v0 = globalCtx->state.gfxCtx;
     temp_a0 = temp_v0->polyOpa.p;
-    temp_v0->polyOpa.p = temp_a0 + 8;
+    temp_v0->polyOpa.p = &temp_a0[1];
     temp_a0->words.w1 = (u32) &sSceneDrawDefaultDl;
     temp_a0->words.w0 = 0xDE000000;
     temp_a0_2 = temp_v0->polyXlu.p;
-    temp_v0->polyXlu.p = temp_a0_2 + 8;
+    temp_v0->polyXlu.p = &temp_a0_2[1];
     temp_a0_2->words.w1 = (u32) &sSceneDrawDefaultDl;
     temp_a0_2->words.w0 = 0xDE000000;
 }
@@ -278,14 +278,14 @@ void AnimatedMat_DrawTexScroll(GlobalContext *globalCtx, s32 segment, void *para
     phi_a1 = temp_a1;
     if ((temp_a1 & 1) != 0) {
         temp_a0 = temp_a2->polyOpa.p;
-        temp_a2->polyOpa.p = temp_a0 + 8;
+        temp_a2->polyOpa.p = &temp_a0[1];
         temp_a0->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
         temp_a0->words.w1 = (u32) temp_v0;
         phi_a1 = sMatAnimFlags;
     }
     if ((phi_a1 & 2) != 0) {
         temp_a0_2 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_a0_2 + 8;
+        temp_a2->polyXlu.p = &temp_a0_2[1];
         temp_a0_2->words.w1 = (u32) temp_v0;
         temp_a0_2->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
     }
@@ -295,7 +295,7 @@ Gfx *AnimatedMat_TwoLayerTexScroll(GlobalContext *globalCtx, AnimatedMatTexScrol
     s32 temp_v0;
 
     temp_v0 = sMatAnimStep;
-    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params->xStep * temp_v0, (u32) -(s32) (params->yStep * temp_v0), (s32) params->width, (s32) params->height, 1, params->unk_4 * temp_v0, (u32) -(s32) (params->unk_5 * temp_v0), (s32) params->unk_6, (s32) params->unk_7);
+    return Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, params->xStep * temp_v0, (u32) -(s32) (params->yStep * temp_v0), (s32) params->width, (s32) params->height, 1, params[1].xStep * temp_v0, (u32) -(s32) (params[1].yStep * temp_v0), (s32) params[1].width, (s32) params[1].height);
 }
 
 void AnimatedMat_DrawTwoTexScroll(GlobalContext *globalCtx, s32 segment, void *params) {
@@ -312,14 +312,14 @@ void AnimatedMat_DrawTwoTexScroll(GlobalContext *globalCtx, s32 segment, void *p
     phi_a1 = temp_a1;
     if ((temp_a1 & 1) != 0) {
         temp_a0 = temp_a2->polyOpa.p;
-        temp_a2->polyOpa.p = temp_a0 + 8;
+        temp_a2->polyOpa.p = &temp_a0[1];
         temp_a0->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
         temp_a0->words.w1 = (u32) temp_v0;
         phi_a1 = sMatAnimFlags;
     }
     if ((phi_a1 & 2) != 0) {
         temp_a0_2 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_a0_2 + 8;
+        temp_a2->polyXlu.p = &temp_a0_2[1];
         temp_a0_2->words.w1 = (u32) temp_v0;
         temp_a0_2->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
     }
@@ -344,25 +344,25 @@ void AnimatedMat_SetColor(GlobalContext *globalCtx, s32 segment, F3DPrimColor *p
     phi_t1 = temp_t1;
     if ((temp_t1 & 1) != 0) {
         temp_a0 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_a0 + 8;
+        temp_t0->polyOpa.p = &temp_a0[1];
         temp_a0->words.w1 = (u32) temp_v0;
         temp_a0->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
         phi_t1 = sMatAnimFlags;
     }
     if ((phi_t1 & 2) != 0) {
         temp_a1 = temp_t0->polyXlu.p;
-        temp_t0->polyXlu.p = temp_a1 + 8;
+        temp_t0->polyXlu.p = &temp_a1[1];
         temp_a1->words.w1 = (u32) temp_v0;
         temp_a1->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
     }
-    temp_v1_2 = temp_v0 + 8;
+    temp_v1_2 = &temp_v0[1];
     temp_v0->words.w0 = primColor->lodFrac | 0xFA000000;
     temp_v0->words.w1 = (primColor->r << 0x18) | (primColor->g << 0x10) | (primColor->b << 8) | ((u32) ((f32) primColor->a * sMatAnimAlphaRatio) & 0xFF);
     phi_v1 = temp_v1_2;
     if (envColor != 0) {
         temp_v1_2->words.w0 = 0xFB000000;
         temp_v1_2->words.w1 = (envColor->r << 0x18) | (envColor->g << 0x10) | (envColor->b << 8) | envColor->a;
-        phi_v1 = temp_v1_2 + 8;
+        phi_v1 = &temp_v1_2[1];
     }
     phi_v1->words.w0 = 0xDF000000;
     phi_v1->words.w1 = 0;
@@ -922,14 +922,14 @@ void AnimatedMat_DrawTexCycle(GlobalContext *globalCtx, s32 segment, void *param
     phi_a1 = temp_a1;
     if ((temp_a1 & 1) != 0) {
         temp_a0 = temp_a2->polyOpa.p;
-        temp_a2->polyOpa.p = temp_a0 + 8;
+        temp_a2->polyOpa.p = &temp_a0[1];
         temp_a0->words.w1 = (u32) temp_v0;
         temp_a0->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
         phi_a1 = sMatAnimFlags;
     }
     if ((phi_a1 & 2) != 0) {
         temp_a0_2 = temp_a2->polyXlu.p;
-        temp_a2->polyXlu.p = temp_a0_2 + 8;
+        temp_a2->polyXlu.p = &temp_a0_2[1];
         temp_a0_2->words.w1 = (u32) temp_v0;
         temp_a0_2->words.w0 = ((segment * 4) & 0xFFFF) | 0xDB060000;
     }
@@ -1037,14 +1037,14 @@ void Scene_DrawConfig3(GlobalContext *globalCtx) {
     temp_s0 = globalCtx->state.gfxCtx;
     temp_t1 = globalCtx->gameplayFrames;
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp7C = temp_t1;
     sp48 = temp_t1;
     sp70 = temp_v0;
     sp70->words.w1 = Gfx_TexScroll(globalCtx->state.gfxCtx, 0U, temp_t1 & 0x3F, 0x100, 0x10);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     temp_a3 = sp48 & 0x7F;
     temp_v1 = sp7C & 0x7F;
@@ -1052,39 +1052,39 @@ void Scene_DrawConfig3(GlobalContext *globalCtx) {
     sp6C = temp_v0_2;
     sp6C->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x7F - temp_v1, temp_a3, 0x20, 0x20, 1, temp_v1, temp_a3, 0x20, 0x20);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp68 = temp_v0_3;
     sp68->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x20, 1, 0U, 0x7F - sp44, 0x20, 0x20);
     temp_v0_4 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_4 + 8;
+    temp_s0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB06002C;
     sp64 = temp_v0_4;
     sp64->words.w1 = Gfx_TexScroll(globalCtx->state.gfxCtx, 0U, sp44, 0x20, 0x20);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDB060030;
     sp60 = temp_v0_5;
     sp60->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, (sp7C * 0x32) & 0x7FF, 8, 0x200, 1, 0U, (sp7C * 0x3C) & 0x7FF, 8, 0x200);
     temp_v0_6 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_6 + 8;
+    temp_s0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDB060034;
     sp5C = temp_v0_6;
     sp5C->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, sp44, 0x20, 0x20);
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0;
     temp_v0_7->words.w0 = 0xE7000000;
     temp_v0_8 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_8 + 8;
+    temp_s0->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0x80808080;
     temp_v0_8->words.w0 = 0xFB000000;
     temp_v0_9 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_9 + 8;
+    temp_s0->polyOpa.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0;
     temp_v0_9->words.w0 = 0xE7000000;
     temp_v0_10 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_10 + 8;
+    temp_s0->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w1 = 0x80808080;
     temp_v0_10->words.w0 = 0xFB000000;
 }
@@ -1106,26 +1106,26 @@ void Scene_DrawConfig4(GlobalContext *globalCtx) {
     temp_t0 = globalCtx->state.gfxCtx;
     temp_v0 = temp_t0->polyXlu.p;
     temp_v1 = temp_t1 & 0x7F;
-    temp_t0->polyXlu.p = temp_v0 + 8;
+    temp_t0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     temp_a3 = temp_t1 & 0x7F;
     sp40 = temp_t0;
     sp38 = temp_v0;
     sp38->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x7F - temp_v1, temp_a3, 0x20, 0x20, 1, temp_v1, temp_a3, 0x20, 0x20);
     temp_v1_2 = temp_t0->polyOpa.p;
-    temp_t0->polyOpa.p = temp_v1_2 + 8;
+    temp_t0->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = 0;
     temp_v1_2->words.w0 = 0xE7000000;
     temp_v1_3 = temp_t0->polyOpa.p;
-    temp_t0->polyOpa.p = temp_v1_3 + 8;
+    temp_t0->polyOpa.p = &temp_v1_3[1];
     temp_v1_3->words.w1 = 0x80808080;
     temp_v1_3->words.w0 = 0xFB000000;
     temp_v0_2 = temp_t0->polyXlu.p;
-    temp_t0->polyXlu.p = temp_v0_2 + 8;
+    temp_t0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xE7000000;
     temp_v0_3 = temp_t0->polyXlu.p;
-    temp_t0->polyXlu.p = temp_v0_3 + 8;
+    temp_t0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0x80808080;
     temp_v0_3->words.w0 = 0xFB000000;
 }
@@ -1144,13 +1144,13 @@ void Scene_SetRenderModeXlu(GlobalContext *globalCtx, s32 index, u32 flags) {
     temp_v1 = globalCtx->state.gfxCtx;
     if ((flags & 1) != 0) {
         temp_a1 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_a1 + 8;
+        temp_v1->polyOpa.p = &temp_a1[1];
         temp_a1->words.w1 = temp_v0;
         temp_a1->words.w0 = 0xDB060030;
     }
     if ((flags & 2) != 0) {
         temp_a1_2 = temp_v1->polyXlu.p;
-        temp_v1->polyXlu.p = temp_a1_2 + 8;
+        temp_v1->polyXlu.p = &temp_a1_2[1];
         temp_a1_2->words.w1 = temp_v0;
         temp_a1_2->words.w0 = 0xDB060030;
     }
@@ -1166,13 +1166,13 @@ void Scene_SetCullFlag(GlobalContext *globalCtx, s32 index, u32 flags) {
     temp_v1 = globalCtx->state.gfxCtx;
     if ((flags & 1) != 0) {
         temp_a1 = temp_v1->polyOpa.p;
-        temp_v1->polyOpa.p = temp_a1 + 8;
+        temp_v1->polyOpa.p = &temp_a1[1];
         temp_a1->words.w1 = temp_v0;
         temp_a1->words.w0 = 0xDB060030;
     }
     if ((flags & 2) != 0) {
         temp_a1_2 = temp_v1->polyXlu.p;
-        temp_v1->polyXlu.p = temp_a1_2 + 8;
+        temp_v1->polyXlu.p = &temp_a1_2[1];
         temp_a1_2->words.w1 = temp_v0;
         temp_a1_2->words.w0 = 0xDB060030;
     }
@@ -1206,12 +1206,12 @@ void Scene_DrawConfig5(GlobalContext *globalCtx) {
     AnimatedMat_Draw(globalCtx, globalCtx->sceneMaterialAnims);
     Scene_SetRenderModeXlu(globalCtx, sp24, 3U);
     temp_v1 = temp_a3->polyOpa.p;
-    temp_a3->polyOpa.p = temp_v1 + 8;
+    temp_a3->polyOpa.p = &temp_v1[1];
     temp_a0 = (phi_t0 & 0xFF) | ~0xFF;
     temp_v1->words.w1 = temp_a0;
     temp_v1->words.w0 = 0xFB000000;
     temp_v1_2 = temp_a3->polyXlu.p;
-    temp_a3->polyXlu.p = temp_v1_2 + 8;
+    temp_a3->polyXlu.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = temp_a0;
     temp_v1_2->words.w0 = 0xFB000000;
 }
@@ -1303,11 +1303,11 @@ block_35:
         phi_s3 = temp_s3;
     } while (temp_s3 != 9);
     temp_v1_2 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v1_2 + 8;
+    sp3C->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060018;
     temp_v1_2->words.w1 = (u32) sp28;
     temp_v1_3 = sp3C->polyXlu.p;
-    sp3C->polyXlu.p = temp_v1_3 + 8;
+    sp3C->polyXlu.p = &temp_v1_3[1];
     temp_v1_3->words.w0 = 0xDB060018;
     temp_v1_3->words.w1 = (u32) sp28;
 }

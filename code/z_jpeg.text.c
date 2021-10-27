@@ -96,7 +96,7 @@ void func_800F42A0(u8 *arg0) {
     temp_v1->unk_C = (void *) (temp_v1 + 0x220);
     temp_v1->unk_10 = (void *) (temp_v1 + 0x2A0);
     temp_v1->unk_14 = (void *) (temp_v1 + 0x320);
-    temp_v1->unk_8 = (s32) temp_a3->unk_28;
+    temp_v1->unk_8 = (s32) temp_a3[40];
     D_801BDAC4 = 0;
     arg0 = temp_a3;
     sp24 = temp_v1;
@@ -198,7 +198,7 @@ void func_800F4540(u8 *arg0, u8 *arg1) {
     u8 *phi_s0;
 
     arg1->unk_0 = 0;
-    arg1->unk_10 = 0U;
+    arg1[16] = 0;
     phi_s2 = 0;
     phi_s0 = arg0;
 loop_1:
@@ -226,19 +226,19 @@ loop_1:
                     phi_s0 = temp_s0_2 + func_800F44F4((s32) temp_s0_2);
                     break;
                 case 196:
-                    (arg1 + (arg1->unk_10 * 4))->unk_14 = (void *) (temp_s0_2 + 2);
-                    arg1->unk_10 = (u8) (arg1->unk_10 + 1);
+                    (arg1 + (arg1[16] * 4))->unk_14 = (void *) (temp_s0_2 + 2);
+                    arg1[16] += 1;
                     phi_s0 = temp_s0_2 + func_800F44F4((s32) temp_s0_2);
                     break;
                 case 221:
                     phi_s0 = temp_s0_2 + func_800F44F4((s32) temp_s0_2);
                     break;
                 case 192:
-                    temp_v0_2 = temp_s0_2->unk_9;
+                    temp_v0_2 = temp_s0_2[9];
                     if (temp_v0_2 == 0x21) {
-                        arg1->unk_28 = 0;
+                        arg1[40] = 0;
                     } else if (temp_v0_2 == 0x22) {
-                        arg1->unk_28 = 2;
+                        arg1[40] = 2;
                     }
                     phi_s0 = temp_s0_2 + func_800F44F4((s32) temp_s0_2);
                     break;

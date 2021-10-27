@@ -605,9 +605,9 @@ void func_80A68ED8(Actor *arg0) {
     f32 temp_f0;
 
     temp_f0 = arg0->speedXZ;
-    arg0->velocity.x = temp_f0 * arg0->unk_328;
-    arg0->velocity.y = temp_f0 * arg0->unk_32C;
-    arg0->velocity.z = temp_f0 * arg0->unk_330;
+    arg0->velocity.x = temp_f0 * arg0[2].colChkInfo.damageTable;
+    arg0->velocity.y = temp_f0 * arg0[2].colChkInfo.displacement.x;
+    arg0->velocity.z = temp_f0 * arg0[2].colChkInfo.displacement.y;
     Actor_ApplyMovement(arg0);
 }
 
@@ -1077,8 +1077,8 @@ void func_80A69F5C(EnMushi2 *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     temp_v0 = arg0->unk_34C;
-    if ((temp_v0 != 0) && (temp_v0->unk_1E4 == 0)) {
-        temp_v0->unk_1E4 = 1;
+    if ((temp_v0 != 0) && (temp_v0[1].colChkInfo.damageTable == 0)) {
+        temp_v0[1].colChkInfo.damageTable = (DamageTable *)1;
         return 1;
     }
     return 0;
@@ -1088,7 +1088,7 @@ void func_80A69F5C(EnMushi2 *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     temp_v0 = arg0->unk_34C;
-    if ((temp_v0 != 0) && (temp_v0->unk_1E4 == 2)) {
+    if ((temp_v0 != 0) && (temp_v0[1].colChkInfo.damageTable == 2)) {
         temp_v0->unk_1E0 = (s8) (temp_v0->unk_1E0 + 1);
         return 1;
     }
@@ -1100,8 +1100,8 @@ void func_80A69F5C(EnMushi2 *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     temp_v0 = arg0->unk_34C;
-    if ((temp_v0 != 0) && ((temp_a0 = temp_v0->unk_1E4, (temp_a0 == 2)) || (temp_a0 == 1))) {
-        temp_v0->unk_1E4 = 4;
+    if ((temp_v0 != 0) && ((temp_a0 = temp_v0[1].colChkInfo.damageTable, (temp_a0 == 2)) || (temp_a0 == 1))) {
+        temp_v0[1].colChkInfo.damageTable = (DamageTable *)4;
         return 1;
     }
     return 0;
@@ -1528,7 +1528,7 @@ void func_80A6B078(Actor *arg0) {
     arg0->unk_160 = 1.9f;
     Audio_PlayActorSound2(arg0, 0x39E9U);
     func_80A68B6C((EnMushi2 *) arg0);
-    arg0->unk_308 = func_80A6B0D8;
+    arg0[2].floorPoly = (CollisionPoly *) func_80A6B0D8;
 }
 
 void func_80A6B0D8(EnMushi2 *this, GlobalContext *globalCtx) {

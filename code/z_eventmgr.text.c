@@ -178,11 +178,11 @@ void ActorCutscene_Init(GlobalContext *globalCtx, ActorCutscene *cutscenes, s32 
     phi_a3 = actorCutsceneNextCutscenes;
     do {
         temp_a3 = phi_a3 + 4;
-        phi_v1->unk_1 = 0;
+        phi_v1[1] = 0;
         temp_a3->unk_-3 = 0;
-        phi_v1->unk_2 = 0;
+        phi_v1[2] = 0;
         temp_a3->unk_-2 = 0;
-        phi_v1->unk_3 = 0;
+        phi_v1[3] = 0;
         temp_a3->unk_-1 = 0;
         temp_v1 = phi_v1 + 4;
         temp_v1->unk_-4 = 0;
@@ -190,13 +190,13 @@ void ActorCutscene_Init(GlobalContext *globalCtx, ActorCutscene *cutscenes, s32 
         phi_v1 = temp_v1;
         phi_a3 = temp_a3;
     } while (temp_a3 != &D_801F4E20);
-    actorCutsceneCurrent.unk_4 = -1;
+    (&actorCutsceneCurrent)[2] = -1;
     actorCutsceneCurrent.unk_10 = globalCtx;
-    actorCutsceneCurrent.unk_2 = -1;
+    (&actorCutsceneCurrent)[1] = -1;
     actorCutsceneCurrent.unk_8 = 0;
-    actorCutsceneCurrent.unk_6 = 0;
-    actorCutsceneCurrent.unk_16 = 0;
-    actorCutsceneCurrent.unk_0 = actorCutsceneCurrent.unk_4;
+    (&actorCutsceneCurrent)[3] = 0;
+    (&actorCutsceneCurrent)[11] = 0;
+    actorCutsceneCurrent.unk_0 = (&actorCutsceneCurrent)[2];
 }
 
 void func_800F15D8(Camera *camera) {
@@ -365,50 +365,50 @@ block_3:
     if (temp_v1_3 != 0) {
         if (temp_v1_3 != 1) {
             if (temp_v1_3 == 2) {
-                func_801699D4(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14, actorCutsceneCurrent.unk_6);
+                func_801699D4(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10], (&actorCutsceneCurrent)[3]);
                 temp_v1_4 = actorCutsceneCurrent.unk_10;
-                temp_a3 = temp_v1_4->cameraPtrs[actorCutsceneCurrent.unk_14];
-                temp_a3->flags2 = (temp_v1_4->cameraPtrs[actorCutsceneCurrent.unk_6]->flags2 & 0x100) | (temp_a3->flags2 & 0xFEFF);
+                temp_a3 = temp_v1_4->cameraPtrs[(&actorCutsceneCurrent)[10]];
+                temp_a3->flags2 = (temp_v1_4->cameraPtrs[(&actorCutsceneCurrent)[3]]->flags2 & 0x100) | (temp_a3->flags2 & 0xFEFF);
                 ActorCutscene_SetIntentToPlay(0x7E);
             } else {
                 goto block_13;
             }
         } else {
             temp_v1_5 = actorCutsceneCurrent.unk_10;
-            temp_a3_2 = temp_v1_5->cameraPtrs[actorCutsceneCurrent.unk_14];
+            temp_a3_2 = temp_v1_5->cameraPtrs[(&actorCutsceneCurrent)[10]];
             temp_t1 = temp_a3_2->flags2;
             phi_a3 = temp_a3_2;
-            if (actorCutsceneCurrent.unk_16 != 0) {
+            if ((&actorCutsceneCurrent)[11] != 0) {
                 sp22 = temp_a3_2->thisIdx;
                 sp20 = temp_t1;
                 memcpy((void *) temp_a3_2, (void *) &temp_v1_5->subCameras[2], 0x178U);
                 temp_v1_6 = actorCutsceneCurrent.unk_10;
-                temp_a3_3 = temp_v1_6->cameraPtrs[actorCutsceneCurrent.unk_14];
-                temp_a3_3->flags2 = (temp_v1_6->cameraPtrs[actorCutsceneCurrent.unk_6]->flags2 & 0x100) | (temp_a3_3->flags2 & 0xFEFF);
-                temp_a3_4 = actorCutsceneCurrent.unk_10->cameraPtrs[actorCutsceneCurrent.unk_14];
+                temp_a3_3 = temp_v1_6->cameraPtrs[(&actorCutsceneCurrent)[10]];
+                temp_a3_3->flags2 = (temp_v1_6->cameraPtrs[(&actorCutsceneCurrent)[3]]->flags2 & 0x100) | (temp_a3_3->flags2 & 0xFEFF);
+                temp_a3_4 = actorCutsceneCurrent.unk_10->cameraPtrs[(&actorCutsceneCurrent)[10]];
                 temp_a3_4->flags2 = (temp_a3_4->flags2 & 0xFFFB) | (temp_t1 & 4);
-                actorCutsceneCurrent.unk_16 = 0;
-                phi_a3 = actorCutsceneCurrent.unk_10->cameraPtrs[actorCutsceneCurrent.unk_14];
+                (&actorCutsceneCurrent)[11] = 0;
+                phi_a3 = actorCutsceneCurrent.unk_10->cameraPtrs[(&actorCutsceneCurrent)[10]];
             }
             phi_a3->thisIdx = temp_a3_2->thisIdx;
         }
     } else {
 block_13:
-        func_801699D4(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14, actorCutsceneCurrent.unk_6);
+        func_801699D4(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10], (&actorCutsceneCurrent)[3]);
         temp_v1_7 = actorCutsceneCurrent.unk_10;
-        temp_a3_5 = temp_v1_7->cameraPtrs[actorCutsceneCurrent.unk_14];
-        temp_a3_5->flags2 = (temp_v1_7->cameraPtrs[actorCutsceneCurrent.unk_6]->flags2 & 0x100) | (temp_a3_5->flags2 & 0xFEFF);
+        temp_a3_5 = temp_v1_7->cameraPtrs[(&actorCutsceneCurrent)[10]];
+        temp_a3_5->flags2 = (temp_v1_7->cameraPtrs[(&actorCutsceneCurrent)[3]]->flags2 & 0x100) | (temp_a3_5->flags2 & 0xFEFF);
     }
-    temp_a1 = actorCutsceneCurrent.unk_6;
+    temp_a1 = (&actorCutsceneCurrent)[3];
     if (temp_a1 != 0) {
         func_80169600(actorCutsceneCurrent.unk_10, temp_a1);
-        func_80169590(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14, 7);
+        func_80169590(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10], 7);
     }
     actorCutsceneCurrent.unk_0 = -1;
-    actorCutsceneCurrent.unk_4 = -1;
-    actorCutsceneCurrent.unk_2 = -1;
+    (&actorCutsceneCurrent)[2] = -1;
+    (&actorCutsceneCurrent)[1] = -1;
     actorCutsceneCurrent.unk_8 = NULL;
-    actorCutsceneCurrent.unk_6 = 0;
+    (&actorCutsceneCurrent)[3] = 0;
 }
 
 s16 ActorCutscene_Update(void) {
@@ -422,19 +422,19 @@ s16 ActorCutscene_Update(void) {
     if (ActorCutscene_GetCanPlayNext(0x7E) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields(0x7E, actorCutscenesGlobalCtxt->actorCtx.actorList[2].first);
     }
-    temp_v1 = actorCutsceneCurrent.unk_4;
+    temp_v1 = (&actorCutsceneCurrent)[2];
     phi_v1 = temp_v1;
     if (temp_v1 == -1) {
         temp_a0 = actorCutsceneCurrent.unk_0;
         if (temp_a0 != -1) {
-            temp_v0 = actorCutsceneCurrent.unk_2;
+            temp_v0 = (&actorCutsceneCurrent)[1];
             if ((s32) temp_v0 > 0) {
-                actorCutsceneCurrent.unk_2 = (s16) (temp_v0 - 1);
+                (&actorCutsceneCurrent)[1] = temp_v0 - 1;
             }
             sp1E = 1;
-            if (actorCutsceneCurrent.unk_2 == 0) {
+            if ((&actorCutsceneCurrent)[1] == 0) {
                 ActorCutscene_Stop(temp_a0);
-                phi_v1 = actorCutsceneCurrent.unk_4;
+                phi_v1 = (&actorCutsceneCurrent)[2];
             }
         }
     }
@@ -447,7 +447,7 @@ s16 ActorCutscene_Update(void) {
         if ((ActorCutscene_MarkNextCutscenes() == 0) && (sp1E != 0)) {
             ShrinkWindow_SetLetterboxTarget(0);
         } else if (sp1E == 0) {
-            func_800F15D8(Play_GetCamera(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14));
+            func_800F15D8(Play_GetCamera(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10]));
         }
     }
     return sp1E;
@@ -489,7 +489,7 @@ s16 ActorCutscene_StartAndSetUnkLinkFields(s16 index, Actor *actor) {
     sp1E = (s16) temp_v0;
     if (temp_v0 >= 0) {
         func_800B7298(actorCutscenesGlobalCtxt, NULL, 7U);
-        if (actorCutsceneCurrent.unk_2 == 0) {
+        if ((&actorCutsceneCurrent)[1] == 0) {
             ActorCutscene_Stop(actorCutsceneCurrent.unk_0);
         }
         actorCutsceneCurrent.unk_C = 1;
@@ -505,7 +505,7 @@ s16 ActorCutscene_StartAndSetFlag(s16 index, Actor *actor) {
     sp1E = (s16) temp_v0;
     if (temp_v0 >= 0) {
         func_800B7298(actorCutscenesGlobalCtxt, NULL, 7U);
-        if (actorCutsceneCurrent.unk_2 == 0) {
+        if ((&actorCutsceneCurrent)[1] == 0) {
             ActorCutscene_Stop(actorCutsceneCurrent.unk_0);
         }
         if (actor != 0) {
@@ -548,10 +548,10 @@ s16 ActorCutscene_Start(s16 index, Actor *actor) {
         sp20 = 2;
     }
     if (sp20 != 0) {
-        actorCutsceneCurrent.unk_14 = Play_GetActiveCameraIndex(actorCutsceneCurrent.unk_10);
-        actorCutsceneCurrent.unk_6 = func_801694DC(actorCutsceneCurrent.unk_10);
-        sp28 = Play_GetCamera(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_6);
-        temp_v0_2 = Play_GetCamera(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14);
+        (&actorCutsceneCurrent)[10] = Play_GetActiveCameraIndex(actorCutsceneCurrent.unk_10);
+        (&actorCutsceneCurrent)[3] = func_801694DC(actorCutsceneCurrent.unk_10);
+        sp28 = Play_GetCamera(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[3]);
+        temp_v0_2 = Play_GetCamera(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10]);
         sp24 = temp_v0_2;
         temp_v1 = temp_v0_2->setting;
         if ((temp_v1 == 0x2C) || (temp_v1 == 0x2D) || (temp_v1 == 0x56)) {
@@ -562,17 +562,17 @@ s16 ActorCutscene_Start(s16 index, Actor *actor) {
             }
         }
         memcpy((void *) sp28, (void *) sp24, 0x178U);
-        sp28->thisIdx = actorCutsceneCurrent.unk_6;
+        sp28->thisIdx = (&actorCutsceneCurrent)[3];
         Camera_ClearFlags(sp28, 0x41);
-        func_80169590(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_14, 1);
-        func_80169590(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_6, 7);
+        func_80169590(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[10], 1);
+        func_80169590(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[3], 7);
         actorCutsceneCurrent.unk_8 = actor;
         sp28->target = actor;
         sp28->flags1 = 0;
         if (sp20 == 1) {
             func_800DFAC8(sp28, 0xA);
             func_800EDDCC(actorCutsceneCurrent.unk_10, (u32) sp2C->unk_7);
-            actorCutsceneCurrent.unk_2 = (s16) sp2C->length;
+            (&actorCutsceneCurrent)[1] = sp2C->length;
         } else {
             temp_a1 = sp2C->unk4;
             if (temp_a1 != -1) {
@@ -580,7 +580,7 @@ s16 ActorCutscene_Start(s16 index, Actor *actor) {
             } else {
                 func_800DFAC8(sp28, 0xA);
             }
-            actorCutsceneCurrent.unk_2 = (s16) sp2C->length;
+            (&actorCutsceneCurrent)[1] = sp2C->length;
         }
     }
     actorCutsceneCurrent.unk_0 = index;
@@ -598,7 +598,7 @@ s16 ActorCutscene_Stop(s16 index) {
     index = index;
     temp_v0 = ActorCutscene_GetCutsceneImpl(actorCutsceneCurrent.unk_0);
     phi_a1 = index;
-    if (((s32) actorCutsceneCurrent.unk_2 > 0) && (temp_v0->unk6 == -1)) {
+    if (((s32) (&actorCutsceneCurrent)[1] > 0) && (temp_v0->unk6 == -1)) {
         return -2;
     }
     if ((index != 0x7F) && (temp_v0->unk6 != -1)) {
@@ -609,8 +609,8 @@ s16 ActorCutscene_Stop(s16 index) {
     }
     temp_a0 = actorCutsceneCurrent.unk_0;
     if (phi_a1 == temp_a0) {
-        actorCutsceneCurrent.unk_4 = temp_a0;
-        return actorCutsceneCurrent.unk_4;
+        (&actorCutsceneCurrent)[2] = temp_a0;
+        return (&actorCutsceneCurrent)[2];
     }
     return -1;
 }
@@ -714,10 +714,10 @@ s32 func_800F22C4(s16 param_1, Actor *actor) {
         return 4;
     }
     func_800B8898(actorCutsceneCurrent.unk_10, actor, &sp2A, &sp28);
-    if (((s32) sp2A >= 0x29) && ((s32) sp2A < 0x118) && ((s32) sp28 >= 0x29) && ((s32) sp28 < 0xC8) && (OLib_Vec3fDist((Vec3f *) &actor->focus, Play_GetCamera(actorCutsceneCurrent.unk_10, actorCutsceneCurrent.unk_6) + 0x5C) < 700.0f)) {
+    if (((s32) sp2A >= 0x29) && ((s32) sp2A < 0x118) && ((s32) sp28 >= 0x29) && ((s32) sp28 < 0xC8) && (OLib_Vec3fDist((Vec3f *) &actor->focus, Play_GetCamera(actorCutsceneCurrent.unk_10, (&actorCutsceneCurrent)[3]) + 0x5C) < 700.0f)) {
         return 1;
     }
-    if ((s32) actorCutsceneCurrent.unk_2 < 6) {
+    if ((s32) (&actorCutsceneCurrent)[1] < 6) {
         return 2;
     }
     phi_v0 = 3;

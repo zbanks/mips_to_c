@@ -1442,7 +1442,7 @@ void EnKanban_Update(Actor *thisx, GlobalContext *globalCtx) {
             temp_v0_5 = temp_t2->toucher.dmgFlags;
             temp_t0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if ((temp_v0_5 & 0x200) != 0) {
-                this->unk_18C = *(&D_8095750C + sp108->unk_ADA);
+                this->unk_18C = *(&D_8095750C + (s8) sp108[8].colChkInfo.atHitEffect);
             } else if ((temp_v0_5 & 0x10) != 0) {
                 temp_v0_6 = this->unk_19A;
                 temp_v1_3 = this->unk_199;
@@ -1560,7 +1560,7 @@ block_89:
             temp_s0->world.pos.y += sp100;
             temp_a0_2 = temp_v1_5 + &D_80957428;
             temp_s0->world.pos.z += sp104;
-            temp_s0->unk_154 = (f32) (-temp_v0_10->unk_0 / this->actor.scale.x);
+            temp_s0[1].home.pos.z = -temp_v0_10->unk_0 / this->actor.scale.x;
             temp_s0->unk_158 = (f32) (-temp_v0_10->unk_4 / this->actor.scale.x);
             temp_s0->unk_15C = (f32) (-temp_v0_10->unk_8 / this->actor.scale.x);
             temp_s0->unk_174 = (f32) temp_a0_2->unk_0;
@@ -2163,7 +2163,7 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0_2);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000C30;
     temp_v0_2->words.w0 = 0xDE000000;
     if (this->unk_14C != 0) {
@@ -2186,14 +2186,14 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY(this->unk_164, 1U);
         SysMatrix_InsertTranslation(this->unk_154, this->unk_158, this->unk_15C - 100.0f, 1);
         temp_v0_3 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_3 + 8;
+        temp_s1->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp68 = temp_v0_3;
         sp68->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         phi_a1 = 3;
         if ((D_8095732C & this->unk_14E) != 0) {
             temp_v0_4 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_4 + 8;
+            temp_s1->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDE000000;
             temp_v0_4->words.w1 = D_80957550;
         }
@@ -2201,28 +2201,28 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_a3 = &D_80957332;
         if ((D_8095732E & this->unk_14E) != 0) {
             temp_v0_5 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_5 + 8;
+            temp_s1->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDE000000;
             temp_v0_5->words.w1 = D_80957554;
             phi_a0 = this->unk_14E;
         }
         if ((D_80957330 & phi_a0) != 0) {
             temp_v0_6 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_6 + 8;
+            temp_s1->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDE000000;
             temp_v0_6->words.w1 = *D_80957558;
         }
         do {
             if ((phi_a3->unk_0 & this->unk_14E) != 0) {
                 temp_v0_7 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_7 + 8;
+                temp_s1->polyOpa.p = &temp_v0_7[1];
                 temp_v0_7->words.w0 = 0xDE000000;
                 temp_v0_7->words.w1 = *(&D_80957550 + (phi_a1 * 4));
             }
             phi_a0_2 = this->unk_14E;
             if ((phi_a3->unk_2 & this->unk_14E) != 0) {
                 temp_v0_8 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_8 + 8;
+                temp_s1->polyOpa.p = &temp_v0_8[1];
                 temp_v0_8->words.w0 = 0xDE000000;
                 temp_v0_8->words.w1 = (&D_80957550 + (phi_a1 * 4))->unk_4;
                 phi_a0_2 = this->unk_14E;
@@ -2230,14 +2230,14 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_a0_3 = phi_a0_2;
             if ((phi_a3->unk_4 & phi_a0_2) != 0) {
                 temp_v0_9 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_9 + 8;
+                temp_s1->polyOpa.p = &temp_v0_9[1];
                 temp_v0_9->words.w0 = 0xDE000000;
                 temp_v0_9->words.w1 = (&D_80957550 + (phi_a1 * 4))->unk_8;
                 phi_a0_3 = this->unk_14E;
             }
             if ((phi_a3->unk_6 & phi_a0_3) != 0) {
                 temp_v0_10 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_10 + 8;
+                temp_s1->polyOpa.p = &temp_v0_10[1];
                 temp_v0_10->words.w0 = 0xDE000000;
                 temp_v0_10->words.w1 = (&D_80957550 + (phi_a1 * 4))->unk_C;
             }
@@ -2255,7 +2255,7 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.world.pos.y = this->actor.home.pos.y + phi_f0;
         SysMatrix_InsertTranslation(0.0f, 0.0f, -100.0f, 1);
         temp_v0_12 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_12 + 8;
+        temp_s1->polyOpa.p = &temp_v0_12[1];
         temp_v0_12->words.w0 = 0xDA380003;
         sp5C = temp_v0_12;
         sp5C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -2263,42 +2263,42 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_a1_2 = 3;
         if (temp_a0_3 == 0xFFFF) {
             temp_v0_13 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_13 + 8;
+            temp_s1->polyOpa.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = (u32) &D_0405AED0;
             temp_v0_13->words.w0 = 0xDE000000;
         } else {
             phi_a3_2 = &D_80957332;
             if ((D_8095732C & temp_a0_3) != 0) {
                 temp_v0_14 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_14 + 8;
+                temp_s1->polyOpa.p = &temp_v0_14[1];
                 temp_v0_14->words.w0 = 0xDE000000;
                 temp_v0_14->words.w1 = D_80957550;
             }
             phi_a0_4 = this->unk_14E;
             if ((D_8095732E & this->unk_14E) != 0) {
                 temp_v0_15 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_15 + 8;
+                temp_s1->polyOpa.p = &temp_v0_15[1];
                 temp_v0_15->words.w0 = 0xDE000000;
                 temp_v0_15->words.w1 = D_80957554;
                 phi_a0_4 = this->unk_14E;
             }
             if ((D_80957330 & phi_a0_4) != 0) {
                 temp_v0_16 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_16 + 8;
+                temp_s1->polyOpa.p = &temp_v0_16[1];
                 temp_v0_16->words.w0 = 0xDE000000;
                 temp_v0_16->words.w1 = *D_80957558;
             }
             do {
                 if ((phi_a3_2->unk_0 & this->unk_14E) != 0) {
                     temp_v0_17 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_17 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_17[1];
                     temp_v0_17->words.w0 = 0xDE000000;
                     temp_v0_17->words.w1 = *(&D_80957550 + (phi_a1_2 * 4));
                 }
                 phi_a0_5 = this->unk_14E;
                 if ((phi_a3_2->unk_2 & this->unk_14E) != 0) {
                     temp_v0_18 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_18 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_18[1];
                     temp_v0_18->words.w0 = 0xDE000000;
                     temp_v0_18->words.w1 = (&D_80957550 + (phi_a1_2 * 4))->unk_4;
                     phi_a0_5 = this->unk_14E;
@@ -2306,14 +2306,14 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 phi_a0_6 = phi_a0_5;
                 if ((phi_a3_2->unk_4 & phi_a0_5) != 0) {
                     temp_v0_19 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_19 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_19[1];
                     temp_v0_19->words.w0 = 0xDE000000;
                     temp_v0_19->words.w1 = (&D_80957550 + (phi_a1_2 * 4))->unk_8;
                     phi_a0_6 = this->unk_14E;
                 }
                 if ((phi_a3_2->unk_6 & phi_a0_6) != 0) {
                     temp_v0_20 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v0_20 + 8;
+                    temp_s1->polyOpa.p = &temp_v0_20[1];
                     temp_v0_20->words.w0 = 0xDE000000;
                     temp_v0_20->words.w1 = (&D_80957550 + (phi_a1_2 * 4))->unk_C;
                 }
@@ -2330,24 +2330,24 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
             SysMatrix_InsertZRotation_f(*(&D_80957D7C + (this->unk_18C * 4)), 1);
             Matrix_Scale(0.0f, 10.0f, 2.0f, 1);
             temp_v0_21 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_21 + 8;
+            temp_s1->polyXlu.p = &temp_v0_21[1];
             temp_v0_21->words.w1 = 0;
             temp_v0_21->words.w0 = 0xE7000000;
             temp_v0_22 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_22 + 8;
+            temp_s1->polyXlu.p = &temp_v0_22[1];
             temp_v0_22->words.w0 = 0xFA000000;
             temp_v0_22->words.w1 = (this->unk_190 & 0xFF) | ~0xFF;
             temp_v0_23 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_23 + 8;
+            temp_s1->polyXlu.p = &temp_v0_23[1];
             temp_v0_23->words.w1 = -0x6A00;
             temp_v0_23->words.w0 = 0xFB000000;
             temp_v0_24 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_24 + 8;
+            temp_s1->polyXlu.p = &temp_v0_24[1];
             temp_v0_24->words.w0 = 0xDA380003;
             sp40 = temp_v0_24;
             sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_25 = temp_s1->polyXlu.p;
-            temp_s1->polyXlu.p = temp_v0_25 + 8;
+            temp_s1->polyXlu.p = &temp_v0_25[1];
             temp_v0_25->words.w1 = (u32) &D_06001630;
             temp_v0_25->words.w0 = 0xDE000000;
         }
@@ -2365,7 +2365,7 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_f0_3 = temp_f0_2 * ((400.0f - temp_f2_2) * 0.01f);
         }
         temp_v0_27 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_27 + 8;
+        temp_s1->polyXlu.p = &temp_v0_27[1];
         temp_v0_27->words.w1 = (s32) phi_f0_3 & 0xFF;
         temp_v0_27->words.w0 = 0xFA000000;
         temp_v0_28 = sp7C->unk_14B;
@@ -2387,7 +2387,7 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY(this->unk_164, 1U);
         SysMatrix_InsertTranslation(this->unk_154, this->unk_158, this->unk_15C, 1);
         temp_v0_29 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_29 + 8;
+        temp_s1->polyXlu.p = &temp_v0_29[1];
         temp_v0_29->words.w0 = 0xDA380003;
         sp2C = temp_v0_29;
         sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -2404,11 +2404,11 @@ void EnKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_v1 += 1;
         } while (temp_v0_30 != &D_80957D7C);
         temp_v0_31 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_31 + 8;
+        temp_s1->polyXlu.p = &temp_v0_31[1];
         temp_v0_31->words.w0 = 0xDB060020;
         temp_v0_31->words.w1 = Lib_SegmentedToVirtual((void *) sp20);
         temp_v0_32 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_32 + 8;
+        temp_s1->polyXlu.p = &temp_v0_32[1];
         temp_v0_32->words.w1 = (u32) &D_80957DE0;
         temp_v0_32->words.w0 = 0xDE000000;
     }

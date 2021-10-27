@@ -255,12 +255,12 @@ void func_80AC0D2C(Actor *arg0, GlobalContext *arg1) {
     s32 phi_v1_2;
 
     temp_s0 = arg1->actorCtx.actorList[2].first;
-    Math_SmoothStepToF(arg0 + 0x24, temp_s0->unk_BEC, 0.5f, 100.0f, 0.01f);
-    Math_SmoothStepToF(arg0 + 0x28, temp_s0->unk_BF0, 0.5f, 100.0f, 0.01f);
+    Math_SmoothStepToF(arg0 + 0x24, temp_s0[9].floorHeight, 0.5f, 100.0f, 0.01f);
+    Math_SmoothStepToF(arg0 + 0x28, temp_s0[9].yDistToWater, 0.5f, 100.0f, 0.01f);
     Math_SmoothStepToF(arg0 + 0x2C, temp_s0->unk_BF4, 0.5f, 100.0f, 0.01f);
     arg0->scale.x -= arg0->unk_174;
     temp_f2 = arg0->scale.x;
-    arg0->shape.rot.z += (s32) arg0->unk_170;
+    arg0->shape.rot.z += (s32) arg0[1].world.pos.z;
     if (temp_f2 < 0.0f) {
         Actor_SetScale(arg0, 0.0f);
     } else {
@@ -307,7 +307,7 @@ loop_8:
         Actor_MarkForDeath(arg0);
         return;
     }
-    arg0->unk_170 = (f32) (arg0->unk_170 + 0.002746582f);
+    arg0[1].world.pos.z += 0.002746582f;
     arg0->unk_174 = (f32) (arg0->unk_174 + 0.15f);
 }
 

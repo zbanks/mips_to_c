@@ -202,10 +202,10 @@ void func_80BD7ED8(Actor *arg0, GlobalContext *arg1) {
     temp_a1 = temp_a3->home.rot.y;
     arg0 = temp_a3;
     if (func_80BD7E0C(temp_a3, temp_a1, arg1, temp_a3) != 0) {
-        arg0->unk_1AC = BgIknvObj_UpdateSakonDoor;
+        arg0[1].velocity.y = (bitwise f32) BgIknvObj_UpdateSakonDoor;
         gSaveContext.weekEventReg[51] &= 0xEF;
     }
-    CollisionCheck_SetOC(arg1, &arg1->colChkCtx, arg0 + 0x15C);
+    CollisionCheck_SetOC(arg1, &arg1->colChkCtx, (Collider *) &arg0[1].home.rot.z);
 }
 
 void func_80BD7F4C(void *arg0, GlobalContext *arg1) {
@@ -239,9 +239,9 @@ void func_80BD8040(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = temp_a3;
     arg0 = temp_a3;
     if (func_80BD7CEC(temp_a0, temp_a3) != 0) {
-        arg0->unk_1AC = func_80BD7FDC;
+        arg0[1].velocity.y = (bitwise f32) func_80BD7FDC;
     }
-    CollisionCheck_SetOC(arg1, arg1 + 0x18884, arg0 + 0x15C);
+    CollisionCheck_SetOC(arg1, arg1 + 0x18884, (Collider *) &arg0[1].home.rot.z);
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj *this, GlobalContext *globalCtx) {
@@ -275,7 +275,7 @@ void BgIknvObj_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v0 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0 + 8;
+    temp_a2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_a2;
     sp18 = temp_v0;
@@ -283,7 +283,7 @@ void BgIknvObj_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp20 = temp_a2;
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_2 + 8;
+    temp_a2->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) this->displayListPtr;
 }

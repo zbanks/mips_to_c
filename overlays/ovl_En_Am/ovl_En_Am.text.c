@@ -320,7 +320,7 @@ void func_808B00D8(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x3845U);
     Audio_PlayActorSound2(arg0, 0x3848U);
     arg0->unk_238 = 0x12C;
-    arg0->unk_230 = func_808B0124;
+    arg0[1].projectedPos.x = (bitwise f32) func_808B0124;
 }
 
 void func_808B0124(EnAm *this, GlobalContext *globalCtx) {
@@ -363,7 +363,7 @@ void func_808B0208(Actor *arg0, GlobalContext *arg1) {
     sp20 = temp_a0;
     SkelAnime_FrameUpdateMatrix(temp_a0);
     if (func_801378B8(temp_a0, 8.0f) != 0) {
-        arg0->speedXZ = arg0->unk_240;
+        arg0->speedXZ = arg0[1].uncullZoneForward;
         arg0->velocity.y = 12.0f;
     } else if (arg0->unk_15C > 11.0f) {
         if ((arg0->bgCheckFlags & 1) == 0) {
@@ -376,7 +376,7 @@ void func_808B0208(Actor *arg0, GlobalContext *arg1) {
             }
         }
     }
-    if (func_808B0894 != arg0->unk_230) {
+    if (func_808B0894 != (bitwise s32) arg0[1].projectedPos.x) {
         arg0->shape.rot.y = arg0->world.rot.y;
     }
 }
@@ -418,9 +418,9 @@ void func_808B03C0(EnAm *this, GlobalContext *globalCtx) {
 
 void func_808B0460(Actor *arg0) {
     arg0->world.rot.y = arg0->shape.rot.y;
-    arg0->unk_240 = 0.0f;
+    arg0[1].uncullZoneForward = 0.0f;
     arg0->unk_23C = Actor_YawToPoint(arg0, arg0 + 8);
-    arg0->unk_230 = func_808B04A8;
+    arg0[1].projectedPos.x = (bitwise f32) func_808B04A8;
 }
 
 void func_808B04A8(EnAm *this, GlobalContext *globalCtx) {
@@ -448,10 +448,10 @@ void func_808B0508(EnAm *this, GlobalContext *globalCtx) {
 }
 
 void func_808B057C(Actor *arg0) {
-    arg0->unk_240 = 6.0f;
+    arg0[1].uncullZoneForward = 6.0f;
     arg0->unk_23C = Actor_YawToPoint(arg0, arg0 + 8);
     arg0->unk_236 = 1;
-    arg0->unk_230 = func_808B05C8;
+    arg0[1].projectedPos.x = (bitwise f32) func_808B05C8;
 }
 
 void func_808B05C8(EnAm *this, GlobalContext *globalCtx) {
@@ -501,7 +501,7 @@ void func_808B06D0(Actor *arg0, GlobalContext *arg1) {
     Audio_PlayActorSound2(arg0, 0x3847U);
     arg0->unk_2F9 = (u8) (arg0->unk_2F9 & 0xFFFE);
     arg0->unk_234 = 0xFF;
-    arg0->unk_230 = func_808B07A8;
+    arg0[1].projectedPos.x = (bitwise f32) func_808B07A8;
 }
 
 void func_808B07A8(EnAm *this, GlobalContext *globalCtx) {
@@ -616,9 +616,9 @@ s32 func_808B0B9C(Actor *arg0, GlobalContext *arg1) {
         }
         arg0->unk_2F8 = (u8) (arg0->unk_2F8 & 0xFFFD);
         if (arg0->colChkInfo.damageEffect == 4) {
-            arg0->unk_248 = 0.7f;
-            arg0->unk_244 = 4.0f;
-            Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0->unk_30E, (f32) arg0->unk_310, (f32) arg0->unk_312, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
+            arg0[1].uncullZoneDownward = 0.7f;
+            arg0[1].uncullZoneScale = 4.0f;
+            Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0[2].wallYaw, (f32) arg0->unk_310, (f32) arg0->unk_312, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         }
         func_808B06D0(arg0, arg1);
         return 1;
@@ -717,8 +717,8 @@ void func_808B0EA4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
         do {
             SysMatrix_MultiplyVector3fByState(phi_s1, phi_s2);
             temp_s0 = phi_s0 + 1;
-            phi_s1 += 0xC;
-            phi_s2 += 0xC;
+            phi_s1 = &phi_s1[1];
+            phi_s2 = &phi_s2[1];
             phi_s0 = temp_s0;
         } while (temp_s0 != phi_s3);
     }
@@ -732,10 +732,10 @@ void EnAm_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1 = globalCtx->state.gfxCtx;
     temp_v0 = temp_v1->polyOpa.p;
     temp_v0->words.w0 = 0xDE000000;
-    temp_v0->words.w1 = (u32) (sSetupDL + 0x4B0);
-    temp_v0->unk_8 = 0xFB000000;
-    temp_v0->unk_C = (s32) this->unk_234;
-    temp_v1->polyOpa.p = temp_v0 + 0x10;
+    temp_v0->words.w1 = (u32) &sSetupDL[150];
+    temp_v0[1].words.w0 = 0xFB000000;
+    temp_v0[1].words.w1 = (u32) this->unk_234;
+    temp_v1->polyOpa.p = &temp_v0[2];
     SkelAnime_Draw(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, NULL, func_808B0EA4, (Actor *) this);
     func_800BE680(globalCtx, (Actor *) this, (Vec3f []) &this->unk_24C, 0xD, this->unk_248, 0.0f, this->unk_244, (u8) 0x14);
 }

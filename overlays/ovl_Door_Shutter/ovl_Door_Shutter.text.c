@@ -1,3 +1,68 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ s8 unk_22;                          /* inferred */
+    /* 0x023 */ s8 unk_23;                          /* inferred */
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ char pad_3A[0x2];                   /* maybe part of unk39[3]? */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct DoorShutter {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char pad_144[0x1A];
@@ -12,6 +77,12 @@ typedef struct DoorShutter {
     /* 0x168 */ f32 unk_168;                        /* inferred */
     /* 0x16C */ void (*actionFunc)(DoorShutter *, GlobalContext *);
 } DoorShutter;                                      /* size = 0x170 */
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
 
 struct _mips2c_stack_DoorShutter_Destroy {};        /* size 0x0 */
 
@@ -499,27 +570,27 @@ void func_808A0F88(Actor *arg0, GlobalContext *arg1) {
     s16 temp_a0_2;
 
     if ((Actor_GetRoomCleared(arg1, (u32) arg0->room) != 0) || (Actor_GetRoomClearedTemp(arg1, (u32) arg0->room) != 0)) {
-        arg0->unk_160 = (s16) arg0->cutscene;
-        if (arg0->unk_162 == 7) {
-            temp_a0_2 = arg0->unk_160;
+        arg0[1].params = (s16) arg0->cutscene;
+        if ((u8) arg0[1].objBankIndex == 7) {
+            temp_a0_2 = arg0[1].params;
             if (temp_a0_2 != -1) {
-                arg0->unk_160 = ActorCutscene_GetAdditionalCutscene(temp_a0_2);
+                arg0[1].params = ActorCutscene_GetAdditionalCutscene(temp_a0_2);
             }
         }
-        if (ActorCutscene_GetCanPlayNext(arg0->unk_160) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields(arg0->unk_160, arg0);
+        if (ActorCutscene_GetCanPlayNext(arg0[1].params) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields(arg0[1].params, arg0);
             Actor_SetRoomCleared(arg1, (u32) arg0->room);
             func_808A08F0((DoorShutter *) arg0, func_808A1784);
-            arg0->unk_167 = -1;
+            arg0[1].unk_23 = -1;
             return;
         }
-        ActorCutscene_SetIntentToPlay(arg0->unk_160);
+        ActorCutscene_SetIntentToPlay(arg0[1].params);
         return;
     }
     if (func_808A0E28(arg0, arg1) != 0) {
         temp_a0 = arg1->actorCtx.actorList[2].first;
         temp_a0->unk_37C = -1;
-        temp_a0->unk_380 = arg0;
+        temp_a0[2].projectedW = (bitwise f32) arg0;
         arg0->textId = 0x1801;
         func_80122F28((Player *) temp_a0, MIPS2C_ERROR(Read from unset register $a1), MIPS2C_ERROR(Read from unset register $a2));
     }
@@ -566,7 +637,7 @@ void func_808A1090(DoorShutter *arg0, GlobalContext *arg1) {
         temp_a0_2 = arg1->actorCtx.actorList[2].first;
         temp_a0_2->unk_37C = 2;
         temp_a0_2->unk_37D = (s8) temp_v0;
-        temp_a0_2->unk_380 = arg0;
+        temp_a0_2[2].projectedW = (bitwise f32) arg0;
         if (arg0->unk_163 == 7) {
             temp_a0_2->unk_37E = 0xC;
         } else {
@@ -652,17 +723,17 @@ block_13:
 }
 
 s32 func_808A1478(Actor *arg0, GlobalContext *arg1, f32 arg2) {
-    if ((1.0f - arg2) == arg0->unk_168) {
+    if ((1.0f - arg2) == arg0[1].world.pos.x) {
         if (arg2 == 1.0f) {
             Audio_PlayActorSound2(arg0, 0x285AU);
         } else {
             Audio_PlayActorSound2(arg0, 0x2859U);
         }
-        if ((arg0->unk_160 != -1) && (ActorCutscene_GetCurrentIndex() == arg0->unk_160)) {
+        if ((arg0[1].params != -1) && (ActorCutscene_GetCurrentIndex() == arg0[1].params)) {
             func_800B724C(arg1, arg0, 1U);
         }
     }
-    if (Math_StepToF(arg0 + 0x168, arg2, 0.2f) != 0) {
+    if (Math_StepToF((f32 *) &arg0[1].world, arg2, 0.2f) != 0) {
         return 1;
     }
     return 0;
@@ -673,20 +744,20 @@ void func_808A1548(Actor *arg0, GlobalContext *arg1) {
 
     if (func_808A1478(arg0, arg1, 1.0f) != 0) {
         if (Flags_GetSwitch(arg1, arg0->params & 0x7F) != 0) {
-            arg0->unk_160 = (s16) arg0->cutscene;
-            if (ActorCutscene_GetCanPlayNext(arg0->unk_160) != 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(arg0->unk_160, arg0);
+            arg0[1].params = (s16) arg0->cutscene;
+            if (ActorCutscene_GetCanPlayNext(arg0[1].params) != 0) {
+                ActorCutscene_StartAndSetUnkLinkFields(arg0[1].params, arg0);
                 func_808A08F0((DoorShutter *) arg0, func_808A1784);
-                arg0->unk_167 = -1;
+                arg0[1].unk_23 = -1;
                 return;
             }
-            ActorCutscene_SetIntentToPlay(arg0->unk_160);
+            ActorCutscene_SetIntentToPlay(arg0[1].params);
             return;
         }
         if (func_808A0E28(arg0, arg1) != 0) {
             temp_a0 = arg1->actorCtx.actorList[2].first;
             temp_a0->unk_37C = -1;
-            temp_a0->unk_380 = arg0;
+            temp_a0[2].projectedW = (bitwise f32) arg0;
             arg0->textId = 0x1800;
             func_80122F28((Player *) temp_a0, MIPS2C_ERROR(Read from unset register $a1), MIPS2C_ERROR(Read from unset register $a2));
         }
@@ -744,20 +815,20 @@ void func_808A1784(Actor *arg0, GlobalContext *arg1) {
     u8 temp_v1;
 
     temp_a3 = arg0;
-    if (temp_a3->unk_167 != 0) {
-        temp_a0 = temp_a3->unk_160;
+    if (temp_a3[1].unk_23 != 0) {
+        temp_a0 = temp_a3[1].params;
         arg0 = temp_a3;
         if (func_800F22C4(temp_a0, temp_a3) != 0) {
-            temp_v0 = arg0->unk_167;
+            temp_v0 = arg0[1].unk_23;
             if ((s32) temp_v0 < 0) {
                 if ((arg1->state.frames & 1) != 0) {
-                    arg0->unk_167 = (s8) (temp_v0 + 1);
+                    arg0[1].unk_23 = temp_v0 + 1;
                     return;
                 }
                 /* Duplicate return node #15. Try simplifying control flow for better match */
                 return;
             }
-            arg0->unk_167 = (s8) (temp_v0 - 1);
+            arg0[1].unk_23 = temp_v0 - 1;
             return;
         }
         /* Duplicate return node #15. Try simplifying control flow for better match */
@@ -765,7 +836,7 @@ void func_808A1784(Actor *arg0, GlobalContext *arg1) {
     }
     arg0 = temp_a3;
     if (func_808A1478(temp_a3, arg1, 0.0f, temp_a3) != 0) {
-        temp_v1 = arg0->unk_162;
+        temp_v1 = (u8) arg0[1].objBankIndex;
         if ((temp_v1 != 0) && (temp_v1 != 1) && (((temp_a0_2 = arg0, (temp_v1 != 7)) && (temp_v1 != 6)) || (arg0 = arg0, (func_808A0900((DoorShutter *) temp_a0_2, arg1) == 0)))) {
             func_808A08F0((DoorShutter *) arg0, func_808A1618);
         } else {
@@ -819,7 +890,7 @@ void func_808A1884(Actor *arg0, GlobalContext *arg1) {
         }
         func_8012EBF8(arg1, arg1 + 0x186E0);
     }
-    arg0->unk_15C = 0;
+    arg0[1].home.rot.z = 0;
     arg0->velocity.y = 0.0f;
     if ((func_808A0974((DoorShutter *) arg0, arg1) != 0) && ((sp54->unk_A6C & 0x800) == 0)) {
         func_808A08F0((DoorShutter *) arg0, func_808A1C50);
@@ -834,7 +905,7 @@ void func_808A1884(Actor *arg0, GlobalContext *arg1) {
 s32 func_808A1A70(Actor *arg0) {
     u8 temp_v0;
 
-    temp_v0 = arg0->unk_163;
+    temp_v0 = arg0[1].targetMode;
     if (temp_v0 == 7) {
         if (temp_v0 == 7) {
             func_800B9010(arg0, 0x2185U);
@@ -987,23 +1058,23 @@ void func_808A1E14(Actor *arg0, GlobalContext *arg1) {
             } else if (arg0->room == temp_v0) {
                 SysMatrix_InsertYRotation_f(3.1415927f, 1);
             }
-        } else if (arg0->unk_162 == 5) {
+        } else if ((u8) arg0[1].objBankIndex == 5) {
             temp_v0_2 = sp40->polyOpa.p;
-            sp40->polyOpa.p = temp_v0_2 + 8;
+            sp40->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060020;
             sp30 = temp_v0_2;
-            sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_808A22DC + (arg0->unk_15E * 4)));
+            sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_808A22DC + (arg0[1].home.unk_12 * 4)));
         }
         temp_v0_3 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0_3 + 8;
+        sp40->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp2C = temp_v0_3;
         sp2C->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_4 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0_4 + 8;
+        sp40->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = sp44->unk_0;
-        temp_f0 = arg0->unk_168;
+        temp_f0 = arg0[1].world.pos.x;
         if ((temp_f0 != 0.0f) && (sp44->unk_4 != 0)) {
             temp_t7 = sp44->unk_8;
             temp_f8 = (f32) temp_t7;
@@ -1019,22 +1090,22 @@ void func_808A1E14(Actor *arg0, GlobalContext *arg1) {
             }
             SysMatrix_InsertTranslation(0.0f, phi_f8 * (1.0f - temp_f0), phi_f4, 1);
             temp_v0_5 = sp40->polyOpa.p;
-            sp40->polyOpa.p = temp_v0_5 + 8;
+            sp40->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             sp24 = temp_v0_5;
             sp24->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
             temp_v0_6 = sp40->polyOpa.p;
-            sp40->polyOpa.p = temp_v0_6 + 8;
+            sp40->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDE000000;
             temp_v0_6->words.w1 = sp44->unk_4;
         }
-        if (arg0->unk_166 != 0) {
+        if (arg0[1].unk_22 != 0) {
             Matrix_Scale(0.01f, 0.01f, 0.025f, 1);
             phi_a2_2 = 0;
-            if (arg0->unk_162 == 5) {
+            if ((u8) arg0[1].objBankIndex == 5) {
                 phi_a2_2 = 1;
             }
-            func_800BC8B8(arg1, arg0->unk_166, phi_a2_2);
+            func_800BC8B8(arg1, arg0[1].unk_22, phi_a2_2);
         }
     }
 }

@@ -281,11 +281,11 @@ void func_80ACBD48(ObjAqua *this, GlobalContext *globalCtx) {
     if (((this->actor.params & 1) == 1) && ((s32) this->unk_196 >= 0x5B)) {
         func_80ACB940();
     }
-    temp_v0 = (Actor *) this->unk_196;
+    temp_v0 = (Actor *) this[1].unk_52;
     if ((s32) temp_v0 >= 6) {
-        (Actor *) this->unk_196 = (u8) (temp_v0 - 5);
+        (Actor *) this[1].unk_52 = temp_v0 - 5;
     } else {
-        (Actor *) this->unk_196 = 0U;
+        (Actor *) this[1].unk_52 = 0;
     }
     temp_v0_2 = (Actor *) this->shape.shadowAlpha;
     if ((s32) temp_v0_2 >= 3) {
@@ -385,16 +385,16 @@ void ObjAqua_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_v1 = (u32) (temp_v1 >> 1);
     }
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp50 = temp_v0;
     sp50->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, phi_v1, 0x20, 0x80);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA008080;
     temp_v0_2->words.w1 = this->unk_196 | 0xAAFFFF00;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0x96FF00;
     temp_v0_3->words.w0 = 0xFB000000;
     if (sp5C != 0) {
@@ -408,12 +408,12 @@ void ObjAqua_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     Matrix_RotateY(sp62, 1U);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDA380003;
     sp40 = temp_v0_4;
     sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) D_0407D590;
     temp_v0_5->words.w0 = 0xDE000000;
 }

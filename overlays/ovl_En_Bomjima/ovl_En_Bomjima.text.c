@@ -328,17 +328,17 @@ void func_80BFE524(Actor *arg0) {
     SkelAnime *temp_s0;
 
     temp_s0 = arg0 + 0x144;
-    if ((arg0->unk_2EC == 5) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
+    if ((arg0[2].velocity.x == 5) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    temp_s0_2 = arg0 + 0x144;
-    if ((arg0->unk_2EC == 0x12) && ((func_801378B8((SkelAnime *) temp_s0_2, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 6.0f) != 0))) {
+    temp_s0_2 = &arg0[1];
+    if (((bitwise s32) arg0[2].velocity.x == 0x12) && ((func_801378B8((SkelAnime *) temp_s0_2, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 6.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    if ((arg0->unk_2EC == 0xF) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 15.0f) != 0)) {
+    if (((bitwise s32) arg0[2].velocity.x == 0xF) && (func_801378B8((SkelAnime *) &arg0[1], 15.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
-    if ((arg0->unk_2EC == 6) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 8.0f) != 0)) {
+    if (((bitwise s32) arg0[2].velocity.x == 6) && (func_801378B8((SkelAnime *) &arg0[1], 8.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
 }
@@ -728,7 +728,7 @@ void func_80BFF430(EnBomjima *this, GlobalContext *globalCtx) {
     if (this->unk_2CC <= this->unk_144.animCurrentFrame) {
         temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x282, this->unk_2B0.x, this->unk_2B0.y, this->unk_2B0.z, (s16) 0, (s16) 0, (s16) 0, (s16) 0);
         if (temp_v0 != 0) {
-            temp_v0->unk_150 = 0.0f;
+            temp_v0[1].home.pos.y = 0.0f;
             temp_v0->unk_14C = (s16) this->unk_2F4;
             func_800B86C8((Actor *) this, globalCtx, temp_v0);
             gSaveContext.weekEventReg[83] &= 0xFB;
@@ -846,7 +846,7 @@ void func_80BFF754(EnBomjima *this, GlobalContext *globalCtx) {
             Math_Vec3f_Copy((Vec3f *) temp_s5, (Vec3f *) &this->actor.world);
             spA0 += Math_SinS((s16) (((temp_v0_2 * 2) + &D_80C00AF8)->unk_-4 + this->actor.world.rot.y)) * (f32) temp_s0_2->unk_2;
             spA8 += Math_CosS((s16) (temp_s0_2->unk_0 + this->actor.world.rot.y)) * (f32) temp_s0_2->unk_2;
-            Math_Vec3f_Copy(temp_s3 + 0x2A4, (Vec3f *) temp_s5);
+            Math_Vec3f_Copy((Vec3f *) &temp_s3[2].params, (Vec3f *) temp_s5);
         }
         temp_s1 = phi_s1 + 1;
         phi_s1 = temp_s1;
@@ -1255,7 +1255,7 @@ s32 func_80C007F4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     }
     if (arg1 == 0x11) {
         arg4->x += arg5->unk_28A;
-        arg4->z += arg5->unk_288;
+        arg4->z += arg5[2].id;
     }
     if ((arg1 == 0x13) && (arg5->unk_2E6 == 2)) {
         *arg2 = NULL;
@@ -1282,17 +1282,17 @@ void EnBomjima_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C00B3C + (this->unk_2E0 * 4)));
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80C00B48 + (this->unk_2E4 * 4)));
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80C00B28 + (this->unk_2E4 * 4)));

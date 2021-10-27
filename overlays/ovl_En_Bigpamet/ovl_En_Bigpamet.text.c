@@ -408,7 +408,7 @@ void func_80A2778C(Actor *arg0) {
     void *phi_s0;
     s32 phi_s3;
 
-    arg0->unk_2A2 = 0x28;
+    arg0[2].home.unk_12 = 0x28;
     phi_s0 = arg0 + 0x2FC;
     phi_s3 = 0;
     do {
@@ -495,7 +495,7 @@ void func_80A27B58(Actor *arg0) {
     sp64 = (Math_SinS((s16) (arg0->wallYaw + 0x8000)) * 50.0f) + arg0->world.pos.x;
     sp68 = arg0->world.pos.y;
     sp6C = (Math_CosS((s16) (arg0->wallYaw + 0x8000)) * 50.0f) + arg0->world.pos.z;
-    arg0->unk_2A2 = 0x28;
+    arg0[2].home.unk_12 = 0x28;
     phi_s0 = arg0 + 0x2FC;
     phi_s3 = 0;
     do {
@@ -719,13 +719,13 @@ void func_80A2844C(EnBigpamet *this, GlobalContext *globalCtx) {
 
 void func_80A284E4(Actor *arg0) {
     SkelAnime_ChangeAnimTransitionStop(arg0 + 0x144, &D_06001C68, -3.0f);
-    arg0->unk_29E = 0;
+    arg0[2].home.rot.y = 0;
     arg0->unk_2A8 = 1.0f;
     arg0->unk_2A4 = 1.0f;
     arg0->speedXZ = 0.0f;
     Audio_PlayActorSound2(arg0, 0x39A2U);
     Audio_PlayActorSound2(arg0->parent, 0x399FU);
-    arg0->unk_298 = func_80A2855C;
+    arg0[2].home.pos.z = (bitwise f32) func_80A2855C;
 }
 
 void func_80A2855C(EnBigpamet *this, GlobalContext *globalCtx) {
@@ -757,7 +757,7 @@ void func_80A28618(Actor *arg0) {
     arg0->unk_2A8 = 0.5f;
     arg0->speedXZ = 0.0f;
     Audio_PlayActorSound2(arg0, 0x392BU);
-    arg0->unk_298 = func_80A2866C;
+    arg0[2].home.pos.z = (bitwise f32) func_80A2866C;
 }
 
 void func_80A2866C(EnBigpamet *this, GlobalContext *globalCtx) {
@@ -858,9 +858,9 @@ void func_80A287E8(EnBigpamet *this, GlobalContext *globalCtx) {
 void func_80A28970(Actor *arg0) {
     Audio_PlayActorSound2(arg0, 0x392DU);
     arg0->shape.rot.z = 0;
-    arg0->unk_2C0 = (u8) (arg0->unk_2C0 & 0xFFFE);
+    arg0[2].cutscene = (u8) arg0[2].cutscene & 0xFFFE;
     arg0->unk_2D0 = 0xF7CFFFFF;
-    arg0->unk_298 = func_80A289C8;
+    arg0[2].home.pos.z = (bitwise f32) func_80A289C8;
     arg0->speedXZ = 0.0f;
 }
 
@@ -925,14 +925,14 @@ void func_80A28B98(Actor *arg0, GlobalContext *arg1) {
     u8 temp_t9;
 
     SkelAnime_ChangeAnimDefaultRepeat(arg0 + 0x144, &D_06000AF4);
-    temp_t9 = arg0->unk_2C0 & 0xFFFE;
-    arg0->unk_2C0 = temp_t9;
+    temp_t9 = arg0[2].cutscene & 0xFFFE;
+    arg0[2].cutscene = temp_t9;
     arg0->unk_2D0 = 0xF7CFFFFF;
-    arg0->unk_2C0 = (u8) (temp_t9 & 0xFFF9);
-    arg0->unk_2C1 = (u8) (arg0->unk_2C1 & 0xFFFE);
+    arg0[2].cutscene = temp_t9 & 0xFFF9;
+    arg0[2].unk39 &= 0xFFFE;
     arg0->velocity.y = 22.0f;
     arg0->speedXZ = 5.0f;
-    if ((func_80A2966C == arg0->draw) && (func_80A28DC0 != arg0->unk_298)) {
+    if ((func_80A2966C == arg0->draw) && (func_80A28DC0 != arg0[2].home.pos.z)) {
         arg0->draw = EnBigpamet_Draw;
     } else {
         temp_a1 = arg0->unk_2B8;
@@ -956,7 +956,7 @@ void func_80A28B98(Actor *arg0, GlobalContext *arg1) {
         sp24->actor.world.rot.y = Actor_YawToPoint(arg0, (Vec3f *) &arg0->home);
     }
     Audio_PlayActorSound2(arg0, 0x39A3U);
-    arg0->unk_298 = func_80A28D0C;
+    arg0[2].home.pos.z = (bitwise f32) func_80A28D0C;
 }
 
 void func_80A28D0C(EnBigpamet *this, GlobalContext *globalCtx) {
@@ -1064,12 +1064,12 @@ void func_80A29094(EnBigpamet *arg0) {
     phi_s0 = arg0 + 0x2FC;
     phi_s1 = 0;
     do {
-        phi_s0->unk_10 = (f32) (phi_s0->unk_10 - 1.0f);
+        phi_s0[1].y -= 1.0f;
         Math_Vec3f_Sum(phi_s0, phi_s0 + 0xC, phi_s0);
         phi_s0->unk_18 = (s16) (phi_s0->unk_18 + ((Rand_Next() >> 0x17) + 0x700));
         phi_s0->unk_1A = (s16) (phi_s0->unk_1A + ((Rand_Next() >> 0x17) + 0x900));
         temp_s1 = phi_s1 + 1;
-        temp_s0 = phi_s0 + 0x24;
+        temp_s0 = &phi_s0[3];
         temp_s0->unk_-8 = (s16) (phi_s0->unk_1C + ((Rand_Next() >> 0x17) + 0xB00));
         phi_s0 = temp_s0;
         phi_s1 = temp_s1;
@@ -1134,11 +1134,11 @@ void func_80A292A8(EnBigpamet *arg0, GraphicsContext **arg1) {
         temp_s3 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = temp_s3->polyOpa.p;
-        temp_s3->polyOpa.p = temp_v0 + 8;
+        temp_s3->polyOpa.p = &temp_v0[1];
         temp_v0->words.w1 = -1;
         temp_v0->words.w0 = 0xFA000080;
         temp_v0_2 = temp_s3->polyOpa.p;
-        temp_s3->polyOpa.p = temp_v0_2 + 8;
+        temp_s3->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = -1;
         temp_v0_2->words.w0 = 0xFB000000;
         phi_s0 = arg0 + 0x2FC;
@@ -1148,12 +1148,12 @@ void func_80A292A8(EnBigpamet *arg0, GraphicsContext **arg1) {
             temp_f12 = phi_s0->unk_20;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_v0_3 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_3 + 8;
+            temp_s3->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDA380003;
             temp_v0_3->words.w1 = Matrix_NewMtx(*arg1);
             temp_v0_4 = temp_s3->polyOpa.p;
             temp_s2 = phi_s2 + 1;
-            temp_s3->polyOpa.p = temp_v0_4 + 8;
+            temp_s3->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = (u32) &D_0406AB30;
             temp_v0_4->words.w0 = 0xDE000000;
             phi_s0 += 0x24;
@@ -1182,7 +1182,7 @@ s32 func_80A293E4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 
 void func_80A29494(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) {
     if (arg1 == 1) {
-        arg4->unk_2AC = (f32) SysMatrix_GetCurrentState()->mf[3][1];
+        arg4[2].world.pos.x = SysMatrix_GetCurrentState()->mf[3][1];
     }
 }
 
@@ -1196,7 +1196,7 @@ void EnBigpamet_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80A29754[this->unk_29C];
     SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80A293E4, func_80A29494, (Actor *) this);
@@ -1222,12 +1222,12 @@ s32 func_80A29580(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 
 void func_80A29628(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) {
     if (arg1 == 1) {
-        arg4->unk_2AC = (f32) SysMatrix_GetCurrentState()->mf[3][1];
+        arg4[2].world.pos.x = SysMatrix_GetCurrentState()->mf[3][1];
     }
 }
 
 void func_80A2966C(Actor *arg0, GlobalContext *arg1) {
     func_8012C28C(arg1->state.gfxCtx);
-    SkelAnime_DrawSV(arg1, arg0->unk_228, arg0->unk_244, (s32) arg0->unk_226, func_80A29580, func_80A29628, arg0);
+    SkelAnime_DrawSV(arg1, arg0[1].shape.feetPos[1].y, arg0[1].uncullZoneScale, (s32) arg0->unk_226, func_80A29580, func_80A29628, arg0);
     func_80A292A8((EnBigpamet *) arg0, (GraphicsContext **) arg1);
 }

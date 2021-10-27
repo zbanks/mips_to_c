@@ -400,7 +400,7 @@ void func_808ACD2C(void *arg0) {
 }
 
 s32 func_808ACF1C(Actor *arg0, GlobalContext *arg1) {
-    if ((Player_GetMask(arg1) != 0x10) && (Actor_XZDistanceToPoint(arg1->actorCtx.actorList[2].first, arg0 + 0x200) < arg0->unk_1F0) && (Actor_IsActorFacingLink(arg0, 0x5000) != 0)) {
+    if ((Player_GetMask(arg1) != 0x10) && (Actor_XZDistanceToPoint(arg1->actorCtx.actorList[2].first, arg0 + 0x200) < arg0[1].colChkInfo.displacement.z) && (Actor_IsActorFacingLink(arg0, 0x5000) != 0)) {
         return 1;
     }
     return 0;
@@ -418,7 +418,7 @@ void func_808ACF98(Actor *arg0) {
     temp_a0 = arg0->unk_1DA;
     arg0 = arg0;
     temp_v0 = arg0->unk_1E6;
-    arg0->world.pos.y = (Math_SinS((s16) (temp_a0 * 0x888)) * 10.0f) + arg0->unk_1EC;
+    arg0->world.pos.y = (Math_SinS((s16) (temp_a0 * 0x888)) * 10.0f) + arg0[1].colChkInfo.displacement.y;
     phi_v1 = (s32) temp_v0;
     if ((s32) temp_v0 < 0) {
         phi_v1 = -(s32) temp_v0;
@@ -482,7 +482,7 @@ void func_808AD170(EnFamos *arg0) {
 void func_808AD18C(Actor *arg0, GlobalContext *arg1) {
     func_808ACF98(arg0);
     if (arg0->unk_1D8 != 0) {
-        Math_Vec3f_Copy(arg0 + 0x200, (Vec3f *) &arg0->world);
+        Math_Vec3f_Copy((Vec3f *) &arg0[1].shape, (Vec3f *) &arg0->world);
     }
     if (func_808ACF1C(arg0, arg1) != 0) {
         func_808AD54C(arg0);
@@ -513,19 +513,19 @@ void func_808AD1F0(Actor *arg0) {
         arg0->unk_1D8 = 1U;
         phi_v0 = arg0->unk_1D7;
     }
-    temp_t1 = arg0->unk_1E8;
+    temp_t1 = arg0[1].colChkInfo.displacement.x;
     sp18 = temp_a3;
     arg0 = arg0;
     Math_Vec3s_ToVec3f(temp_a0, temp_t1 + (phi_v0 * 6));
     arg0->unk_1E4 = Actor_YawToPoint(arg0, sp18);
-    arg0->unk_1D0 = func_808AD294;
+    arg0[1].yDistToWater = (bitwise f32) func_808AD294;
     arg0->speedXZ = 0.0f;
 }
 
 void func_808AD294(Actor *arg0, GlobalContext *arg1) {
     func_808ACF98(arg0);
     if (arg0->unk_1D8 != 0) {
-        Math_Vec3f_Copy(arg0 + 0x200, (Vec3f *) &arg0->world);
+        Math_Vec3f_Copy((Vec3f *) &arg0[1].shape, (Vec3f *) &arg0->world);
     }
     if (func_808ACF1C(arg0, arg1) != 0) {
         func_808AD54C(arg0);
@@ -546,8 +546,8 @@ void func_808AD31C(Actor *arg0) {
     temp_a0 = arg0;
     arg0 = arg0;
     arg0->unk_1E4 = Actor_YawToPoint(temp_a0, temp_a1);
-    Math_Vec3f_Copy(arg0 + 0x1F4, temp_a1);
-    arg0->unk_1D0 = func_808AD378;
+    Math_Vec3f_Copy((Vec3f *) &arg0[1].colChkInfo.cylRadius, temp_a1);
+    arg0[1].yDistToWater = (bitwise f32) func_808AD378;
     arg0->speedXZ = 0.0f;
 }
 
@@ -565,7 +565,7 @@ void func_808AD378(Actor *arg0, GlobalContext *arg1) {
 void func_808AD3E8(Actor *arg0) {
     arg0->world.rot.y = arg0->shape.rot.y;
     arg0->world.rot.x = (s16) -Actor_PitchToPoint(arg0, arg0 + 0x1F4);
-    arg0->unk_1D0 = func_808AD42C;
+    arg0[1].yDistToWater = (bitwise f32) func_808AD42C;
 }
 
 void func_808AD42C(Actor *arg0, GlobalContext *arg1) {
@@ -580,14 +580,14 @@ void func_808AD42C(Actor *arg0, GlobalContext *arg1) {
     arg0->world.rot.y = arg0->shape.rot.y;
     func_808ACF98(arg0);
     if (arg0->unk_1D8 != 0) {
-        Math_Vec3f_Copy(arg0 + 0x200, (Vec3f *) &arg0->world);
+        Math_Vec3f_Copy((Vec3f *) &arg0[1].shape, (Vec3f *) &arg0->world);
     }
     if (func_808ACF1C(arg0, arg1) != 0) {
         func_808AD54C(arg0);
         return;
     }
     if (sp24 < 20.0f) {
-        if (arg0->unk_1E8 != 0) {
+        if ((bitwise s32) arg0[1].colChkInfo.displacement.x != 0) {
             func_808AD1F0((EnFamos *) arg0);
             return;
         }
@@ -616,7 +616,7 @@ void func_808AD54C(Actor *arg0) {
         Math_Vec3f_Copy(temp_a2 + 0x200, temp_a2 + 0x24);
         phi_a2 = arg0;
     }
-    phi_a2->unk_1D0 = func_808AD5B0;
+    phi_a2[1].yDistToWater = func_808AD5B0;
 }
 
 void func_808AD5B0(Actor *arg0, ? arg1) {
@@ -637,16 +637,16 @@ void func_808AD5B0(Actor *arg0, ? arg1) {
     arg0->unk_1DC = (s16) (arg0->unk_1DC - 1);
     temp_v0_2 = arg0->unk_1DC;
     if (temp_v0_2 == 0) {
-        arg0->world.pos.y = arg0->unk_1EC;
+        arg0->world.pos.y = arg0[1].colChkInfo.displacement.y;
         func_808AD66C(arg0);
         return;
     }
-    arg0->world.pos.y = (Math_SinS((s16) ((s32) (temp_v0_2 << 0x1C) >> 0x10)) * 30.0f) + arg0->unk_1EC;
+    arg0->world.pos.y = (Math_SinS((s16) ((s32) (temp_v0_2 << 0x1C) >> 0x10)) * 30.0f) + arg0[1].colChkInfo.displacement.y;
 }
 
 void func_808AD66C(Actor *arg0) {
     arg0->unk_1DA = 0;
-    arg0->unk_1D0 = func_808AD68C;
+    arg0[1].yDistToWater = func_808AD68C;
     arg0->world.rot.y = arg0->shape.rot.y;
 }
 
@@ -673,7 +673,7 @@ void func_808AD68C(Actor *arg0, GlobalContext *arg1) {
         func_808AD7EC(arg0);
         return;
     }
-    if ((Player_GetMask(arg1) == 0x10) || (arg0->unk_1F0 < Actor_XZDistanceToPoint(arg1->actorCtx.actorList[2].first, arg0 + 0x200)) || (Actor_IsActorFacingLink(arg0, 0x6000) == 0)) {
+    if ((Player_GetMask(arg1) == 0x10) || (arg0[1].colChkInfo.displacement.z < Actor_XZDistanceToPoint(arg1->actorCtx.actorList[2].first, (Vec3f *) &arg0[1].shape)) || (Actor_IsActorFacingLink(arg0, 0x6000) == 0)) {
         func_808ADC40(arg0);
     }
 }
@@ -682,12 +682,12 @@ void func_808AD7EC(Actor *arg0) {
     SkelAnime_ChangeAnimDefaultStop(arg0 + 0x144, &D_060000F8);
     arg0->speedXZ = 0.0f;
     Audio_PlayActorSound2(arg0, 0x3848U);
-    arg0->unk_1D0 = func_808AD840;
+    arg0[1].yDistToWater = (bitwise f32) func_808AD840;
 }
 
 void func_808AD840(Actor *arg0, ? arg1) {
     func_800B9010(arg0, 0x31D7U);
-    if (SkelAnime_FrameUpdateMatrix((SkelAnime *) (arg0 + 0x144)) != 0) {
+    if (SkelAnime_FrameUpdateMatrix((SkelAnime *) &arg0[1]) != 0) {
         func_808AD888(arg0);
     }
 }
@@ -696,7 +696,7 @@ void func_808AD888(Actor *arg0) {
     arg0->world.rot.x = -0x4000;
     arg0->unk_21C = (u8) (arg0->unk_21C | 1);
     arg0->unk_1DC = 4;
-    arg0->unk_1D0 = func_808AD8B8;
+    arg0[1].yDistToWater = func_808AD8B8;
 }
 
 void func_808AD8B8(Actor *arg0, GlobalContext *arg1) {
@@ -751,7 +751,7 @@ void func_808ADA74(Actor *arg0) {
     arg0->unk_1DC = 3;
     arg0->speedXZ = 0.0f;
     Audio_PlayActorSound2(arg0, 0x2802U);
-    arg0->unk_1D0 = func_808ADAE8;
+    arg0[1].yDistToWater = (bitwise f32) func_808ADAE8;
 }
 
 void func_808ADAE8(Actor *arg0, ? arg1) {
@@ -770,7 +770,7 @@ void func_808ADAE8(Actor *arg0, ? arg1) {
 
 void func_808ADB4C(Actor *arg0) {
     arg0->world.rot.x = 0x4000;
-    arg0->unk_1D0 = func_808ADB70;
+    arg0[1].yDistToWater = func_808ADB70;
     arg0->speedXZ = 0.0f;
 }
 
@@ -791,7 +791,7 @@ void func_808ADB70(Actor *arg0, ? arg1) {
             func_800B9010(arg0, 0x3293U);
         }
     }
-    if ((arg0->unk_1EC < arg0->world.pos.y) || ((arg0->bgCheckFlags & 0x10) != 0)) {
+    if ((arg0[1].colChkInfo.displacement.y < arg0->world.pos.y) || ((arg0->bgCheckFlags & 0x10) != 0)) {
         arg0->speedXZ = 0.0f;
         func_808AD66C(arg0);
     }
@@ -799,7 +799,7 @@ void func_808ADB70(Actor *arg0, ? arg1) {
 
 void func_808ADC40(Actor *arg0) {
     arg0->unk_1DC = 0x3C;
-    arg0->unk_1D0 = func_808ADC64;
+    arg0[1].yDistToWater = func_808ADC64;
     arg0->speedXZ = 0.0f;
 }
 
@@ -828,7 +828,7 @@ void func_808ADD20(Actor *arg0) {
     arg0->unk_1E0 = -1;
     arg0->world.pos.y = arg0->floorHeight - 60.0f;
     Audio_PlayActorSound2(arg0, 0x3846U);
-    arg0->unk_1D0 = func_808ADDA8;
+    arg0[1].yDistToWater = (bitwise f32) func_808ADDA8;
 }
 
 void func_808ADDA8(void *arg0, ? arg1) {
@@ -846,9 +846,9 @@ void func_808ADE00(Actor *arg0) {
     arg0->world.rot.x = 0x4000;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 4);
     arg0->unk_1DC = 0x19;
-    Math_Vec3f_Copy(arg0 + 0x1F4, (Vec3f *) &arg0->world);
+    Math_Vec3f_Copy((Vec3f *) &arg0[1].colChkInfo.cylRadius, (Vec3f *) &arg0->world);
     arg0->flags |= 0x10;
-    arg0->unk_1D0 = func_808ADE74;
+    arg0[1].yDistToWater = (bitwise f32) func_808ADE74;
 }
 
 void func_808ADE74(Actor *arg0, GlobalContext *arg1) {
@@ -882,7 +882,7 @@ void func_808ADFA4(Actor *arg0) {
     func_808ACD2C();
     arg0->flags &= -2;
     arg0->shape.shadowDraw = NULL;
-    arg0->unk_1D0 = func_808ADFF0;
+    arg0[1].yDistToWater = func_808ADFF0;
     arg0->speedXZ = 0.0f;
 }
 
@@ -907,12 +907,12 @@ void func_808AE030(EnFamos *arg0) {
     phi_s0 = arg0 + 0x344;
     phi_s1 = 0;
     do {
-        phi_s0->unk_10 = (f32) (phi_s0->unk_10 - 1.0f);
+        phi_s0[1].y -= 1.0f;
         Math_Vec3f_Sum(phi_s0, phi_s0 + 0xC, phi_s0);
         phi_s0->unk_18 = (s16) (phi_s0->unk_18 + ((Rand_Next() >> 0x17) + 0x700));
         phi_s0->unk_1A = (s16) (phi_s0->unk_1A + ((Rand_Next() >> 0x17) + 0x900));
         temp_s1 = phi_s1 + 1;
-        temp_s0 = phi_s0 + 0x24;
+        temp_s0 = &phi_s0[3];
         temp_s0->unk_-8 = (s16) (phi_s0->unk_1C + ((Rand_Next() >> 0x17) + 0xB00));
         phi_s0 = temp_s0;
         phi_s1 = temp_s1;
@@ -981,9 +981,9 @@ void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_808AE304(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 1) {
         SysMatrix_InsertTranslation(0.0f, 4000.0f, 0.0f, 1);
-        SysMatrix_InsertZRotation_s(arg5->unk_1E6, 1);
+        SysMatrix_InsertZRotation_s(arg5[81].x, 1);
         SysMatrix_InsertTranslation(0.0f, -4000.0f, 0.0f, 1);
-    } else if (((s32) arg5->unk_1E0 < 0) && ((arg1 == 3) || (arg1 == 4) || (arg1 == 5))) {
+    } else if (((s32) arg5[80].x < 0) && ((arg1 == 3) || (arg1 == 4) || (arg1 == 5))) {
         *arg2 = NULL;
     }
     return 0;
@@ -1013,11 +1013,11 @@ void func_808AE3FC(EnFamos *arg0, GraphicsContext **arg1) {
         temp_a1 = *arg1;
         temp_v0 = temp_a1->polyOpa.p;
         temp_v0->words.w0 = 0xDE000000;
-        temp_v0->words.w1 = sSetupDL + 0x4B0;
-        temp_v0->unk_8 = 0xFA000080;
-        temp_v0->unk_C = -1;
-        temp_v0->unk_10 = 0xFB000000;
-        temp_v0->unk_14 = -1;
+        temp_v0->words.w1 = &sSetupDL[150];
+        temp_v0[1].words.w0 = 0xFA000080;
+        temp_v0[1].words.w1 = -1;
+        temp_v0[2].words.w0 = 0xFB000000;
+        temp_v0[2].words.w1 = -1;
         sp48 = temp_v0;
         sp40 = temp_a1;
         phi_s0 = arg0 + 0x344;
@@ -1028,10 +1028,10 @@ void func_808AE3FC(EnFamos *arg0, GraphicsContext **arg1) {
             SysMatrix_SetStateRotationAndTranslation(phi_s0->unk_0, phi_s0->unk_4, phi_s0->unk_8, phi_s0 + 0x18);
             temp_f12 = phi_s0->unk_20;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
-            phi_s1->unk_18 = 0xDA380003;
+            phi_s1[3].words.w0 = 0xDA380003;
             phi_s3->unk_4 = Matrix_NewMtx(*arg1);
-            phi_s1->unk_20 = 0xDE000000U;
-            phi_s1->unk_24 = &D_0406AB30;
+            phi_s1[4].words.w0 = 0xDE000000;
+            phi_s1[4].words.w1 = &D_0406AB30;
             temp_s2 = phi_s2 + 0x10;
             phi_s0 += 0x24;
             phi_s1 += 0x10;

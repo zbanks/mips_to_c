@@ -43,7 +43,7 @@ void func_80B12430(Actor *arg0, GlobalContext *arg1) {
 
     sp1C = arg1->actorCtx.actorList[2].first;
     temp_a2 = arg0->cutscene;
-    if (arg0->unk_168 != 0) {
+    if (arg0[1].world.pos.x != 0) {
         sp1A = (s16) temp_a2;
         arg0 = arg0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -57,42 +57,42 @@ void func_80B12430(Actor *arg0, GlobalContext *arg1) {
                 arg0 = arg0;
                 ActorCutscene_StartAndSetUnkLinkFields((s16) temp_a2, temp_a1);
                 gSaveContext.weekEventReg[88] |= 0x40;
-                arg0->unk_168 = 0;
+                arg0[1].world.pos.x = 0.0f;
             } else {
                 arg0 = arg0;
                 ActorCutscene_SetIntentToPlay((s16) temp_a2);
             }
         }
-    } else if (((gSaveContext.weekEventReg[88] & 0x40) == 0) && (arg0->unk_160 == 0) && (arg1->actorCtx.unk1F5 != 0) && (arg1->actorCtx.unk1F4 == 0)) {
+    } else if (((gSaveContext.weekEventReg[88] & 0x40) == 0) && (arg0[1].params == 0) && (arg1->actorCtx.unk1F5 != 0) && (arg1->actorCtx.unk1F4 == 0)) {
         arg0 = arg0;
         if (func_800C99AC(arg1 + 0x830, sp1C->floorPoly, (s32) sp1C->floorBgId) == 6) {
-            arg0->unk_168 = 1;
-            arg0->unk_16C = 0;
+            arg0[1].world.pos.x = 1e-45.0f;
+            arg0[1].world.pos.y = 0.0f;
         }
     }
-    temp_v0 = arg0->unk_160;
+    temp_v0 = arg0[1].params;
     phi_t0 = &gSaveContext;
     phi_a3 = arg0;
     if ((gSaveContext.weekEventReg[88] & 0x40) != 0) {
-        arg0->unk_160 = (s16) (temp_v0 + 1);
+        arg0[1].params = temp_v0 + 1;
     } else {
-        arg0->unk_160 = (s16) (temp_v0 - 1);
+        arg0[1].params = temp_v0 - 1;
     }
-    temp_v0_2 = arg0->unk_160;
+    temp_v0_2 = arg0[1].params;
     if ((s32) temp_v0_2 < 0) {
-        arg0->unk_160 = 0;
+        arg0[1].params = 0;
     } else {
         phi_v1 = temp_v0_2;
         if ((s32) temp_v0_2 >= 0x3D) {
             phi_v1 = 0x3C;
         }
-        arg0->unk_160 = phi_v1;
+        arg0[1].params = phi_v1;
     }
-    if (temp_v0 != arg0->unk_160) {
+    if (temp_v0 != arg0[1].params) {
         arg0 = arg0;
         Audio_PlayActorSound2(arg0, 0x2143U);
         arg0->unk_162 = 0xB4;
-        temp_f0 = ((f32) arg0->unk_160 * 1.6666666f) + arg0->home.pos.y;
+        temp_f0 = ((f32) arg0[1].params * 1.6666666f) + arg0->home.pos.y;
         arg0->unk_164 = temp_f0;
         arg0->world.pos.y = temp_f0;
         phi_t0 = &gSaveContext;
@@ -145,13 +145,13 @@ void BgTobira01_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000088;
     temp_v0_2->words.w0 = 0xDE000000;
 }

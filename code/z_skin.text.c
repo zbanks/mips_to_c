@@ -126,8 +126,8 @@ void func_80137970(MtxF *arg0, u32 arg1, u16 *arg2, s32 arg3, f32 *arg4) {
             temp_s1 = (phi_s0->unk_0 * 0x10) + arg3;
             temp_a1 = &sp44;
             temp_s1->unk_0 = (s16) (s32) arg4->unk_0;
-            temp_s1->unk_2 = (s16) (s32) arg4->unk_4;
-            temp_s1->unk_4 = (s16) (s32) arg4->unk_8;
+            temp_s1->unk_2 = (s16) (s32) arg4[1];
+            temp_s1->unk_4 = (s16) (s32) arg4[2];
             sp44 = (f32) phi_s0->unk_6;
             sp48 = (f32) phi_s0->unk_7;
             sp4C = (f32) phi_s0->unk_8;
@@ -192,7 +192,7 @@ void func_80137B34(GraphicsContext *arg0, void ***arg1, s32 arg2, s32 arg3) {
     temp_v0 = Lib_SegmentedToVirtual(Lib_SegmentedToVirtual(*(Lib_SegmentedToVirtual(*arg1->unk_0) + (arg2 * 4)))->unk_C);
     temp_s2 = temp_v0;
     temp_v0_2 = Lib_SegmentedToVirtual(temp_v0->unk_4);
-    temp_a1 = arg1->unk_48 + (arg2 * 0xC);
+    temp_a1 = arg1[18] + (arg2 * 0xC);
     temp_s6 = temp_v0_2;
     spBC = (temp_a1 + (*temp_a1 * 4))->unk_4;
     temp_a0 = temp_s2->unk_2 * 0x10;
@@ -204,7 +204,7 @@ void func_80137B34(GraphicsContext *arg0, void ***arg1, s32 arg2, s32 arg3) {
         do {
             temp_fp = Lib_SegmentedToVirtual(phi_s6->unk_8);
             temp_v0_3 = Lib_SegmentedToVirtual(phi_s6->unk_C);
-            temp_v1 = phi_s6->unk_2;
+            temp_v1 = phi_s6[1];
             temp_s3 = temp_v0_3;
             if (temp_v1 == 1) {
                 temp_a1_2 = &sp80;
@@ -217,7 +217,7 @@ void func_80137B34(GraphicsContext *arg0, void ***arg1, s32 arg2, s32 arg3) {
                 phi_s0 = temp_s0;
                 if (arg3 != 0) {
                     temp_a1_3 = &sp74;
-                    temp_s0_2 = (phi_s6->unk_4 * 0xA) + temp_s3;
+                    temp_s0_2 = (phi_s6[2] * 0xA) + temp_s3;
                     sp74 = (f32) temp_s0_2->unk_2;
                     sp78 = (f32) temp_s0_2->unk_4;
                     sp7C = (f32) temp_s0_2->unk_6;
@@ -251,8 +251,8 @@ void func_80137B34(GraphicsContext *arg0, void ***arg1, s32 arg2, s32 arg3) {
                     }
                 }
             }
-            func_80137970(&D_801F5AC0 + (*(temp_s3 + (phi_s6->unk_4 * 0xA)) << 6), (u32) temp_fp, phi_s6, spBC, &spAC);
-            temp_s6_2 = phi_s6 + 0x10;
+            func_80137970(&D_801F5AC0 + (*(temp_s3 + (phi_s6[2] * 0xA)) << 6), (u32) temp_fp, phi_s6, spBC, &spAC);
+            temp_s6_2 = &phi_s6[8];
             phi_s6 = temp_s6_2;
         } while ((u32) temp_s6_2 < (u32) sp64);
         phi_a1 = spDC;
@@ -302,19 +302,19 @@ void func_80137F58(GraphicsContext *arg0, void ***arg1, s32 arg2, u32 arg3) {
         temp_v0 = SkinMatrix_MtxFToNewMtx(arg0, (arg2 << 6) + &D_801F5AC0);
         if (temp_v0 != 0) {
             temp_v1 = arg0->polyOpa.p;
-            arg0->polyOpa.p = temp_v1 + 8;
+            arg0->polyOpa.p = &temp_v1[1];
             temp_v1->words.w1 = (u32) temp_v0;
             temp_v1->words.w0 = 0xDA380000;
             temp_v1_2 = arg0->polyOpa.p;
-            arg0->polyOpa.p = temp_v1_2 + 8;
+            arg0->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w1 = phi_t0;
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_3 = arg0->polyOpa.p;
-            arg0->polyOpa.p = temp_v1_3 + 8;
+            arg0->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w1 = 0x40;
             temp_v1_3->words.w0 = 0xD8380002;
             temp_v1_4 = arg0->polyOpa.p;
-            arg0->polyOpa.p = temp_v1_4 + 8;
+            arg0->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w1 = 0;
             temp_v1_4->words.w0 = 0xE7000000;
         }
@@ -344,7 +344,7 @@ void func_80138050(s32 arg0, GraphicsContext **arg1, void ***arg2, ? (*arg3)(s32
         temp_v0 = SkinMatrix_MtxFToNewMtx(temp_s5, arg2 + 4);
         if (temp_v0 != 0) {
             temp_a0_2 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_a0_2 + 8;
+            temp_s5->polyOpa.p = &temp_a0_2[1];
             temp_a0_2->words.w1 = (u32) temp_v0;
             temp_a0_2->words.w0 = 0xDA380003;
             goto block_5;

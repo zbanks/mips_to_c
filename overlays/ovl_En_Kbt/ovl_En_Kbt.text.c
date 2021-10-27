@@ -630,7 +630,7 @@ void EnKbt_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 s32 func_80B349C8(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
-    if (((arg5->unk_27C & 1) == 0) && (arg1 == 0xE)) {
+    if (((arg5[106].x & 1) == 0) && (arg1 == 0xE)) {
         *arg2 = NULL;
     }
     return 0;
@@ -661,8 +661,8 @@ void EnKbt_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1->words.w1 = (u32) temp_v0;
     sp38 = temp_v1;
     temp_v0_2 = Lib_SegmentedToVirtual(*(&D_80B34B90 + (this->unk_27F * 4)));
-    temp_v1->unk_8 = 0xDB060024;
-    temp_v1->unk_C = temp_v0_2;
-    sp30->polyOpa.p = temp_v1 + 0x10;
+    temp_v1[1].words.w0 = 0xDB060024;
+    temp_v1[1].words.w1 = (u32) temp_v0_2;
+    sp30->polyOpa.p = &temp_v1[2];
     SkelAnime_DrawSV(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, func_80B349C8, func_80B34A00, (Actor *) this);
 }

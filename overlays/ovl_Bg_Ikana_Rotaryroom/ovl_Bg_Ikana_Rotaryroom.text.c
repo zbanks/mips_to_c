@@ -275,24 +275,24 @@ void func_80B80358(f32 *arg0) {
     } else {
         phi_f2 = -0.5f;
     }
-    temp_f12 = arg0->unk_4;
+    temp_f12 = arg0[1];
     arg0->unk_0 = temp_f0 + phi_f2;
     if (temp_f12 >= 0.0f) {
         phi_f2_2 = 0.5f;
     } else {
         phi_f2_2 = -0.5f;
     }
-    temp_f0_2 = arg0->unk_8;
-    arg0->unk_4 = (f32) (temp_f12 + phi_f2_2);
+    temp_f0_2 = arg0[2];
+    arg0[1] = temp_f12 + phi_f2_2;
     if (temp_f0_2 >= 0.0f) {
         phi_f2_3 = 0.5f;
     } else {
         phi_f2_3 = -0.5f;
     }
-    arg0->unk_8 = (f32) (temp_f0_2 + phi_f2_3);
+    arg0[2] = temp_f0_2 + phi_f2_3;
     arg0->unk_0 = (f32) (s32) arg0->unk_0;
-    arg0->unk_4 = (f32) (s32) arg0->unk_4;
-    arg0->unk_8 = (f32) (s32) arg0->unk_8;
+    arg0[1] = (f32) (s32) arg0[1];
+    arg0[2] = (f32) (s32) arg0[2];
 }
 
 void func_80B80440(BgIkanaRotaryroom *arg0, GlobalContext *arg1) {
@@ -369,7 +369,7 @@ void func_80B80550(BgIkanaRotaryroom *arg0, GlobalContext *arg1) {
                         SysMatrix_StatePop();
                     }
                     temp_s3 = phi_s3 + 0x10;
-                    phi_s4 += 0x10;
+                    phi_s4 = (Vec3f *) &phi_s4[1].y;
                     phi_s0 += 0x10;
                     phi_s3 = temp_s3;
                 } while (temp_s3 != 0x20);
@@ -480,9 +480,9 @@ void func_80B80894(Actor *arg0, void *arg1) {
                 sp2C = temp_v0_2 + 0x24C;
                 SysMatrix_StatePush();
                 SysMatrix_InsertTranslation(phi_s0->unk_24, phi_s0->unk_28, phi_s0->unk_2C, 1);
-                Matrix_RotateY(phi_s0->unk_BE, 1U);
-                SysMatrix_InsertXRotation_s(phi_s0->unk_BC, 1);
-                SysMatrix_InsertZRotation_s(phi_s0->unk_C0, 1);
+                Matrix_RotateY(phi_s0[95], 1U);
+                SysMatrix_InsertXRotation_s(phi_s0[94], 1);
+                SysMatrix_InsertZRotation_s(phi_s0[96], 1);
                 SysMatrix_CopyCurrentState(sp2C);
                 SysMatrix_StatePop();
                 phi_s1_2 += 1;
@@ -496,7 +496,7 @@ void func_80B80894(Actor *arg0, void *arg1) {
     do {
         temp_s1_2 = phi_s1_3 + 1;
         temp_v0_3 = phi_v0_2 + 0x44;
-        temp_v0_3->unk_28C = 0;
+        temp_v0_3[2].flags = 0;
         phi_v0_2 = temp_v0_3;
         phi_s1_3 = temp_s1_2;
     } while (temp_s1_2 < 4);
@@ -526,7 +526,7 @@ void func_80B80894(Actor *arg0, void *arg1) {
     do {
         temp_s1_3 = phi_s1_5 + 1;
         temp_v0_5 = phi_v0_3 + 0x50;
-        temp_v0_5->unk_390 = 0;
+        temp_v0_5[2].prevPos.x = 0.0f;
         phi_v0_3 = temp_v0_5;
         phi_s1_5 = temp_s1_3;
     } while (temp_s1_3 < 4);
@@ -609,7 +609,7 @@ void func_80B80C88(Actor *arg0, GlobalContext *arg1) {
     phi_s3_2 = 0;
     phi_s3_3 = 0;
     do {
-        temp_s1_2 = phi_s2->unk_248;
+        temp_s1_2 = phi_s2[1].uncullZoneDownward;
         if (temp_s1_2 != 0) {
             SysMatrix_StatePush();
             SysMatrix_InsertMatrix(phi_s2 + 0x24C, 1);
@@ -689,7 +689,7 @@ s32 func_80B80F08(BgIkanaRotaryroom *arg0, GlobalContext *arg1) {
         SysMatrix_SetStateRotationAndTranslation(arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, arg0 + 0xBC);
         SysMatrix_InsertTranslation(D_80B82178.unk_0, D_80B82178.unk_4, D_80B82178.unk_8, 1);
         SysMatrix_GetStateTranslation((Vec3f *) &sp34);
-        SysMatrix_SetStateRotationAndTranslation(temp_v0->world.pos.x, temp_v0->world.pos.y + temp_v0->unk_170, temp_v0->world.pos.z, temp_v0 + 0xBC);
+        SysMatrix_SetStateRotationAndTranslation(temp_v0->world.pos.x, temp_v0->world.pos.y + temp_v0[1].world.pos.z, temp_v0->world.pos.z, temp_v0 + 0xBC);
         SysMatrix_GetStateTranslation((Vec3f *) &sp28);
         SysMatrix_StatePop();
         if (Math3D_DistanceSquared((Vec3f *) &sp34, (Vec3f *) &sp28) < 3.0f) {
@@ -925,7 +925,7 @@ s32 func_80B816A4(Actor *arg0) {
         phi_v1_4 = 1;
     }
     phi_v1_3 = phi_v1_4;
-    if (arg0->unk_430 != 0) {
+    if (arg0[3].velocity.x != 0) {
         phi_v1_3 = phi_v1_4 + 1;
     }
     phi_v1_2 = phi_v1_3;
@@ -933,7 +933,7 @@ s32 func_80B816A4(Actor *arg0) {
         phi_v1_2 = phi_v1_3 + 1;
     }
     phi_v1 = phi_v1_2;
-    if (arg0->unk_4D0 != 0) {
+    if (arg0[3].uncullZoneDownward != 0) {
         phi_v1 = phi_v1_2 + 1;
     }
     return phi_v1;
@@ -1032,9 +1032,9 @@ void func_80B8198C(BgIkanaRotaryroom *arg0, GlobalContext *arg1) {
         func_80B819DC();
         return;
     }
-    temp_v1 = temp_v0->unk_17C;
+    temp_v1 = temp_v0[1].cutscene;
     if ((temp_v1 & 1) != 0) {
-        temp_v0->unk_17C = (u8) (temp_v1 | 8);
+        temp_v0[1].cutscene = temp_v1 | 8;
         func_80B819DC();
     }
 }
@@ -1167,15 +1167,15 @@ void func_80B81BA0(Actor *arg0, GlobalContext *arg1) {
             }
             phi_v0 += 0x44;
         } while (temp_v1 != 0x110);
-        arg0->unk_568 = 0.0f;
-        arg0->unk_56C = (f32) temp_a2->world.pos.x;
-        arg0->unk_570 = (f32) (temp_a2->world.pos.y - *(&D_80B82200 + (temp_a2->unk_14B * 4)));
-        arg0->unk_574 = (f32) temp_a2->world.pos.z;
+        arg0[4].scale.x = 0.0f;
+        arg0[4].scale.y = temp_a2->world.pos.x;
+        arg0[4].scale.z = temp_a2->world.pos.y - *(&D_80B82200 + (temp_a2->unk_14B * 4));
+        arg0[4].velocity.x = temp_a2->world.pos.z;
         if (func_80B816A4(arg0, 0x110, temp_a2) > 0) {
-            arg0->unk_578 = func_80B81010;
+            arg0[4].velocity.y = (bitwise f32) func_80B81010;
         }
-        arg0->unk_57C = func_80B81234;
-        arg0->unk_580 = func_80B814B8;
+        arg0[4].velocity.z = (bitwise f32) func_80B81234;
+        arg0[4].speedXZ = (bitwise f32) func_80B814B8;
         func_80B802E0((BgIkanaRotaryroom *) arg0);
         func_80B81DAC(arg0);
     }
@@ -1293,7 +1293,7 @@ void BgIkanaRotaryroom_Update(Actor *thisx, GlobalContext *globalCtx) {
     if (func_80B80F08(temp_a0_4, globalCtx, temp_a2) != 0) {
         temp_v0_2 = temp_a2_2->unk_204;
         if (temp_v0_2 != 0) {
-            temp_v0_2->unk_17E = 1;
+            temp_v0_2[1].unk_3A = 1;
         }
     }
     this = temp_a2_2;

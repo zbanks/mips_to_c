@@ -25,7 +25,7 @@ s32 osVoiceCheckWord(u8 *arg0) {
     if (*arg0 != 0) {
         phi_v0 = *arg0;
 loop_2:
-        temp_t9 = phi_t3->unk_1 + (phi_v0 << 8);
+        temp_t9 = phi_t3[1] + (phi_v0 << 8);
         temp_v1 = temp_t9 & 0xFFFF;
         sp6 = temp_t9;
         if (((temp_v1 != 0x815B) && (temp_v1 < 0x829F)) || ((temp_v1 >= 0x82F2) && (temp_v1 < 0x8340)) || (temp_v1 == 0x837F) || (temp_v1 >= 0x8397)) {
@@ -68,7 +68,7 @@ block_196:
 
         } else {
             spC += 2;
-            temp_v0 = phi_t3->unk_2;
+            temp_v0 = phi_t3[2];
             phi_t3 += 2;
             phi_v0 = temp_v0;
             phi_a1 = sp6;

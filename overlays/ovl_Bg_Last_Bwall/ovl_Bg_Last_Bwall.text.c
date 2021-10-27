@@ -127,7 +127,7 @@ loop_3:
             Math_Vec3s_ToVec3f((Vec3f *) &sp60, (*(arg4->unk_4 + phi_s1) * 6) + arg4->unk_0);
             SysMatrix_MultiplyVector3fByState((Vec3f *) &sp60, (Vec3f *) &sp54);
             Math_Vec3f_Sum((Vec3f *) &sp54, arg1, phi_s0);
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             phi_s1 += 2;
             phi_s0 = temp_s0;
             if (temp_s0 != &sp90) {

@@ -33,18 +33,18 @@ void ObjFunen_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     Matrix_RotateY((s16) (func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) - 0x8000), 1U);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp48 = temp_v0;
     sp48->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_a3 = -(s32) (globalCtx->gameplayFrames & 0x7FFFFFFF) & 0x7F;
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp44 = temp_v0_2;
     sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, temp_a3, 0x20, 0x20, 1, 0U, temp_a3, 0x20, 0x20);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_060000D0;
     temp_v0_3->words.w0 = 0xDE000000;
 }

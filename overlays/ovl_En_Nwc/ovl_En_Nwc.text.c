@@ -362,11 +362,11 @@ void func_809448A4(EnNwc *this, GlobalContext *globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, (s32) this->unk_248) != 0) {
         temp_a1 = &this->unk_144;
-        *(gSegments + 0x18) = (u32) (globalCtx->objectCtx.status[this->unk_248].segment + 0x80000000);
+        gSegments[6] = (u32) (globalCtx->objectCtx.status[this->unk_248].segment + 0x80000000);
         sp30 = temp_a1;
         SkelAnime_InitSV(globalCtx, temp_a1, &D_06002530, &D_060000E8, &this->unk_188, &this->unk_1E8, 0x10);
         SkelAnime_ChangeAnim(sp30, &D_060000E8, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060000E8), (u8) 0, 0.0f);
-        *(gSegments + 0x18) = (u32) (globalCtx->objectCtx.status[this->unk_249].segment + 0x80000000);
+        gSegments[6] = (u32) (globalCtx->objectCtx.status[this->unk_249].segment + 0x80000000);
         this->unk_25A = -1;
         func_809447A8(this);
     }
@@ -648,12 +648,12 @@ void EnNwc_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1->words.w0 = 0xDB060020;
     sp30 = temp_v1;
     temp_v1->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk_24A * 4))->unk_38);
-    temp_v1->unk_8 = 0xDA380003;
+    temp_v1[1].words.w0 = 0xDA380003;
     sp30 = temp_v1;
-    temp_v1->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_v1->unk_14 = &D_060002E8;
-    temp_v1->unk_10 = 0xDE000000;
-    sp2C->polyOpa.p = temp_v1 + 0x18;
+    temp_v1[1].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_v1[2].words.w1 = (u32) &D_060002E8;
+    temp_v1[2].words.w0 = 0xDE000000;
+    sp2C->polyOpa.p = &temp_v1[3];
 }
 
 s32 func_8094529C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
@@ -661,7 +661,7 @@ s32 func_8094529C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         arg4->y += arg5->unk_262;
     }
     if ((arg1 == 0xB) || (arg1 == 7)) {
-        arg4->y += arg5->unk_25E;
+        arg4->y += arg5[1].colorFilterParams;
         arg4->z += arg5->unk_260;
     }
     return 0;
@@ -669,5 +669,5 @@ s32 func_8094529C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 
 void func_80945310(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, thisx->unk_148, thisx->unk_164, (s32) thisx->unk_146, func_8094529C, NULL, thisx);
+    SkelAnime_DrawSV(globalCtx, (void **) thisx[1].flags, thisx->unk_164, (s32) thisx[1].category, func_8094529C, NULL, thisx);
 }

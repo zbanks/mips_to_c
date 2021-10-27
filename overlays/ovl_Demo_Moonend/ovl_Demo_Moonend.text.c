@@ -273,12 +273,12 @@ void func_80C17FCC(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_060129F0));
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06010C40;
     temp_v0_2->words.w0 = 0xDE000000;
 }

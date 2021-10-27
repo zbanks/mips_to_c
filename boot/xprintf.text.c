@@ -224,7 +224,7 @@ loop_1:
     phi_s3_10 = phi_s3;
     if ((temp_v0 != 0) && (temp_v0 != 0x25)) {
 loop_3:
-        temp_v0_2 = phi_s2->unk_1;
+        temp_v0_2 = phi_s2[1];
         temp_s2 = phi_s2 + 1;
         phi_s2 = temp_s2;
         phi_s2_2 = temp_s2;
@@ -271,7 +271,7 @@ block_9:
     phi_s2_5 = phi_s2_4;
     phi_s2_6 = phi_s2_4;
     if (*phi_s2_4 == 0x2A) {
-        temp_t6 = (s32) (ap + 3) & ~3;
+        temp_t6 = (s32) &ap[3] & ~3;
         ap = temp_t6 + 4;
         temp_t9 = *temp_t6;
         temp_s2_4 = phi_s2_4 + 1;
@@ -292,7 +292,7 @@ loop_19:
             if (spC8 < 0x3E7) {
                 spC8 = (phi_a1 + (spC8 * 0xA)) - 0x30;
             }
-            temp_a1_2 = phi_s2_5->unk_1;
+            temp_a1_2 = phi_s2_5[1];
             temp_s2_5 = phi_s2_5 + 1;
             phi_a1 = temp_a1_2;
             phi_s2_5 = temp_s2_5;
@@ -311,8 +311,8 @@ loop_19:
         temp_s2_6 = phi_s2_6 + 1;
         phi_s2_7 = temp_s2_6;
         phi_s2_8 = temp_s2_6;
-        if (phi_s2_6->unk_1 == 0x2A) {
-            temp_t8 = (s32) (ap + 3) & ~3;
+        if (phi_s2_6[1] == 0x2A) {
+            temp_t8 = (s32) &ap[3] & ~3;
             ap = temp_t8 + 4;
             temp_s2_7 = temp_s2_6 + 1;
             spC4 = *temp_t8;
@@ -328,7 +328,7 @@ loop_29:
                 if (spC4 < 0x3E7) {
                     spC4 = (phi_a1_3 + (spC4 * 0xA)) - 0x30;
                 }
-                temp_a1_4 = phi_s2_7->unk_1;
+                temp_a1_4 = phi_s2_7[1];
                 temp_s2_8 = phi_s2_7 + 1;
                 phi_a1_3 = temp_a1_4;
                 phi_s2_7 = temp_s2_8;
@@ -561,6 +561,7 @@ void _Putfld(_Pft *px, s8 **pap, u8 code, u8 *ac) {
     s8 *temp_a0;
     s8 *temp_a0_2;
     s8 *temp_a0_3;
+    s8 *temp_t0_3;
     s8 *temp_t1;
     s8 *temp_t1_2;
     s8 *temp_t2;
@@ -570,10 +571,13 @@ void _Putfld(_Pft *px, s8 **pap, u8 code, u8 *ac) {
     s8 *temp_t6_3;
     s8 *temp_t6_4;
     s8 *temp_t7;
-    s8 *temp_t7_3;
+    s8 *temp_t7_2;
+    s8 *temp_t7_4;
+    s8 *temp_t8_2;
     s8 *temp_t9;
     s8 *temp_t9_2;
     s8 *temp_t9_3;
+    s8 *temp_t9_4;
     s8 *temp_v0_5;
     s8 *temp_v0_6;
     u32 temp_v0_2;
@@ -582,7 +586,7 @@ void _Putfld(_Pft *px, s8 **pap, u8 code, u8 *ac) {
     u8 temp_v0_3;
     u8 temp_v0_4;
     u8 temp_v0_8;
-    void *temp_t7_2;
+    void *temp_t7_3;
     s8 *phi_v0;
     s8 *phi_v0_2;
     s8 *phi_a0;
@@ -598,7 +602,7 @@ void _Putfld(_Pft *px, s8 **pap, u8 code, u8 *ac) {
     if (temp_t6 >= 0x26) {
         switch (temp_t6) {
         case 99:
-            temp_t1 = ((s32) (*pap + 3) & ~3) + 4;
+            temp_t1 = ((s32) &(*pap)[3] & ~3) + 4;
             *pap = temp_t1;
             ac[px->n0] = (u8) temp_t1->unk_-4;
             px->n0 += 1;
@@ -607,18 +611,18 @@ void _Putfld(_Pft *px, s8 **pap, u8 code, u8 *ac) {
         case 105:
             temp_v0 = px->qual;
             if (temp_v0 == 0x6C) {
-                temp_t1_2 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t1_2 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t1_2;
                 temp_t4 = temp_t1_2->unk_-4;
                 px->unk_0 = (s32) (temp_t4 >> 0x1F);
                 px->unk_4 = temp_t4;
             } else if (temp_v0 == 0x4C) {
-                temp_t9 = ((s32) (*pap + 7) & ~7) + 8;
+                temp_t9 = ((s32) &(*pap)[7] & ~7) + 8;
                 *pap = temp_t9;
                 px->unk_4 = (s32) temp_t9->unk_-4;
                 px->unk_0 = (s32) temp_t9->unk_-8;
             } else {
-                temp_t7 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t7 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t7;
                 temp_t8 = temp_t7->unk_-4;
                 px->unk_0 = (s32) (temp_t8 >> 0x1F);
@@ -656,18 +660,18 @@ block_17:
         case 120:
             temp_v0_3 = px->qual;
             if (temp_v0_3 == 0x6C) {
-                temp_t4_2 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t4_2 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t4_2;
                 temp_t6_2 = temp_t4_2->unk_-4;
                 px->unk_0 = (s32) (temp_t6_2 >> 0x1F);
                 px->unk_4 = temp_t6_2;
             } else if (temp_v0_3 == 0x4C) {
-                temp_t2 = ((s32) (*pap + 7) & ~7) + 8;
+                temp_t2 = ((s32) &(*pap)[7] & ~7) + 8;
                 *pap = temp_t2;
                 px->unk_4 = (s32) temp_t2->unk_-4;
                 px->unk_0 = (s32) temp_t2->unk_-8;
             } else {
-                temp_t9_2 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t9_2 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t9_2;
                 temp_t0_2 = temp_t9_2->unk_-4;
                 px->unk_0 = (s32) (temp_t0_2 >> 0x1F);
@@ -696,14 +700,16 @@ block_17:
             if (px->qual == 0x4C) {
                 temp_v0_5 = *pap;
                 if (((s32) temp_v0_5 & 1) != 0) {
-                    *pap = temp_v0_5 + 7;
-                    phi_v0 = &temp_v0_5[7].unk_-16;
+                    temp_t0_3 = &temp_v0_5[7];
+                    *pap = temp_t0_3;
+                    phi_v0 = temp_t0_3 - 0x16;
                 } else {
                     if (((s32) temp_v0_5 & 2) != 0) {
-                        *pap = temp_v0_5 + 0xA;
-                        phi_a0 = &temp_v0_5[0xA].unk_-28;
+                        temp_t7_2 = &temp_v0_5[10];
+                        *pap = temp_t7_2;
+                        phi_a0 = temp_t7_2 - 0x28;
                     } else {
-                        temp_a0 = ((s32) (temp_v0_5 + 7) & ~7) + 8;
+                        temp_a0 = ((s32) &temp_v0_5[7] & ~7) + 8;
                         *pap = temp_a0;
                         phi_a0 = temp_a0;
                     }
@@ -713,14 +719,16 @@ block_17:
             } else {
                 temp_v0_6 = *pap;
                 if (((s32) temp_v0_6 & 1) != 0) {
-                    *pap = temp_v0_6 + 7;
-                    phi_v0_2 = &temp_v0_6[7].unk_-16;
+                    temp_t8_2 = &temp_v0_6[7];
+                    *pap = temp_t8_2;
+                    phi_v0_2 = temp_t8_2 - 0x16;
                 } else {
                     if (((s32) temp_v0_6 & 2) != 0) {
-                        *pap = temp_v0_6 + 0xA;
-                        phi_a0_2 = &temp_v0_6[0xA].unk_-28;
+                        temp_t9_3 = &temp_v0_6[10];
+                        *pap = temp_t9_3;
+                        phi_a0_2 = temp_t9_3 - 0x28;
                     } else {
-                        temp_a0_2 = ((s32) (temp_v0_6 + 7) & ~7) + 8;
+                        temp_a0_2 = ((s32) &temp_v0_6[7] & ~7) + 8;
                         *pap = temp_a0_2;
                         phi_a0_2 = temp_a0_2;
                     }
@@ -747,40 +755,40 @@ block_17:
         case 110:
             temp_v0_8 = px->qual;
             if (temp_v0_8 == 0x68) {
-                temp_t6_3 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t6_3 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t6_3;
                 *temp_t6_3->unk_-4 = (s16) px->nchar;
                 return;
             }
             if (temp_v0_8 == 0x6C) {
-                temp_t2_2 = ((s32) (*pap + 3) & ~3) + 4;
+                temp_t2_2 = ((s32) &(*pap)[3] & ~3) + 4;
                 *pap = temp_t2_2;
                 *temp_t2_2->unk_-4 = px->nchar;
                 return;
             }
             if (temp_v0_8 == 0x4C) {
-                temp_t9_3 = ((s32) (*pap + 3) & ~3) + 4;
-                *pap = temp_t9_3;
-                temp_t7_2 = temp_t9_3->unk_-4;
-                temp_t7_2->unk_0 = 0;
-                temp_t7_2->unk_4 = (u32) px->nchar;
+                temp_t9_4 = ((s32) &(*pap)[3] & ~3) + 4;
+                *pap = temp_t9_4;
+                temp_t7_3 = temp_t9_4->unk_-4;
+                temp_t7_3->unk_0 = 0;
+                temp_t7_3->unk_4 = (u32) px->nchar;
                 return;
             }
-            temp_t6_4 = ((s32) (*pap + 3) & ~3) + 4;
+            temp_t6_4 = ((s32) &(*pap)[3] & ~3) + 4;
             *pap = temp_t6_4;
             *temp_t6_4->unk_-4 = px->nchar;
             return;
         case 112:
-            temp_t7_3 = ((s32) (*pap + 3) & ~3) + 4;
-            *pap = temp_t7_3;
-            temp_t5 = temp_t7_3->unk_-4;
+            temp_t7_4 = ((s32) &(*pap)[3] & ~3) + 4;
+            *pap = temp_t7_4;
+            temp_t5 = temp_t7_4->unk_-4;
             px->unk_0 = (s32) (temp_t5 >> 0x1F);
             px->s = (s8 *) &ac[px->n0];
             px->unk_4 = temp_t5;
             _Litob(px, 0x78U);
             return;
         case 115:
-            temp_t3_2 = ((s32) (*pap + 3) & ~3) + 4;
+            temp_t3_2 = ((s32) &(*pap)[3] & ~3) + 4;
             *pap = temp_t3_2;
             temp_a0_3 = temp_t3_2->unk_-4;
             px->s = temp_a0_3;

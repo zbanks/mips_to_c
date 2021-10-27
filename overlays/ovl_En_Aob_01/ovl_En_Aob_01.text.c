@@ -480,9 +480,9 @@ void func_809C16DC(Actor *arg0, GlobalContext *arg1) {
             sp1C = 0x3521U & 0xFFFF;
             goto block_68;
         case 13601:
-            temp_v0 = temp_a3->unk_2D2;
+            temp_v0 = temp_a3[2].focus.rot.y;
             if ((temp_v0 & 2) != 0) {
-                temp_a3->unk_2D2 = (u16) (temp_v0 & 0xFFFD);
+                temp_a3[2].focus.rot.y = temp_v0 & 0xFFFD;
                 temp_v1 = arg1->actorCtx.actorList[2].first->unk_14B;
                 if (temp_v1 != 1) {
                     if (temp_v1 != 2) {
@@ -491,43 +491,43 @@ void func_809C16DC(Actor *arg0, GlobalContext *arg1) {
 
                             } else if ((s32) gSaveContext.rupees < 0xA) {
                                 temp_a3->unk_210 = 0x3524U;
-                                temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x10);
+                                temp_a3[2].focus.rot.y |= 0x10;
                             } else {
                                 temp_a3->unk_210 = 0x3522U;
-                                temp_t9 = temp_a3->unk_2D2 | 4;
-                                temp_a3->unk_2D2 = temp_t9;
-                                temp_a3->unk_2D2 = (u16) (temp_t9 | 0x10);
+                                temp_t9 = temp_a3[2].focus.rot.y | 4;
+                                temp_a3[2].focus.rot.y = temp_t9;
+                                temp_a3[2].focus.rot.y = temp_t9 | 0x10;
                             }
                         } else {
                             temp_a3->unk_210 = 0x354AU;
-                            temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x10);
+                            temp_a3[2].focus.rot.y |= 0x10;
                         }
                     } else {
                         temp_a3->unk_210 = 0x3549U;
-                        temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x10);
+                        temp_a3[2].focus.rot.y |= 0x10;
                     }
                 } else {
                     temp_a3->unk_210 = 0x3548U;
-                    temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x10);
+                    temp_a3[2].focus.rot.y |= 0x10;
                 }
             } else {
-                temp_a3->unk_2D2 = (u16) (temp_v0 | 0x10);
+                temp_a3[2].focus.rot.y = temp_v0 | 0x10;
                 temp_a3->unk_210 = 0x3535U;
             }
             sp1C = (s32) temp_a3->unk_210;
             goto block_68;
         case 13602:
         case 13603:
-            temp_v0_2 = temp_a3->unk_2D2;
+            temp_v0_2 = temp_a3[2].focus.rot.y;
             temp_t9_2 = temp_v0_2 | 0x40;
             if ((temp_v0_2 & 8) != 0) {
                 temp_a3->unk_210 = 0x3525U;
                 sp1C = 0x3525U & 0xFFFF;
             } else {
-                temp_a3->unk_2D2 = temp_t9_2;
+                temp_a3[2].focus.rot.y = temp_t9_2;
                 temp_a3->unk_210 = 0x3523U;
-                temp_a3->unk_2D2 = (u16) (temp_t9_2 | 0x10);
-                temp_a3->unk_43C = 1;
+                temp_a3[2].focus.rot.y = temp_t9_2 | 0x10;
+                temp_a3[3].speedXZ = 1e-45.0f;
                 arg0 = temp_a3;
                 func_800BDC5C(temp_a3 + 0x148, (ActorAnimationEntry []) D_809C3790, 1);
                 phi_t2 = (s32) arg0->unk_210;
@@ -538,17 +538,17 @@ block_67:
             goto block_68;
         case 13605:
         case 13606:
-            temp_v0_3 = temp_a3->unk_2D2;
+            temp_v0_3 = temp_a3[2].focus.rot.y;
             if ((temp_v0_3 & 4) != 0) {
                 if ((temp_v0_3 & 8) != 0) {
                     temp_a3->unk_210 = 0x3525U;
                     sp1C = 0x3525U & 0xFFFF;
                 } else {
                     temp_t9_3 = temp_v0_3 | 0x40;
-                    temp_a3->unk_2D2 = temp_t9_3;
+                    temp_a3[2].focus.rot.y = temp_t9_3;
                     temp_a3->unk_210 = 0x3523U;
-                    temp_a3->unk_2D2 = (u16) (temp_t9_3 | 0x10);
-                    temp_a3->unk_43C = 1;
+                    temp_a3[2].focus.rot.y = temp_t9_3 | 0x10;
+                    temp_a3[3].speedXZ = 1e-45.0f;
                     arg0 = temp_a3;
                     func_800BDC5C(temp_a3 + 0x148, (ActorAnimationEntry []) D_809C3790, 1);
                     phi_t2 = (s32) arg0->unk_210;
@@ -556,17 +556,17 @@ block_67:
                     goto block_67;
                 }
             } else if ((temp_v0_3 & 2) != 0) {
-                temp_a3->unk_2D2 = (u16) (temp_v0_3 & 0xFFFD);
+                temp_a3[2].focus.rot.y = temp_v0_3 & 0xFFFD;
                 temp_a3->unk_210 = 0x3527U;
                 sp1C = 0x3527U & 0xFFFF;
             } else {
                 temp_t9_4 = temp_v0_3 | 0x40;
                 temp_t1 = temp_t9_4 | 4;
-                temp_a3->unk_2D2 = temp_t9_4;
-                temp_a3->unk_2D2 = temp_t1;
+                temp_a3[2].focus.rot.y = temp_t9_4;
+                temp_a3[2].focus.rot.y = temp_t1;
                 temp_a3->unk_210 = 0x3526U;
-                temp_a3->unk_2D2 = (u16) (temp_t1 | 0x10);
-                temp_a3->unk_43C = 1;
+                temp_a3[2].focus.rot.y = temp_t1 | 0x10;
+                temp_a3[3].speedXZ = 1e-45.0f;
                 arg0 = temp_a3;
                 func_800BDC5C(temp_a3 + 0x148, (ActorAnimationEntry []) D_809C3790, 1);
                 sp1C = (s32) arg0->unk_210;
@@ -578,11 +578,11 @@ block_67:
             sp1C = 0x3528U & 0xFFFF;
             goto block_68;
         case 13608:
-            temp_v0_4 = temp_a3->unk_434;
+            temp_v0_4 = temp_a3[3].velocity.y;
             if ((s32) gSaveContext.rupees < temp_v0_4) {
                 temp_a3->unk_210 = 0x3536U;
-                temp_a3->unk_43C = 1;
-                temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x40);
+                temp_a3[3].speedXZ = 1e-45.0f;
+                temp_a3[2].focus.rot.y |= 0x40;
                 arg0 = temp_a3;
                 func_800BDC5C(temp_a3 + 0x148, (ActorAnimationEntry []) D_809C3790, 1);
                 phi_t2 = (s32) arg0->unk_210;
@@ -591,25 +591,25 @@ block_67:
             }
             if (temp_v0_4 == 0) {
                 temp_a3->unk_210 = 0x3537U;
-                temp_a3->unk_2D2 = (u16) (temp_a3->unk_2D2 | 0x40);
-                temp_a3->unk_43C = 1;
+                temp_a3[2].focus.rot.y |= 0x40;
+                temp_a3[3].speedXZ = 1e-45.0f;
                 arg0 = temp_a3;
                 func_800BDC5C(temp_a3 + 0x148, (ActorAnimationEntry []) D_809C3790, 1);
                 sp1C = (s32) arg0->unk_210;
                 phi_a3 = arg0;
             } else {
                 gSaveContext.unk_3F5C = temp_v0_4;
-                arg1->msgCtx.bankRupees = temp_a3->unk_434;
+                arg1->msgCtx.bankRupees = temp_a3[3].velocity.y;
                 temp_a3->unk_210 = 0x3529U;
                 sp1C = 0x3529U & 0xFFFF;
             }
             goto block_68;
         case 13609:
-            temp_v0_5 = temp_a3->unk_2D2;
+            temp_v0_5 = temp_a3[2].focus.rot.y;
             if ((temp_v0_5 & 2) != 0) {
-                temp_a3->unk_2D2 = (u16) (temp_v0_5 & 0xFFFD);
+                temp_a3[2].focus.rot.y = temp_v0_5 & 0xFFFD;
                 arg0 = temp_a3;
-                func_801159EC((s16) ((s32) temp_a3->unk_434 * -1));
+                func_801159EC((s16) ((s32) temp_a3[3].velocity.y * -1));
                 func_800B7298(arg1, NULL, 7U);
                 arg1->msgCtx.unk11F22 = 0x43;
                 arg1->msgCtx.unk12023 = 4;
@@ -779,7 +779,7 @@ void func_809C1EC8(EnAob01 *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x148);
     if (func_8013D5E8(arg0->actor.shape.rot.y, 0x36B0, arg0->actor.yawTowardsPlayer) != 0) {
         sp30 = temp_s1->world.pos.x;
-        sp34 = temp_s1->unk_C44 + 3.0f;
+        sp34 = temp_s1[9].shape.feetPos[1].x + 3.0f;
         sp38 = temp_s1->world.pos.z;
         func_8013D2E0((Vec3f *) &sp30, arg0 + 0x3C, arg0 + 0xBC, arg0 + 0x2D4, arg0 + 0x2DA, arg0 + 0x2E0, D_809C392C);
     } else {
@@ -1276,7 +1276,7 @@ s32 func_809C2EC4(EnAob01 *arg0, GlobalContext *arg1) {
     if (temp_v0 != 0) {
 loop_1:
         if (phi_v0->id == 0xE2) {
-            arg0->unk_432 = phi_v0->unk_288;
+            arg0->unk_432 = phi_v0[2].id;
             temp_v1 = arg0->unk_432;
             if (temp_v1 == -1) {
                 return 0;
@@ -1467,12 +1467,12 @@ s32 func_809C33D8(void **arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, A
         temp_v1->unk_2B0 = (s32 *) (temp_v0 + 8);
         *temp_v0 = 0xDB060028;
         sp2C = temp_v0;
-        sp2C->unk_4 = Lib_SegmentedToVirtual(*(&sp38 + (arg5->unk_3EE * 4)));
+        sp2C[1] = Lib_SegmentedToVirtual(*(&sp38 + (arg5[3].unk_22 * 4)));
     }
     if (arg1 == 0xF) {
         SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
         SysMatrix_InsertXRotation_s(arg5->unk_2DC, 1);
-        SysMatrix_InsertZRotation_s((s16) ((s32) arg5->unk_2DA * -1), 1);
+        SysMatrix_InsertZRotation_s((s16) ((s32) arg5[2].unk_52 * -1), 1);
         SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
     }
     if (arg1 == 8) {
@@ -1517,17 +1517,17 @@ void EnAob01_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp44 = temp_v0;
     sp44->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x32, 0x50, 0, 0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp40 = temp_v0_2;
     sp40->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x32, 0x50, 0, 0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE7000000;
     func_801343C0(globalCtx, this->unk_148.skeleton, this->unk_148.limbDrawTbl, (s32) this->unk_148.dListCount, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *)) func_809C33D8, func_809C35B4, func_809C35F4, (Actor *) this);

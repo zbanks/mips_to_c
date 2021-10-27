@@ -201,7 +201,7 @@ void func_809A00F8(Actor *arg0, GlobalContext *arg1) {
     Math_SmoothStepToS(arg0 + 0x304, 0, 6, 0x1838, (s16) 0x64);
     Math_SmoothStepToS(arg0 + 0x306, 0, 6, 0x1838, (s16) 0x64);
     Math_SmoothStepToS(arg0 + 0x30A, 0, 6, 0x1838, (s16) 0x64);
-    Math_SmoothStepToS(arg0 + 0x30C, 0, 6, 0x1838, (s16) 0x64);
+    Math_SmoothStepToS((s16 *) &arg0[2].wallBgId, 0, 6, 0x1838, (s16) 0x64);
 }
 
 void func_809A020C(EnGe3 *arg0, GlobalContext *arg1) {
@@ -522,7 +522,7 @@ void EnGe3_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_809A0DFC + (this->unk_2F8 * 4)));

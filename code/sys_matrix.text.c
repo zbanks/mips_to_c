@@ -183,7 +183,7 @@ void SysMatrix_StatePush(void) {
     MtxF *temp_a1;
 
     temp_a1 = sCurrentMatrix;
-    temp_a0 = temp_a1 + 0x40;
+    temp_a0 = &temp_a1[1];
     sCurrentMatrix = temp_a0;
     Matrix_MtxFCopy(temp_a0, temp_a1);
 }
@@ -1236,25 +1236,25 @@ RSPMatrix *SysMatrix_ToRSPMatrix(MtxF *src, RSPMatrix *dst) {
     dst->fracPart[8] = (u16) temp_f8_5;
     temp_f18_5 = (s32) (src->mf[2][1] * 65536.0f);
     dst->intPart[9] = (s16) (temp_f18_5 >> 0x10);
-    temp_v1->unk_12 = (s16) temp_f18_5;
+    temp_v1[9] = (u16) temp_f18_5;
     temp_f8_6 = (s32) (src->mf[2][2] * 65536.0f);
     dst->intPart[10] = (s16) (temp_f8_6 >> 0x10);
-    temp_v1->unk_14 = (s16) temp_f8_6;
+    temp_v1[10] = (u16) temp_f8_6;
     temp_f18_6 = (s32) (src->mf[2][3] * 65536.0f);
     dst->intPart[11] = (s16) (temp_f18_6 >> 0x10);
-    temp_v1->unk_16 = (s16) temp_f18_6;
+    temp_v1[11] = (u16) temp_f18_6;
     temp_f8_7 = (s32) (src->mf[3][0] * 65536.0f);
     dst->intPart[12] = (s16) (temp_f8_7 >> 0x10);
-    temp_v1->unk_18 = (s16) temp_f8_7;
+    temp_v1[12] = (u16) temp_f8_7;
     temp_f18_7 = (s32) (src->mf[3][1] * 65536.0f);
     dst->intPart[13] = (s16) (temp_f18_7 >> 0x10);
-    temp_v1->unk_1A = (s16) temp_f18_7;
+    temp_v1[13] = (u16) temp_f18_7;
     temp_f8_8 = (s32) (src->mf[3][2] * 65536.0f);
     dst->intPart[14] = (s16) (temp_f8_8 >> 0x10);
-    temp_v1->unk_1C = (s16) temp_f8_8;
+    temp_v1[14] = (u16) temp_f8_8;
     temp_f18_8 = (s32) (src->mf[3][3] * 65536.0f);
     dst->intPart[15] = (s16) (temp_f18_8 >> 0x10);
-    temp_v1->unk_1E = (s16) temp_f18_8;
+    temp_v1[15] = (u16) temp_f18_8;
     return dst;
 }
 

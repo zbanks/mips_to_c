@@ -136,11 +136,11 @@ loop_1:
         phi_s0->unk_8 = (s32) arg1->unk_4;
         phi_s0->unk_C = (s32) arg1->unk_8;
         phi_s0->unk_10 = (s32) arg2->unk_0;
-        phi_s0->unk_14 = (s32) arg2->unk_4;
-        phi_s0->unk_18 = (s32) arg2->unk_8;
+        phi_s0->unk_14 = (s32) arg2[1];
+        phi_s0->unk_18 = (s32) arg2[2];
         phi_s0->unk_1C = (s32) arg3->unk_0;
-        phi_s0->unk_20 = (s32) arg3->unk_4;
-        phi_s0->unk_24 = (s32) arg3->unk_8;
+        phi_s0->unk_20 = (s32) arg3[1];
+        phi_s0->unk_24 = (s32) arg3[2];
         phi_s0->unk_50 = arg4;
         phi_s0->unk_58 = Rand_ZeroFloat(6.2831855f);
         temp_f0 = Rand_ZeroFloat(6.2831855f);
@@ -346,11 +346,11 @@ loop_1:
         phi_s0->unk_8 = (s32) arg1->unk_4;
         phi_s0->unk_C = (s32) arg1->unk_8;
         phi_s0->unk_10 = (f32) arg2->unk_0;
-        phi_s0->unk_14 = (f32) arg2->unk_4;
-        phi_s0->unk_18 = (f32) arg2->unk_8;
+        phi_s0->unk_14 = (f32) arg2[1];
+        phi_s0->unk_18 = (f32) arg2[2];
         phi_s0->unk_1C = (s32) arg3->unk_0;
-        phi_s0->unk_20 = (s32) arg3->unk_4;
-        phi_s0->unk_24 = (s32) arg3->unk_8;
+        phi_s0->unk_20 = (s32) arg3[1];
+        phi_s0->unk_24 = (s32) arg3[2];
         phi_s0->unk_54 = 1.0f;
         phi_s0->unk_50 = (f32) (arg4 / 1000.0f);
         phi_s0->unk_64 = arg5;
@@ -398,11 +398,11 @@ loop_1:
         phi_s0->unk_8 = (s32) arg1->unk_4;
         phi_s0->unk_C = (s32) arg1->unk_8;
         phi_s0->unk_10 = (f32) arg2->unk_0;
-        phi_s0->unk_14 = (f32) arg2->unk_4;
-        phi_s0->unk_18 = (f32) arg2->unk_8;
+        phi_s0->unk_14 = (f32) arg2[1];
+        phi_s0->unk_18 = (f32) arg2[2];
         phi_s0->unk_1C = (s32) arg3->unk_0;
-        phi_s0->unk_20 = (s32) arg3->unk_4;
-        phi_s0->unk_24 = (s32) arg3->unk_8;
+        phi_s0->unk_20 = (s32) arg3[1];
+        phi_s0->unk_24 = (s32) arg3[2];
         phi_s0->unk_54 = 1.0f;
         phi_s0->unk_50 = (f32) (arg4 / 1000.0f);
         phi_s0->unk_64 = arg5;
@@ -683,11 +683,11 @@ void EnClearTag_UpdateCamera(Actor *arg0, GlobalContext *arg1) {
     CutsceneContext *sp24;
     Camera *temp_v0_2;
     Camera *temp_v0_3;
+    f32 *temp_v1_2;
     f32 temp_f2;
     s16 temp_a1;
     u8 temp_v0;
     void *temp_v1;
-    void *temp_v1_2;
 
     temp_v0 = arg0->unk_2E54;
     temp_v1 = arg1->actorCtx.actorList[2].first;
@@ -706,12 +706,12 @@ void EnClearTag_UpdateCamera(Actor *arg0, GlobalContext *arg1) {
             func_80169590(arg1, arg0->unk_2E64, 7);
             func_800B7298(arg1, arg0, 4U);
             temp_v0_2 = Play_GetCamera(arg1, 0);
-            arg0->unk_2E6C = (f32) temp_v0_2->eye.x;
-            arg0->unk_2E70 = (f32) temp_v0_2->eye.y;
-            arg0->unk_2E74 = (f32) temp_v0_2->eye.z;
-            arg0->unk_2E78 = (f32) temp_v0_2->at.x;
-            arg0->unk_2E7C = (f32) temp_v0_2->at.y;
-            arg0->unk_2E80 = (f32) temp_v0_2->at.z;
+            arg0[36].shape.feetPos[0].z = temp_v0_2->eye.x;
+            arg0[36].shape.feetPos[1].x = temp_v0_2->eye.y;
+            arg0[36].shape.feetPos[1].y = temp_v0_2->eye.z;
+            arg0[36].shape.feetPos[1].z = temp_v0_2->at.x;
+            arg0[36].projectedPos.x = temp_v0_2->at.y;
+            arg0[36].projectedPos.y = temp_v0_2->at.z;
             func_801518B0(arg1, 0xFU, NULL);
             arg0->unk_2E54 = 2U;
             func_8019FDC8((void *) &D_801DB4A4, 0x6873U, 0x20);
@@ -725,16 +725,16 @@ block_16:
             if (func_80152498(&arg1->msgCtx) == 0) {
                 sp24 = &arg1->csCtx;
                 temp_v0_3 = Play_GetCamera(arg1, 0);
-                temp_v1_2 = arg0 + 0x2E6C;
+                temp_v1_2 = &arg0[36].shape.feetPos[0].z;
                 temp_v0_3->eye.x = temp_v1_2->unk_0;
-                temp_v0_3->eye.y = temp_v1_2->unk_4;
-                temp_v0_3->eye.z = temp_v1_2->unk_8;
+                temp_v0_3->eye.y = temp_v1_2[1];
+                temp_v0_3->eye.z = temp_v1_2[2];
                 temp_v0_3->eyeNext.x = temp_v1_2->unk_0;
-                temp_v0_3->eyeNext.y = temp_v1_2->unk_4;
-                temp_v0_3->eyeNext.z = temp_v1_2->unk_8;
-                temp_v0_3->at.x = arg0->unk_2E78;
-                temp_v0_3->at.y = arg0->unk_2E7C;
-                temp_v0_3->at.z = arg0->unk_2E80;
+                temp_v0_3->eyeNext.y = temp_v1_2[1];
+                temp_v0_3->eyeNext.z = temp_v1_2[2];
+                temp_v0_3->at.x = arg0[36].shape.feetPos[1].z;
+                temp_v0_3->at.y = arg0[36].projectedPos.x;
+                temp_v0_3->at.z = arg0[36].projectedPos.y;
                 func_80169AFC(arg1, arg0->unk_2E64, 0);
                 func_800EA0EC(arg1, sp24);
                 func_800B7298(arg1, arg0, 6U);
@@ -759,7 +759,7 @@ block_16:
     }
     temp_a1 = arg0->unk_2E64;
     if (temp_a1 != 0) {
-        Play_CameraSetAtEye(arg1, temp_a1, arg0 + 0x2E78, arg0 + 0x2E6C);
+        Play_CameraSetAtEye(arg1, temp_a1, (Vec3f *) &arg0[36].shape.feetPos[1].z, (Vec3f *) &arg0[36].shape.feetPos[0].z);
     }
 }
 
@@ -1051,7 +1051,7 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             if (sp1B7 == 0) {
                 sp1B7 += 1;
                 temp_v0_2 = temp_s4->polyOpa.p;
-                temp_s4->polyOpa.p = temp_v0_2 + 8;
+                temp_s4->polyOpa.p = &temp_v0_2[1];
                 temp_v0_2->words.w1 = (u32) &D_8094B090;
                 temp_v0_2->words.w0 = 0xDE000000;
             }
@@ -1062,11 +1062,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             SysMatrix_InsertYRotation_f(phi_s3->rotationY, 1);
             SysMatrix_RotateStateAroundXAxis(phi_s3->rotationX);
             temp_v0_3 = temp_s4->polyOpa.p;
-            temp_s4->polyOpa.p = temp_v0_3 + 8;
+            temp_s4->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDA380003;
             temp_v0_3->words.w1 = Matrix_NewMtx(temp_s4);
             temp_v0_4 = temp_s4->polyOpa.p;
-            temp_s4->polyOpa.p = temp_v0_4 + 8;
+            temp_s4->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = (u32) &D_8094B110;
             temp_v0_4->words.w0 = 0xDE000000;
         }
@@ -1082,15 +1082,15 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
         do {
             if (phi_s3_2->type == 6) {
                 temp_v1 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1 + 8;
+                temp_s4->polyXlu.p = &temp_v1[1];
                 temp_v1->words.w1 = 0;
                 temp_v1->words.w0 = 0xE7000000;
                 temp_v1_2 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_2 + 8;
+                temp_s4->polyXlu.p = &temp_v1_2[1];
                 temp_v1_2->words.w0 = 0xFB000000;
                 temp_v1_2->words.w1 = ((s32) phi_s3_2->primColor.a & 0xFF) | ~0xFF;
                 temp_v1_3 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_3 + 8;
+                temp_s4->polyXlu.p = &temp_v1_3[1];
                 temp_v1_3->words.w0 = 0xFA000000;
                 temp_v1_3->words.w1 = ((s32) phi_s3_2->primColor.a & 0xFF) | ~0xFF;
                 sp1B4 = phi_t0;
@@ -1099,11 +1099,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
                 temp_f20_2 = phi_s3_2->scale;
                 Matrix_Scale(temp_f20_2, 1.0f, temp_f20_2, 1);
                 temp_s0 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_s0 + 8;
+                temp_s4->polyXlu.p = &temp_s0[1];
                 temp_s0->words.w0 = 0xDA380003;
                 temp_s0->words.w1 = Matrix_NewMtx(temp_s4);
                 temp_v1_4 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_4 + 8;
+                temp_s4->polyXlu.p = &temp_v1_4[1];
                 temp_v1_4->words.w1 = (u32) D_04030100;
                 temp_v1_4->words.w0 = 0xDE000000;
             }
@@ -1119,17 +1119,17 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             if (phi_s3_3->type == 4) {
                 if (sp1B7 == 0) {
                     temp_v1_5 = temp_s4->polyXlu.p;
-                    temp_s4->polyXlu.p = temp_v1_5 + 8;
+                    temp_s4->polyXlu.p = &temp_v1_5[1];
                     temp_v1_5->words.w1 = 0;
                     temp_v1_5->words.w0 = 0xE7000000;
                     temp_v1_6 = temp_s4->polyXlu.p;
-                    temp_s4->polyXlu.p = temp_v1_6 + 8;
+                    temp_s4->polyXlu.p = &temp_v1_6[1];
                     temp_v1_6->words.w1 = -0x3800;
                     temp_v1_6->words.w0 = 0xFB000000;
                     sp1B7 += 1;
                 }
                 temp_v1_7 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_7 + 8;
+                temp_s4->polyXlu.p = &temp_v1_7[1];
                 temp_v1_7->words.w0 = 0xFA000000;
                 temp_v1_7->words.w1 = ((s32) (phi_s3_3->primColor.a * 0.7f) & 0xFF) | ~0x37FF;
                 sp1B4 = phi_t0_2;
@@ -1138,11 +1138,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
                 temp_f12 = phi_s3_3->scale * 3.0f;
                 Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
                 temp_s0_2 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_s0_2 + 8;
+                temp_s4->polyXlu.p = &temp_s0_2[1];
                 temp_s0_2->words.w0 = 0xDA380003;
                 temp_s0_2->words.w1 = Matrix_NewMtx(temp_s4);
                 temp_v1_8 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_8 + 8;
+                temp_s4->polyXlu.p = &temp_v1_8[1];
                 temp_v1_8->words.w1 = (u32) &D_8094CB10;
                 temp_v1_8->words.w0 = 0xDE000000;
             }
@@ -1159,26 +1159,26 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             temp_s1 = &globalCtx->mf_187FC;
             if (sp1B7 == 0) {
                 temp_v1_9 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_9 + 8;
+                temp_s4->polyXlu.p = &temp_v1_9[1];
                 temp_v1_9->words.w1 = (u32) &D_8094B758;
                 temp_v1_9->words.w0 = 0xDE000000;
                 sp1B7 += 1;
             }
             temp_v1_10 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_10 + 8;
+            temp_s4->polyXlu.p = &temp_v1_10[1];
             temp_v1_10->words.w1 = 0;
             temp_v1_10->words.w0 = 0xE7000000;
             temp_v1_11 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_11 + 8;
+            temp_s4->polyXlu.p = &temp_v1_11[1];
             temp_v1_11->words.w0 = 0xFB000000;
             temp_v1_11->words.w1 = ((s32) phi_s3_4->envColor.r << 0x18) | (((s32) phi_s3_4->envColor.g & 0xFF) << 0x10) | (((s32) phi_s3_4->envColor.b & 0xFF) << 8) | 0x80;
             temp_v1_12 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_12 + 8;
+            temp_s4->polyXlu.p = &temp_v1_12[1];
             temp_v1_12->words.w0 = 0xFA000000;
             temp_v1_12->words.w1 = ((s32) phi_s3_4->primColor.r << 0x18) | (((s32) phi_s3_4->primColor.g & 0xFF) << 0x10) | (((s32) phi_s3_4->primColor.b & 0xFF) << 8) | ((s32) phi_s3_4->primColor.a & 0xFF);
             sp1B4 = phi_a1_2;
             temp_s0_3 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_3 + 8;
+            temp_s4->polyXlu.p = &temp_s0_3[1];
             temp_s0_3->words.w0 = 0xDB060020;
             temp_s0_3->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, (s32) phi_s3_4->actionTimer * -5, 0x20, 0x40, 1, 0U, 0U, 0x20, 0x20);
             SysMatrix_InsertTranslation(phi_s3_4->position.x, phi_s3_4->position.y, phi_s3_4->position.z, 0);
@@ -1187,11 +1187,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_Scale(phi_s3_4->smokeScaleX * temp_f20_3, phi_s3_4->smokeScaleY * temp_f20_3, 1.0f, 1);
             SysMatrix_InsertTranslation(0.0f, 20.0f, 0.0f, 1);
             temp_s0_4 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_4 + 8;
+            temp_s4->polyXlu.p = &temp_s0_4[1];
             temp_s0_4->words.w0 = 0xDA380003;
             temp_s0_4->words.w1 = Matrix_NewMtx(temp_s4);
             temp_v1_13 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_13 + 8;
+            temp_s4->polyXlu.p = &temp_v1_13[1];
             temp_v1_13->words.w1 = (u32) &D_8094B800;
             temp_v1_13->words.w0 = 0xDE000000;
         }
@@ -1206,22 +1206,22 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             temp_s1_2 = &globalCtx->mf_187FC;
             if (sp1B7 == 0) {
                 temp_v1_14 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_14 + 8;
+                temp_s4->polyXlu.p = &temp_v1_14[1];
                 temp_v1_14->words.w1 = (u32) &D_8094B758;
                 temp_v1_14->words.w0 = 0xDE000000;
                 temp_v1_15 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_15 + 8;
+                temp_s4->polyXlu.p = &temp_v1_15[1];
                 temp_v1_15->words.w1 = 0xFFD7FF80;
                 temp_v1_15->words.w0 = 0xFB000000;
                 sp1B7 += 1;
             }
             temp_v1_16 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_16 + 8;
+            temp_s4->polyXlu.p = &temp_v1_16[1];
             temp_v1_16->words.w0 = 0xFA000000;
             temp_v1_16->words.w1 = ((s32) phi_s3_5->primColor.a & 0xFF) | 0xC8140000;
             sp1B4 = phi_a1_3;
             temp_s0_5 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_5 + 8;
+            temp_s4->polyXlu.p = &temp_s0_5[1];
             temp_s0_5->words.w0 = 0xDB060020;
             temp_s0_5->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, (s32) phi_s3_5->actionTimer * -0xF, 0x20, 0x40, 1, 0U, 0U, 0x20, 0x20);
             SysMatrix_InsertTranslation(phi_s3_5->position.x, phi_s3_5->position.y, phi_s3_5->position.z, 0);
@@ -1229,11 +1229,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             temp_f20_4 = phi_s3_5->scale;
             Matrix_Scale(temp_f20_4, temp_f20_4, 1.0f, 1);
             temp_s0_6 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_6 + 8;
+            temp_s4->polyXlu.p = &temp_s0_6[1];
             temp_s0_6->words.w0 = 0xDA380003;
             temp_s0_6->words.w1 = Matrix_NewMtx(temp_s4);
             temp_v1_17 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_17 + 8;
+            temp_s4->polyXlu.p = &temp_v1_17[1];
             temp_v1_17->words.w1 = (u32) &D_8094B800;
             temp_v1_17->words.w0 = 0xDE000000;
         }
@@ -1249,17 +1249,17 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             temp_s1_3 = &globalCtx->mf_187FC;
             if (sp1B7 == 0) {
                 temp_v1_18 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_18 + 8;
+                temp_s4->polyXlu.p = &temp_v1_18[1];
                 temp_v1_18->words.w1 = 0;
                 temp_v1_18->words.w0 = 0xE7000000;
                 temp_v1_19 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_19 + 8;
+                temp_s4->polyXlu.p = &temp_v1_19[1];
                 temp_v1_19->words.w0 = 0xFB000000;
                 temp_v1_19->words.w1 = (this->flashEnvColor.r << 0x18) | (this->flashEnvColor.g << 0x10) | (this->flashEnvColor.b << 8);
                 sp1B7 += 1;
             }
             temp_v1_20 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_20 + 8;
+            temp_s4->polyXlu.p = &temp_v1_20[1];
             temp_v1_20->words.w0 = 0xFA000000;
             temp_v1_20->words.w1 = ((s32) phi_s3_6->primColor.a & 0xFF) | ~0x37FF;
             SysMatrix_InsertTranslation(phi_s3_6->position.x, phi_s3_6->position.y, phi_s3_6->position.z, 0);
@@ -1267,11 +1267,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             temp_f12_2 = 2.0f * phi_s3_6->scale;
             Matrix_Scale(temp_f12_2, temp_f12_2, 1.0f, 1);
             temp_s0_7 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_7 + 8;
+            temp_s4->polyXlu.p = &temp_s0_7[1];
             temp_s0_7->words.w0 = 0xDA380003;
             temp_s0_7->words.w1 = Matrix_NewMtx(temp_s4);
             temp_v1_21 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_21 + 8;
+            temp_s4->polyXlu.p = &temp_v1_21[1];
             temp_v1_21->words.w1 = (u32) &D_8094C860;
             temp_v1_21->words.w0 = 0xDE000000;
         }
@@ -1286,21 +1286,21 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
         if (phi_s3_7->type == 5) {
             if (sp1B7 == 0) {
                 temp_v1_22 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_22 + 8;
+                temp_s4->polyXlu.p = &temp_v1_22[1];
                 temp_v1_22->words.w1 = 0;
                 temp_v1_22->words.w0 = 0xE7000000;
                 temp_v0_6 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v0_6 + 8;
+                temp_s4->polyXlu.p = &temp_v0_6[1];
                 temp_v0_6->words.w0 = 0xFB000000;
                 temp_v0_6->words.w1 = ((u32) phi_s3_7->envColor.r << 0x18) | (((u32) phi_s3_7->envColor.g & 0xFF) << 0x10) | (((u32) phi_s3_7->envColor.b & 0xFF) << 8);
                 temp_v1_23 = temp_s4->polyXlu.p;
-                temp_s4->polyXlu.p = temp_v1_23 + 8;
+                temp_s4->polyXlu.p = &temp_v1_23[1];
                 temp_v1_23->words.w1 = (u32) &D_8094DBD8;
                 temp_v1_23->words.w0 = 0xDE000000;
                 sp1B7 += 1;
             }
             temp_v0_7 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v0_7 + 8;
+            temp_s4->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xFA000000;
             temp_v0_7->words.w1 = ((u32) phi_s3_7->primColor.r << 0x18) | (((u32) phi_s3_7->primColor.g & 0xFF) << 0x10) | (((u32) phi_s3_7->primColor.b & 0xFF) << 8) | ((u32) phi_s3_7->primColor.a & 0xFF);
             SysMatrix_InsertTranslation(phi_s3_7->position.x, phi_s3_7->position.y, phi_s3_7->position.z, 0);
@@ -1312,11 +1312,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
             Matrix_Scale(temp_f12_3, temp_f12_3, phi_s3_7->maxScale * temp_f20_5, 1);
             SysMatrix_RotateStateAroundXAxis(1.5707964f);
             temp_s0_8 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_8 + 8;
+            temp_s4->polyXlu.p = &temp_s0_8[1];
             temp_s0_8->words.w0 = 0xDA380003;
             temp_s0_8->words.w1 = Matrix_NewMtx(temp_s4);
             temp_v1_24 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_24 + 8;
+            temp_s4->polyXlu.p = &temp_v1_24[1];
             temp_v1_24->words.w1 = (u32) &D_8094DC48;
             temp_v1_24->words.w0 = 0xDE000000;
         }
@@ -1331,24 +1331,24 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
         temp_s5 = &globalCtx->colCtx;
         if (phi_s3_8->type == 7) {
             temp_v1_25 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_25 + 8;
+            temp_s4->polyXlu.p = &temp_v1_25[1];
             temp_v1_25->words.w1 = 0;
             temp_v1_25->words.w0 = 0xE7000000;
             temp_v1_26 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_26 + 8;
+            temp_s4->polyXlu.p = &temp_v1_26[1];
             temp_v1_26->words.w1 = -0x38;
             temp_v1_26->words.w0 = 0xFB000000;
             temp_v1_27 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_27 + 8;
+            temp_s4->polyXlu.p = &temp_v1_27[1];
             temp_v1_27->words.w1 = -0x38;
             temp_v1_27->words.w0 = 0xFA000000;
             temp_s0_9 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_s0_9 + 8;
+            temp_s4->polyXlu.p = &temp_s0_9[1];
             temp_s0_9->words.w0 = 0xDB060020;
             temp_s0_9->words.w1 = Lib_SegmentedToVirtual(*(&D_8094AE34 + (phi_s3_8->actionTimer * 4)));
             func_8012C9BC(temp_s4);
             temp_v1_28 = temp_s4->polyXlu.p;
-            temp_s4->polyXlu.p = temp_v1_28 + 8;
+            temp_s4->polyXlu.p = &temp_v1_28[1];
             temp_v1_28->words.w1 = 0;
             temp_v1_28->words.w0 = 0xD9FFFBFF;
             sp1B7 += 1;
@@ -1365,11 +1365,11 @@ void EnClearTag_DrawEffects(Actor *thisx, GlobalContext *globalCtx) {
                     temp_f20_7 = phi_s3_8->scale;
                     Matrix_Scale(temp_f20_7, temp_f20_7, temp_f20_7, 1);
                     temp_s0_10 = temp_s4->polyXlu.p;
-                    temp_s4->polyXlu.p = temp_s0_10 + 8;
+                    temp_s4->polyXlu.p = &temp_s0_10[1];
                     temp_s0_10->words.w0 = 0xDA380003;
                     temp_s0_10->words.w1 = Matrix_NewMtx(temp_s4);
                     temp_v1_29 = temp_s4->polyXlu.p;
-                    temp_s4->polyXlu.p = temp_v1_29 + 8;
+                    temp_s4->polyXlu.p = &temp_v1_29[1];
                     temp_v1_29->words.w1 = (u32) D_0403A0F0;
                     temp_v1_29->words.w0 = 0xDE000000;
                 }

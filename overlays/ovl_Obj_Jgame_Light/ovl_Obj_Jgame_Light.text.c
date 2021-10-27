@@ -136,11 +136,11 @@ void func_80C15474(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_1AC = 0xC8;
             arg0->unk_1B6 = 1;
         }
-        temp_f0 = arg0->unk_1A8;
+        temp_f0 = arg0[1].velocity.x;
         if (temp_f0 < 0.7f) {
-            arg0->unk_1A8 = (f32) (temp_f0 + 0.3f);
+            arg0[1].velocity.x = temp_f0 + 0.3f;
         } else {
-            arg0->unk_1A8 = 1.0f;
+            arg0[1].velocity.x = 1.0f;
         }
     } else if ((temp_v0 & 8) != 0) {
         temp_v0_3 = arg0->unk_1AC;
@@ -148,20 +148,20 @@ void func_80C15474(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_1AC = (s16) (temp_v0_3 - 0x28);
         } else {
             arg0->unk_1AC = -1;
-            if (arg0->unk_1A8 == 0.0f) {
+            if (arg0[1].velocity.x == 0.0f) {
                 arg0->unk_1B6 = 0;
                 temp_t6 = arg0->colChkInfo.health & 0xFFFE;
                 arg0->colChkInfo.health = temp_t6;
                 arg0->colChkInfo.health = temp_t6 & 0xFFF7;
             }
         }
-        if (arg0->unk_1A8 > 0.3f) {
-            arg0->unk_1A8 = (f32) (arg0->unk_1A8 - 0.3f);
+        if (arg0[1].velocity.x > 0.3f) {
+            arg0[1].velocity.x -= 0.3f;
         } else {
-            arg0->unk_1A8 = 0.0f;
+            arg0[1].velocity.x = 0.0f;
         }
     }
-    if (arg0->unk_1A8 > 0.1f) {
+    if (arg0[1].velocity.x > 0.1f) {
         func_800B9010(arg0, 0x2031U);
     }
     temp_a1 = ((s32) (Rand_ZeroOne() * 127.0f) + 0x80) & 0xFF;
@@ -170,7 +170,7 @@ void func_80C15474(Actor *arg0, GlobalContext *arg1) {
     if (temp_a1 < 0) {
         phi_f4 = temp_f4 + 4294967296.0f;
     }
-    Lights_PointSetColorAndRadius(arg0 + 0x198, (u8) temp_a1, (u32) (phi_f4 * 0.7f) & 0xFF, 0U, (s16) (s32) arg0->unk_1AC);
+    Lights_PointSetColorAndRadius((LightInfo *) &arg0[1].targetArrowOffset, (u8) temp_a1, (u32) (phi_f4 * 0.7f) & 0xFF, 0U, (s16) (s32) arg0->unk_1AC);
 }
 
 void func_80C156C4(Actor *arg0, GlobalContext *arg1) {
@@ -259,41 +259,41 @@ void ObjJgameLight_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp6C = temp_v0;
     sp6C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_060003A0;
     temp_v0_2->words.w0 = 0xDE000000;
     if ((s32) this->unk_1B2 > 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         if ((s32) this->unk_1B2 >= 0x100) {
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0xD24020FF;
             temp_v0_3->words.w0 = 0xFA000000;
         } else {
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFA000000;
             temp_v0_4->words.w1 = (this->unk_1B2 & 0xFF) | 0xD2402000;
         }
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDA380003;
         sp5C = temp_v0_5;
         sp5C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_6 = this->unk_1B4;
         if (temp_v0_6 == 1) {
             temp_v0_7 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_7 + 8;
+            temp_s0->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_80C160B0;
             temp_v0_7->words.w0 = 0xDE000000;
         } else if (temp_v0_6 == 2) {
             temp_v0_8 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_8 + 8;
+            temp_s0->polyXlu.p = &temp_v0_8[1];
             temp_v0_8->words.w1 = (u32) &D_80C16030;
             temp_v0_8->words.w0 = 0xDE000000;
         }
@@ -302,28 +302,28 @@ void ObjJgameLight_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         sp50 = (this->unk_1A8 * 27.0f) / 10000.0f;
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xDB060020;
         sp4C = temp_v0_9;
         sp4C->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) this->unk_198.base.unk_16 * -0x14) & 0x1FF, 0x20, 0x80);
         temp_v0_10 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_10 + 8;
+        temp_s0->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0xFFFF00FF;
         temp_v0_10->words.w0 = 0xFA008080;
         temp_v0_11 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_11 + 8;
+        temp_s0->polyXlu.p = &temp_v0_11[1];
         temp_v0_11->words.w1 = 0xFF000000;
         temp_v0_11->words.w0 = 0xFB000000;
         SysMatrix_InsertTranslation(0.0f, 52.0f, 0.0f, 1);
         Matrix_RotateY((s16) ((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000), 1U);
         Matrix_Scale(sp50, sp50, sp50, 1);
         temp_v0_12 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_12 + 8;
+        temp_s0->polyXlu.p = &temp_v0_12[1];
         temp_v0_12->words.w0 = 0xDA380003;
         sp40 = temp_v0_12;
         sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_13 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_13 + 8;
+        temp_s0->polyXlu.p = &temp_v0_13[1];
         temp_v0_13->words.w1 = (u32) D_0407D590;
         temp_v0_13->words.w0 = 0xDE000000;
     }

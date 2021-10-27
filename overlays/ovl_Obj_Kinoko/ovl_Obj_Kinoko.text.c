@@ -94,20 +94,20 @@ block_3:
         }
     }
     temp_s0->words.w1 = (phi_t1 & 0xFF) | 0xA93FBA00;
-    temp_s0->unk_8 = 0xFB000000;
-    temp_s0->unk_C = 0x6E2CC864;
-    temp_s0->unk_10 = 0xE200001C;
-    temp_s0->unk_14 = 0xC184B50;
-    temp_s0->unk_18 = 0xDA380003;
-    temp_s0->unk_1C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_s0->unk_20 = 0xDE000000;
-    temp_s0->unk_24 = &D_04029D20;
+    temp_s0[1].words.w0 = 0xFB000000;
+    temp_s0[1].words.w1 = 0x6E2CC864;
+    temp_s0[2].words.w0 = 0xE200001C;
+    temp_s0[2].words.w1 = 0xC184B50;
+    temp_s0[3].words.w0 = 0xDA380003;
+    temp_s0[3].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s0[4].words.w0 = 0xDE000000;
+    temp_s0[4].words.w1 = (u32) &D_04029D20;
     sp24 = &D_04029D20;
     SysMatrix_InsertXRotation_s(-0x4000, 1);
-    temp_s0->unk_28 = 0xDA380003;
+    temp_s0[5].words.w0 = 0xDA380003;
     sp24 = &D_04029D20;
-    temp_s0->unk_2C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    temp_s0->unk_30 = 0xDE000000;
-    temp_s0->unk_34 = &D_04029D20;
-    sp48->polyXlu.p = temp_s0 + 0x38;
+    temp_s0[5].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    temp_s0[6].words.w0 = 0xDE000000;
+    temp_s0[6].words.w1 = (u32) &D_04029D20;
+    sp48->polyXlu.p = &temp_s0[7];
 }

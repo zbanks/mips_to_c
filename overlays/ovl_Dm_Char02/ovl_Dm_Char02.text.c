@@ -93,7 +93,7 @@ void func_80AAAECC(Actor *arg0, void *arg1) {
 }
 
 void func_80AAAF2C(DmChar02 *arg1) {
-    if ((arg1->unk_1F2C != 0) && (arg1->unk_A4 == 0x19) && (arg1->unk_1F36 == 1)) {
+    if ((arg1[10].unk_1A4 != 0) && (arg1->unk_A4 == 0x19) && (arg1[10].unk_1AE == 1)) {
         func_80AAAECC();
     }
 }

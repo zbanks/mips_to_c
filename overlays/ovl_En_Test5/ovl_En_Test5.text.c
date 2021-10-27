@@ -72,7 +72,7 @@ void func_80A90478(EnTest5 *this, GlobalContext *globalCtx) {
         return;
     }
     temp_v0 = globalCtx->actorCtx.actorList[2].first;
-    if ((temp_v0->unk_388 == 0) || (temp_v0->unk_384 != 0xBA)) {
+    if (((bitwise s32) temp_v0[2].uncullZoneScale == 0) || (temp_v0->unk_384 != 0xBA)) {
         sp3C = temp_v0;
         Math_Vec3f_DistXYZAndStoreDiff(&this->unk_144, (Vec3f *) &temp_v0->world, (Vec3f *) &sp30);
         if ((sp30 >= 0.0f) && (sp30 <= this->unk_150) && (sp38 >= 0.0f) && (sp38 <= this->unk_154) && (fabsf(sp34) < 100.0f) && (temp_v0->yDistToWater > 12.0f)) {

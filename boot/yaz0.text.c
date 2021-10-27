@@ -139,7 +139,7 @@ s32 Yaz0_DecompressImpl(u8 *hdr, u8 *dst) {
         return -1;
     }
     temp_s2 = &dst[hdr->unk_4];
-    phi_s1 = (u32) (hdr + 0x10);
+    phi_s1 = (u32) &hdr[16];
     do {
         phi_s1_2 = (void *) phi_s1;
         phi_s0_2 = phi_s0;

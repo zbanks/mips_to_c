@@ -157,8 +157,8 @@ static InitChainEntry D_80BC4668[6];                /* unable to generate initia
             arg0 = arg0;
             temp_v1_2 = Lib_SegmentedToVirtual(temp_t2->unk_4) + (arg0->unk_164 * 6);
             arg0->actor.world.pos.x = (f32) temp_v1_2->unk_0;
-            arg0->actor.world.pos.y = (f32) temp_v1_2->unk_2;
-            arg0->actor.world.pos.z = (f32) temp_v1_2->unk_4;
+            arg0->actor.world.pos.y = (f32) temp_v1_2[1];
+            arg0->actor.world.pos.z = (f32) temp_v1_2[2];
         }
     } else {
         arg0->unk_15C = NULL;
@@ -194,36 +194,36 @@ s32 func_80BC3B00(Actor *arg0) {
     temp_a0_2 = arg0 + 0x24;
     temp_v1_2 = Lib_SegmentedToVirtual(temp_a0) + (arg0->unk_164 * 6);
     sp28 = (f32) temp_v1_2->unk_0;
-    sp2C = (f32) temp_v1_2->unk_2;
-    sp30 = (f32) temp_v1_2->unk_4;
-    if (arg0->unk_168 == 6) {
+    sp2C = (f32) temp_v1_2[1];
+    sp30 = (f32) temp_v1_2[2];
+    if (arg0[1].world.pos.x == 6) {
         temp_f0 = sp28 - arg0->world.pos.x;
         temp_f2 = sp2C - arg0->world.pos.y;
         temp_f14 = sp30 - arg0->world.pos.z;
         if (temp_f0 > 10.0f) {
-            arg0->unk_168 = 0;
+            arg0[1].world.pos.x = 0;
         }
         if (temp_f2 > 10.0f) {
-            arg0->unk_168 = 1;
+            arg0[1].world.pos.x = 1;
         }
         if (temp_f14 > 10.0f) {
-            arg0->unk_168 = 2;
+            arg0[1].world.pos.x = 2;
         }
         if (temp_f0 < -10.0f) {
-            arg0->unk_168 = 3;
+            arg0[1].world.pos.x = 3;
         }
         if (temp_f2 < -10.0f) {
-            arg0->unk_168 = 4;
+            arg0[1].world.pos.x = 4;
         }
         if (temp_f14 < -10.0f) {
-            arg0->unk_168 = 5;
+            arg0[1].world.pos.x = 5;
         }
     }
     temp_a2 = arg0->speedXZ;
     arg0 = arg0;
     phi_v0 = 0;
     if (Math_Vec3f_StepTo(temp_a0_2, (Vec3f *) temp_a1, temp_a2) <= 0.0f) {
-        arg0->unk_168 = 6;
+        arg0[1].world.pos.x = 6;
         arg0->unk_160 = (s32) arg0->unk_164;
         phi_v0 = 1;
     }
@@ -265,30 +265,30 @@ s32 func_80BC3D08(Actor *arg0, GlobalContext *arg1, s32 arg2) {
     f32 temp_f6;
     s32 temp_a3;
 
-    temp_a3 = arg0->unk_168;
+    temp_a3 = arg0[1].world.pos.x;
     if (temp_a3 == 6) {
         goto block_9;
     }
     if (arg2 != 0) {
         temp_f6 = (*(&D_80BC4620 + (temp_a3 * 0xC)) * ((800.0f * arg0->scale.x) - (arg0->speedXZ * 0.5f))) + arg0->world.pos.x;
         sp48 = temp_f6;
-        temp_f4 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_4 * ((800.0f * arg0->scale.y) - (arg0->speedXZ * 0.5f))) + arg0->world.pos.y;
+        temp_f4 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_4 * ((800.0f * arg0->scale.y) - (arg0->speedXZ * 0.5f))) + arg0->world.pos.y;
         sp4C = temp_f4;
-        temp_f16 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_8 * ((800.0f * arg0->scale.z) - (arg0->speedXZ * 0.5f))) + arg0->world.pos.z;
+        temp_f16 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_8 * ((800.0f * arg0->scale.z) - (arg0->speedXZ * 0.5f))) + arg0->world.pos.z;
         sp50 = temp_f16;
-        sp3C = (*(&D_80BC4620 + (arg0->unk_168 * 0xC)) * arg0->speedXZ) + temp_f6;
-        sp40 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_4 * arg0->speedXZ) + temp_f4;
-        sp44 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_8 * arg0->speedXZ) + temp_f16;
+        sp3C = (*(&D_80BC4620 + (arg0[1].world.pos.x * 0xC)) * arg0->speedXZ) + temp_f6;
+        sp40 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_4 * arg0->speedXZ) + temp_f4;
+        sp44 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_8 * arg0->speedXZ) + temp_f16;
     } else {
         temp_f4_2 = (*(&D_80BC4620 + (temp_a3 * 0xC)) * 800.0f * arg0->scale.x) + arg0->world.pos.x;
         sp3C = temp_f4_2;
-        temp_f10 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_4 * 800.0f * arg0->scale.y) + arg0->world.pos.y;
+        temp_f10 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_4 * 800.0f * arg0->scale.y) + arg0->world.pos.y;
         sp40 = temp_f10;
-        temp_f18 = ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_8 * 800.0f * arg0->scale.z) + arg0->world.pos.z;
+        temp_f18 = ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_8 * 800.0f * arg0->scale.z) + arg0->world.pos.z;
         sp44 = temp_f18;
-        sp48 = temp_f4_2 - (*(&D_80BC4620 + (arg0->unk_168 * 0xC)) * arg0->speedXZ * 1.5f);
-        sp4C = temp_f10 - ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_4 * arg0->speedXZ * 1.5f);
-        sp50 = temp_f18 - ((&D_80BC4620 + (arg0->unk_168 * 0xC))->unk_8 * arg0->speedXZ * 1.5f);
+        sp48 = temp_f4_2 - (*(&D_80BC4620 + (arg0[1].world.pos.x * 0xC)) * arg0->speedXZ * 1.5f);
+        sp4C = temp_f10 - ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_4 * arg0->speedXZ * 1.5f);
+        sp50 = temp_f18 - ((&D_80BC4620 + (arg0[1].world.pos.x * 0xC))->unk_8 * arg0->speedXZ * 1.5f);
     }
     if (func_800C57F8(arg1 + 0x830, &sp48, &sp3C, &sp30, &sp54, 1) != 0) {
         if (arg2 == 0) {
@@ -306,7 +306,7 @@ void func_80BC4038(Actor *arg0) {
     s32 temp_t6;
 
     temp_t6 = arg0->unk_164;
-    arg0->unk_168 = 6;
+    arg0[1].world.pos.x = 8e-45.0f;
     arg0->unk_164 = (s32) arg0->unk_160;
     arg0->unk_160 = temp_t6;
 }
@@ -349,18 +349,18 @@ void func_80BC41AC(Actor *arg0, GlobalContext *arg1) {
     if (func_80BC3D08(arg0, arg1, 1) != 0) {
         if (Flags_GetSwitch(arg1, (s32) (arg0->params & 0xFE00) >> 9) == 0) {
             func_80BC4038(arg0);
-            arg0->unk_16C = func_80BC44F4;
+            arg0[1].world.pos.y = func_80BC44F4;
             return;
         }
         /* Duplicate return node #4. Try simplifying control flow for better match */
         return;
     }
-    arg0->unk_16C = func_80BC4344;
+    arg0[1].world.pos.y = func_80BC4344;
 }
 
 void func_80BC4228(Actor *arg0, GlobalContext *arg1) {
+    f32 temp_t2;
     s32 temp_v0;
-    u32 temp_t2;
 
     if (func_80BC3B00(arg0) != 0) {
         temp_v0 = arg0->unk_160;
@@ -368,39 +368,40 @@ void func_80BC4228(Actor *arg0, GlobalContext *arg1) {
         if (temp_v0 < (*arg0->unk_15C - 1)) {
             arg0->unk_164 = (s32) (temp_v0 + 1);
         } else {
-            arg0->unk_16C = func_80BC4530;
+            arg0[1].world.pos.y = func_80BC4530;
             ActorCutscene_Stop((s16) arg0->cutscene);
             Audio_PlayActorSound2(arg0, 0x29A3U);
         }
     }
     if (func_80BC3D08(arg0, arg1, 0) != 0) {
         ActorCutscene_Stop((s16) arg0->cutscene);
-        arg0->unk_16C = (void (*)(BgF40Block *, GlobalContext *)) func_80BC41AC;
+        arg0[1].world.pos.y = (bitwise f32) func_80BC41AC;
         Audio_PlayActorSound2(arg0, 0x29A4U);
         return;
     }
-    temp_t2 = arg0->unk_168;
-    switch (temp_t2) {
-    case 0:
-    case 3:
-        func_800B9010(arg0, 0x21A0U);
-        return;
-    case 1:
-    case 4:
-        func_800B9010(arg0, 0x21A2U);
-        return;
-    case 2:
-    case 5:
-        func_800B9010(arg0, 0x21A1U);
-        /* fallthrough */
-    default:
-        return;
+    temp_t2 = arg0[1].world.pos.x;
+    if ((bitwise u32) temp_t2 < 6U) {
+        switch ((bitwise s32) temp_t2) {
+        case 0:
+        case 3:
+            func_800B9010(arg0, 0x21A0U);
+            return;
+        case 1:
+        case 4:
+            func_800B9010(arg0, 0x21A2U);
+            return;
+        case 2:
+        case 5:
+            func_800B9010(arg0, 0x21A1U);
+            /* Duplicate return node #11. Try simplifying control flow for better match */
+            return;
+        }
     }
 }
 
 void func_80BC4344(Actor *arg0, GlobalContext *arg1) {
     if (func_80BC3CA4(arg0) != 0) {
-        arg0->unk_16C = func_80BC4228;
+        arg0[1].world.pos.y = (bitwise f32) func_80BC4228;
     }
 }
 
@@ -414,13 +415,13 @@ void func_80BC43CC(Actor *arg0, GlobalContext *arg1) {
     if (func_80BC3D08(arg0, arg1, 1) != 0) {
         if (Flags_GetSwitch(arg1, (s32) (arg0->params & 0xFE00) >> 9) != 0) {
             func_80BC4038(arg0);
-            arg0->unk_16C = func_80BC4344;
+            arg0[1].world.pos.y = (bitwise f32) func_80BC4344;
             return;
         }
         /* Duplicate return node #4. Try simplifying control flow for better match */
         return;
     }
-    arg0->unk_16C = func_80BC44F4;
+    arg0[1].world.pos.y = (bitwise f32) func_80BC44F4;
 }
 
 void func_80BC4448(Actor *arg0, GlobalContext *arg1) {
@@ -432,21 +433,21 @@ void func_80BC4448(Actor *arg0, GlobalContext *arg1) {
         if (temp_v0 > 0) {
             arg0->unk_164 = (s32) (temp_v0 - 1);
         } else {
-            arg0->unk_16C = func_80BC4380;
+            arg0[1].world.pos.y = (bitwise f32) func_80BC4380;
             ActorCutscene_Stop((s16) arg0->cutscene);
             Audio_PlayActorSound2(arg0, 0x29A3U);
         }
     }
     if (func_80BC3D08(arg0, arg1, 0) != 0) {
         ActorCutscene_Stop((s16) arg0->cutscene);
-        arg0->unk_16C = (void (*)(BgF40Block *, GlobalContext *)) func_80BC43CC;
+        arg0[1].world.pos.y = (bitwise f32) func_80BC43CC;
         Audio_PlayActorSound2(arg0, 0x29A4U);
     }
 }
 
 void func_80BC44F4(Actor *arg0, GlobalContext *arg1) {
     if (func_80BC3CA4(arg0) != 0) {
-        arg0->unk_16C = func_80BC4448;
+        arg0[1].world.pos.y = (bitwise f32) func_80BC4448;
     }
 }
 

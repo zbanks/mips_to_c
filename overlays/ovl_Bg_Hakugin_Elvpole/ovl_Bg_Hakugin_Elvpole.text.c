@@ -158,7 +158,7 @@ void BgHakuginElvpole_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v0 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0 + 8;
+    temp_a2->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_a2;
     sp1C = temp_v0;
@@ -166,7 +166,7 @@ void BgHakuginElvpole_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a2;
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_2 + 8;
+    temp_a2->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_0600ACB8;
 }

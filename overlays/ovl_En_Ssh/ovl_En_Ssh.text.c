@@ -30,6 +30,12 @@ typedef struct EnSsh {
     /* 0x5CA */ char pad_5CA[0x2];
 } EnSsh;                                            /* size = 0x5CC */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnSsh_Destroy {
     /* 0x00 */ char pad_0[0x30];
 };                                                  /* size = 0x30 */
@@ -454,11 +460,11 @@ void func_80974118(Vec3s *arg0) {
     ? sp28;
 
     sp4C.unk_0 = D_809760E4.unk_0;
-    sp4C.unk_4 = (s32) D_809760E4.unk_4;
-    sp4C.unk_8 = (s32) D_809760E4.unk_8;
+    (&sp4C)[1] = D_809760E4.unk_4;
+    (&sp4C)[2] = D_809760E4.unk_8;
     sp40.unk_0 = D_809760F0.unk_0;
-    sp40.unk_4 = (s32) D_809760F0.unk_4;
-    sp40.unk_8 = (s32) D_809760F0.unk_8;
+    (&sp40)[1] = D_809760F0.unk_4;
+    (&sp40)[2] = D_809760F0.unk_8;
     sp4C *= arg0->unk_534;
     sp50 *= arg0->unk_534;
     sp54 *= arg0->unk_534;
@@ -479,34 +485,34 @@ void func_80974220(Vec3s *arg0) {
 void func_8097424C(Actor *arg0, GlobalContext *arg1) {
     ColliderCylinderInit *sp50;
     ColliderCylinderInit **temp_s0;
-    ColliderJntSph *temp_s0_2;
+    f32 *temp_s0_2;
     ColliderCylinder *phi_s1;
     ColliderCylinderInit **phi_s0;
 
     sp50.unk_0 = D_809760FC.unk_0;
-    sp50.unk_4 = (s32) D_809760FC.unk_4;
-    sp50.unk_C = (s32) D_809760FC.unk_C;
-    sp50.unk_8 = (s32) D_809760FC.unk_8;
-    sp50.unk_10 = (s32) D_809760FC.unk_10;
-    sp50.unk_14 = (s32) D_809760FC.unk_14;
+    (&sp50)[1] = D_809760FC.unk_4;
+    (&sp50)[3] = D_809760FC.unk_C;
+    (&sp50)[2] = D_809760FC.unk_8;
+    (&sp50)[4] = D_809760FC.unk_10;
+    (&sp50)[5] = D_809760FC.unk_14;
     phi_s1 = arg0 + 0x2F4;
     phi_s0 = &sp50;
     do {
         Collider_InitAndSetCylinder(arg1, phi_s1, arg0, *phi_s0);
         temp_s0 = phi_s0 + 4;
-        phi_s1 += 0x4C;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != &arg0);
-    arg0->unk_314 = 0x38A9;
-    arg0->unk_360 = 0xF7CFC756;
+    arg0[2].yDistToWater = 2.0326e-41f;
+    arg0[2].shape.feetPos[0].y = -8.4285036e33f;
     arg0->unk_3A0 = 9;
     arg0->unk_3BA = 0xD;
     arg0->unk_3B8 = 2;
-    arg0->unk_3AC = 0xF7CFC756;
+    arg0[2].child = (bitwise Actor *) -8.4285036e33f;
     CollisionCheck_SetInfo2(&arg0->colChkInfo, DamageTable_Get(2), &D_8097605C);
-    temp_s0_2 = arg0 + 0x4BC;
-    Collider_InitJntSph(arg1, temp_s0_2);
-    Collider_SetJntSph(arg1, temp_s0_2, arg0, &D_809760B8, arg0 + 0x4DC);
+    temp_s0_2 = &arg0[3].projectedPos.y;
+    Collider_InitJntSph(arg1, (ColliderJntSph *) temp_s0_2);
+    Collider_SetJntSph(arg1, (ColliderJntSph *) temp_s0_2, arg0, &D_809760B8, (ColliderJntSphElement *) &arg0[3].prevPos.z);
 }
 
 f32 func_80974374(Actor *arg0, s32 arg1) {
@@ -568,10 +574,10 @@ void func_80974540(EnSsh *arg0) {
 }
 
 void func_80974590(Actor *arg0) {
-    if (arg0->unk_52A == 0) {
-        arg0->unk_52A = 0x78;
+    if (arg0[4].home.unk_12 == 0) {
+        arg0[4].home.unk_12 = 0x78;
         arg0->colorFilterTimer = 0;
-        arg0->unk_5C2 = (u16) (arg0->unk_5C2 | 8);
+        arg0[4].colChkInfo.cylHeight |= 8;
     }
 }
 
@@ -591,10 +597,10 @@ void func_809745BC(Actor *arg0, f32 arg1, f32 arg2) {
     s16 phi_t9_2;
     Actor *phi_v0_2;
 
-    temp_a1 = arg0->unk_4D8;
+    temp_a1 = arg0[3].prevPos.y;
     temp_a1->unk_2E = (s16) (s32) ((f32) temp_a1->unk_2E * arg1);
     temp_f16 = arg1 * arg2;
-    temp_t9 = arg0->unk_338;
+    temp_t9 = arg0[2].colChkInfo.cylRadius;
     phi_t9 = temp_t9;
     phi_v0 = arg0;
     phi_v1 = 0x4C;
@@ -604,7 +610,7 @@ void func_809745BC(Actor *arg0, f32 arg1, f32 arg2) {
         do {
             temp_v1 = phi_v1 + 0x4C;
             temp_v0 = phi_v0 + 0x4C;
-            temp_t9_2 = temp_v0->unk_338;
+            temp_t9_2 = temp_v0[2].colChkInfo.cylRadius;
             temp_v0->unk_2EC = (s16) (s32) ((f32) phi_t9 * arg1);
             temp_v0->unk_2E8 = (s16) (s32) ((f32) phi_v0->unk_334 * temp_f16);
             temp_v0->unk_2EA = (s16) (s32) ((f32) phi_v0->unk_336 * arg1);
@@ -624,30 +630,30 @@ void func_809745BC(Actor *arg0, f32 arg1, f32 arg2) {
     temp_f4 = 0.04f * arg1;
     arg1 = arg1;
     Actor_SetScale(temp_a0, temp_f4);
-    arg0->unk_538 = (f32) (60.0f * arg1);
-    arg0->unk_534 = (f32) (arg1 * 1.5f);
+    arg0[4].world.pos.y = 60.0f * arg1;
+    arg0[4].world.pos.x = arg1 * 1.5f;
 }
 
 ? func_80974730(Actor *arg0) {
     s16 temp_v0;
     s16 phi_v1;
 
-    temp_v0 = arg0->unk_52A;
-    if ((temp_v0 == 0x78) && ((arg0->unk_5C2 & 1) != 0)) {
+    temp_v0 = arg0[4].home.unk_12;
+    if ((temp_v0 == 0x78) && ((arg0[4].colChkInfo.cylHeight & 1) != 0)) {
         func_800BCB70(arg0, 0, 0xC8, 0, (s16) (s32) temp_v0);
     }
-    if (arg0->unk_52A == 0) {
+    if (arg0[4].home.unk_12 == 0) {
         phi_v1 = 0;
     } else {
-        arg0->unk_52A = (s16) (arg0->unk_52A - 1);
-        phi_v1 = arg0->unk_52A;
+        arg0[4].home.unk_12 += -1;
+        phi_v1 = arg0[4].home.unk_12;
     }
     if (phi_v1 != 0) {
         Math_SmoothStepToS(arg0 + 0x51E, 0x2710, 0xA, 0x3E8, (s16) 1);
         return 0;
     }
-    arg0->unk_52A = 0;
-    arg0->unk_5C2 = (u16) (arg0->unk_5C2 & 0xFFFE);
+    arg0[4].home.unk_12 = 0;
+    arg0[4].colChkInfo.cylHeight = (u16) arg0[4].colChkInfo.cylHeight & 0xFFFE;
     arg0->unk_522 = 0;
     if (arg0->unk_52E == 0) {
         arg0->unk_522 = 0x1E;
@@ -828,11 +834,11 @@ void func_80974CC8(EnSsh *arg0, GlobalContext *arg1) {
         return 0;
     }
     do {
-        temp_a0 = phi_v0->unk_3EB;
+        temp_a0 = phi_v0[3].targetMode;
         temp_v1 = phi_v1 + 0x4C;
         phi_v1 = temp_v1;
         if ((temp_a0 & 1) != 0) {
-            phi_v0->unk_3EB = (u8) (temp_a0 & ~1);
+            phi_v0[3].targetMode = temp_a0 & ~1;
             phi_a3 = 1;
         }
         phi_v0 += 0x4C;
@@ -840,9 +846,9 @@ void func_80974CC8(EnSsh *arg0, GlobalContext *arg1) {
     if (phi_a3 == 0) {
         return 0;
     }
-    arg0->unk_524 = 0x1E;
+    arg0[4].home.rot.x = 0x1E;
     if (arg0->unk_52E == 0) {
-        arg0->unk_522 = (s16) arg0->unk_524;
+        arg0->unk_522 = (s16) arg0[4].home.rot.x;
     }
     Audio_PlayActorSound2(arg0, 0x3884U);
     Audio_PlayActorSound2(arg0, 0x6868U);
@@ -855,13 +861,13 @@ void func_80974CC8(EnSsh *arg0, GlobalContext *arg1) {
 s32 func_80974E44(Actor *arg0) {
     u8 temp_v0;
 
-    temp_v0 = arg0->unk_39D;
+    temp_v0 = arg0[2].targetPriority;
     if ((temp_v0 & 2) == 0) {
         return 0;
     }
-    arg0->unk_39D = (u8) (temp_v0 & 0xFFFD);
-    arg0->unk_526 = 8;
-    if ((arg0->unk_52E == 0) && (arg0->unk_524 == 0) && (arg0->unk_52A == 0)) {
+    arg0[2].targetPriority = temp_v0 & 0xFFFD;
+    arg0[4].home.rot.y = 8;
+    if ((arg0->unk_52E == 0) && (arg0[4].home.rot.x == 0) && (arg0[4].home.unk_12 == 0)) {
         arg0->unk_52E = 0x3C;
     }
     return 1;
@@ -888,34 +894,34 @@ s32 func_80974EA0(Actor *arg0, GlobalContext *arg1) {
         return 0;
     }
     temp_v0_3 = arg0->unk_5C4;
-    arg0->unk_526 = 8;
+    arg0[4].home.rot.y = 8;
     if ((s32) temp_v0_3 <= 0) {
         arg0->unk_5C4 = (u8) (temp_v0_3 + 1);
     }
-    if (arg0->unk_52A == 0) {
+    if (arg0[4].home.unk_12 == 0) {
         Audio_PlayActorSound2(arg0, 0x389EU);
         Audio_PlayActorSound2(arg0, 0x6867U);
     }
     func_80974590(arg0);
-    arg0->unk_5C2 = (u16) (arg0->unk_5C2 | 1);
+    arg0[4].colChkInfo.cylHeight = (u16) arg0[4].colChkInfo.cylHeight | 1;
     return 0;
 }
 
 s32 func_80974F78(Actor *arg0, GlobalContext *arg1) {
-    if (arg0->unk_52A == 0) {
+    if (arg0[4].home.unk_12 == 0) {
         func_80974D3C(arg0, arg1);
     }
     if (func_80974E44(arg0) != 0) {
         return 0;
     }
     if (arg1->actorCtx.unk2 != 0) {
-        arg0->unk_526 = 8;
-        if (arg0->unk_52A == 0) {
+        arg0[4].home.rot.y = 8;
+        if (arg0[4].home.unk_12 == 0) {
             Audio_PlayActorSound2(arg0, 0x389EU);
             Audio_PlayActorSound2(arg0, 0x6867U);
         }
         func_80974590(arg0);
-        arg0->unk_5C2 = (u16) (arg0->unk_5C2 | 1);
+        arg0[4].colChkInfo.cylHeight = (u16) arg0[4].colChkInfo.cylHeight | 1;
         return 0;
     }
     return func_80974EA0(arg0, arg1);
@@ -990,24 +996,24 @@ void func_80975070(Actor *arg0, GlobalContext *arg1) {
     phi_s3 = 0;
     do {
         sp70.unk_0 = temp_s6->unk_0;
-        sp70.unk_4 = (s32) temp_s6->unk_4;
-        sp70.unk_8 = (s32) temp_s6->unk_8;
-        phi_s0->x *= arg0->unk_534;
-        phi_s0->y *= arg0->unk_534;
-        phi_s0->z *= arg0->unk_534;
+        (&sp70)[1] = temp_s6->unk_4;
+        (&sp70)[2] = temp_s6->unk_8;
+        phi_s0->x *= arg0[4].world.pos.x;
+        phi_s0->y *= arg0[4].world.pos.x;
+        phi_s0->z *= arg0[4].world.pos.x;
         SysMatrix_StatePush();
         SysMatrix_InsertTranslation(sp70, sp74, sp78, 0);
         SysMatrix_InsertYRotation_f(((f32) arg0->unk_51C / 32768.0f) * 3.1415927f, 1);
         SysMatrix_MultiplyVector3fByState(phi_s0, (Vec3f *) &sp70);
         SysMatrix_StatePop();
-        phi_s1->unk_41E = (s16) (s32) sp70;
+        phi_s1[3].unk_52 = (s16) (s32) sp70;
         phi_s1->unk_420 = (s16) (s32) sp74;
         phi_s1->unk_422 = (s16) (s32) sp78;
         CollisionCheck_SetOC(arg1, arg1 + 0x18884, phi_s4);
         temp_s3 = phi_s3 + 0x4C;
-        phi_s0 += 0xC;
+        phi_s0 = &phi_s0[1];
         phi_s1 += 0x4C;
-        phi_s4 += 0x4C;
+        phi_s4 = (Collider *) &phi_s4[3].at;
         phi_s3 = temp_s3;
     } while (temp_s3 != 0xE4);
     return 1;
@@ -1036,17 +1042,17 @@ void func_80975300(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     temp_a0 = temp_a3;
-    if (temp_a3->unk_524 == 0) {
+    if (temp_a3[4].home.rot.x == 0) {
         arg0 = temp_a3;
         func_80975128(temp_a0, arg1, temp_a3);
         phi_a3 = arg0;
     }
-    temp_v0 = phi_a3->unk_526;
+    temp_v0 = phi_a3[4].home.rot.y;
     if (temp_v0 == 0) {
         phi_v1 = 0;
     } else {
-        phi_a3->unk_526 = (s16) (temp_v0 - 1);
-        phi_v1 = phi_a3->unk_526;
+        phi_a3[4].home.rot.y = temp_v0 - 1;
+        phi_v1 = phi_a3[4].home.rot.y;
     }
     if (phi_v1 == 0) {
         arg0 = phi_a3;
@@ -1100,7 +1106,7 @@ void EnSsh_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     do {
         Collider_DestroyCylinder(globalCtx, phi_s1);
         temp_s0 = phi_s0 + 0x4C;
-        phi_s1 += 0x4C;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x1C8);
     Collider_DestroyJntSph(globalCtx, &this->unk_4BC);
@@ -1403,18 +1409,18 @@ s32 func_80975DBC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
             if (arg1 != 5) {
                 if (arg1 != 8) {
 
-                } else if ((arg5->unk_5C2 & 0x20) != 0) {
+                } else if ((arg5[245].z & 0x20) != 0) {
                     *arg2 = &D_06005F78;
                 }
-            } else if ((arg5->unk_5C2 & 0x20) != 0) {
+            } else if ((arg5[245].z & 0x20) != 0) {
                 *arg2 = &D_06005210;
             }
-        } else if ((arg5->unk_5C2 & 0x20) != 0) {
+        } else if ((arg5[245].z & 0x20) != 0) {
             *arg2 = &D_06005850;
         }
     } else {
-        temp_v0 = arg5->unk_522;
-        if ((temp_v0 != 0) && (arg5->unk_52E == 0)) {
+        temp_v0 = arg5[219].x;
+        if ((temp_v0 != 0) && (arg5[221].x == 0)) {
             if ((s32) temp_v0 >= 2) {
                 func_80974118(arg5);
             } else {
@@ -1429,7 +1435,7 @@ void func_80975EB8(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) 
     void *temp_a0;
     void *temp_v1;
 
-    if ((arg1 == 5) && ((arg4->unk_5C2 & 0x20) != 0)) {
+    if ((arg1 == 5) && ((arg4[4].colChkInfo.cylHeight & 0x20) != 0)) {
         temp_a0 = *arg0;
         temp_v1 = temp_a0->unk_2B0;
         temp_a0->unk_2B0 = (void *) (temp_v1 + 8);
@@ -1452,7 +1458,7 @@ void EnSsh_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp2C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp2C->polyOpa.p;
-    sp2C->polyOpa.p = temp_v1 + 8;
+    sp2C->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80976178 + (this->unk_5C6 * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;

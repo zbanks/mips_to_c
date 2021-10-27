@@ -681,7 +681,7 @@ void func_80B1E680(Actor *arg0) {
     s32 temp_t7;
 
     if (arg0->unk_2C8 != 6) {
-        temp_t7 = arg0->unk_5DC;
+        temp_t7 = arg0[4].shape.shadowScale;
         switch (temp_t7) {
         case 1:
         case 7:
@@ -700,7 +700,7 @@ void func_80B1E680(Actor *arg0) {
             Audio_PlayActorSound2(arg0, 0x3179U);
             return;
         case 4:
-            temp_a0_2 = arg0 + 0x144;
+            temp_a0_2 = &arg0[1];
             arg0 = arg0;
             if (func_801378B8((SkelAnime *) temp_a0_2, 0.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x397AU);
@@ -709,7 +709,7 @@ void func_80B1E680(Actor *arg0) {
             /* Duplicate return node #11. Try simplifying control flow for better match */
             return;
         case 6:
-            temp_a0_3 = arg0 + 0x144;
+            temp_a0_3 = &arg0[1];
             arg0 = arg0;
             if (func_801378B8((SkelAnime *) temp_a0_3, 6.0f) != 0) {
                 Audio_PlayActorSound2(arg0, 0x397AU);
@@ -756,7 +756,7 @@ loop_3:
         return 2;
     }
     temp_s1 = phi_s1 + 2;
-    phi_s2 += 0xC;
+    phi_s2 = &phi_s2[1];
     phi_s1 = temp_s1;
     if (temp_s1 == &D_80B2175E) {
         temp_f10 = Math_SinS(phi_s4) * 40.0f;
@@ -1174,16 +1174,16 @@ void func_80B1F770(Actor *arg0, GlobalContext *arg1) {
         if ((s32) temp_v1 < 0) {
             phi_a0 = -(s32) temp_v1;
         }
-        arg0->unk_2D0 = (s16) (temp_v0 + 0x8000);
+        arg0[2].focus.rot.x = temp_v0 + 0x8000;
         if (phi_a0 < 0x3000) {
-            arg0->unk_2D0 = temp_v0;
+            arg0[2].focus.rot.x = temp_v0;
         }
         Math_Vec3f_Copy(arg0 + 0x358, arg0 + 0x24);
-        Matrix_RotateY(arg0->unk_2D0, 0U);
+        Matrix_RotateY(arg0[2].focus.rot.x, 0U);
         SysMatrix_GetStateTranslationAndScaledZ(-200.0f, (Vec3f *) &sp44);
         arg0->unk_2CA = 0xA;
         arg0->unk_358 = (f32) (arg0->unk_358 + sp44);
-        arg0->unk_360 = (f32) (arg0->unk_360 + sp4C);
+        arg0[2].shape.feetPos[0].y += sp4C;
     }
     temp_v0_2 = arg0->unk_3F4;
     if (((temp_v0_2 == 0xB) || (temp_v0_2 == 0xA)) && (arg0->unk_3F2 != 0)) {
@@ -1194,10 +1194,10 @@ void func_80B1F770(Actor *arg0, GlobalContext *arg1) {
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 8);
     arg0->unk_2CC = 0;
     func_80B1E5A8((EnPp *) arg0, 5);
-    arg0->unk_2D0 = (s16) (arg0->yawTowardsPlayer + 0x8000);
+    arg0[2].focus.rot.x = arg0->yawTowardsPlayer + 0x8000;
     arg0->unk_2C8 = 8;
     if (func_80B1E778((EnPp *) arg0, arg1) == 2) {
-        arg0->unk_5E8 = 0.0f;
+        arg0[4].shape.feetPos[0].y = 0.0f;
         arg0->unk_5E0 = 0.0f;
         arg0->speedXZ = 0.0f;
     }
@@ -1439,7 +1439,7 @@ void func_80B20030(EnPp *arg0, GlobalContext *arg1) {
                                 spD0 = arg0->actor.floorHeight;
                                 spD4 += randPlusMinusPoint5Scaled(20.0f);
                                 func_800B3030(arg1, (Vec3f *) temp_s1, phi_s0, phi_s0, (s16) 0x46, (s16) 0, 2);
-                                temp_s0 = phi_s0 + 0xC;
+                                temp_s0 = &phi_s0[1];
                                 phi_s0 = temp_s0;
                             } while (temp_s0 != temp_s3);
                             Actor_MarkForDeath((Actor *) arg0);
@@ -1526,7 +1526,7 @@ void func_80B203BC(EnPp *arg0, GlobalContext *arg1) {
             temp_s1 = phi_s1 + 0xCCC;
             temp_s0 = phi_s0 + 0xC;
             temp_s0->unk_370 = phi_s0->unk_374.z + (Math_CosS(phi_s1) * 15.0f);
-            phi_s2 += 0xC;
+            phi_s2 = &phi_s2[1];
             phi_s1 = temp_s1;
             phi_s0 = temp_s0;
         } while (temp_s1 != 0x7FF8);
@@ -1830,7 +1830,7 @@ s32 func_80B20E6C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
             arg4->x += (s32) arg5->unk_340;
             arg4->y += (s32) arg5->unk_344;
             arg4->z += (s32) arg5->unk_348;
-            arg3->x += arg5->unk_334;
+            arg3->x += arg5[2].colChkInfo.displacement.z;
             arg3->y += arg5->unk_338;
             arg3->z += arg5->unk_33C;
         }
@@ -1868,7 +1868,7 @@ void func_80B20F70(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
                 temp_f0 = arg4->unk_15C;
                 if ((temp_f0 > 26.0f) || ((s32) arg4->unk_2C8 >= 7)) {
                     arg4->unk_2CE = 0;
-                    func_800A8514(Effect_GetParams(arg4->unk_5D8));
+                    func_800A8514(Effect_GetParams(arg4[4].shape.shadowDraw));
                 } else if ((temp_f0 > 0.0f) && (temp_f0 < 10.0f)) {
                     SysMatrix_InsertTranslation(0.0f, 0.0f, 0.0f, 1);
                     D_80B217CC.x = 1160.0f;
@@ -1892,7 +1892,7 @@ void func_80B20F70(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
                     Collider_SetQuadVertices(arg4 + 0x554, temp_a1_2, sp40, sp3C, sp38);
                     SysMatrix_MultiplyVector3fByState(&D_80B217CC, (Vec3f *) &sp58);
                     SysMatrix_MultiplyVector3fByState(&D_80B217D8, (Vec3f *) &sp4C);
-                    func_800A81F0(Effect_GetParams(arg4->unk_5D8), (Vec3f *) &sp58, (Vec3f *) &sp4C);
+                    func_800A81F0(Effect_GetParams(arg4[4].shape.shadowDraw), (Vec3f *) &sp58, (Vec3f *) &sp4C);
                 }
             }
         }
@@ -1904,15 +1904,15 @@ void func_80B20F70(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     }
     SysMatrix_StatePop();
     if ((arg4->unk_2C8 != 0xD) && ((Collider_UpdateSpheres(arg1, arg4 + 0x494), Collider_UpdateSpheres(arg1, arg4 + 0x4F4), (arg1 == 1)) || (arg1 == 3) || (arg1 == 6) || (arg1 == 0xA) || (arg1 == 0xD) || (arg1 == 0x10) || (arg1 == 0x12) || (arg1 == 0x13) || (arg1 == 0x16) || (arg1 == 0x18) || (arg1 == 0x19))) {
-        SysMatrix_GetStateTranslation(arg4 + (arg4->unk_48C * 0xC) + 0x408);
-        arg4->unk_48C = (s16) (arg4->unk_48C + 1);
-        if ((s32) arg4->unk_48C >= 0xB) {
-            arg4->unk_48C = 0;
+        SysMatrix_GetStateTranslation(arg4 + (arg4[3].shape.rot.z * 0xC) + 0x408);
+        arg4[3].shape.rot.z += 1;
+        if ((s32) arg4[3].shape.rot.z >= 0xB) {
+            arg4[3].shape.rot.z = 0;
         }
-        if ((arg4->unk_2C8 == 0xB) && ((s32) arg4->unk_2D6 < 6) && ((arg1 == 1) || (arg1 == 3) || (arg1 == 6) || (arg1 == 0xA) || (arg1 == 0x10) || (arg1 == 0x13))) {
+        if ((arg4->unk_2C8 == 0xB) && ((s32) arg4[2].focus.unk_12 < 6) && ((arg1 == 1) || (arg1 == 3) || (arg1 == 6) || (arg1 == 0xA) || (arg1 == 0x10) || (arg1 == 0x13))) {
             Actor_Spawn(arg0 + 0x1CA0, arg0, 0x1E9, arg4->world.pos.x, arg4->world.pos.y, arg4->world.pos.z, (s16) (s32) arg4->world.rot.x, (s16) (s32) arg4->world.rot.y, (s16) (s32) arg4->world.rot.z, (s16) (arg1 + 7));
-            arg4->unk_2D6 = (s16) (arg4->unk_2D6 + 1);
-            if ((s32) arg4->unk_2D6 >= 6) {
+            arg4[2].focus.unk_12 += 1;
+            if ((s32) arg4[2].focus.unk_12 >= 6) {
                 arg4->unk_2C8 = 0xC;
             }
         }
@@ -1974,7 +1974,7 @@ void EnPp_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp4C = temp_a0;
             func_8012C448(temp_a0);
             temp_v0_4 = sp4C->polyXlu.p;
-            sp4C->polyXlu.p = temp_v0_4 + 8;
+            sp4C->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = 0xFF;
             temp_v0_4->words.w0 = 0xFA000000;
             Math_Vec3f_Copy((Vec3f *) &sp58, (Vec3f *) &this->actor.world);
@@ -1986,11 +1986,11 @@ void EnPp_Draw(Actor *thisx, GlobalContext *globalCtx) {
             SysMatrix_InsertMatrix((MtxF *) &sp64, 0);
             Matrix_Scale(0.5f, 1.0f, 0.5f, 1);
             temp_v0_5 = sp4C->polyXlu.p;
-            sp4C->polyXlu.p = temp_v0_5 + 8;
+            sp4C->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_6 = sp4C->polyXlu.p;
-            sp4C->polyXlu.p = temp_v0_6 + 8;
+            sp4C->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) D_04076BC0;
             temp_v0_6->words.w0 = 0xDE000000;
         }

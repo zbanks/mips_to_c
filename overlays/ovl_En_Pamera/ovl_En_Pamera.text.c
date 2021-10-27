@@ -879,17 +879,17 @@ void EnPamera_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v0 + 8;
+    sp30->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80BDA604 + (this->unk_312 * 4));
     temp_v0->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;
     temp_v0_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v0_2 + 8;
+    sp30->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     temp_a0_3 = *(&D_80BDA610 + (this->unk_314 * 4));
     temp_v0_2->words.w1 = (temp_a0_3 & 0xFFFFFF) + gSegments[(u32) (temp_a0_3 * 0x10) >> 0x1C] + 0x80000000;
     temp_v0_3 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v0_3 + 8;
+    sp30->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     temp_a0_4 = *(&D_80BDA5FC + (this->unk_310 * 4));
     temp_v0_3->words.w1 = (temp_a0_4 & 0xFFFFFF) + gSegments[(u32) (temp_a0_4 * 0x10) >> 0x1C] + 0x80000000;
@@ -1250,7 +1250,7 @@ void func_80BDA344(Actor *thisx, GlobalContext *globalCtx) {
     u8 temp_v0_2;
 
     thisx->unk_1D4(thisx, globalCtx);
-    SkelAnime_FrameUpdateMatrix(thisx + 0x190);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &thisx[1].focus.rot.z);
     func_80BD9384((EnPamera *) thisx, globalCtx);
     if (func_80BD9CB8((EnPamera *) thisx, globalCtx) != 0) {
         temp_v0 = gSaveContext.weekEventReg[59];
@@ -1261,12 +1261,12 @@ void func_80BDA344(Actor *thisx, GlobalContext *globalCtx) {
         if ((temp_v0_2 & 4) == 0) {
             gSaveContext.weekEventReg[61] = temp_v0_2 | 4;
         }
-        func_800E8F08(thisx + 0x304, thisx + 0x30A);
+        func_800E8F08((Vec3s *) &thisx[2].wallPoly, thisx + 0x30A);
         return;
     }
     func_80BD94E0((EnPamera *) thisx, globalCtx);
     if (func_80BD994C == thisx->unk_1D4) {
-        temp_a2 = thisx + 0x144;
+        temp_a2 = &thisx[1];
         sp24 = temp_a2;
         Collider_UpdateCylinder(thisx, (ColliderCylinder *) temp_a2);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider *) temp_a2);

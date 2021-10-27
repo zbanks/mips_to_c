@@ -173,10 +173,10 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep *arg0) {
         sp54 = (f32) phi_s0 * -20.0f;
         SysMatrix_MultiplyVector3fByState((Vec3f *) temp_s3, phi_s1);
         temp_s0 = phi_s0 + 1;
-        phi_s1->unk_C = 0.0f;
+        phi_s1[1].x = 0.0f;
         phi_s1->unk_12 = 0;
         phi_s0 = temp_s0;
-        phi_s1 += 0x14;
+        phi_s1 = (Vec3f *) &phi_s1[1].z;
     } while (temp_s0 != 7);
 }
 
@@ -203,7 +203,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep *arg0) {
         temp_s0 = phi_s0 + 1;
         phi_s2 += 4;
         phi_s0 = temp_s0;
-        phi_s1 += 0x14;
+        phi_s1 = (Vec3f *) &phi_s1[1].z;
     } while (temp_s0 != 7);
 }
 
@@ -389,10 +389,10 @@ void ObjTokeiStep_DrawOpen(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1 = globalCtx->state.gfxCtx;
     temp_s0 = temp_v1->polyOpa.p;
     temp_s0->words.w0 = 0xDE000000;
-    temp_s0->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s0->words.w1 = (u32) &sSetupDL[150];
     sp44 = temp_v1;
     phi_s3 = this->panels;
-    phi_s0 = temp_s0 + 8;
+    phi_s0 = &temp_s0[1];
     phi_s2 = 0;
     do {
         ObjTokeiStep_SetSysMatrix(phi_s3);

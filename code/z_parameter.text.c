@@ -89,7 +89,7 @@ typedef struct GlobalContext {
     /* 0x18B9C */ char pad_18B9C[0x2B8];            /* maybe part of pauseBgPreRender[9]? */
     /* 0x18E54 */ SceneTableEntry *loadedScene;
     /* 0x18E58 */ char pad_18E58[0x4];
-    /* 0x18E5C */ s32 unk_18E5C;                    /* inferred */
+    /* 0x18E5C */ GraphicsContext *unk_18E5C;       /* inferred */
     /* 0x18E60 */ char pad_18E60[0x3F8];            /* maybe part of unk_18E5C[255]? */
 } GlobalContext;                                    /* size = 0x19258 */
 
@@ -125,6 +125,36 @@ typedef struct {
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ char pad_120B2[0x2E];             /* maybe part of unk120B1[47]? */
 } MessageContext;                                   /* size = 0x120E0 */
+
+typedef struct {
+    /* 0x000 */ u32 magic;
+    /* 0x004 */ GraphicsContext *gfxCtx;
+    /* 0x008 */ Viewport viewport;
+    /* 0x018 */ f32 fovy;
+    /* 0x01C */ f32 zNear;
+    /* 0x020 */ f32 zFar;
+    /* 0x024 */ f32 scale;
+    /* 0x028 */ Vec3f eye;
+    /* 0x034 */ Vec3f at;
+    /* 0x040 */ Vec3f up;
+    /* 0x04C */ u8 unk_4C;                          /* inferred */
+    /* 0x04D */ char pad_4D[0x3];                   /* maybe part of unk_4C[4]? */
+    /* 0x050 */ Vp vp;
+    /* 0x060 */ Mtx projection;
+    /* 0x0A0 */ Mtx viewing;
+    /* 0x0E0 */ Mtx unkE0;
+    /* 0x120 */ Mtx *projectionPtr;
+    /* 0x124 */ Mtx *viewingPtr;
+    /* 0x128 */ Vec3f quakeRot;
+    /* 0x134 */ Vec3f quakeScale;
+    /* 0x140 */ f32 quakeSpeed;
+    /* 0x144 */ Vec3f currQuakeRot;
+    /* 0x150 */ Vec3f currQuakeScale;
+    /* 0x15C */ u16 normal;
+    /* 0x15E */ char pad_15E[0x2];
+    /* 0x160 */ u32 flags;
+    /* 0x164 */ char pad_164[0x4];
+} View;                                             /* size = 0x168 */
 
 struct _mips2c_stack_Interface_ChangeAlpha {};      /* size 0x0 */
 
@@ -642,8 +672,8 @@ s32 func_800FE4A8();                                /* extern */
 ? func_8010A580(GlobalContext *);                   /* extern */
 s32 func_801234D4(GlobalContext *);                 /* extern */
 s32 func_801242DC(GlobalContext *, SaveContext *, u8, s16); /* extern */
-? func_801663C4(s32, u64 *, ?, SaveContext *);      /* extern */
-? func_80166644(u64 *, s32, ?, SaveContext *);      /* extern */
+? func_801663C4(GraphicsContext *, u64 *, ?, SaveContext *); /* extern */
+? func_80166644(u64 *, GraphicsContext *, ?, SaveContext *); /* extern */
 ? func_80174F7C(void (*)(s32), ?);                  /* extern */
 ? func_80174F9C(void (*)(s32), ?);                  /* extern */
 ? func_80178E3C(u8 *, s32, void *, ?);              /* extern */
@@ -697,7 +727,7 @@ void func_80116918(GraphicsContext **arg0, Gfx *);  /* static */
 void func_80116FD8(GraphicsContext **arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); /* static */
 void func_801170B8(View *arg0, GraphicsContext **, GraphicsContext *); /* static */
 void func_80117100(GraphicsContext **arg0);         /* static */
-void func_80117A20(GraphicsContext **arg0, s32 arg1, s16 arg2, GraphicsContext *); /* static */
+void func_80117A20(GraphicsContext **arg0, void *arg1, s16 arg2, GraphicsContext *); /* static */
 void func_80117BD0(GraphicsContext **arg0, s16 arg1, s16 arg2, GraphicsContext *); /* static */
 void func_80118084(GraphicsContext **arg0);         /* static */
 void func_80118890(GraphicsContext **arg0);         /* static */
@@ -984,7 +1014,7 @@ static s16 D_801BF8DC = 0;
 static s16 D_801BF8E0 = 0;
 static s16 D_801BF8E4 = 0;
 static ? D_801BF8E8;                                /* unable to generate initializer */
-static s32 D_801BF8F0 = 0;
+static u32 D_801BF8F0 = 0;
 static ? D_801BF8F8;                                /* unable to generate initializer */
 static ? D_801BF8FC;                                /* unable to generate initializer */
 static ? D_801BF930;                                /* unable to generate initializer */
@@ -1112,7 +1142,7 @@ static ? D_801BFD8C;                                /* unable to generate initia
 static u8 D_801BFD94 = 0;
 static s16 D_801BFD98 = 0;
 static Input D_801F5850[4];
-static s32 D_801FBB90;
+static GraphicsContext *D_801FBB90;
 static ? D_801E3BB0;                                /* unable to generate initializer; const */
 u32 D_801C2410[144] = {
     0,
@@ -2309,7 +2339,7 @@ void func_8010E028(GraphicsContext **arg0) {
     temp_v1 = arg0->unk_0;
     temp_v0 = temp_v1->polyOpa.d - 0x6C0;
     temp_v1->polyOpa.d = temp_v0;
-    arg0->unk_16B50 = temp_v0;
+    arg0[23252] = temp_v0;
     temp_a2 = arg0 + 0x169E8;
     phi_t1 = 0;
     phi_t2 = 0;
@@ -2531,17 +2561,17 @@ block_12:
     temp_a2->unk_16C->unk_32 = -8;
     temp_a0_24 = temp_a2->unk_16C;
     temp_a0_24->unk_22 = (s16) temp_a0_24->unk_32;
-    temp_a2->unk_16C->unk_34 = 0;
+    temp_a2->unk_16C[6].texture.s = 0;
     temp_a0_25 = temp_a2->unk_16C;
-    temp_a1_10 = temp_a0_25->unk_34;
-    temp_a0_25->unk_24 = temp_a1_10;
-    temp_a2->unk_16C->unk_14 = temp_a1_10;
+    temp_a1_10 = temp_a0_25[6].texture.s;
+    temp_a0_25[4].texture.s = temp_a1_10;
+    temp_a2->unk_16C[2].texture.s = temp_a1_10;
     temp_a2->unk_16C->texture.s = temp_a1_10;
-    temp_a2->unk_16C->unk_36 = 0U;
+    temp_a2->unk_16C[6].texture.t = 0;
     temp_a0_26 = temp_a2->unk_16C;
-    temp_a1_11 = temp_a0_26->unk_36;
-    temp_a0_26->unk_26 = temp_a1_11;
-    temp_a2->unk_16C->unk_16 = temp_a1_11;
+    temp_a1_11 = temp_a0_26[6].texture.t;
+    temp_a0_26[4].texture.t = temp_a1_11;
+    temp_a2->unk_16C[2].texture.t = temp_a1_11;
     temp_a2->unk_16C->texture.t = temp_a1_11;
     temp_a2->unk_16C->unk_28 = 0;
     temp_a0_27 = temp_a2->unk_16C;
@@ -2555,24 +2585,24 @@ block_12:
     temp_a0_28->unk_38 = temp_a1_13;
     temp_a2->unk_16C->unk_2A = temp_a1_13;
     temp_a2->unk_16C->unk_18 = temp_a1_13;
-    temp_a2->unk_16C->unk_3F = 0xFFU;
+    temp_a2->unk_16C[7].tri.tri.v[2] = 0xFF;
     temp_a0_29 = temp_a2->unk_16C;
-    temp_v0_10 = temp_a0_29->unk_3F;
-    temp_a0_29->unk_2F = temp_v0_10;
-    temp_a2->unk_16C->unk_1F = temp_v0_10;
-    temp_a2->unk_16C->unk_F = temp_v0_10;
-    temp_a2->unk_16C->unk_3E = temp_v0_10;
-    temp_a2->unk_16C->unk_2E = temp_v0_10;
-    temp_a2->unk_16C->unk_1E = temp_v0_10;
-    temp_a2->unk_16C->unk_E = temp_v0_10;
-    temp_a2->unk_16C->unk_3D = temp_v0_10;
-    temp_a2->unk_16C->unk_2D = temp_v0_10;
-    temp_a2->unk_16C->unk_1D = temp_v0_10;
-    temp_a2->unk_16C->unk_D = temp_v0_10;
-    temp_a2->unk_16C->unk_3C = temp_v0_10;
-    temp_a2->unk_16C->unk_2C = temp_v0_10;
-    temp_a2->unk_16C->unk_1C = temp_v0_10;
-    temp_a2->unk_16C->unk_C = temp_v0_10;
+    temp_v0_10 = temp_a0_29[7].tri.tri.v[2];
+    temp_a0_29[5].tri.tri.v[2] = temp_v0_10;
+    temp_a2->unk_16C[3].tri.tri.v[2] = temp_v0_10;
+    temp_a2->unk_16C[1].tri.tri.v[2] = temp_v0_10;
+    temp_a2->unk_16C[7].tri.tri.v[1] = temp_v0_10;
+    temp_a2->unk_16C[5].tri.tri.v[1] = temp_v0_10;
+    temp_a2->unk_16C[3].tri.tri.v[1] = temp_v0_10;
+    temp_a2->unk_16C[1].tri.tri.v[1] = temp_v0_10;
+    temp_a2->unk_16C[7].tri.tri.v[0] = temp_v0_10;
+    temp_a2->unk_16C[5].tri.tri.v[0] = temp_v0_10;
+    temp_a2->unk_16C[3].tri.tri.v[0] = temp_v0_10;
+    temp_a2->unk_16C[1].tri.tri.v[0] = temp_v0_10;
+    temp_a2->unk_16C[7].tri.tri.flag = temp_v0_10;
+    temp_a2->unk_16C[5].tri.tri.flag = temp_v0_10;
+    temp_a2->unk_16C[3].tri.tri.flag = temp_v0_10;
+    temp_a2->unk_16C[1].tri.tri.flag = temp_v0_10;
 }
 
 void func_8010E968(s32 arg0) {
@@ -5218,15 +5248,15 @@ void func_80111CB4(GlobalContext *arg0) {
     void *sp30;
     s32 sp28;
     void *sp18;
+    GraphicsContext *temp_v0_3;
+    GraphicsContext *temp_v0_8;
+    GraphicsContext *temp_v0_9;
     InterfaceContext *temp_v0_7;
     s16 temp_v0_2;
     s32 temp_a0;
     s32 temp_hi;
     s32 temp_hi_2;
     s32 temp_v0;
-    s32 temp_v0_3;
-    s32 temp_v0_8;
-    s32 temp_v0_9;
     u16 temp_v0_16;
     u16 temp_v0_5;
     u8 temp_v0_10;
@@ -5241,10 +5271,10 @@ void func_80111CB4(GlobalContext *arg0) {
     void *temp_t7;
     void *temp_v0_4;
     void *temp_v0_6;
-    s32 phi_a0;
+    GraphicsContext *phi_a0;
     s32 phi_a0_2;
-    s32 phi_a0_3;
-    s32 phi_a1;
+    GraphicsContext *phi_a0_3;
+    GraphicsContext *phi_a1;
     u8 phi_a1_2;
     u8 phi_a1_3;
     u8 phi_a0_4;
@@ -5604,7 +5634,7 @@ block_133:
                                 func_80115844(arg0, 0x12);
                                 Interface_ChangeAlpha(0x15U);
                                 D_801BF884 = 1;
-                                gSaveContext.inventory.questItems &= -1 - *(gBitFlags + 0x64);
+                                gSaveContext.inventory.questItems &= -1 - gBitFlags[25];
                                 phi_a3_5 = &gSaveContext;
                             } else {
                                 func_8019F208();
@@ -5625,7 +5655,7 @@ block_133:
                                     func_8013A240(arg0);
                                 }
                                 arg0->actorCtx.unk5 &= 0xFFFB;
-                                gSaveContext.inventory.questItems |= *(gBitFlags + 0x64);
+                                gSaveContext.inventory.questItems |= gBitFlags[25];
                                 D_801BF888 = 0;
                                 phi_a3_5 = &gSaveContext;
                             }
@@ -5648,7 +5678,7 @@ block_133:
                     goto block_165;
                 }
                 if ((arg0->actorCtx.unk5 & 4) != 0) {
-                    if ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) == 0) {
+                    if ((gBitFlags[25] & gSaveContext.inventory.questItems) == 0) {
                         func_80115844(arg0, 0x12);
                         Interface_ChangeAlpha(0x15U);
                         D_801BF884 = 1;
@@ -5697,18 +5727,18 @@ loop_1:
     temp_v0 = phi_v0 + 1;
     if (arg0->unk_A5 == phi_a2) {
         temp_v0_2 = arg0 + 0x169E8;
-        temp_v0_2->unk_30E = (s8) ((s32) (phi_a1->unk_1 & 0xC0) >> 6);
-        temp_v0_2->unk_30F = (s8) ((s32) (phi_a1->unk_1 & 0x30) >> 4);
-        temp_v0_2->unk_310 = (s8) ((s32) (phi_a1->unk_1 & 0xC) >> 2);
-        temp_v0_2->unk_311 = (s8) (phi_a1->unk_1 & 3);
-        temp_v0_2->unk_312 = (s8) ((s32) (phi_a1->unk_2 & 0xC0) >> 6);
-        temp_v0_2->unk_313 = (s8) ((s32) (phi_a1->unk_2 & 0x30) >> 4);
-        temp_v0_2->unk_314 = (s8) ((s32) (phi_a1->unk_2 & 0xC) >> 2);
-        temp_v0_2->unk_315 = (s8) (phi_a1->unk_2 & 3);
-        temp_v0_2->unk_316 = (s8) ((s32) (phi_a1->unk_3 & 0xC0) >> 6);
-        temp_v0_2->unk_317 = (s8) ((s32) (phi_a1->unk_3 & 0x30) >> 4);
-        temp_v0_2->unk_318 = (s8) ((s32) (phi_a1->unk_3 & 0xC) >> 2);
-        temp_v0_2->unk_319 = (s8) (phi_a1->unk_3 & 3);
+        temp_v0_2->unk_30E = (s8) ((s32) (phi_a1[1] & 0xC0) >> 6);
+        temp_v0_2->unk_30F = (s8) ((s32) (phi_a1[1] & 0x30) >> 4);
+        temp_v0_2->unk_310 = (s8) ((s32) (phi_a1[1] & 0xC) >> 2);
+        temp_v0_2->unk_311 = (s8) (phi_a1[1] & 3);
+        temp_v0_2->unk_312 = (s8) ((s32) (phi_a1[2] & 0xC0) >> 6);
+        temp_v0_2->unk_313 = (s8) ((s32) (phi_a1[2] & 0x30) >> 4);
+        temp_v0_2->unk_314 = (s8) ((s32) (phi_a1[2] & 0xC) >> 2);
+        temp_v0_2->unk_315 = (s8) (phi_a1[2] & 3);
+        temp_v0_2->unk_316 = (s8) ((s32) (phi_a1[3] & 0xC0) >> 6);
+        temp_v0_2->unk_317 = (s8) ((s32) (phi_a1[3] & 0x30) >> 4);
+        temp_v0_2->unk_318 = (s8) ((s32) (phi_a1[3] & 0xC) >> 2);
+        temp_v0_2->unk_319 = (s8) (phi_a1[3] & 3);
         return;
     }
     temp_a1 = D_801BF6C0 + (temp_v0 * 4);
@@ -6312,7 +6342,7 @@ void func_80114FD0(GlobalContext *arg0, u8 arg1, u8 arg2) {
     phi_v0 = 0;
     phi_v0_2 = (u8) 0;
 loop_1:
-    temp_t0 = gItemSlots[0x16] + &gSaveContext + phi_v1;
+    temp_t0 = gItemSlots[22] + &gSaveContext + phi_v1;
     phi_t0 = temp_t0;
     if (temp_t0->unk_70 == 0x16) {
         phi_a2 = 1;
@@ -6473,7 +6503,7 @@ void func_80115428(InterfaceContext *arg0, u16 arg1, s16 arg2) {
         osRecvMesg(temp_a0, NULL, 1);
         return;
     }
-    *(gSegments + 0x24) = arg0->doActionSegment + 0x80000000;
+    gSegments[9] = arg0->doActionSegment + 0x80000000;
     func_801153C8(Lib_SegmentedToVirtual(*(&D_801BFAB0 + (arg2 * 4))), 0x60);
 }
 
@@ -6616,7 +6646,7 @@ void func_80115844(GlobalContext *globalCtx, s16 param_2) {
     temp_v1 = &temp_v0->loadQueue;
     sp2C = temp_v1;
     sp30 = temp_v0;
-    DmaMgr_SendRequestImpl(&temp_v0->dmaRequest_184, (void *) (temp_v0->doActionSegment + 0x480), (u32) ((param_2 * 0x180) + _do_action_staticSegmentRomStart), 0x180U, 0, temp_v1, NULL);
+    DmaMgr_SendRequestImpl(&temp_v0->dmaRequest_184, (void *) &temp_v0->doActionSegment[1152], (u32) ((param_2 * 0x180) + _do_action_staticSegmentRomStart), 0x180U, 0, temp_v1, NULL);
     osRecvMesg(sp2C, NULL, 1);
     temp_v0->unk_222 = 1;
 }
@@ -6675,7 +6705,7 @@ void func_80115A14(s32 arg0, s16 arg1) {
         temp_t6 = gItemSlots[8];
         gSaveContext.inventory.ammo[temp_t6] += arg1;
         temp_a0 = gSaveContext.inventory.ammo[temp_t6];
-        temp_a2 = (*(gUpgradeCapacities + 0x28))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x18)) >> gUpgradeShifts[6]];
+        temp_a2 = gUpgradeCapacities[5][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[6]) >> gUpgradeShifts[6]];
         if ((s32) temp_a0 >= (s32) temp_a2) {
             gSaveContext.inventory.ammo[temp_t6] = (s8) temp_a2;
             return;
@@ -6691,7 +6721,7 @@ void func_80115A14(s32 arg0, s16 arg1) {
         temp_t5 = gItemSlots[9];
         gSaveContext.inventory.ammo[temp_t5] += arg1;
         temp_a0_2 = gSaveContext.inventory.ammo[temp_t5];
-        temp_a2_2 = (*(gUpgradeCapacities + 0x30))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x1C)) >> gUpgradeShifts[7]];
+        temp_a2_2 = gUpgradeCapacities[6][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[7]) >> gUpgradeShifts[7]];
         if ((s32) temp_a0_2 >= (s32) temp_a2_2) {
             gSaveContext.inventory.ammo[temp_t5] = (s8) temp_a2_2;
             return;
@@ -6706,7 +6736,7 @@ void func_80115A14(s32 arg0, s16 arg1) {
     if ((s16) arg0 == 7) {
         temp_t4 = gItemSlots[7];
         gSaveContext.inventory.ammo[temp_t4] += arg1;
-        temp_a2_3 = (*gUpgradeCapacities)[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 4)) >> gUpgradeShifts[1]];
+        temp_a2_3 = (*gUpgradeCapacities)[(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]];
         temp_a0_3 = gSaveContext.inventory.ammo[temp_t4];
         if ((s32) temp_a0_3 >= (s32) temp_a2_3) {
             gSaveContext.inventory.ammo[temp_t4] = (s8) temp_a2_3;
@@ -6722,7 +6752,7 @@ void func_80115A14(s32 arg0, s16 arg1) {
     if ((s16) arg0 == 1) {
         temp_t3 = gItemSlots[1];
         gSaveContext.inventory.ammo[temp_t3] += arg1;
-        temp_a2_4 = *(gUpgradeShifts + 8 + (((u32) (gSaveContext.inventory.upgrades & *gUpgradeMasks) >> *gUpgradeShifts) * 2));
+        temp_a2_4 = *(&gUpgradeShifts[8] + (((u32) (gSaveContext.inventory.upgrades & *gUpgradeMasks) >> *gUpgradeShifts) * 2));
         temp_a0_4 = gSaveContext.inventory.ammo[temp_t3];
         if ((s32) temp_a0_4 >= (s32) temp_a2_4) {
             gSaveContext.inventory.ammo[temp_t3] = (s8) temp_a2_4;
@@ -6739,7 +6769,7 @@ void func_80115A14(s32 arg0, s16 arg1) {
         temp_t2 = gItemSlots[6];
         gSaveContext.inventory.ammo[temp_t2] += arg1;
         temp_a0_5 = gSaveContext.inventory.ammo[temp_t2];
-        temp_a2_5 = (*gUpgradeCapacities)[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 4)) >> gUpgradeShifts[1]];
+        temp_a2_5 = (*gUpgradeCapacities)[(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]];
         if ((s32) temp_a0_5 >= (s32) temp_a2_5) {
             gSaveContext.inventory.ammo[temp_t2] = (s8) temp_a2_5;
             return;
@@ -6752,12 +6782,12 @@ void func_80115A14(s32 arg0, s16 arg1) {
         return;
     }
     if ((s16) arg0 == 0xA) {
-        temp_t1 = gItemSlots[0xA];
+        temp_t1 = gItemSlots[10];
         gSaveContext.inventory.ammo[temp_t1] += arg1;
         return;
     }
     if ((s16) arg0 == 0xC) {
-        temp_t4_2 = gItemSlots[0xC];
+        temp_t4_2 = gItemSlots[12];
         gSaveContext.inventory.ammo[temp_t4_2] += arg1;
         temp_a0_6 = gSaveContext.inventory.ammo[temp_t4_2];
         if ((s32) temp_a0_6 > 0) {
@@ -7269,7 +7299,7 @@ void func_80116918(GraphicsContext **arg0) {
         spE2 = phi_t2;
         func_8012C654(temp_a1);
         temp_v0 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0 + 8;
+        temp_a1->overlay.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFB000000;
         temp_v0->words.w1 = 0x643232FF;
         temp_t1 = arg0 + 0x169E8;
@@ -7282,142 +7312,142 @@ void func_80116918(GraphicsContext **arg0) {
         temp_a1->overlay.p = temp_v0_3;
         temp_a1->overlay.p = func_8010D480(temp_v0_3, &D_02004DA0, 8, 0x10, (s16) (gSaveContext.unk_3F2E + 0x1A), (s16) (s32) phi_t2, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400, (s16) (s32) D_801BF8A0, (s16) (s32) D_801BF8A4, (s16) (s32) D_801BF8A8, (s16) (s32) temp_t1->unk_272, 3, 0x100);
         temp_v0_4 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_4 + 8;
+        temp_a1->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE7000000;
         temp_v0_5 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_5 + 8;
+        temp_a1->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x55FEF77B;
         temp_v0_5->words.w0 = 0xFC30FE61;
         temp_v0_6 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_6 + 8;
+        temp_a1->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0xFF;
         temp_v0_6->words.w0 = 0xFB000000;
         if (gSaveContext.unk_3F28 == 4) {
             temp_v0_7 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_7 + 8;
+            temp_a1->overlay.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xFA000000;
             temp_v0_7->words.w1 = (temp_t1->unk_272 & 0xFF) | 0xFAFA0000;
             temp_v0_8 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_8 + 8;
+            temp_a1->overlay.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xFD900000;
             temp_v0_8->words.w1 = (u32) &D_02004FA0;
             temp_v0_9 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_9 + 8;
+            temp_a1->overlay.p = &temp_v0_9[1];
             temp_v0_9->words.w1 = 0x7000000;
             temp_v0_9->words.w0 = 0xF5900000;
             temp_v0_10 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_10 + 8;
+            temp_a1->overlay.p = &temp_v0_10[1];
             temp_v0_10->words.w1 = 0;
             temp_v0_10->words.w0 = 0xE6000000;
             temp_v0_11 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_11 + 8;
+            temp_a1->overlay.p = &temp_v0_11[1];
             temp_v0_11->words.w1 = 0x703F800;
             temp_v0_11->words.w0 = 0xF3000000;
             temp_v0_12 = temp_a1->overlay.p;
             temp_a2 = ((phi_t2 + 0xA) * 4) & 0xFFF;
-            temp_a1->overlay.p = temp_v0_12 + 8;
+            temp_a1->overlay.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0;
             temp_v0_12->words.w0 = 0xE7000000;
             temp_v0_13 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_13 + 8;
+            temp_a1->overlay.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0;
             temp_v0_13->words.w0 = 0xF5800200;
             temp_v0_14 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_14 + 8;
+            temp_a1->overlay.p = &temp_v0_14[1];
             temp_v0_14->words.w0 = 0xF2000000;
             temp_v0_14->words.w1 = 0x3C03C;
             temp_v0_15 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_15 + 8;
+            temp_a1->overlay.p = &temp_v0_15[1];
             temp_a3 = (((phi_t2 + 3) * 4) & 0xFFF) | 0x68000;
             temp_v0_15->words.w1 = temp_a3;
             temp_v0_15->words.w0 = ((((gSaveContext.magic + 0x1A) * 4) & 0xFFF) << 0xC) | 0xE4000000 | temp_a2;
             temp_v0_16 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_16 + 8;
+            temp_a1->overlay.p = &temp_v0_16[1];
             temp_v0_16->words.w1 = 0;
             temp_v0_16->words.w0 = 0xE1000000;
             temp_v0_17 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_17 + 8;
+            temp_a1->overlay.p = &temp_v0_17[1];
             temp_v0_17->words.w1 = 0x4000400;
             temp_v0_17->words.w0 = 0xF1000000;
             temp_v0_18 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_18 + 8;
+            temp_a1->overlay.p = &temp_v0_18[1];
             temp_v0_18->words.w1 = 0;
             temp_v0_18->words.w0 = 0xE7000000;
             if ((gSaveContext.weekEventReg[14] & 8) != 0) {
                 temp_v0_19 = temp_a1->overlay.p;
-                temp_a1->overlay.p = temp_v0_19 + 8;
+                temp_a1->overlay.p = &temp_v0_19[1];
                 temp_v0_19->words.w0 = 0xFA000000;
                 temp_v0_19->words.w1 = (temp_t1->unk_272 & 0xFF) | 0xC800;
             } else {
                 temp_v0_20 = temp_a1->overlay.p;
-                temp_a1->overlay.p = temp_v0_20 + 8;
+                temp_a1->overlay.p = &temp_v0_20[1];
                 temp_v0_20->words.w0 = 0xFA000000;
                 temp_v0_20->words.w1 = (temp_t1->unk_272 & 0xFF) | 0xC80000;
             }
             temp_v0_21 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_21 + 8;
+            temp_a1->overlay.p = &temp_v0_21[1];
             temp_v0_21->words.w1 = temp_a3;
             temp_v0_21->words.w0 = (((((gSaveContext.magic - gSaveContext.unk_3F32) + 0x1A) * 4) & 0xFFF) << 0xC) | 0xE4000000 | temp_a2;
             temp_v0_22 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_22 + 8;
+            temp_a1->overlay.p = &temp_v0_22[1];
             temp_v0_22->words.w1 = 0;
             temp_v0_22->words.w0 = 0xE1000000;
             temp_v0_23 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_23 + 8;
+            temp_a1->overlay.p = &temp_v0_23[1];
             temp_v0_23->words.w1 = 0x4000400;
             temp_v0_23->words.w0 = 0xF1000000;
             return;
         }
         if ((gSaveContext.weekEventReg[14] & 8) != 0) {
             temp_v0_24 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_24 + 8;
+            temp_a1->overlay.p = &temp_v0_24[1];
             temp_v0_24->words.w0 = 0xFA000000;
             temp_v0_24->words.w1 = (temp_t1->unk_272 & 0xFF) | 0xC800;
         } else {
             temp_v0_25 = temp_a1->overlay.p;
-            temp_a1->overlay.p = temp_v0_25 + 8;
+            temp_a1->overlay.p = &temp_v0_25[1];
             temp_v0_25->words.w0 = 0xFA000000;
             temp_v0_25->words.w1 = (temp_t1->unk_272 & 0xFF) | 0xC80000;
         }
         temp_v0_26 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_26 + 8;
+        temp_a1->overlay.p = &temp_v0_26[1];
         temp_v0_26->words.w0 = 0xFD900000;
         temp_v0_26->words.w1 = (u32) &D_02004FA0;
         temp_v0_27 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_27 + 8;
+        temp_a1->overlay.p = &temp_v0_27[1];
         temp_v0_27->words.w1 = 0x7000000;
         temp_v0_27->words.w0 = 0xF5900000;
         temp_v0_28 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_28 + 8;
+        temp_a1->overlay.p = &temp_v0_28[1];
         temp_v0_28->words.w1 = 0;
         temp_v0_28->words.w0 = 0xE6000000;
         temp_v0_29 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_29 + 8;
+        temp_a1->overlay.p = &temp_v0_29[1];
         temp_v0_29->words.w1 = 0x703F800;
         temp_v0_29->words.w0 = 0xF3000000;
         temp_v0_30 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_30 + 8;
+        temp_a1->overlay.p = &temp_v0_30[1];
         temp_v0_30->words.w1 = 0;
         temp_v0_30->words.w0 = 0xE7000000;
         temp_v0_31 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_31 + 8;
+        temp_a1->overlay.p = &temp_v0_31[1];
         temp_v0_31->words.w1 = 0;
         temp_v0_31->words.w0 = 0xF5800200;
         temp_v0_32 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_32 + 8;
+        temp_a1->overlay.p = &temp_v0_32[1];
         temp_v0_32->words.w0 = 0xF2000000;
         temp_v0_32->words.w1 = 0x3C03C;
         temp_v0_33 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_33 + 8;
+        temp_a1->overlay.p = &temp_v0_33[1];
         temp_v0_33->words.w0 = ((((gSaveContext.magic + 0x1A) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_t2 + 0xA) * 4) & 0xFFF);
         temp_v0_33->words.w1 = (((phi_t2 + 3) * 4) & 0xFFF) | 0x68000;
         temp_v0_34 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_34 + 8;
+        temp_a1->overlay.p = &temp_v0_34[1];
         temp_v0_34->words.w1 = 0;
         temp_v0_34->words.w0 = 0xE1000000;
         temp_v0_35 = temp_a1->overlay.p;
-        temp_a1->overlay.p = temp_v0_35 + 8;
+        temp_a1->overlay.p = &temp_v0_35[1];
         temp_v0_35->words.w1 = 0x4000400;
         temp_v0_35->words.w0 = 0xF1000000;
         /* Duplicate return node #13. Try simplifying control flow for better match */
@@ -7447,11 +7477,11 @@ void func_80116FD8(GraphicsContext **arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg
     sp3C = -1.0f;
     sp2C = 1.0f;
     View_SetViewOrientation(temp_s0, (Vec3f *) &sp40, (Vec3f *) &sp34, (Vec3f *) &sp28);
-    temp_s0->unk_200 = arg1;
-    temp_s0->unk_204 = arg2;
-    temp_s0->unk_208 = arg3;
-    temp_s0->unk_20C = arg4;
-    View_SetViewport(temp_s0, temp_s0 + 0x200);
+    temp_s0[1].projection.m[3][2] = arg1;
+    temp_s0[1].projection.m[3][3] = arg2;
+    temp_s0[1].viewing.m[0][0] = arg3;
+    temp_s0[1].viewing.m[0][1] = arg4;
+    View_SetViewport(temp_s0, (Viewport *) &temp_s0[1].projection.m[3][2]);
     func_8013F0D0(temp_s0, 60.0f, 10.0f, 60.0f);
     func_8013FD74(temp_s0);
 }
@@ -7540,7 +7570,7 @@ void func_80117100(GraphicsContext **arg0) {
     s32 phi_t2;
     u8 phi_v1;
 
-    sp100 = arg0->unk_1CCC;
+    sp100 = arg0[1843];
     temp_s0 = arg0->unk_0;
     temp_v1 = temp_s0->overlay.p;
     temp_s0->overlay.p = temp_v1 + 8;
@@ -7556,7 +7586,7 @@ void func_80117100(GraphicsContext **arg0) {
     sp4C = temp_t4;
     temp_s0->overlay.p = func_8010CFBC(temp_s0->overlay.p, &D_02000F60, 0x20, 0x20, (s16) (s32) D_801BF9D4, (s16) (s32) D_801BF9DC, (s16) (s32) temp_v0, (s16) (s32) temp_v0, (u16) temp_v1_3, (u16) temp_v1_3, (s16) 0x64, (s16) 0xFF, (s16) 0x78, (s16) (s32) temp_t4->unk_268);
     temp_v1_4 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v1_4 + 8;
+    temp_s0->overlay.p = &temp_v1_4[1];
     temp_v1_4->words.w1 = 0;
     temp_v1_4->words.w0 = 0xE7000000;
     temp_a3 = D_801BFAF6;
@@ -7577,59 +7607,59 @@ void func_80117100(GraphicsContext **arg0) {
         sp4C = temp_t4;
         temp_s0->overlay.p = func_8010D2D4(temp_s0->overlay.p, 0x88, 0x11, 0x16, (s16) 0x16, (u16) 0x5B6, (u16) 0x5B6, (s16) 0xFF, (s16) 0x82, (s16) 0x3C, (s16) (s32) temp_t4->unk_276);
         temp_v1_8 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_8 + 8;
+        temp_s0->overlay.p = &temp_v1_8[1];
         temp_v1_8->words.w1 = 0;
         temp_v1_8->words.w0 = 0xE7000000;
         temp_v1_9 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_9 + 8;
+        temp_s0->overlay.p = &temp_v1_9[1];
         temp_v1_9->words.w0 = 0xFA000000;
         temp_v1_9->words.w1 = (temp_t4->unk_276 & 0xFF) | ~0xFF;
         temp_v1_10 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_10 + 8;
+        temp_s0->overlay.p = &temp_v1_10[1];
         temp_v1_10->words.w1 = 0;
         temp_v1_10->words.w0 = 0xFB000000;
         temp_v1_11 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_11 + 8;
+        temp_s0->overlay.p = &temp_v1_11[1];
         temp_v1_11->words.w0 = 0xFC309661;
         temp_v1_11->words.w1 = 0x552EFF7F;
         temp_v1_12 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_12 + 8;
+        temp_s0->overlay.p = &temp_v1_12[1];
         temp_v1_12->words.w0 = 0xFD700000;
         temp_v1_12->words.w1 = temp_t4->unk_174 + 0x300;
         temp_v1_13 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_13 + 8;
+        temp_s0->overlay.p = &temp_v1_13[1];
         temp_v1_13->words.w1 = 0x7000000;
         temp_v1_13->words.w0 = 0xF5700000;
         temp_v1_14 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_14 + 8;
+        temp_s0->overlay.p = &temp_v1_14[1];
         temp_v1_14->words.w1 = 0;
         temp_v1_14->words.w0 = 0xE6000000;
         temp_v1_15 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_15 + 8;
+        temp_s0->overlay.p = &temp_v1_15[1];
         temp_v1_15->words.w1 = 0x70BF2AB;
         temp_v1_15->words.w0 = 0xF3000000;
         temp_v1_16 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_16 + 8;
+        temp_s0->overlay.p = &temp_v1_16[1];
         temp_v1_16->words.w1 = 0;
         temp_v1_16->words.w0 = 0xE7000000;
         temp_v1_17 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_17 + 8;
+        temp_s0->overlay.p = &temp_v1_17[1];
         temp_v1_17->words.w1 = 0;
         temp_v1_17->words.w0 = 0xF5600600;
         temp_v1_18 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_18 + 8;
+        temp_s0->overlay.p = &temp_v1_18[1];
         temp_v1_18->words.w0 = 0xF2000000;
         temp_v1_18->words.w1 = 0xBC03C;
         temp_v1_19 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_19 + 8;
+        temp_s0->overlay.p = &temp_v1_19[1];
         temp_v1_19->words.w0 = 0xE42D409C;
         temp_v1_19->words.w1 = 0x1F8054;
         temp_v1_20 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_20 + 8;
+        temp_s0->overlay.p = &temp_v1_20[1];
         temp_v1_20->words.w1 = 0;
         temp_v1_20->words.w0 = 0xE1000000;
         temp_v1_21 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_v1_21 + 8;
+        temp_s0->overlay.p = &temp_v1_21[1];
         temp_v1_21->words.w1 = 0x4A604A6;
         temp_v1_21->words.w0 = 0xF1000000;
     }
@@ -7641,13 +7671,13 @@ void func_80117100(GraphicsContext **arg0) {
     if (((arg0 + 0x169E8)->unk_220 != 0) && (arg0->unk_16F1C == 0) && (arg0->unk_16F1E == 0) && (arg0->unk_1F2C == 0) && (D_801BF884 == 0)) {
         if (D_801BF898 == 0) {
             temp_v1_22 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_22 + 8;
+            temp_s0->overlay.p = &temp_v1_22[1];
             temp_v1_22->words.w1 = 0;
             temp_v1_22->words.w0 = 0xE7000000;
             temp_v0_5 = gSaveContext.unk_3F22;
             if ((temp_v0_5 == 1) || (temp_v0_5 == 2) || (temp_v0_5 == 5) || (arg0->unk_1682A != 0)) {
                 phi_t1 = 0;
-            } else if (sp100->unk_A6C & 0x200000) {
+            } else if (sp100[3].unk_19C & 0x200000) {
                 phi_t1 = 0x46;
             } else {
                 phi_t1 = (arg0 + 0x169E8)->unk_266;
@@ -7656,59 +7686,59 @@ void func_80117100(GraphicsContext **arg0) {
             spF6 = phi_t1;
             temp_s0->overlay.p = func_8010D2D4(temp_s0->overlay.p, 0xFE, 0x10, 0x10, (s16) 0x10, (u16) 0x800, (u16) 0x800, (s16) 0xFF, (s16) 0xF0, (s16) 0, (s16) (s32) phi_t1);
             temp_v1_23 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_23 + 8;
+            temp_s0->overlay.p = &temp_v1_23[1];
             temp_v1_23->words.w1 = 0;
             temp_v1_23->words.w0 = 0xE7000000;
             temp_v1_24 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_24 + 8;
+            temp_s0->overlay.p = &temp_v1_24[1];
             temp_v1_24->words.w1 = (phi_t1 & 0xFF) | ~0xFF;
             temp_v1_24->words.w0 = 0xFA000000;
             temp_v1_25 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_25 + 8;
+            temp_s0->overlay.p = &temp_v1_25[1];
             temp_v1_25->words.w1 = 0;
             temp_v1_25->words.w0 = 0xFB000000;
             temp_v1_26 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_26 + 8;
+            temp_s0->overlay.p = &temp_v1_26[1];
             temp_v1_26->words.w0 = 0xFC309661;
             temp_v1_26->words.w1 = 0x552EFF7F;
             temp_v1_27 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_27 + 8;
+            temp_s0->overlay.p = &temp_v1_27[1];
             temp_v1_27->words.w0 = 0xFD700000;
             temp_v1_27->words.w1 = *(&D_801BFAD4 + (gSaveContext.language * 4));
             temp_v1_28 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_28 + 8;
+            temp_s0->overlay.p = &temp_v1_28[1];
             temp_v1_28->words.w1 = 0x7000000;
             temp_v1_28->words.w0 = 0xF5700000;
             temp_v1_29 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_29 + 8;
+            temp_s0->overlay.p = &temp_v1_29[1];
             temp_v1_29->words.w1 = 0;
             temp_v1_29->words.w0 = 0xE6000000;
             temp_v1_30 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_30 + 8;
+            temp_s0->overlay.p = &temp_v1_30[1];
             temp_v1_30->words.w1 = 0x705F400;
             temp_v1_30->words.w0 = 0xF3000000;
             temp_v1_31 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_31 + 8;
+            temp_s0->overlay.p = &temp_v1_31[1];
             temp_v1_31->words.w1 = 0;
             temp_v1_31->words.w0 = 0xE7000000;
             temp_v1_32 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_32 + 8;
+            temp_s0->overlay.p = &temp_v1_32[1];
             temp_v1_32->words.w1 = 0;
             temp_v1_32->words.w0 = 0xF5600400;
             temp_v1_33 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_33 + 8;
+            temp_s0->overlay.p = &temp_v1_33[1];
             temp_v1_33->words.w0 = 0xF2000000;
             temp_v1_33->words.w1 = 0x7C02C;
             temp_v1_34 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_34 + 8;
+            temp_s0->overlay.p = &temp_v1_34[1];
             temp_v1_34->words.w0 = 0xE445C078;
             temp_v1_34->words.w1 = 0x3DC048;
             temp_v1_35 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_35 + 8;
+            temp_s0->overlay.p = &temp_v1_35[1];
             temp_v1_35->words.w1 = 0;
             temp_v1_35->words.w0 = 0xE1000000;
             temp_v1_36 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v1_36 + 8;
+            temp_s0->overlay.p = &temp_v1_36[1];
             temp_v1_36->words.w1 = 0x4000400;
             temp_v1_36->words.w0 = 0xF1000000;
         }
@@ -7722,7 +7752,7 @@ void func_80117100(GraphicsContext **arg0) {
         }
     }
     temp_v1_37 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v1_37 + 8;
+    temp_s0->overlay.p = &temp_v1_37[1];
     temp_v1_37->words.w1 = 0;
     temp_v1_37->words.w0 = phi_t0;
     phi_t1_2 = 1;
@@ -7743,17 +7773,17 @@ void func_80117100(GraphicsContext **arg0) {
         if ((phi_v0 & 0xFF) >= 0xF1) {
             if (phi_t1_2 == 1) {
                 temp_v1_38 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_v1_38 + 8;
+                temp_s0->overlay.p = &temp_v1_38[1];
                 temp_v1_38->words.w0 = phi_t5;
                 temp_v1_38->words.w1 = (phi_t4->unk_26A & 0xFF) | phi_t2;
             } else if (phi_t1_2 == 2) {
                 temp_v1_39 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_v1_39 + 8;
+                temp_s0->overlay.p = &temp_v1_39[1];
                 temp_v1_39->words.w0 = phi_t5;
                 temp_v1_39->words.w1 = (phi_t4->unk_26C & 0xFF) | phi_t2;
             } else {
                 temp_v1_40 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_v1_40 + 8;
+                temp_s0->overlay.p = &temp_v1_40[1];
                 temp_v1_40->words.w0 = phi_t5;
                 temp_v1_40->words.w1 = (phi_t4->unk_26E & 0xFF) | phi_t2;
             }
@@ -7771,7 +7801,7 @@ void func_80117100(GraphicsContext **arg0) {
     } while ((s32) temp_t1 < 4);
 }
 
-void func_80117A20(GraphicsContext **arg0, s32 arg1, s16 arg2) {
+void func_80117A20(GraphicsContext **arg0, void *arg1, s16 arg2) {
     GraphicsContext *temp_v1;
     s16 *temp_t0;
     s16 *temp_t1;
@@ -7887,7 +7917,7 @@ void func_80117BD0(GraphicsContext **arg0, s16 arg1, s16 arg2) {
         phi_a1 = (&gSaveContext + *temp_a3)->unk_A0 & 0xFFFF;
         if (phi_v0 == 0xD) {
             phi_a1 = 1U;
-            if ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) == 0) {
+            if ((gBitFlags[25] & gSaveContext.inventory.questItems) == 0) {
                 phi_a1 = 0U;
             }
         }
@@ -7904,7 +7934,7 @@ void func_80117BD0(GraphicsContext **arg0, s16 arg1, s16 arg2) {
             temp_a1_2 = (temp_v0_3 - 1) & 0xFFFF;
             phi_a1_2 = temp_a1_2;
             phi_v1_2 = (s32) temp_a1_2;
-        } else if (((phi_v0 == 1) && ((&gSaveContext + *temp_a3)->unk_A0 == *(gUpgradeShifts + 8 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_0) >> gUpgradeShifts->unk_0) * 2)))) || ((temp_v0_4 = gUpgradeShifts + 8, (phi_v0 == 6)) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_4) >> gUpgradeShifts->unk_1) * 2))->unk_8)) || ((phi_v0 == 8) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_18) >> gUpgradeShifts->unk_6) * 2))->unk_30)) || ((phi_v0 == 9) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_1C) >> gUpgradeShifts->unk_7) * 2))->unk_38)) || ((phi_v0 == 7) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_4) >> gUpgradeShifts->unk_1) * 2))->unk_8)) || ((phi_v0 == 0xC) && (phi_a1 == 1)) || ((phi_v1_2 = (s32) phi_a1, (phi_v0 == 0xD)) && (phi_a1 == 1)) || ((phi_v0 == 0xA) && (phi_a1 == 0x14))) {
+        } else if (((phi_v0 == 1) && ((&gSaveContext + *temp_a3)->unk_A0 == *(&gUpgradeShifts[8] + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_0) >> gUpgradeShifts->unk_0) * 2)))) || ((temp_v0_4 = &gUpgradeShifts[8], (phi_v0 == 6)) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]) * 2))->unk_8)) || ((phi_v0 == 8) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[6]) >> gUpgradeShifts[6]) * 2))->unk_30)) || ((phi_v0 == 9) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[7]) >> gUpgradeShifts[7]) * 2))->unk_38)) || ((phi_v0 == 7) && ((&gSaveContext + *temp_a3)->unk_A0 == (temp_v0_4 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]) * 2))->unk_8)) || ((phi_v0 == 0xC) && (phi_a1 == 1)) || ((phi_v1_2 = (s32) phi_a1, (phi_v0 == 0xD)) && (phi_a1 == 1)) || ((phi_v0 == 0xA) && (phi_a1 == 0x14))) {
             temp_v0_5 = temp_t1->overlay.p;
             temp_t1->overlay.p = temp_v0_5 + 8;
             temp_v0_5->words.w0 = 0xFA000000;
@@ -8002,7 +8032,7 @@ void func_80118084(GraphicsContext **arg0) {
     u8 phi_v1_4;
     u8 phi_v1_5;
 
-    temp_t2 = arg0->unk_1CCC;
+    temp_t2 = arg0[1843];
     temp_a3 = arg0->unk_0;
     temp_v0 = temp_a3->overlay.p;
     temp_a3->overlay.p = temp_v0 + 8;
@@ -8018,7 +8048,7 @@ void func_80118084(GraphicsContext **arg0) {
     temp_v0_3->words.w1 = 0xFF2FFFFF;
     temp_v0_3->words.w0 = 0xFC119623;
     temp_a0 = temp_t1->unk_222;
-    if ((temp_a0 == 0) && (temp_t2->unk_A74 & 0x1000000)) {
+    if ((temp_a0 == 0) && (temp_t2[3].unk1A4.size & 0x1000000)) {
         if (gSaveContext.buttonStatus[0] != 0xFF) {
             sp18 = temp_t1;
             spB4 = temp_a3;
@@ -8201,7 +8231,7 @@ block_19:
         if (temp_v0_35 == 4) {
             phi_v1_5 = 0U;
         }
-        if (((&gSaveContext + (phi_v1_5 * 4))->unk_4C != 0xFF) && ((spB8 = temp_t2, sp18 = temp_t1, spB4 = temp_a3, func_80117A20(arg0, temp_t1->unk_178, 0, temp_a3), ((temp_t2->unk_A6C << 8) < 0)) || ((gSaveContext.weekEventReg[8] & 1) != 0) || ((s32) arg0->unk_1887C >= 2)) && (temp_v0_36 = temp_a3->overlay.p, temp_a3->overlay.p = temp_v0_36 + 8, temp_v0_36->words.w1 = 0, temp_v0_36->words.w0 = 0xE7000000, temp_v0_37 = temp_a3->overlay.p, temp_a3->overlay.p = temp_v0_37 + 8, temp_v0_37->words.w1 = 0x552EFF7F, temp_v0_37->words.w0 = 0xFC309661, temp_v0_38 = arg0->unk_A4, (temp_v0_38 != 0x20)) && (temp_v0_38 != 0x24) && (temp_v0_38 != 0x11) && ((temp_v0_39 = gSaveContext.minigameState, (temp_v0_39 != 1)) || (gSaveContext.entranceIndex != 0x6400)) && ((temp_v0_39 != 1) || ((gSaveContext.eventInf[3] & 0x20) == 0)) && (((gSaveContext.weekEventReg[31] & 0x80) == 0) || (arg0->unk_1887C != 0x64))) {
+        if (((&gSaveContext + (phi_v1_5 * 4))->unk_4C != 0xFF) && ((spB8 = temp_t2, sp18 = temp_t1, spB4 = temp_a3, func_80117A20(arg0, temp_t1->unk_178, 0, temp_a3), ((temp_t2[3].unk_19C << 8) < 0)) || ((gSaveContext.weekEventReg[8] & 1) != 0) || ((s32) arg0->unk_1887C >= 2)) && (temp_v0_36 = temp_a3->overlay.p, temp_a3->overlay.p = temp_v0_36 + 8, temp_v0_36->words.w1 = 0, temp_v0_36->words.w0 = 0xE7000000, temp_v0_37 = temp_a3->overlay.p, temp_a3->overlay.p = temp_v0_37 + 8, temp_v0_37->words.w1 = 0x552EFF7F, temp_v0_37->words.w0 = 0xFC309661, temp_v0_38 = arg0->unk_A4, (temp_v0_38 != 0x20)) && (temp_v0_38 != 0x24) && (temp_v0_38 != 0x11) && ((temp_v0_39 = gSaveContext.minigameState, (temp_v0_39 != 1)) || (gSaveContext.entranceIndex != 0x6400)) && ((temp_v0_39 != 1) || ((gSaveContext.eventInf[3] & 0x20) == 0)) && (((gSaveContext.weekEventReg[31] & 0x80) == 0) || (arg0->unk_1887C != 0x64))) {
             func_80117BD0(arg0, 0, temp_t1->unk_268, temp_a3);
             return;
         }
@@ -8249,7 +8279,7 @@ void func_80118890(GraphicsContext **arg0) {
         temp_v0_3->words.w0 = 0xFC119623;
         sp1C = temp_t0;
         sp60 = temp_a3;
-        func_80117A20(arg0, temp_t0->unk_178 + 0x1000, 1, temp_a3);
+        func_80117A20(arg0, temp_t0[94] + 0x1000, 1, temp_a3);
         temp_v0_4 = temp_a3->overlay.p;
         temp_a3->overlay.p = temp_v0_4 + 8;
         temp_v0_4->words.w1 = 0;
@@ -8266,7 +8296,7 @@ void func_80118890(GraphicsContext **arg0) {
     temp_v0_6->words.w1 = 0;
     temp_v0_6->words.w0 = 0xE7000000;
     if ((s32) gSaveContext.equips.buttonItems[0][2] < 0xF0) {
-        temp_t0_2 = arg0 + 0x169E8;
+        temp_t0_2 = &arg0[23162];
         temp_v0_7 = (*arg0)->overlay.p;
         (*arg0)->overlay.p = temp_v0_7 + 8;
         temp_v0_7->words.w0 = 0xFA000000;
@@ -8277,7 +8307,7 @@ void func_80118890(GraphicsContext **arg0) {
         temp_v0_8->words.w0 = 0xFC119623;
         sp1C = temp_t0_2;
         sp60 = *arg0;
-        func_80117A20(arg0, temp_t0_2->unk_178 + 0x2000, 2, *arg0);
+        func_80117A20(arg0, temp_t0_2[94] + 0x2000, 2, *arg0);
         temp_v0_9 = (*arg0)->overlay.p;
         (*arg0)->overlay.p = temp_v0_9 + 8;
         temp_v0_9->words.w1 = 0;
@@ -8294,7 +8324,7 @@ void func_80118890(GraphicsContext **arg0) {
     temp_v0_11->words.w1 = 0;
     temp_v0_11->words.w0 = 0xE7000000;
     if ((s32) gSaveContext.equips.buttonItems[0][3] < 0xF0) {
-        temp_t0_3 = arg0 + 0x169E8;
+        temp_t0_3 = &arg0[23162];
         temp_v0_12 = (*arg0)->overlay.p;
         (*arg0)->overlay.p = temp_v0_12 + 8;
         temp_v0_12->words.w0 = 0xFA000000;
@@ -8305,7 +8335,7 @@ void func_80118890(GraphicsContext **arg0) {
         temp_v0_13->words.w0 = 0xFC119623;
         sp1C = temp_t0_3;
         sp60 = *arg0;
-        func_80117A20(arg0, temp_t0_3->unk_178 + 0x3000, 3, *arg0);
+        func_80117A20(arg0, temp_t0_3[94] + 0x3000, 3, *arg0);
         temp_v0_14 = (*arg0)->overlay.p;
         (*arg0)->overlay.p = temp_v0_14 + 8;
         temp_v0_14->words.w1 = 0;
@@ -8367,15 +8397,15 @@ void func_80118BA4(GraphicsContext **arg0) {
     temp_v0_2 = gGameInfo->data[1375];
     func_80116FD8(arg0, temp_v0_2 + 0x19, temp_v0_2 + 0x46, 0xC0, 0xED);
     temp_v0_3 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_3 + 8;
+    temp_s0->overlay.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xD9FFF9FF;
     temp_v0_4 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_4 + 8;
+    temp_s0->overlay.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xFC119623;
     temp_v0_4->words.w1 = 0xFF2FFFFF;
     temp_v0_5 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_5 + 8;
+    temp_s0->overlay.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = 1;
     temp_v0_5->words.w0 = 0xE2001E01;
     SysMatrix_InsertTranslation(0.0f, 0.0f, -38.0f, 0);
@@ -8384,73 +8414,73 @@ void func_80118BA4(GraphicsContext **arg0) {
     sp2C = temp_v0_6;
     SysMatrix_RotateStateAroundXAxis(temp_v0_6->unk_218 / 10000.0f);
     temp_v0_7 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_7 + 8;
+    temp_s0->overlay.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDA380003;
     sp68 = temp_v0_7;
     sp68->words.w1 = Matrix_NewMtx(arg0->unk_0);
     temp_v0_8 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_8 + 8;
+    temp_s0->overlay.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0;
     temp_v0_8->words.w0 = 0xE7000000;
     temp_v0_9 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_9 + 8;
+    temp_s0->overlay.p = &temp_v0_9[1];
     temp_v0_9->words.w0 = 0x1004008;
     temp_v0_9->words.w1 = sp2C->unk_168 + 0x40;
     temp_v0_10 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_10 + 8;
+    temp_s0->overlay.p = &temp_v0_10[1];
     temp_v0_10->words.w0 = 0xFA000000;
     temp_v0_10->words.w1 = sp82 & 0xFF;
     temp_s0->overlay.p = func_8010DC58(temp_s0->overlay.p, &D_02000F60, 0x20, 0x20, (u16) 0);
     temp_v0_11 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_11 + 8;
+    temp_s0->overlay.p = &temp_v0_11[1];
     temp_v0_11->words.w1 = 0;
     temp_v0_11->words.w0 = 0xE7000000;
     temp_v0_12 = gGameInfo->data[1375];
     func_80116FD8(arg0, temp_v0_12 + 0x17, temp_v0_12 + 0x44, 0xBE, 0xEB);
     temp_v0_13 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_13 + 8;
+    temp_s0->overlay.p = &temp_v0_13[1];
     temp_v0_13->words.w0 = 0x1004008;
     temp_v0_13->words.w1 = sp2C->unk_168;
     temp_v0_14 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_14 + 8;
+    temp_s0->overlay.p = &temp_v0_14[1];
     temp_v0_14->words.w0 = 0xFA000000;
     temp_v0_14->words.w1 = (sp2C->unk_266 & 0xFF) | 0x64C8FF00;
     temp_v0_15 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_15 + 8;
+    temp_s0->overlay.p = &temp_v0_15[1];
     temp_v0_15->words.w1 = 0x602;
     temp_v0_15->words.w0 = 0x7000406;
     temp_v0_16 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_16 + 8;
+    temp_s0->overlay.p = &temp_v0_16[1];
     temp_v0_16->words.w1 = 0;
     temp_v0_16->words.w0 = 0xE7000000;
     temp_v0_17 = gGameInfo->data[1375];
     func_80116FD8(arg0, temp_v0_17 + 0x17, temp_v0_17 + 0x44, 0xBE, 0xEB);
     temp_v0_18 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_18 + 8;
+    temp_s0->overlay.p = &temp_v0_18[1];
     temp_v0_18->words.w1 = 0x400;
     temp_v0_18->words.w0 = 0xD9FFFFFF;
     temp_v0_19 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_19 + 8;
+    temp_s0->overlay.p = &temp_v0_19[1];
     temp_v0_19->words.w0 = 0xFC309661;
     temp_v0_19->words.w1 = 0x552EFF7F;
     temp_v0_20 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_20 + 8;
+    temp_s0->overlay.p = &temp_v0_20[1];
     temp_v0_20->words.w0 = 0xFA000000;
     temp_v0_20->words.w1 = (sp2C->unk_266 & 0xFF) | ~0xFF;
     temp_v0_21 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_21 + 8;
+    temp_s0->overlay.p = &temp_v0_21[1];
     temp_v0_21->words.w1 = 0;
     temp_v0_21->words.w0 = 0xFB000000;
     SysMatrix_InsertTranslation(0.0f, 0.0f, *(&D_801BF9CC + (gSaveContext.language * 4)) / 10.0f, 0);
     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
     SysMatrix_RotateStateAroundXAxis(sp2C->unk_218 / 10000.0f);
     temp_v0_22 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_22 + 8;
+    temp_s0->overlay.p = &temp_v0_22[1];
     temp_v0_22->words.w0 = 0xDA380003;
     sp34 = temp_v0_22;
     sp34->words.w1 = Matrix_NewMtx(arg0->unk_0);
     temp_v0_23 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_23 + 8;
+    temp_s0->overlay.p = &temp_v0_23[1];
     temp_v0_23->words.w0 = 0x1004008;
     temp_v0_23->words.w1 = sp2C->unk_168 + 0x80;
     temp_v0_24 = sp2C->unk_210;
@@ -8534,15 +8564,15 @@ void func_80119030(GraphicsContext **arg0) {
         sp1C = temp_a1;
         func_8012C8D4(*arg0);
         temp_v0_4 = temp_a3->overlay.p;
-        temp_a3->overlay.p = temp_v0_4 + 8;
+        temp_a3->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFC119623;
         temp_v0_4->words.w1 = 0xFF2FFFFF;
         temp_v0_5 = temp_a3->overlay.p;
-        temp_a3->overlay.p = temp_v0_5 + 8;
+        temp_a3->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 1;
         temp_v0_5->words.w0 = 0xE2001E01;
         temp_v0_6 = temp_a3->overlay.p;
-        temp_a3->overlay.p = temp_v0_6 + 8;
+        temp_a3->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         temp_v0_6->words.w1 = (u32) &D_801D1DE0;
         temp_lo = (s32) temp_a1->unk_278 / 0xA;
@@ -8562,45 +8592,45 @@ void func_80119030(GraphicsContext **arg0) {
         temp_v1_3 = temp_a1->unk_272;
         if ((s32) temp_v1_3 < 0xB5) {
             temp_v0_9 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_9 + 8;
+            temp_a3->overlay.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xFA000000;
             temp_v0_9->words.w1 = (temp_a1->unk_27C & 0xFF) | ~0xFF;
             temp_v0_10 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_10 + 8;
+            temp_a3->overlay.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0x1004008;
             temp_v0_10->words.w1 = (u32) (temp_a1->unk_1A8 + 0x100);
             temp_v0_11 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_11 + 8;
+            temp_a3->overlay.p = &temp_v0_11[1];
             temp_v0_11->words.w0 = 0xFD180000;
             temp_v0_11->words.w1 = (u32) gItemIcons[temp_a1->unk_272];
             temp_v0_12 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_12 + 8;
+            temp_a3->overlay.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0x7000000;
             temp_v0_12->words.w0 = 0xF5180000;
             temp_v0_13 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_13 + 8;
+            temp_a3->overlay.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0;
             temp_v0_13->words.w0 = 0xE6000000;
             temp_v0_14 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_14 + 8;
+            temp_a3->overlay.p = &temp_v0_14[1];
             temp_v0_14->words.w1 = 0x73FF080;
             temp_v0_14->words.w0 = 0xF3000000;
             temp_v0_15 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_15 + 8;
+            temp_a3->overlay.p = &temp_v0_15[1];
             temp_v0_15->words.w1 = 0;
             temp_v0_15->words.w0 = 0xE7000000;
             temp_v0_16 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_16 + 8;
+            temp_a3->overlay.p = &temp_v0_16[1];
             temp_v0_16->words.w1 = 0;
             temp_v0_16->words.w0 = 0xF5181000;
             temp_v0_17 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_17 + 8;
+            temp_a3->overlay.p = &temp_v0_17[1];
             temp_v0_17->words.w1 = 0x7C07C;
             temp_v0_17->words.w0 = 0xF2000000;
         } else {
             temp_v0_18 = temp_a3->overlay.p;
             temp_a0_2 = (s16) (temp_v1_3 - 0xB5) * 2;
-            temp_a3->overlay.p = temp_v0_18 + 8;
+            temp_a3->overlay.p = &temp_v0_18[1];
             temp_v0_18->words.w0 = 0xFA000000;
             temp_v0_18->words.w1 = ((*(&D_801BFB24 + temp_a0_2) & 0xFF) << 8) | (*(&D_801BFB14 + temp_a0_2) << 0x18) | ((*(&D_801BFB1C + temp_a0_2) & 0xFF) << 0x10) | (temp_a1->unk_27C & 0xFF);
             temp_t0 = temp_a1->unk_27C;
@@ -8625,40 +8655,40 @@ void func_80119030(GraphicsContext **arg0) {
                 temp_a1->unk_1A8->unk_122 = temp_v0_22;
             }
             temp_v0_23 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_23 + 8;
+            temp_a3->overlay.p = &temp_v0_23[1];
             temp_v0_23->words.w0 = 0x1004008;
             temp_v0_23->words.w1 = (u32) (temp_a1->unk_1A8 + 0x100);
             temp_v0_24 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_24 + 8;
+            temp_a3->overlay.p = &temp_v0_24[1];
             temp_v0_24->words.w1 = (u32) &D_08095AC0;
             temp_v0_24->words.w0 = 0xFD700000;
             temp_v0_25 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_25 + 8;
+            temp_a3->overlay.p = &temp_v0_25[1];
             temp_v0_25->words.w1 = 0x7000000;
             temp_v0_25->words.w0 = 0xF5700000;
             temp_v0_26 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_26 + 8;
+            temp_a3->overlay.p = &temp_v0_26[1];
             temp_v0_26->words.w1 = 0;
             temp_v0_26->words.w0 = 0xE6000000;
             temp_v0_27 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_27 + 8;
+            temp_a3->overlay.p = &temp_v0_27[1];
             temp_v0_27->words.w1 = 0x71FF200;
             temp_v0_27->words.w0 = 0xF3000000;
             temp_v0_28 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_28 + 8;
+            temp_a3->overlay.p = &temp_v0_28[1];
             temp_v0_28->words.w1 = 0;
             temp_v0_28->words.w0 = 0xE7000000;
             temp_v0_29 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_29 + 8;
+            temp_a3->overlay.p = &temp_v0_29[1];
             temp_v0_29->words.w1 = 0;
             temp_v0_29->words.w0 = 0xF5680800;
             temp_v0_30 = temp_a3->overlay.p;
-            temp_a3->overlay.p = temp_v0_30 + 8;
+            temp_a3->overlay.p = &temp_v0_30[1];
             temp_v0_30->words.w1 = 0x7C07C;
             temp_v0_30->words.w0 = 0xF2000000;
         }
         temp_v0_31 = temp_a3->overlay.p;
-        temp_a3->overlay.p = temp_v0_31 + 8;
+        temp_a3->overlay.p = &temp_v0_31[1];
         temp_v0_31->words.w1 = 0x602;
         temp_v0_31->words.w0 = 0x7000406;
     }
@@ -8942,34 +8972,34 @@ block_30:
                     sp70 = &arg0->interfaceCtx;
                     func_8012C654(arg0->state.gfxCtx);
                     temp_v0_5 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_5 + 8;
+                    temp_s0->overlay.p = &temp_v0_5[1];
                     temp_v0_5->words.w1 = 1;
                     temp_v0_5->words.w0 = 0xE2001E01;
                     temp_v0_6 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_6 + 8;
+                    temp_s0->overlay.p = &temp_v0_6[1];
                     temp_v0_6->words.w0 = 0xE200001C;
                     temp_v0_6->words.w1 = 0x504240;
                     temp_v0_7 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_7 + 8;
+                    temp_s0->overlay.p = &temp_v0_7[1];
                     temp_v0_7->words.w0 = 0xFA000000;
                     temp_ra = D_801BFB2C & 0xFF;
                     temp_v0_7->words.w1 = temp_ra | 0x82828200;
                     temp_v0_8 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_8 + 8;
+                    temp_s0->overlay.p = &temp_v0_8[1];
                     temp_v0_8->words.w0 = 0xFCFF97FF;
                     temp_v0_8->words.w1 = 0xFF2DFEFF;
                     sp6C = temp_ra;
                     temp_s0->overlay.p = func_8010D9F4(temp_s0->overlay.p, &D_02005F60, 4, 0x40, (s16) 0x23, (s16) 0x60, (s16) 0xB4, (s16) 0x80, (s16) 0x23, 1, 6, 0, (u16) 0x400, (u16) 0x400);
                     temp_v0_9 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_9 + 8;
+                    temp_s0->overlay.p = &temp_v0_9[1];
                     temp_v0_9->words.w1 = 0;
                     temp_v0_9->words.w0 = 0xE7000000;
                     temp_v0_10 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_10 + 8;
+                    temp_s0->overlay.p = &temp_v0_10[1];
                     temp_v0_10->words.w1 = temp_ra | ~0xFF;
                     temp_v0_10->words.w0 = 0xFA000000;
                     temp_v0_11 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_11 + 8;
+                    temp_s0->overlay.p = &temp_v0_11[1];
                     temp_v0_11->words.w0 = 0xFCFF97FF;
                     temp_v0_11->words.w1 = 0xFF2DFEFF;
                     sp6C = temp_ra;
@@ -8978,13 +9008,13 @@ block_30:
                     if ((temp_hi >= 4) || ((temp_hi == 3) && (temp_v0_12 = gSaveContext.time, (((s32) temp_v0_12 < 5) == 0)) && ((s32) temp_v0_12 < 0x4000))) {
                         func_8012C8D4(arg0->state.gfxCtx);
                         temp_v0_45 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_45 + 8;
+                        temp_s0->overlay.p = &temp_v0_45[1];
                         temp_v0_45->words.w0 = 0xDA380003;
                         sp64 = &D_801D1DE0;
                         temp_v0_45->words.w1 = (u32) &D_801D1DE0;
                     } else {
                         temp_v0_13 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_13 + 8;
+                        temp_s0->overlay.p = &temp_v0_13[1];
                         temp_v0_13->words.w1 = 0;
                         temp_v0_13->words.w0 = 0xE7000000;
                         if (gSaveContext.unk_14 == -2) {
@@ -9092,16 +9122,16 @@ block_30:
                                 phi_a2 = temp_a0_4;
                             }
                             temp_v0_20 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_20 + 8;
+                            temp_s0->overlay.p = &temp_v0_20[1];
                             temp_v0_20->words.w0 = 0xFC309661;
                             temp_v0_20->words.w1 = 0x552EFF7F;
                             temp_v0_21 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_21 + 8;
+                            temp_s0->overlay.p = &temp_v0_21[1];
                             temp_v0_21->words.w0 = 0xFA000000;
                             temp_v0_21->words.w1 = (D_801BFBCC << 0x18) | ((phi_t5 & 0xFF) << 0x10) | 0xFF00 | temp_ra;
                             D_801BFBD0 = phi_t5;
                             temp_v0_22 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_22 + 8;
+                            temp_s0->overlay.p = &temp_v0_22[1];
                             temp_v0_22->words.w0 = 0xFB000000;
                             temp_v0_22->words.w1 = (phi_t3 << 0x18) | ((phi_t0 & 0xFF) << 0x10) | ((phi_a2 & 0xFF) << 8);
                             D_801BFBE0 = phi_a2;
@@ -9109,27 +9139,27 @@ block_30:
                             D_801BFBD8 = phi_t3;
                         } else {
                             temp_v0_23 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_23 + 8;
+                            temp_s0->overlay.p = &temp_v0_23[1];
                             temp_v0_23->words.w0 = 0xFC119623;
                             temp_v0_23->words.w1 = 0xFF2FFFFF;
                             temp_v0_24 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_24 + 8;
+                            temp_s0->overlay.p = &temp_v0_24[1];
                             temp_v0_24->words.w0 = 0xFA000000;
                             temp_v0_24->words.w1 = temp_ra | 0xAA6400;
                         }
                         sp6C = temp_ra;
                         temp_s0->overlay.p = func_8010CD98(temp_s0->overlay.p, &D_02004FE0, 0x28, 0x20, (s16) 0x8C, (s16) 0xBE, (s16) 0x28, (s16) 0x20, (u16) 0x400, (u16) 0x400);
                         temp_v0_25 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_25 + 8;
+                        temp_s0->overlay.p = &temp_v0_25[1];
                         temp_v0_25->words.w1 = 0;
                         temp_v0_25->words.w0 = 0xE7000000;
                         temp_v0_26 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_26 + 8;
+                        temp_s0->overlay.p = &temp_v0_26[1];
                         temp_v0_26->words.w1 = temp_ra | ~0x64FF;
                         temp_v0_26->words.w0 = 0xFA000000;
-                        temp_s0->overlay.p = func_8010CD98(temp_s0->overlay.p, sp70->doActionSegment + 0x780, 0x30, 0x1B, (s16) 0x89, (s16) 0xC0, (s16) 0x30, (s16) 0x1B, (u16) 0x400, (u16) 0x400);
+                        temp_s0->overlay.p = func_8010CD98(temp_s0->overlay.p, &sp70->doActionSegment[1920], 0x30, 0x1B, (s16) 0x89, (s16) 0xC0, (s16) 0x30, (s16) 0x1B, (u16) 0x400, (u16) 0x400);
                         temp_v0_27 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_27 + 8;
+                        temp_s0->overlay.p = &temp_v0_27[1];
                         temp_v0_27->words.w1 = 0;
                         temp_v0_27->words.w0 = 0xE7000000;
                         temp_v0_28 = D_801BF974;
@@ -9150,30 +9180,30 @@ block_30:
                         sp1D0 = temp_f2_2;
                         func_8012C8D4(arg0->state.gfxCtx);
                         temp_v0_29 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_29 + 8;
+                        temp_s0->overlay.p = &temp_v0_29[1];
                         temp_v0_29->words.w0 = 0xDA380003;
                         temp_v0_29->words.w1 = (u32) &D_801D1DE0;
                         if (D_801BFB2C != 0xFF) {
                             temp_v0_30 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_30 + 8;
+                            temp_s0->overlay.p = &temp_v0_30[1];
                             temp_v0_30->words.w0 = 0xFA000000;
                             temp_v0_30->words.w1 = (D_801BFB2C & 0xFF) | 0xFFFF6E00;
                         } else {
                             temp_v0_31 = temp_s0->overlay.p;
-                            temp_s0->overlay.p = temp_v0_31 + 8;
+                            temp_s0->overlay.p = &temp_v0_31[1];
                             temp_v0_31->words.w0 = 0xFA000000;
                             temp_v0_31->words.w1 = (D_801BF97C & 0xFF) | 0xFFFF6E00;
                         }
                         temp_v0_32 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_32 + 8;
+                        temp_s0->overlay.p = &temp_v0_32[1];
                         temp_v0_32->words.w0 = 0xFC119623;
                         temp_v0_32->words.w1 = 0xFF2FFFFF;
                         temp_v0_33 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_33 + 8;
+                        temp_s0->overlay.p = &temp_v0_33[1];
                         temp_v0_33->words.w1 = 1;
                         temp_v0_33->words.w0 = 0xE2001E01;
                         temp_v0_34 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_34 + 8;
+                        temp_s0->overlay.p = &temp_v0_34[1];
                         temp_v0_34->words.w0 = 0xE200001C;
                         temp_v0_34->words.w1 = 0x504240;
                         sp64 = &D_801D1DE0;
@@ -9182,53 +9212,53 @@ block_30:
                         Matrix_Scale(1.0f, 1.0f, D_801BF980, 1);
                         SysMatrix_InsertZRotation_f(-(temp_f2_2 * 0.0175f) / 10.0f, 1);
                         temp_v0_35 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_35 + 8;
+                        temp_s0->overlay.p = &temp_v0_35[1];
                         temp_v0_35->words.w0 = 0xDA380003;
                         sp140 = temp_v0_35;
                         sp140->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                         temp_v0_36 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_36 + 8;
+                        temp_s0->overlay.p = &temp_v0_36[1];
                         temp_v0_36->words.w0 = 0x1004008;
-                        temp_v0_36->words.w1 = (u32) (sp70->actionVtx + 0xC0);
+                        temp_v0_36->words.w1 = (u32) &sp70->actionVtx[12];
                         temp_v0_37 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_37 + 8;
+                        temp_s0->overlay.p = &temp_v0_37[1];
                         temp_v0_37->words.w1 = (u32) &D_020063C0;
                         temp_v0_37->words.w0 = 0xFD900000;
                         temp_v0_38 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_38 + 8;
+                        temp_s0->overlay.p = &temp_v0_38[1];
                         temp_v0_38->words.w1 = 0x7000000;
                         temp_v0_38->words.w0 = 0xF5900000;
                         temp_v0_39 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_39 + 8;
+                        temp_s0->overlay.p = &temp_v0_39[1];
                         temp_v0_39->words.w1 = 0;
                         temp_v0_39->words.w0 = 0xE6000000;
                         temp_v0_40 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_40 + 8;
+                        temp_s0->overlay.p = &temp_v0_40[1];
                         temp_v0_40->words.w1 = 0x703F800;
                         temp_v0_40->words.w0 = 0xF3000000;
                         temp_v0_41 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_41 + 8;
+                        temp_s0->overlay.p = &temp_v0_41[1];
                         temp_v0_41->words.w1 = 0;
                         temp_v0_41->words.w0 = 0xE7000000;
                         temp_v0_42 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_42 + 8;
+                        temp_s0->overlay.p = &temp_v0_42[1];
                         temp_v0_42->words.w1 = 0;
                         temp_v0_42->words.w0 = 0xF5800200;
                         temp_v0_43 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_43 + 8;
+                        temp_s0->overlay.p = &temp_v0_43[1];
                         temp_v0_43->words.w0 = 0xF2000000;
                         temp_v0_43->words.w1 = 0x3C03C;
                         temp_v0_44 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_44 + 8;
+                        temp_s0->overlay.p = &temp_v0_44[1];
                         temp_v0_44->words.w1 = 0x602;
                         temp_v0_44->words.w0 = 0x7000406;
                     }
                     temp_v0_46 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_46 + 8;
+                    temp_s0->overlay.p = &temp_v0_46[1];
                     temp_v0_46->words.w1 = 0;
                     temp_v0_46->words.w0 = 0xE7000000;
                     temp_v0_47 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_47 + 8;
+                    temp_s0->overlay.p = &temp_v0_47[1];
                     temp_v0_47->words.w0 = 0xED19026C;
                     temp_v0_47->words.w1 = ((s32) ((f32) gGameInfo->data[1388] * 4.0f) & 0xFFF) | 0x370000;
                     temp_a1_4 = gSaveContext.time;
@@ -9249,67 +9279,67 @@ loop_89:
                     sp1D8 = Math_SinS((s16) temp_a1_4) * -40.0f;
                     temp_f14 = Math_CosS(unksp6A) * -34.0f;
                     temp_v0_48 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_48 + 8;
+                    temp_s0->overlay.p = &temp_v0_48[1];
                     temp_v0_48->words.w1 = 0;
                     temp_v0_48->words.w0 = 0xE7000000;
                     temp_v0_49 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_49 + 8;
+                    temp_s0->overlay.p = &temp_v0_49[1];
                     temp_v0_49->words.w1 = 0xFF2FFFFF;
                     temp_v0_49->words.w0 = 0xFC119623;
                     temp_v0_50 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_50 + 8;
+                    temp_s0->overlay.p = &temp_v0_50[1];
                     temp_v0_50->words.w0 = 0xFA000000;
                     temp_v0_50->words.w1 = (D_801BFB2C & 0xFF) | 0xFF646E00;
                     sp1C6 = phi_t0_3;
                     SysMatrix_InsertTranslation(sp1D8, temp_f14, 0.0f, 0);
                     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
                     temp_v0_51 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_51 + 8;
+                    temp_s0->overlay.p = &temp_v0_51[1];
                     temp_v0_51->words.w0 = 0xDA380003;
                     sp1C6 = phi_t0_3;
                     sp104 = temp_v0_51;
                     sp104->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                     temp_v0_52 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_52 + 8;
+                    temp_s0->overlay.p = &temp_v0_52[1];
                     temp_v0_52->words.w0 = 0x1004008;
-                    temp_v0_52->words.w1 = (u32) (sp70->actionVtx + 0x100);
+                    temp_v0_52->words.w1 = (u32) &sp70->actionVtx[16];
                     sp1C6 = phi_t0_3;
                     temp_s0->overlay.p = func_8010DC58(temp_s0->overlay.p, &D_02005720, 0x18, 0x18, (u16) 0);
                     sp1D8 = Math_SinS(unksp6A) * 40.0f;
                     temp_f14_2 = Math_CosS(unksp6A) * 34.0f;
                     temp_v0_53 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_53 + 8;
+                    temp_s0->overlay.p = &temp_v0_53[1];
                     temp_v0_53->words.w1 = 0;
                     temp_v0_53->words.w0 = 0xE7000000;
                     temp_v0_54 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_54 + 8;
+                    temp_s0->overlay.p = &temp_v0_54[1];
                     temp_v0_54->words.w1 = 0xFF2FFFFF;
                     temp_v0_54->words.w0 = 0xFC119623;
                     temp_v0_55 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_55 + 8;
+                    temp_s0->overlay.p = &temp_v0_55[1];
                     temp_v0_55->words.w0 = 0xFA000000;
                     temp_v0_55->words.w1 = (D_801BFB2C & 0xFF) | 0xFFFF3700;
                     sp1C6 = phi_t0_3;
                     SysMatrix_InsertTranslation(sp1D8, temp_f14_2, 0.0f, 0);
                     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
                     temp_v0_56 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_56 + 8;
+                    temp_s0->overlay.p = &temp_v0_56[1];
                     temp_v0_56->words.w0 = 0xDA380003;
                     sp1C6 = phi_t0_3;
                     spF0 = temp_v0_56;
                     spF0->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                     temp_v0_57 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_57 + 8;
+                    temp_s0->overlay.p = &temp_v0_57[1];
                     temp_v0_57->words.w0 = 0x1004008;
-                    temp_v0_57->words.w1 = (u32) (sp70->actionVtx + 0x140);
+                    temp_v0_57->words.w1 = (u32) &sp70->actionVtx[20];
                     sp1C6 = phi_t0_3;
                     temp_s0->overlay.p = func_8010DC58(temp_s0->overlay.p, &D_020054E0, 0x18, 0x18, (u16) 0);
                     temp_v0_58 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_58 + 8;
+                    temp_s0->overlay.p = &temp_v0_58[1];
                     temp_v0_58->words.w1 = 0;
                     temp_v0_58->words.w0 = 0xE7000000;
                     temp_v0_59 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_59 + 8;
+                    temp_s0->overlay.p = &temp_v0_59[1];
                     temp_v0_59->words.w0 = 0xED19026C;
                     temp_v0_59->words.w1 = ((s32) ((f32) gGameInfo->data[1389] * 4.0f) & 0xFFF) | 0x370000;
                     sp1CC = (f32) gSaveContext.time * 0.000096131f;
@@ -9318,85 +9348,85 @@ loop_89:
                     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
                     SysMatrix_InsertZRotation_f(-(sp1CC - 3.15f), 1);
                     temp_v0_60 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_60 + 8;
+                    temp_s0->overlay.p = &temp_v0_60[1];
                     temp_v0_60->words.w0 = 0xDA380003;
                     sp1C6 = phi_t0_3;
                     spE0 = temp_v0_60;
                     spE0->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                     temp_v0_61 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_61 + 8;
+                    temp_s0->overlay.p = &temp_v0_61[1];
                     temp_v0_61->words.w1 = 0;
                     temp_v0_61->words.w0 = 0xE7000000;
                     temp_v0_62 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_62 + 8;
+                    temp_s0->overlay.p = &temp_v0_62[1];
                     temp_v0_62->words.w1 = 0xFF2DFEFF;
                     temp_v0_62->words.w0 = 0xFCFF97FF;
                     temp_v0_63 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_63 + 8;
+                    temp_s0->overlay.p = &temp_v0_63[1];
                     temp_v0_63->words.w0 = 0xFA000000;
                     temp_ra_2 = D_801BFB2C & 0xFF;
                     temp_v0_63->words.w1 = temp_ra_2;
                     temp_v0_64 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_64 + 8;
+                    temp_s0->overlay.p = &temp_v0_64[1];
                     temp_v0_64->words.w0 = 0x1008010;
-                    temp_v0_64->words.w1 = (u32) (sp70->actionVtx + 0x180);
+                    temp_v0_64->words.w1 = (u32) &sp70->actionVtx[24];
                     sp6C = temp_ra_2;
                     temp_v0_65 = (phi_t0_3 * 4) + &D_801BFB6C;
                     sp68 = temp_v0_65;
                     temp_s0->overlay.p = func_8010DE38(temp_s0->overlay.p, *temp_v0_65, 4, 0x10, (s16) 0xB, (u16) 0);
                     temp_v0_66 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_66 + 8;
+                    temp_s0->overlay.p = &temp_v0_66[1];
                     temp_v0_66->words.w1 = 0;
                     temp_v0_66->words.w0 = 0xE7000000;
                     temp_v0_67 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_67 + 8;
+                    temp_s0->overlay.p = &temp_v0_67[1];
                     temp_v0_67->words.w1 = temp_ra_2 | ~0x64FF;
                     temp_v0_67->words.w0 = 0xFA000000;
                     temp_v0_68 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_68 + 8;
+                    temp_s0->overlay.p = &temp_v0_68[1];
                     temp_v0_68->words.w0 = 0x7080C0E;
                     temp_v0_68->words.w1 = 0x80E0A;
                     SysMatrix_InsertTranslation(0.0f, (f32) gGameInfo->data[1387] / 10.0f, 0.0f, 0);
                     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
                     SysMatrix_InsertZRotation_f(-sp1CC, 1);
                     temp_v0_69 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_69 + 8;
+                    temp_s0->overlay.p = &temp_v0_69[1];
                     temp_v0_69->words.w0 = 0xDA380003;
                     spC0 = temp_v0_69;
                     spC0->words.w1 = Matrix_NewMtx(arg0->state.gfxCtx);
                     temp_v0_70 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_70 + 8;
+                    temp_s0->overlay.p = &temp_v0_70[1];
                     temp_v0_70->words.w1 = 0;
                     temp_v0_70->words.w0 = 0xE7000000;
                     temp_v0_71 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_71 + 8;
+                    temp_s0->overlay.p = &temp_v0_71[1];
                     temp_v0_71->words.w1 = 0xFF2DFEFF;
                     temp_v0_71->words.w0 = 0xFCFF97FF;
                     temp_v0_72 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_72 + 8;
+                    temp_s0->overlay.p = &temp_v0_72[1];
                     temp_v0_72->words.w0 = 0xFA000000;
                     temp_ra_3 = D_801BFB2C & 0xFF;
                     temp_v0_72->words.w1 = temp_ra_3;
                     temp_v0_73 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_73 + 8;
+                    temp_s0->overlay.p = &temp_v0_73[1];
                     temp_v0_73->words.w0 = 0x1008010;
-                    temp_v0_73->words.w1 = (u32) (sp70->actionVtx + 0x200);
+                    temp_v0_73->words.w1 = (u32) &sp70->actionVtx[32];
                     sp6C = temp_ra_3;
                     temp_s0->overlay.p = func_8010DE38(temp_s0->overlay.p, *sp68, 4, 0x10, (s16) 0xB, (u16) 0);
                     temp_v0_74 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_74 + 8;
+                    temp_s0->overlay.p = &temp_v0_74[1];
                     temp_v0_74->words.w1 = 0;
                     temp_v0_74->words.w0 = 0xE7000000;
                     temp_v0_75 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_75 + 8;
+                    temp_s0->overlay.p = &temp_v0_75[1];
                     temp_v0_75->words.w1 = temp_ra_3 | ~0x64FF;
                     temp_v0_75->words.w0 = 0xFA000000;
                     temp_v0_76 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_76 + 8;
+                    temp_s0->overlay.p = &temp_v0_76[1];
                     temp_v0_76->words.w0 = 0x7080C0E;
                     temp_v0_76->words.w1 = 0x80E0A;
                     temp_v0_77 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_v0_77 + 8;
+                    temp_s0->overlay.p = &temp_v0_77[1];
                     temp_v0_77->words.w0 = 0xDE000000;
                     temp_v0_77->words.w1 = (u32) &D_0E0001C8;
                     temp_hi_2 = (s32) gSaveContext.day % 5;
@@ -9478,28 +9508,28 @@ loop_89:
                         sp1E6 = phi_a1_2;
                         func_8012C654(arg0->state.gfxCtx);
                         temp_v0_83 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_83 + 8;
+                        temp_s0->overlay.p = &temp_v0_83[1];
                         temp_v0_83->words.w0 = 0xDA380003;
                         temp_t1_3 = phi_a1_2 & 0xFF;
                         temp_v0_83->words.w1 = (u32) sp64;
                         temp_v0_84 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_84 + 8;
+                        temp_s0->overlay.p = &temp_v0_84[1];
                         temp_v0_84->words.w1 = 1;
                         temp_v0_84->words.w0 = 0xE2001E01;
                         temp_v0_85 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_85 + 8;
+                        temp_s0->overlay.p = &temp_v0_85[1];
                         temp_v0_85->words.w0 = 0xE200001C;
                         temp_v0_85->words.w1 = 0x504240;
                         temp_v0_86 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_86 + 8;
+                        temp_s0->overlay.p = &temp_v0_86[1];
                         temp_v0_86->words.w0 = 0xFC309661;
                         temp_v0_86->words.w1 = 0x552EFF7F;
                         temp_v0_87 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_87 + 8;
+                        temp_s0->overlay.p = &temp_v0_87[1];
                         temp_v0_87->words.w0 = 0xFA000000;
                         temp_v0_87->words.w1 = temp_t1_3 | ~0x3CFF;
                         temp_v0_88 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_88 + 8;
+                        temp_s0->overlay.p = &temp_v0_88[1];
                         temp_v0_88->words.w0 = 0xFB000000;
                         temp_v0_88->words.w1 = (D_801BF9F0 << 0x18) | ((D_801BF9F4 & 0xFF) << 0x10) | ((D_801BF9F8 & 0xFF) << 8);
                         sp70 = (InterfaceContext *) temp_t1_3;
@@ -9556,15 +9586,15 @@ loop_89:
                         sp1B0 = 0xA;
                         sp1B6 = 0xA;
                         temp_v0_93 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_93 + 8;
+                        temp_s0->overlay.p = &temp_v0_93[1];
                         temp_v0_93->words.w1 = 0;
                         temp_v0_93->words.w0 = 0xE7000000;
                         temp_v0_94 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_94 + 8;
+                        temp_s0->overlay.p = &temp_v0_94[1];
                         temp_v0_94->words.w0 = 0xFA000000;
                         temp_v0_94->words.w1 = (D_801BF9EC << 0x18) | temp_t1_3;
                         temp_v0_95 = temp_s0->overlay.p;
-                        temp_s0->overlay.p = temp_v0_95 + 8;
+                        temp_s0->overlay.p = &temp_v0_95[1];
                         temp_v0_95->words.w0 = 0xFB000000;
                         temp_v0_95->words.w1 = D_801BF9EC << 0x18;
                         do {
@@ -10210,11 +10240,11 @@ void func_8011C4C4(GraphicsContext **arg0) {
     temp_s0 = temp_a0;
     func_8012C8D4(temp_a0);
     temp_v0 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0 + 8;
+    temp_s0->overlay.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = (u32) &D_801D1DE0;
     temp_v0_2 = temp_s0->overlay.p;
-    temp_s0->overlay.p = temp_v0_2 + 8;
+    temp_s0->overlay.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFCFF97FF;
     temp_v0_2->words.w1 = 0xFF2DFEFF;
     temp_s3 = arg0 + 0x169E8;
@@ -10228,42 +10258,42 @@ void func_8011C4C4(GraphicsContext **arg0) {
             temp_f24 = temp_s2->unk_2BC * Math_SinS(temp_s1->unk_29A);
             temp_f22 = temp_s2->unk_2DC * Math_CosS(temp_s1->unk_29A);
             temp_v0_3 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_3 + 8;
+            temp_s0->overlay.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0;
             temp_v0_3->words.w0 = 0xE7000000;
             temp_v0_4 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_4 + 8;
+            temp_s0->overlay.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xFA000000;
             temp_v0_4->words.w1 = temp_s3->unk_302 & 0xFF;
             SysMatrix_InsertTranslation(temp_f24, temp_f22, 0.0f, 0);
             Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
             temp_v0_5 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_5 + 8;
+            temp_s0->overlay.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380003;
             temp_v0_5->words.w1 = Matrix_NewMtx(*arg0);
             temp_v0_6 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_6 + 8;
+            temp_s0->overlay.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0x1004008;
             temp_s2_2 = phi_s7 * 0x10;
             temp_v0_6->words.w1 = temp_s3->unk_168 + temp_s2_2 + 0x2C0;
             temp_s5 = temp_s4 + &D_801BFCC4;
             temp_s0->overlay.p = func_8010DE38(temp_s0->overlay.p, *temp_s5, 4, 0x20, (s16) 0x21, (u16) 0);
             temp_v0_7 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_7 + 8;
+            temp_s0->overlay.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = 0;
             temp_v0_7->words.w0 = 0xE7000000;
             temp_v0_8 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_8 + 8;
+            temp_s0->overlay.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xFA000000;
             temp_v0_8->words.w1 = (temp_s3->unk_302 & 0xFF) | (temp_s3->unk_2FC << 0x18) | ((temp_s3->unk_2FE & 0xFF) << 0x10) | ((temp_s3->unk_300 & 0xFF) << 8);
             SysMatrix_InsertTranslation(temp_f24, temp_f22, 0.0f, 0);
             Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
             temp_v0_9 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_9 + 8;
+            temp_s0->overlay.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xDA380003;
             temp_v0_9->words.w1 = Matrix_NewMtx(*arg0);
             temp_v0_10 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_v0_10 + 8;
+            temp_s0->overlay.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0x1004008;
             temp_v0_10->words.w1 = temp_s3->unk_168 + temp_s2_2 + 0x4C0;
             temp_s0->overlay.p = func_8010DE38(temp_s0->overlay.p, *temp_s5, 4, 0x20, (s16) 0x21, (u16) 0);
@@ -11100,11 +11130,11 @@ block_152:
             temp_t6_7 = D_801BF970;
             temp_s1->overlay.p = func_8010CD98(temp_s1->overlay.p, &D_02002360, 0x10, 0x10, (s16) (s32) gSaveContext.timerX[temp_t6_7], (s16) (gSaveContext.timerY[temp_t6_7] + 2), (s16) 0x10, (s16) 0x10, (u16) 0x400, (u16) 0x400);
             temp_v0_19 = temp_s1->overlay.p;
-            temp_s1->overlay.p = temp_v0_19 + 8;
+            temp_s1->overlay.p = &temp_v0_19[1];
             temp_v0_19->words.w1 = 0;
             temp_v0_19->words.w0 = 0xE7000000;
             temp_v0_20 = temp_s1->overlay.p;
-            temp_s1->overlay.p = temp_v0_20 + 8;
+            temp_s1->overlay.p = &temp_v0_20[1];
             temp_v0_20->words.w0 = 0xFCFF97FF;
             temp_v0_20->words.w1 = 0xFF2DFEFF;
             temp_a1_11 = D_801BF970;
@@ -11115,12 +11145,12 @@ block_152:
                     if (temp_a1_11 == 2) {
                         if (((gSaveContext.unk_3DE0[temp_a1_11] == 0) && ((&gSaveContext + (temp_a1_11 * 8))->unk_3DE4 == 0)) || (temp_v0_21 == 4)) {
                             temp_v0_23 = temp_s1->overlay.p;
-                            temp_s1->overlay.p = temp_v0_23 + 8;
+                            temp_s1->overlay.p = &temp_v0_23[1];
                             temp_v0_23->words.w1 = 0xFF3200FF;
                             temp_v0_23->words.w0 = 0xFA000000;
                         } else {
                             temp_v0_22 = temp_s1->overlay.p;
-                            temp_s1->overlay.p = temp_v0_22 + 8;
+                            temp_s1->overlay.p = &temp_v0_22[1];
                             temp_v0_22->words.w1 = -1;
                             temp_v0_22->words.w0 = 0xFA000000;
                         }
@@ -11129,12 +11159,12 @@ block_152:
                         if ((gSaveContext.minigameState == 1) && (gSaveContext.entranceIndex == 0x6400)) {
                             if ((gSaveContext.unk_3DE0[temp_a1_11] != 0) || ((u32) (&gSaveContext + (temp_a1_11 * 8))->unk_3DE4 >= 0x2AF8U)) {
                                 temp_v0_25 = temp_s1->overlay.p;
-                                temp_s1->overlay.p = temp_v0_25 + 8;
+                                temp_s1->overlay.p = &temp_v0_25[1];
                                 temp_v0_25->words.w1 = 0xFF3200FF;
                                 temp_v0_25->words.w0 = 0xFA000000;
                             } else {
                                 temp_v0_24 = temp_s1->overlay.p;
-                                temp_s1->overlay.p = temp_v0_24 + 8;
+                                temp_s1->overlay.p = &temp_v0_24[1];
                                 temp_v0_24->words.w1 = -1;
                                 temp_v0_24->words.w0 = 0xFA000000;
                             }
@@ -11146,28 +11176,28 @@ block_152:
                             sp7C = temp_t7_16;
                             if ((temp_t6_8 >= 0U) && ((temp_t6_8 > 0U) || (temp_t7_16 >= (u32) (&gSaveContext + ((temp_v0_26 % 5) * 4))->unk_E68))) {
                                 temp_v0_27 = temp_s1->overlay.p;
-                                temp_s1->overlay.p = temp_v0_27 + 8;
+                                temp_s1->overlay.p = &temp_v0_27[1];
                                 temp_v0_27->words.w1 = 0xFF3200FF;
                                 temp_v0_27->words.w0 = 0xFA000000;
                             } else if ((sp78 >= 0U) && ((sp78 > 0U) || (sp7C >= (u32) ((&gSaveContext + ((temp_v0_26 % 5) * 4))->unk_E68 - 0x384)))) {
                                 temp_v0_28 = temp_s1->overlay.p;
-                                temp_s1->overlay.p = temp_v0_28 + 8;
+                                temp_s1->overlay.p = &temp_v0_28[1];
                                 temp_v0_28->words.w1 = 0xFFFF00FF;
                                 temp_v0_28->words.w0 = 0xFA000000;
                             } else {
                                 temp_v0_29 = temp_s1->overlay.p;
-                                temp_s1->overlay.p = temp_v0_29 + 8;
+                                temp_s1->overlay.p = &temp_v0_29[1];
                                 temp_v0_29->words.w1 = -1;
                                 temp_v0_29->words.w0 = 0xFA000000;
                             }
                         } else if ((gSaveContext.unk_3DE0[temp_a1_11] == 0) && ((u32) (&gSaveContext + (temp_a1_11 * 8))->unk_3DE4 < 0x3E8U) && (gSaveContext.unk_3DD7[temp_a1_11] == 0) && (temp_v0_21 != 0xB)) {
                             temp_v0_30 = temp_s1->overlay.p;
-                            temp_s1->overlay.p = temp_v0_30 + 8;
+                            temp_s1->overlay.p = &temp_v0_30[1];
                             temp_v0_30->words.w1 = 0xFF3200FF;
                             temp_v0_30->words.w0 = 0xFA000000;
                         } else {
                             temp_v0_31 = temp_s1->overlay.p;
-                            temp_s1->overlay.p = temp_v0_31 + 8;
+                            temp_s1->overlay.p = &temp_v0_31[1];
                             temp_v0_31->words.w1 = -1;
                             temp_v0_31->words.w0 = 0xFA000000;
                         }
@@ -11271,7 +11301,7 @@ void func_8011E3B4(GlobalContext *arg0) {
                 temp_a0 = &gSaveContext + (phi_a1 * 8);
                 if (gSaveContext.unk_101A[phi_a1] == 1) {
                     temp_t9 = temp_a0->unk_10B4 + temp_v1;
-                    temp_t1 = D_801BF8F0.unk_4;
+                    temp_t1 = (&D_801BF8F0)[1];
                     temp_t2 = (((temp_t9 < temp_v1) + gSaveContext.unk_10B0[phi_a1] + temp_ret) - D_801BF8F0.unk_0) - (temp_t9 < temp_t1);
                     temp_a0->unk_10B4 = (s32) (temp_t9 - temp_t1);
                     gSaveContext.unk_10B0[phi_a1] = temp_t2;
@@ -11340,7 +11370,7 @@ void func_8011E3B4(GlobalContext *arg0) {
         temp_ret_6 = osGetTime();
         temp_v1_4 = (u32) temp_ret_6;
         D_801BF8F0.unk_0 = temp_ret_6;
-        D_801BF8F0.unk_4 = temp_v1_4;
+        (&D_801BF8F0)[1] = temp_v1_4;
         D_801BF96C = 1;
     }
 }
@@ -11438,31 +11468,31 @@ void func_8011E730(GraphicsContext **arg0) {
             phi_t0 = 1;
             if (temp_t3->unk_212 == 8) {
                 temp_v1 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1 + 8;
+                sp34->overlay.p = &temp_v1[1];
                 temp_v1->words.w1 = (u32) &D_02002DE0;
                 temp_v1->words.w0 = 0xFD180000;
                 temp_v1_2 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_2 + 8;
+                sp34->overlay.p = &temp_v1_2[1];
                 temp_v1_2->words.w1 = 0x7000000;
                 temp_v1_2->words.w0 = 0xF5180000;
                 temp_v1_3 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_3 + 8;
+                sp34->overlay.p = &temp_v1_3[1];
                 temp_v1_3->words.w1 = 0;
                 temp_v1_3->words.w0 = 0xE6000000;
                 temp_v1_4 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_4 + 8;
+                sp34->overlay.p = &temp_v1_4[1];
                 temp_v1_4->words.w1 = 0x70FF100;
                 temp_v1_4->words.w0 = 0xF3000000;
                 temp_v1_5 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_5 + 8;
+                sp34->overlay.p = &temp_v1_5[1];
                 temp_v1_5->words.w1 = 0;
                 temp_v1_5->words.w0 = 0xE7000000;
                 temp_v1_6 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_6 + 8;
+                sp34->overlay.p = &temp_v1_6[1];
                 temp_v1_6->words.w1 = 0;
                 temp_v1_6->words.w0 = 0xF5180800;
                 temp_v1_7 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_7 + 8;
+                sp34->overlay.p = &temp_v1_7[1];
                 temp_v1_7->words.w0 = 0xF2000000;
                 temp_v1_7->words.w1 = 0x3C03C;
                 phi_t2 = 0x6E;
@@ -11477,25 +11507,25 @@ void func_8011E730(GraphicsContext **arg0) {
                     temp_a0_2 = phi_t2 + 0x10;
                     if ((temp_v0 == 0) || ((s32) temp_v0 < phi_t0)) {
                         temp_v1_9 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_9 + 8;
+                        sp34->overlay.p = &temp_v1_9[1];
                         temp_v1_9->words.w0 = 0xFA000000;
                         temp_v1_9->words.w1 = (temp_t3->unk_266 & 0xFF) | 0x96FF00;
                     } else {
                         temp_v1_8 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_8 + 8;
+                        sp34->overlay.p = &temp_v1_8[1];
                         temp_v1_8->words.w0 = 0xFA000000;
                         temp_v1_8->words.w1 = (temp_t3->unk_266 & 0xFF) | ~0xFF;
                     }
                     temp_v1_10 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_10 + 8;
+                    sp34->overlay.p = &temp_v1_10[1];
                     temp_v1_10->words.w0 = (((temp_a0_2 * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((phi_v0 + 0x10) * 4) & 0xFFF);
                     temp_v1_10->words.w1 = (((phi_t2 * 4) & 0xFFF) << 0xC) | ((phi_v0 * 4) & 0xFFF);
                     temp_v1_11 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_11 + 8;
+                    sp34->overlay.p = &temp_v1_11[1];
                     temp_v1_11->words.w1 = 0;
                     temp_v1_11->words.w0 = 0xE1000000;
                     temp_v1_12 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_12 + 8;
+                    sp34->overlay.p = &temp_v1_12[1];
                     temp_v1_12->words.w1 = 0x4000400;
                     temp_v1_12->words.w0 = 0xF1000000;
                     temp_t0 = phi_t0 + 1;
@@ -11505,11 +11535,11 @@ void func_8011E730(GraphicsContext **arg0) {
             }
             if (gSaveContext.minigameState == 1) {
                 temp_v1_13 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_13 + 8;
+                sp34->overlay.p = &temp_v1_13[1];
                 temp_v1_13->words.w1 = 0;
                 temp_v1_13->words.w0 = 0xE7000000;
                 temp_v1_14 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_14 + 8;
+                sp34->overlay.p = &temp_v1_14[1];
                 temp_v1_14->words.w0 = 0xFC309661;
                 temp_v1_14->words.w1 = 0x552EFF7F;
                 phi_t2_2 = 0x14;
@@ -11523,115 +11553,115 @@ void func_8011E730(GraphicsContext **arg0) {
                 phi_t0_2 = 0;
                 if (gSaveContext.entranceIndex == 0x8E10) {
                     temp_v1_15 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_15 + 8;
+                    sp34->overlay.p = &temp_v1_15[1];
                     temp_v1_15->words.w0 = 0xFA000000;
                     temp_v1_15->words.w1 = (temp_t3->unk_268 & 0xFF) | ~0xFF;
                     temp_v1_16 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_16 + 8;
+                    sp34->overlay.p = &temp_v1_16[1];
                     temp_v1_16->words.w1 = 0xFF;
                     temp_v1_16->words.w0 = 0xFB000000;
                     temp_v1_17 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_17 + 8;
+                    sp34->overlay.p = &temp_v1_17[1];
                     temp_v1_17->words.w0 = 0xFD180000;
                     temp_v1_17->words.w1 = (u32) &D_020038A0;
                     temp_v1_18 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_18 + 8;
+                    sp34->overlay.p = &temp_v1_18[1];
                     temp_v1_18->words.w1 = 0x7000000;
                     temp_v1_18->words.w0 = 0xF5180000;
                     temp_v1_19 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_19 + 8;
+                    sp34->overlay.p = &temp_v1_19[1];
                     temp_v1_19->words.w1 = 0;
                     temp_v1_19->words.w0 = 0xE6000000;
                     temp_v1_20 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_20 + 8;
+                    sp34->overlay.p = &temp_v1_20[1];
                     temp_v1_20->words.w1 = 0x717F0AB;
                     temp_v1_20->words.w0 = 0xF3000000;
                     temp_v1_21 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_21 + 8;
+                    sp34->overlay.p = &temp_v1_21[1];
                     temp_v1_21->words.w1 = 0;
                     temp_v1_21->words.w0 = 0xE7000000;
                     temp_v1_22 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_22 + 8;
+                    sp34->overlay.p = &temp_v1_22[1];
                     temp_v1_22->words.w1 = 0;
                     temp_v1_22->words.w0 = 0xF5180C00;
                     temp_v1_23 = sp34->overlay.p;
-                    sp34->overlay.p = temp_v1_23 + 8;
+                    sp34->overlay.p = &temp_v1_23[1];
                     temp_v1_23->words.w0 = 0xF2000000;
                     temp_v1_23->words.w1 = 0x5C03C;
                 } else {
                     temp_v0_2 = arg0->unk_A4;
                     if (temp_v0_2 == 0x54) {
                         temp_v1_24 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_24 + 8;
+                        sp34->overlay.p = &temp_v1_24[1];
                         temp_v1_24->words.w0 = 0xFA000000;
                         temp_v1_24->words.w1 = (temp_t3->unk_268 & 0xFF) | 0xFF8C3200;
                         temp_v1_25 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_25 + 8;
+                        sp34->overlay.p = &temp_v1_25[1];
                         temp_v1_25->words.w1 = 0xFF;
                         temp_v1_25->words.w0 = 0xFB000000;
                         temp_v1_26 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_26 + 8;
+                        sp34->overlay.p = &temp_v1_26[1];
                         temp_v1_26->words.w0 = 0xFD700000;
                         temp_v1_26->words.w1 = (u32) &D_02000BE0;
                         temp_v1_27 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_27 + 8;
+                        sp34->overlay.p = &temp_v1_27[1];
                         temp_v1_27->words.w1 = 0x7000000;
                         temp_v1_27->words.w0 = 0xF5700000;
                         temp_v1_28 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_28 + 8;
+                        sp34->overlay.p = &temp_v1_28[1];
                         temp_v1_28->words.w1 = 0;
                         temp_v1_28->words.w0 = 0xE6000000;
                         temp_v1_29 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_29 + 8;
+                        sp34->overlay.p = &temp_v1_29[1];
                         temp_v1_29->words.w1 = 0x70BF2AB;
                         temp_v1_29->words.w0 = 0xF3000000;
                         temp_v1_30 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_30 + 8;
+                        sp34->overlay.p = &temp_v1_30[1];
                         temp_v1_30->words.w1 = 0;
                         temp_v1_30->words.w0 = 0xE7000000;
                         temp_v1_31 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_31 + 8;
+                        sp34->overlay.p = &temp_v1_31[1];
                         temp_v1_31->words.w1 = 0;
                         temp_v1_31->words.w0 = 0xF5680600;
                         temp_v1_32 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_32 + 8;
+                        sp34->overlay.p = &temp_v1_32[1];
                         temp_v1_32->words.w0 = 0xF2000000;
                         temp_v1_32->words.w1 = 0x5C03C;
                     } else if (temp_v0_2 == 0x37) {
                         temp_v1_33 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_33 + 8;
+                        sp34->overlay.p = &temp_v1_33[1];
                         temp_v1_33->words.w0 = 0xFA000000;
                         temp_v1_33->words.w1 = (temp_t3->unk_268 & 0xFF) | 0xFF644B00;
                         temp_v1_34 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_34 + 8;
+                        sp34->overlay.p = &temp_v1_34[1];
                         temp_v1_34->words.w0 = 0xFB000000;
                         temp_v1_34->words.w1 = 0x373700FF;
                         temp_v1_35 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_35 + 8;
+                        sp34->overlay.p = &temp_v1_35[1];
                         temp_v1_35->words.w0 = 0xFD700000;
                         temp_v1_35->words.w1 = (u32) &D_02000A00;
                         temp_v1_36 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_36 + 8;
+                        sp34->overlay.p = &temp_v1_36[1];
                         temp_v1_36->words.w1 = 0x7000000;
                         temp_v1_36->words.w0 = 0xF5700000;
                         temp_v1_37 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_37 + 8;
+                        sp34->overlay.p = &temp_v1_37[1];
                         temp_v1_37->words.w1 = 0;
                         temp_v1_37->words.w0 = 0xE6000000;
                         temp_v1_38 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_38 + 8;
+                        sp34->overlay.p = &temp_v1_38[1];
                         temp_v1_38->words.w1 = 0x70EF400;
                         temp_v1_38->words.w0 = 0xF3000000;
                         temp_v1_39 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_39 + 8;
+                        sp34->overlay.p = &temp_v1_39[1];
                         temp_v1_39->words.w1 = 0;
                         temp_v1_39->words.w0 = 0xE7000000;
                         temp_v1_40 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_40 + 8;
+                        sp34->overlay.p = &temp_v1_40[1];
                         temp_v1_40->words.w1 = 0;
                         temp_v1_40->words.w0 = 0xF5680400;
                         temp_v1_41 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_41 + 8;
+                        sp34->overlay.p = &temp_v1_41[1];
                         temp_v1_41->words.w0 = 0xF2000000;
                         temp_v1_41->words.w1 = 0x3C074;
                         phi_t2_2 = 0x18;
@@ -11639,65 +11669,65 @@ void func_8011E730(GraphicsContext **arg0) {
                         phi_a1 = 0x1E;
                     } else {
                         temp_v1_42 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_42 + 8;
+                        sp34->overlay.p = &temp_v1_42[1];
                         temp_v1_42->words.w0 = 0xFA000000;
                         temp_v1_42->words.w1 = (temp_t3->unk_268 & 0xFF) | ~0xFF;
                         temp_v1_43 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_43 + 8;
+                        sp34->overlay.p = &temp_v1_43[1];
                         temp_v1_43->words.w1 = 0xFF;
                         temp_v1_43->words.w0 = 0xFB000000;
                         temp_v1_44 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_44 + 8;
+                        sp34->overlay.p = &temp_v1_44[1];
                         temp_v1_44->words.w0 = 0xFD100000;
                         temp_v1_44->words.w1 = (u32) &D_02003FA0;
                         temp_v1_45 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_45 + 8;
+                        sp34->overlay.p = &temp_v1_45[1];
                         temp_v1_45->words.w1 = 0x7000000;
                         temp_v1_45->words.w0 = 0xF5100000;
                         temp_v1_46 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_46 + 8;
+                        sp34->overlay.p = &temp_v1_46[1];
                         temp_v1_46->words.w1 = 0;
                         temp_v1_46->words.w0 = 0xE6000000;
                         temp_v1_47 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_47 + 8;
+                        sp34->overlay.p = &temp_v1_47[1];
                         temp_v1_47->words.w1 = 0x717F156;
                         temp_v1_47->words.w0 = 0xF3000000;
                         temp_v1_48 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_48 + 8;
+                        sp34->overlay.p = &temp_v1_48[1];
                         temp_v1_48->words.w1 = 0;
                         temp_v1_48->words.w0 = 0xE7000000;
                         temp_v1_49 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_49 + 8;
+                        sp34->overlay.p = &temp_v1_49[1];
                         temp_v1_49->words.w1 = 0;
                         temp_v1_49->words.w0 = 0xF5100C00;
                         temp_v1_50 = sp34->overlay.p;
-                        sp34->overlay.p = temp_v1_50 + 8;
+                        sp34->overlay.p = &temp_v1_50[1];
                         temp_v1_50->words.w0 = 0xF2000000;
                         temp_v1_50->words.w1 = 0x5C03C;
                     }
                 }
                 temp_v1_51 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_51 + 8;
+                sp34->overlay.p = &temp_v1_51[1];
                 temp_v1_51->words.w0 = ((((phi_t2_2 + phi_a0) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((sp3C + phi_a1) * 4) & 0xFFF);
                 temp_v1_51->words.w1 = (((phi_t2_2 * 4) & 0xFFF) << 0xC) | ((sp3C * 4) & 0xFFF);
                 temp_v1_52 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_52 + 8;
+                sp34->overlay.p = &temp_v1_52[1];
                 temp_v1_52->words.w1 = 0;
                 temp_v1_52->words.w0 = 0xE1000000;
                 temp_v1_53 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_53 + 8;
+                sp34->overlay.p = &temp_v1_53[1];
                 temp_v1_53->words.w1 = 0x4000400;
                 temp_v1_53->words.w0 = 0xF1000000;
                 temp_v1_54 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_54 + 8;
+                sp34->overlay.p = &temp_v1_54[1];
                 temp_v1_54->words.w1 = 0;
                 temp_v1_54->words.w0 = 0xE7000000;
                 temp_v1_55 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_55 + 8;
+                sp34->overlay.p = &temp_v1_55[1];
                 temp_v1_55->words.w0 = 0xFA000000;
                 temp_v1_55->words.w1 = (temp_t3->unk_268 & 0xFF) | ~0xFF;
                 temp_v1_56 = sp34->overlay.p;
-                sp34->overlay.p = temp_v1_56 + 8;
+                sp34->overlay.p = &temp_v1_56[1];
                 temp_v1_56->words.w0 = 0xFCFF97FF;
                 temp_v1_56->words.w1 = 0xFF2DFEFF;
                 phi_v1 = 0;
@@ -11920,6 +11950,8 @@ void func_8011F0E0(GraphicsContext **arg0) {
     GraphicsContext **temp_a3;
     GraphicsContext *temp_a0_6;
     GraphicsContext *temp_s0;
+    GraphicsContext *temp_v0_32;
+    GraphicsContext *temp_v0_33;
     View *temp_s1;
     s16 temp_a0_3;
     s16 temp_a0_4;
@@ -11944,19 +11976,17 @@ void func_8011F0E0(GraphicsContext **arg0) {
     s16 temp_v1_9;
     s32 temp_v0_11;
     s32 temp_v0_2;
-    s32 temp_v0_32;
-    s32 temp_v0_33;
     s32 temp_v1_10;
     s32 temp_v1_13;
     s32 temp_v1_4;
     s32 temp_v1_7;
     s8 temp_v1_5;
+    u32 temp_v0_14;
+    u32 temp_v0_15;
+    u32 temp_v0_16;
+    u32 temp_v0_17;
     u8 temp_v1_11;
     void *temp_v0;
-    void *temp_v0_14;
-    void *temp_v0_15;
-    void *temp_v0_16;
-    void *temp_v0_17;
     void *temp_v0_18;
     void *temp_v0_3;
     void *temp_v0_4;
@@ -11979,63 +12009,63 @@ void func_8011F0E0(GraphicsContext **arg0) {
     s16 phi_t0;
     Gfx *phi_a1;
     s32 phi_v0_7;
-    s32 phi_a0_2;
+    GraphicsContext *phi_a0_2;
     GraphicsContext **phi_a3;
-    s32 phi_a0_3;
+    GraphicsContext *phi_a0_3;
     s16 phi_t0_2;
     s16 phi_a2;
     s16 phi_v0_8;
     s16 phi_v1_4;
 
     temp_a3 = arg0;
-    sp2D4 = temp_a3->unk_1CCC;
+    sp2D4 = temp_a3[1843];
     temp_s0 = temp_a3->unk_0;
     temp_a1 = temp_s0->overlay.p;
     temp_s0->overlay.p = temp_a1 + 8;
     temp_s1 = temp_a3 + 0x169E8;
     temp_a1->words.w0 = 0xDB060008;
-    temp_a1->words.w1 = temp_s1->unk_170;
+    temp_a1->words.w1 = temp_s1[1].viewport.topY;
     temp_a1_2 = temp_s0->overlay.p;
     temp_s0->overlay.p = temp_a1_2 + 8;
     temp_a1_2->words.w0 = 0xDB060024;
     temp_v0 = temp_a3 + 0x16D30;
     temp_a0 = temp_a3;
-    temp_a1_2->words.w1 = temp_s1->unk_174;
+    temp_a1_2->words.w1 = temp_s1[1].viewport.bottomY;
     temp_a1_3 = temp_s0->overlay.p;
     temp_s0->overlay.p = temp_a1_3 + 8;
     temp_a1_3->words.w0 = 0xDB060020;
-    temp_a1_3->words.w1 = temp_s1->unk_178;
+    temp_a1_3->words.w1 = temp_s1[1].viewport.leftX;
     temp_a1_4 = temp_s0->overlay.p;
     temp_s0->overlay.p = temp_a1_4 + 8;
     temp_a1_4->words.w0 = 0xDB06002C;
-    temp_a1_4->words.w1 = temp_s1->unk_17C;
+    temp_a1_4->words.w1 = temp_s1[1].viewport.rightX;
     arg0 = temp_a3;
     if (temp_v0->unk_1EE == 0) {
         sp50 = temp_v0;
         arg0 = temp_a3;
         func_8010E028(temp_a0, temp_a1_4, temp_a3);
         func_801170B8(temp_s1);
-        if (temp_s1->unk_31C == 2) {
+        if (temp_s1[2].unk_4C == 2) {
             temp_a1_5 = temp_s0->overlay.p;
             temp_s0->overlay.p = temp_a1_5 + 8;
             temp_a1_5->words.w0 = 0xDB06001C;
-            temp_a1_5->words.w1 = temp_s1->unk_33C;
+            temp_a1_5->words.w1 = temp_s1[2].projection.m[0][3];
             func_8012C628(arg0->unk_0);
             temp_v1 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1 + 8;
+            temp_s0->polyOpa.p = &temp_v1[1];
             temp_v1->words.w1 = 0;
             temp_v1->words.w0 = 0xE3001201;
             temp_a1_6 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_6 + 8;
+            temp_s0->overlay.p = &temp_a1_6[1];
             temp_a1_6->words.w0 = 0xFA000000;
             temp_a0_2 = &sp2D0;
             temp_a1_6->words.w1 = (sp50->unk_224 & 0xFF) | ~0xFF;
             temp_a1_7 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_7 + 8;
+            temp_s0->overlay.p = &temp_a1_7[1];
             temp_a1_7->words.w0 = 0xE1000000;
             temp_a1_7->words.w1 = (u32) (&D_801E3BB0 - 0x80000000);
             temp_a1_8 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_8 + 8;
+            temp_s0->overlay.p = &temp_a1_8[1];
             temp_a1_8->words.w1 = (u32) (&D_801ABAB0 - 0x80000000);
             temp_a1_8->words.w0 = 0xDD0007FF;
             sp2D0 = temp_s0->overlay.p;
@@ -12043,47 +12073,47 @@ void func_8011F0E0(GraphicsContext **arg0) {
             func_80172758(temp_a0_2, *(&D_801BFD84 + temp_v0_2), *(&D_801BFD8C + temp_v0_2), 0x140U, (u16) 0xF0, (u8) 2, (u8) 1, (u16) 0x8000, (u16) 0x100, 0.0f, 0.0f, 1.0f, 1.0f, 0U);
             temp_s0->overlay.p = sp2D0;
             temp_a1_9 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_9 + 8;
+            temp_s0->overlay.p = &temp_a1_9[1];
             temp_a1_9->words.w0 = 0xE1000000;
             sp288 = temp_a1_9;
             sp288->words.w1 = func_80182CCC();
             temp_a1_10 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_10 + 8;
+            temp_s0->overlay.p = &temp_a1_10[1];
             temp_a1_10->words.w0 = 0xDD0007FF;
             sp288 = temp_a1_10;
             sp288->words.w1 = func_80182CBC();
             temp_a1_11 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_11 + 8;
+            temp_s0->overlay.p = &temp_a1_11[1];
             temp_a1_11->words.w1 = 0;
             temp_a1_11->words.w0 = 0xE7000000;
             temp_a1_12 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_12 + 8;
+            temp_s0->overlay.p = &temp_a1_12[1];
             temp_a1_12->words.w1 = 0x504240;
             temp_a1_12->words.w0 = 0xE200001C;
             temp_a1_13 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_13 + 8;
+            temp_s0->overlay.p = &temp_a1_13[1];
             temp_a1_13->words.w0 = 0xFCFFFFFF;
             temp_a1_13->words.w1 = 0xFFFDF6FB;
             temp_a1_14 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_14 + 8;
+            temp_s0->overlay.p = &temp_a1_14[1];
             temp_a1_14->words.w0 = 0xFA000000;
             temp_a1_14->words.w1 = gGameInfo->data[1435] & 0xFF;
             temp_a1_15 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_15 + 8;
+            temp_s0->overlay.p = &temp_a1_15[1];
             temp_a1_15->words.w1 = 0;
             temp_a1_15->words.w0 = 0xF65003C0;
         }
         LifeMeter_Draw((GlobalContext *) arg0);
         func_8012C654(arg0->unk_0);
         temp_a1_16 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_16 + 8;
+        temp_s0->overlay.p = &temp_a1_16[1];
         temp_a1_16->words.w0 = 0xFA000000;
-        temp_v0_3 = (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_10) >> gUpgradeShifts->unk_4) * 6) + &D_801BFD2C;
+        temp_v0_3 = (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) * 6) + &D_801BFD2C;
         temp_a1_16->words.w1 = ((temp_v0_3->unk_4 & 0xFF) << 8) | (temp_v0_3->unk_0 << 0x18) | ((temp_v0_3->unk_2 & 0xFF) << 0x10) | (temp_s1->unk_272 & 0xFF);
         temp_a1_17 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_17 + 8;
+        temp_s0->overlay.p = &temp_a1_17[1];
         temp_a1_17->words.w0 = 0xFB000000;
-        temp_v0_4 = (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_10) >> gUpgradeShifts->unk_4) * 6) + &D_801BFD40;
+        temp_v0_4 = (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) * 6) + &D_801BFD40;
         temp_a1_17->words.w1 = ((temp_v0_4->unk_4 & 0xFF) << 8) | (temp_v0_4->unk_0 << 0x18) | ((temp_v0_4->unk_2 & 0xFF) << 0x10) | 0xFF;
         temp_s0->overlay.p = func_8010CD98(temp_s0->overlay.p, &D_02000E60, 0x10, 0x10, (s16) 0x1A, (s16) 0xCE, (s16) 0x10, (s16) 0x10, (u16) 0x400, (u16) 0x400);
         temp_a0_3 = arg0->unk_A4;
@@ -12103,24 +12133,24 @@ void func_8011F0E0(GraphicsContext **arg0) {
 block_8:
             if ((s32) gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex] >= 0) {
                 temp_a1_48 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_48 + 8;
+                temp_s0->overlay.p = &temp_a1_48[1];
                 temp_a1_48->words.w1 = 0;
                 temp_a1_48->words.w0 = 0xE7000000;
                 temp_a1_49 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_49 + 8;
+                temp_s0->overlay.p = &temp_a1_49[1];
                 temp_a1_49->words.w0 = 0xFA000000;
                 temp_a1_49->words.w1 = (temp_s1->unk_272 & 0xFF) | 0xC8E6FF00;
                 temp_a1_50 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_50 + 8;
+                temp_s0->overlay.p = &temp_a1_50[1];
                 temp_a1_50->words.w1 = 0x14FF;
                 temp_a1_50->words.w0 = 0xFB000000;
                 temp_s0->overlay.p = func_8010CD98(temp_s0->overlay.p, &D_02000D60, 0x10, 0x10, (s16) 0x1A, (s16) 0xBE, (s16) 0x10, (s16) 0x10, (u16) 0x400, (u16) 0x400);
                 temp_a1_51 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_51 + 8;
+                temp_s0->overlay.p = &temp_a1_51[1];
                 temp_a1_51->words.w1 = 0;
                 temp_a1_51->words.w0 = 0xE7000000;
                 temp_a1_52 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_52 + 8;
+                temp_s0->overlay.p = &temp_a1_52[1];
                 temp_a1_52->words.w0 = 0xFCFF97FF;
                 temp_a1_52->words.w1 = 0xFF2DFEFF;
                 temp_v1_5 = gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex];
@@ -12142,65 +12172,65 @@ block_8:
                 sp2BC = phi_v0_2;
                 if (phi_v0_2 != 0) {
                     temp_a1_53 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_53 + 8;
+                    temp_s0->overlay.p = &temp_a1_53[1];
                     temp_a1_53->words.w1 = 0;
                     temp_a1_53->words.w0 = 0xE7000000;
                     temp_a1_54 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_54 + 8;
+                    temp_s0->overlay.p = &temp_a1_54[1];
                     temp_a1_54->words.w0 = 0xFA000000;
                     temp_a1_54->words.w1 = temp_s1->unk_272 & 0xFF;
                     temp_s0->overlay.p = func_8010D7D0(temp_s0->overlay.p, (sp2BC << 7) + &D_020044A0, 8, 0x10, (s16) 0x2B, (s16) 0xBF, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400);
                     temp_a1_55 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_55 + 8;
+                    temp_s0->overlay.p = &temp_a1_55[1];
                     temp_a1_55->words.w1 = 0;
                     temp_a1_55->words.w0 = 0xE7000000;
                     temp_a1_56 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_56 + 8;
+                    temp_s0->overlay.p = &temp_a1_56[1];
                     temp_a1_56->words.w0 = 0xFA000000;
                     temp_a1_56->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
                     temp_a1_57 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_57 + 8;
+                    temp_s0->overlay.p = &temp_a1_57[1];
                     temp_a1_57->words.w0 = 0xE40C8338;
                     temp_a1_57->words.w1 = 0xA82F8;
                     temp_a1_58 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_58 + 8;
+                    temp_s0->overlay.p = &temp_a1_58[1];
                     temp_a1_58->words.w1 = 0;
                     temp_a1_58->words.w0 = 0xE1000000;
                     temp_a1_59 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_59 + 8;
+                    temp_s0->overlay.p = &temp_a1_59[1];
                     temp_a1_59->words.w1 = 0x4000400;
                     temp_a1_59->words.w0 = 0xF1000000;
                     phi_t2_2 = 0x32;
                 }
                 temp_a1_60 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_60 + 8;
+                temp_s0->overlay.p = &temp_a1_60[1];
                 temp_a1_60->words.w1 = 0;
                 temp_a1_60->words.w0 = 0xE7000000;
                 temp_a1_61 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_61 + 8;
+                temp_s0->overlay.p = &temp_a1_61[1];
                 temp_a1_61->words.w0 = 0xFA000000;
                 temp_a1_61->words.w1 = temp_s1->unk_272 & 0xFF;
                 sp2CA = phi_t2_2;
                 temp_s0->overlay.p = func_8010D7D0(temp_s0->overlay.p, (sp2BE << 7) + &D_020044A0, 8, 0x10, (s16) (phi_t2_2 + 1), (s16) 0xBF, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400);
                 temp_a1_62 = temp_s0->overlay.p;
                 temp_v1_7 = phi_t2_2 * 4;
-                temp_s0->overlay.p = temp_a1_62 + 8;
+                temp_s0->overlay.p = &temp_a1_62[1];
                 temp_a1_62->words.w1 = 0;
                 temp_a1_62->words.w0 = 0xE7000000;
                 temp_a1_63 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_63 + 8;
+                temp_s0->overlay.p = &temp_a1_63[1];
                 temp_a1_63->words.w0 = 0xFA000000;
                 temp_a1_63->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
                 temp_a1_64 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_64 + 8;
+                temp_s0->overlay.p = &temp_a1_64[1];
                 temp_a1_64->words.w1 = ((temp_v1_7 & 0xFFF) << 0xC) | 0x2F8;
                 temp_a1_64->words.w0 = (((temp_v1_7 + 0x20) & 0xFFF) << 0xC) | 0xE4000000 | 0x338;
                 temp_a1_65 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_65 + 8;
+                temp_s0->overlay.p = &temp_a1_65[1];
                 temp_a1_65->words.w1 = 0;
                 temp_a1_65->words.w0 = 0xE1000000;
                 temp_a1_66 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_66 + 8;
+                temp_s0->overlay.p = &temp_a1_66[1];
                 temp_a1_66->words.w1 = 0x4000400;
                 temp_a1_66->words.w0 = 0xF1000000;
             }
@@ -12210,67 +12240,67 @@ block_23:
         case 39:
         case 40:
             temp_a1_18 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_18 + 8;
+            temp_s0->overlay.p = &temp_a1_18[1];
             temp_a1_18->words.w1 = 0;
             temp_a1_18->words.w0 = 0xE7000000;
             temp_a1_19 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_19 + 8;
+            temp_s0->overlay.p = &temp_a1_19[1];
             temp_a1_19->words.w0 = 0xFC119623;
             temp_a1_19->words.w1 = 0xFF2FFFFF;
             temp_a1_20 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_20 + 8;
+            temp_s0->overlay.p = &temp_a1_20[1];
             temp_a1_20->words.w0 = 0xFA000000;
             temp_a1_20->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
             temp_a1_21 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_21 + 8;
+            temp_s0->overlay.p = &temp_a1_21[1];
             temp_a1_21->words.w1 = 0xFF;
             temp_a1_21->words.w0 = 0xFB000000;
             temp_a1_22 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_22 + 8;
+            temp_s0->overlay.p = &temp_a1_22[1];
             temp_a1_22->words.w1 = (u32) &D_020031E0;
             temp_a1_22->words.w0 = 0xFD180000;
             temp_a1_23 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_23 + 8;
+            temp_s0->overlay.p = &temp_a1_23[1];
             temp_a1_23->words.w1 = 0x7000000;
             temp_a1_23->words.w0 = 0xF5180000;
             temp_a1_24 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_24 + 8;
+            temp_s0->overlay.p = &temp_a1_24[1];
             temp_a1_24->words.w1 = 0;
             temp_a1_24->words.w0 = 0xE6000000;
             temp_a1_25 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_25 + 8;
+            temp_s0->overlay.p = &temp_a1_25[1];
             temp_a1_25->words.w1 = 0x723F0AB;
             temp_a1_25->words.w0 = 0xF3000000;
             temp_a1_26 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_26 + 8;
+            temp_s0->overlay.p = &temp_a1_26[1];
             temp_a1_26->words.w1 = 0;
             temp_a1_26->words.w0 = 0xE7000000;
             temp_a1_27 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_27 + 8;
+            temp_s0->overlay.p = &temp_a1_27[1];
             temp_a1_27->words.w1 = 0;
             temp_a1_27->words.w0 = 0xF5180C00;
             temp_a1_28 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_28 + 8;
+            temp_s0->overlay.p = &temp_a1_28[1];
             temp_a1_28->words.w0 = 0xF2000000;
             temp_a1_28->words.w1 = 0x5C05C;
             temp_a1_29 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_29 + 8;
+            temp_s0->overlay.p = &temp_a1_29[1];
             temp_a1_29->words.w0 = 0xE40B0334;
             temp_a1_29->words.w1 = 0x502EC;
             temp_a1_30 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_30 + 8;
+            temp_s0->overlay.p = &temp_a1_30[1];
             temp_a1_30->words.w1 = 0;
             temp_a1_30->words.w0 = 0xE1000000;
             temp_a1_31 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_31 + 8;
+            temp_s0->overlay.p = &temp_a1_31[1];
             temp_a1_31->words.w1 = 0x4000400;
             temp_a1_31->words.w0 = 0xF1000000;
             temp_a1_32 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_32 + 8;
+            temp_s0->overlay.p = &temp_a1_32[1];
             temp_a1_32->words.w1 = 0;
             temp_a1_32->words.w0 = 0xE7000000;
             temp_a1_33 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_33 + 8;
+            temp_s0->overlay.p = &temp_a1_33[1];
             temp_a1_33->words.w0 = 0xFCFF97FF;
             temp_a1_33->words.w1 = 0xFF2DFEFF;
             sp2BC = 0;
@@ -12292,75 +12322,75 @@ block_23:
             phi_t2 = 0x2A;
             if (sp2BC != 0) {
                 temp_a1_34 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_34 + 8;
+                temp_s0->overlay.p = &temp_a1_34[1];
                 temp_a1_34->words.w1 = 0;
                 temp_a1_34->words.w0 = 0xE7000000;
                 temp_a1_35 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_35 + 8;
+                temp_s0->overlay.p = &temp_a1_35[1];
                 temp_a1_35->words.w0 = 0xFA000000;
                 temp_a1_35->words.w1 = temp_s1->unk_272 & 0xFF;
                 temp_s0->overlay.p = func_8010D7D0(temp_s0->overlay.p, (sp2BC << 7) + &D_020044A0, 8, 0x10, (s16) 0x2B, (s16) 0xBF, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400);
                 temp_a1_36 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_36 + 8;
+                temp_s0->overlay.p = &temp_a1_36[1];
                 temp_a1_36->words.w1 = 0;
                 temp_a1_36->words.w0 = 0xE7000000;
                 temp_a1_37 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_37 + 8;
+                temp_s0->overlay.p = &temp_a1_37[1];
                 temp_a1_37->words.w0 = 0xFA000000;
                 temp_a1_37->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
                 temp_a1_38 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_38 + 8;
+                temp_s0->overlay.p = &temp_a1_38[1];
                 temp_a1_38->words.w0 = 0xE40C8338;
                 temp_a1_38->words.w1 = 0xA82F8;
                 temp_a1_39 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_39 + 8;
+                temp_s0->overlay.p = &temp_a1_39[1];
                 temp_a1_39->words.w1 = 0;
                 temp_a1_39->words.w0 = 0xE1000000;
                 temp_a1_40 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_40 + 8;
+                temp_s0->overlay.p = &temp_a1_40[1];
                 temp_a1_40->words.w1 = 0x4000400;
                 temp_a1_40->words.w0 = 0xF1000000;
                 phi_t2 = 0x32;
             }
             temp_a1_41 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_41 + 8;
+            temp_s0->overlay.p = &temp_a1_41[1];
             temp_a1_41->words.w1 = 0;
             temp_a1_41->words.w0 = 0xE7000000;
             temp_a1_42 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_42 + 8;
+            temp_s0->overlay.p = &temp_a1_42[1];
             temp_a1_42->words.w0 = 0xFA000000;
             temp_a1_42->words.w1 = temp_s1->unk_272 & 0xFF;
             sp2CA = phi_t2;
             temp_s0->overlay.p = func_8010D7D0(temp_s0->overlay.p, (sp2BE << 7) + &D_020044A0, 8, 0x10, (s16) (phi_t2 + 1), (s16) 0xBF, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400);
             temp_a1_43 = temp_s0->overlay.p;
             temp_v1_4 = phi_t2 * 4;
-            temp_s0->overlay.p = temp_a1_43 + 8;
+            temp_s0->overlay.p = &temp_a1_43[1];
             temp_a1_43->words.w1 = 0;
             temp_a1_43->words.w0 = 0xE7000000;
             temp_a1_44 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_44 + 8;
+            temp_s0->overlay.p = &temp_a1_44[1];
             temp_a1_44->words.w0 = 0xFA000000;
             temp_a1_44->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
             temp_a1_45 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_45 + 8;
+            temp_s0->overlay.p = &temp_a1_45[1];
             temp_a1_45->words.w1 = ((temp_v1_4 & 0xFFF) << 0xC) | 0x2F8;
             temp_a1_45->words.w0 = (((temp_v1_4 + 0x20) & 0xFFF) << 0xC) | 0xE4000000 | 0x338;
             temp_a1_46 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_46 + 8;
+            temp_s0->overlay.p = &temp_a1_46[1];
             temp_a1_46->words.w1 = 0;
             temp_a1_46->words.w0 = 0xE1000000;
             temp_a1_47 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_47 + 8;
+            temp_s0->overlay.p = &temp_a1_47[1];
             temp_a1_47->words.w1 = 0x4000400;
             temp_a1_47->words.w0 = 0xF1000000;
             break;
         }
         temp_a1_67 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_67 + 8;
+        temp_s0->overlay.p = &temp_a1_67[1];
         temp_a1_67->words.w1 = 0;
         temp_a1_67->words.w0 = 0xE7000000;
         temp_a1_68 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_68 + 8;
+        temp_s0->overlay.p = &temp_a1_68[1];
         temp_a1_68->words.w0 = 0xFCFF97FF;
         temp_a1_68->words.w1 = 0xFF2DFEFF;
         temp_v0_8 = gSaveContext.rupees;
@@ -12398,7 +12428,7 @@ block_23:
             sp2BC = temp_v0_10;
         }
         temp_v1_9 = temp_s1->unk_272;
-        temp_v0_11 = ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]) * 2;
+        temp_v0_11 = ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) * 2;
         temp_t4 = *(&D_801BFD24 + temp_v0_11);
         phi_t4 = temp_t4;
         phi_t0 = *(&D_801BFD1C + temp_v0_11);
@@ -12412,11 +12442,11 @@ block_23:
             phi_t3 = phi_v1_4 & 0xFF;
             do {
                 temp_a1_69 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_69 + 8;
+                temp_s0->overlay.p = &temp_a1_69[1];
                 temp_a1_69->words.w1 = 0;
                 temp_a1_69->words.w0 = 0xE7000000;
                 temp_a1_70 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_70 + 8;
+                temp_s0->overlay.p = &temp_a1_70[1];
                 temp_a1_70->words.w1 = phi_t3;
                 temp_a1_70->words.w0 = 0xFA000000;
                 sp2C8 = phi_t4;
@@ -12426,38 +12456,38 @@ block_23:
                 sp2CC = phi_t0;
                 temp_s0->overlay.p = func_8010D7D0(temp_s0->overlay.p, ((sp + (phi_t0 * 2))->unk_2B8 << 7) + &D_020044A0, 8, 0x10, (s16) (phi_t2_3 + 1), (s16) 0xCF, (s16) 8, (s16) 0x10, (u16) 0x400, (u16) 0x400);
                 temp_a1_71 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_71 + 8;
+                temp_s0->overlay.p = &temp_a1_71[1];
                 temp_a1_71->words.w1 = 0;
                 temp_a1_71->words.w0 = 0xE7000000;
                 temp_v0_12 = gSaveContext.rupees;
                 temp_t1 = phi_t1 + 1;
                 temp_v1_10 = phi_t2_3 * 4;
-                if (temp_v0_12 == (*(gUpgradeCapacities + 0x18))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]]) {
+                if (temp_v0_12 == gUpgradeCapacities[3][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]]) {
                     temp_a1_72 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_72 + 8;
+                    temp_s0->overlay.p = &temp_a1_72[1];
                     temp_a1_72->words.w0 = 0xFA000000;
                     temp_a1_72->words.w1 = (temp_s1->unk_272 & 0xFF) | 0x78FF0000;
                 } else if (temp_v0_12 != 0) {
                     temp_a1_73 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_73 + 8;
+                    temp_s0->overlay.p = &temp_a1_73[1];
                     temp_a1_73->words.w0 = 0xFA000000;
                     temp_a1_73->words.w1 = (temp_s1->unk_272 & 0xFF) | ~0xFF;
                 } else {
                     temp_a1_74 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_74 + 8;
+                    temp_s0->overlay.p = &temp_a1_74[1];
                     temp_a1_74->words.w0 = 0xFA000000;
                     temp_a1_74->words.w1 = (temp_s1->unk_272 & 0xFF) | 0x64646400;
                 }
                 temp_a1_75 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_75 + 8;
+                temp_s0->overlay.p = &temp_a1_75[1];
                 temp_a1_75->words.w1 = ((temp_v1_10 & 0xFFF) << 0xC) | 0x338;
                 temp_a1_75->words.w0 = (((temp_v1_10 + 0x20) & 0xFFF) << 0xC) | 0xE4000000 | 0x378;
                 temp_a1_76 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_76 + 8;
+                temp_s0->overlay.p = &temp_a1_76[1];
                 temp_a1_76->words.w1 = 0;
                 temp_a1_76->words.w0 = 0xE1000000;
                 temp_a1_77 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_77 + 8;
+                temp_s0->overlay.p = &temp_a1_77[1];
                 temp_a1_77->words.w1 = 0x4000400;
                 temp_a1_77->words.w0 = 0xF1000000;
                 phi_t2_3 = (s16) (phi_t2_3 + 8);
@@ -12470,7 +12500,7 @@ block_23:
         func_8010A54C(arg0);
         temp_v0_13 = gGameInfo->data[190];
         if ((temp_v0_13 != 2) && (temp_v0_13 != 3)) {
-            func_800B5208((TargetContext *) (arg0 + 0x1DC0), (GlobalContext *) arg0);
+            func_800B5208((TargetContext *) &arg0[1904], (GlobalContext *) arg0);
         }
         func_8012C654(arg0->unk_0);
         func_80117100(arg0);
@@ -12487,32 +12517,32 @@ block_23:
                     temp_t1_2 = ((s32) temp_v1_11 >> 1) - 1;
                     sp2C0 = (f32) temp_s1->unk_284 / 100.0f;
                     if (temp_t1_2 == 3) {
-                        temp_s1->unk_168->unk_2A0 = -0x14;
-                        temp_v0_14 = temp_s1->unk_168;
+                        temp_s1[1].magic->unk_2A0 = -0x14;
+                        temp_v0_14 = temp_s1[1].magic;
                         temp_v0_14->unk_280 = (s16) temp_v0_14->unk_2A0;
-                        temp_v0_15 = temp_s1->unk_168;
+                        temp_v0_15 = temp_s1[1].magic;
                         temp_a0_5 = temp_v0_15->unk_280 + 0x28;
                         temp_v0_15->unk_2B0 = temp_a0_5;
-                        temp_s1->unk_168->unk_290 = temp_a0_5;
-                        temp_s1->unk_168->unk_2B8 = 0x500;
-                        temp_v0_16 = temp_s1->unk_168;
+                        temp_s1[1].magic->unk_290 = temp_a0_5;
+                        temp_s1[1].magic->unk_2B8 = 0x500;
+                        temp_v0_16 = temp_s1[1].magic;
                         temp_v0_16->unk_298 = (s16) temp_v0_16->unk_2B8;
                     }
-                    temp_s1->unk_168->unk_2BA = 0x400;
-                    temp_v0_17 = temp_s1->unk_168;
+                    temp_s1[1].magic->unk_2BA = 0x400;
+                    temp_v0_17 = temp_s1[1].magic;
                     temp_v0_17->unk_2AA = (s16) temp_v0_17->unk_2BA;
                     sp2CE = temp_t1_2;
                     func_8012C8D4(arg0->unk_0);
                     temp_a1_78 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_78 + 8;
+                    temp_s0->overlay.p = &temp_a1_78[1];
                     temp_a1_78->words.w0 = 0xFC119623;
                     temp_a1_78->words.w1 = 0xFF2FFFFF;
                     temp_a1_79 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_79 + 8;
+                    temp_s0->overlay.p = &temp_a1_79[1];
                     temp_a1_79->words.w1 = 1;
                     temp_a1_79->words.w0 = 0xE2001E01;
                     temp_a1_80 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_80 + 8;
+                    temp_s0->overlay.p = &temp_a1_80[1];
                     temp_v0_18 = (temp_t1_2 * 6) + &D_801BFD6C;
                     temp_a1_80->words.w0 = 0xFA000000;
                     temp_a1_80->words.w1 = ((temp_v0_18->unk_4 & 0xFF) << 8) | (temp_v0_18->unk_0 << 0x18) | ((temp_v0_18->unk_2 & 0xFF) << 0x10) | (temp_s1->unk_282 & 0xFF);
@@ -12520,15 +12550,15 @@ block_23:
                     SysMatrix_InsertTranslation(0.0f, -40.0f, 0.0f, 0);
                     Matrix_Scale(sp2C0, sp2C0, 0.0f, 1);
                     temp_a1_81 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_81 + 8;
+                    temp_s0->overlay.p = &temp_a1_81[1];
                     temp_a1_81->words.w0 = 0xDA380003;
                     sp2CE = temp_t1_2;
                     sp16C = temp_a1_81;
                     sp16C->words.w1 = Matrix_NewMtx(arg0->unk_0);
                     temp_a1_82 = temp_s0->overlay.p;
-                    temp_s0->overlay.p = temp_a1_82 + 8;
+                    temp_s0->overlay.p = &temp_a1_82[1];
                     temp_a1_82->words.w0 = 0x1004008;
-                    temp_a1_82->words.w1 = (u32) (temp_s1->unk_168 + 0x280);
+                    temp_a1_82->words.w1 = temp_s1[1].magic + 0x280;
                     temp_s0->overlay.p = func_8010DC58(temp_s0->overlay.p, *(&D_801BFD54 + (temp_t1_2 * 4)), *(&D_801BFD64 + (temp_t1_2 * 2)), 0x20, (u16) 0);
                 }
             } else {
@@ -12548,187 +12578,187 @@ block_23:
         arg0 = arg0;
         func_8012C654(temp_a0_6);
         temp_a1_83 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_83 + 8;
+        temp_s0->overlay.p = &temp_a1_83[1];
         temp_a1_83->words.w1 = 1;
         temp_a1_83->words.w0 = 0xE2001E01;
         temp_a1_84 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_84 + 8;
+        temp_s0->overlay.p = &temp_a1_84[1];
         temp_a1_84->words.w0 = 0xE200001C;
         temp_a1_84->words.w1 = 0x504240;
         temp_a1_85 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_85 + 8;
+        temp_s0->overlay.p = &temp_a1_85[1];
         temp_a1_85->words.w0 = 0xFC119623;
         temp_a1_85->words.w1 = 0xFF2FFFFF;
         temp_a1_86 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_86 + 8;
+        temp_s0->overlay.p = &temp_a1_86[1];
         temp_a1_86->words.w1 = -0x6401;
         temp_a1_86->words.w0 = 0xFA000000;
         temp_a1_87 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_87 + 8;
+        temp_s0->overlay.p = &temp_a1_87[1];
         temp_a1_87->words.w0 = 0xFD700000;
         temp_a1_87->words.w1 = (u32) &D_020043A0;
         temp_a1_88 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_88 + 8;
+        temp_s0->overlay.p = &temp_a1_88[1];
         temp_a1_88->words.w0 = 0xF5700000;
         temp_a1_88->words.w1 = 0x7050140;
         temp_a1_89 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_89 + 8;
+        temp_s0->overlay.p = &temp_a1_89[1];
         temp_a1_89->words.w1 = 0;
         temp_a1_89->words.w0 = 0xE6000000;
         temp_a1_90 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_90 + 8;
+        temp_s0->overlay.p = &temp_a1_90[1];
         temp_a1_90->words.w1 = 0x703F800;
         temp_a1_90->words.w0 = 0xF3000000;
         temp_a1_91 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_91 + 8;
+        temp_s0->overlay.p = &temp_a1_91[1];
         temp_a1_91->words.w1 = 0;
         temp_a1_91->words.w0 = 0xE7000000;
         temp_a1_92 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_92 + 8;
+        temp_s0->overlay.p = &temp_a1_92[1];
         temp_a1_92->words.w0 = 0xF5600200;
         temp_a1_92->words.w1 = 0x50140;
         temp_a1_93 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_93 + 8;
+        temp_s0->overlay.p = &temp_a1_93[1];
         temp_a1_93->words.w0 = 0xF2000000;
         temp_a1_93->words.w1 = 0x3C03C;
         temp_a1_94 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_94 + 8;
+        temp_s0->overlay.p = &temp_a1_94[1];
         temp_v0_20 = gGameInfo;
         temp_a1_94->words.w0 = (((temp_v0_20->data[609] * 4) + 0x40) & 0xFFF) | 0xE4000000 | ((((temp_v0_20->data[608] * 4) + 0x40) & 0xFFF) << 0xC);
         temp_v0_21 = gGameInfo;
         temp_a1_94->words.w1 = ((temp_v0_21->data[609] * 4) & 0xFFF) | (((temp_v0_21->data[608] * 4) & 0xFFF) << 0xC);
         temp_a1_95 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_95 + 8;
+        temp_s0->overlay.p = &temp_a1_95[1];
         temp_a1_95->words.w1 = 0;
         temp_a1_95->words.w0 = 0xE1000000;
         temp_a1_96 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_96 + 8;
+        temp_s0->overlay.p = &temp_a1_96[1];
         temp_a1_96->words.w1 = 0x4000400;
         temp_a1_96->words.w0 = 0xF1000000;
         temp_a1_97 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_97 + 8;
+        temp_s0->overlay.p = &temp_a1_97[1];
         temp_v0_22 = gGameInfo;
         temp_a1_97->words.w0 = (((temp_v0_22->data[611] * 4) + 0x40) & 0xFFF) | 0xE4000000 | ((((temp_v0_22->data[610] * 4) + 0x40) & 0xFFF) << 0xC);
         temp_v0_23 = gGameInfo;
         temp_a1_97->words.w1 = ((temp_v0_23->data[611] * 4) & 0xFFF) | (((temp_v0_23->data[610] * 4) & 0xFFF) << 0xC);
         temp_a1_98 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_98 + 8;
+        temp_s0->overlay.p = &temp_a1_98[1];
         temp_a1_98->words.w1 = 0x2000000;
         temp_a1_98->words.w0 = 0xE1000000;
         temp_a1_99 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_99 + 8;
+        temp_s0->overlay.p = &temp_a1_99[1];
         temp_a1_99->words.w1 = 0x4000400;
         temp_a1_99->words.w0 = 0xF1000000;
         temp_a1_100 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_100 + 8;
+        temp_s0->overlay.p = &temp_a1_100[1];
         temp_v0_24 = gGameInfo;
         temp_a1_100->words.w0 = (((temp_v0_24->data[613] * 4) + 0x40) & 0xFFF) | 0xE4000000 | ((((temp_v0_24->data[612] * 4) + 0x40) & 0xFFF) << 0xC);
         temp_v0_25 = gGameInfo;
         temp_a1_100->words.w1 = ((temp_v0_25->data[613] * 4) & 0xFFF) | (((temp_v0_25->data[612] * 4) & 0xFFF) << 0xC);
         temp_a1_101 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_101 + 8;
+        temp_s0->overlay.p = &temp_a1_101[1];
         temp_a1_101->words.w1 = 0x200;
         temp_a1_101->words.w0 = 0xE1000000;
         temp_a1_102 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_102 + 8;
+        temp_s0->overlay.p = &temp_a1_102[1];
         temp_a1_102->words.w1 = 0x4000400;
         temp_a1_102->words.w0 = 0xF1000000;
         temp_a1_103 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_103 + 8;
+        temp_s0->overlay.p = &temp_a1_103[1];
         temp_v0_26 = gGameInfo;
         temp_a1_103->words.w0 = (((temp_v0_26->data[615] * 4) + 0x40) & 0xFFF) | 0xE4000000 | ((((temp_v0_26->data[614] * 4) + 0x40) & 0xFFF) << 0xC);
         temp_v0_27 = gGameInfo;
         temp_a1_103->words.w1 = ((temp_v0_27->data[615] * 4) & 0xFFF) | (((temp_v0_27->data[614] * 4) & 0xFFF) << 0xC);
         temp_a1_104 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_104 + 8;
+        temp_s0->overlay.p = &temp_a1_104[1];
         temp_a1_104->words.w1 = 0x2000200;
         temp_a1_104->words.w0 = 0xE1000000;
         temp_a1_105 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_105 + 8;
+        temp_s0->overlay.p = &temp_a1_105[1];
         temp_a1_105->words.w1 = 0x4000400;
         temp_a1_105->words.w0 = 0xF1000000;
         temp_a1_106 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_106 + 8;
+        temp_s0->overlay.p = &temp_a1_106[1];
         temp_a1_106->words.w1 = (u32) &D_020042A0;
         temp_a1_106->words.w0 = 0xFD900000;
         temp_a1_107 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_107 + 8;
+        temp_s0->overlay.p = &temp_a1_107[1];
         temp_a1_107->words.w1 = 0x7000000;
         temp_a1_107->words.w0 = 0xF5900000;
         temp_a1_108 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_108 + 8;
+        temp_s0->overlay.p = &temp_a1_108[1];
         temp_a1_108->words.w1 = 0;
         temp_a1_108->words.w0 = 0xE6000000;
         temp_a1_109 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_109 + 8;
+        temp_s0->overlay.p = &temp_a1_109[1];
         temp_a1_109->words.w1 = 0x707F400;
         temp_a1_109->words.w0 = 0xF3000000;
         temp_a1_110 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_110 + 8;
+        temp_s0->overlay.p = &temp_a1_110[1];
         temp_a1_110->words.w1 = 0;
         temp_a1_110->words.w0 = 0xE7000000;
         temp_a1_111 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_111 + 8;
+        temp_s0->overlay.p = &temp_a1_111[1];
         temp_a1_111->words.w1 = 0;
         temp_a1_111->words.w0 = 0xF5800400;
         temp_a1_112 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_112 + 8;
+        temp_s0->overlay.p = &temp_a1_112[1];
         temp_a1_112->words.w1 = 0x7C03C;
         temp_a1_112->words.w0 = 0xF2000000;
         temp_a1_113 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_113 + 8;
+        temp_s0->overlay.p = &temp_a1_113[1];
         temp_v0_28 = gGameInfo;
         temp_a1_113->words.w0 = (((temp_v0_28->data[617] * 4) + 0x40) & 0xFFF) | 0xE4000000 | ((((temp_v0_28->data[616] * 4) + 0x80) & 0xFFF) << 0xC);
         temp_v0_29 = gGameInfo;
         temp_a1_113->words.w1 = ((temp_v0_29->data[617] * 4) & 0xFFF) | (((temp_v0_29->data[616] * 4) & 0xFFF) << 0xC);
         temp_a1_114 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_114 + 8;
+        temp_s0->overlay.p = &temp_a1_114[1];
         temp_a1_114->words.w1 = 0;
         temp_a1_114->words.w0 = 0xE1000000;
         temp_a1_115 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_115 + 8;
+        temp_s0->overlay.p = &temp_a1_115[1];
         temp_a1_115->words.w1 = 0x4000400;
         temp_a1_115->words.w0 = 0xF1000000;
         temp_a1_116 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_116 + 8;
+        temp_s0->overlay.p = &temp_a1_116[1];
         temp_a1_116->words.w0 = 0xFD900000;
         temp_a1_116->words.w1 = (u32) &D_02004420;
         temp_a1_117 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_117 + 8;
+        temp_s0->overlay.p = &temp_a1_117[1];
         temp_a1_117->words.w1 = 0x7000000;
         temp_a1_117->words.w0 = 0xF5900000;
         temp_a1_118 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_118 + 8;
+        temp_s0->overlay.p = &temp_a1_118[1];
         temp_a1_118->words.w1 = 0;
         temp_a1_118->words.w0 = 0xE6000000;
         temp_a1_119 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_119 + 8;
+        temp_s0->overlay.p = &temp_a1_119[1];
         temp_a1_119->words.w1 = 0x703F400;
         temp_a1_119->words.w0 = 0xF3000000;
         temp_a1_120 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_120 + 8;
+        temp_s0->overlay.p = &temp_a1_120[1];
         temp_a1_120->words.w1 = 0;
         temp_a1_120->words.w0 = 0xE7000000;
         temp_a1_121 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_121 + 8;
+        temp_s0->overlay.p = &temp_a1_121[1];
         temp_a1_121->words.w1 = 0;
         temp_a1_121->words.w0 = 0xF5800400;
         temp_a1_122 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_122 + 8;
+        temp_s0->overlay.p = &temp_a1_122[1];
         temp_a1_122->words.w1 = 0x7C01C;
         temp_a1_122->words.w0 = 0xF2000000;
         temp_a1_123 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_123 + 8;
+        temp_s0->overlay.p = &temp_a1_123[1];
         temp_v0_30 = gGameInfo;
         temp_a1_123->words.w0 = (((temp_v0_30->data[619] * 4) + 0x20) & 0xFFF) | 0xE4000000 | ((((temp_v0_30->data[618] * 4) + 0x80) & 0xFFF) << 0xC);
         temp_v0_31 = gGameInfo;
         temp_a1_123->words.w1 = ((temp_v0_31->data[619] * 4) & 0xFFF) | (((temp_v0_31->data[618] * 4) & 0xFFF) << 0xC);
         temp_a1_124 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_124 + 8;
+        temp_s0->overlay.p = &temp_a1_124[1];
         temp_a1_124->words.w1 = 0;
         temp_a1_124->words.w0 = 0xE1000000;
         temp_a1_125 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_125 + 8;
+        temp_s0->overlay.p = &temp_a1_125[1];
         temp_a1_125->words.w1 = 0x4000400;
         temp_a1_125->words.w0 = 0xF1000000;
         phi_v0_7 = (s32) D_801BF884;
@@ -12754,50 +12784,50 @@ block_23:
                 arg0 = (GraphicsContext **) (SaveContext *) arg0;
                 func_801518B0((GlobalContext *) (SaveContext *) arg0, 0xF8U, NULL);
                 Interface_ChangeAlpha(1U);
-                sp2D4->unk_A6C = (s32) (sp2D4->unk_A6C | 0x200);
+                sp2D4[3].unk_19C |= 0x200;
                 phi_a3 = arg0;
             }
             temp_a1_126 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_126 + 8;
+            temp_s0->overlay.p = &temp_a1_126[1];
             temp_a1_126->words.w1 = 0;
             temp_a1_126->words.w0 = 0xE7000000;
             temp_a1_127 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_127 + 8;
+            temp_s0->overlay.p = &temp_a1_127[1];
             temp_a1_127->words.w0 = 0xE200001C;
             temp_a1_127->words.w1 = 0x504240;
             temp_a1_128 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_128 + 8;
+            temp_s0->overlay.p = &temp_a1_128[1];
             temp_a1_128->words.w0 = 0xFCFFFFFF;
             temp_a1_128->words.w1 = 0xFFFDF6FB;
             temp_a1_129 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_129 + 8;
+            temp_s0->overlay.p = &temp_a1_129[1];
             temp_a1_129->words.w0 = 0xFA000000;
             temp_a1_129->words.w1 = 0xC8C8C8FA;
             temp_a1_130 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_130 + 8;
+            temp_s0->overlay.p = &temp_a1_130[1];
             temp_a1_130->words.w0 = 0xF63EC25C;
             temp_a1_130->words.w1 = 0x118058;
             arg0 = phi_a3;
             func_8012C654(*phi_a3);
             temp_a1_131 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_131 + 8;
+            temp_s0->overlay.p = &temp_a1_131[1];
             temp_a1_131->words.w0 = 0xE200001C;
             temp_a1_131->words.w1 = 0xF0A4000;
             temp_a1_132 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_132 + 8;
+            temp_s0->overlay.p = &temp_a1_132[1];
             temp_a1_132->words.w1 = -0x805;
             temp_a1_132->words.w0 = 0xFC11FE23;
             temp_a1_133 = temp_s0->overlay.p;
-            temp_s0->overlay.p = temp_a1_133 + 8;
+            temp_s0->overlay.p = &temp_a1_133[1];
             temp_a1_133->words.w0 = 0xFA000000;
             temp_a1_133->words.w1 = 0xFAA0A0FF;
             phi_t0_2 = 0;
             phi_a2 = 0x1F;
             do {
                 temp_v1_12 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_v1_12 + 8;
+                temp_s0->overlay.p = &temp_v1_12[1];
                 temp_v1_12->words.w0 = 0xFD900000;
-                temp_v0_33 = arg0->unk_18E5C;
+                temp_v0_33 = arg0[25495];
                 temp_t0 = phi_t0_2 + 1;
                 if (temp_v0_33 != 0) {
                     phi_a0_3 = temp_v0_33;
@@ -12806,40 +12836,40 @@ block_23:
                 }
                 temp_v1_12->words.w1 = phi_a0_3 + (phi_t0_2 * 0x500);
                 temp_a1_134 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_134 + 8;
+                temp_s0->overlay.p = &temp_a1_134[1];
                 temp_a1_134->words.w1 = 0x7000000;
                 temp_a1_134->words.w0 = 0xF5900000;
                 temp_a1_135 = temp_s0->overlay.p;
                 temp_v1_13 = phi_a2 * 4;
-                temp_s0->overlay.p = temp_a1_135 + 8;
+                temp_s0->overlay.p = &temp_a1_135[1];
                 temp_a1_135->words.w1 = 0;
                 temp_a1_135->words.w0 = 0xE6000000;
                 temp_a1_136 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_136 + 8;
+                temp_s0->overlay.p = &temp_a1_136[1];
                 temp_a1_136->words.w1 = 0x727F067;
                 temp_a1_136->words.w0 = 0xF3000000;
                 temp_a1_137 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_137 + 8;
+                temp_s0->overlay.p = &temp_a1_137[1];
                 temp_a1_137->words.w1 = 0;
                 temp_a1_137->words.w0 = 0xE7000000;
                 temp_a1_138 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_138 + 8;
+                temp_s0->overlay.p = &temp_a1_138[1];
                 temp_a1_138->words.w1 = 0;
                 temp_a1_138->words.w0 = 0xF5882800;
                 temp_a1_139 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_139 + 8;
+                temp_s0->overlay.p = &temp_a1_139[1];
                 temp_a1_139->words.w1 = 0x27C01C;
                 temp_a1_139->words.w0 = 0xF2000000;
                 temp_a1_140 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_140 + 8;
+                temp_s0->overlay.p = &temp_a1_140[1];
                 temp_a1_140->words.w1 = 0x140000 | (temp_v1_13 & 0xFFF);
                 temp_a1_140->words.w0 = 0xE43C0000 | ((temp_v1_13 + 0x20) & 0xFFF);
                 temp_a1_141 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_141 + 8;
+                temp_s0->overlay.p = &temp_a1_141[1];
                 temp_a1_141->words.w1 = 0;
                 temp_a1_141->words.w0 = 0xE1000000;
                 temp_a1_142 = temp_s0->overlay.p;
-                temp_s0->overlay.p = temp_a1_142 + 8;
+                temp_s0->overlay.p = &temp_a1_142[1];
                 temp_a1_142->words.w1 = 0x4000400;
                 temp_a1_142->words.w0 = 0xF1000000;
                 phi_t0_2 = temp_t0;
@@ -12849,19 +12879,19 @@ block_23:
     }
     if (temp_s1->unk_264 != 0) {
         temp_a1_143 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_143 + 8;
+        temp_s0->overlay.p = &temp_a1_143[1];
         temp_a1_143->words.w1 = 0;
         temp_a1_143->words.w0 = 0xE7000000;
         temp_a1_144 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_144 + 8;
+        temp_s0->overlay.p = &temp_a1_144[1];
         temp_a1_144->words.w1 = (u32) &D_801BF988;
         temp_a1_144->words.w0 = 0xDE000000;
         temp_a1_145 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_145 + 8;
+        temp_s0->overlay.p = &temp_a1_145[1];
         temp_a1_145->words.w0 = 0xFA000000;
         temp_a1_145->words.w1 = temp_s1->unk_264 & 0xFF;
         temp_a1_146 = temp_s0->overlay.p;
-        temp_s0->overlay.p = temp_a1_146 + 8;
+        temp_s0->overlay.p = &temp_a1_146[1];
         temp_a1_146->words.w1 = (u32) &D_0E0002E0;
         temp_a1_146->words.w0 = 0xDE000000;
     }
@@ -13139,14 +13169,14 @@ block_44:
     LifeMeter_UpdateSizeAndBeep(arg0);
     D_801BF8DC = func_801242DC(arg0);
     if (D_801BF8DC == 1) {
-        if (((s32) (gSaveContext.equips.equipment & *(gEquipMasks + 4)) >> gEquipShifts[2]) == 2) {
+        if (((s32) (gSaveContext.equips.equipment & gEquipMasks[2]) >> gEquipShifts[2]) == 2) {
             D_801BF8DC = 0;
         }
     } else {
         sp20 = phi_a3_3;
         if (func_801242DC(arg0) >= 2) {
             sp20 = phi_a3_3;
-            if ((func_801242DC(arg0) < 5) && (((s32) (gSaveContext.equips.equipment & *(gEquipMasks + 4)) >> gEquipShifts[2]) == 3)) {
+            if ((func_801242DC(arg0) < 5) && (((s32) (gSaveContext.equips.equipment & gEquipMasks[2]) >> gEquipShifts[2]) == 3)) {
                 D_801BF8DC = 0;
             }
         }
@@ -13156,7 +13186,7 @@ block_44:
     temp_v0_4 = gSaveContext.rupeeAccumulator;
     if (temp_v0_4 != 0) {
         if ((s32) temp_v0_4 > 0) {
-            temp_a0_2 = (*(gUpgradeCapacities + 0x18))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]];
+            temp_a0_2 = gUpgradeCapacities[3][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]];
             temp_v1_2 = gSaveContext.rupees;
             if ((s32) temp_v1_2 < (s32) temp_a0_2) {
                 gSaveContext.rupeeAccumulator = temp_v0_4 - 1;
@@ -13328,7 +13358,7 @@ block_93:
         phi_a3_3->unk_210 = 2;
         phi_a3_3->unk_218 = -15700.0f;
         temp_v0_8 = &arg0->msgCtx.font.fontBuf[34328];
-        if ((temp_v0_8->unk_1F22 != 0) && (temp_v0_8->unk_2006 == 0x26)) {
+        if ((temp_v0_8[7970] != 0) && (temp_v0_8->unk_2006 == 0x26)) {
             gGameInfo->data[1375] = -0xE;
             phi_a1_6 = &gGameInfo;
         } else {
@@ -13598,7 +13628,7 @@ void func_80121FC4(GlobalContext *globalCtx) {
     temp_a0_4 = temp_v0_2;
     sp24->doActionSegment = temp_v0_2;
     DmaMgr_SendRequest0((void *) temp_a0_4, (u32) _do_action_staticSegmentRomStart, 0x300U);
-    DmaMgr_SendRequest0((void *) (sp24->doActionSegment + 0x300), (u32) (_do_action_staticSegmentRomStart + 0x480), 0x180U);
+    DmaMgr_SendRequest0((void *) &sp24->doActionSegment[768], (u32) &_do_action_staticSegmentRomStart[1152], 0x180U);
     func_8010EE74(globalCtx, (s32) gSaveContext.day % 5);
     sp24->iconItemSegment = THA_AllocEndAlign16(temp_a0_2, 0x4000U);
     temp_a0_5 = gSaveContext.playerForm;

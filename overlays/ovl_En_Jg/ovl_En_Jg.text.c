@@ -172,7 +172,7 @@ s16 func_80B73B98(u8 *arg0, s32 arg1, void *arg2, f32 *arg3); /* static */
 s32 func_80B73C58(Actor *arg0, u8 *arg1, s32 arg2); /* static */
 s8 func_80B73DF4(void *arg0);                       /* static */
 void func_80B73E3C(Actor *arg0, Actor *);           /* static */
-void func_80B73F1C(EnJg *arg0, GlobalContext *arg1); /* static */
+void func_80B73F1C(void *arg0, ? arg1);             /* static */
 void func_80B7406C(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80B7408C(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80B74134(Actor *arg0, GlobalContext *arg1); /* static */
@@ -183,7 +183,7 @@ void func_80B74550(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80B747C8(void *arg0, ? arg1);             /* static */
 void func_80B74840(EnJg *arg0, GlobalContext *arg1); /* static */
 void func_80B749D0(Actor *arg0, GlobalContext *arg1); /* static */
-void func_80B74AD8(Actor *arg0, GlobalContext *arg1); /* static */
+void func_80B74AD8(void *arg0, GlobalContext *arg1); /* static */
 void func_80B74B54(Actor *arg0, ? arg1);            /* static */
 void func_80B74BC8(EnJg *arg0, GlobalContext *arg1); /* static */
 u16 func_80B74E5C(Actor *arg0);                     /* static */
@@ -294,11 +294,11 @@ void func_80B73AE4(Actor *arg0, GlobalContext *arg1) {
     GlobalContext *temp_a0;
 
     temp_a1 = arg1 + 0x18884;
-    arg0->unk_192 = (s16) (s32) arg0->world.pos.x;
+    arg0[1].focus.unk_12 = (s16) (s32) arg0->world.pos.x;
     temp_a2 = arg0 + 0x14C;
-    arg0->unk_194 = (s16) (s32) arg0->world.pos.y;
+    arg0[1].sfx = (u16) (s32) arg0->world.pos.y;
     temp_a0 = arg1;
-    arg0->unk_196 = (s16) (s32) arg0->world.pos.z;
+    arg0[1].unk_52 = (s16) (s32) arg0->world.pos.z;
     arg1 = arg1;
     sp28 = temp_a2;
     sp2C = temp_a1;
@@ -383,7 +383,7 @@ void func_80B73E3C(Actor *arg0) {
     ActorCutscene_Stop(arg0->unk_3C8);
     if (arg0->unk_3D0 == 0xA) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            arg0->unk_1DC = func_80B74134;
+            arg0[1].xzDistToPlayer = func_80B74134;
         } else {
             arg0->unk_3C8 = 0x7C;
         }
@@ -395,22 +395,22 @@ void func_80B73E3C(Actor *arg0) {
     }
     ActorCutscene_SetIntentToPlay(arg0->unk_3C8);
     temp_t9 = arg0->unk_3CE;
-    arg0->unk_1DC = func_80B741F8;
+    arg0[1].xzDistToPlayer = func_80B741F8;
     switch (temp_t9) {
     case 3536:
     case 3538:
     case 3539:
     case 3540:
     case 3542:
-        arg0->unk_3CC = (u16) (arg0->unk_3CC | 1);
+        arg0[3].id |= 1;
         return;
     default:
-        arg0->unk_3CC = (u16) (arg0->unk_3CC & 0xFFFE);
+        arg0[3].id &= 0xFFFE;
         return;
     }
 }
 
-void func_80B73F1C(EnJg *arg0, GlobalContext *arg1) {
+void func_80B73F1C(void *arg0, ? arg1) {
     u16 temp_t6;
 
     temp_t6 = arg0->unk_3CE;
@@ -418,17 +418,17 @@ void func_80B73F1C(EnJg *arg0, GlobalContext *arg1) {
     case 3500:
         arg0->unk_39E = 3;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B74550;
+        arg0->unk_1DC = func_80B74550;
         return;
     case 3501:
         arg0->unk_39E = 4;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B742F8;
+        arg0->unk_1DC = func_80B742F8;
         return;
     case 3511:
         arg0->unk_39E = 4;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B74550;
+        arg0->unk_1DC = func_80B74550;
         return;
     case 3502:
     case 3507:
@@ -438,7 +438,7 @@ void func_80B73F1C(EnJg *arg0, GlobalContext *arg1) {
     case 3524:
         arg0->unk_39E = 0;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B74550;
+        arg0->unk_1DC = func_80B74550;
         return;
     case 3504:
     case 3515:
@@ -446,13 +446,13 @@ void func_80B73F1C(EnJg *arg0, GlobalContext *arg1) {
     case 3526:
         arg0->unk_39E = 6;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B74550;
+        arg0->unk_1DC = func_80B74550;
         return;
     case 3508:
     case 3509:
         arg0->unk_39E = 2;
         func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-        arg0->actionFunc = func_80B74550;
+        arg0->unk_1DC = func_80B74550;
         /* fallthrough */
     default:
         return;
@@ -465,9 +465,9 @@ void func_80B7406C(void) {
 
 void func_80B7408C(Actor *arg0, GlobalContext *arg1) {
     if (func_800B84D0(arg0, arg1) != 0) {
-        arg0->unk_3CC = (u16) (arg0->unk_3CC | 4);
+        arg0[3].id = (u16) arg0[3].id | 4;
         func_801518B0(arg1, arg0->unk_3CE, arg0);
-        arg0->unk_1DC = func_80B74134;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B74134;
         return;
     }
     if ((arg0->xzDistToPlayer < 100.0f) || (arg0->isTargeted != 0)) {
@@ -485,8 +485,8 @@ void func_80B74134(Actor *arg0, GlobalContext *arg1) {
         if ((temp_v0 == 0xDCC) || (temp_v0 == 0xDDD) || (temp_v0 == 0xDE0)) {
             arg1->msgCtx.unk11F22 = 0x43;
             arg1->msgCtx.unk12023 = 4;
-            arg0->unk_3CC = (u16) (arg0->unk_3CC & 0xFFFB);
-            arg0->unk_1DC = func_80B7408C;
+            arg0[3].id = (u16) arg0[3].id & 0xFFFB;
+            arg0[1].xzDistToPlayer = (bitwise f32) func_80B7408C;
             return;
         }
         temp_v0_2 = func_80B74E5C(arg0);
@@ -518,12 +518,12 @@ void func_80B741F8(Actor *arg0, GlobalContext *arg1) {
             func_800E0308(arg1->cameraPtrs[0], arg0->unk_144);
             break;
         }
-        arg0->unk_1DC = func_80B74134;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B74134;
         return;
     }
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         if (arg0->unk_3D0 == 0xA) {
-            arg0->unk_1DC = func_80B74134;
+            arg0[1].xzDistToPlayer = (bitwise f32) func_80B74134;
         } else {
             ActorCutscene_Stop(0x7C);
         }
@@ -537,12 +537,12 @@ void func_80B742F8(Actor *arg0, GlobalContext *arg1) {
     s16 temp_v1;
 
     sp27 = func_80152498(arg1 + 0x4908);
-    sp24 = (s16) (s32) arg0->unk_1B0;
-    temp_v1 = arg0->unk_39E;
+    sp24 = (s16) (s32) arg0[1].velocity.z;
+    temp_v1 = arg0[2].textId;
     if (temp_v1 == 4) {
-        if (sp24 == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80B75878[arg0->unk_39E].animationSeg)) {
-            arg0->unk_39E = 5;
-            func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
+        if (sp24 == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80B75878[arg0[2].textId].animationSeg)) {
+            arg0[2].textId = 5;
+            func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0[2].textId);
             return;
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
@@ -552,10 +552,10 @@ void func_80B742F8(Actor *arg0, GlobalContext *arg1) {
         if ((sp27 == 5) && (func_80147624(arg1) != 0)) {
             arg1->msgCtx.unk11F22 = 0x43;
             arg1->msgCtx.unk12023 = 4;
-            arg0->unk_39E = 1;
-            arg0->unk_3CC = (u16) (arg0->unk_3CC & 0xFFFB);
-            func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
-            arg0->unk_1DC = func_80B74440;
+            arg0[2].textId = 1;
+            arg0[3].id &= 0xFFFB;
+            func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0[2].textId);
+            arg0[1].xzDistToPlayer = func_80B74440;
             return;
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
@@ -574,22 +574,22 @@ void func_80B74440(Actor *arg0, GlobalContext *arg1) {
     u8 *temp_t6;
     s16 phi_a1;
 
-    temp_t6 = arg0->unk_1E0;
+    temp_t6 = arg0[1].yDistToPlayer;
     sp2C = temp_t6;
     if (temp_t6 != 0) {
-        phi_a1 = func_80B73B98(temp_t6, arg0->unk_1E4, arg0 + 0x24, &sp30);
+        phi_a1 = func_80B73B98(temp_t6, arg0[1].colChkInfo.damageTable, arg0 + 0x24, &sp30);
         if ((arg0->bgCheckFlags & 8) != 0) {
             phi_a1 = arg0->wallYaw;
         }
         Math_SmoothStepToS(arg0 + 0x32, phi_a1, 4, 0x3E8, (s16) 1);
         arg0->shape.rot.y = arg0->world.rot.y;
-        if (func_80B73C58(arg0, arg0->unk_1E0, arg0->unk_1E4) != 0) {
-            temp_v0 = arg0->unk_1E4;
-            if (temp_v0 >= (*arg0->unk_1E0 - 1)) {
-                arg0->unk_39E = 1;
-                arg0->unk_1DC = func_80B742F8;
+        if (func_80B73C58(arg0, arg0[1].yDistToPlayer, arg0[1].colChkInfo.damageTable) != 0) {
+            temp_v0 = arg0[1].colChkInfo.damageTable;
+            if (temp_v0 >= (*arg0[1].yDistToPlayer - 1)) {
+                arg0[2].textId = 1;
+                arg0[1].xzDistToPlayer = func_80B742F8;
             } else {
-                arg0->unk_1E4 = (s32) (temp_v0 + 1);
+                arg0[1].colChkInfo.damageTable = temp_v0 + 1;
                 Math_ApproachF(arg0 + 0x70, 0.5f, 0.2f, 1.0f);
             }
         } else {
@@ -665,19 +665,19 @@ void func_80B749D0(Actor *arg0, GlobalContext *arg1) {
     SkelAnime *temp_a0;
 
     temp_a1 = arg1;
-    if (arg0->unk_148->unk_138 == 0) {
-        arg0->unk_148 = NULL;
+    if (arg0[1].flags->unk_138 == 0) {
+        arg0[1].flags = NULL;
         temp_a0 = arg0 + 0x198;
-        if ((arg0->unk_39E == 8) && (sp24 = temp_a0, (func_801378B8(temp_a0, 0.0f) != 0))) {
-            arg0->unk_39E = 0;
+        if ((arg0[2].textId == 8) && (sp24 = temp_a0, (func_801378B8(temp_a0, 0.0f) != 0))) {
+            arg0[2].textId = 0;
             if (arg0->unk_3CE == 0xDAC) {
-                func_8013BC6C(temp_a0, D_80B75878, (s32) arg0->unk_39E);
-                arg0->unk_1DC = func_80B7406C;
+                func_8013BC6C(temp_a0, D_80B75878, (s32) arg0[2].textId);
+                arg0[1].xzDistToPlayer = func_80B7406C;
                 return;
             }
-            arg0->unk_3A2 = 0x3E8;
-            func_8013BC6C(temp_a0, D_80B75878, (s32) arg0->unk_39E);
-            arg0->unk_1DC = func_80B74440;
+            arg0[2].colorFilterParams = 0x3E8;
+            func_8013BC6C(temp_a0, D_80B75878, (s32) arg0[2].textId);
+            arg0[1].xzDistToPlayer = func_80B74440;
             return;
         }
         /* Duplicate return node #10. Try simplifying control flow for better match */
@@ -686,7 +686,7 @@ void func_80B749D0(Actor *arg0, GlobalContext *arg1) {
     arg1 = arg1;
     if (func_800B84D0(arg0, temp_a1) != 0) {
         func_801518B0(arg1, 0x236U, arg0);
-        arg0->unk_1DC = func_80B74AD8;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B74AD8;
         return;
     }
     if (arg0->isTargeted != 0) {
@@ -694,7 +694,7 @@ void func_80B749D0(Actor *arg0, GlobalContext *arg1) {
     }
 }
 
-void func_80B74AD8(Actor *arg0, GlobalContext *arg1) {
+void func_80B74AD8(void *arg0, GlobalContext *arg1) {
     if ((func_80152498(arg1 + 0x4908) == 6) && (func_80147624(arg1) != 0)) {
         arg1->msgCtx.unk11F22 = 0x43;
         arg1->msgCtx.unk12023 = 4;
@@ -705,7 +705,7 @@ void func_80B74AD8(Actor *arg0, GlobalContext *arg1) {
 void func_80B74B54(Actor *arg0, ? arg1) {
     if (ActorCutscene_GetCanPlayNext(arg0->unk_3C8) != 0) {
         ActorCutscene_Start(arg0->unk_3C8, arg0);
-        arg0->unk_1DC = func_80B74BC8;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B74BC8;
         return;
     }
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -841,7 +841,7 @@ u16 func_80B74E5C(Actor *arg0) {
         }
         arg0 = arg0;
         ActorCutscene_SetIntentToPlay(arg0->unk_3C8);
-        arg0->unk_1DC = func_80B741F8;
+        arg0[1].xzDistToPlayer = func_80B741F8;
         return 0xDD0U;
     case 3536:
         func_80B73E3C(temp_a1, temp_a1);
@@ -884,7 +884,7 @@ u16 func_80B74E5C(Actor *arg0) {
         temp_a1->unk_3D0 = 0xAU;
         arg0 = temp_a1;
         func_80B73E3C(temp_a1, temp_a1);
-        arg0->unk_3CC = (u16) (arg0->unk_3CC & 0xFFFE);
+        arg0[3].id &= 0xFFFE;
         return 0xDD8U;
     case 3544:
         return 0xDD9U;
@@ -909,7 +909,7 @@ u16 func_80B750A0(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg1->actorCtx.actorList[2].first;
     if ((arg0->params & 1) == 0) {
         if (temp_v0->unk_14B == 1) {
-            if (((gSaveContext.weekEventReg[24] & 0x10) != 0) || (temp_v1 = gSaveContext.inventory.questItems, ((gBitFlags->unk_1C & temp_v1) != 0)) || ((gBitFlags->unk_60 & temp_v1) != 0)) {
+            if (((gSaveContext.weekEventReg[24] & 0x10) != 0) || (temp_v1 = gSaveContext.inventory.questItems, ((gBitFlags[7] & temp_v1) != 0)) || ((gBitFlags[24] & temp_v1) != 0)) {
                 return 0xDBCU;
             }
             return 0xDB6U;
@@ -939,14 +939,14 @@ void func_80B751F8(Actor *arg0, GlobalContext *arg1) {
     s16 sp24;
     u16 temp_a1;
 
-    sp26 = (s16) (s32) arg0->unk_1B0;
-    sp24 = SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80B75878[arg0->unk_39E].animationSeg);
+    sp26 = (s16) (s32) arg0[1].velocity.z;
+    sp24 = SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80B75878[arg0[2].textId].animationSeg);
     if (func_800B84D0(arg0, arg1) != 0) {
         temp_a1 = arg0->unk_3CE;
-        arg0->unk_3CC = (u16) (arg0->unk_3CC | 4);
+        arg0[3].id = (u16) arg0[3].id | 4;
         arg0->speedXZ = 0.0f;
         if (temp_a1 == 0xDAC) {
-            arg0->unk_3A0 = 0;
+            arg0[2].freezeTimer = 0;
             goto block_7;
         }
         if (temp_a1 == 0xDAE) {
@@ -958,21 +958,21 @@ void func_80B751F8(Actor *arg0, GlobalContext *arg1) {
 block_7:
         }
         func_801518B0(arg1, arg0->unk_3CE, arg0);
-        arg0->unk_1DC = func_80B73F1C;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B73F1C;
         return;
     }
     if ((arg0->xzDistToPlayer < 100.0f) || (arg0->isTargeted != 0)) {
         func_800B863C(arg0, arg1);
-        if (arg0->unk_3A0 == 0) {
+        if ((s16) arg0[2].freezeTimer == 0) {
             arg0->unk_3CE = func_80B750A0(arg0, arg1);
         }
     }
-    arg0->unk_3A2 = (s16) (arg0->unk_3A2 - 1);
-    if (((s32) arg0->unk_3A2 <= 0) && (sp26 == sp24)) {
-        arg0->unk_39E = 7;
-        func_8013BC6C(arg0 + 0x198, D_80B75878, (s32) arg0->unk_39E);
+    arg0[2].colorFilterParams = (s16) arg0[2].colorFilterParams - 1;
+    if (((s32) (s16) arg0[2].colorFilterParams <= 0) && (sp26 == sp24)) {
+        arg0[2].textId = 7;
+        func_8013BC6C((SkelAnime *) &arg0[1].targetArrowOffset, D_80B75878, (s32) (s16) arg0[2].textId);
         func_8019F1C0(&D_80B759A8, 0x295CU);
-        arg0->unk_1DC = func_80B74840;
+        arg0[1].xzDistToPlayer = (bitwise f32) func_80B74840;
     }
 }
 
@@ -1042,12 +1042,12 @@ void EnJg_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80B75658(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 1) {
-        if ((arg5->unk_3CC & 4) != 0) {
-            Math_SmoothStepToS(arg5 + 0x39C, (s16) (arg5->unk_92 - arg5->unk_BE), 5, 0x1000, (s16) 0x100);
-            Matrix_RotateY(arg5->unk_39C, 1U);
+        if ((arg5[162].x & 4) != 0) {
+            Math_SmoothStepToS(arg5 + 0x39C, (s16) (arg5[24].y - arg5[31].z), 5, 0x1000, (s16) 0x100);
+            Matrix_RotateY(arg5[154].x, 1U);
         } else {
             Math_SmoothStepToS(arg5 + 0x39C, 0, 5, 0x1000, (s16) 0x100);
-            Matrix_RotateY(arg5->unk_39C, 1U);
+            Matrix_RotateY(arg5[154].x, 1U);
         }
     }
     return 0;

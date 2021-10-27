@@ -1,3 +1,9 @@
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnFirefly_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -236,7 +242,7 @@ void EnFirefly_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 void EnFirefly_SpawnIceEffects(Actor *arg0, GlobalContext *arg1) {
     if (arg0->unk_18F == 0xA) {
         arg0->unk_18F = 0U;
-        arg0->unk_2E8 = 0.0f;
+        arg0[2].scale.z = 0.0f;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x2F8), 3, 2, 0.2f, 0.2f);
     }
 }
@@ -343,16 +349,16 @@ s32 EnFirefly_SeekTorch(Actor *arg0, GlobalContext *arg1) {
 void EnFirefly_SetupFlyIdle(Actor *arg0) {
     s32 phi_v0;
 
-    arg0->unk_190 = Rand_S16Offset(0x46, 0x64);
+    arg0[1].focus.rot.z = Rand_S16Offset(0x46, 0x64);
     arg0->speedXZ = (Rand_ZeroOne() * 1.5f) + 1.5f;
     Math_ScaledStepToS(&arg0->shape.rot.y, Actor_YawToPoint(arg0, arg0 + 8), 0x300);
     phi_v0 = -0xC00;
-    if (arg0->unk_2E4 < arg0->world.pos.y) {
+    if (arg0[2].scale.y < arg0->world.pos.y) {
         phi_v0 = 0xC00;
     }
-    arg0->unk_192 = (s16) (phi_v0 + 0x1554);
+    arg0[1].focus.unk_12 = phi_v0 + 0x1554;
     arg0->unk_160 = 1.0f;
-    arg0->unk_188 = EnFirefly_FlyIdle;
+    arg0[1].focus.pos.z = (bitwise f32) EnFirefly_FlyIdle;
 }
 
 void EnFirefly_FlyIdle(EnFirefly *this, GlobalContext *globalCtx) {
@@ -412,7 +418,7 @@ void EnFirefly_FlyIdle(EnFirefly *this, GlobalContext *globalCtx) {
 void EnFirefly_SetupFall(Actor *arg0, GlobalContext *arg1) {
     u8 temp_v0;
 
-    arg0->unk_190 = 0x28;
+    arg0[1].focus.rot.z = 0x28;
     arg0->velocity.y = 0.0f;
     SkelAnime_ChangeAnim(arg0 + 0x144, &D_0600017C, 0.0f, 6.0f, 6.0f, (u8) 2, 0.0f);
     Audio_PlayActorSound2(arg0, 0x3842U);
@@ -425,26 +431,26 @@ void EnFirefly_SetupFall(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 3) {
         arg0->unk_18F = 0xA;
-        arg0->unk_2E8 = 1.0f;
-        arg0->unk_2EC = 0.55f;
-        arg0->unk_2F0 = 0.82500005f;
+        arg0[2].scale.z = 1.0f;
+        arg0[2].velocity.x = 0.55f;
+        arg0[2].velocity.y = 0.82500005f;
     } else if (temp_v0 == 4) {
         arg0->unk_18F = 0x14;
-        arg0->unk_2E8 = 4.0f;
-        arg0->unk_2EC = 0.55f;
-        Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) arg0->unk_342, (f32) arg0->unk_344, (f32) arg0->unk_346, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
+        arg0[2].scale.z = 4.0f;
+        arg0[2].velocity.x = 0.55f;
+        Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) arg0->unk_342, (f32) arg0[2].shape.rot.x, (f32) arg0[2].shape.rot.y, (s16) 0, (s16) 0, (s16) 0, (s16) 3);
     } else if (temp_v0 == 2) {
         arg0->unk_18F = 0;
-        arg0->unk_2E8 = 4.0f;
-        arg0->unk_2EC = 0.55f;
+        arg0[2].scale.z = 4.0f;
+        arg0[2].velocity.x = 0.55f;
     }
-    if (arg0->unk_2E8 > 0.0f) {
+    if (arg0[2].scale.z > 0.0f) {
         arg0->unk_18C = 0;
     }
     if ((arg0->flags & 0x8000) != 0) {
         arg0->speedXZ = 0.0f;
     }
-    arg0->unk_188 = EnFirefly_Fall;
+    arg0[1].focus.pos.z = (bitwise f32) EnFirefly_Fall;
 }
 
 void EnFirefly_Fall(EnFirefly *this, GlobalContext *globalCtx) {
@@ -619,18 +625,18 @@ void EnFirefly_SetupStunned(Actor *arg0) {
     void (*sp2C)(EnFirefly *, GlobalContext *);
 
     if (arg0->unk_18E != 0) {
-        func_800BCB70(arg0, 0, 0xFF, 0x2000, (s16) (s32) arg0->unk_190);
+        func_800BCB70(arg0, 0, 0xFF, 0x2000, (s16) (s32) arg0[1].focus.rot.z);
     } else {
-        func_800BCB70(arg0, 0, 0xFF, 0, (s16) (s32) arg0->unk_190);
+        func_800BCB70(arg0, 0, 0xFF, 0, (s16) (s32) arg0[1].focus.rot.z);
     }
-    if (EnFirefly_Stunned != arg0->unk_188) {
+    if (EnFirefly_Stunned != (bitwise s32) arg0[1].focus.pos.z) {
         arg0->velocity.y = 0.0f;
         arg0->speedXZ = 0.0f;
     }
     arg0->unk_18C = 0;
     sp2C = EnFirefly_Stunned;
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_188 = EnFirefly_Stunned;
+    arg0[1].focus.pos.z = (bitwise f32) EnFirefly_Stunned;
 }
 
 void EnFirefly_Stunned(EnFirefly *this, GlobalContext *globalCtx) {
@@ -746,15 +752,15 @@ void EnFirefly_UpdateDamage(Actor *arg0, GlobalContext *arg1) {
         func_800BE258(temp_a0, temp_a1);
         temp_v0_2 = arg0->colChkInfo.damageEffect;
         if (temp_v0_2 == 1) {
-            arg0->unk_190 = 0x28;
+            arg0[1].focus.rot.z = 0x28;
             EnFirefly_SetupStunned(arg0);
             return;
         }
         if (temp_v0_2 == 5) {
-            arg0->unk_190 = 0x28;
+            arg0[1].focus.rot.z = 0x28;
             arg0->unk_18F = 0x1F;
-            arg0->unk_2E8 = 2.0f;
-            arg0->unk_2EC = 0.55f;
+            arg0[2].scale.z = 2.0f;
+            arg0[2].velocity.x = 0.55f;
             EnFirefly_SetupStunned(arg0);
             return;
         }
@@ -875,8 +881,8 @@ void EnFirefly_PostLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *ar
         *arg5 = temp_v1 + 8;
         temp_v1->words.w0 = 0xDE000000;
         temp_v1->words.w1 = &D_06001678;
-    } else if ((arg0->gameplayFrames != arg4->unk_2F4) && ((temp_v0 = arg4->unk_18C, (temp_v0 == 1)) || (temp_v0 == 2)) && ((arg1 == 0xF) || (arg1 == 0x15))) {
-        if (EnFirefly_Die != arg4->unk_188) {
+    } else if ((arg0->gameplayFrames != arg4[2].velocity.z) && ((temp_v0 = arg4->unk_18C, (temp_v0 == 1)) || (temp_v0 == 2)) && ((arg1 == 0xF) || (arg1 == 0x15))) {
+        if (EnFirefly_Die != arg4[1].focus.pos.z) {
             SysMatrix_GetStateTranslation((Vec3f *) &sp5C);
             sp5C += Rand_ZeroFloat(5.0f);
             sp60 += Rand_ZeroFloat(5.0f);
@@ -885,13 +891,13 @@ void EnFirefly_PostLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *ar
             phi_t1 = 3;
         } else {
             if (arg1 == 0xF) {
-                sp5C = (Math_SinS((s16) (arg4->unk_190 * 0x238C)) * (f32) arg4->unk_190) + arg4->world.pos.x;
-                sp64 = (Math_CosS((s16) (arg4->unk_190 * 0x238C)) * (f32) arg4->unk_190) + arg4->world.pos.z;
+                sp5C = (Math_SinS((s16) (arg4[1].focus.rot.z * 0x238C)) * (f32) arg4[1].focus.rot.z) + arg4->world.pos.x;
+                sp64 = (Math_CosS((s16) (arg4[1].focus.rot.z * 0x238C)) * (f32) arg4[1].focus.rot.z) + arg4->world.pos.z;
             } else {
-                sp5C = arg4->world.pos.x - (Math_SinS((s16) (arg4->unk_190 * 0x238C)) * (f32) arg4->unk_190);
-                sp64 = arg4->world.pos.z - (Math_CosS((s16) (arg4->unk_190 * 0x238C)) * (f32) arg4->unk_190);
+                sp5C = arg4->world.pos.x - (Math_SinS((s16) (arg4[1].focus.rot.z * 0x238C)) * (f32) arg4[1].focus.rot.z);
+                sp64 = arg4->world.pos.z - (Math_CosS((s16) (arg4[1].focus.rot.z * 0x238C)) * (f32) arg4[1].focus.rot.z);
             }
-            sp60 = arg4->world.pos.y + ((f32) (0xF - arg4->unk_190) * 1.5f);
+            sp60 = arg4->world.pos.y + ((f32) (0xF - arg4[1].focus.rot.z) * 1.5f);
             phi_t0 = -5;
             phi_t1 = 0xA;
         }
@@ -930,14 +936,14 @@ void EnFirefly_Draw(Actor *thisx, GlobalContext *globalCtx) {
     } else {
         phi_v0 = temp_v1->polyOpa.p;
     }
-    phi_v0->words.w1 = sSetupDL + 0x4B0;
+    phi_v0->words.w1 = &sSetupDL[150];
     phi_v0->words.w0 = 0xDE000000;
     if (this->currentType == 0) {
-        phi_v0->unk_8 = 0xFB000000;
-        phi_v0->unk_C = 0;
+        phi_v0[1].words.w0 = 0xFB000000;
+        phi_v0[1].words.w1 = 0;
     } else {
-        phi_v0->unk_C = 0xFF;
-        phi_v0->unk_8 = 0xFB000000;
+        phi_v0[1].words.w1 = 0xFF;
+        phi_v0[1].words.w0 = 0xFB000000;
     }
     sp30 = temp_v1;
     temp_v0 = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnFirefly_OverrideLimbDraw, EnFirefly_PostLimbDraw, (Actor *) this, phi_v0 + 0x10);

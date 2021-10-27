@@ -216,8 +216,8 @@ void OceffWipe5_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_a2 = this;
     temp_t0 = globalCtx->cameraPtrs[globalCtx->activeCamera];
     sp58.unk_0 = temp_t0->eye.x;
-    sp58.unk_4 = (f32) temp_t0->eye.y;
-    sp58.unk_8 = (f32) temp_t0->eye.z;
+    (&sp58)[1] = temp_t0->eye.y;
+    (&sp58)[2] = temp_t0->eye.z;
     temp_v0 = temp_a2->actor.params & 0xF;
     temp_a3 = globalCtx->cameraPtrs[globalCtx->activeCamera];
     temp_v1 = temp_v0 * 3;
@@ -270,23 +270,23 @@ void OceffWipe5_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertXRotation_s(0x708, 1);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -sp70, 1);
     temp_v0_4 = sp38->polyXlu.p;
-    sp38->polyXlu.p = temp_v0_4 + 8;
+    sp38->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDA380003;
     sp30 = temp_v0_4;
     sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_5 = sp38->polyXlu.p;
-    sp38->polyXlu.p = temp_v0_5 + 8;
+    sp38->polyXlu.p = &temp_v0_5[1];
     temp_v1_2 = sp40 + &D_80BC9188;
     temp_v0_5->words.w0 = 0xFA000080;
     temp_v0_5->words.w1 = (temp_v1_2->unk_2 << 8) | (temp_v1_2->unk_0 << 0x18) | (temp_v1_2->unk_1 << 0x10) | 0xFF;
     temp_v0_6 = sp38->polyXlu.p;
-    sp38->polyXlu.p = temp_v0_6 + 8;
+    sp38->polyXlu.p = &temp_v0_6[1];
     temp_v1_3 = sp40 + &D_80BC9198;
     temp_v0_6->words.w0 = 0xFB000000;
     temp_v0_6->words.w1 = (temp_v1_3->unk_2 << 8) | (temp_v1_3->unk_0 << 0x18) | (temp_v1_3->unk_1 << 0x10) | 0xFF;
     AnimatedMat_Draw(globalCtx, &D_80BC7F18);
     temp_v0_7 = sp38->polyXlu.p;
-    sp38->polyXlu.p = temp_v0_7 + 8;
+    sp38->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = (u32) &D_80BC9080;
     temp_v0_7->words.w0 = 0xDE000000;
 }

@@ -151,7 +151,7 @@ void func_809527F8(EnMs *arg0, GlobalContext *arg1) {
             func_80151938(arg1, 0x935U);
             return;
         }
-        if ((s32) gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+        if ((s32) gSaveContext.inventory.ammo[gItemSlots[10]] >= 0x14) {
             play_sound(0x4806U);
             func_80151938(arg1, 0x937U);
             return;

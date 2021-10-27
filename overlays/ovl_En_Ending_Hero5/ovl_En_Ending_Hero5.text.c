@@ -88,31 +88,31 @@ void EnEndingHero5_Draw(Actor *thisx, GlobalContext *globalCtx) {
     switch (temp_t9) {
     case 0:
         temp_v0 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v0 + 8;
+        temp_a0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFB000000;
         temp_v0->words.w1 = 0xAA0A46FF;
         break;
     case 1:
         temp_v0_2 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v0_2 + 8;
+        temp_a0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFB000000;
         temp_v0_2->words.w1 = 0xAAC8FFFF;
         break;
     case 2:
         temp_v0_3 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v0_3 + 8;
+        temp_a0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = 0xE646FF;
         break;
     case 3:
         temp_v0_4 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v0_4 + 8;
+        temp_a0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFB000000;
         temp_v0_4->words.w1 = 0xC80096FF;
         break;
     case 4:
         temp_v0_5 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v0_5 + 8;
+        temp_a0->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFB000000;
         temp_v0_5->words.w1 = 0xF59B00FF;
         break;

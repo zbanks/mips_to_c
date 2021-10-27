@@ -145,7 +145,7 @@ void func_80086588(void) {
     if (temp_v0 != 0) {
         do {
             temp_s0 = phi_s0 + phi_v0;
-            temp_v1 = temp_s0->unk_4;
+            temp_v1 = temp_s0[1];
             phi_s0 = temp_s0;
             if (temp_v1 != 0) {
                 temp_v1();

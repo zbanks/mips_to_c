@@ -159,7 +159,7 @@ void func_80ACAD88(BgOpenShutter *this, GlobalContext *globalCtx) {
     if (temp_v0 > 0) {
         temp_a2->unk_37C = 2;
         temp_a2->unk_37D = (s8) temp_v0;
-        temp_a2->unk_380 = this;
+        temp_a2[2].projectedW = (bitwise f32) this;
         func_80122F28((Player *) temp_a2, MIPS2C_ERROR(Read from unset register $a1), temp_a2);
     }
 }

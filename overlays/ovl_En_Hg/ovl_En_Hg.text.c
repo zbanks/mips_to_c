@@ -465,10 +465,10 @@ void func_80BCFC0C(Actor *arg0, GlobalContext *arg1) {
         }
         if (phi_a1->msgCtx.unk1202A == 3) {
             if ((phi_a1->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == 4)) {
-                if (gSaveContext.inventory.items[gItemSlots[0x41]] == 0x41) {
-                    phi_a2->unk_218 = 3;
+                if (gSaveContext.inventory.items[gItemSlots[65]] == 0x41) {
+                    phi_a2[1].shape.feetPos[0].x = 3;
                 } else {
-                    phi_a2->unk_218 = 1;
+                    phi_a2[1].shape.feetPos[0].x = 1;
                 }
                 func_80BCF88C(phi_a2, phi_a1, phi_a2);
                 return;
@@ -480,9 +480,9 @@ void func_80BCFC0C(Actor *arg0, GlobalContext *arg1) {
             temp_v0_2 = gSaveContext.weekEventReg[61];
             if ((temp_v0_2 & 2) == 0) {
                 gSaveContext.weekEventReg[61] = temp_v0_2 | 2;
-                phi_a2->unk_218 = 0;
+                phi_a2[1].shape.feetPos[0].x = 0;
             } else {
-                phi_a2->unk_218 = 2;
+                phi_a2[1].shape.feetPos[0].x = 2;
             }
             func_80BCF88C(phi_a2, phi_a1, phi_a2);
             return;
@@ -508,7 +508,7 @@ s32 EnHg_OverrideLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
 
 void EnHg_PostLimbDraw(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
     if (limbIndex == 0xA) {
-        SysMatrix_CopyCurrentState(thisx + 0x1D8);
+        SysMatrix_CopyCurrentState((MtxF *) &thisx[1].xyzDistToPlayerSq);
         return;
     }
     if (limbIndex == 0xB) {
@@ -529,11 +529,11 @@ void EnHg_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, (Actor *) this);
     SysMatrix_SetCurrentState(&this->unk1D8);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_06005E28;
 }

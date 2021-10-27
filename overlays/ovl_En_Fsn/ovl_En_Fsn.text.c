@@ -391,8 +391,8 @@ void EnFsn_HandleConversationBackroom(Actor *arg0, GlobalContext *arg1) {
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 10720:
-            if (gSaveContext.inventory.items[gItemSlots[0x3A]] == 0x3A) {
-                temp_a2->unk_37C = 0xA1;
+            if (gSaveContext.inventory.items[gItemSlots[58]] == 0x3A) {
+                temp_a2[2].projectedPos.z = 2.26e-43f;
                 temp_t8 = temp_a2->unk_44E | 2;
                 temp_a2->unk_44E = temp_t8;
                 temp_a2->unk_44E = (u16) (temp_t8 | 8);
@@ -412,7 +412,7 @@ void EnFsn_HandleConversationBackroom(Actor *arg0, GlobalContext *arg1) {
             temp_t8_2 = temp_a2->unk_44E | 2;
             temp_a2->unk_44E = temp_t8_2;
             temp_a2->unk_44E = (u16) (temp_t8_2 | 4);
-            temp_a2->unk_37C = 0x80;
+            temp_a2[2].projectedPos.z = 1.8e-43f;
             temp_a2->unk_376 = 0x29E3U;
             phi_a3 = 0x29E3U & 0xFFFF;
             break;
@@ -420,7 +420,7 @@ void EnFsn_HandleConversationBackroom(Actor *arg0, GlobalContext *arg1) {
             temp_t4 = temp_a2->unk_44E | 2;
             temp_a2->unk_44E = temp_t4;
             temp_a2->unk_44E = (u16) (temp_t4 | 8);
-            temp_a2->unk_37C = 0xA1;
+            temp_a2[2].projectedPos.z = 2.26e-43f;
             gSaveContext.weekEventReg[80] |= 0x10;
             temp_a2->unk_376 = 0x29F1U;
             phi_a3 = 0x29F1U & 0xFFFF;
@@ -738,7 +738,7 @@ void EnFsn_EndInteraction(Actor *arg0, GlobalContext *arg1) {
     Interface_ChangeAlpha(0x32U);
     arg0->unk_3C9 = 0;
     arg0->unk_400 = 0;
-    arg0->unk_438 = 0;
+    arg0[3].velocity.z = 0.0f;
     arg1->interfaceCtx.unk_222 = 0;
     arg1->interfaceCtx.unk_224 = 0;
     arg0->textId = 0;
@@ -785,9 +785,9 @@ void EnFsn_UpdateCursorPos(Actor *arg0, GlobalContext *arg1) {
     s16 sp2C;
 
     func_800B8898(arg1, (arg0 + (arg0->unk_379 * 4))->unk_390, &sp2E, &sp2C);
-    arg0->unk_3A8 = (f32) ((f32) sp2E + 0.0f);
-    arg0->unk_3AC = (f32) ((f32) sp2C + 17.0f);
-    arg0->unk_3B0 = 1.2f;
+    arg0[2].parent = (f32) sp2E + 0.0f;
+    arg0[2].child = (f32) sp2C + 17.0f;
+    arg0[2].prev = (Actor *)0x3F99999A;
 }
 
 s32 EnFsn_FacingShopkeeperDialogResult(Actor *arg0, GlobalContext *arg1) {
@@ -843,13 +843,13 @@ s32 EnFsn_HasPlayerSelectedItem(Actor *arg0, GlobalContext *arg1) {
     if (EnFsn_TestItemSelected(arg1) != 0) {
         temp_v0 = arg0 + (arg0->unk_379 * 4);
         if (temp_v0->unk_390->unk_1A0 == 0) {
-            arg0->unk_1D8 = arg0->unk_1D4;
+            arg0[1].xyzDistToPlayerSq = arg0->unk_1D4;
             func_80151938(arg1, temp_v0->unk_390->unk_198);
             play_sound(0x4808U);
             arg0->unk_400 = 0;
-            arg0->unk_438 = 0;
+            arg0[3].velocity.z = 0.0f;
             arg0->unk_3C9 = 0;
-            arg0->unk_1D4 = EnFsn_SelectItem;
+            arg0->unk_1D4 = (bitwise f32) EnFsn_SelectItem;
             return 1;
         }
         play_sound(0x4806U);
@@ -927,8 +927,8 @@ void EnFsn_PositionSelectedItem(EnFsn *arg0) {
     void *temp_v1;
 
     sp1C.unk_0 = D_80AE5C40.unk_0;
-    sp1C.unk_4 = (s32) D_80AE5C40.unk_4;
-    sp1C.unk_8 = (s32) D_80AE5C40.unk_8;
+    (&sp1C)[1] = D_80AE5C40.unk_4;
+    (&sp1C)[2] = D_80AE5C40.unk_8;
     temp_v0 = arg0->cursorIdx;
     temp_a1 = (temp_v0 * 0xC) + &sShopItemPositions;
     temp_f2 = temp_a1->unk_0;
@@ -1411,7 +1411,7 @@ void EnFsn_DeterminePrice(EnFsn *this, GlobalContext *globalCtx) {
         temp_v0 = func_80123810(globalCtx);
         temp_a2 = this;
         if (temp_v0 > 0) {
-            temp_a0 = temp_a3->unk_146;
+            temp_a0 = (s8) temp_a3[1].category;
             if (temp_a0 == 0) {
                 temp_v0_2 = gSaveContext.playerForm;
                 phi_v1 = temp_v0_2;
@@ -1530,7 +1530,7 @@ void EnFsn_GiveItem(EnFsn *this, GlobalContext *globalCtx) {
 }
 
 void EnFsn_SetupResumeInteraction(EnFsn *this, GlobalContext *globalCtx) {
-    if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
         if (globalCtx->msgCtx.unk120B1 == 0) {
             EnFsn_HandleSetupResumeInteraction();
             return;
@@ -1733,7 +1733,7 @@ block_6:
     arg1->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(0x32U);
     arg0->unk_3C9 = 0;
-    arg0->unk_448 = 0.0f;
+    arg0[3].wallPoly = NULL;
     temp_a1_3 = (arg0 + (arg0->unk_379 * 4))->unk_390;
     temp_a1_3->unk_1A4(arg1, temp_a1_3);
     temp_v0_2 = arg0->unk_379;
@@ -1756,7 +1756,7 @@ void EnFsn_SetupEndInteraction(EnFsn *this, GlobalContext *globalCtx) {
 
     temp_v0 = func_80152498(&globalCtx->msgCtx);
     if (((temp_v0 == 5) || (temp_v0 == 6)) && (temp_a0 = globalCtx, globalCtx = globalCtx, (func_80147624(temp_a0) != 0))) {
-        if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+        if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction((Actor *) this, globalCtx);
                 return;
@@ -1846,7 +1846,7 @@ void EnFsn_AskCanBuyMore(EnFsn *this, GlobalContext *globalCtx) {
         return;
     }
     if (((sp27 == 5) || (sp27 == 6)) && (func_80147624(globalCtx) != 0)) {
-        if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+        if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction((Actor *) this, globalCtx);
                 return;
@@ -1905,7 +1905,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn *this, GlobalContext *globalCtx)
         return;
     }
     if (((sp27 == 5) || (sp27 == 6)) && (func_80147624(globalCtx) != 0)) {
-        if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+        if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction((Actor *) this, globalCtx);
                 return;
@@ -2097,48 +2097,48 @@ void EnFsn_DrawCursor(EnFsn *arg0, GraphicsContext **arg1, f32 arg2, f32 arg3, f
         arg0 = arg0;
         func_8012C654(temp_a3);
         temp_v0 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0 + 8;
+        sp18->overlay.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFA000000;
         temp_v0->words.w1 = (arg0->cursorColor.r << 0x18) | ((arg0->cursorColor.g & 0xFF) << 0x10) | ((arg0->cursorColor.b & 0xFF) << 8) | (arg0->cursorColor.a & 0xFF);
         temp_v0_2 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_2 + 8;
+        sp18->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFD700000;
         temp_v0_2->words.w1 = (u32) &D_0401F740;
         temp_v0_3 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_3 + 8;
+        sp18->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xF5700000;
         temp_v0_3->words.w1 = 0x7050140;
         temp_v0_4 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_4 + 8;
+        sp18->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE6000000;
         temp_v0_5 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_5 + 8;
+        sp18->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x703F800;
         temp_v0_5->words.w0 = 0xF3000000;
         temp_v0_6 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_6 + 8;
+        sp18->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0;
         temp_v0_6->words.w0 = 0xE7000000;
         temp_v0_7 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_7 + 8;
+        sp18->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xF5600200;
         temp_v0_7->words.w1 = 0x50140;
         temp_v0_8 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_8 + 8;
+        sp18->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xF2000000;
         temp_v0_8->words.w1 = 0x3C03C;
         temp_v0_9 = sp18->overlay.p;
         temp_f0 = 16.0f * arg4;
-        sp18->overlay.p = temp_v0_9 + 8;
+        sp18->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = (((s32) ((arg2 + temp_f0) * 4.0f) & 0xFFF) << 0xC) | 0xE4000000 | ((s32) ((arg3 + temp_f0 + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_9->words.w1 = (((s32) ((arg2 - temp_f0) * 4.0f) & 0xFFF) << 0xC) | ((s32) (((arg3 - temp_f0) + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_10 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_10 + 8;
+        sp18->overlay.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0;
         temp_v0_10->words.w0 = 0xE1000000;
         temp_v0_11 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_11 + 8;
+        sp18->overlay.p = &temp_v0_11[1];
         temp_a1 = (s32) ((1.0f / arg4) * 1024.0f) & 0xFFFF;
         temp_v0_11->words.w1 = (temp_a1 << 0x10) | temp_a1;
         temp_v0_11->words.w0 = 0xF1000000;
@@ -2214,35 +2214,35 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn *arg0, GraphicsContext **arg1) {
         sp4C = temp_t1;
         func_8012C654(temp_a2);
         temp_v0_2 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_2 + 8;
+        temp_a2->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFC119623;
         temp_v0_2->words.w1 = 0xFF2FFFFF;
         temp_v0_3 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_3 + 8;
+        temp_a2->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFD700000;
         temp_v0_3->words.w1 = (u32) &D_0401F8C0;
         temp_v0_4 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_4 + 8;
+        temp_a2->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xF5700000;
         temp_v0_4->words.w1 = 0x7000040;
         temp_v0_5 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_5 + 8;
+        temp_a2->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0;
         temp_v0_5->words.w0 = 0xE6000000;
         temp_v0_6 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_6 + 8;
+        temp_a2->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x70BF400;
         temp_v0_6->words.w0 = 0xF3000000;
         temp_v0_7 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_7 + 8;
+        temp_a2->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0;
         temp_v0_7->words.w0 = 0xE7000000;
         temp_v0_8 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_8 + 8;
+        temp_a2->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x40;
         temp_v0_8->words.w0 = 0xF5680400;
         temp_v0_9 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_9 + 8;
+        temp_a2->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xF2000000;
         temp_v0_9->words.w1 = 0x3C05C;
         if (temp_t1 != 0) {
@@ -2367,13 +2367,13 @@ void EnFsn_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp40 = sp40;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&sEyeTextures + (this->eyeTextureIdx * 4)));
     temp_v0_2 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_2 + 8;
+    sp40->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&sEyeTextures + (this->eyeTextureIdx * 4)));

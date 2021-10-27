@@ -24,7 +24,7 @@ struct _mips2c_stack_func_80AFD5E0 {};              /* size 0x0 */
 
 struct _mips2c_stack_func_80AFD668 {
     /* 0x00 */ char pad_0[0x20];
-    /* 0x20 */ void *sp20;                          /* inferred */
+    /* 0x20 */ f32 sp20;                            /* inferred */
     /* 0x24 */ Actor *sp24;                         /* inferred */
 };                                                  /* size = 0x28 */
 
@@ -167,14 +167,14 @@ s32 func_80AFD5E0(ElfMsg4 *arg0) {
 
 void func_80AFD668(ElfMsg4 *this, GlobalContext *globalCtx) {
     Actor *sp24;
-    void *sp20;
+    f32 sp20;
     Actor *temp_v1;
-    void *temp_v0;
+    f32 temp_v0;
 
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
-    temp_v0 = temp_v1->unk_A80;
+    temp_v0 = temp_v1[8].scale.z;
     sp20 = temp_v0;
-    if ((temp_v0 != 0) && (sp24 = temp_v1, (func_80AFD5E0(this) != 0))) {
+    if (((bitwise s32) temp_v0 != 0) && (sp24 = temp_v1, (func_80AFD5E0(this) != 0))) {
         sp24->unk_A84 = func_80AFD5B4(this);
         ActorCutscene_SetIntentToPlay(0x7C);
         sp20->unk_230 = (Actor *) this->unk_144;

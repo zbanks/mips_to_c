@@ -160,7 +160,7 @@ void func_808C1154(ArmsHook *arg0) {
 
 s32 ArmsHook_AttachToPlayer(ArmsHook *arg0, Actor *arg1) {
     arg1->child = arg0;
-    arg1->unk_34C = arg0;
+    arg1[2].shape.yOffset = arg0;
     if (arg0->actor.child != 0) {
         arg0->actor.child = NULL;
         arg1->parent = NULL;
@@ -302,7 +302,7 @@ void ArmsHook_Shoot(ArmsHook *this, GlobalContext *globalCtx) {
         }
         temp_a1_2 = &this->actor.world;
         sp44 = temp_a1_2;
-        temp_a0 = spC4 + 0x368;
+        temp_a0 = &spC4[2].shape.feetPos[1];
         sp40 = temp_a0;
         spBC = phi_a3;
         temp_f0 = Math_Vec3f_DistXYZAndStoreDiff(temp_a0, (Vec3f *) temp_a1_2, (Vec3f *) &spB0);
@@ -437,16 +437,16 @@ void ArmsHook_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_80122868(globalCtx, (Player *) sp74);
         temp_v0_2 = sp44->polyOpa.p;
-        sp44->polyOpa.p = temp_v0_2 + 8;
+        sp44->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         sp3C = temp_v0_2;
         sp3C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_3 = sp44->polyOpa.p;
-        sp44->polyOpa.p = temp_v0_3 + 8;
+        sp44->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_0601D960;
         temp_v0_3->words.w0 = 0xDE000000;
         SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-        Math_Vec3f_Diff(sp74 + 0x368, (Vec3f *) &this->actor.world, (Vec3f *) &sp68);
+        Math_Vec3f_Diff(&sp74[2].shape.feetPos[1], (Vec3f *) &this->actor.world, (Vec3f *) &sp68);
         temp_f2 = (sp68 * sp68) + (sp70 * sp70);
         temp_f0 = sqrtf(temp_f2);
         sp48 = temp_f2;
@@ -455,11 +455,11 @@ void ArmsHook_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_InsertXRotation_s(Math_Atan2S(-sp6C, sp4C), 1);
         Matrix_Scale(0.015f, 0.015f, sqrtf((sp6C * sp6C) + sp48) * 0.01f, 1);
         temp_v0_4 = sp44->polyOpa.p;
-        sp44->polyOpa.p = temp_v0_4 + 8;
+        sp44->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         temp_v0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = sp44->polyOpa.p;
-        sp44->polyOpa.p = temp_v0_5 + 8;
+        sp44->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) D_040008D0;
         temp_v0_5->words.w0 = 0xDE000000;
         func_801229A0(globalCtx, (Player *) sp74);

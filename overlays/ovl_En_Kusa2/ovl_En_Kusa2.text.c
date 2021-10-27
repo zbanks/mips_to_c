@@ -356,7 +356,7 @@ struct _mips2c_stack_func_80A5EA48 {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
 
-void func_80A5B160(EnKusa2 *arg0, GlobalContext *arg1); /* static */
+void func_80A5B160(CollisionPoly *arg0, GlobalContext *arg1); /* static */
 void func_80A5B334(EnKusa2 *arg0, GlobalContext *arg1); /* static */
 void func_80A5B3BC(EnKusa2 *arg0);                  /* static */
 void func_80A5B490(EnKusa2 *arg0, GlobalContext *arg1); /* static */
@@ -374,7 +374,7 @@ void func_80A5BF84(Actor *arg0, GlobalContext *arg1); /* static */
 s32 func_80A5BFD8(Actor *arg0, GlobalContext *arg1); /* static */
 Vec3f *func_80A5C074(Vec3f *arg0);                  /* static */
 f32 *func_80A5C0B8(s32 arg0);                       /* static */
-Vec3f *func_80A5C104(Vec3f *arg1, f32 *arg2, f32 arg3, s16 arg4, s16 arg5, s32); /* static */
+Vec3f *func_80A5C104(Vec3f *arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5, s32); /* static */
 f32 *func_80A5C2FC(f32 arg1, Vec3f *arg2, Vec3f *arg3, f32 *arg4, s16 *arg5, s16 *); /* static */
 void func_80A5C410(Vec3f *arg0, s32 arg1, Vec3f *arg2); /* static */
 void func_80A5C70C(s32 arg0);                       /* static */
@@ -433,7 +433,7 @@ static s16 D_80A60B0C;
 static s16 D_80A60B0E;
 static s16 D_80A60B10;
 
-void func_80A5B160(EnKusa2 *arg0, GlobalContext *arg1) {
+void func_80A5B160(CollisionPoly *arg0, GlobalContext *arg1) {
     Actor **temp_s4;
     Actor **temp_v1;
     Actor *temp_v0;
@@ -443,19 +443,19 @@ void func_80A5B160(EnKusa2 *arg0, GlobalContext *arg1) {
     f32 temp_f22;
     s16 temp_s1;
     s32 temp_s2;
-    void *phi_s3;
+    u16 *phi_s3;
     s32 phi_s2;
 
     if (arg0->unk_194 == 0) {
-        temp_v0 = Actor_SpawnAsChildAndCutscene(arg1 + 0x1CA0, arg1, 0x171, arg0->actor.world.pos.x, arg0->actor.world.pos.y, arg0->actor.world.pos.z, (s16) 0, (s16) (Rand_Next() >> 0x10), (s16) 0, 1, (u32) arg0->actor.cutscene, (s32) arg0->actor.unk20, NULL);
+        temp_v0 = Actor_SpawnAsChildAndCutscene(arg1 + 0x1CA0, arg1, 0x171, arg0->unk_24, arg0->unk_28, arg0->unk_2C, (s16) 0, (s16) (Rand_Next() >> 0x10), (s16) 0, 1, (u32) arg0->unk_38, (s32) arg0[2].type, NULL);
         temp_v1 = arg0 + 0x194;
         *temp_v1 = temp_v0;
         if (temp_v0 != 0) {
-            temp_v0->room = arg0->actor.room;
-            (*temp_v1)->unk_1C0 = arg0;
+            temp_v0->room = arg0->unk_3;
+            (*temp_v1)[1].wallPoly = arg0;
         }
     }
-    phi_s3 = arg0 + 4;
+    phi_s3 = &arg0->vtxData[1];
     phi_s2 = 1;
     do {
         temp_s1 = (phi_s2 << 0xD) - 0x2000;
@@ -464,11 +464,11 @@ void func_80A5B160(EnKusa2 *arg0, GlobalContext *arg1) {
             temp_s4 = phi_s3 + 0x194;
             temp_f20 = Math_SinS(temp_s1);
             temp_f22 = Math_CosS(temp_s1);
-            temp_v0_2 = Actor_SpawnAsChildAndCutscene(temp_s5, arg1, 0x171, (temp_f20 * 80.0f) + arg0->actor.world.pos.x, arg0->actor.world.pos.y, (temp_f22 * 80.0f) + arg0->actor.world.pos.z, (s16) 0, (s16) (Rand_Next() >> 0x10), (s16) 0, 1, (u32) arg0->actor.cutscene, (s32) arg0->actor.unk20, NULL);
+            temp_v0_2 = Actor_SpawnAsChildAndCutscene(temp_s5, arg1, 0x171, (temp_f20 * 80.0f) + arg0->unk_24, arg0->unk_28, (temp_f22 * 80.0f) + arg0->unk_2C, (s16) 0, (s16) (Rand_Next() >> 0x10), (s16) 0, 1, (u32) arg0->unk_38, (s32) (s16) arg0[2].type, NULL);
             *temp_s4 = temp_v0_2;
             if (temp_v0_2 != 0) {
-                temp_v0_2->room = arg0->actor.room;
-                (*temp_s4)->unk_1C0 = arg0;
+                temp_v0_2->room = arg0->unk_3;
+                (*temp_s4)[1].wallPoly = arg0;
             }
         }
         temp_s2 = phi_s2 + 1;
@@ -730,7 +730,7 @@ void func_80A5B954(f32 *arg0, f32 arg1) {
             temp_a1 = phi_a1 + 4;
             temp_a0 = phi_a0 + 0x10;
             temp_v1 = phi_v1 + 0x10;
-            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + (phi_a0->unk_4 * arg1));
+            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + (phi_a0[1] * arg1));
             temp_v1->unk_-8 = (f32) (phi_v1->mf[0][2] + (temp_a0->unk_-8 * arg1));
             temp_v1->unk_-4 = (f32) (phi_v1->mf[0][3] + (temp_a0->unk_-4 * arg1));
             temp_f16_2 = temp_a0->unk_0 * arg1;
@@ -748,7 +748,7 @@ void func_80A5B954(f32 *arg0, f32 arg1) {
     phi_v1_2->mf[0][0] = phi_f18_2 + phi_f16_2;
     temp_a0_2 = phi_a0_2 + 0x10;
     temp_v1_2 = phi_v1_2 + 0x10;
-    temp_v1_2->unk_-C = (f32) (phi_v1_2->mf[0][1] + (phi_a0_2->unk_4 * arg1));
+    temp_v1_2->unk_-C = (f32) (phi_v1_2->mf[0][1] + (phi_a0_2[1] * arg1));
     temp_v1_2->unk_-8 = (f32) (phi_v1_2->mf[0][2] + (temp_a0_2->unk_-8 * arg1));
     temp_v1_2->unk_-4 = (f32) (phi_v1_2->mf[0][3] + (temp_a0_2->unk_-4 * arg1));
 }
@@ -829,21 +829,21 @@ void func_80A5BD14(Actor *arg0, GlobalContext *arg1, s32 arg2) {
     void *sp1C;
     void *temp_v0;
 
-    temp_v0 = arg0->unk_1C0;
+    temp_v0 = arg0[1].wallPoly;
     if (temp_v0 != 0) {
-        if ((s32) temp_v0->unk_1BC >= 9) {
-            temp_v0->unk_1BC = 8;
+        if ((s32) temp_v0[27].normal.z >= 9) {
+            temp_v0[27].normal.z = 8;
         }
         sp1C = temp_v0;
-        Item_DropCollectible(arg1, arg0 + 0x24, *(&D_80A5EB24 + (temp_v0->unk_1BC * 4)));
-        temp_v0->unk_1BC = (s16) (temp_v0->unk_1BC + arg2);
+        Item_DropCollectible(arg1, arg0 + 0x24, *(&D_80A5EB24 + (temp_v0[27].normal.z * 4)));
+        temp_v0[27].normal.z += arg2;
     }
 }
 
 void func_80A5BD94(Actor *arg0) {
     void *temp_v0;
 
-    temp_v0 = arg0->unk_1C0;
+    temp_v0 = arg0[1].wallPoly;
     if (temp_v0 != 0) {
         temp_v0->unk_1BE = 1;
     }
@@ -919,7 +919,7 @@ s32 func_80A5BFD8(Actor *arg0, GlobalContext *arg1) {
     if ((arg0->unk_155 & 2) != 0) {
         func_80A5CF44(arg0);
         phi_a2 = 0;
-        if (*arg0->unk_180 & 0x1000000) {
+        if (*arg0[1].focus.pos.x & 0x1000000) {
             phi_a2 = 1;
         }
         func_80A5BD14(arg0, arg1, phi_a2);
@@ -986,7 +986,7 @@ loop_1:
     return phi_v1_2;
 }
 
-Vec3f *func_80A5C104(Vec3f *arg1, f32 *arg2, f32 arg3, s16 arg4, s16 arg5) {
+Vec3f *func_80A5C104(Vec3f *arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
     f32 sp20;
     Vec3f *temp_s0;
     Vec3f *temp_v0;
@@ -999,10 +999,10 @@ Vec3f *func_80A5C104(Vec3f *arg1, f32 *arg2, f32 arg3, s16 arg4, s16 arg5) {
     temp_v0 = func_80A5C074();
     temp_s0 = temp_v0;
     Math_Vec3f_Copy(temp_v0, arg1);
-    Math_Vec3f_Copy(temp_s0 + 0xC, &D_801D15B0);
-    temp_s0->unk_18 = arg2;
+    Math_Vec3f_Copy(&temp_s0[1], &D_801D15B0);
+    temp_s0[2].x = arg2;
     temp_v0_2 = D_80A5EB48 + 1;
-    temp_s0->unk_1C = arg3;
+    temp_s0[2].y = arg3;
     temp_s0->unk_20 = arg4;
     temp_s0->unk_22 = arg5;
     if (temp_v0_2 >= 3) {
@@ -1014,32 +1014,32 @@ Vec3f *func_80A5C104(Vec3f *arg1, f32 *arg2, f32 arg3, s16 arg4, s16 arg5) {
     }
     temp_s0->unk_26 = phi_v0;
     temp_s0->unk_24 = (s16) (temp_s0->unk_26 - 0x14);
-    temp_s0->unk_28 = func_80A5C70C;
-    temp_s0->unk_2C = 0.0f;
-    temp_s0->unk_30 = 0.0f;
+    temp_s0[3].y = (bitwise f32) func_80A5C70C;
+    temp_s0[3].z = 0.0f;
+    temp_s0[4].x = 0.0f;
     temp_f12 = 1.0f / (f32) temp_s0->unk_24;
     sp20 = temp_f12;
     temp_f6 = Rand_ZeroOne() * 60.0f;
-    temp_s0->unk_3C = 40.0f;
+    temp_s0[5].x = 40.0f;
     temp_f2 = temp_f6 + 20.0f;
-    temp_s0->unk_40 = -1.5f;
-    temp_s0->unk_34 = (f32) (temp_f2 * 0.05f);
-    temp_s0->unk_38 = (f32) (temp_f2 * temp_f12);
-    temp_s0->unk_48 = 140.0f;
-    temp_s0->unk_44 = (f32) (-50.0f * temp_f12);
-    temp_s0->unk_4C = 19600.0f;
-    temp_s0->unk_5C = 0.05f;
-    temp_s0->unk_54 = 327.68f;
-    temp_s0->unk_50 = 819.2f;
-    temp_s0->unk_58 = 2.5f;
-    temp_s0->unk_60 = (f32) (3.5f * temp_f12);
-    temp_s0->unk_64 = 0.35f;
-    temp_s0->unk_68 = 0.0875f;
-    temp_s0->unk_6C = 160.0f;
-    temp_s0->unk_70 = 25600.0f;
-    temp_s0->unk_7C = 327.68f;
-    temp_s0->unk_74 = 204.8f;
-    temp_s0->unk_78 = 100.0f;
+    temp_s0[5].y = -1.5f;
+    temp_s0[4].y = temp_f2 * 0.05f;
+    temp_s0[4].z = temp_f2 * temp_f12;
+    temp_s0[6].x = 140.0f;
+    temp_s0[5].z = -50.0f * temp_f12;
+    temp_s0[6].y = 19600.0f;
+    temp_s0[7].z = 0.05f;
+    temp_s0[7].x = 327.68f;
+    temp_s0[6].z = 819.2f;
+    temp_s0[7].y = 2.5f;
+    temp_s0[8].x = 3.5f * temp_f12;
+    temp_s0[8].y = 0.35f;
+    temp_s0[8].z = 0.0875f;
+    temp_s0[9].x = 160.0f;
+    temp_s0[9].y = 25600.0f;
+    temp_s0[10].y = 327.68f;
+    temp_s0[9].z = 204.8f;
+    temp_s0[10].x = 100.0f;
     return temp_s0;
 }
 
@@ -1060,16 +1060,16 @@ f32 *func_80A5C2FC(f32 arg1, Vec3f *arg2, Vec3f *arg3, f32 *arg4, s16 *arg5) {
         goto block_5;
     }
     if (arg1 <= 0.1f) {
-        temp_s0->unk_1C = 1.0f;
+        temp_s0[7] = 1.0f;
     } else {
         phi_f8 = (0.02f / arg1) + 0.8f;
 block_5:
-        temp_s0->unk_1C = phi_f8;
+        temp_s0[7] = phi_f8;
     }
     temp_s0->unk_20 = (unaligned s32) arg4->unk_0;
     temp_s0->unk_24 = (u16) arg4->unk_4;
     temp_s0->unk_26 = (unaligned s32) arg5->unk_0;
-    temp_s0->unk_2A = (u16) arg5->unk_4;
+    temp_s0->unk_2A = (u16) arg5[2];
     temp_s0->unk_2C = Rand_S16Offset(0x41, 0x1E);
     return temp_s0;
 }
@@ -1097,11 +1097,11 @@ void func_80A5C410(Vec3f *arg0, s32 arg1, Vec3f *arg2) {
             Math_Vec3f_Diff(arg1 + 4, phi_s0, (Vec3f *) &sp98);
             temp_f0 = Math3D_LengthSquared((Vec3f *) &sp98);
             phi_v0 = 0;
-            if (temp_f0 <= phi_s0->unk_4C) {
+            if (temp_f0 <= phi_s0[6].y) {
                 phi_v0 = 1;
             }
             phi_s2 = 0;
-            if (temp_f0 <= phi_s0->unk_70) {
+            if (temp_f0 <= phi_s0[9].y) {
                 phi_s2 = 1;
             }
             if ((phi_v0 != 0) || (phi_s2 != 0)) {
@@ -1116,28 +1116,28 @@ void func_80A5C410(Vec3f *arg0, s32 arg1, Vec3f *arg2) {
                     } else {
                         phi_f20 = 1.0f;
                     }
-                    temp_f0_2 = phi_s0->unk_3C;
+                    temp_f0_2 = phi_s0[5].x;
                     if (phi_f22 < temp_f0_2) {
-                        phi_f2 = Math_SinS((s16) (s32) (phi_s0->unk_50 * phi_f22)) * -phi_s0->unk_2C;
+                        phi_f2 = Math_SinS((s16) (s32) (phi_s0[6].z * phi_f22)) * -phi_s0[3].z;
                     } else {
-                        phi_f2 = (Math_CosS((s16) (s32) (phi_s0->unk_54 * (phi_f22 - temp_f0_2))) + 1.0f) * phi_s0->unk_30;
+                        phi_f2 = (Math_CosS((s16) (s32) (phi_s0[7].x * (phi_f22 - temp_f0_2))) + 1.0f) * phi_s0[4].x;
                     }
                     temp_f0_3 = -(phi_f20 * phi_f2);
                     arg2->x += sp98 * temp_f0_3;
                     arg2->z += spA0 * temp_f0_3;
                     if (phi_s2 != 0) {
-                        arg2->x += phi_f20 * spA0 * phi_s0->unk_58;
-                        arg2->z -= phi_f20 * sp98 * phi_s0->unk_58;
+                        arg2->x += phi_f20 * spA0 * phi_s0[7].y;
+                        arg2->z -= phi_f20 * sp98 * phi_s0[7].y;
                     }
                 }
-                if ((phi_s2 != 0) && (fabsf(sp9C) < phi_s0->unk_78)) {
-                    temp_f20 = Math_CosS((s16) (s32) (phi_s0->unk_7C * sp9C));
-                    arg2->y += phi_s0->unk_68 * (Math_CosS((s16) (s32) (phi_s0->unk_74 * phi_f22)) + 1.0f) * (temp_f20 + 1.0f);
+                if ((phi_s2 != 0) && (fabsf(sp9C) < phi_s0[10].x)) {
+                    temp_f20 = Math_CosS((s16) (s32) (phi_s0[10].y * sp9C));
+                    arg2->y += phi_s0[8].z * (Math_CosS((s16) (s32) (phi_s0[9].z * phi_f22)) + 1.0f) * (temp_f20 + 1.0f);
                 }
             }
         }
         temp_s3 = phi_s3 + 0x80;
-        phi_s0 += 0x80;
+        phi_s0 = (Vec3f *) &phi_s0[10].z;
         phi_s3 = temp_s3;
     } while (temp_s3 != 0x480);
     arg2->y -= 0.5f;
@@ -1175,26 +1175,26 @@ void func_80A5C7F0(Vec3f *arg0, Vec3f *arg1) {
     if ((s32) temp_v0 > 0) {
         temp_a0->unk_26 = (s16) (temp_v0 - 1);
         arg1 = temp_a0;
-        temp_a0->unk_28(temp_a0);
+        temp_a0[3].y(temp_a0);
         if ((s32) arg1->unk_26 >= (s32) arg1->unk_24) {
-            arg1->unk_2C = (f32) (arg1->unk_2C + arg1->unk_34);
-            arg1->unk_3C = (f32) (arg1->unk_3C + arg1->unk_40);
-            arg1->unk_58 = (f32) (arg1->unk_58 + arg1->unk_5C);
+            arg1[3].z += arg1[4].y;
+            arg1[5].x += arg1[5].y;
+            arg1[7].y += arg1[7].z;
         } else {
-            arg1->unk_2C = (f32) (arg1->unk_2C - arg1->unk_38);
-            if (arg1->unk_2C < 0.0f) {
-                arg1->unk_2C = 0.0f;
+            arg1[3].z -= arg1[4].z;
+            if (arg1[3].z < 0.0f) {
+                arg1[3].z = 0.0f;
             }
-            arg1->unk_58 = (f32) (arg1->unk_58 - arg1->unk_60);
-            arg1->unk_3C = (f32) (arg1->unk_3C - arg1->unk_44);
-            if (arg1->unk_58 < 0.0f) {
-                arg1->unk_58 = 0.0f;
+            arg1[7].y -= arg1[8].x;
+            arg1[5].x -= arg1[5].z;
+            if (arg1[7].y < 0.0f) {
+                arg1[7].y = 0.0f;
             }
         }
-        temp_f0 = arg1->unk_3C;
-        arg1->unk_30 = (f32) (arg1->unk_2C * 0.5f);
-        arg1->unk_50 = (f32) (32768.0f / temp_f0);
-        arg1->unk_54 = (f32) (32768.0f / (arg1->unk_48 - temp_f0));
+        temp_f0 = arg1[5].x;
+        arg1[4].x = arg1[3].z * 0.5f;
+        arg1[6].z = 32768.0f / temp_f0;
+        arg1[7].x = 32768.0f / (arg1[6].x - temp_f0);
     }
 }
 
@@ -1223,16 +1223,16 @@ void func_80A5C918(Vec3f *arg1) {
     if ((s32) temp_v0 > 0) {
         arg1->unk_2C = (s16) (temp_v0 - 1);
         func_80A5C410((Vec3f *) &sp4C);
-        temp_f12 = arg1->unk_1C;
-        arg1->unk_10 = (f32) (arg1->unk_10 + sp4C);
-        temp_f2 = arg1->unk_10;
-        arg1->unk_14 = (f32) (arg1->unk_14 + sp50);
-        arg1->unk_18 = (f32) (arg1->unk_18 + sp54);
+        temp_f12 = arg1[2].y;
+        arg1[1].y += sp4C;
+        temp_f2 = arg1[1].y;
+        arg1[1].z += sp50;
+        arg1[2].x += sp54;
         temp_f0 = temp_f12 * 0.06f;
         sp38 = temp_f2 * temp_f0;
-        temp_f16 = arg1->unk_14;
+        temp_f16 = arg1[1].z;
         sp3C = temp_f16 * temp_f0;
-        temp_f14 = arg1->unk_18;
+        temp_f14 = arg1[2].x;
         temp_f18 = temp_f12 * 0.004f;
         sp40 = temp_f14 * temp_f0;
         temp_f10 = temp_f2 * temp_f2 * temp_f18;
@@ -1244,23 +1244,23 @@ void func_80A5C918(Vec3f *arg1) {
         } else {
             phi_f0 = -sp2C;
         }
-        arg1->unk_10 = (f32) (temp_f2 - (sp38 + phi_f0));
+        arg1[1].y = temp_f2 - (sp38 + phi_f0);
         if (temp_f16 > 0.0f) {
             phi_f0_2 = temp_f12_2;
         } else {
             phi_f0_2 = -temp_f12_2;
         }
-        temp_f14_2 = arg1->unk_18;
-        arg1->unk_14 = (f32) (temp_f16 - (sp3C + phi_f0_2));
+        temp_f14_2 = arg1[2].x;
+        arg1[1].z = temp_f16 - (sp3C + phi_f0_2);
         if (temp_f14_2 > 0.0f) {
             phi_f0_3 = sp34;
         } else {
             phi_f0_3 = -sp34;
         }
-        arg1->unk_18 = (f32) (temp_f14_2 - (sp40 + phi_f0_3));
-        arg1->y += arg1->unk_10;
-        arg1->z += arg1->unk_14;
-        arg1->unk_C = (f32) (arg1->unk_C + arg1->unk_18);
+        arg1[2].x = temp_f14_2 - (sp40 + phi_f0_3);
+        arg1->y += arg1[1].y;
+        arg1->z += arg1[1].z;
+        arg1[1].x += arg1[2].x;
         arg1->unk_20 = (s16) (arg1->unk_20 + arg1->unk_26);
         arg1->unk_22 = (s16) (arg1->unk_22 + arg1->unk_28);
         arg1->unk_24 = (s16) (arg1->unk_24 + arg1->unk_2A);
@@ -1314,7 +1314,7 @@ void func_80A5CB74(Actor *arg0) {
     sp44 = arg0->world.pos.y + 20.0f;
     sp48 = arg0->world.pos.z;
     sp3E = Rand_S16Offset(-0x2710, 0x4E20) + arg0->world.rot.y;
-    temp_a1 = arg0->unk_1C0;
+    temp_a1 = arg0[1].wallPoly;
     phi_v1 = 0;
     if (temp_a1 != 0) {
         sp36 = Actor_YawBetweenActors(arg0, temp_a1);
@@ -1330,7 +1330,7 @@ void func_80A5CB74(Actor *arg0) {
     }
     sp3C = phi_v1;
     sp38 = phi_f2;
-    arg0->unk_1B8 = func_80A5C104(D_80A5F1C0, &sp40, (Rand_ZeroOne() * 3.5f) + 4.0f, (bitwise s16) phi_f2, (s16) (s32) sp3E, (s32) phi_v1);
+    arg0[1].gravity = (bitwise f32) func_80A5C104(D_80A5F1C0, (bitwise f32) &sp40, (Rand_ZeroOne() * 3.5f) + 4.0f, (bitwise s16) phi_f2, (s16) (s32) sp3E, (s32) phi_v1);
 }
 
 void func_80A5CCD4(EnKusa2 *arg0) {
@@ -1353,17 +1353,17 @@ void func_80A5CD0C(EnKusa2 *arg0) {
     f32 sp9C;
     s16 sp98;
     s16 sp96;
-    s16 sp94;
+    u16 sp94;
     s16 sp90;
     s16 sp8E;
     s16 sp8C;
     f32 *temp_s4;
     f32 *temp_s5;
     f32 temp_f20;
-    s16 *temp_s6;
     s16 *temp_s7;
     s16 temp_s0;
     s32 temp_s1;
+    u16 *temp_s6;
     s32 phi_s1;
 
     temp_s7 = &sp8C;
@@ -1404,7 +1404,7 @@ void func_80A5CF44(Actor *arg0) {
     f32 sp9C;
     s16 sp98;
     s16 sp96;
-    s16 sp94;
+    u16 sp94;
     s16 sp90;
     s16 sp8E;
     s16 sp8C;
@@ -1414,9 +1414,9 @@ void func_80A5CF44(Actor *arg0) {
     f32 temp_f6;
     f32 temp_f6_2;
     s16 *temp_fp;
-    s16 *temp_s7;
     s16 temp_s0;
     s32 temp_s1;
+    u16 *temp_s7;
     s32 phi_s2;
     s32 phi_s1;
 
@@ -1462,7 +1462,7 @@ void func_80A5D178(EnKusa2 *arg0) {
     f32 spA4;
     s16 spA0;
     s16 sp9E;
-    s16 sp9C;
+    u16 sp9C;
     s16 sp98;
     s16 sp96;
     s16 sp94;
@@ -1471,11 +1471,11 @@ void func_80A5D178(EnKusa2 *arg0) {
     f32 temp_f20;
     f32 temp_f22;
     f32 temp_f24;
-    s16 *temp_s6;
     s16 *temp_s7;
     s16 temp_s0;
     s16 temp_v0;
     s32 temp_s1;
+    u16 *temp_s6;
     s32 phi_s1;
 
     temp_s7 = &sp94;
@@ -1580,7 +1580,7 @@ void func_80A5D62C(EnKusa2 *this, GlobalContext *globalCtx) {
         return;
     }
     if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < 2560000.0f) {
-        func_80A5B160(this, globalCtx);
+        func_80A5B160((CollisionPoly *) this, globalCtx);
         func_80A5D6B0(this);
     }
 }
@@ -1688,8 +1688,8 @@ void func_80A5D964(EnKusa2 *arg0) {
     D_80A5EAF4.unk_2 = 0;
     D_80A5EAF4.unk_4 = 0;
     D_80A5EAFC.unk_0 = 0;
-    D_80A5EAFC.unk_2 = 0;
-    D_80A5EAFC.unk_4 = 0;
+    (&D_80A5EAFC)[1] = 0;
+    (&D_80A5EAFC)[2] = 0;
     D_80A5EB04.unk_0 = 0;
     D_80A5EB04.unk_2 = 0;
     D_80A5EB04.unk_4 = 0;
@@ -2019,11 +2019,11 @@ void func_80A5E6F0(Actor *this, GlobalContext *globalCtx) {
             temp_f12 = temp_s0->unk_0;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_v0 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0 + 8;
+            temp_s1->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_2 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_2 + 8;
+            temp_s1->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_2->words.w1 = *(&D_80A5EB68 + ((phi_s2 & 1) * 4));
         }
@@ -2045,17 +2045,17 @@ void func_80A5E80C(GraphicsContext **arg0, s32 arg1) {
     sp24 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0 + 8;
+    sp24->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(*arg0);
     temp_v0_2 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0_2 + 8;
+    sp24->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA000000;
     temp_v0_2->words.w1 = (arg1 & 0xFF) | ~0xFF;
     temp_v0_3 = sp24->polyXlu.p;
-    sp24->polyXlu.p = temp_v0_3 + 8;
+    sp24->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_05007938;
     temp_v0_3->words.w0 = 0xDE000000;
 }
@@ -2089,8 +2089,8 @@ void func_80A5E9B4(Actor *arg0, GlobalContext *arg1) {
     s16 sp18;
 
     sp18 = arg0->shape.rot.x + D_80A5EAFC.unk_0;
-    sp1A = arg0->shape.rot.y + D_80A5EAFC.unk_2;
-    sp1C = arg0->shape.rot.z + D_80A5EAFC.unk_4;
+    sp1A = arg0->shape.rot.y + (&D_80A5EAFC)[1];
+    sp1C = arg0->shape.rot.z + (&D_80A5EAFC)[2];
     SysMatrix_SetStateRotationAndTranslation(arg0->world.pos.x, arg0->world.pos.y, arg0->world.pos.z, (Vec3s *) &sp18);
     Matrix_Scale(arg0->scale.x, arg0->scale.y, arg0->scale.z, 1);
     func_800BDFC0(arg1, (Gfx *) &D_050078A0);

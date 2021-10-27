@@ -91,15 +91,15 @@ void func_800AE434(GlobalContext *globalCtx, Color_RGBA8 *color, s16 sParm3, s16
     temp_v0 = temp_t0->polyOpa.p;
     temp_v0->words.w0 = 0xE7000000;
     temp_v0->words.w1 = 0;
-    temp_v0_2 = temp_v0 + 8;
+    temp_v0_2 = &temp_v0[1];
     temp_v0_2->words.w0 = 0xF8000000;
     temp_v0_2->words.w1 = (color->r << 0x18) | (color->g << 0x10) | (color->b << 8) | color->a;
-    temp_v0_3 = temp_v0_2 + 8;
+    temp_v0_3 = &temp_v0_2[1];
     temp_f6 = fabsf(temp_f2) * 2800.0f;
     temp_v0_3->words.w0 = 0xDB080000;
     temp_a0 = (0x1F400 / (s32) ((s16) (s32) temp_f6 + 0x6A4)) & 0xFFFF;
     temp_v0_3->words.w1 = temp_a0 | (temp_a0 << 0x10);
-    temp_t0->polyOpa.p = temp_v0_3 + 8;
+    temp_t0->polyOpa.p = &temp_v0_3[1];
 }
 
 void func_800AE5A0(GlobalContext *globalCtx) {
@@ -109,7 +109,7 @@ void func_800AE5A0(GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v1 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v1 + 8;
+    temp_a2->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xE7000000;
     sp18 = temp_a2;
@@ -167,15 +167,15 @@ void func_800AE778(GlobalContext *globalCtx, Color_RGBA8 *color, s16 param_3, s1
     temp_f2 = Math_CosS((s16) ((0x4000 / (s32) param_4) * param_3));
     temp_v0->words.w0 = 0xE7000000;
     temp_v0->words.w1 = 0;
-    temp_v0_2 = temp_v0 + 8;
+    temp_v0_2 = &temp_v0[1];
     temp_v0_2->words.w0 = 0xF8000000;
     temp_v0_2->words.w1 = (color->r << 0x18) | (color->g << 0x10) | (color->b << 8) | color->a;
-    temp_v0_3 = temp_v0_2 + 8;
+    temp_v0_3 = &temp_v0_2[1];
     temp_f6 = fabsf(temp_f2) * 2800.0f;
     temp_v0_3->words.w0 = 0xDB080000;
     temp_a0 = (0x1F400 / (s32) ((s16) (s32) temp_f6 + 0x6A4)) & 0xFFFF;
     temp_v0_3->words.w1 = temp_a0 | (temp_a0 << 0x10);
-    temp_t0->polyXlu.p = temp_v0_3 + 8;
+    temp_t0->polyXlu.p = &temp_v0_3[1];
 }
 
 void func_800AE8EC(GlobalContext *globalCtx) {
@@ -185,7 +185,7 @@ void func_800AE8EC(GlobalContext *globalCtx) {
 
     temp_a2 = globalCtx->state.gfxCtx;
     temp_v1 = temp_a2->polyXlu.p;
-    temp_a2->polyXlu.p = temp_v1 + 8;
+    temp_a2->polyXlu.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xE7000000;
     sp18 = temp_a2;

@@ -61,13 +61,13 @@ void func_80142100(void *arg0, Gfx **gfx, u32 arg2) {
     }
     if (arg2 != 0) {
         temp_v1->words.w0 = 0xE7000000;
-        temp_v1_2 = temp_v1 + 8;
+        temp_v1_2 = &temp_v1[1];
         temp_v1->words.w1 = 0;
         phi_v1 = temp_v1_2;
         if (arg0->unk_4 == 1) {
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_2->words.w1 = (u32) &D_0E0001C8;
-            phi_v1 = temp_v1_2 + 8;
+            phi_v1 = &temp_v1_2[1];
         }
         phi_v1->words.w1 = 0xF0A4004;
         phi_v1->words.w0 = 0xEF000C30;

@@ -114,7 +114,7 @@ u8 __osSumcalc(u8 *arg0, s32 arg1) {
             do {
 loop_4:
                 temp_a2_2 = phi_a2_2 + 4;
-                temp_v1_2 = phi_v1_3 + phi_v0_2->unk_0 + phi_v0_2->unk_1 + phi_v0_2->unk_2 + phi_v0_2->unk_3;
+                temp_v1_2 = phi_v1_3 + phi_v0_2->unk_0 + phi_v0_2[1] + phi_v0_2[2] + phi_v0_2[3];
                 phi_a2_2 = temp_a2_2;
                 phi_v1 = temp_v1_2;
                 phi_v1_3 = temp_v1_2;
@@ -304,9 +304,9 @@ block_25:
     } else {
         phi_v0_3 = 0;
     }
-    arg2->unk_1A = (s8) phi_s3_2;
+    arg2[26] = (u8) phi_s3_2;
     arg2->unk_18 = (s16) ((arg1->unk_18 & 0xFFFE) | phi_v0_3);
-    arg2->unk_1B = (u8) arg1->unk_1B;
+    arg2[27] = arg1[27];
     __osIdCheckSum(arg2, arg2 + 0x1C, arg2 + 0x1E);
     sp48 = 1;
     sp4A = 3;
@@ -331,15 +331,15 @@ loop_38:
         if (phi_v0_4->unk_0 != phi_v1_3->unk_0) {
             return 0xB;
         }
-        if (phi_v0_4->unk_1 != phi_v1_3->unk_1) {
+        if (phi_v0_4[1] != phi_v1_3[1]) {
             return 0xB;
         }
-        if (phi_v0_4->unk_2 != phi_v1_3->unk_2) {
+        if (phi_v0_4[2] != phi_v1_3[2]) {
             return 0xB;
         }
         temp_v0_12 = phi_v0_4 + 4;
         phi_v0_4 = temp_v0_12;
-        if (phi_v0_4->unk_3 != phi_v1_3->unk_3) {
+        if (phi_v0_4[3] != phi_v1_3[3]) {
             return 0xB;
         }
         phi_v1_3 += 4;
@@ -575,14 +575,14 @@ loop_13:
     if (phi_v0 != 0) {
         return phi_v0;
     }
-    phi_s1 += 0x20;
+    phi_s1 = &phi_s1[32];
     if (temp_s0 >= 8) {
         if ((temp_s4 == 0) && (temp_a1_2 = (sp48 * -2) + 0x100, temp_s4_2 = arg1 + (sp48 * 2), sp3C = temp_a1_2, phi_s1_2 = (u8 *) arg1, ((__osSumcalc(temp_s4_2, temp_a1_2) & 0xFF) != arg1->unk_1))) {
             do {
                 __osContRamRead(arg0->unk_4, arg0->unk_8, (arg0->unk_58 + temp_s3 + phi_s0_2) & 0xFFFF, phi_s1_2);
                 temp_s0_2 = phi_s0_2 + 1;
                 phi_s0_2 = temp_s0_2;
-                phi_s1_2 += 0x20;
+                phi_s1_2 = &phi_s1_2[32];
             } while (temp_s0_2 < 8);
             phi_s1_3 = (u8 *) arg1;
             if ((__osSumcalc(temp_s4_2, sp3C) & 0xFF) != arg1->unk_1) {
@@ -592,7 +592,7 @@ loop_13:
                 __osContRamWrite(arg0->unk_4, arg0->unk_8, (arg0->unk_54 + temp_s3 + phi_s0_3) & 0xFFFF, phi_s1_3, 0);
                 temp_s0_3 = phi_s0_3 + 1;
                 phi_s0_3 = temp_s0_3;
-                phi_s1_3 += 0x20;
+                phi_s1_3 = &phi_s1_3[32];
             } while (temp_s0_3 != 8);
             goto block_25;
         }

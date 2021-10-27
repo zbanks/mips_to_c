@@ -114,13 +114,13 @@ SaveContext gSaveContext;
     if (gSaveContext.magicAcquired != 1) {
         return 0x21F;
     }
-    if (gSaveContext.inventory.items[gItemSlots->unk_29] == 0x29) {
+    if (gSaveContext.inventory.items[gItemSlots[41]] == 0x29) {
         if (arg0->unk_A4 != 0x19) {
             return 0x244;
         }
         return 0;
     }
-    if (gSaveContext.inventory.items[gItemSlots->unk_28] == 0x28) {
+    if (gSaveContext.inventory.items[gItemSlots[40]] == 0x28) {
         if ((gSaveContext.weekEventReg[86] & 4) != 0) {
             return 0x242;
         }

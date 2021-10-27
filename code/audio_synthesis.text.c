@@ -674,7 +674,7 @@ void func_80187FA8(void) {
 
 void func_80187FB0(s32 *arg0, s32 arg1, s32 arg2) {
     arg0->unk_0 = (arg1 & 0xFFFFFF) | 0x2000000;
-    arg0->unk_4 = arg2;
+    arg0[1] = arg2;
 }
 
 void func_80187FD0(void) {
@@ -708,7 +708,7 @@ void func_8018802C(void) {
 
 void func_80188034(s32 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     arg0->unk_0 = ((arg1 & 0xFF) << 0x10) | 0x8000000 | (arg2 & 0xFFFF);
-    arg0->unk_4 = (s32) ((arg3 << 0x10) | (arg4 & 0xFFFF));
+    arg0[1] = (arg3 << 0x10) | (arg4 & 0xFFFF);
 }
 
 void func_80188068(void) {
@@ -721,7 +721,7 @@ void func_80188070(void) {
 
 void func_80188078(s32 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk_0 = (arg1 & 0xFFFFFF) | 0xA000000;
-    arg0->unk_4 = (s32) ((arg2 << 0x10) | (arg3 & 0xFFFF));
+    arg0[1] = (arg2 << 0x10) | (arg3 & 0xFFFF);
 }
 
 void func_801880A4(void) {
@@ -742,7 +742,7 @@ void func_801880BC(void) {
 
 void func_801880C4(s32 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk_0 = (arg3 & 0xFFFF) | 0x11000000;
-    arg0->unk_4 = (s32) ((arg1 << 0x10) | (arg2 & 0xFFFF));
+    arg0[1] = (arg1 << 0x10) | (arg2 & 0xFFFF);
 }
 
 void func_801880E8(void *arg0, s32 arg1, s16 arg2, s16 arg3, s32 arg4) {
@@ -756,7 +756,7 @@ void func_8018811C(void) {
 
 void func_80188124(s32 *arg0, s32 arg1, s32 arg2, void *arg3) {
     arg0->unk_0 = (((arg2 >> 4) & 0xFF) << 0x10) | 0x14000000 | (arg1 & 0xFFFF);
-    arg0->unk_4 = arg3;
+    arg0[1] = arg3;
 }
 
 void func_8018814C(void *arg0, s32 arg1, s32 arg2, void *arg3) {
@@ -788,12 +788,12 @@ void func_801881A8(void *arg0, s32 arg1, s32 arg2) {
 
 void func_801881C4(s32 *arg0, u8 arg1, s32 arg2, s32 arg3, s32 arg4) {
     arg0->unk_0 = ((arg1 & 0xFF) << 0x10) | 0xE000000 | (arg4 & 0xFFFF);
-    arg0->unk_4 = (s32) ((arg2 << 0x10) | (arg3 & 0xFFFF));
+    arg0[1] = (arg2 << 0x10) | (arg3 & 0xFFFF);
 }
 
 void func_801881F8(s32 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     arg0->unk_0 = ((arg4 & 0xFF) << 0x10) | (arg3 & 0xFFFF);
-    arg0->unk_4 = (s32) ((arg1 << 0x10) | (arg2 & 0xFFFF));
+    arg0[1] = (arg1 << 0x10) | (arg2 & 0xFFFF);
 }
 
 void func_80188224(void) {
@@ -835,7 +835,7 @@ void func_80188264(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 void func_80188288(s32 *arg0, s32 arg1, s32 arg2) {
     arg0->unk_0 = (arg1 & 0xFFFF) | 0x7020000;
-    arg0->unk_4 = arg2;
+    arg0[1] = arg2;
 }
 
 s32 *func_801882A0(s32 *arg0, s32 *arg1) {
@@ -843,7 +843,7 @@ s32 *func_801882A0(s32 *arg0, s32 *arg1) {
     void *temp_a3;
 
     arg0->unk_0 = 0xA000C70;
-    arg0->unk_4 = 0x71001A0;
+    arg0[1] = 0x71001A0;
     temp_a2 = arg0 + 8;
     temp_a2->unk_4 = 0xE100C70;
     temp_a2->unk_0 = (s32) ((arg1->unk_10 & 0xFFFF) | 0xC1A0000);
@@ -887,7 +887,7 @@ s32 *func_80188304(s32 arg1, void *arg2, s16 arg3) {
     }
     phi_v0->unk_0 = ((temp_t0 + 0x3D0) & 0xFFFF) | 0x8000000;
     temp_a1 = (arg1 * 2) & 0xFFFF;
-    phi_v0->unk_4 = (s32) (temp_a1 | 0xC700000);
+    phi_v0[1] = temp_a1 | 0xC700000;
     temp_a2 = phi_v0 + 8;
     temp_a2->unk_0 = (s32) ((arg2->unk_0 << 0x10) | 0x5000000 | arg2->unk_E);
     temp_a3 = temp_a2 + 8;
@@ -940,7 +940,7 @@ s32 *func_801884A0(void *arg0, void *arg1, s16 arg2) {
         phi_s0 = func_80188AFC(temp_a0, ((s16) temp_s1_2->unk_10 + 0x710) & 0xFFFF, temp_v1_2 & 0xFFFF, arg1->unk_28);
     }
     phi_s0->unk_0 = 0xA000E10;
-    phi_s0->unk_4 = temp_t1 | 0x3D00000;
+    phi_s0[1] = temp_t1 | 0x3D00000;
     temp_v1_3 = phi_s0 + 8;
     temp_v1_3->unk_0 = 0x80003D0;
     temp_t0 = temp_v1_3 + 8;
@@ -991,7 +991,7 @@ s32 *func_80188698(s32 arg1, void *arg2, s16 arg3) {
     }
     phi_v0->unk_0 = ((temp_t0 + 0x3D0) & 0xFFFF) | 0x8000000;
     temp_a1 = (arg1 * 2) & 0xFFFF;
-    phi_v0->unk_4 = (s32) (temp_a1 | 0xC700000);
+    phi_v0[1] = temp_a1 | 0xC700000;
     temp_a2 = phi_v0 + 8;
     temp_a2->unk_0 = (s32) ((arg2->unk_0 << 0x10) | 0x5000000 | (temp_t1 + 0x40)->unk_14);
     temp_a3 = temp_a2 + 8;
@@ -1011,21 +1011,21 @@ s32 *func_8018883C(s32 *arg0, s32 arg1, s32 *arg2) {
     s32 *phi_a0_2;
 
     phi_a0 = arg0;
-    if (arg2->unk_270 != 0) {
+    if (arg2[156] != 0) {
         arg0->unk_0 = (arg1 & 0xFFFF) | 0x7020000;
         temp_a0 = arg0 + 8;
-        arg0->unk_4 = (s32) arg2->unk_270;
+        arg0[1] = arg2[156];
         temp_a0->unk_0 = (s32) ((arg2->unk_0 << 0x10) | 0x7000000 | 0xC70);
-        temp_a0->unk_4 = (s32) arg2->unk_280;
+        temp_a0->unk_4 = (s32) arg2[160];
         phi_a0 = temp_a0 + 8;
     }
     phi_a0_2 = phi_a0;
-    if (arg2->unk_274 != 0) {
+    if (arg2[157] != 0) {
         phi_a0->unk_0 = (arg1 & 0xFFFF) | 0x7020000;
         temp_a0_2 = phi_a0 + 8;
-        phi_a0->unk_4 = (s32) arg2->unk_274;
+        phi_a0[1] = arg2[157];
         temp_a0_2->unk_0 = (s32) ((arg2->unk_0 << 0x10) | 0x7000000 | 0xE10);
-        temp_a0_2->unk_4 = (s32) arg2->unk_284;
+        temp_a0_2->unk_4 = (s32) arg2[161];
         phi_a0_2 = temp_a0_2 + 8;
     }
     return phi_a0_2;
@@ -1054,7 +1054,7 @@ s32 *func_801888E4(s32 *arg0, s32 *arg1, s16 arg2) {
             sp1C = (s32) arg2;
             arg1 = temp_a3;
             temp_v0_2 = func_80187E58(temp_a1_2, arg2, temp_a3);
-            temp_v0_2->unk_4 = 0xC7003D0;
+            temp_v0_2[1] = 0xC7003D0;
             temp_v0_2->unk_0 = (arg1->unk_8 & 0xFFFF) | 0xC340000;
             phi_a0 = func_80187F00(temp_v0_2 + 8, (s16) temp_a1_2, arg2, arg1);
         }
@@ -1127,7 +1127,7 @@ s32 *func_80188AFC(s32 *arg0, s32 arg1, u16 arg2, s32 arg3) {
     phi_v1_2 = temp_a2;
     if (temp_t2 != 0) {
         arg0->unk_0 = 0x140103B0;
-        arg0->unk_4 = (s32) (temp_v0 - temp_t2);
+        arg0[1] = temp_v0 - temp_t2;
         temp_a0 = arg0 + 8;
         temp_a0->unk_0 = (s32) ((temp_a1 & 0xFFFFFF) | 0xA000000);
         temp_a0->unk_4 = (s32) ((temp_a2 & 0xFFFF) | 0x3C00000);
@@ -1147,7 +1147,7 @@ s32 *func_80188AFC(s32 *arg0, s32 arg1, u16 arg2, s32 arg3) {
     phi_a1_2 = phi_a1;
     if (temp_t0 != 0) {
         temp_a0_3 = phi_a0 + 8;
-        phi_a0->unk_4 = (s32) (arg3 - temp_t0);
+        phi_a0[1] = arg3 - temp_t0;
         phi_a0->unk_0 = 0x140103B0;
         temp_a0_3->unk_0 = (s32) ((phi_a1 & 0xFFFFFF) | 0xA000000);
         temp_a0_3->unk_4 = (s32) (((temp_t0 + 0x3B0) << 0x10) | (phi_a2 & 0xFFFF));
@@ -1155,7 +1155,7 @@ s32 *func_80188AFC(s32 *arg0, s32 arg1, u16 arg2, s32 arg3) {
         phi_v1 = (phi_v1_2 + temp_t0) & 0xFFFF;
         phi_a1_2 = 0x3B0;
     }
-    phi_a0_2->unk_4 = (s32) (arg3 - temp_t0);
+    phi_a0_2[1] = arg3 - temp_t0;
     phi_a0_2->unk_0 = (((phi_v1 >> 4) & 0xFF) << 0x10) | 0x15000000 | (phi_a1_2 & 0xFFFF);
     return phi_a0_2 + 8;
 }
@@ -1168,7 +1168,7 @@ s32 *func_80188C48(s32 *arg0, u16 arg1, s16 arg2, s32 arg3, void *arg4) {
     temp_t0 = (((arg3 >> 4) & 0xFF) << 0x10) | 0x14000000;
     arg0->unk_0 = temp_t0 | (arg1 & 0xFFFF);
     temp_t1 = (arg2 & 0xFFFF) * 2;
-    arg0->unk_4 = (s32) (arg4->unk_28 + temp_t1);
+    arg0[1] = arg4->unk_28 + temp_t1;
     temp_t2 = arg0 + 8;
     temp_t2->unk_0 = (s32) (temp_t0 | ((arg1 + 0x1A0) & 0xFFFF));
     temp_t2->unk_4 = (s32) (arg4->unk_2C + temp_t1);
@@ -1183,10 +1183,10 @@ s32 *func_80188CB4(s32 *arg0, u16 arg1, s16 arg2, s32 arg3, s32 *arg4) {
     temp_t0 = (((arg3 >> 4) & 0xFF) << 0x10) | 0x15000000;
     arg0->unk_0 = temp_t0 | (arg1 & 0xFFFF);
     temp_t1 = (arg2 & 0xFFFF) * 2;
-    arg0->unk_4 = (s32) (arg4->unk_28 + temp_t1);
+    arg0[1] = arg4[10] + temp_t1;
     temp_t2 = arg0 + 8;
     temp_t2->unk_0 = (s32) (temp_t0 | ((arg1 + 0x1A0) & 0xFFFF));
-    temp_t2->unk_4 = (s32) (arg4->unk_2C + temp_t1);
+    temp_t2->unk_4 = (s32) (arg4[11] + temp_t1);
     return temp_t2 + 8;
 }
 
@@ -1263,7 +1263,7 @@ s32 *func_80188DDC(s32 *arg0, s32 *arg1, s16 arg2) {
                 temp_v1 = (phi_a2 & 0xFFFF) | 0x11000000;
                 temp_a1 = phi_a1 >> 1;
                 phi_s0->unk_0 = temp_v1;
-                phi_s0->unk_4 = 0xC700C70;
+                phi_s0[1] = 0xC700C70;
                 temp_s0->unk_4 = 0xE100E10;
                 temp_s0->unk_0 = temp_v1;
                 temp_s0_2 = temp_s0 + 8;
@@ -1276,12 +1276,12 @@ s32 *func_80188DDC(s32 *arg0, s32 *arg1, s16 arg2) {
         temp_v0_3 = temp_s1->unk_10;
         phi_s0_3 = phi_s0_2;
         if (temp_v0_3 != 0) {
-            phi_s0_3 = func_80188AFC(func_80188AFC(phi_s0_2, 0xC70, temp_v0_3 & 0xFFFF, arg1->unk_28 + (temp_s1->unk_C * 2)), 0xE10, (u16) temp_s1->unk_10, arg1->unk_2C + (temp_s1->unk_C * 2));
+            phi_s0_3 = func_80188AFC(func_80188AFC(phi_s0_2, 0xC70, temp_v0_3 & 0xFFFF, arg1[10] + (temp_s1->unk_C * 2)), 0xE10, (u16) temp_s1->unk_10, arg1[11] + (temp_s1->unk_C * 2));
         }
         temp_v0_4 = temp_s1->unk_12;
         phi_s0_4 = phi_s0_3;
         if (temp_v0_4 != 0) {
-            phi_v0 = func_80188AFC(func_80188AFC(phi_s0_3, (temp_s1->unk_10 + 0xC70) & 0xFFFF, temp_v0_4 & 0xFFFF, arg1->unk_28), (temp_s1->unk_10 + 0xE10) & 0xFFFF, (u16) temp_s1->unk_12, arg1->unk_2C);
+            phi_v0 = func_80188AFC(func_80188AFC(phi_s0_3, (temp_s1->unk_10 + 0xC70) & 0xFFFF, temp_v0_4 & 0xFFFF, arg1[10]), (temp_s1->unk_10 + 0xE10) & 0xFFFF, (u16) temp_s1->unk_12, arg1[11]);
 block_12:
             phi_s0_4 = phi_v0;
         }
@@ -1479,19 +1479,19 @@ void *func_80189064(s32 arg0, void *arg1, void *arg2, s16 arg3) {
             if (temp_t3 != 0) {
                 temp_s0 = temp_t8 + 0x18;
                 temp_v0 = func_80188D68(phi_s3, arg1, (s16) temp_s0, arg3);
-                temp_v0->unk_4 = 0xC700930;
+                temp_v0[1] = 0xC700930;
                 temp_v0->unk_0 = (temp_s0->unk_A & 0xFFFF) | 0xC340000;
                 temp_t8_2 = temp_s0->unk_14;
-                temp_v1 = temp_v0 + 8;
+                temp_v1 = &temp_v0[2];
                 sp7C = (s32) temp_t8_2;
                 phi_s3_2 = temp_v1;
                 if (temp_t8_2 != 0) {
                     temp_v1->unk_0 = 0xA000C70;
-                    temp_v1->unk_4 = 0x3D00340;
-                    phi_s3_2 = temp_v1 + 8;
+                    temp_v1[1] = 0x3D00340;
+                    phi_s3_2 = &temp_v1[2];
                 }
                 phi_s3_2->unk_0 = ((temp_s0->unk_C + 0x8000) & 0xFFFF) | 0xC340000;
-                phi_s3_2->unk_4 = 0xC700C70;
+                phi_s3_2[1] = 0xC700C70;
                 temp_s3_2 = phi_s3_2 + 8;
                 phi_s3_3 = temp_s3_2;
                 if (((temp_s0->unk_10 != 0) || (temp_s0->unk_12 != 0)) && (D_80200C70.unk_28BE != 3)) {
@@ -1504,9 +1504,9 @@ void *func_80189064(s32 arg0, void *arg1, void *arg2, s16 arg3) {
                         phi_s3_4 = func_801888E4(phi_s3_3, (s16) temp_s0, arg3);
                     }
                     temp_v0_2 = func_80188D28(func_80188DDC(phi_s3_4, temp_s0, arg3), (s16) arg1, temp_s0, arg3);
-                    temp_v0_2->unk_4 = 0x3D00C70;
+                    temp_v0_2[1] = 0x3D00C70;
                     temp_v0_2->unk_0 = (temp_s0->unk_16 & 0xFFFF) | 0xC340000;
-                    phi_s3_13 = temp_v0_2 + 8;
+                    phi_s3_13 = &temp_v0_2[2];
                 }
             }
             phi_s3_5 = phi_s3_13;
@@ -1537,7 +1537,7 @@ loop_40:
             phi_s3_12 = (s32) phi_s3_6;
             if (sp90 != 0) {
                 temp_s0_2 = sp5C + 0x18;
-                if ((sp5C->unk_288 != 0) || (temp_s0_2->unk_274 != 0)) {
+                if ((sp5C->unk_288 != 0) || (temp_s0_2[157] != 0)) {
                     phi_s3_7 = func_8018883C(phi_s3_6, (s32) arg1 * 2, temp_s0_2);
                 }
                 phi_s3_8 = phi_s3_7;
@@ -1572,7 +1572,7 @@ loop_40:
         } while ((u32) temp_s0_3 < (u32) (phi_s2_4 + &sp9C));
     }
     phi_s3_10->unk_0 = (((temp_s7 >> 4) & 0xFF) << 0x10) | 0xD000000 | 0x3B0;
-    phi_s3_10->unk_4 = 0x9300AD0;
+    phi_s3_10[1] = 0x9300AD0;
     temp_v1_2 = *D_80208E74;
     temp_s3_3 = phi_s3_10 + 8;
     phi_s3_11 = temp_s3_3;
@@ -1744,7 +1744,7 @@ s32 *func_80189620(s32 arg0, s32 *arg1, u32 *arg2, s32 arg3, s32 arg4, s32 *arg5
         arg2->unk_16 = 0;
         arg2->unk_2 = 0;
         arg2->unk_3 = 0;
-        arg2->unk_C = (s32) temp_a3->unk_B8;
+        arg2[3] = temp_a3->unk_B8;
         arg2->unk_5 = 0U;
         arg2->unk_1E = 1U;
         arg2->unk_4 = (u8) arg1->unk_5;
@@ -1773,15 +1773,15 @@ s32 *func_80189620(s32 arg0, s32 *arg1, u32 *arg2, s32 arg3, s32 arg4, s32 *arg5
         arg1 = arg1;
         sp50 = temp_s3;
         temp_v0_2 = func_8018ACC4(arg5, temp_a1, temp_a2, temp_s3);
-        temp_a2_2 = arg2->unk_C;
+        temp_a2_2 = arg2[3];
         spAE = (temp_a2_2 * 2) + 0x570;
-        arg2->unk_C = (s32) (temp_a2_2 + sp50);
+        arg2[3] = temp_a2_2 + sp50;
         arg5 = temp_v0_2;
         phi_s2_2 = arg1;
         phi_s0_2 = arg2;
         goto block_120;
     }
-    temp_v1_2 = *arg1->unk_10;
+    temp_v1_2 = *arg1[4];
     temp_v0_3 = temp_v1_2->unk_8;
     if (temp_a3->unk_38 != 0) {
         arg2->unk_0 = (u8) (arg2->unk_0 | 0x40);
@@ -1840,7 +1840,7 @@ loop_15:
                 }
                 temp_v0_5 = sp148->unk_C;
                 phi_s1->unk_0 = ((temp_v0_5->unk_0 * 0x10 * temp_v0_5->unk_4) & 0xFFFFFF) | 0xB000000;
-                phi_s1->unk_4 = (? *) D_80200C80;
+                phi_s1[1] = D_80200C80;
                 phi_s1_16 = phi_s1 + 8;
                 phi_v1_2 = spC0;
                 phi_a0 = sp50;
@@ -1852,7 +1852,7 @@ loop_15:
 loop_30:
             sp138 = 0;
             sp134 = 0;
-            temp_a2_3 = phi_t2_2->unk_C;
+            temp_a2_3 = phi_t2_2[3];
             temp_a3_2 = phi_s5 - phi_s7;
             spFC = temp_a3_2;
             temp_t0 = sp148->unk_0;
@@ -1939,7 +1939,7 @@ block_66:
                         } else {
                             temp_t0_2 = phi_a1 & 0xF;
                             temp_v0_9 = ((phi_s2 * phi_fp) + 0x1F) & 0xFFF0;
-                            phi_s1_2->unk_4 = (s32) (phi_a1 - temp_t0_2);
+                            phi_s1_2[1] = phi_a1 - temp_t0_2;
                             phi_s1_2->unk_0 = (((temp_v0_9 >> 4) & 0xFF) << 0x10) | 0x14000000 | ((0x930 - temp_v0_9) & 0xFFFF);
                             phi_a2 = *phi_t2_6;
                             phi_s1_3 = phi_s1_2 + 8;
@@ -1955,7 +1955,7 @@ block_70:
                     phi_t2_4 = phi_t2_3;
                     if ((phi_a2 >> 0x1F) != 0) {
                         phi_s1_3->unk_0 = 0xF000000;
-                        phi_s1_3->unk_4 = (s32) (sp148->unk_8 + 0x10);
+                        phi_s1_3[1] = sp148->unk_8 + 0x10;
                         sp130 = 2;
                         phi_t2_3->unk_0 = (u8) (phi_t2_3->unk_0 & 0xFF7F);
                         phi_s1_4 = phi_s1_3 + 8;
@@ -1976,9 +1976,9 @@ block_70:
                             } else {
                                 temp_s1 = phi_s1_4 + 8;
                                 phi_s1_4->unk_0 = (((0x930 - (((phi_s2 * phi_fp) + 0x1F) & 0xFFF0)) + phi_t0_2) & 0xFFFF) | 0x8000000;
-                                phi_s1_4->unk_4 = (s32) (((phi_s6 + 0x570) << 0x10) | ((phi_s0 * 2) & 0xFFFF));
+                                phi_s1_4[1] = ((phi_s6 + 0x570) << 0x10) | ((phi_s0 * 2) & 0xFFFF);
                                 temp_s1->unk_0 = (s32) ((((sp130 | 4) & 0xFF) << 0x10) | 0x1000000);
-                                temp_s1->unk_4 = (s32) phi_t2_3->unk_10;
+                                temp_s1->unk_4 = (s32) phi_t2_3[4];
                                 phi_s1_5 = temp_s1 + 8;
                             }
                         } else {
@@ -1986,22 +1986,22 @@ block_70:
                             spE8 = phi_t3_2;
                             spE4 = phi_t4_2;
                             func_80188034(phi_s1_4, 0, (s16) (0x930 - (((phi_s2 * phi_fp) + 0x1F) & 0xFFF0)) + phi_t0_2, phi_s6 + 0x570, phi_s0 * 2);
-                            func_801881A8(temp_s1_2, sp130, arg2->unk_10);
+                            func_801881A8(temp_s1_2, sp130, arg2[4]);
                             phi_s1_5 = temp_s1_2 + 8;
                             phi_t2_4 = arg2;
                         }
                     } else {
                         temp_s1_3 = phi_s1_4 + 8;
                         phi_s1_4->unk_0 = (((0x930 - (((phi_s2 * phi_fp) + 0x1F) & 0xFFF0)) + phi_t0_2) & 0xFFFF) | 0x8000000;
-                        phi_s1_4->unk_4 = (s32) (((phi_s6 + 0x570) << 0x10) | ((phi_s0 * 2) & 0xFFFF));
+                        phi_s1_4[1] = ((phi_s6 + 0x570) << 0x10) | ((phi_s0 * 2) & 0xFFFF);
                         temp_s1_3->unk_0 = (s32) (((sp130 & 0xFF) << 0x10) | 0x1000000);
-                        temp_s1_3->unk_4 = (s32) phi_t2_3->unk_10;
+                        temp_s1_3->unk_4 = (u32) phi_t2_3[4];
                         phi_s1_5 = temp_s1_3 + 8;
                     }
                     phi_s1_6 = phi_s1_5;
                     if (phi_s7 != 0) {
                         phi_s1_5->unk_0 = ((phi_s6 + (phi_s3 * 2) + 0x570) & 0xFFFFFF) | 0xA000000;
-                        phi_s1_5->unk_4 = (s32) (((phi_s4 + 0x570) << 0x10) | ((((phi_s0 + phi_t3_2) - phi_t4_2) * 2) & 0xFFFF));
+                        phi_s1_5[1] = ((phi_s4 + 0x570) << 0x10) | ((((phi_s0 + phi_t3_2) - phi_t4_2) * 2) & 0xFFFF);
                         phi_s1_6 = phi_s1_5 + 8;
                     }
                     temp_v1_5 = (phi_s0 + phi_t3_2) - phi_t4_2;
@@ -2046,9 +2046,9 @@ block_93:
                     }
                     if (sp134 != 0) {
                         phi_t2_4->unk_0 = (u8) (phi_t2_4->unk_0 | 0x80);
-                        phi_t2_4->unk_C = (s32) sp144->unk_0;
+                        phi_t2_4[3] = sp144->unk_0;
                     } else {
-                        phi_t2_4->unk_C = (s32) (phi_t2_4->unk_C + spFC);
+                        phi_t2_4[3] += spFC;
                     }
                     if (phi_s7_2 == phi_s5) {
 block_102:
@@ -2198,20 +2198,20 @@ block_120:
             }
             func_801881C4(phi_s1_9, phi_a1_2, 0x3B0, 0, temp_s4 + 0x20);
         }
-        temp_a2_4 = arg1->unk_14;
+        temp_a2_4 = arg1[5];
         phi_s6_2 = arg1;
         phi_s1_11 = phi_s1_10;
         if (temp_a2_4 != 0) {
             temp_s1_6 = phi_s1_10 + 8;
             func_80188288(phi_s1_10, temp_s4, temp_a2_4);
-            func_80188264(temp_s1_6, sp130, 0x3B0, arg2->unk_10 + 0x40);
+            func_80188264(temp_s1_6, sp130, 0x3B0, arg2[4] + 0x40);
             phi_s6_2 = arg1;
             phi_s1_11 = temp_s1_6 + 8;
         }
         temp_s0_3 = phi_s6_2->unk_7;
         temp_v1_6 = phi_s6_2->unk_E;
         temp_s5 = temp_v1_6;
-        temp_s3_3 = arg2->unk_10 + 0xE0;
+        temp_s3_3 = arg2[4] + 0xE0;
         phi_s6_3 = phi_s6_2;
         phi_s1_13 = phi_s1_11;
         if ((temp_s0_3 != 0) && (temp_v1_6 != 0)) {
@@ -2299,7 +2299,7 @@ s32 *func_8018A4B4(s32 *arg0, s32 *arg1, u32 *arg2, s32 arg3, s32 *arg4, s32 arg
     } else {
         temp_s0_2->unk_0 = (s32) (0x4B0 | 0x14100000);
         temp_s0_3 = temp_s0_2 + 8;
-        temp_s0_2->unk_4 = (s32) (arg2->unk_10 + 0x1E0);
+        temp_s0_2->unk_4 = (s32) (arg2[4] + 0x1E0);
         temp_a2 = (((temp_s2 >> 4) & 0xFF) << 0x10) | 0xC000000;
         temp_a3 = 0x4B0 << 0x10;
         temp_s0_4 = temp_s0_3 + 8;
@@ -2317,7 +2317,7 @@ s32 *func_8018A4B4(s32 *arg0, s32 *arg1, u32 *arg2, s32 arg3, s32 *arg4, s32 arg
         phi_s0 = temp_s0_6 + 8;
     }
     phi_s0->unk_0 = (s32) (((temp_s2 + 0x4B0) & 0xFFFF) | 0x15100000);
-    phi_s0->unk_4 = (s32) (arg2->unk_10 + 0x1E0);
+    phi_s0->unk_4 = (s32) (arg2[4] + 0x1E0);
     temp_s0 = phi_s0 + 8;
     temp_f0 = (f32) (arg1->unk_8 + arg1->unk_A) * 0.00012207031f;
     phi_f0 = temp_f0;
@@ -2345,11 +2345,11 @@ s32 *func_8018A768(s32 *arg0, u32 *arg1, s32 arg2, u16 arg3, u16 arg4, s32 arg5)
         func_80187FB0((s32 *)0x3B0, temp_a3);
         phi_s0 = arg0 + 8;
     } else {
-        arg0->unk_4 = (s32) ((arg2 & 0xFFFF) | 0x3B00000);
+        arg0[1] = (arg2 & 0xFFFF) | 0x3B00000;
         arg0->unk_0 = arg4 | 0x8000000;
         temp_s0 = arg0 + 8;
         temp_s0->unk_0 = (s32) (((arg5 & 0xFF) << 0x10) | 0x5000000 | (temp_a3 & 0xFFFF));
-        temp_s0->unk_4 = (s32) (arg1->unk_10 + 0x20);
+        temp_s0->unk_4 = (s32) (arg1[4] + 0x20);
         phi_s0 = temp_s0 + 8;
     }
     return phi_s0;
@@ -2453,18 +2453,18 @@ s32 *func_8018A808(s32 *arg0, s32 *arg1, u32 *arg2, s32 arg3, u16 arg4, s32 arg5
             phi_a1 = D_801D5FB8;
         }
     } else {
-        temp_s0_4 = arg0 + 8;
+        temp_s0_4 = &arg0[2];
         arg0->unk_0 = (((phi_t1 * 2) & 0xFF) << 0x10) | 0x12000000 | (sp5A & 0xFFFF);
-        arg0->unk_4 = (s32) ((phi_a3 << 0x10) | (phi_t0 & 0xFFFF));
+        arg0[1] = (phi_a3 << 0x10) | (phi_t0 & 0xFFFF);
         temp_s0_4->unk_0 = 0x16000000;
-        temp_s0_4->unk_4 = (s32) ((temp_ra << 0x10) | (u16) sp62);
-        phi_s0 = temp_s0_4 + 8;
+        temp_s0_4[1] = (temp_ra << 0x10) | (u16) sp62;
+        phi_s0 = &temp_s0_4[2];
 block_19:
         phi_a1 = *D_801D5FC0;
         phi_t4 = arg2->unk_4;
     }
     temp_v1_2 = (s32) arg1->unk_0;
-    phi_s0->unk_4 = phi_a1;
+    phi_s0[1] = phi_a1;
     phi_s0->unk_0 = ((((s32) arg4 >> 4) & 0xFF) << 0x10) | D_801D5FB4 | ((arg3 & 0xFF) << 8) | ((((s32) (phi_t4 & 0x80) >> 7) & 1) * 0x10) | ((((u32) (temp_v1_2 << 6) >> 0x1F) & 1) * 8) | (((u8) arg1->unk_0 & 1) * 4) | ((((u32) (temp_v1_2 * 0x10) >> 0x1F) & 1) * 2) | (((u32) (temp_v1_2 << 5) >> 0x1F) & 1);
     return phi_s0 + 8;
 }
@@ -2480,16 +2480,16 @@ s32 *func_8018ACC4(s32 *arg0, s32 *arg1, u32 *arg2, s32 arg3) {
     s32 *phi_s0;
 
     temp_t0 = arg1->unk_6;
-    temp_v1 = arg2->unk_C;
+    temp_v1 = arg2[3];
     phi_v1 = temp_v1;
     if (((u32) (arg1->unk_0 << 0xB) >> 0x1E) != 0) {
         func_80188124(arg0, 0x570, ((arg3 * 2) + 0xF) & ~0xF, D_801D4DB0);
-        D_801D4D90.unk_20 = (s32) (D_801D4D90.unk_20 + (arg3 * 4));
+        (&D_801D4D90)[8] += arg3 * 4;
         return arg0 + 8;
     }
     arg0->unk_0 = 0x14080570;
-    temp_s0 = arg0 + 8;
-    arg0->unk_4 = (s32) arg1->unk_10;
+    temp_s0 = &arg0[2];
+    arg0[1] = arg1[4];
     phi_s0 = temp_s0;
     if (temp_t0 != 0) {
         phi_v1 = (s32) (temp_v1 * *(&D_801D5FD4 + ((s32) temp_t0 >> 2))) / (s32) *(&D_801D5FD4 + (temp_t0 & 3));
@@ -2500,11 +2500,11 @@ s32 *func_8018ACC4(s32 *arg0, s32 *arg1, u32 *arg2, s32 arg3) {
         temp_a0 = (s32) ((arg3 - temp_v0) + 0x3F) / 0x40;
         if (temp_a0 != 0) {
             temp_s0->unk_0 = ((temp_a0 & 0xFF) << 0x10) | 0x9000000 | 0x570;
-            temp_s0->unk_4 = 0x5F00080;
-            phi_s0 = temp_s0 + 8;
+            temp_s0[1] = 0x5F00080;
+            phi_s0 = &temp_s0[2];
         }
     }
-    arg2->unk_C = temp_v1_2;
+    arg2[3] = temp_v1_2;
     return phi_s0;
 }
 
@@ -2554,7 +2554,7 @@ block_6:
             temp_v0_3 = arg3 + phi_v1;
             temp_t2 = temp_v0_3 - phi_v0;
             arg0->unk_0 = 0x80005B0;
-            arg0->unk_4 = (s32) ((temp_t2 & 0xFFFF) | 0x3B00000);
+            arg0[1] = (temp_t2 & 0xFFFF) | 0x3B00000;
             temp_a0 = arg0 + 8;
             temp_a0->unk_4 = 0;
             temp_a0->unk_0 = (s32) ((((s32) (((s32) (arg3 << 0xF) / 2) - 1) / (s32) ((s32) (temp_t2 - 2) / 2)) & 0xFFFF & 0xFFFF) | 0x6000000);
@@ -2562,14 +2562,14 @@ block_6:
             phi_v0_2 = temp_v0_3;
         } else {
             arg0->unk_0 = 0xA0005B0;
-            arg0->unk_4 = (s32) ((arg3 & 0xFFFF) | 0x3B00000);
+            arg0[1] = (arg3 & 0xFFFF) | 0x3B00000;
             phi_a0 = arg0 + 8;
             phi_v0_2 = arg3 + phi_v1;
         }
         if (phi_v0 != 0) {
             phi_a0->unk_0 = (s32) (((((s32) ((phi_v0 + 0xF) & 0xFFF0) >> 4) & 0xFF) << 0x10) | 0x14000000 | 0x5B0);
             temp_a0_2 = phi_a0 + 8;
-            phi_a0->unk_4 = (s32) (arg2->unk_10 + 0xA0);
+            phi_a0->unk_4 = (s32) (arg2[4] + 0xA0);
             temp_a0_2->unk_0 = 0xA0003B0;
             temp_a0_2->unk_4 = (s32) (((phi_v0 + 0x5B0) << 0x10) | ((phi_v0_2 - phi_v0) & 0xFFFF));
             phi_a0_3 = temp_a0_2 + 8;
@@ -2581,7 +2581,7 @@ block_6:
     } else {
         temp_v0_4 = arg3 & 0xFFFF;
         arg0->unk_0 = 0xA0005B0;
-        arg0->unk_4 = (s32) (temp_v0_4 | 0x3B00000);
+        arg0[1] = temp_v0_4 | 0x3B00000;
         temp_a0_3 = arg0 + 8;
         phi_a0_2 = temp_a0_3;
         if (phi_v1 != 0) {
@@ -2596,7 +2596,7 @@ block_6:
     phi_a0_4 = phi_a0_3;
     if (phi_v1 != 0) {
         phi_a0_3->unk_0 = (s32) (((((s32) ((phi_v1 + 0xF) & 0xFFF0) >> 4) & 0xFF) << 0x10) | 0x15000000 | ((arg3 + 0x5B0) & 0xFFFF));
-        phi_a0_3->unk_4 = (s32) (arg2->unk_10 + 0xA0);
+        phi_a0_3->unk_4 = (s32) (arg2[4] + 0xA0);
         phi_a0_4 = phi_a0_3 + 8;
     }
     phi_a0_4->unk_0 = (s32) (((((s32) ((arg3 + 0x3F) & 0xFFC0) >> 4) & 0xFF) << 0x10) | 0x4000000 | 0x7FFF);

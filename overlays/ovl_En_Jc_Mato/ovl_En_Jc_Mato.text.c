@@ -170,13 +170,13 @@ void EnJcMato_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp20 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp20->polyOpa.p;
-    sp20->polyOpa.p = temp_v0 + 8;
+    sp20->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = sp20;
     sp18 = temp_v0;
     sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp20->polyOpa.p;
-    sp20->polyOpa.p = temp_v0_2 + 8;
+    sp20->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000390;
     temp_v0_2->words.w0 = 0xDE000000;
     SysMatrix_MultiplyVector3fByState(&D_80B9E25C, &this->pos);

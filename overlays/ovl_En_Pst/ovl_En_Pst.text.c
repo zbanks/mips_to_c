@@ -248,13 +248,13 @@ block_8:
         }
     } else {
         if ((temp_v0 & 0x20) != 0) {
-            if (arg0->unk_218 == 0x33) {
+            if (arg0[1].shape.feetPos[0].x == 0x33) {
                 return &D_80B2C488;
             }
             return &D_80B2C490;
         }
         temp_t1 = arg0->params;
-        arg0->unk_210 = func_80B2B974;
+        arg0[1].shape.shadowScale = func_80B2B974;
         switch (temp_t1) {                          /* switch 2 */
         case 0:                                     /* switch 2 */
             return &D_80B2C23C;
@@ -293,18 +293,18 @@ s32 func_80B2BBFC(Actor *arg0, GlobalContext *arg1) {
             temp_v0 = temp_a2->unk_A87;
             if (temp_v0 == 0x2D) {
                 arg0->unk_208 = (u16) (temp_t9 | 0x10);
-                arg0->unk_218 = (s32) temp_a2->unk_A87;
+                arg0[1].shape.feetPos[0].x = (bitwise f32) temp_a2->unk_A87;
             } else if (temp_v0 != 0) {
                 arg0->unk_208 = (u16) (arg0->unk_208 | 0x20);
-                arg0->unk_218 = (s32) temp_a2->unk_A87;
+                arg0[1].shape.feetPos[0].x = (bitwise f32) temp_a2->unk_A87;
             }
-            arg0->unk_21C = func_80B2B874(arg0);
-            func_8013AED4(arg0 + 0x208, 0U, 7U);
+            arg0[1].shape.feetPos[0].y = (bitwise f32) func_80B2B874(arg0);
+            func_8013AED4((u16 *) &arg0[1].shape.yOffset, 0U, 7U);
             arg0->unk_20E = 0;
-            arg0->unk_210 = 0;
+            arg0[1].shape.shadowScale = 0.0f;
             arg0->unk_208 = (u16) (arg0->unk_208 | 0x40);
-            arg0->unk_1DC = func_80B2BAA4(arg0, arg1);
-            arg0->unk_188 = func_80B2BE54;
+            arg0[1].xzDistToPlayer = (bitwise f32) func_80B2BAA4(arg0, arg1);
+            arg0[1].focus.pos.z = (bitwise f32) func_80B2BE54;
             phi_v1 = 1;
         }
     }
@@ -433,7 +433,7 @@ s32 func_80B2C11C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     f32 phi_f14;
 
     if (arg1 == 2) {
-        if ((arg5->unk_208 & 0x40) != 0) {
+        if ((arg5[86].z & 0x40) != 0) {
             phi_f14 = -100.0f;
         } else {
             phi_f14 = 0.0f;

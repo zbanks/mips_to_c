@@ -332,7 +332,7 @@ s32 Sched_TaskCheckFramebuffers(OSScTask *arg0, void *arg1) {
 
     sp1C = osViGetNextFramebuffer();
     temp_v0 = osViGetCurrentFramebuffer();
-    if ((arg1 == 0) || (arg0->unk_324 != 0) || ((temp_v0 == *arg1->unk_C) && (temp_v0 != sp1C))) {
+    if ((arg1 == 0) || (arg0[9].framebuffer != 0) || ((temp_v0 == *arg1->unk_C) && (temp_v0 != sp1C))) {
         return 0;
     }
     return 1;

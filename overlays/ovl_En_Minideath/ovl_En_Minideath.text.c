@@ -296,8 +296,8 @@ void EnMinideath_Init(Actor *thisx, GlobalContext *globalCtx) {
         do {
             Math_Vec3f_Sum((Vec3f *) &this->actor.world, phi_s1, phi_s2);
             temp_s0 = phi_s0 + 0x24;
-            phi_s1 += 0x24;
-            phi_s2 += 0x24;
+            phi_s1 = &phi_s1[3];
+            phi_s2 = &phi_s2[3];
             phi_s0 = temp_s0;
         } while (temp_s0 != 0x6C);
         func_808CAB90(this);
@@ -536,8 +536,8 @@ block_7:
         sp44 = temp_v1_2;
         temp_a0 = phi_a0 + temp_v1_2->unk_2F6;
         sp32 = temp_a0;
-        sp38 = (Math_SinS(temp_a0) * sp44->unk_308) + this->actor.parent->world.pos.x;
-        sp40 = (Math_CosS(temp_a0) * sp44->unk_308) + this->actor.parent->world.pos.z;
+        sp38 = (Math_SinS(temp_a0) * (bitwise f32) sp44[2].floorPoly) + this->actor.parent->world.pos.x;
+        sp40 = (Math_CosS(temp_a0) * (bitwise f32) sp44[2].floorPoly) + this->actor.parent->world.pos.z;
         sp3C = this->actor.parent->world.pos.y + (f32) (phi_v0 * 0x14);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawToPoint((Actor *) this, (Vec3f *) &sp38), 2, 0x1000, (s16) 0x100);

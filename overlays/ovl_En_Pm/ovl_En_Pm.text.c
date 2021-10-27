@@ -582,17 +582,17 @@ s32 func_80AF7E98(Actor *arg0, s32 arg1) {
     phi_t0 = 0;
     if ((arg1 != 0) && (arg1 != 1)) {
         if ((arg1 != 3) && (arg1 != 4)) {
-            if (arg1 != arg0->unk_384) {
+            if (arg1 != arg0[2].uncullZoneForward) {
                 goto block_12;
             }
         } else {
-            temp_v0 = arg0->unk_384;
+            temp_v0 = arg0[2].uncullZoneForward;
             if ((temp_v0 != 3) && (temp_v0 != 4)) {
                 goto block_12;
             }
         }
     } else {
-        temp_v0_2 = arg0->unk_384;
+        temp_v0_2 = arg0[2].uncullZoneForward;
         if ((temp_v0_2 != 0) && (temp_v0_2 != 1)) {
 block_12:
             phi_v1 = 1;
@@ -600,10 +600,10 @@ block_12:
     }
     temp_a0 = arg0 + 0x144;
     if (phi_v1 != 0) {
-        arg0->unk_384 = arg1;
+        arg0[2].uncullZoneForward = arg1;
         arg0 = arg0;
         temp_t0 = func_8013BC6C(temp_a0, D_80AFB7F4, arg1);
-        arg0->unk_35C = (f32) arg0->unk_160;
+        arg0[2].shape.feetPos[0].x = arg0->unk_160;
         phi_t0 = temp_t0;
     }
     return phi_t0;
@@ -616,14 +616,14 @@ void func_80AF7F68(Actor *arg0, GlobalContext *arg1) {
     ColliderCylinder *temp_a2;
     u8 temp_t6;
 
-    temp_t6 = arg0->unk_258;
+    temp_t6 = arg0[1].isTargeted;
     switch (temp_t6) {
     case 9:
     case 20:
     case 21:
     case 22:
     case 24:
-        arg0->unk_22A = (s16) (s32) ((f32) arg0->unk_222 * arg0->unk_22C);
+        arg0->unk_22A = (s16) (s32) ((f32) arg0->unk_222 * arg0[1].shape.feetPos[1].z);
         CollisionCheck_SetOC(arg1, arg1 + 0x18884, arg0 + 0x1DC);
         return;
     default:
@@ -827,7 +827,7 @@ s32 func_80AF8478(Actor *arg0, GlobalContext *arg1) {
 
         } else {
             sp20 = 0;
-            if (func_801378B8(arg0 + 0x144, arg0->unk_154) != 0) {
+            if (func_801378B8(arg0 + 0x144, arg0[1].home.pos.z) != 0) {
                 func_80AF7E98(arg0, 4);
                 temp_t4 = arg0->unk_356 & 0xFDFF;
                 arg0->unk_356 = temp_t4;
@@ -852,28 +852,28 @@ s32 func_80AF8478(Actor *arg0, GlobalContext *arg1) {
     u8 temp_t6;
     u8 temp_v0_2;
 
-    temp_t6 = arg0->unk_258;
+    temp_t6 = arg0[1].isTargeted;
     switch (temp_t6) {                              /* switch 1 */
     case 28:                                        /* switch 1 */
-        arg0->unk_37C = func_80AF8348;
+        arg0[2].projectedPos.z = func_80AF8348;
         return &D_80AFB6BC;
     case 29:                                        /* switch 1 */
         return &D_80AFB710;
     case 16:                                        /* switch 1 */
-        arg0->unk_37C = func_80AF81E8;
+        arg0[2].projectedPos.z = func_80AF81E8;
         return &D_80AFB5A0;
     case 17:                                        /* switch 1 */
         return &D_80AFB644;
     case 24:                                        /* switch 1 */
         temp_v0 = arg0->unk_356;
         if ((temp_v0 & 0x2000) != 0) {
-            arg0->unk_37C = func_80AF8478;
+            arg0[2].projectedPos.z = func_80AF8478;
             return &D_80AFB74C;
         }
         if ((temp_v0 & 0x4000) != 0) {
             return &D_80AFB764;
         }
-        arg0->unk_37C = func_80AF8478;
+        arg0[2].projectedPos.z = func_80AF8478;
         return &D_80AFB658;
     case 25:                                        /* switch 1 */
         return &D_80AFB650;
@@ -882,7 +882,7 @@ s32 func_80AF8478(Actor *arg0, GlobalContext *arg1) {
         if (Player_GetMask(arg1) == 2) {
             return &D_80AFB744;
         }
-        temp_v0_2 = arg0->unk_258;
+        temp_v0_2 = arg0[1].isTargeted;
         if ((s32) temp_v0_2 >= 0x17) {
             switch (temp_v0_2);                     /* switch 2; jump table: jtbl_80AFBADC */
         } else {
@@ -919,16 +919,16 @@ s32 func_80AF86F0(Actor *arg0, GlobalContext *arg1) {
         phi_v1 = sp24;
         if (func_800B84D0(arg0, arg1) != 0) {
             func_8013AED4(arg0 + 0x356, 0U, 7U);
-            arg0->unk_398 = 0;
+            arg0[2].prevPos.z = 0.0f;
             arg0->unk_378 = 0;
-            arg0->unk_37C = 0;
-            arg0->child = arg0->unk_268;
-            temp_v1 = arg0->unk_258;
+            arg0[2].projectedPos.z = 0.0f;
+            arg0->child = arg0[1].child;
+            temp_v1 = arg0[1].isTargeted;
             arg0->unk_25C = func_80AF8540(arg0, arg1);
             if ((temp_v1 != 0x18) && (temp_v1 != 9) && (temp_v1 != 0x14) && (temp_v1 != 0x15) && (temp_v1 != 0x16)) {
                 arg0->unk_356 = (u16) (arg0->unk_356 | 0x20);
             }
-            arg0->unk_188 = func_80AFA5FC;
+            arg0[1].focus.pos.z = (bitwise f32) func_80AFA5FC;
             phi_v1 = 1;
         }
     }
@@ -1136,7 +1136,7 @@ void func_80AF8C68(void *arg0, void *arg1) {
 ? func_80AF8D84(Actor *arg0, GlobalContext *arg1) {
     s32 temp_v0;
 
-    temp_v0 = arg0->unk_384;
+    temp_v0 = arg0[2].uncullZoneForward;
     if (temp_v0 != 7) {
         if (temp_v0 == 0xA) {
             func_80AF7E98((Actor *)9);
@@ -1161,7 +1161,7 @@ void func_80AF8C68(void *arg0, void *arg1) {
     if ((arg1->actorCtx.actorList[2].first->unk_A6C & 0x440) != 0) {
         arg0->unk_356 = (u16) (arg0->unk_356 | 0x400);
         if (temp_a2 != arg0->unk_358) {
-            temp_v0 = arg0->unk_384;
+            temp_v0 = arg0[2].uncullZoneForward;
             if ((temp_v0 == 0) || (temp_v0 == 1)) {
                 sp20 = (s32) temp_a2;
                 sp2A = temp_a2;
@@ -1205,22 +1205,22 @@ s32 func_80AF8ED4(Actor *arg0, GlobalContext *arg1, u8 *arg2, u8 arg3, s16 arg4)
 
     sp24 = 0;
     sp4F = (u8) arg0->params;
-    arg0->unk_234 = NULL;
+    arg0[1].projectedPos.y = NULL;
     temp_v0 = func_80AF7CB0(arg0, arg1, arg3, arg4);
     temp_a2 = *(&D_80AFB430 + (*arg2 * 4));
     phi_v1 = temp_v0;
     if (temp_a2 >= 0) {
         sp2C = temp_v0;
-        arg0->unk_234 = func_8013BB34(arg1, sp4F, temp_a2);
+        arg0[1].projectedPos.y = func_8013BB34(arg1, sp4F, temp_a2);
         phi_v1 = sp2C;
     }
     if ((phi_v1 != 0) && (phi_v1->update != 0)) {
-        temp_v0_2 = arg0->unk_234;
+        temp_v0_2 = arg0[1].projectedPos.y;
         if (temp_v0_2 != 0) {
             temp_v0_3 = Lib_SegmentedToVirtual((void *) temp_v0_2->points);
             sp48 = temp_v0_3;
-            Math_Vec3s_ToVec3f((Vec3f *) &sp3C, ((arg0->unk_234->count * 6) + temp_v0_3) - 0xC);
-            Math_Vec3s_ToVec3f((Vec3f *) &sp30, ((arg0->unk_234->count * 6) + sp48) - 6);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp3C, ((arg0[1].projectedPos.y->count * 6) + temp_v0_3) - 0xC);
+            Math_Vec3s_ToVec3f((Vec3f *) &sp30, ((arg0[1].projectedPos.y->count * 6) + sp48) - 6);
             arg0->shape.shadowDraw = NULL;
             arg0->world.rot.y = Math_Vec3f_Yaw((Vec3f *) &sp3C, (Vec3f *) &sp30);
             Math_Vec3f_Copy(arg0 + 0x24, (Vec3f *) &sp30);
@@ -1248,14 +1248,14 @@ s32 func_80AF9008(Actor *arg0, GlobalContext *arg1, void *arg2) {
     sp56 = gSaveContext.time - 0x3FFC;
     sp2C = 0;
     sp55 = (u8) arg0->params;
-    arg0->unk_234 = NULL;
+    arg0[1].projectedPos.y = NULL;
     sp50 = func_80AF7D60(arg1, arg2->unk_0);
     temp_a2 = *(&D_80AFB430 + (arg2->unk_0 * 4));
     if (temp_a2 >= 0) {
-        arg0->unk_234 = func_8013BB34(arg1, sp55, temp_a2);
+        arg0[1].projectedPos.y = func_8013BB34(arg1, sp55, temp_a2);
     }
     if ((sp50 != 0) && (sp50->unk_138 != 0)) {
-        temp_v0 = arg0->unk_234;
+        temp_v0 = arg0[1].projectedPos.y;
         if (temp_v0 != 0) {
             temp_v0_2 = Lib_SegmentedToVirtual((void *) temp_v0->points);
             sp4C = temp_v0_2;
@@ -1271,9 +1271,9 @@ s32 func_80AF9008(Actor *arg0, GlobalContext *arg1, void *arg2) {
                 phi_v1 = -(s32) temp_v0_3;
             }
             if (phi_v1 < 0x4001) {
-                arg0->unk_260 = -0x4B;
+                arg0[1].colorFilterTimer = -0x4B;
             } else {
-                arg0->unk_260 = 0x4B;
+                arg0[1].colorFilterTimer = 0x4B;
             }
             arg0->unk_36C = (s16) (arg2->unk_8 - arg2->unk_4);
             arg0->flags &= -2;
@@ -1312,23 +1312,23 @@ s32 func_80AF91E8(Actor *arg0, GlobalContext *arg1, void *arg2) {
     s32 phi_v1_2;
 
     sp2B = arg0->params & 0xFF;
-    arg0->unk_234 = NULL;
+    arg0[1].projectedPos.y = NULL;
     temp_t0 = gSaveContext.time - 0x3FFC;
     temp_a3 = *(&D_80AFB430 + (arg2->unk_0 * 4));
     if (temp_a3 >= 0) {
         sp20 = 0;
         sp2E = temp_t0 & 0xFFFF;
-        arg0->unk_234 = func_8013BB34(arg1, sp2B, temp_a3);
+        arg0[1].projectedPos.y = func_8013BB34(arg1, sp2B, temp_a3);
     }
-    temp_v0 = arg0->unk_234;
+    temp_v0 = arg0[1].projectedPos.y;
     phi_v0 = temp_v0;
     phi_v1_2 = 0;
     if ((temp_v0 != 0) && ((s32) temp_v0->count < 3)) {
-        arg0->unk_234 = NULL;
+        arg0[1].projectedPos.y = NULL;
         phi_v0 = NULL;
     }
     if (phi_v0 != 0) {
-        temp_v0_2 = arg0->unk_258;
+        temp_v0_2 = arg0[1].isTargeted;
         if (((s32) temp_v0_2 < 0x26) && (temp_v0_2 != 0) && ((s32) arg0->unk_374 >= 0)) {
             phi_v1 = temp_t0 & 0xFFFF & 0xFFFF;
         } else {
@@ -1336,19 +1336,19 @@ s32 func_80AF91E8(Actor *arg0, GlobalContext *arg1, void *arg2) {
         }
         temp_v0_3 = arg2->unk_8;
         if (temp_v0_3 < phi_v1) {
-            arg0->unk_248 = (s32) ((phi_v1 - temp_v0_3) + 0xFFFF);
+            arg0[1].uncullZoneDownward = (phi_v1 - temp_v0_3) + 0xFFFF;
         } else {
-            arg0->unk_248 = (s32) (temp_v0_3 - phi_v1);
+            arg0[1].uncullZoneDownward = temp_v0_3 - phi_v1;
         }
-        arg0->unk_254 = (s32) ((temp_t0 & 0xFFFF) - phi_v1);
-        temp_lo = (s32) arg0->unk_248 / (s32) ((arg0->unk_234->count - 2) & 0xFFFF);
-        arg0->unk_24C = temp_lo;
+        arg0[1].prevPos.z = (temp_t0 & 0xFFFF) - phi_v1;
+        temp_lo = (s32) arg0[1].uncullZoneDownward / (s32) ((arg0[1].projectedPos.y->count - 2) & 0xFFFF);
+        arg0[1].prevPos.x = temp_lo;
         temp_t7 = arg0->unk_356 & ~8;
         temp_t9 = temp_t7 & 0xFFFF & ~0x10;
         arg0->unk_356 = temp_t7;
-        arg0->unk_250 = (s32) (((s32) arg0->unk_254 / temp_lo) + 2);
+        arg0[1].prevPos.y = ((s32) arg0[1].prevPos.z / temp_lo) + 2;
         arg0->unk_356 = temp_t9;
-        if (arg0->unk_258 == 0x1B) {
+        if (arg0[1].isTargeted == 0x1B) {
             Audio_PlayActorSound2(arg0, 0x29ADU);
             Actor_UnsetSwitchFlag(arg1, 0);
         }
@@ -1402,15 +1402,15 @@ s32 func_80AF94AC(Actor *arg0, GlobalContext *arg1, u8 *arg2) {
     s32 phi_v1;
 
     sp4F = (u8) arg0->params;
-    arg0->unk_234 = NULL;
+    arg0[1].projectedPos.y = NULL;
     temp_a3 = *(&D_80AFB430 + (*arg2 * 4));
     phi_v1 = 0;
     if (temp_a3 >= 0) {
         sp28 = 0;
-        arg0->unk_234 = func_8013BB34(arg1, sp4F, temp_a3);
+        arg0[1].projectedPos.y = func_8013BB34(arg1, sp4F, temp_a3);
         phi_v1 = sp28;
     }
-    temp_v0 = arg0->unk_234;
+    temp_v0 = arg0[1].projectedPos.y;
     if ((temp_v0 != 0) && ((s32) temp_v0->count >= 2)) {
         temp_v0_2 = Lib_SegmentedToVirtual((void *) temp_v0->points);
         sp30 = temp_v0_2;
@@ -1423,8 +1423,8 @@ s32 func_80AF94AC(Actor *arg0, GlobalContext *arg1, u8 *arg2) {
         if (*arg2 == 0x18) {
             Actor_UnsetSwitchFlag(arg1, 0);
             Actor_UnsetSwitchFlag(arg1, 1);
-            arg0->unk_394 = 0;
-            arg0->unk_368 = 60.0f;
+            arg0[2].prevPos.y = 0.0f;
+            arg0[2].shape.feetPos[1].x = 60.0f;
             func_80AF7E98(arg0, 9);
         }
         phi_v1 = 1;
@@ -1466,19 +1466,19 @@ s32 func_80AF95E8(Actor *arg0, GlobalContext *arg1, u8 *arg2) {
     if ((phi_a3 >= 0) && (sp28 = 0, (func_80AF7DC4(arg0, arg1, (s16) phi_a3, phi_a3) == 0))) {
         return 0;
     }
-    arg0->unk_234 = NULL;
+    arg0[1].projectedPos.y = NULL;
     temp_a3 = *(&D_80AFB430 + (*arg2 * 4));
     if (temp_a3 >= 0) {
         sp28 = 0;
-        arg0->unk_234 = func_8013BB34(arg1, sp4F, temp_a3);
+        arg0[1].projectedPos.y = func_8013BB34(arg1, sp4F, temp_a3);
     }
-    temp_v0_2 = arg0->unk_234;
+    temp_v0_2 = arg0[1].projectedPos.y;
     phi_v1 = 0;
     if ((temp_v0_2 != 0) && ((s32) temp_v0_2->count >= 2)) {
         temp_v0_3 = Lib_SegmentedToVirtual((void *) temp_v0_2->points);
         sp30 = temp_v0_3;
-        Math_Vec3s_ToVec3f((Vec3f *) &sp40, ((arg0->unk_234->count * 6) + temp_v0_3) - 6);
-        Math_Vec3s_ToVec3f((Vec3f *) &sp34, ((arg0->unk_234->count * 6) + sp30) - 0xC);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp40, ((arg0[1].projectedPos.y->count * 6) + temp_v0_3) - 6);
+        Math_Vec3s_ToVec3f((Vec3f *) &sp34, ((arg0[1].projectedPos.y->count * 6) + sp30) - 0xC);
         arg0->world.rot.y = Math_Vec3f_Yaw((Vec3f *) &sp34, (Vec3f *) &sp40);
         Math_Vec3s_Copy(arg0 + 0xBC, arg0 + 0x30);
         Math_Vec3f_Copy(arg0 + 0x24, (Vec3f *) &sp40);
@@ -1554,7 +1554,7 @@ s32 func_80AF992C(Actor *arg0, ? arg1, u8 *arg2) {
     func_8013AED4(arg0 + 0x356, 3U, 7U);
     arg0->targetMode = 6;
     arg0->gravity = -1.0f;
-    arg0->unk_368 = 80.0f;
+    arg0[2].shape.feetPos[1].x = 80.0f;
     if (*arg2 == 0xE) {
         arg0->unk_356 = (u16) (arg0->unk_356 & 0xFDFF);
         func_80AF7E98(arg0, 0xD);
@@ -1581,7 +1581,7 @@ s32 func_80AF9A0C(Actor *arg0) {
         arg0->unk_356 = temp_t8;
         temp_t0 = temp_t9 | 0x9000;
         arg0->unk_356 = temp_t0;
-        if (arg0->unk_258 != 0) {
+        if (arg0[1].isTargeted != 0) {
             arg0->unk_356 = (u16) (temp_t0 | 0x800);
             func_80AF7E98(arg0, 5);
         } else {
@@ -1608,7 +1608,7 @@ s32 func_80AF9AB0(Actor *arg0) {
         arg0->unk_356 = temp_t8;
         temp_t0 = temp_t9 | 0x9000;
         arg0->unk_356 = temp_t0;
-        if (arg0->unk_258 != 0) {
+        if (arg0[1].isTargeted != 0) {
             arg0->unk_356 = (u16) (temp_t0 | 0x800);
             func_80AF7E98(arg0, 5);
         } else {
@@ -1635,7 +1635,7 @@ s32 func_80AF9B54(Actor *arg0) {
         arg0->unk_356 = temp_t8;
         temp_t0 = temp_t9 | 0x20;
         arg0->unk_356 = temp_t0;
-        if (arg0->unk_258 != 0) {
+        if (arg0[1].isTargeted != 0) {
             arg0->unk_356 = (u16) (temp_t0 | 0x800);
             func_80AF7E98(arg0, 5);
         } else {
@@ -1784,11 +1784,11 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     s16 temp_v1;
     s16 phi_a0;
 
-    sp44 = func_80AF7D60(arg1, arg0->unk_258);
+    sp44 = func_80AF7D60(arg1, arg0[1].isTargeted);
     if ((func_8013AD6C(arg1) == 0) && (arg0->unk_374 != 0)) {
         if ((sp44 != 0) && (sp44->unk_138 != 0)) {
             if (((f32) arg0->unk_36E / (f32) arg0->unk_36C) <= 0.9f) {
-                sp44->unk_1A7 = (s8) arg0->unk_260;
+                sp44->unk_1A7 = (s8) arg0[1].colorFilterTimer;
             } else {
                 sp44->unk_1A7 = 0;
             }
@@ -1842,28 +1842,28 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
 
     sp50 = 0;
     sp54 = 0;
-    func_8013AF00((void *) &sp7C, 3, arg0->unk_234->count + 3);
+    func_8013AF00((void *) &sp7C, 3, arg0[1].projectedPos.y->count + 3);
     temp_v1 = arg0 + 0x238;
     phi_v1 = temp_v1;
     if ((arg0->unk_356 & 8) == 0) {
         temp_v0 = arg0 + 0x250;
         sp58.unk_0 = D_801D15B0.x;
         temp_a1 = arg0 + 0x244;
-        sp58.unk_4 = (f32) D_801D15B0.y;
+        (&sp58)[1] = D_801D15B0.y;
         temp_a2 = arg0 + 0x254;
-        sp58.unk_8 = (f32) D_801D15B0.z;
+        (&sp58)[2] = D_801D15B0.z;
         sp44 = temp_a2;
         sp48 = temp_a1;
         sp40 = temp_v0;
-        func_8013B6B0(arg0->unk_234, temp_a1, temp_a2, arg0->unk_24C, arg0->unk_248, temp_v0, (void *) &sp7C, (Vec3f *) &sp58, (s16) (s32) arg0->unk_374);
-        func_8013B878(arg1, arg0->unk_234, arg0->unk_250, (Vec3f *) &sp58);
+        func_8013B6B0(arg0[1].projectedPos.y, temp_a1, temp_a2, arg0[1].prevPos.x, arg0[1].uncullZoneDownward, temp_v0, (void *) &sp7C, (Vec3f *) &sp58, (s16) (s32) arg0->unk_374);
+        func_8013B878(arg1, arg0[1].projectedPos.y, arg0[1].prevPos.y, (Vec3f *) &sp58);
         arg0->unk_356 = (u16) (arg0->unk_356 | 8);
         arg0->world.pos.y = sp5C;
         phi_v1 = arg0 + 0x238;
     } else {
         sp58.unk_0 = temp_v1->x;
-        sp58.unk_4 = (f32) temp_v1->y;
-        sp58.unk_8 = (f32) temp_v1->z;
+        (&sp58)[1] = temp_v1->y;
+        (&sp58)[2] = temp_v1->z;
         sp40 = arg0 + 0x250;
         sp44 = arg0 + 0x254;
         sp48 = arg0 + 0x244;
@@ -1872,17 +1872,17 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     arg0->world.pos.z = sp60;
     sp3C = phi_v1;
     if (func_8013AD6C(arg1) != 0) {
-        sp54 = arg0->unk_254;
-        sp50 = arg0->unk_250;
+        sp54 = arg0[1].prevPos.z;
+        sp50 = arg0[1].prevPos.y;
         sp58.unk_0 = arg0->world.pos.x;
-        sp58.unk_4 = (f32) arg0->world.pos.y;
-        sp58.unk_8 = (f32) arg0->world.pos.z;
+        (&sp58)[1] = arg0->world.pos.y;
+        (&sp58)[2] = arg0->world.pos.z;
     }
     phi_v1->x = D_801D15B0.x;
     phi_v1->y = D_801D15B0.y;
     phi_v1->z = D_801D15B0.z;
     sp3C = phi_v1;
-    if (func_8013B6B0(arg0->unk_234, sp48, sp44, arg0->unk_24C, arg0->unk_248, sp40, (void *) &sp7C, phi_v1, (s16) (s32) arg0->unk_374) != 0) {
+    if (func_8013B6B0(arg0[1].projectedPos.y, sp48, sp44, arg0[1].prevPos.x, arg0[1].uncullZoneDownward, sp40, (void *) &sp7C, phi_v1, (s16) (s32) arg0->unk_374) != 0) {
         arg0->unk_356 = (u16) (arg0->unk_356 | 0x10);
     } else {
         sp70.unk_0 = (f32) arg0->world.pos.x;
@@ -1896,18 +1896,18 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     }
     sp3C = phi_v1;
     if (func_8013AD6C(arg1) != 0) {
-        arg0->unk_254 = sp54;
-        arg0->unk_250 = sp50;
+        arg0[1].prevPos.z = sp54;
+        arg0[1].prevPos.y = sp50;
         phi_v1->x = sp58.unk_0;
-        phi_v1->y = sp58.unk_4;
-        phi_v1->z = sp58.unk_8;
+        phi_v1->y = (&sp58)[1];
+        phi_v1->z = (&sp58)[2];
     } else {
         temp_a0 = arg0 + 0x144;
-        if ((arg0->unk_258 != 0x5B) && ((sp48 = temp_a0, (func_801378B8((SkelAnime *) temp_a0, 3.0f) != 0)) || (func_801378B8((SkelAnime *) temp_a0, 8.0f) != 0))) {
+        if ((arg0[1].isTargeted != 0x5B) && ((sp48 = temp_a0, (func_801378B8((SkelAnime *) temp_a0, 3.0f) != 0)) || (func_801378B8((SkelAnime *) temp_a0, 8.0f) != 0))) {
             Audio_PlayActorSound2(arg0, 0x284AU);
         }
     }
-    if (((arg0->unk_356 & 0x10) != 0) && (arg0->unk_258 == 0x5A)) {
+    if (((arg0->unk_356 & 0x10) != 0) && (arg0[1].isTargeted == 0x5A)) {
         temp_v0_2 = (gSaveContext.weekEventReg[89] | 0x40) & 0xFF;
         gSaveContext.weekEventReg[89] = temp_v0_2;
         if (temp_v0_2 == 0) {
@@ -1920,13 +1920,13 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
 ? func_80AFA170(Actor *arg0, ? arg1) {
     ? sp34;
     ? sp28;
+    Actor *temp_v0_3;
     s16 temp_v0;
     u8 temp_t6;
     u8 temp_v0_2;
-    void *temp_v0_3;
     s16 phi_v1;
 
-    temp_t6 = arg0->unk_258;
+    temp_t6 = arg0[1].isTargeted;
     switch (temp_t6) {
     case 28:
         if ((s32) gSaveContext.time >= 0x1199) {
@@ -1936,10 +1936,10 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     case 16:
     case 17:
     case 18:
-        if ((arg0->unk_384 == 5) && (func_801378B8(arg0 + 0x144, arg0->unk_154) != 0)) {
+        if ((arg0[2].uncullZoneForward == 5) && (func_801378B8(arg0 + 0x144, arg0[1].home.pos.z) != 0)) {
             func_80AF7E98(arg0, 6);
             arg0->unk_36C = 0x28;
-        } else if (arg0->unk_384 == 6) {
+        } else if ((bitwise s32) arg0[2].uncullZoneForward == 6) {
             temp_v0 = arg0->unk_36C;
             if (temp_v0 == 0) {
                 phi_v1 = 0;
@@ -1959,13 +1959,13 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     case 6:
     case 7:
     case 19:
-        if ((arg0->unk_384 == 0xB) && (func_801378B8((SkelAnime *) (arg0 + 0x144), arg0->unk_154) != 0)) {
+        if (((bitwise s32) arg0[2].uncullZoneForward == 0xB) && (func_801378B8((SkelAnime *) &arg0[1], arg0[1].home.pos.z) != 0)) {
             func_80AF7E98(arg0, 4);
         }
-        if ((arg0->unk_384 == 0xB) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 8.0f) != 0)) {
+        if (((bitwise s32) arg0[2].uncullZoneForward == 0xB) && (func_801378B8((SkelAnime *) &arg0[1], 8.0f) != 0)) {
             Audio_PlayActorSound2(arg0, 0x284BU);
         }
-        temp_v0_2 = arg0->unk_258;
+        temp_v0_2 = arg0[1].isTargeted;
         if (temp_v0_2 == 0x13) {
             func_80AF8BA8(4);
         } else {
@@ -1973,9 +1973,9 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
         }
         break;
     }
-    temp_v0_3 = arg0->unk_268;
-    if ((temp_v0_3 != 0) && (temp_v0_3->unk_138 != 0)) {
-        Math_Vec3f_Copy((Vec3f *) &sp34, temp_v0_3 + 0x24);
+    temp_v0_3 = arg0[1].child;
+    if ((temp_v0_3 != 0) && (temp_v0_3->update != 0)) {
+        Math_Vec3f_Copy((Vec3f *) &sp34, (Vec3f *) &temp_v0_3->world);
         Math_Vec3f_Copy((Vec3f *) &sp28, (Vec3f *) &arg0->world);
         arg0->world.rot.y = Math_Vec3f_Yaw((Vec3f *) &sp28, (Vec3f *) &sp34);
     }
@@ -1990,7 +1990,7 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
     s32 phi_v1;
     s16 phi_v1_2;
 
-    temp_t6 = arg0->unk_258;
+    temp_t6 = arg0[1].isTargeted;
     switch (temp_t6) {
     case 14:
     case 24:
@@ -2034,7 +2034,7 @@ s32 func_80AF9BF8(EnPm *arg0, u8 *arg2) {
 void func_80AFA438(Actor *arg0) {
     u8 temp_t7;
 
-    temp_t7 = arg0->unk_258;
+    temp_t7 = arg0[1].isTargeted;
     switch (temp_t7) {
     case 3:
     case 4:
@@ -2198,7 +2198,7 @@ void func_80AFA724(Actor *arg0, GlobalContext *arg1) {
 
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
     Actor_UpdateBgCheckInfo(arg1, arg0, 30.0f, 12.0f, 0.0f, 4U);
-    temp_a0 = arg0 + 0x144;
+    temp_a0 = &arg0[1];
     sp24 = temp_a0;
     if ((func_801378B8((SkelAnime *) temp_a0, 3.0f) != 0) || (func_801378B8((SkelAnime *) temp_a0, 8.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x284AU);
@@ -2335,7 +2335,7 @@ void EnPm_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_s1 = globalCtx->state.gfxCtx;
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
         temp_v0 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0 + 8;
+        temp_s1->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp3C = temp_v0;
         sp3C->words.w1 = Lib_SegmentedToVirtual(*D_80AFB914);

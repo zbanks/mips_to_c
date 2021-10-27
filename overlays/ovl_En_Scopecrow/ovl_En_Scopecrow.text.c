@@ -266,10 +266,10 @@ f32 func_80BCD4D0(u8 *arg0, s32 arg1, Vec3f *arg2, s16 *arg3) {
     if (arg0 != 0) {
         temp_v1 = (arg1 * 6) + Lib_SegmentedToVirtual(arg0->unk_4);
         sp20 = (f32) temp_v1->unk_0;
-        sp24 = (f32) temp_v1->unk_2;
-        sp28 = (f32) temp_v1->unk_4;
+        sp24 = (f32) temp_v1[1];
+        sp28 = (f32) temp_v1[2];
     }
-    arg3->unk_2 = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
+    arg3[1] = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
     arg3->unk_0 = Math_Vec3f_Pitch(arg2, (Vec3f *) &sp20);
     return sp24 - arg2->y;
 }
@@ -353,11 +353,11 @@ void EnScopecrow_Init(Actor *thisx, GlobalContext *globalCtx) {
             temp_a2_2 = &sp3C;
             temp_v1 = (this->unk_262 * 6) + Lib_SegmentedToVirtual(this->unk_1F8->unk_4);
             sp3C = (f32) temp_v1->unk_0;
-            sp40 = (f32) temp_v1->unk_2;
-            sp44 = (f32) temp_v1->unk_4;
+            sp40 = (f32) temp_v1[1];
+            sp44 = (f32) temp_v1[2];
             this->actor.world.pos.x = temp_a2_2->unk_0;
-            this->actor.world.pos.y = temp_a2_2->unk_4;
-            this->actor.world.pos.z = temp_a2_2->unk_8;
+            this->actor.world.pos.y = temp_a2_2[1];
+            this->actor.world.pos.z = temp_a2_2[2];
             temp_f0 = func_800C3FA0(&globalCtx->colCtx, &sp4C, temp_a2_2);
             this->actor.world.pos.y = temp_f0;
             if (temp_f0 == -32000.0f) {

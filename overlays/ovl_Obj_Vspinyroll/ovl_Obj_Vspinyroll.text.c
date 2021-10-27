@@ -204,9 +204,9 @@ void func_80A3C4E0(f32 *arg0, f32 *arg1, s16 arg2) {
 
     sp1C = Math_SinS(arg2);
     temp_f0 = Math_CosS(arg2);
-    arg0->unk_0 = (arg1->unk_8 * sp1C) + (arg1->unk_0 * temp_f0);
-    arg0->unk_4 = (f32) arg1->unk_4;
-    arg0->unk_8 = (f32) ((arg1->unk_8 * temp_f0) - (arg1->unk_0 * sp1C));
+    arg0->unk_0 = (arg1[2] * sp1C) + (arg1->unk_0 * temp_f0);
+    arg0[1] = arg1[1];
+    arg0[2] = (arg1[2] * temp_f0) - (arg1->unk_0 * sp1C);
 }
 
 void func_80A3C560(ObjVspinyroll *arg0) {
@@ -361,10 +361,10 @@ s32 func_80A3C8D8(Actor *arg0, GlobalContext *arg1, Vec3f *arg2, s32 arg3) {
     spF8 = temp_v0;
     spEC = 0.0f;
     sp9C = 0;
-    arg0->unk_388 = 0;
+    arg0[2].uncullZoneScale = 0.0f;
     phi_f20 = 3.4028235e38f;
     phi_s3 = 0;
-    if (arg0->unk_38C > 0) {
+    if (arg0[2].uncullZoneDownward > 0) {
         sp94 = arg1 + 0x830;
         sp98 = temp_v0;
         temp_s6 = &spCC;
@@ -383,8 +383,8 @@ s32 func_80A3C8D8(Actor *arg0, GlobalContext *arg1, Vec3f *arg2, s32 arg3) {
             spE0 += arg0->world.pos.z;
             Math_Vec3f_Copy((Vec3f *) temp_s6, (Vec3f *) temp_a1_2);
             temp_a2 = temp_s6;
-            spCC += 30.0f * arg0->unk_3B4;
-            spD4 += 30.0f * arg0->unk_3BC;
+            spCC += 30.0f * arg0[2].next;
+            spD4 += 30.0f * arg0[2].destroy;
             if (func_800C56E0(sp94, temp_s2, temp_a2, &spC0, phi_s4, 1, 0, 0, 1, phi_s5, arg0, 0.0f) != 0) {
                 if ((arg3 != 0) && ((arg0->flags & 0x40) != 0)) {
                     temp_a1_3 = &spA8;
@@ -672,22 +672,22 @@ void func_80A3D2C0(Actor *this, GlobalContext *globalCtx) {
     SysMatrix_InsertXRotation_s(sp3C, 1);
     Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_06000460;
     sp20 = &D_06000460;
     func_80A3CC84(120.0f, &D_06000460);
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp20 = &D_06000460;
     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_4 + 8;
+    temp_s1->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06000460;
     temp_v0_4->words.w0 = 0xDE000000;
 }

@@ -109,8 +109,8 @@ struct _mips2c_stack_func_80ACD2E4 {
     /* 0x00 */ char pad_0[0x34];
     /* 0x34 */ Actor *sp34;                         /* inferred */
     /* 0x38 */ f32 sp38;                            /* inferred */
-    /* 0x3C */ ? sp3C;                              /* inferred */
-    /* 0x3C */ char pad_3C[0xC];
+    /* 0x3C */ f32 sp3C;                            /* inferred */
+    /* 0x40 */ char pad_40[0x8];
 };                                                  /* size = 0x48 */
 
 struct _mips2c_stack_func_80ACD59C {};              /* size 0x0 */
@@ -132,10 +132,10 @@ struct _mips2c_stack_func_80ACD878 {};              /* size 0x0 */
 s32 func_8010A074(GlobalContext *);                 /* extern */
 void func_80ACC470(EnElforg *arg0);                 /* static */
 void func_80ACC7E4(EnElforg *arg0, GlobalContext *arg1, s32 arg2); /* static */
-void func_80ACC8D4(Actor *arg0, PosRot *arg1);      /* static */
+void func_80ACC8D4(Actor *arg0, f32 *arg1);         /* static */
 void func_80ACC934(Actor *arg0);                    /* static */
-void func_80ACC994(Actor *arg0, PosRot *arg1);      /* static */
-void func_80ACCAC0(Actor *arg0, PosRot *arg1);      /* static */
+void func_80ACC994(Actor *arg0, f32 *arg1);         /* static */
+void func_80ACCAC0(Actor *arg0, f32 *arg1);         /* static */
 void func_80ACCBB8(EnElforg *arg0, GlobalContext *arg1); /* static */
 void func_80ACCBD0(EnElforg *arg0, GlobalContext *arg1); /* static */
 void func_80ACCC98(EnElforg *arg0, GlobalContext *arg1); /* static */
@@ -295,13 +295,13 @@ void func_80ACC7E4(EnElforg *arg0, GlobalContext *arg1, s32 arg2) {
     EffectSsKiraKira_SpawnDispersed(arg1, (Vec3f *) &sp3C, &D_80ACDA5C, &D_80ACDA68, temp_v0_2 + &D_80ACDA74, temp_v0_2 + &D_80ACDA88, (s16) 0x3E8, arg2);
 }
 
-void func_80ACC8D4(Actor *arg0, PosRot *arg1) {
+void func_80ACC8D4(Actor *arg0, f32 *arg1) {
     f32 temp_f12;
     f32 temp_f14;
     f32 temp_f16;
     f32 temp_f2;
 
-    temp_f12 = arg1->pos.y;
+    temp_f12 = arg1[1];
     temp_f14 = arg0->world.pos.y;
     temp_f16 = arg0->speedXZ;
     temp_f2 = temp_f12 - temp_f14;
@@ -320,7 +320,7 @@ void func_80ACC934(Actor *arg0) {
     f32 temp_f0;
     f32 temp_f2;
 
-    temp_f0 = arg0->unk_224;
+    temp_f0 = arg0[1].shape.feetPos[1].x;
     temp_f2 = arg0->speedXZ;
     if (temp_f0 < temp_f2) {
         arg0->speedXZ = temp_f2 * 0.9f;
@@ -333,7 +333,7 @@ void func_80ACC934(Actor *arg0) {
     arg0->speedXZ = temp_f0;
 }
 
-void func_80ACC994(Actor *arg0, PosRot *arg1) {
+void func_80ACC994(Actor *arg0, f32 *arg1) {
     f32 sp30;
     f32 sp2C;
     f32 temp_f0;
@@ -342,13 +342,13 @@ void func_80ACC994(Actor *arg0, PosRot *arg1) {
     f32 temp_f2;
     s32 phi_v0;
 
-    arg0->shape.yOffset += 100.0f * Math_SinS((s16) (arg0->unk_21C << 9));
+    arg0->shape.yOffset += 100.0f * Math_SinS((s16) (arg0[1].shape.feetPos[0].y << 9));
     func_80ACC8D4(arg0, arg1);
-    temp_f2 = arg0->world.pos.x - arg1->pos.x;
-    temp_f16 = arg0->world.pos.z - arg1->pos.z;
+    temp_f2 = arg0->world.pos.x - arg1->unk_0;
+    temp_f16 = arg0->world.pos.z - arg1[2];
     sp2C = temp_f2;
     sp30 = temp_f16;
-    temp_f12 = arg0->unk_228;
+    temp_f12 = arg0[1].shape.feetPos[1].y;
     temp_f0 = sqrtf((temp_f2 * temp_f2) + (temp_f16 * temp_f16));
     if ((temp_f12 + 10.0f) < temp_f0) {
         phi_v0 = 0x1000;
@@ -363,13 +363,13 @@ void func_80ACC994(Actor *arg0, PosRot *arg1) {
     Actor_SetVelocityAndMoveYRotationAndGravity(arg0);
 }
 
-void func_80ACCAC0(Actor *arg0, PosRot *arg1) {
+void func_80ACCAC0(Actor *arg0, f32 *arg1) {
     s16 temp_v0;
 
-    arg0->shape.yOffset += 100.0f * Math_SinS((s16) (arg0->unk_21C << 9));
+    arg0->shape.yOffset += 100.0f * Math_SinS((s16) (arg0[1].shape.feetPos[0].y << 9));
     func_80ACC8D4(arg0, arg1);
-    temp_v0 = Math_FAtan2F(-(arg0->world.pos.z - arg1->pos.z), -(arg0->world.pos.x - arg1->pos.x));
-    if (arg0->unk_224 > 2.0f) {
+    temp_v0 = Math_FAtan2F(-(arg0->world.pos.z - arg1[2]), -(arg0->world.pos.x - arg1->unk_0));
+    if (arg0[1].shape.feetPos[1].x > 2.0f) {
         Math_SmoothStepToS(&arg0->world.rot.y, temp_v0, 2, 0x400, (s16) 0x100);
     } else {
         Math_SmoothStepToS(&arg0->world.rot.y, (s16) (temp_v0 + 0x2000), 0xA, 0x200, (s16) 0x80);
@@ -415,7 +415,7 @@ void func_80ACCC98(EnElforg *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(&arg0->unk_144);
     arg0->actor.speedXZ = 5.0f;
     arg0->actor.shape.yOffset *= 0.9f;
-    func_80ACC8D4((Actor *) arg0, sp3C + 0xBEC);
+    func_80ACC8D4((Actor *) arg0, &sp3C[9].floorHeight);
     sp38 = arg0->actor.xzDistToPlayer;
     if (sp38 < 0.0f) {
         sp38 = 10.0f;
@@ -450,10 +450,10 @@ void func_80ACCE4C(Actor *arg0, GlobalContext *arg1) {
     arg0 = arg0;
     SkelAnime_FrameUpdateMatrix(temp_a0);
     func_80ACC994(arg0, arg0 + 8);
-    if (arg0->unk_220 < 0x1F) {
-        arg0->unk_22C = func_80ACCC98;
+    if ((bitwise s32) arg0[1].shape.feetPos[0].z < 0x1F) {
+        arg0[1].shape.feetPos[1].z = (bitwise f32) func_80ACCC98;
     }
-    arg0->unk_220 = (s32) (arg0->unk_220 - 1);
+    arg0[1].shape.feetPos[0].z = (bitwise f32) ((bitwise s32) arg0[1].shape.feetPos[0].z - 1);
 }
 
 void func_80ACCEB0(EnElforg *arg0, GlobalContext *arg1) {
@@ -484,7 +484,7 @@ block_10:
     }
     sp20 = &arg0->actor.home;
     SkelAnime_FrameUpdateMatrix(&arg0->unk_144);
-    func_80ACC994((Actor *) arg0, sp20);
+    func_80ACC994((Actor *) arg0, (f32 *) sp20);
     if ((arg0->unk_214 & 4) != 0) {
         arg0->actionFunc = (void (*)(EnElforg *, GlobalContext *)) func_80ACCE4C;
     }
@@ -521,13 +521,13 @@ void func_80ACD088(EnElforg *arg0, GlobalContext *arg1) {
     arg0 = arg0;
     arg0->actor.world.pos.x = (Math_SinS((s16) (temp_a0 << 0xC)) * phi_f2) + sp20->world.pos.x;
     arg0->actor.world.pos.z = (Math_CosS((s16) (arg0->unk_21C << 0xC)) * phi_f2) + sp20->world.pos.z;
-    arg0->actor.world.pos.y = sp1C->unk_BF0;
+    arg0->actor.world.pos.y = sp1C[9].yDistToWater;
     func_80ACC7E4(arg0, arg1, 0x10);
 }
 
 void func_80ACD164(Actor *arg0) {
     func_80ACD088();
-    if (arg0->unk_21C >= 0x51) {
+    if (arg0[1].shape.feetPos[0].y >= 0x51) {
         Actor_MarkForDeath(arg0);
         return;
     }
@@ -539,7 +539,7 @@ void func_80ACD1B0(EnElforg *arg0, GlobalContext *arg1) {
 
     temp_v1 = arg1->actorCtx.actorList[2].first;
     arg0->actor.world.pos.x = temp_v1->world.pos.x;
-    arg0->actor.world.pos.y = temp_v1->unk_BF0;
+    arg0->actor.world.pos.y = temp_v1[9].yDistToWater;
     arg0->actionFunc = func_80ACD164;
     arg0->unk_21C = 0;
     arg0->unk_220 = 0;
@@ -576,7 +576,7 @@ void func_80ACD1F0(EnElforg *arg0, GlobalContext *arg1) {
 }
 
 void func_80ACD2E4(EnElforg *arg0, GlobalContext *arg1) {
-    ? sp3C;
+    f32 sp3C;
     f32 sp38;
     Actor *sp34;
     f32 temp_f0;
@@ -587,14 +587,14 @@ void func_80ACD2E4(EnElforg *arg0, GlobalContext *arg1) {
     sp34 = arg1->actorCtx.actorList[2].first;
     SkelAnime_FrameUpdateMatrix(&arg0->unk_144);
     if (Player_GetMask(arg1) == 0xB) {
-        sp3C.unk_0 = (s32) sp34->unk_BEC;
-        sp3C.unk_4 = (s32) sp34->unk_BF0;
-        sp3C.unk_8 = (s32) sp34->unk_BF4;
+        sp3C.unk_0 = sp34[9].floorHeight;
+        (&sp3C)[1] = sp34[9].yDistToWater;
+        (&sp3C)[2] = sp34->unk_BF4;
         arg0->unk_224 = 5.0f;
-        func_80ACCAC0((Actor *) arg0, (PosRot *) &sp3C);
+        func_80ACCAC0((Actor *) arg0, &sp3C);
     } else {
         arg0->unk_224 = 1.0f;
-        func_80ACCAC0((Actor *) arg0, &arg0->actor.home);
+        func_80ACCAC0((Actor *) arg0, (f32 *) &arg0->actor.home);
     }
     temp_f0 = arg0->actor.yDistToPlayer - (arg0->actor.shape.yOffset * arg0->actor.scale.y);
     sp38 = temp_f0;
@@ -675,10 +675,10 @@ void func_80ACD610(Actor *arg0, GlobalContext *arg1) {
     f32 temp_f0_3;
     void *temp_v0;
 
-    temp_v0 = arg0->unk_210;
+    temp_v0 = arg0[1].shape.shadowScale;
     if (temp_v0->unk_138 == 0) {
         func_80ACC470();
-        arg0->unk_22C = func_80ACD2E4;
+        arg0[1].shape.feetPos[1].z = func_80ACD2E4;
         arg0->draw = EnElforg_Draw;
         Audio_PlayActorSound2(arg0, 0x288EU);
     } else {
@@ -752,7 +752,7 @@ void EnElforg_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 s32 func_80ACD878(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
-    if ((s32) arg5->unk_216 < 0) {
+    if ((s32) arg5[89].x < 0) {
         if (arg1 == 9) {
             goto block_4;
         }

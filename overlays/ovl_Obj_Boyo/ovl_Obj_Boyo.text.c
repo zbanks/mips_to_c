@@ -72,7 +72,7 @@ void func_809A5DC0(void *arg0, void *arg1) {
 }
 
 void func_809A5DE0(Actor *arg0, Actor *arg1) {
-    arg1->unk_2F0 = 30.0f;
+    arg1[2].velocity.y = 30.0f;
     arg1->unk_2F4 = Actor_YawBetweenActors(arg0, arg1);
 }
 

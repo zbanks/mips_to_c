@@ -563,9 +563,9 @@ void SkelAnime_LodDrawLimb(GlobalContext *globalCtx, s32 limbIndex, void **skele
             temp_v1->words.w0 = 0xDA380003;
             sp38 = temp_v1;
             temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            temp_v1->unk_8 = 0xDE000000;
-            temp_v1->unk_C = sp58;
-            sp40->polyOpa.p = temp_v1 + 0x10;
+            temp_v1[1].words.w0 = 0xDE000000;
+            temp_v1[1].words.w1 = (u32) sp58;
+            sp40->polyOpa.p = &temp_v1[2];
         }
     }
     if (postLimbDraw != 0) {
@@ -608,7 +608,7 @@ void SkelAnime_LodDraw(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDra
         sp4C = (f32) limbDrawTable->y;
         sp50 = (f32) limbDrawTable->z;
         sp40.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-        sp40.unk_4 = (u16) limbDrawTable->unk_A;
+        sp40.unk_4 = (u16) limbDrawTable[1].z;
         sp54 = (temp_v0 + (dListIndex * 4))->unk_8;
         if ((overrideLimbDraw == 0) || (overrideLimbDraw(globalCtx, 1, temp_a2, (Vec3f *) temp_a3, (Vec3s *) &sp40, actor) == 0)) {
             SysMatrix_RotateAndTranslateState((Vec3f *) &sp48, (Vec3s *) &sp40);
@@ -617,9 +617,9 @@ void SkelAnime_LodDraw(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDra
                 temp_v1->words.w0 = 0xDA380003;
                 sp34 = temp_v1;
                 temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-                temp_v1->unk_8 = 0xDE000000;
-                temp_v1->unk_C = sp54;
-                sp3C->polyOpa.p = temp_v1 + 0x10;
+                temp_v1[1].words.w0 = 0xDE000000;
+                temp_v1[1].words.w1 = (u32) sp54;
+                sp3C->polyOpa.p = &temp_v1[2];
             }
         }
         if (postLimbDraw != 0) {
@@ -677,17 +677,17 @@ void SkelAnime_LodDrawLimbSV(GlobalContext *globalCtx, s32 limbIndex, void **ske
         if (sp60 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*mtx);
             temp_v1 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v1 + 8;
+            sp44->polyOpa.p = &temp_v1[1];
             temp_v1->words.w0 = 0xDA380003;
             temp_v1->words.w1 = (u32) *mtx;
             temp_v1_2 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v1_2 + 8;
+            sp44->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_2->words.w1 = (u32) sp60;
-            *mtx += 0x40;
+            *mtx = &(*mtx)[1];
         } else if (sp5C != 0) {
             SysMatrix_GetStateAsRSPMatrix(*mtx);
-            *mtx += 0x40;
+            *mtx = &(*mtx)[1];
         }
     }
     if (postLimbDraw != 0) {
@@ -733,7 +733,7 @@ void SkelAnime_LodDrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbD
     if (skeleton != 0) {
         temp_a0 = globalCtx->state.gfxCtx;
         temp_v1_2 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v1_2 + 8;
+        temp_a0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB060034;
         temp_v1_2->words.w1 = (u32) sp50;
         sp4C = temp_a0;
@@ -746,7 +746,7 @@ void SkelAnime_LodDrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbD
         sp60 = (f32) limbDrawTable->y;
         sp64 = (f32) limbDrawTable->z;
         sp54.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-        sp54.unk_4 = (u16) limbDrawTable->unk_A;
+        sp54.unk_4 = (u16) limbDrawTable[1].z;
         temp_t6 = (temp_v0_2 + (dListIndex * 4))->unk_8;
         sp68 = temp_t6;
         sp6C = temp_t6;
@@ -757,13 +757,13 @@ void SkelAnime_LodDrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbD
                 temp_v1_3->words.w0 = 0xDA380003;
                 sp40 = temp_v1_3;
                 temp_v1_3->words.w1 = SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp50);
-                temp_v1_3->unk_8 = 0xDE000000;
-                temp_v1_3->unk_C = sp6C;
-                sp4C->polyOpa.p = temp_v1_3 + 0x10;
-                sp50 += 0x40;
+                temp_v1_3[1].words.w0 = 0xDE000000;
+                temp_v1_3[1].words.w1 = (u32) sp6C;
+                sp4C->polyOpa.p = &temp_v1_3[2];
+                sp50 = &sp50[8];
             } else if (sp68 != 0) {
                 SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp50);
-                sp50 += 0x40;
+                sp50 = &sp50[8];
             }
         }
         if (postLimbDraw != 0) {
@@ -819,9 +819,9 @@ void SkelAnime_DrawLimb(GlobalContext *globalCtx, s32 limbIndex, void **skeleton
             temp_v1->words.w0 = 0xDA380003;
             sp38 = temp_v1;
             temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            temp_v1->unk_8 = 0xDE000000;
-            temp_v1->unk_C = sp58;
-            sp40->polyOpa.p = temp_v1 + 0x10;
+            temp_v1[1].words.w0 = 0xDE000000;
+            temp_v1[1].words.w1 = (u32) sp58;
+            sp40->polyOpa.p = &temp_v1[2];
         }
     }
     if (postLimbDraw != 0) {
@@ -864,7 +864,7 @@ void SkelAnime_Draw(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTa
         sp4C = (f32) limbDrawTable->y;
         sp50 = (f32) limbDrawTable->z;
         sp40.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-        sp40.unk_4 = (u16) limbDrawTable->unk_A;
+        sp40.unk_4 = (u16) limbDrawTable[1].z;
         sp54 = temp_v0->unk_8;
         if ((overrideLimbDraw == 0) || (overrideLimbDraw(globalCtx, 1, temp_a2, (Vec3f *) temp_a3, (Vec3s *) &sp40, actor) == 0)) {
             SysMatrix_RotateAndTranslateState((Vec3f *) &sp48, (Vec3s *) &sp40);
@@ -873,9 +873,9 @@ void SkelAnime_Draw(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTa
                 temp_v1->words.w0 = 0xDA380003;
                 sp34 = temp_v1;
                 temp_v1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-                temp_v1->unk_8 = 0xDE000000;
-                temp_v1->unk_C = sp54;
-                sp3C->polyOpa.p = temp_v1 + 0x10;
+                temp_v1[1].words.w0 = 0xDE000000;
+                temp_v1[1].words.w1 = (u32) sp54;
+                sp3C->polyOpa.p = &temp_v1[2];
             }
         }
         if (postLimbDraw != 0) {
@@ -933,17 +933,17 @@ void SkelAnime_DrawLimbSV(GlobalContext *globalCtx, s32 limbIndex, void **skelet
         if (sp58 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*limbMatricies);
             temp_v1 = sp3C->polyOpa.p;
-            sp3C->polyOpa.p = temp_v1 + 8;
+            sp3C->polyOpa.p = &temp_v1[1];
             temp_v1->words.w0 = 0xDA380003;
             temp_v1->words.w1 = (u32) *limbMatricies;
             temp_v1_2 = sp3C->polyOpa.p;
-            sp3C->polyOpa.p = temp_v1_2 + 8;
+            sp3C->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_2->words.w1 = (u32) sp58;
-            *limbMatricies += 0x40;
+            *limbMatricies = &(*limbMatricies)[1];
         } else if (sp54 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*limbMatricies);
-            *limbMatricies += 0x40;
+            *limbMatricies = &(*limbMatricies)[1];
         }
     }
     if (postLimbDraw != 0) {
@@ -989,7 +989,7 @@ void SkelAnime_DrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDraw
     if (skeleton != 0) {
         temp_a0 = globalCtx->state.gfxCtx;
         temp_v1_2 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v1_2 + 8;
+        temp_a0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB060034;
         temp_v1_2->words.w1 = (u32) sp48;
         sp44 = temp_a0;
@@ -1002,7 +1002,7 @@ void SkelAnime_DrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDraw
         sp58 = (f32) limbDrawTable->y;
         sp5C = (f32) limbDrawTable->z;
         sp4C.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-        sp4C.unk_4 = (u16) limbDrawTable->unk_A;
+        sp4C.unk_4 = (u16) limbDrawTable[1].z;
         temp_t3 = temp_v0_2->unk_8;
         sp60 = temp_t3;
         sp64 = temp_t3;
@@ -1013,13 +1013,13 @@ void SkelAnime_DrawSV(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDraw
                 temp_v1_3->words.w0 = 0xDA380003;
                 sp38 = temp_v1_3;
                 temp_v1_3->words.w1 = SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
-                temp_v1_3->unk_8 = 0xDE000000;
-                temp_v1_3->unk_C = sp64;
-                sp44->polyOpa.p = temp_v1_3 + 0x10;
-                sp48 += 0x40;
+                temp_v1_3[1].words.w0 = 0xDE000000;
+                temp_v1_3[1].words.w1 = (u32) sp64;
+                sp44->polyOpa.p = &temp_v1_3[2];
+                sp48 = &sp48[8];
             } else if (sp60 != 0) {
                 SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
-                sp48 += 0x40;
+                sp48 = &sp48[8];
             }
         }
         if (postLimbDraw != 0) {
@@ -1081,13 +1081,13 @@ void func_80134148(GlobalContext *globalCtx, s32 limbIndex, void **skeleton, Vec
             temp_v1->words.w0 = 0xDA380003;
             sp3C = temp_v1;
             temp_v1->words.w1 = SysMatrix_GetStateAsRSPMatrix(*mtx);
-            temp_v1->unk_8 = 0xDE000000;
-            temp_v1->unk_C = sp60;
-            sp44->polyOpa.p = temp_v1 + 0x10;
-            *mtx += 0x40;
+            temp_v1[1].words.w0 = 0xDE000000;
+            temp_v1[1].words.w1 = (u32) sp60;
+            sp44->polyOpa.p = &temp_v1[2];
+            *mtx = &(*mtx)[1];
         } else if (sp5C != 0) {
             SysMatrix_GetStateAsRSPMatrix(*mtx);
-            *mtx += 0x40;
+            *mtx = &(*mtx)[1];
         }
         SysMatrix_StatePop();
     }
@@ -1133,7 +1133,7 @@ void func_801343C0(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
         temp_a0->polyOpa.d = temp_v1;
         sp50 = temp_v1;
         temp_v1_2 = temp_a0->polyOpa.p;
-        temp_a0->polyOpa.p = temp_v1_2 + 8;
+        temp_a0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB060034;
         temp_v1_2->words.w1 = (u32) sp50;
         sp4C = temp_a0;
@@ -1146,7 +1146,7 @@ void func_801343C0(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
         sp60 = (f32) limbDrawTable->y;
         sp64 = (f32) limbDrawTable->z;
         sp54.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-        sp54.unk_4 = (u16) limbDrawTable->unk_A;
+        sp54.unk_4 = (u16) limbDrawTable[1].z;
         temp_t2 = temp_v0->unk_8;
         sp68 = temp_t2;
         sp6C = temp_t2;
@@ -1159,13 +1159,13 @@ void func_801343C0(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawTab
                 temp_v1_3->words.w0 = 0xDA380003;
                 sp40 = temp_v1_3;
                 temp_v1_3->words.w1 = SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp50);
-                temp_v1_3->unk_8 = 0xDE000000;
-                temp_v1_3->unk_C = sp6C;
-                sp4C->polyOpa.p = temp_v1_3 + 0x10;
-                sp50 += 0x40;
+                temp_v1_3[1].words.w0 = 0xDE000000;
+                temp_v1_3[1].words.w1 = (u32) sp6C;
+                sp4C->polyOpa.p = &temp_v1_3[2];
+                sp50 = &sp50[8];
             } else if (sp68 != 0) {
                 temp_a0_2 = sp50;
-                sp50 += 0x40;
+                sp50 = &sp50[8];
                 SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) temp_a0_2);
             }
             SysMatrix_StatePop();
@@ -1277,9 +1277,9 @@ Gfx *SkelAnime_Draw2Limb(GlobalContext *globalCtx, s32 limbIndex, void **skeleto
             sp30 = gfx;
             gfx->words.w0 = 0xDA380003;
             sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            gfx->unk_8 = 0xDE000000;
-            (gfx + 8)->words.w1 = (u32) sp48;
-            gfx += 0x10;
+            gfx[1].words.w0 = 0xDE000000;
+            gfx[1].words.w1 = (u32) sp48;
+            gfx = &gfx[2];
         }
     }
     if (postLimbDraw != 0) {
@@ -1322,7 +1322,7 @@ Gfx *SkelAnime_Draw2(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawT
     sp44 = (f32) limbDrawTable->y;
     sp48 = (f32) limbDrawTable->z;
     sp38.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-    sp38.unk_4 = (u16) limbDrawTable->unk_A;
+    sp38.unk_4 = (u16) limbDrawTable[1].z;
     sp4C = temp_v0->unk_8;
     if ((overrideLimbDraw == 0) || (overrideLimbDraw(globalCtx, 1, temp_a2, (Vec3f *) temp_a3, (Vec3s *) &sp38, actor, &gfx) == 0)) {
         SysMatrix_RotateAndTranslateState((Vec3f *) &sp40, (Vec3s *) &sp38);
@@ -1330,9 +1330,9 @@ Gfx *SkelAnime_Draw2(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDrawT
             sp34 = gfx;
             gfx->words.w0 = 0xDA380003;
             sp34->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            gfx->unk_8 = 0xDE000000;
-            (gfx + 8)->words.w1 = (u32) sp4C;
-            gfx += 0x10;
+            gfx[1].words.w0 = 0xDE000000;
+            gfx[1].words.w1 = (u32) sp4C;
+            gfx = &gfx[2];
         }
     }
     if (postLimbDraw != 0) {
@@ -1388,13 +1388,13 @@ Gfx *SkelAnime_DrawLimbSV2(GlobalContext *globalCtx, s32 limbIndex, void **skele
             sp3C = gfx;
             gfx->words.w0 = 0xDA380003;
             sp3C->words.w1 = SysMatrix_GetStateAsRSPMatrix(*mtx);
-            gfx->unk_8 = 0xDE000000;
-            (gfx + 8)->words.w1 = (u32) sp58;
-            gfx += 0x10;
-            *mtx += 0x40;
+            gfx[1].words.w0 = 0xDE000000;
+            gfx[1].words.w1 = (u32) sp58;
+            gfx = &gfx[2];
+            *mtx = &(*mtx)[1];
         } else if (sp54 != 0) {
             SysMatrix_GetStateAsRSPMatrix(*mtx);
-            *mtx += 0x40;
+            *mtx = &(*mtx)[1];
         }
     }
     if (postLimbDraw != 0) {
@@ -1439,7 +1439,7 @@ Gfx *SkelAnime_DrawSV2(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDra
     temp_v1->polyOpa.d = temp_v0;
     sp48 = temp_v0;
     temp_t2 = gfx;
-    gfx = temp_t2 + 8;
+    gfx = &temp_t2[1];
     temp_t2->words.w0 = 0xDB060034;
     temp_t2->words.w1 = (u32) sp48;
     SysMatrix_StatePush();
@@ -1451,7 +1451,7 @@ Gfx *SkelAnime_DrawSV2(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDra
     sp58 = (f32) limbDrawTable->y;
     sp5C = (f32) limbDrawTable->z;
     sp4C.unk_0 = (s32) (unaligned s32) limbDrawTable->unk_6;
-    sp4C.unk_4 = (u16) limbDrawTable->unk_A;
+    sp4C.unk_4 = (u16) limbDrawTable[1].z;
     temp_t3 = temp_v0_2->unk_8;
     sp60 = temp_t3;
     sp64 = temp_t3;
@@ -1461,13 +1461,13 @@ Gfx *SkelAnime_DrawSV2(GlobalContext *globalCtx, void **skeleton, Vec3s *limbDra
             sp40 = gfx;
             gfx->words.w0 = 0xDA380003;
             sp40->words.w1 = SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
-            gfx->unk_8 = 0xDE000000;
-            (gfx + 8)->words.w1 = (u32) sp64;
-            gfx += 0x10;
-            sp48 += 0x40;
+            gfx[1].words.w0 = 0xDE000000;
+            gfx[1].words.w1 = (u32) sp64;
+            gfx = &gfx[2];
+            sp48 = &sp48[8];
         } else if (sp60 != 0) {
             SysMatrix_GetStateAsRSPMatrix((RSPMatrix *) sp48);
-            sp48 += 0x40;
+            sp48 = &sp48[8];
         }
     }
     if (postLimbDraw != 0) {
@@ -1519,7 +1519,7 @@ s32 func_80134FFC(s32 arg0, s32 arg1, Vec3s *dst) {
     } else {
         dst->z = *(temp_v0_2 + (sp1C->unk_A * 2));
     }
-    temp_a2 = dst + 6;
+    temp_a2 = &dst[1];
     temp_v1 = sp1C + 0xC;
     phi_v1 = temp_v1;
     phi_a2 = temp_a2;
@@ -1542,7 +1542,7 @@ s32 func_80134FFC(s32 arg0, s32 arg1, Vec3s *dst) {
                 temp_a2->z = *(temp_v0_2 + (temp_v1->unk_A * 2));
             }
             phi_v1 = temp_v1 + 0xC;
-            phi_a2 = temp_a2 + 6;
+            phi_a2 = &temp_a2[1];
             if ((temp_t0 + 1) != 2) {
                 goto loop_21;
             }
@@ -1670,7 +1670,7 @@ void SkelAnime_InterpolateVec3s(s32 limbCount, Vec3s *dst, Vec3s *vec2, Vec3s *v
     phi_s0_5 = dst;
     if (unkf < 1.0f) {
         phi_v0 = 0;
-        if ((limbCount > 0) && (((limbCount & 1) == 0) || (temp_v1 = vec2->x, temp_s0 = dst + 6, temp_a2 = vec2 + 6, temp_a3 = vec3 + 6, temp_s0->unk_-6 = (s16) ((s32) ((f32) (s16) (vec3->x - temp_v1) * unkf) + temp_v1), temp_v1_2 = temp_a2->unk_-4, temp_s0->unk_-4 = (s16) ((s32) ((f32) (s16) (temp_a3->unk_-4 - temp_v1_2) * unkf) + temp_v1_2), temp_v1_3 = temp_a2->unk_-2, temp_s0->unk_-2 = (s16) ((s32) ((f32) (s16) (temp_a3->unk_-2 - temp_v1_3) * unkf) + temp_v1_3), phi_v0 = 1, phi_a3_5 = temp_a3, phi_a2_3 = temp_a2, phi_s0_5 = temp_s0, (limbCount != 1)))) {
+        if ((limbCount > 0) && (((limbCount & 1) == 0) || (temp_v1 = vec2->x, temp_s0 = &dst[1], temp_a2 = &vec2[1], temp_a3 = &vec3[1], temp_s0->unk_-6 = (s16) ((s32) ((f32) (s16) (vec3->x - temp_v1) * unkf) + temp_v1), temp_v1_2 = temp_a2->unk_-4, temp_s0->unk_-4 = (s16) ((s32) ((f32) (s16) (temp_a3->unk_-4 - temp_v1_2) * unkf) + temp_v1_2), temp_v1_3 = temp_a2->unk_-2, temp_s0->unk_-2 = (s16) ((s32) ((f32) (s16) (temp_a3->unk_-2 - temp_v1_3) * unkf) + temp_v1_3), phi_v0 = 1, phi_a3_5 = temp_a3, phi_a2_3 = temp_a2, phi_s0_5 = temp_s0, (limbCount != 1)))) {
             temp_v0 = phi_v0 + 2;
             temp_v1_4 = phi_a2_3->x;
             temp_t4 = phi_a3_5->x;

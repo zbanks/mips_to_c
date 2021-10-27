@@ -248,7 +248,7 @@ void BgKin2Picture_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_s0 = (Vec3f *) &sp68;
 loop_2:
         SysMatrix_MultiplyVector3fByState(phi_s2 + D_80B6FA08.elements + phi_s1 + 0x18, phi_s0);
-        temp_s0 = phi_s0 + 0xC;
+        temp_s0 = &phi_s0[1];
         phi_s1 += 0xC;
         phi_s0 = temp_s0;
         if (temp_s0 != &sp8C) {

@@ -269,7 +269,7 @@ void func_80AE9258(ObjBigicicle *this, GlobalContext *globalCtx) {
     phi_s0 = temp_s0;
     if (temp_s0 != 0) {
 loop_1:
-        if ((phi_s0->id == 0x8E) && (temp_f0 = this->actor.world.pos.y - phi_s0->world.pos.y, (temp_f0 < (f32) phi_s0->unk_18E)) && (temp_f0 > 0.0f) && (Actor_XZDistanceBetweenActors((Actor *) this, phi_s0) < (f32) phi_s0->unk_18C)) {
+        if ((phi_s0->id == 0x8E) && (temp_f0 = this->actor.world.pos.y - phi_s0->world.pos.y, (temp_f0 < (f32) phi_s0[1].focus.rot.y)) && (temp_f0 > 0.0f) && (Actor_XZDistanceBetweenActors((Actor *) this, phi_s0) < (f32) phi_s0[1].focus.rot.x)) {
             Actor_SetSwitchFlag(globalCtx, (s32) this->actor.params);
             this->actionFunc = func_80AE939C;
             return;

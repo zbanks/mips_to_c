@@ -34,29 +34,29 @@ void Nmi_Init(void) {
     s32 *temp_v0;
     s32 *temp_v0_2;
     s32 *temp_v1;
+    s32 temp_t9;
     u32 temp_t1;
-    u32 temp_t9;
 
     gNMIBuffer = osAppNmiBuffer;
     *osAppNmiBuffer = 0;
     if (osResetType == 0) {
-        gNMIBuffer->unk_4 = 0;
+        gNMIBuffer[1] = 0;
         temp_t2 = gNMIBuffer;
-        temp_t2->unk_8 = 0;
-        temp_t2->unk_C = 0;
+        temp_t2[2] = 0;
+        temp_t2[3] = 0;
     } else {
         temp_v0 = gNMIBuffer;
-        temp_v0->unk_4 = (s32) (temp_v0->unk_4 + 1);
+        temp_v0[1] += 1;
         temp_v0_2 = gNMIBuffer;
-        temp_v1 = temp_v0_2 + 8;
-        temp_t9 = temp_v0_2->unk_14;
-        temp_t1 = temp_v1->unk_4 + temp_t9;
-        temp_v1->unk_0 = (temp_t1 < temp_t9) + temp_v1->unk_0 + temp_v0_2->unk_10;
-        temp_v1->unk_4 = temp_t1;
+        temp_v1 = &temp_v0_2[2];
+        temp_t9 = temp_v0_2[5];
+        temp_t1 = temp_v1[1] + temp_t9;
+        temp_v1->unk_0 = (temp_t1 < (u32) temp_t9) + temp_v1->unk_0 + temp_v0_2[4];
+        temp_v1[1] = (s32) temp_t1;
     }
     temp_t5 = gNMIBuffer;
-    temp_t5->unk_14 = 0U;
-    temp_t5->unk_10 = 0;
+    temp_t5[5] = 0;
+    temp_t5[4] = 0;
 }
 
 void Nmi_SetPrenmiStart(void) {
@@ -68,8 +68,8 @@ void Nmi_SetPrenmiStart(void) {
     temp_ret = osGetTime();
     temp_v1 = (u32) temp_ret;
     temp_t8 = gNMIBuffer;
-    temp_t8->unk_10 = temp_ret;
-    temp_t8->unk_14 = temp_v1;
+    temp_t8[4] = temp_ret;
+    temp_t8[5] = (s32) temp_v1;
 }
 
 s32 Nmi_GetPrenmiHasStarted(void) {

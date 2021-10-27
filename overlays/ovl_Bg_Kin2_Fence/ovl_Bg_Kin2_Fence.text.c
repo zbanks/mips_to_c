@@ -87,13 +87,13 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence *arg0) {
     if ((temp_v0->info.bumperFlags & 2) != 0) {
         return 0;
     }
-    if ((temp_v0->unk_56 & 2) != 0) {
+    if ((temp_v0[1].info.bumperFlags & 2) != 0) {
         return 1;
     }
-    if ((temp_v0->unk_96 & 2) != 0) {
+    if ((temp_v0[2].info.bumperFlags & 2) != 0) {
         return 2;
     }
-    if ((temp_v0->unk_D6 & 2) != 0) {
+    if ((temp_v0[3].info.bumperFlags & 2) != 0) {
         return 3;
     }
     return -1;
@@ -112,7 +112,7 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence *arg0, GlobalContext *arg1, s8 arg
         SysMatrix_MultiplyVector3fByState(phi_s1, (Vec3f *) &sp58);
         EffectSsKiraKira_SpawnDispersed(arg1, (Vec3f *) &sp58, &D_801D15B0, &D_801D15B0, &D_80B6EEE0, &D_80B6EEE4, (s16) 0x1770, -0xA);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x18);
 }

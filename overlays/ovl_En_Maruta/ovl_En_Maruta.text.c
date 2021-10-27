@@ -117,7 +117,7 @@ struct _mips2c_stack_func_80B37C60 {
 struct _mips2c_stack_func_80B37CA0 {
     /* 0x00 */ char pad_0[0x40];
     /* 0x40 */ CollisionCheckContext *sp40;         /* inferred */
-    /* 0x44 */ ColliderCylinder *sp44;              /* inferred */
+    /* 0x44 */ u32 *sp44;                           /* inferred */
     /* 0x48 */ void (*sp48)(EnMaruta *, GlobalContext *); /* inferred */
     /* 0x4C */ char pad_4C[0x8];                    /* maybe part of sp48[3]? */
     /* 0x54 */ void *sp54;                          /* inferred */
@@ -437,68 +437,68 @@ void func_80B37590(EnMaruta *arg0, GlobalContext *arg1) {
     switch (temp_t6) {
     case 2:
         sp48.unk_0 = D_80B38754.unk_0;
-        sp48.unk_4 = (s32) D_80B38754.unk_4;
-        sp48.unk_8 = (s32) D_80B38754.unk_8;
+        (&sp48)[1] = D_80B38754.unk_4;
+        (&sp48)[2] = D_80B38754.unk_8;
         arg0->unk_1A0 = &D_80B388BC;
         break;
     case 4:
-        if (temp_v0->unk_ADA == 8) {
+        if (temp_v0[8].colChkInfo.atHitEffect == 8) {
             sp48.unk_0 = D_80B3876C.unk_0;
-            sp48.unk_4 = (s32) D_80B3876C.unk_4;
-            sp48.unk_8 = (s32) D_80B3876C.unk_8;
+            (&sp48)[1] = D_80B3876C.unk_4;
+            (&sp48)[2] = D_80B3876C.unk_8;
         } else {
             sp48.unk_0 = D_80B38778.unk_0;
-            sp48.unk_4 = (s32) D_80B38778.unk_4;
-            sp48.unk_8 = (s32) D_80B38778.unk_8;
+            (&sp48)[1] = D_80B38778.unk_4;
+            (&sp48)[2] = D_80B38778.unk_8;
         }
         arg0->unk_1A0 = &D_80B3891C;
         break;
     case 5:
-        if (temp_v0->unk_ADA == 0) {
+        if (temp_v0[8].colChkInfo.atHitEffect == 0) {
             sp48.unk_0 = D_80B38784.unk_0;
-            sp48.unk_4 = (s32) D_80B38784.unk_4;
-            sp48.unk_8 = (s32) D_80B38784.unk_8;
+            (&sp48)[1] = D_80B38784.unk_4;
+            (&sp48)[2] = D_80B38784.unk_8;
         } else {
             sp48.unk_0 = D_80B38790.unk_0;
-            sp48.unk_4 = (s32) D_80B38790.unk_4;
-            sp48.unk_8 = (s32) D_80B38790.unk_8;
+            (&sp48)[1] = D_80B38790.unk_4;
+            (&sp48)[2] = D_80B38790.unk_8;
         }
         arg0->unk_1A0 = &D_80B3897C;
         break;
     case 6:
-        if (temp_v0->unk_ADA == 0) {
+        if (temp_v0[8].colChkInfo.atHitEffect == 0) {
             sp48.unk_0 = D_80B3879C.unk_0;
-            sp48.unk_4 = (s32) D_80B3879C.unk_4;
-            sp48.unk_8 = (s32) D_80B3879C.unk_8;
+            (&sp48)[1] = D_80B3879C.unk_4;
+            (&sp48)[2] = D_80B3879C.unk_8;
         } else {
             sp48.unk_0 = D_80B387A8.unk_0;
-            sp48.unk_4 = (s32) D_80B387A8.unk_4;
-            sp48.unk_8 = (s32) D_80B387A8.unk_8;
+            (&sp48)[1] = D_80B387A8.unk_4;
+            (&sp48)[2] = D_80B387A8.unk_8;
         }
         arg0->unk_1A0 = &D_80B389DC;
         break;
     case 8:
-        if (temp_v0->unk_ADA == 4) {
+        if (temp_v0[8].colChkInfo.atHitEffect == 4) {
             sp48.unk_0 = D_80B387B4.unk_0;
-            sp48.unk_4 = (s32) D_80B387B4.unk_4;
-            sp48.unk_8 = (s32) D_80B387B4.unk_8;
+            (&sp48)[1] = D_80B387B4.unk_4;
+            (&sp48)[2] = D_80B387B4.unk_8;
         } else {
             sp48.unk_0 = D_80B387C0.unk_0;
-            sp48.unk_4 = (s32) D_80B387C0.unk_4;
-            sp48.unk_8 = (s32) D_80B387C0.unk_8;
+            (&sp48)[1] = D_80B387C0.unk_4;
+            (&sp48)[2] = D_80B387C0.unk_8;
         }
         arg0->unk_1A0 = &D_80B38A3C;
         break;
     case 7:
         sp48.unk_0 = D_80B387CC.unk_0;
-        sp48.unk_4 = (s32) D_80B387CC.unk_4;
-        sp48.unk_8 = (s32) D_80B387CC.unk_8;
+        (&sp48)[1] = D_80B387CC.unk_4;
+        (&sp48)[2] = D_80B387CC.unk_8;
         arg0->unk_1A0 = &D_80B38A9C;
         break;
     default:
         sp48.unk_0 = D_80B38B54.unk_0;
-        sp48.unk_4 = (s32) D_80B38B54.unk_4;
-        sp48.unk_8 = (s32) D_80B38B54.unk_8;
+        (&sp48)[1] = D_80B38B54.unk_4;
+        (&sp48)[2] = D_80B38B54.unk_8;
         break;
     }
     temp_a0 = arg0->actor.shape.rot.y;
@@ -611,7 +611,7 @@ s32 func_80B37B78(Actor *arg0, GlobalContext *arg1) {
     if ((s32) temp_v1 < 0) {
         phi_a0 = -(s32) temp_v1;
     }
-    if ((phi_a0 < 0x1555) || ((temp_v0->unk_ADB != 0) && ((temp_v1_2 = temp_v0->unk_ADA, (temp_v1_2 == 4)) || (temp_v1_2 == 6) || (temp_v1_2 == 0x1E) || (temp_v1_2 == 0x20)))) {
+    if ((phi_a0 < 0x1555) || ((temp_v0[8].colChkInfo.acHitEffect != 0) && ((temp_v1_2 = temp_v0[8].colChkInfo.atHitEffect, (temp_v1_2 == 4)) || (temp_v1_2 == 6) || (temp_v1_2 == 0x1E) || (temp_v1_2 == 0x20)))) {
         return 1;
     }
     return 0;
@@ -640,14 +640,14 @@ void func_80B37C60(EnMaruta *arg0) {
 void func_80B37CA0(Actor *arg0, GlobalContext *arg1) {
     void *sp54;
     void (*sp48)(EnMaruta *, GlobalContext *);
-    ColliderCylinder *sp44;
+    u32 *sp44;
     CollisionCheckContext *sp40;
     Actor *temp_v1_4;
-    ColliderCylinder *temp_a1;
     CollisionCheckContext *temp_a1_2;
+    f32 temp_v1_3;
     s32 temp_v0;
     s32 temp_v1_2;
-    s32 temp_v1_3;
+    u32 *temp_a1;
     u8 temp_v1;
     void *temp_t0;
 
@@ -656,13 +656,13 @@ void func_80B37CA0(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->unk_144;
     if ((func_80B372CC == temp_v0) || (func_80B3738C == temp_v0) || (func_80B374FC == temp_v0) || (func_80B37AA0 == temp_v0) || ((func_80B37428 == temp_v0) && !(arg0->world.pos.y < (arg0->floorHeight - 20.0f)))) {
         temp_v1 = arg0->unk_159;
-        if (((temp_v1 & 2) != 0) && (sp48 == temp_v0) && (arg0->unk_159 = (u8) (temp_v1 & 0xFFFD), sp54 = temp_t0, Audio_PlayActorSound2(arg0, 0x1811U), temp_v1_2 = *(&D_80B386CC + (temp_t0->unk_ADA * 4)), (temp_v1_2 != 0))) {
-            arg0->unk_210 = temp_v1_2;
+        if (((temp_v1 & 2) != 0) && (sp48 == temp_v0) && (arg0->unk_159 = (u8) (temp_v1 & 0xFFFD), sp54 = temp_t0, Audio_PlayActorSound2(arg0, 0x1811U), temp_v1_2 = *(&D_80B386CC + (temp_t0[8].colChkInfo.atHitEffect * 4)), (temp_v1_2 != 0))) {
+            arg0[1].shape.shadowScale = (bitwise f32) temp_v1_2;
             sp54 = temp_t0;
             Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x1F8, arg0->world.pos.x, arg0->world.pos.y, arg0->world.pos.z, (s16) 0, (s16) (s32) arg0->shape.rot.y, (s16) 0, ((temp_v1_2 + 1) << 8) & 0xFF00);
-            temp_v1_3 = arg0->unk_210;
+            temp_v1_3 = arg0[1].shape.shadowScale;
             arg0->world.rot.y = arg0->shape.rot.y;
-            if ((temp_v1_3 == 5) || ((temp_v1_3 == 7) && (temp_t0->unk_ADA == 0xC))) {
+            if (((bitwise s32) temp_v1_3 == 5) || (((bitwise s32) temp_v1_3 == 7) && (temp_t0[8].colChkInfo.atHitEffect == 0xC))) {
                 func_80B37590((EnMaruta *) arg0, arg1);
             } else {
                 func_80B374B8(arg0);
@@ -676,9 +676,9 @@ void func_80B37CA0(Actor *arg0, GlobalContext *arg1) {
             /* Duplicate return node #20. Try simplifying control flow for better match */
             return;
         }
-        temp_a1 = arg0 + 0x148;
+        temp_a1 = &arg0[1].flags;
         sp44 = temp_a1;
-        Collider_UpdateCylinder(arg0, temp_a1);
+        Collider_UpdateCylinder(arg0, (ColliderCylinder *) temp_a1);
         temp_a1_2 = &arg1->colChkCtx;
         sp40 = temp_a1_2;
         CollisionCheck_SetOC(arg1, temp_a1_2, (Collider *) sp44);
@@ -699,16 +699,16 @@ void func_80B37EC0(Actor *arg0, s32 arg1) {
     s32 phi_v0;
 
     sp34.unk_0 = (s32) arg0->unk_204;
-    sp34.unk_4 = (f32) arg0->unk_208;
-    sp34.unk_8 = (s32) arg0->unk_20C;
+    sp34.unk_4 = (f32) arg0[1].shape.yOffset;
+    sp34.unk_8 = (s32) arg0[1].shape.shadowDraw;
     phi_v1 = arg0;
     phi_v0 = 0;
     phi_a2 = -1;
     do {
-        if (phi_v1->unk_1A8 < sp38) {
-            sp34.unk_0 = (s32) phi_v1->unk_1A4;
-            sp34.unk_4 = (f32) phi_v1->unk_1A8;
-            sp34.unk_8 = (s32) phi_v1->unk_1AC;
+        if (phi_v1[1].velocity.x < sp38) {
+            sp34.unk_0 = (s32) phi_v1[1].scale.z;
+            sp34.unk_4 = (f32) phi_v1[1].velocity.x;
+            sp34.unk_8 = phi_v1[1].velocity.y;
             phi_a2 = phi_v0;
         }
         temp_v0 = phi_v0 + 1;
@@ -752,7 +752,7 @@ void func_80B38060(Actor *arg0, ? *arg1) {
 
     func_80B3828C(arg0 + 0x194, &sp44, 0, arg0->shape.rot.y, 0);
     temp_f0 = func_80B38028(&sp44, arg0 + 0x204, arg1);
-    temp_v0 = arg0->unk_210;
+    temp_v0 = arg0[1].shape.shadowScale;
     if ((temp_v0 == 5) || (temp_v0 == 6)) {
         phi_f2 = 8.0f;
     } else if (temp_v0 == 4) {
@@ -835,8 +835,8 @@ void func_80B382E4(GlobalContext *arg0, f32 arg1, s32 arg2, s32 arg3) {
     s32 phi_s0;
 
     sp84.unk_0 = (s32) arg1.unk_0;
-    sp84.unk_4 = (s32) arg1.unk_4;
-    sp84.unk_8 = (s32) arg1.unk_8;
+    sp84.unk_4 = (s32) (&arg1)[1];
+    sp84.unk_8 = (s32) (&arg1)[2];
     sp68 = D_80B38B60;
     sp64 = D_80B38B64;
     temp_s2 = &sp6C;
@@ -888,32 +888,32 @@ void EnMaruta_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0 = this->unk_210;
     if (temp_v0 == 0) {
         temp_s1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_s1 + 8;
+        temp_s0->polyOpa.p = &temp_s1[1];
         temp_s1->words.w0 = 0xDA380003;
         temp_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1 + 8;
+        temp_s0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) &D_06002EC0;
         temp_v1->words.w0 = 0xDE000000;
         return;
     }
     temp_t3 = (temp_v0 * 0xC) + &D_80B387E4;
     sp50.unk_0 = temp_t3->unk_0;
-    sp50.unk_4 = (s32) temp_t3->unk_4;
-    sp50.unk_8 = (s32) temp_t3->unk_8;
+    (&sp50)[1] = temp_t3->unk_4;
+    (&sp50)[2] = temp_t3->unk_8;
     SysMatrix_StatePush();
     SysMatrix_InsertTranslation(sp50, sp54, sp58, 1);
     SysMatrix_InsertRotationAroundUnitVector_s(this->unk_218, (Vec3f *) &this->unk_194, 1);
     SysMatrix_InsertTranslation(-sp50, -sp54, -sp58, 1);
     temp_s1_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_s1_2 + 8;
+    temp_s0->polyOpa.p = &temp_s1_2[1];
     temp_s1_2->words.w0 = 0xDA380003;
     temp_s1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     phi_a0 = 0;
     do {
         if ((*(&D_80B386C0 + this->unk_210) & (1 << phi_a0)) != 0) {
             temp_v1_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_2 + 8;
+            temp_s0->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_2->words.w1 = *((phi_a0 * 4) + &D_80B386A0);
         }
@@ -927,7 +927,7 @@ void EnMaruta_Draw(Actor *thisx, GlobalContext *globalCtx) {
             SysMatrix_MultiplyVector3fByState(this->unk_1A0 + phi_s0, phi_s1);
             temp_s0_2 = phi_s0 + 0xC;
             phi_s0 = temp_s0_2;
-            phi_s1 += 0xC;
+            phi_s1 = &phi_s1[1];
         } while (temp_s0_2 != 0x60);
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp50, &this->unk_204);
     }

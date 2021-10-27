@@ -378,21 +378,21 @@ void EffectSS_Init(GlobalContext *globalCtx, s32 numEntries) {
     if ((u32) temp_v0 < (u32) &temp_v0[numEntries]) {
         do {
             EffectSS_ResetEntry(phi_s0);
-            temp_s0 = phi_s0 + 0x60;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while ((u32) temp_s0 < (u32) &EffectSS2Info.data_table[EffectSS2Info.size]);
     }
-    temp_v0_2 = particleOverlayTable + 0x1C;
+    temp_v0_2 = &particleOverlayTable[1];
     particleOverlayTable->loadedRamAddr = NULL;
-    temp_v0_2->unk_2C = 0;
+    temp_v0_2[1].loadedRamAddr = NULL;
     temp_v0_2->loadedRamAddr = NULL;
-    phi_v0 = temp_v0_2 + 0x38;
+    phi_v0 = &temp_v0_2[2];
     phi_v1 = 3;
     do {
         temp_v1 = phi_v1 + 4;
-        phi_v0->unk_2C = 0;
-        phi_v0->unk_48 = 0;
-        phi_v0->unk_64 = 0;
+        phi_v0[1].loadedRamAddr = NULL;
+        phi_v0[2].loadedRamAddr = NULL;
+        phi_v0[3].loadedRamAddr = NULL;
         temp_v0_3 = phi_v0 + 0x70;
         temp_v0_3->unk_-60 = 0;
         phi_v0 = temp_v0_3;
@@ -415,7 +415,7 @@ void EffectSS_Clear(GlobalContext *globalCtx) {
     if ((0 * 0x60) != 0) {
         do {
             EffectSS_Delete(phi_s0);
-            temp_s0 = phi_s0 + 0x60;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while ((u32) temp_s0 < (u32) &EffectSS2Info.data_table[EffectSS2Info.size]);
     }
@@ -590,7 +590,7 @@ void EffectSS_Copy(GlobalContext *globalCtx, EffectSs *particle) {
             temp_t2->unk_-4 = (s32) temp_t3->unk_-4;
             phi_t3 = temp_t3;
             phi_t2 = temp_t2;
-        } while (temp_t3 != (particle + 0x60));
+        } while (temp_t3 != &particle[1]);
     }
 }
 

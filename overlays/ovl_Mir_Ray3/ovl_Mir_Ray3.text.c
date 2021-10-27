@@ -193,9 +193,9 @@ void MirRay3_Update(Actor *thisx, GlobalContext *globalCtx) {
             this->unk_210 = (u16) (this->unk_210 | 2);
         }
         temp_a2 = &this->unk_1C4;
-        this->actor.world.pos.x = temp_s2->unk_D34;
+        this->actor.world.pos.x = temp_s2[10].yDistToWater;
         this->actor.world.pos.y = temp_s2->unk_D38;
-        this->actor.world.pos.z = temp_s2->unk_D3C;
+        this->actor.world.pos.z = temp_s2[10].xyzDistToPlayerSq;
         sp2C = &globalCtx->colChkCtx;
         sp28 = temp_a2;
         Collider_UpdateCylinder((Actor *) this, (ColliderCylinder *) temp_a2);
@@ -255,8 +255,8 @@ void func_80B9E5F4(MirRay3 *arg0, GlobalContext *arg1, ? *arg2) {
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_s0 = temp_v0 + 0xD04;
-    sp60 = -(temp_v0->unk_D24 * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
-    sp64 = -(temp_v0->unk_D28 * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
+    sp60 = -(temp_v0[10].wallPoly * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
+    sp64 = -(temp_v0[10].floorPoly * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
     sp68 = -(temp_v0->unk_D2C * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
     phi_s1 = arg0;
     phi_s2 = arg2;
@@ -414,18 +414,18 @@ void func_80B9E8D4(MirRay3 *arg0, GlobalContext *arg1, ? *arg2) {
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
     temp_s6 = &sp134;
-    temp_f6 = -(temp_v0->unk_D24 * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
+    temp_f6 = -(temp_v0[10].wallPoly * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
     temp_s4 = &sp110;
     temp_s3 = &sp11C;
     temp_s1 = temp_v0 + 0xD04;
     spF8 = temp_f6;
-    temp_f18 = -(temp_v0->unk_D28 * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
+    temp_f18 = -(temp_v0[10].floorPoly * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
     spFC = temp_f18;
     temp_f4 = -(temp_v0->unk_D2C * arg0->unk_260) * arg0->unk_1C4.dim.quad[1].y * 400.0f;
     sp100 = temp_f4;
-    sp140 = temp_v0->unk_D34;
+    sp140 = temp_v0[10].yDistToWater;
     sp144 = temp_v0->unk_D38;
-    temp_f8 = temp_v0->unk_D3C;
+    temp_f8 = temp_v0[10].xyzDistToPlayerSq;
     sp148 = temp_f8;
     sp134 = temp_f6 + sp140;
     sp138 = temp_f18 + sp144;
@@ -573,7 +573,7 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_s0 = globalCtx->actorCtx.actorList[2].first;
     if (((this->unk_210 & 1) == 0) && (func_8012405C(globalCtx) != 0)) {
-        SysMatrix_InsertMatrix(temp_s0 + 0xD04, 0);
+        SysMatrix_InsertMatrix((MtxF *) &temp_s0[10].scale.y, 0);
         func_80B9E544(this, globalCtx);
         if (!(this->unk_1C4.dim.quad[1].y <= 0.1f)) {
             temp_a0 = globalCtx->state.gfxCtx;
@@ -581,7 +581,7 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
             func_8012C2DC(temp_a0);
             Matrix_Scale(1.0f, 1.0f, this->unk_1C4.dim.quad[1].y, 1);
             temp_v0 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0 + 8;
+            temp_s2->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             if ((this->actor.params & 0xF) == 1) {
@@ -591,12 +591,12 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
                     phi_a0 = (0xFFFF - temp_a0_2) & 0xFFFF;
                 }
                 temp_v0_2 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_2 + 8;
+                temp_s2->polyXlu.p = &temp_v0_2[1];
                 temp_v0_2->words.w0 = 0xFA000078;
                 temp_v0_2->words.w1 = ((s32) (this->unk_1C4.dim.quad[1].y * 100.0f) & 0xFF) | ~0xFF;
                 temp_v1 = temp_s2->polyXlu.p;
                 temp_f6 = (f32) phi_a0;
-                temp_s2->polyXlu.p = temp_v1 + 8;
+                temp_s2->polyXlu.p = &temp_v1[1];
                 temp_v1->words.w0 = 0xFB000000;
                 phi_f6 = temp_f6;
                 if (phi_a0 < 0) {
@@ -605,17 +605,17 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 temp_v1->words.w1 = (((u32) ((100.0f * (phi_f6 * 0.000030517578f)) + 105.0f) & 0xFF) << 8) | 0xDAE10000 | 0xFF;
             } else {
                 temp_v0_3 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_3 + 8;
+                temp_s2->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xFA000078;
                 temp_v0_3->words.w1 = ((s32) (this->unk_1C4.dim.quad[1].y * 100.0f) & 0xFF) | ~0xFF;
                 temp_v0_4 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_v0_4 + 8;
+                temp_s2->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w1 = 0xDAE1CDFF;
                 temp_v0_4->words.w0 = 0xFB000000;
             }
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060003F8));
             temp_v0_5 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_5 + 8;
+            temp_s2->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDE000000;
             temp_v0_5->words.w1 = (u32) &D_06000168;
             func_80B9E5F4(this, globalCtx, &sp8C);
@@ -636,7 +636,7 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 phi_s0 = temp_s0_2;
             } while ((u32) temp_s0_2 < (u32) &sp284);
             temp_v0_7 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_7 + 8;
+            temp_s2->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xE200001C;
             temp_v0_7->words.w1 = 0xC8104DD8;
             phi_s0_2 = &sp8C;
@@ -646,19 +646,19 @@ void MirRay3_Draw(Actor *thisx, GlobalContext *globalCtx) {
                     Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
                     SysMatrix_InsertMatrix(phi_s0_2 + 0xC, 1);
                     temp_v0_8 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_8 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_8[1];
                     temp_v0_8->words.w0 = 0xDA380003;
                     temp_v0_8->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                     temp_v0_9 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_9 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_9[1];
                     temp_v0_9->words.w1 = 0;
                     temp_v0_9->words.w0 = 0xE7000000;
                     temp_v0_10 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_10 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_10[1];
                     temp_v0_10->words.w0 = 0xFA000000;
                     temp_v0_10->words.w1 = spDC | ~0xFF;
                     temp_v0_11 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_11 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_11[1];
                     temp_v0_11->words.w1 = (u32) &D_060004B0;
                     temp_v0_11->words.w0 = 0xDE000000;
                 }

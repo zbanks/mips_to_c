@@ -111,7 +111,7 @@ void func_80A3E524(Actor *this, GlobalContext *globalCtx) {
         sp28 = temp_a0;
         func_8012C2DC(temp_a0);
         temp_v0 = sp28->polyXlu.p;
-        sp28->polyXlu.p = temp_v0 + 8;
+        sp28->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp2C = *temp_a3;
         sp28 = sp28;
@@ -119,12 +119,12 @@ void func_80A3E524(Actor *this, GlobalContext *globalCtx) {
         sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         if (*temp_a3 != 0) {
             temp_v0_2 = sp28->polyXlu.p;
-            sp28->polyXlu.p = temp_v0_2 + 8;
+            sp28->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = *temp_a3;
             temp_v0_2->words.w0 = 0xDE000000;
         }
         temp_v0_3 = sp28->polyXlu.p;
-        sp28->polyXlu.p = temp_v0_3 + 8;
+        sp28->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = *(&D_80A3E6B0 + (this->params * 0xC));
         return;

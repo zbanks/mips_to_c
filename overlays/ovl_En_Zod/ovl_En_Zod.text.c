@@ -893,7 +893,7 @@ void func_80BB01B0(EnZod *arg0, GraphicsContext **arg1) {
         temp_v0->words.w0 = 0xDA380003;
         temp_v0->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_2 = temp_s2->polyOpa.p;
-        temp_s2->polyOpa.p = temp_v0_2 + 8;
+        temp_s2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = *phi_s7;
         SysMatrix_StatePop();
@@ -924,10 +924,10 @@ void EnZod_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v1->words.w0 = 0xDB060020;
     sp30 = temp_v1;
     temp_v1->words.w1 = Lib_SegmentedToVirtual(*(&D_80BB062C + (this->unk_24C * 4)));
-    temp_v1->unk_8 = 0xDB060024;
+    temp_v1[1].words.w0 = 0xDB060024;
     sp30 = temp_v1;
-    temp_v1->unk_C = Lib_SegmentedToVirtual(&D_06007650);
-    temp_s1->polyOpa.p = temp_v1 + 0x10;
+    temp_v1[1].words.w1 = Lib_SegmentedToVirtual(&D_06007650);
+    temp_s1->polyOpa.p = &temp_v1[2];
     func_80BB01B0(this, (GraphicsContext **) globalCtx);
     SkelAnime_DrawSV(globalCtx, this->unk_1BC.skeleton, this->unk_1BC.limbDrawTbl, (s32) this->unk_1BC.dListCount, func_80BB0128, func_80BB0170, (Actor *) this);
     if ((this->unk_256 & 2) != 0) {

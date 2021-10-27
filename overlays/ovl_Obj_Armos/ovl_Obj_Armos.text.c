@@ -511,7 +511,7 @@ void func_809A5960(Actor *arg0, GlobalContext *arg1) {
     Matrix_Scale(0.014f, 0.014f, 0.014f, 1);
     func_8012C28C(arg1->state.gfxCtx);
     temp_v1 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v1 + 8;
+    sp38->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xFB000000;
     SkelAnime_Draw(arg1, arg0->unk_160, arg0->unk_17C, NULL, NULL, arg0);
@@ -531,22 +531,22 @@ void func_809A5A3C(ObjArmos *arg0, GraphicsContext **arg1) {
         temp_s0 = temp_a0;
         func_8012C448(temp_a0);
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFCFF97FF;
         temp_v0->words.w1 = 0xFFFDFE38;
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = 0xFF;
         temp_v0_2->words.w0 = 0xFA000000;
         func_800C0094(arg0->actor.floorPoly, arg0->unk_250, arg0->actor.floorHeight, arg0->unk_258, (MtxF *) &sp48);
         SysMatrix_SetCurrentState((MtxF *) &sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, 1);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         temp_v0_3->words.w1 = Matrix_NewMtx(*arg1);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = (u32) D_04076BC0;
     }

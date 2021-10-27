@@ -128,8 +128,8 @@ void ObjGrassUnit_Init(Actor *thisx, GlobalContext *globalCtx) {
         temp_v1 = D_809AC41C;
         if ((temp_v1 != 0) && (D_809AC420 != 0)) {
             D_809AC424 = 1;
-            temp_v0->unk_3298 = temp_v1;
-            D_809AC418->unk_329C = (Actor *) D_809AC420;
+            temp_v0[39].draw = (void (*)(Actor *, GlobalContext *)) temp_v1;
+            D_809AC418[39].overlayEntry = (ActorOverlay *) D_809AC420;
             D_809AC41C->unk_190 = (Actor *) D_809AC418;
             D_809AC420->unk_190 = (Actor *) D_809AC418;
         }

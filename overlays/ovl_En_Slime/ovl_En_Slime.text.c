@@ -373,10 +373,10 @@ void EnSlime_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 void func_80A2EFAC(Actor *arg0) {
     arg0->unk_14A = 0xA;
     arg0->unk_1D0 = 3;
-    arg0->unk_168 = 0.4f;
+    arg0[1].world.pos.x = 0.4f;
     arg0->unk_14C = 0x50;
     arg0->flags &= -0x401;
-    arg0->unk_16C = 0.6f;
+    arg0[1].world.pos.y = 0.6f;
     arg0->unk_164 = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0x2000, (s16) 0x50);
 }
@@ -677,7 +677,7 @@ void func_80A2FBA0(EnSlime *this, GlobalContext *globalCtx) {
 
 void func_80A2FD94(Actor *arg0) {
     Actor *temp_a0;
-    Actor *temp_a1;
+    CollisionPoly *temp_a1;
     Actor *phi_a0;
 
     arg0->speedXZ = 10.0f;
@@ -688,11 +688,11 @@ void func_80A2FD94(Actor *arg0) {
     arg0->unk_1CD = (u8) (arg0->unk_1CD & 0xFFFE);
     Audio_PlayActorSound2(arg0, 0x38BFU);
     temp_a0 = arg0;
-    temp_a1 = temp_a0->unk_1C4;
+    temp_a1 = temp_a0[1].floorPoly;
     phi_a0 = temp_a0;
     if (temp_a1 != 0) {
         arg0 = temp_a0;
-        arg0->world.rot.y = Actor_YawBetweenActors(temp_a0, temp_a1) + 0x8000;
+        arg0->world.rot.y = Actor_YawBetweenActors(temp_a0, (Actor *) temp_a1) + 0x8000;
         phi_a0 = arg0;
     } else {
         temp_a0->world.rot.y = temp_a0->yawTowardsPlayer + 0x8000;
@@ -764,11 +764,11 @@ void func_80A30018(Actor *arg0, GlobalContext *arg1, s32 arg2) {
     arg0->unk_14C = 0x14;
     arg0->speedXZ = 10.0f;
     if (arg2 == 1) {
-        func_800BE504(arg0, arg0 + 0x1BC);
+        func_800BE504(arg0, (ColliderCylinder *) &arg0[1].minVelocityY);
     }
     arg0->unk_149 = 0;
     Actor_SetScale(arg0, 0.01f);
-    arg0->unk_154 = (f32) (Rand_ZeroOne() * 6.2831855f);
+    arg0[1].home.pos.z = Rand_ZeroOne() * 6.2831855f;
     arg0->unk_15C = (f32) (Rand_ZeroOne() * 6.2831855f);
     sp98 = Math_SinS(arg0->world.rot.y) * 10.0f;
     temp_f28 = Math_CosS(arg0->world.rot.y) * 10.0f;
@@ -911,7 +911,7 @@ void func_80A30778(Actor *arg0) {
     arg0->speedXZ = 0.0f;
     arg0->velocity.y = 0.0f;
     arg0->gravity = 0.0f;
-    arg0->unk_154 = func_80A3072C(arg0->world.pos.x, arg0->home.pos.x);
+    arg0[1].home.pos.z = func_80A3072C(arg0->world.pos.x, arg0->home.pos.x);
     arg0->unk_15C = func_80A3072C(arg0->world.pos.z, arg0->home.pos.z);
     func_800BCB70(arg0, 0x8000, 0x80FF, 0x2000, (s16) 0xA);
     arg0->unk_149 = 0;
@@ -1153,7 +1153,7 @@ void func_80A30F98(Actor *arg0, GlobalContext *arg1) {
             arg0->colChkInfo.damage = 0;
         }
         if (Actor_ApplyDamage(arg0) == 0) {
-            func_800BE258(arg0, arg0 + 0x1D4);
+            func_800BE258(arg0, (void *) &arg0[1].bgCheckFlags);
             Enemy_StartFinishingBlow(arg1, arg0);
             arg0->flags &= -2;
         }
@@ -1186,12 +1186,12 @@ void func_80A30F98(Actor *arg0, GlobalContext *arg1) {
             if (temp_v0_2 == 4) {
                 arg0->unk_164 = 4.0f;
                 arg0->unk_14A = 0x14U;
-                arg0->unk_168 = 0.4f;
+                arg0[1].world.pos.x = 0.4f;
                 Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0->unk_1E2, (f32) arg0->unk_1E4, (f32) arg0->unk_1E6, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
             } else if (temp_v0_2 == 5) {
                 arg0->unk_14A = 0x20U;
                 arg0->unk_164 = 4.0f;
-                arg0->unk_168 = 0.4f;
+                arg0[1].world.pos.x = 0.4f;
             }
             func_80A30018(arg0, arg1, 1);
             /* Duplicate return node #24. Try simplifying control flow for better match */
@@ -1233,7 +1233,7 @@ void EnSlime_Update(Actor *thisx, GlobalContext *globalCtx) {
         if ((this->unk_1BC.base.acFlags & 1) != 0) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, (Collider *) sp28);
         }
-        if ((sp2C->unk_A74 & 0x100) != 0) {
+        if (((bitwise s32) sp2C[8].targetArrowOffset & 0x100) != 0) {
             this->unk_1BC.base.ocFlags1 &= 0xFFF7;
         } else {
             this->unk_1BC.base.ocFlags1 |= 8;
@@ -1314,15 +1314,15 @@ void EnSlime_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_800B8118((Actor *) this, globalCtx, 0);
     if (this->unk_148 != 0xFF) {
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060028;
         temp_v0->words.w1 = (u32) D_801AEFA0;
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = -1;
         temp_v0_2->words.w0 = 0xFA0000AA;
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_3->words.w1 = this->unk_148 | 0x96FFFF00;
     } else {
@@ -1333,11 +1333,11 @@ void EnSlime_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp98 = temp_a2;
         AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) D_80A32200);
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFA000064;
         temp_v0_5->words.w1 = (temp_a2->unk_0 << 0x18) | (temp_a2->unk_1 << 0x10) | (temp_a2->unk_2 << 8) | temp_a2->unk_3;
         temp_v0_6 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_6 + 8;
+        temp_s1->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xFB000000;
         temp_v0_6->words.w1 = (temp_a3->unk_0 << 0x18) | (temp_a3->unk_1 << 0x10) | (temp_a3->unk_2 << 8) | 0xFF;
     }
@@ -1352,46 +1352,46 @@ void EnSlime_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_RotateStateAroundXAxis(-this->unk_154);
     }
     temp_v0_7 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_7 + 8;
+    temp_s1->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDA380003;
     sp70 = temp_v0_7;
     sp70->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_8 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_8 + 8;
+    temp_s1->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) &D_060004C0;
     temp_v0_8->words.w0 = 0xDE000000;
     if (this->unk_148 == 0xFF) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1U);
         temp_v0_9 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_9 + 8;
+        temp_s1->polyOpa.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xDB060024;
         temp_v0_9->words.w1 = (u32) D_80A31B44[this->unk_149];
         temp_v0_10 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_10 + 8;
+        temp_s1->polyOpa.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0x1E46FF;
         temp_v0_10->words.w0 = 0xFB000000;
         temp_v0_11 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_11 + 8;
+        temp_s1->polyOpa.p = &temp_v0_11[1];
         temp_v0_11->words.w0 = 0xDA380003;
         sp60 = temp_v0_11;
         sp60->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_12 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_12 + 8;
+        temp_s1->polyOpa.p = &temp_v0_12[1];
         temp_v0_12->words.w1 = (u32) &D_06000650;
         temp_v0_12->words.w0 = 0xDE000000;
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);
         temp_v0_13 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_13 + 8;
+        temp_s1->polyXlu.p = &temp_v0_13[1];
         temp_v0_13->words.w0 = 0xDB060024;
         temp_v0_13->words.w1 = (u32) D_80A31B44[this->unk_149];
         temp_v0_14 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_14 + 8;
+        temp_s1->polyXlu.p = &temp_v0_14[1];
         temp_v0_14->words.w0 = 0xDA380003;
         sp54 = temp_v0_14;
         sp54->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_15 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_15 + 8;
+        temp_s1->polyXlu.p = &temp_v0_15[1];
         temp_v0_15->words.w1 = (u32) &D_06000650;
         temp_v0_15->words.w0 = 0xDE000000;
     }
@@ -1401,21 +1401,21 @@ void EnSlime_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp38 = phi_a0;
         sp34 = phi_a1;
         SysMatrix_MultiplyVector3fByState(phi_a0, phi_a1);
-        temp_a0_2 = phi_a0 + 0xC;
+        temp_a0_2 = &phi_a0[1];
         phi_a0 = temp_a0_2;
-        phi_a1 += 0xC;
+        phi_a1 = &phi_a1[1];
     } while (temp_a0_2 != &D_80A31BD0);
     if (func_80A30CEC == this->actionFunc) {
         SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
         Matrix_RotateY(this->unk_150, 1U);
         Matrix_Scale(this->unk_174, this->unk_178, this->unk_17C, 1);
         temp_v0_16 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_16 + 8;
+        temp_s1->polyXlu.p = &temp_v0_16[1];
         temp_v0_16->words.w0 = 0xDA380003;
         sp4C = temp_v0_16;
         sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_17 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_17 + 8;
+        temp_s1->polyXlu.p = &temp_v0_17[1];
         temp_v0_17->words.w1 = (u32) &D_06000A10;
         temp_v0_17->words.w0 = 0xDE000000;
     }
@@ -1426,16 +1426,16 @@ void EnSlime_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + (2000.0f * this->actor.scale.y), this->actor.world.pos.z, 0);
         Matrix_Scale(0.03f, 0.03f, 0.03f, 1);
         temp_v0_19 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_19 + 8;
+        temp_s1->polyOpa.p = &temp_v0_19[1];
         temp_v0_19->words.w0 = 0xDB060020;
         temp_v0_19->words.w1 = (u32) this->unk_160;
         temp_v0_20 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_20 + 8;
+        temp_s1->polyOpa.p = &temp_v0_20[1];
         temp_v0_20->words.w0 = 0xDA380003;
         sp40 = temp_v0_20;
         sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_21 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_21 + 8;
+        temp_s1->polyOpa.p = &temp_v0_21[1];
         temp_v0_21->words.w1 = (u32) D_0405F6F0;
         temp_v0_21->words.w0 = 0xDE000000;
     }

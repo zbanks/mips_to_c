@@ -131,8 +131,8 @@ void ObjIcePoly_Init(Actor *thisx, GlobalContext *globalCtx) {
         Collider_UpdateCylinder((Actor *) this, phi_s2);
         Collider_UpdateCylinder((Actor *) this, phi_s1);
         temp_s3 = phi_s3 + 0x4C;
-        phi_s2 += 0x4C;
-        phi_s1 += 0x4C;
+        phi_s2 = &phi_s2[1];
+        phi_s1 = &phi_s1[1];
         phi_s3 = temp_s3;
     } while (temp_s3 != 0x98);
     this->unk_18E = (s16) (s32) (this->actor.scale.y * 58.0f);
@@ -173,8 +173,8 @@ void ObjIcePoly_Destroy(Actor *thisx, GlobalContext *globalCtx) {
         Collider_DestroyCylinder(globalCtx, phi_s2);
         Collider_DestroyCylinder(globalCtx, phi_s1);
         temp_s0 = phi_s0 + 0x4C;
-        phi_s2 += 0x4C;
-        phi_s1 += 0x4C;
+        phi_s2 = &phi_s2[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x98);
 }
@@ -308,8 +308,8 @@ void func_80931A38(ObjIcePoly *this, GlobalContext *globalCtx) {
                 CollisionCheck_SetOC(globalCtx, temp_s3_2, phi_s0);
                 CollisionCheck_SetAC(globalCtx, temp_s3_2, phi_s2);
                 temp_s1 = phi_s1 + 0x4C;
-                phi_s0 += 0x4C;
-                phi_s2 += 0x4C;
+                phi_s0 = (Collider *) &phi_s0[3].at;
+                phi_s2 = (Collider *) &phi_s2[3].at;
                 phi_s1 = temp_s1;
             } while (temp_s1 != 0x98);
         }
@@ -434,22 +434,22 @@ void ObjIcePoly_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     func_800B8118((Actor *) this, globalCtx, 0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp44 = temp_v0;
     sp44->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     temp_v1 = globalCtx->gameplayFrames;
     sp40 = temp_v0_2;
     sp40->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, temp_v1 & 0xFF, 0x20, 0x10, 1, 0U, (temp_v1 * 2) & 0xFF, 0x40, 0x20);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = this->unk_148 | 0x326400;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_04050D10;
     temp_v0_4->words.w0 = 0xDE000000;
 }

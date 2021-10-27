@@ -67,25 +67,25 @@ void EffectSsDeadDb_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     temp_v0 = SkinMatrix_MtxFToNewMtx(temp_s0, (MtxF *) &sp44);
     if (temp_v0 != 0) {
         temp_v1 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1 + 8;
+        temp_s0->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) temp_v0;
         temp_v1->words.w0 = 0xDA380003;
         func_8012C974(temp_s0);
         temp_v1_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_2 + 8;
+        temp_s0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFB000000;
         temp_v1_2->words.w1 = ((this->regs[8] & 0xFF) << 8) | (this->regs[6] << 0x18) | ((this->regs[7] & 0xFF) << 0x10);
         temp_v1_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_3 + 8;
+        temp_s0->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFA000000;
         temp_v1_3->words.w1 = (this->regs[5] & 0xFF) | (this->regs[2] << 0x18) | ((this->regs[3] & 0xFF) << 0x10) | ((this->regs[4] & 0xFF) << 8);
         temp_v1_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_4 + 8;
+        temp_s0->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xDB060020;
         sp24 = temp_v1_4;
         sp24->words.w1 = Lib_SegmentedToVirtual(*(&D_80980CD8 + (this->regs[1] * 4)));
         temp_v1_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_5 + 8;
+        temp_s0->polyXlu.p = &temp_v1_5[1];
         temp_v1_5->words.w0 = 0xDE000000;
         temp_v1_5->words.w1 = (u32) this->gfx;
     }

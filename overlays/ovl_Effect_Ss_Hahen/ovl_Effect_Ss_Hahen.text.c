@@ -111,7 +111,7 @@ void func_8097B424(GraphicsContext **arg0, EffectSs *arg1) {
     arg1 = arg1;
     func_8012C28C(*arg0);
     temp_v0_3 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_3 + 8;
+    temp_a2->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = arg1->gfx;
 }
@@ -142,7 +142,7 @@ void func_8097B504(GraphicsContext **arg0, EffectSs *arg1) {
     arg1 = arg1;
     func_8012C2DC(*arg0);
     temp_v0_3 = temp_a2->polyXlu.p;
-    temp_a2->polyXlu.p = temp_v0_3 + 8;
+    temp_a2->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = arg1->gfx;
 }

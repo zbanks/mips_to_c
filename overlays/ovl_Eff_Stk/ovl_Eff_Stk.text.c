@@ -105,8 +105,8 @@ void EffStk_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_a1 = globalCtx->cameraPtrs[globalCtx->activeCamera];
     sp50.unk_0 = temp_a1->eye.x;
-    sp50.unk_4 = (f32) temp_a1->eye.y;
-    sp50.unk_8 = (f32) temp_a1->eye.z;
+    (&sp50)[1] = temp_a1->eye.y;
+    (&sp50)[2] = temp_a1->eye.z;
     func_800E01B8(&sp44, temp_a1);
     temp_a0 = globalCtx->state.gfxCtx;
     temp_s0 = temp_a0;
@@ -116,25 +116,25 @@ void EffStk_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     SysMatrix_InsertTranslation(0.0f, 0.0f, this->unk_148, 1);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp38 = temp_v0;
     sp38->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     AnimatedMat_DrawAlphaStep(globalCtx, Lib_SegmentedToVirtual(&D_06009F60), 1.0f, (u32) this->unk_144);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0x80;
     temp_v0_2->words.w0 = 0xE3001801;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0x20;
     temp_v0_3->words.w0 = 0xE3001A01;
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06008920;
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_06008A38;
     temp_v0_5->words.w0 = 0xDE000000;
 }

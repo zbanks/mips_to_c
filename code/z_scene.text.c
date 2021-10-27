@@ -8313,7 +8313,7 @@ void Object_InitBank(GameState *gamestate, ObjectContext *objectCtx) {
     temp_v0_3 = Object_Spawn(objectCtx, 1);
     temp_t8 = (temp_v0_3 & 0xFF) * 0x44;
     objectCtx->mainKeepIndex = temp_v0_3;
-    *(gSegments + 0x10) = (objectCtx + temp_t8)->unk_10 + 0x80000000;
+    gSegments[4] = (objectCtx + temp_t8)->unk_10 + 0x80000000;
 }
 
 void Object_UpdateBank(ObjectContext *objectCtx) {
@@ -8524,7 +8524,7 @@ void Scene_HeaderCmdSpecialFiles(GlobalContext *globalCtx, SceneCmd *cmd) {
         globalCtx = globalCtx;
         cmd = cmd;
         globalCtx->objectCtx.subKeepIndex = Object_Spawn(temp_a0, temp_a1);
-        *(gSegments + 0x14) = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
+        gSegments[5] = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
     }
     temp_v0_2 = cmd->base.data1;
     if (temp_v0_2 != 0) {
@@ -8664,7 +8664,7 @@ void Scene_HeaderCmdLightList(GlobalContext *globalCtx, SceneCmd *cmd) {
         do {
             LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, phi_s0);
             temp_s1 = phi_s1 + 1;
-            phi_s0 += 0xE;
+            phi_s0 = &phi_s0[1];
             phi_s1 = temp_s1;
         } while (temp_s1 < (s32) cmd->base.data1);
     }
@@ -8836,7 +8836,7 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext *globalCtx, SceneCmd *cmd) {
         temp_a0 = (Lib_SegmentedToVirtual((void *) cmd->base.data2) + (gSaveContext.sceneSetupIndex * 4))->unk_-4;
         if (temp_a0 != 0) {
             Scene_ProcessHeader(globalCtx, Lib_SegmentedToVirtual(temp_a0));
-            cmd->unk_8 = 0x14;
+            cmd[1].base.code = 0x14;
         }
     }
 }

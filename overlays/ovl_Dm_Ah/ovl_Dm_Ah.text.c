@@ -392,7 +392,7 @@ void func_80C1DB24(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 2) {
         func_8013AD9C((s16) (arg2->unk_28E + 0x4000), (s16) (arg2->unk_290 + arg2->shape.rot.y + 0x4000), arg2 + 0x198, arg2 + 0x1AA, phi_v1, phi_v0);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_198, arg2->unk_19C, arg2->unk_1A0, 0);
+        SysMatrix_InsertTranslation(arg2[1].targetArrowOffset, arg2[1].scale.x, arg2[1].scale.y, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
         Matrix_RotateY(arg2->unk_1AC, 1U);
         SysMatrix_InsertXRotation_s(arg2->unk_1AA, 1);
@@ -414,13 +414,13 @@ void DmAh_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp40 = sp40;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C1DE28 + (this->unk_284 * 4)));
     temp_v0_2 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_2 + 8;
+    sp40->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*D_80C1DE20);

@@ -266,7 +266,7 @@ void func_808BF344(Actor *arg0) {
     arg0->unk_260 = 0.4f;
     arg0->unk_250 = 0x50;
     arg0->flags &= -0x201;
-    arg0->unk_264 = 0.6f;
+    arg0[1].parent = (Actor *)0x3F19999A;
     arg0->unk_25C = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
@@ -337,9 +337,9 @@ void func_808BF578(EnBbfall *arg0) {
 
     arg0->unk_384.elements->unk_4 = 1;
     temp_v0 = arg0->unk_384.elements;
-    temp_v0->unk_55 = (u8) (temp_v0->unk_55 | 1);
+    temp_v0[1].info.toucherFlags |= 1;
     temp_v0_2 = arg0->unk_384.elements;
-    temp_v0_2->unk_95 = (u8) (temp_v0_2->unk_95 | 1);
+    temp_v0_2[2].info.toucherFlags |= 1;
 }
 
 void func_808BF5AC(Actor *arg0) {
@@ -385,7 +385,7 @@ void func_808BF5E0(EnBbfall *arg0) {
         temp_s1 = phi_s1 + 1;
         temp_s0 = phi_s0 + 0xC;
         temp_s0->unk_260 = phi_s0->unk_268.y - 47.0f;
-        phi_s2 += 0xC;
+        phi_s2 = &phi_s2[1];
         phi_s0 = temp_s0;
         phi_s1 = temp_s1;
     } while (temp_s1 != 6);
@@ -422,7 +422,7 @@ void func_808BF7A0(Actor *arg0) {
     func_808BF578();
     arg0->flags |= 1;
     Audio_PlayActorSound2(arg0, 0x3A1CU);
-    arg0->unk_248 = func_808BF830;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808BF830;
 }
 
 void func_808BF830(EnBbfall *this, GlobalContext *globalCtx) {
@@ -516,11 +516,11 @@ void func_808BFAB4(Actor *arg0) {
     arg0->unk_24C = 0;
     arg0->unk_395 = (u8) (arg0->unk_395 | 1);
     arg0->speedXZ = 2.0f;
-    arg0->unk_254 = 0.0f;
+    arg0[1].prevPos.z = 0.0f;
     arg0->unk_258 = 0.0f;
     arg0->gravity = -2.0f;
     Audio_PlayActorSound2(arg0, 0x38CDU);
-    arg0->unk_248 = func_808BFB4C;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808BFB4C;
     arg0->world.rot.y = arg0->shape.rot.y;
 }
 
@@ -572,12 +572,12 @@ block_9:
 void func_808BFCCC(Actor *arg0, GlobalContext *arg1) {
     f32 sp70;
     PosRot *temp_s4;
+    Vec3f *temp_s0;
     f32 temp_f0;
     s32 temp_s1;
-    void *temp_s0;
     Vec3f *phi_s2;
     f32 phi_f2;
-    void *phi_s0;
+    Vec3f *phi_s0;
     s32 phi_s1;
 
     func_800BE5CC(arg0, arg0 + 0x384, 0);
@@ -591,8 +591,8 @@ void func_808BFCCC(Actor *arg0, GlobalContext *arg1) {
     arg0->speedXZ = 0.0f;
     arg0->unk_24E = 1;
     arg0->gravity = -1.5f;
-    phi_s2 = arg0 + 0x2B0;
-    phi_s0 = arg0 + 0x2EC;
+    phi_s2 = (Vec3f *) &arg0[2].world.pos.y;
+    phi_s0 = &arg0[2].velocity;
     phi_s1 = 0;
     do {
         Math_Vec3f_Diff(phi_s2, (Vec3f *) temp_s4, (Vec3f *) &sp70);
@@ -601,16 +601,16 @@ void func_808BFCCC(Actor *arg0, GlobalContext *arg1) {
         if (temp_f0 > 1.0f) {
             phi_f2 = 2.5f / temp_f0;
         }
-        phi_s0->unk_0 = (f32) (sp70 * phi_f2);
-        phi_s0->unk_8 = (f32) (sp78 * phi_f2);
+        phi_s0->x = sp70 * phi_f2;
+        phi_s0->z = sp78 * phi_f2;
         temp_s1 = phi_s1 + 0xC;
         temp_s0 = phi_s0 + 0xC;
         temp_s0->unk_-8 = (f32) (Rand_ZeroFloat(3.5f) + 10.0f);
-        phi_s2 += 0xC;
+        phi_s2 = &phi_s2[1];
         phi_s0 = temp_s0;
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x3C);
-    arg0->unk_248 = func_808BFE58;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808BFE58;
 }
 
 void func_808BFE58(EnBbfall *this, GlobalContext *globalCtx) {
@@ -636,7 +636,7 @@ void func_808BFE58(EnBbfall *this, GlobalContext *globalCtx) {
             func_800B3030(globalCtx, phi_s0, &D_801D15B0, &D_801D15B0, (s16) 0x28, (s16) 7, 2);
             Audio_PlaySoundAtPosition(globalCtx, phi_s0, 0xB, 0x3878U);
             temp_s1 = phi_s1 + 0xC;
-            phi_s0 += 0xC;
+            phi_s0 = &phi_s0[1];
             phi_s1 = temp_s1;
         } while (temp_s1 != 0x3C);
         Actor_MarkForDeath((Actor *) this);
@@ -648,8 +648,8 @@ void func_808BFE58(EnBbfall *this, GlobalContext *globalCtx) {
         temp_s2 = phi_s2 + 1;
         temp_s1_2 = phi_s1_2 + 0xC;
         temp_s1_2->unk_2E4 = phi_s1_2->unk_2EC.y + this->actor.gravity;
-        phi_s0_2 += 0xC;
-        phi_s3 += 0xC;
+        phi_s0_2 = &phi_s0_2[1];
+        phi_s3 = &phi_s3[1];
         phi_s1_2 = temp_s1_2;
         phi_s2 = temp_s2;
     } while (temp_s2 != 5);
@@ -660,7 +660,7 @@ void func_808BFF8C(Actor *arg0) {
 
     arg0->unk_395 = (u8) (arg0->unk_395 & 0xFFFE);
     Audio_PlayActorSound2(arg0, 0x38E3U);
-    func_800BE5CC(arg0, arg0 + 0x384, 0);
+    func_800BE5CC(arg0, (ColliderJntSph *) &arg0[2].uncullZoneForward, 0);
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 5) {
         func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
@@ -676,7 +676,7 @@ void func_808BFF8C(Actor *arg0) {
         func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x14);
         arg0->speedXZ = 7.0f;
     }
-    arg0->unk_248 = func_808C00A0;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_808C00A0;
 }
 
 void func_808C00A0(EnBbfall *this, GlobalContext *globalCtx) {
@@ -697,7 +697,7 @@ void func_808C013C(Actor *arg0) {
         arg0->velocity.y = 0.0f;
     }
     arg0->gravity = -2.0f;
-    arg0->unk_248 = func_808C0178;
+    arg0[1].uncullZoneDownward = func_808C0178;
 }
 
 void func_808C0178(EnBbfall *this, GlobalContext *globalCtx) {
@@ -733,7 +733,7 @@ void func_808C01E0(Actor *arg0, GlobalContext *arg1) {
         if ((arg0->unk_24F != 0xA) || ((*arg0->unk_3A0->unk_24 & 0xDB0B3) == 0)) {
             func_800BE2B8(arg0, arg0 + 0x384);
             arg0->unk_24C = 0;
-            arg0->unk_254 = 0.0f;
+            arg0[1].prevPos.z = 0.0f;
             arg0->unk_258 = 0.0f;
             func_808BF5AC(arg0);
             func_808BF3B8(arg0, arg1);
@@ -770,7 +770,7 @@ void func_808C01E0(Actor *arg0, GlobalContext *arg1) {
     if ((temp_v0_3 & 4) != 0) {
         arg0->unk_394 = (u8) (temp_v0_3 & 0xFFF9);
         func_808BF5AC(arg0);
-        if (func_808BFB4C != arg0->unk_248) {
+        if (func_808BFB4C != (bitwise s32) arg0[1].uncullZoneDownward) {
             arg0->world.rot.y = arg0->yawTowardsPlayer + 0x8000;
             arg0->shape.rot.y = arg0->world.rot.y;
             func_808BFAB4(arg0);
@@ -821,9 +821,9 @@ void EnBbfall_Update(Actor *thisx, GlobalContext *globalCtx) {
         }
         temp_v1 = &this->actor.focus;
         phi_v0 = 5;
-        phi_s4 = temp_v1 + 0x250;
-        phi_s3 = temp_v1 + 0x25C;
-        phi_s0 = temp_v1 + 0x268;
+        phi_s4 = (Vec3f *) &temp_v1[29].rot;
+        phi_s3 = (Vec3f *) &temp_v1[30].pos.y;
+        phi_s0 = (Vec3f *) &temp_v1[30].rot.z;
         do {
             sp58 = phi_v0;
             Math_Vec3f_Diff(phi_s4, phi_s3, (Vec3f *) &sp5C);
@@ -989,9 +989,9 @@ void func_808C080C(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         sp28 = temp_v0_5;
         sp28->words.w1 = Matrix_NewMtx(*arg0);
         temp_v0_6 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v0_6 + 8;
+        sp30->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDE000000;
-        temp_v0_6->words.w1 = arg4->unk_328;
+        temp_v0_6->words.w1 = arg4[2].colChkInfo.damageTable;
     }
 }
 
@@ -1020,9 +1020,9 @@ void EnBbfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = this;
     temp_s1 = globalCtx->state.gfxCtx;
     temp_v0 = temp_s1->polyOpa.p;
-    temp_v0->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_v0->words.w1 = (u32) &sSetupDL[150];
     temp_v0->words.w0 = 0xDE000000;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_a2 = temp_s0->unk_144.limbDrawTbl;
     temp_a1 = temp_s0->unk_144.skeleton;
     this = temp_s0;
@@ -1032,7 +1032,7 @@ void EnBbfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_RotateY((s16) ((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000), 1U);
         Matrix_Scale(this->unk_258, this->unk_254, 1.0f, 1);
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = 0xFF000000;
         temp_v0_2->words.w0 = 0xFB000000;
         temp_s5 = SysMatrix_GetCurrentState();
@@ -1044,23 +1044,23 @@ void EnBbfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_s2 = &this->unk_268;
 loop_2:
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDB060020;
         temp_v0_3->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((sp70->unk_840 + phi_s6) * phi_s4) & 0x1FF, 0x20, 0x80);
         temp_v0_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_4 + 8;
+        temp_s1->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFA008080;
         temp_v0_4->words.w1 = (phi_s3 & 0xFF) | 0xFFFF0000;
         temp_s5->mf[3][0] = phi_s2->x;
         temp_s5->mf[3][1] = phi_s2->y;
         temp_s5->mf[3][2] = phi_s2->z;
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDA380003;
         temp_v0_5->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_6 = temp_s1->polyXlu.p;
         temp_s3 = phi_s3 - 0x23;
-        temp_s1->polyXlu.p = temp_v0_6 + 8;
+        temp_s1->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDE000000;
         temp_v0_6->words.w1 = (u32) sp74;
         phi_s3 = (u8) temp_s3;
@@ -1077,5 +1077,5 @@ loop_2:
             }
         }
     }
-    func_800BE680(globalCtx, (Actor *) this, (Vec3f []) ((Actor *) this + 0x2B0), 5, (Actor *) this->unk_260, (Actor *) this->unk_264, (Actor *) this->unk_25C, (u8) (s32) (Actor *) this->unk_24F);
+    func_800BE680(globalCtx, (Actor *) this, (Vec3f []) ((Actor *) this + 0x2B0), 5, (Actor *) this->unk_260, (Actor *) this[1].parent, (Actor *) this->unk_25C, (u8) (s32) (Actor *) this->unk_24F);
 }

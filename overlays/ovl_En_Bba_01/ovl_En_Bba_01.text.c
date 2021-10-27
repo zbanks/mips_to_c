@@ -43,6 +43,12 @@ typedef struct EnBba01 {
     /* 0x32C */ char pad_32C[0x2F0];
 } EnBba01;                                          /* size = 0x61C */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ u16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnBba01_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -184,7 +190,7 @@ void func_809CC060(EnBba01 *arg0, GlobalContext *arg1) {
     func_800F09B4(arg0);
     if (func_8013D5E8(arg0->actor.shape.rot.y, 0x36B0, arg0->actor.yawTowardsPlayer) != 0) {
         sp30 = temp_v1->world.pos.x;
-        sp34 = temp_v1->unk_C44 + 3.0f;
+        sp34 = temp_v1[9].shape.feetPos[1].x + 3.0f;
         sp38 = temp_v1->world.pos.z;
         func_8013D2E0((Vec3f *) &sp30, arg0 + 0x3C, arg0 + 0xBC, arg0 + 0x2C6, arg0 + 0x2CC, arg0 + 0x2D2, D_809CCCD8);
     } else {
@@ -214,9 +220,9 @@ s32 func_809CC1D4(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_1E0 = 0x10B9;
         arg0->unk_144 = func_809CC3CC;
         arg0->unk_2DC = (u16) arg0->unk_2CA;
-        arg0->unk_2E2 = (u16) arg0->unk_2D0;
-        arg0->unk_2E8 = (u16) arg0->unk_2D6;
-        arg0->unk_148 = temp_t3;
+        arg0->unk_2E2 = (u16) arg0[2].focus.rot.x;
+        arg0->unk_2E8 = (u16) arg0[2].focus.unk_12;
+        arg0[1].flags = (u32) temp_t3;
         phi_v1 = 1;
     }
     return phi_v1;
@@ -360,7 +366,7 @@ s32 func_809CC6F0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         temp_a0->polyOpa.p = temp_v1 + 8;
         temp_v1->words.w0 = 0xDB060018;
         temp_v1->words.w1 = (arg0 + (arg5->unk_190 * 0x44))->unk_17D98;
-        temp_at = gSegments + 0x18;
+        temp_at = &gSegments[6];
         *temp_at = (arg0 + (arg5->unk_190 * 0x44))->unk_17D98 + 0x80000000;
         *temp_at = (arg0 + (arg5->unk_192 * 0x44))->unk_17D98 + 0x80000000;
     }
@@ -371,8 +377,8 @@ s32 func_809CC6F0(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
     }
     if (arg1 == 8) {
-        SysMatrix_InsertXRotation_s((s16) ((s32) arg5->unk_2D4 * -1), 1);
-        SysMatrix_InsertZRotation_s((s16) ((s32) arg5->unk_2D2 * -1), 1);
+        SysMatrix_InsertXRotation_s((s16) ((s32) arg5[2].focus.rot.z * -1), 1);
+        SysMatrix_InsertZRotation_s((s16) ((s32) arg5[2].focus.rot.y * -1), 1);
     }
     if ((arg1 == 0xF) && (arg5->unk_1E3 != 0) && ((arg0->state.frames & 1) == 0)) {
         SysMatrix_InsertTranslation(40.0f, 0.0f, 0.0f, 1);
@@ -400,7 +406,7 @@ void func_809CC984(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) 
         temp_a1->unk_2B0 = (void *) (temp_v1 + 8);
         temp_v1->unk_0 = 0xDB060018;
         temp_v1->unk_4 = (s32) (arg0 + (arg4->unk_191 * 0x44))->unk_17D98;
-        *(gSegments + 0x18) = (arg0 + (arg4->unk_191 * 0x44))->unk_17D98 + 0x80000000;
+        gSegments[6] = (arg0 + (arg4->unk_191 * 0x44))->unk_17D98 + 0x80000000;
     }
     if (arg1 == 0xF) {
         SysMatrix_MultiplyVector3fByState((Vec3f *) &sp2C, arg4 + 0x3C);
@@ -433,15 +439,15 @@ void EnBba01_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0_2;
     func_8012C28C(temp_a0_2);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     temp_v0->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     temp_v0_2->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x37, 0x37, 0xFF, 0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE7000000;
     func_801343C0(globalCtx, this->unk_150, this->unk_16C, (s32) this->unk_14E, func_809CC6F0, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_809CC984, func_809CCA5C, (Actor *) this);

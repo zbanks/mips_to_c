@@ -213,7 +213,7 @@ void ObjSyokudai_Update(Actor *thisx, GlobalContext *globalCtx) {
                 if ((temp_t1 & 0x820) != 0) {
                     phi_t0 = 1;
                 }
-            } else if (globalCtx->actorCtx.actorList[2].first->unk_147 == 7) {
+            } else if (globalCtx->actorCtx.actorList[2].first[1].room == 7) {
                 sp54 = globalCtx->actorCtx.actorList[2].first;
                 sp4C = 0;
                 sp48 = 0;
@@ -247,7 +247,7 @@ void ObjSyokudai_Update(Actor *thisx, GlobalContext *globalCtx) {
                         temp_v0_3 = this->flameCollider.base.ac;
                         if ((temp_v0_3->update != 0) && (temp_v0_3->id == 0xF)) {
                             temp_v0_3->params = 0;
-                            temp_v0_3->unk_1C0 = 0x800;
+                            temp_v0_3[1].wallPoly = (CollisionPoly *)0x800;
 block_42:
                             phi_t2 = temp_t2 & 0xF;
                         }
@@ -341,12 +341,12 @@ void ObjSyokudai_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp64 = temp_v0;
     sp64->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = *(&sDLists + (((s32) this->actor.params >> 0xC) * 4));
     temp_v0_3 = this->snuffTimer;
@@ -361,28 +361,28 @@ void ObjSyokudai_Draw(Actor *thisx, GlobalContext *globalCtx) {
         temp_f20 = phi_f20 * 0.0027f;
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDB060020;
         sp58 = temp_v0_4;
         sp58->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) this->flameTexScroll * -0x14) & 0x1FF, 0x20, 0x80);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0xFFFF00FF;
         temp_v0_5->words.w0 = 0xFA008080;
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0xFF000000;
         temp_v0_6->words.w0 = 0xFB000000;
         SysMatrix_InsertTranslation(0.0f, 52.0f, 0.0f, 1);
         Matrix_RotateY((s16) ((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000), 1U);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, 1);
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDA380003;
         sp4C = temp_v0_7;
         sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = (u32) D_0407D590;
         temp_v0_8->words.w0 = 0xDE000000;
     }

@@ -513,7 +513,7 @@ s32 func_8019B5AC();                                /* extern */
 ? func_8019C2E4(?, ?);                              /* extern */
 ? func_8019C300(u8, s32, GlobalContext *);          /* extern */
 ? func_8019C398(s8, ?);                             /* extern */
-? func_8019CD08(?, u8 *, s32);                      /* extern */
+? func_8019CD08(?, void *, s32);                    /* extern */
 s32 func_8019CF6C(u32, u16, s32, SaveContext *);    /* extern */
 s32 func_8019CF78(GameInfo **);                     /* extern */
 s32 func_8019CF9C(GameInfo **);                     /* extern */
@@ -2001,7 +2001,7 @@ void func_8014995C(GlobalContext *arg0, void *arg1, u32 **arg2) {
     temp_t0 = arg0->msgCtx.unk_11FF4;
     temp_t1 = arg0->msgCtx.unk_11FF6;
     temp_v0->unk_0 = 0xE7000000;
-    temp_v0->unk_4 = 0;
+    temp_v0[1] = 0;
     temp_v0_2 = temp_v0 + 8;
     temp_v0_2->unk_0 = 0xFD900000;
     temp_v0_3 = temp_v0_2 + 8;
@@ -2250,7 +2250,7 @@ void func_80149F74(GlobalContext *globalCtx, u32 **ppuParm2) {
         play_sound(0U);
     }
     **ppuParm2 = 0xE7000000;
-    (*ppuParm2)->unk_4 = 0;
+    (*ppuParm2)[1] = 0;
     temp_v0 = *ppuParm2 + 8;
     temp_v0->unk_0 = 0xFC119623;
     temp_v0->unk_4 = 0xFF2FFFFF;
@@ -2855,193 +2855,193 @@ block_35:
                     play_sound(0U);
                 }
                 temp_t2 = sp134;
-                sp134 = temp_t2 + 8;
-                temp_t2->unk_4 = 0;
+                sp134 = &temp_t2[2];
+                temp_t2[1] = 0;
                 temp_t2->unk_0 = 0xE7000000;
                 temp_t5 = sp134;
-                sp134 = temp_t5 + 8;
+                sp134 = &temp_t5[2];
                 temp_t5->unk_0 = 0xFC119623;
-                temp_t5->unk_4 = 0xFF2FFFFF;
+                temp_t5[1] = 0xFF2FFFFF;
                 temp_t9_2 = sp134;
-                sp134 = temp_t9_2 + 8;
+                sp134 = &temp_t9_2[2];
                 temp_t9_2->unk_0 = 0xFA000000;
-                temp_t9_2->unk_4 = (s32) (temp_s1->unk_1201E & 0xFF);
+                temp_t9_2[1] = temp_s1->unk_1201E & 0xFF;
                 temp_t5_2 = sp134;
-                sp134 = temp_t5_2 + 8;
+                sp134 = &temp_t5_2[2];
                 temp_t5_2->unk_0 = 0xFD900000;
-                temp_t5_2->unk_4 = (s32) (temp_s1->unk_11EF8 + 0x1000);
+                temp_t5_2[1] = temp_s1->unk_11EF8 + 0x1000;
                 temp_t1 = sp134;
-                sp134 = temp_t1 + 8;
-                temp_t1->unk_4 = 0x7000000;
+                sp134 = &temp_t1[2];
+                temp_t1[1] = 0x7000000;
                 temp_t1->unk_0 = 0xF5900000;
                 temp_t5_3 = sp134;
-                sp134 = temp_t5_3 + 8;
-                temp_t5_3->unk_4 = 0;
+                sp134 = &temp_t5_3[2];
+                temp_t5_3[1] = 0;
                 temp_t5_3->unk_0 = 0xE6000000;
                 temp_t8 = sp134;
-                sp134 = temp_t8 + 8;
-                temp_t8->unk_4 = 0x747F156;
+                sp134 = &temp_t8[2];
+                temp_t8[1] = 0x747F156;
                 temp_t8->unk_0 = 0xF3000000;
                 temp_t3 = sp134;
-                sp134 = temp_t3 + 8;
-                temp_t3->unk_4 = 0;
+                sp134 = &temp_t3[2];
+                temp_t3[1] = 0;
                 temp_t3->unk_0 = 0xE7000000;
                 temp_t6 = sp134;
-                sp134 = temp_t6 + 8;
-                temp_t6->unk_4 = 0;
+                sp134 = &temp_t6[2];
+                temp_t6[1] = 0;
                 temp_t6->unk_0 = 0xF5800C00;
                 temp_t9_3 = sp134;
-                sp134 = temp_t9_3 + 8;
-                temp_t9_3->unk_4 = 0x17C0BC;
+                sp134 = &temp_t9_3[2];
+                temp_t9_3[1] = 0x17C0BC;
                 temp_t9_3->unk_0 = 0xF2000000;
                 temp_v0_12 = sp134;
-                sp134 = temp_v0_12 + 8;
+                sp134 = &temp_v0_12[2];
                 temp_v0_12->unk_0 = ((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((temp_s1->unk_12012 + 0x31) * 4) & 0xFFF);
-                temp_v0_12->unk_4 = (s32) ((((temp_s1->unk_11FF4 * 4) & 0xFFF) << 0xC) | (((temp_s1->unk_12012 + 1) * 4) & 0xFFF));
+                temp_v0_12[1] = (((temp_s1->unk_11FF4 * 4) & 0xFFF) << 0xC) | (((temp_s1->unk_12012 + 1) * 4) & 0xFFF);
                 temp_t8_2 = sp134;
-                sp134 = temp_t8_2 + 8;
+                sp134 = &temp_t8_2[2];
                 temp_t8_2->unk_0 = 0xE1000000;
-                temp_t8_2->unk_4 = 0;
+                temp_t8_2[1] = 0;
                 temp_t4 = sp134;
-                sp134 = temp_t4 + 8;
+                sp134 = &temp_t4[2];
                 temp_t4->unk_0 = 0xF1000000;
-                temp_t4->unk_4 = 0x4000400;
+                temp_t4[1] = 0x4000400;
                 temp_t6_2 = sp134;
-                sp134 = temp_t6_2 + 8;
+                sp134 = &temp_t6_2[2];
                 temp_t6_2->unk_0 = 0xFD900000;
-                temp_t6_2->unk_4 = (s32) (temp_s1->unk_11EF8 + 0x1900);
+                temp_t6_2[1] = temp_s1->unk_11EF8 + 0x1900;
                 temp_t4_2 = sp134;
-                sp134 = temp_t4_2 + 8;
-                temp_t4_2->unk_4 = 0x7000000;
+                sp134 = &temp_t4_2[2];
+                temp_t4_2[1] = 0x7000000;
                 temp_t4_2->unk_0 = 0xF5900000;
                 temp_t6_3 = sp134;
-                sp134 = temp_t6_3 + 8;
-                temp_t6_3->unk_4 = 0;
+                sp134 = &temp_t6_3[2];
+                temp_t6_3[1] = 0;
                 temp_t6_3->unk_0 = 0xE6000000;
                 temp_t9_4 = sp134;
-                sp134 = temp_t9_4 + 8;
-                temp_t9_4->unk_4 = 0x747F156;
+                sp134 = &temp_t9_4[2];
+                temp_t9_4[1] = 0x747F156;
                 temp_t9_4->unk_0 = 0xF3000000;
                 temp_t2_2 = sp134;
-                sp134 = temp_t2_2 + 8;
-                temp_t2_2->unk_4 = 0;
+                sp134 = &temp_t2_2[2];
+                temp_t2_2[1] = 0;
                 temp_t2_2->unk_0 = 0xE7000000;
                 temp_t7 = sp134;
-                sp134 = temp_t7 + 8;
-                temp_t7->unk_4 = 0;
+                sp134 = &temp_t7[2];
+                temp_t7[1] = 0;
                 temp_t7->unk_0 = 0xF5800C00;
                 temp_t1_2 = sp134;
-                sp134 = temp_t1_2 + 8;
-                temp_t1_2->unk_4 = 0x17C0BC;
+                sp134 = &temp_t1_2[2];
+                temp_t1_2[1] = 0x17C0BC;
                 temp_t1_2->unk_0 = 0xF2000000;
                 temp_v0_13 = sp134;
-                sp134 = temp_v0_13 + 8;
+                sp134 = &temp_v0_13[2];
                 temp_v0_13->unk_0 = ((((temp_s1->unk_11FF4 + 0xC1) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((temp_s1->unk_12012 + 0x31) * 4) & 0xFFF);
-                temp_v0_13->unk_4 = (s32) (((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | (((temp_s1->unk_12012 + 1) * 4) & 0xFFF));
+                temp_v0_13[1] = ((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | (((temp_s1->unk_12012 + 1) * 4) & 0xFFF);
                 temp_t1_3 = sp134;
-                sp134 = temp_t1_3 + 8;
+                sp134 = &temp_t1_3[2];
                 temp_t1_3->unk_0 = 0xE1000000;
-                temp_t1_3->unk_4 = 0;
+                temp_t1_3[1] = 0;
                 temp_t6_4 = sp134;
-                sp134 = temp_t6_4 + 8;
+                sp134 = &temp_t6_4[2];
                 temp_t6_4->unk_0 = 0xF1000000;
-                temp_t6_4->unk_4 = 0x4000400;
+                temp_t6_4[1] = 0x4000400;
                 temp_t8_3 = sp134;
-                sp134 = temp_t8_3 + 8;
-                temp_t8_3->unk_4 = 0;
+                sp134 = &temp_t8_3[2];
+                temp_t8_3[1] = 0;
                 temp_t8_3->unk_0 = 0xE7000000;
                 temp_t4_3 = sp134;
-                sp134 = temp_t4_3 + 8;
+                sp134 = &temp_t4_3[2];
                 temp_t4_3->unk_0 = 0xFA000000;
-                temp_t4_3->unk_4 = (s32) ((temp_s1->unk_1201E & 0xFF) | 0xFF3C0000);
+                temp_t4_3[1] = (temp_s1->unk_1201E & 0xFF) | 0xFF3C0000;
                 temp_t8_4 = sp134;
-                sp134 = temp_t8_4 + 8;
+                sp134 = &temp_t8_4[2];
                 temp_t8_4->unk_0 = 0xFD900000;
-                temp_t8_4->unk_4 = (s32) (temp_s1->unk_11EF8 + 0x1000);
+                temp_t8_4[1] = temp_s1->unk_11EF8 + 0x1000;
                 temp_t6_5 = sp134;
-                sp134 = temp_t6_5 + 8;
-                temp_t6_5->unk_4 = 0x7000000;
+                sp134 = &temp_t6_5[2];
+                temp_t6_5[1] = 0x7000000;
                 temp_t6_5->unk_0 = 0xF5900000;
                 temp_t8_5 = sp134;
-                sp134 = temp_t8_5 + 8;
-                temp_t8_5->unk_4 = 0;
+                sp134 = &temp_t8_5[2];
+                temp_t8_5[1] = 0;
                 temp_t8_5->unk_0 = 0xE6000000;
                 temp_t4_4 = sp134;
-                sp134 = temp_t4_4 + 8;
-                temp_t4_4->unk_4 = 0x747F156;
+                sp134 = &temp_t4_4[2];
+                temp_t4_4[1] = 0x747F156;
                 temp_t4_4->unk_0 = 0xF3000000;
                 temp_t7_2 = sp134;
-                sp134 = temp_t7_2 + 8;
-                temp_t7_2->unk_4 = 0;
+                sp134 = &temp_t7_2[2];
+                temp_t7_2[1] = 0;
                 temp_t7_2->unk_0 = 0xE7000000;
                 temp_t9_5 = sp134;
-                sp134 = temp_t9_5 + 8;
-                temp_t9_5->unk_4 = 0;
+                sp134 = &temp_t9_5[2];
+                temp_t9_5[1] = 0;
                 temp_t9_5->unk_0 = 0xF5800C00;
                 temp_t2_3 = sp134;
-                sp134 = temp_t2_3 + 8;
-                temp_t2_3->unk_4 = 0x17C0BC;
+                sp134 = &temp_t2_3[2];
+                temp_t2_3[1] = 0x17C0BC;
                 temp_t2_3->unk_0 = 0xF2000000;
                 temp_v0_14 = sp134;
-                sp134 = temp_v0_14 + 8;
+                sp134 = &temp_v0_14[2];
                 temp_v0_14->unk_0 = ((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((temp_s1->unk_12012 + 0x30) * 4) & 0xFFF);
-                temp_v0_14->unk_4 = (s32) ((((temp_s1->unk_11FF4 * 4) & 0xFFF) << 0xC) | ((temp_s1->unk_12012 * 4) & 0xFFF));
+                temp_v0_14[1] = (((temp_s1->unk_11FF4 * 4) & 0xFFF) << 0xC) | ((temp_s1->unk_12012 * 4) & 0xFFF);
                 temp_t1_4 = sp134;
-                sp134 = temp_t1_4 + 8;
+                sp134 = &temp_t1_4[2];
                 temp_t1_4->unk_0 = 0xE1000000;
-                temp_t1_4->unk_4 = 0;
+                temp_t1_4[1] = 0;
                 temp_t6_6 = sp134;
-                sp134 = temp_t6_6 + 8;
+                sp134 = &temp_t6_6[2];
                 temp_t6_6->unk_0 = 0xF1000000;
-                temp_t6_6->unk_4 = 0x4000400;
+                temp_t6_6[1] = 0x4000400;
                 temp_t5_4 = sp134;
-                sp134 = temp_t5_4 + 8;
+                sp134 = &temp_t5_4[2];
                 temp_t5_4->unk_0 = 0xFD900000;
-                temp_t5_4->unk_4 = (s32) (temp_s1->unk_11EF8 + 0x1900);
+                temp_t5_4[1] = temp_s1->unk_11EF8 + 0x1900;
                 temp_t6_7 = sp134;
-                sp134 = temp_t6_7 + 8;
-                temp_t6_7->unk_4 = 0x7000000;
+                sp134 = &temp_t6_7[2];
+                temp_t6_7[1] = 0x7000000;
                 temp_t6_7->unk_0 = 0xF5900000;
                 temp_t5_5 = sp134;
-                sp134 = temp_t5_5 + 8;
-                temp_t5_5->unk_4 = 0;
+                sp134 = &temp_t5_5[2];
+                temp_t5_5[1] = 0;
                 temp_t5_5->unk_0 = 0xE6000000;
                 temp_t4_5 = sp134;
-                sp134 = temp_t4_5 + 8;
-                temp_t4_5->unk_4 = 0x747F156;
+                sp134 = &temp_t4_5[2];
+                temp_t4_5[1] = 0x747F156;
                 temp_t4_5->unk_0 = 0xF3000000;
                 temp_t8_6 = sp134;
-                sp134 = temp_t8_6 + 8;
-                temp_t8_6->unk_4 = 0;
+                sp134 = &temp_t8_6[2];
+                temp_t8_6[1] = 0;
                 temp_t8_6->unk_0 = 0xE7000000;
                 temp_t9_6 = sp134;
-                sp134 = temp_t9_6 + 8;
-                temp_t9_6->unk_4 = 0;
+                sp134 = &temp_t9_6[2];
+                temp_t9_6[1] = 0;
                 temp_t9_6->unk_0 = 0xF5800C00;
                 temp_t2_4 = sp134;
-                sp134 = temp_t2_4 + 8;
-                temp_t2_4->unk_4 = 0x17C0BC;
+                sp134 = &temp_t2_4[2];
+                temp_t2_4[1] = 0x17C0BC;
                 temp_t2_4->unk_0 = 0xF2000000;
                 temp_v0_15 = sp134;
-                sp134 = temp_v0_15 + 8;
+                sp134 = &temp_v0_15[2];
                 temp_v0_15->unk_0 = ((((temp_s1->unk_11FF4 + 0xC0) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((temp_s1->unk_12012 + 0x30) * 4) & 0xFFF);
-                temp_v0_15->unk_4 = (s32) (((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | ((temp_s1->unk_12012 * 4) & 0xFFF));
+                temp_v0_15[1] = ((((temp_s1->unk_11FF4 + 0x60) * 4) & 0xFFF) << 0xC) | ((temp_s1->unk_12012 * 4) & 0xFFF);
                 temp_t4_6 = sp134;
-                sp134 = temp_t4_6 + 8;
+                sp134 = &temp_t4_6[2];
                 temp_t4_6->unk_0 = 0xE1000000;
-                temp_t4_6->unk_4 = 0;
+                temp_t4_6[1] = 0;
                 temp_t8_7 = sp134;
-                sp134 = temp_t8_7 + 8;
+                sp134 = &temp_t8_7[2];
                 temp_t8_7->unk_0 = 0xF1000000;
-                temp_t8_7->unk_4 = 0x4000400;
+                temp_t8_7[1] = 0x4000400;
                 temp_t9_7 = sp134;
-                sp134 = temp_t9_7 + 8;
-                temp_t9_7->unk_4 = 0;
+                sp134 = &temp_t9_7[2];
+                temp_t9_7[1] = 0;
                 temp_t9_7->unk_0 = 0xE7000000;
                 temp_t2_5 = sp134;
-                sp134 = temp_t2_5 + 8;
+                sp134 = &temp_t2_5[2];
                 temp_t2_5->unk_0 = 0xFCFF97FF;
-                temp_t2_5->unk_4 = 0xFF2DFEFF;
+                temp_t2_5[1] = 0xFF2DFEFF;
                 temp_s1->unk_11FF4 += 0x20;
                 goto block_192;
             case 514:                               /* switch 2 */
@@ -3853,11 +3853,11 @@ void func_8014D7B4(GlobalContext *arg0) {
     s32 sp7C;
     void *sp74;
     f32 temp_f0;
-    s16 *temp_s0_13;
+    s16 *temp_s0_10;
     s16 *temp_s0_14;
     s16 *temp_s0_15;
     s16 *temp_s0_16;
-    s16 *temp_s0_2;
+    s16 *temp_s0_17;
     s16 *temp_s0_3;
     s16 *temp_s0_4;
     s16 *temp_s0_5;
@@ -3903,9 +3903,9 @@ void func_8014D7B4(GlobalContext *arg0) {
     s16 temp_a3_7;
     s16 temp_a3_8;
     s16 temp_a3_9;
-    s16 temp_s0_10;
     s16 temp_s0_11;
     s16 temp_s0_12;
+    s16 temp_s0_13;
     s16 temp_s1;
     s16 temp_s1_10;
     s16 temp_s1_11;
@@ -3985,6 +3985,7 @@ void func_8014D7B4(GlobalContext *arg0) {
     u32 temp_a3_26;
     u32 temp_v0_12;
     u32 temp_v0_3;
+    u8 *temp_s0_2;
     u8 temp_v0_13;
     u8 temp_v0_14;
     u8 temp_v0_16;
@@ -4197,8 +4198,9 @@ loop_51:
                                                     spDA = temp_a3;
                                                     spD2 = 2;
                                                     spE0 = 2;
+                                                    temp_s0_2 = &_message_texture_staticSegmentRomStart[2304];
                                                     DmaMgr_SendRequest0(sp74->unk_1EF8 + 0x1000, (u32) _message_texture_staticSegmentRomStart, 0x900U);
-                                                    DmaMgr_SendRequest0(sp74->unk_1EF8 + 0x1900, (u32) (_message_texture_staticSegmentRomStart + 0x900), 0x900U);
+                                                    DmaMgr_SendRequest0(sp74->unk_1EF8 + 0x1900, (u32) temp_s0_2, 0x900U);
                                                     temp_s7->unk_12012 = (s16) (sp74->unk_206A + 8);
                                                     temp_s7->unk_11F18 = 1;
                                                     temp_s7->unk_12010 = (s16) gGameInfo->data[1391];
@@ -4265,10 +4267,10 @@ loop_51:
                                                                 spDA = temp_a3_3;
                                                             }
                                                             do {
-                                                                temp_s0_2 = &temp_s5[phi_s1_3];
-                                                                Font_LoadChar(arg0, (*temp_s0_2 + 0x824F) & 0xFFFF, spC8);
+                                                                temp_s0_3 = &temp_s5[phi_s1_3];
+                                                                Font_LoadChar(arg0, (*temp_s0_3 + 0x824F) & 0xFFFF, spC8);
                                                                 spC8 += 0x80;
-                                                                (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_2 + 0x824F);
+                                                                (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_3 + 0x824F);
                                                                 spEA += 1;
                                                                 if (phi_s1_3 == 1) {
                                                                     Font_LoadChar(arg0, 0x8E9EU, spC8);
@@ -4327,10 +4329,10 @@ loop_51:
                                                                     phi_s3_2 = 1;
                                                                 }
                                                                 if (phi_s3_2 != 0) {
-                                                                    temp_s0_3 = &temp_s5[phi_s1_4];
-                                                                    Font_LoadChar(arg0, (*temp_s0_3 + 0x824F) & 0xFFFF, spC8);
+                                                                    temp_s0_4 = &temp_s5[phi_s1_4];
+                                                                    Font_LoadChar(arg0, (*temp_s0_4 + 0x824F) & 0xFFFF, spC8);
                                                                     spC8 += 0x80;
-                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_3 + 0x824F);
+                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_4 + 0x824F);
                                                                     spEA += 1;
                                                                     spC0 += 16.0f * sp74->unk_2098;
                                                                 }
@@ -4721,10 +4723,10 @@ block_190:
                                                                     phi_s3_9 = 1;
                                                                 }
                                                                 if (phi_s3_9 != 0) {
-                                                                    temp_s0_4 = &temp_s5[phi_s1_17];
-                                                                    Font_LoadChar(arg0, (*temp_s0_4 + 0x824F) & 0xFFFF, spC8);
+                                                                    temp_s0_5 = &temp_s5[phi_s1_17];
+                                                                    Font_LoadChar(arg0, (*temp_s0_5 + 0x824F) & 0xFFFF, spC8);
                                                                     spC8 += 0x80;
-                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_4 + 0x824F);
+                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_5 + 0x824F);
                                                                     spEA += 1;
                                                                     spC0 += 16.0f * sp74->unk_2098;
                                                                 }
@@ -4774,10 +4776,10 @@ block_190:
                                                                     phi_s3_10 = 1;
                                                                 }
                                                                 if (phi_s3_10 != 0) {
-                                                                    temp_s0_5 = &temp_s5[phi_s1_18];
-                                                                    Font_LoadChar(arg0, (*temp_s0_5 + 0x824F) & 0xFFFF, spC8);
+                                                                    temp_s0_6 = &temp_s5[phi_s1_18];
+                                                                    Font_LoadChar(arg0, (*temp_s0_6 + 0x824F) & 0xFFFF, spC8);
                                                                     spC8 += 0x80;
-                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_5 + 0x824F);
+                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_6 + 0x824F);
                                                                     spEA += 1;
                                                                     spC0 += 16.0f * sp74->unk_2098;
                                                                 }
@@ -4797,7 +4799,7 @@ block_190:
                                                                     spD8 = 0;
                                                                     spD6 = 0;
                                                                     spD4 = 0;
-                                                                    temp_a0_2 = spEC->unk_146;
+                                                                    temp_a0_2 = spEC[1].category;
                                                                     phi_s1_19 = 0;
                                                                     phi_s3_11 = 0;
                                                                     if (temp_a0_2 == 0) {
@@ -4847,10 +4849,10 @@ block_190:
                                                                             phi_s3_11 = 1;
                                                                         }
                                                                         if (phi_s3_11 != 0) {
-                                                                            temp_s0_6 = &temp_s5[phi_s1_19];
-                                                                            Font_LoadChar(arg0, (*temp_s0_6 + 0x824F) & 0xFFFF, spC8);
+                                                                            temp_s0_7 = &temp_s5[phi_s1_19];
+                                                                            Font_LoadChar(arg0, (*temp_s0_7 + 0x824F) & 0xFFFF, spC8);
                                                                             spC8 += 0x80;
-                                                                            (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_6 + 0x824F);
+                                                                            (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_7 + 0x824F);
                                                                             spEA += 1;
                                                                             spC0 += 16.0f * sp74->unk_2098;
                                                                         }
@@ -4862,12 +4864,12 @@ block_190:
                                                                     spDA = temp_a3;
                                                                     phi_s1_20 = 0;
                                                                     do {
-                                                                        temp_s0_7 = &temp_s5[phi_s1_20];
-                                                                        *temp_s0_7 = (s16) gSaveContext.bomberCode[phi_s1_20];
-                                                                        Font_LoadChar(arg0, (*temp_s0_7 + 0x824F) & 0xFFFF, spC8);
+                                                                        temp_s0_8 = &temp_s5[phi_s1_20];
+                                                                        *temp_s0_8 = (s16) gSaveContext.bomberCode[phi_s1_20];
+                                                                        Font_LoadChar(arg0, (*temp_s0_8 + 0x824F) & 0xFFFF, spC8);
                                                                         temp_s1_20 = phi_s1_20 + 1;
                                                                         spC8 += 0x80;
-                                                                        (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_7 + 0x824F);
+                                                                        (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_8 + 0x824F);
                                                                         spEA += 1;
                                                                         spC0 += 16.0f * sp74->unk_2098;
                                                                         phi_s1_20 = temp_s1_20;
@@ -4966,10 +4968,10 @@ block_190:
                                                                                     spDA = temp_a3_32;
                                                                                 }
                                                                                 do {
-                                                                                    temp_s0_13 = &temp_s5[phi_s1_26];
-                                                                                    Font_LoadChar(arg0, (*temp_s0_13 + 0x824F) & 0xFFFF, spC8);
+                                                                                    temp_s0_14 = &temp_s5[phi_s1_26];
+                                                                                    Font_LoadChar(arg0, (*temp_s0_14 + 0x824F) & 0xFFFF, spC8);
                                                                                     spC8 += 0x80;
-                                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_13 + 0x824F);
+                                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_14 + 0x824F);
                                                                                     spEA += 1;
                                                                                     if (phi_s1_26 == 1) {
                                                                                         Font_LoadChar(arg0, 0x95AAU, spC8);
@@ -5027,10 +5029,10 @@ block_190:
                                                                                         phi_s3_13 = 1;
                                                                                     }
                                                                                     if (phi_s3_13 != 0) {
-                                                                                        temp_s0_8 = &temp_s5[phi_s1_22];
-                                                                                        Font_LoadChar(arg0, (*temp_s0_8 + 0x824F) & 0xFFFF, spC8);
+                                                                                        temp_s0_9 = &temp_s5[phi_s1_22];
+                                                                                        Font_LoadChar(arg0, (*temp_s0_9 + 0x824F) & 0xFFFF, spC8);
                                                                                         spC8 += 0x80;
-                                                                                        (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_8 + 0x824F);
+                                                                                        (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_9 + 0x824F);
                                                                                         spEA += 1;
                                                                                         spC0 += 16.0f * sp74->unk_2098;
                                                                                     }
@@ -5123,10 +5125,10 @@ loop_389:
                                                                                             phi_s3_14 = 1;
                                                                                         }
                                                                                         if (phi_s3_14 != 0) {
-                                                                                            temp_s0_9 = &temp_s5[phi_s1_23];
-                                                                                            Font_LoadChar(arg0, (*temp_s0_9 + 0x824F) & 0xFFFF, spC8);
+                                                                                            temp_s0_10 = &temp_s5[phi_s1_23];
+                                                                                            Font_LoadChar(arg0, (*temp_s0_10 + 0x824F) & 0xFFFF, spC8);
                                                                                             spC8 += 0x80;
-                                                                                            (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_9 + 0x824F);
+                                                                                            (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_10 + 0x824F);
                                                                                             spEA += 1;
                                                                                             spC0 += 16.0f * sp74->unk_2098;
                                                                                         }
@@ -5168,16 +5170,16 @@ loop_389:
                                                                                             temp_s7->unk_1209C = 1;
                                                                                             temp_v0_7 = spEA + 1;
                                                                                             spEA = temp_v0_7;
-                                                                                            temp_s0_10 = (sp74->unk_1FEC + 1) & 0xFFFF;
-                                                                                            temp_s7->unk_11FEC = temp_s0_10;
-                                                                                            (temp_s7 + (temp_v0_7 * 2))->unk_11F24 = (s16) ((temp_s2 + (temp_s0_10 * 2))->unk_11880 & 0xFF);
+                                                                                            temp_s0_11 = (sp74->unk_1FEC + 1) & 0xFFFF;
+                                                                                            temp_s7->unk_11FEC = temp_s0_11;
+                                                                                            (temp_s7 + (temp_v0_7 * 2))->unk_11F24 = (s16) ((temp_s2 + (temp_s0_11 * 2))->unk_11880 & 0xFF);
                                                                                         } else if (temp_s0 == 0x120) {
                                                                                             spDA = temp_a3;
                                                                                             temp_v0_8 = spEA + 1;
                                                                                             spEA = temp_v0_8;
-                                                                                            temp_s0_11 = (sp74->unk_1FEC + 1) & 0xFFFF;
-                                                                                            temp_s7->unk_11FEC = temp_s0_11;
-                                                                                            (temp_s7 + (temp_v0_8 * 2))->unk_11F24 = (u16) (temp_s2 + (temp_s0_11 * 2))->unk_11880;
+                                                                                            temp_s0_12 = (sp74->unk_1FEC + 1) & 0xFFFF;
+                                                                                            temp_s7->unk_11FEC = temp_s0_12;
+                                                                                            (temp_s7 + (temp_v0_8 * 2))->unk_11F24 = (u16) (temp_s2 + (temp_s0_12 * 2))->unk_11880;
                                                                                             if ((sp74->unk_2094 != 0) || (temp_v0_9 = sp74->unk_1F0A, (temp_v0_9 == 1)) || (temp_v0_9 == 3) || (temp_v0_9 == 6) || (temp_v0_9 == 8) || (temp_v0_9 == 9) || (temp_v0_9 == 0xB) || (sp74->unk_1F0C == 3)) {
                                                                                                 play_sound((temp_s7 + (spEA * 2))->unk_11F24);
                                                                                             }
@@ -5185,9 +5187,9 @@ loop_389:
                                                                                             spDA = temp_a3;
                                                                                             temp_v0_10 = spEA + 1;
                                                                                             spEA = temp_v0_10;
-                                                                                            temp_s0_12 = (sp74->unk_1FEC + 1) & 0xFFFF;
-                                                                                            temp_s7->unk_11FEC = temp_s0_12;
-                                                                                            (temp_s7 + (temp_v0_10 * 2))->unk_11F24 = (u16) (temp_s2 + (temp_s0_12 * 2))->unk_11880;
+                                                                                            temp_s0_13 = (sp74->unk_1FEC + 1) & 0xFFFF;
+                                                                                            temp_s7->unk_11FEC = temp_s0_13;
+                                                                                            (temp_s7 + (temp_v0_10 * 2))->unk_11F24 = (u16) (temp_s2 + (temp_s0_13 * 2))->unk_11880;
                                                                                         } else if (temp_s0 != 0x20) {
                                                                                             spDA = temp_a3;
                                                                                             if ((s32) temp_s0 >= 0x2000) {
@@ -5268,10 +5270,10 @@ block_334:
                                                                                     phi_s3_15 = 1;
                                                                                 }
                                                                                 if (phi_s3_15 != 0) {
-                                                                                    temp_s0_14 = (phi_s1_27 * 2) + &spAC;
-                                                                                    Font_LoadChar(arg0, (*temp_s0_14 + 0x824F) & 0xFFFF, spC8);
+                                                                                    temp_s0_15 = (phi_s1_27 * 2) + &spAC;
+                                                                                    Font_LoadChar(arg0, (*temp_s0_15 + 0x824F) & 0xFFFF, spC8);
                                                                                     spC8 += 0x80;
-                                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_14 + 0x824F);
+                                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_15 + 0x824F);
                                                                                     spEA += 1;
                                                                                 } else {
                                                                                     phi_f20 = phi_f20_2 - 1.0f;
@@ -5353,10 +5355,10 @@ block_323:
                                                                                 phi_s3_16 = 1;
                                                                             }
                                                                             if (phi_s3_16 != 0) {
-                                                                                temp_s0_15 = &temp_s5[phi_s1_28];
-                                                                                Font_LoadChar(arg0, (*temp_s0_15 + 0x824F) & 0xFFFF, spC8);
+                                                                                temp_s0_16 = &temp_s5[phi_s1_28];
+                                                                                Font_LoadChar(arg0, (*temp_s0_16 + 0x824F) & 0xFFFF, spC8);
                                                                                 spC8 += 0x80;
-                                                                                (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_15 + 0x824F);
+                                                                                (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_16 + 0x824F);
                                                                                 spEA += 1;
                                                                                 spC0 += 16.0f * sp74->unk_2098;
                                                                             }
@@ -5383,11 +5385,11 @@ block_253:
                                                                     spD8 = temp_v0_12 & 0xF;
                                                                 }
                                                                 do {
-                                                                    temp_s0_16 = &temp_s5[phi_s1_29];
-                                                                    Font_LoadChar(arg0, (*temp_s0_16 + 0x824F) & 0xFFFF, spC8);
+                                                                    temp_s0_17 = &temp_s5[phi_s1_29];
+                                                                    Font_LoadChar(arg0, (*temp_s0_17 + 0x824F) & 0xFFFF, spC8);
                                                                     temp_s1_29 = phi_s1_29 + 1;
                                                                     spC8 += 0x80;
-                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_16 + 0x824F);
+                                                                    (temp_s7 + (spEA * 2))->unk_11F24 = (s16) (*temp_s0_17 + 0x824F);
                                                                     spEA += 1;
                                                                     spC0 += 16.0f * sp74->unk_2098;
                                                                     phi_s1_29 = temp_s1_29;
@@ -5908,7 +5910,7 @@ void func_80151BB4(GlobalContext *globalCtx, u32 uParm2) {
     u16 temp_v0_3;
 
     temp_a1 = uParm2 & 0xFF;
-    if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
         temp_v0 = *(&D_801C6B28 + (temp_a1 * 2));
         temp_v0_2 = &globalCtx->msgCtx;
         if ((temp_v0 & 0xFF & gSaveContext.weekEventReg[(s32) temp_v0 >> 8]) == 0) {
@@ -5947,7 +5949,7 @@ loop_1:
     temp_t8 = (s32) temp_v0 >> 8;
     temp_a1 = gSaveContext.weekEventReg[temp_t8];
     temp_a2 = temp_v0 & 0xFF;
-    if (((temp_a2 & temp_a1) == 0) && (gSaveContext.weekEventReg[temp_t8] = temp_a2 | temp_a1, temp_s0 = *(&D_801C6AB8 + ((temp_a3 + temp_a3->unk_120B1)->unk_120B2 * 2)), (temp_s0 != 0)) && ((gBitFlags->unk_48 & gSaveContext.inventory.questItems) != 0)) {
+    if (((temp_a2 & temp_a1) == 0) && (gSaveContext.weekEventReg[temp_t8] = temp_a2 | temp_a1, temp_s0 = *(&D_801C6AB8 + ((temp_a3 + temp_a3->unk_120B1)->unk_120B2 * 2)), (temp_s0 != 0)) && ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0)) {
         func_80151938(arg0, temp_s0 & 0xFFFF);
         play_sound(0x4855U);
         return 1;
@@ -5983,7 +5985,7 @@ void func_80151DA4(GlobalContext *arg0, u16 arg1) {
         phi_a1 = (u16) &D_801D02C0;
         do {
             temp_s0 = arg0 + 0x4908;
-            if ((phi_v1->unk_18 & gSaveContext.inventory.questItems) != 0) {
+            if ((phi_v1[6] & gSaveContext.inventory.questItems) != 0) {
                 temp_s0->unk_120A0 = (s32) (*(&D_801D02C0 + (phi_v0 * 2)) | temp_s0->unk_120A0);
             }
             temp_v0_2 = phi_v0 + 1;
@@ -5992,15 +5994,15 @@ void func_80151DA4(GlobalContext *arg0, u16 arg1) {
         } while (temp_v0_2 < 0xCU);
     }
     temp_s0_2 = arg0 + 0x4908;
-    if ((gBitFlags->unk_30 & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[12] & gSaveContext.inventory.questItems) != 0) {
         temp_s0_2->unk_120A0 = (s32) (temp_s0_2->unk_120A0 | 0x3000);
     }
     phi_a0 = gSaveContext.inventory.questItems;
-    if ((gBitFlags->unk_60 & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[24] & gSaveContext.inventory.questItems) != 0) {
         temp_s0_2->unk_120A0 = (s32) (temp_s0_2->unk_120A0 | 0x4000);
         phi_a0 = gSaveContext.inventory.questItems;
     }
-    if ((gBitFlags->unk_1C & phi_a0) != 0) {
+    if ((gBitFlags[7] & phi_a0) != 0) {
         temp_s0_2->unk_120A0 = (s32) (temp_s0_2->unk_120A0 & 0xBFFF);
     }
     if (gSaveContext.unk_F65 != 0) {
@@ -6822,7 +6824,7 @@ void func_80153750(GlobalContext *arg0, Gfx **arg1) {
             sp24 = temp_t1;
             func_8012C680(&spA0);
             temp_t7 = spA0;
-            spA0 = temp_t7 + 8;
+            spA0 = &temp_t7[1];
             temp_t7->words.w0 = 0xFC309661;
             temp_t7->words.w1 = 0x552EFF7F;
             temp_v0_2 = sp1C->unk_1F22;
@@ -6844,55 +6846,55 @@ void func_80153750(GlobalContext *arg0, Gfx **arg1) {
                     if ((s32) D_801C6A80 > 0) {
                         do {
                             temp_t6 = spA0;
-                            spA0 = temp_t6 + 8;
+                            spA0 = &temp_t6[1];
                             temp_t6->words.w1 = 0;
                             temp_t6->words.w0 = 0xE7000000;
                             temp_t8 = spA0;
-                            spA0 = temp_t8 + 8;
+                            spA0 = &temp_t8[1];
                             temp_t8->words.w1 = 0x96969696;
                             temp_t8->words.w0 = 0xFA000000;
                             temp_t6_2 = spA0;
-                            spA0 = temp_t6_2 + 8;
+                            spA0 = &temp_t6_2[1];
                             temp_t6_2->words.w1 = 0xA0A0A00;
                             temp_t6_2->words.w0 = 0xFB000000;
                             temp_v0_4 = spA0;
-                            spA0 = temp_v0_4 + 8;
+                            spA0 = &temp_v0_4[1];
                             temp_v0_4->words.w0 = 0xFD700000;
                             temp_v0_4->words.w1 = *(&D_801D0364 + ((&D_801D8A48 + (D_801C6A84 * 9) + phi_a1)->unk_1 * 4));
                             temp_t6_3 = spA0;
-                            spA0 = temp_t6_3 + 8;
+                            spA0 = &temp_t6_3[1];
                             temp_t6_3->words.w1 = 0x7000000;
                             temp_t6_3->words.w0 = 0xF5700000;
                             temp_t6_4 = spA0;
-                            spA0 = temp_t6_4 + 8;
+                            spA0 = &temp_t6_4[1];
                             temp_t6_4->words.w1 = 0;
                             temp_t6_4->words.w0 = 0xE6000000;
                             temp_t9 = spA0;
-                            spA0 = temp_t9 + 8;
+                            spA0 = &temp_t9[1];
                             temp_t9->words.w0 = 0xF3000000;
                             temp_t9->words.w1 = 0x707F400;
                             temp_t9_2 = spA0;
-                            spA0 = temp_t9_2 + 8;
+                            spA0 = &temp_t9_2[1];
                             temp_t9_2->words.w1 = 0;
                             temp_t9_2->words.w0 = 0xE7000000;
                             temp_t7_2 = spA0;
-                            spA0 = temp_t7_2 + 8;
+                            spA0 = &temp_t7_2[1];
                             temp_t7_2->words.w1 = 0;
                             temp_t7_2->words.w0 = 0xF5680400;
                             temp_t6_5 = spA0;
-                            spA0 = temp_t6_5 + 8;
+                            spA0 = &temp_t6_5[1];
                             temp_t6_5->words.w0 = 0xF2000000;
                             temp_t6_5->words.w1 = 0x3C03C;
                             temp_v0_5 = spA0;
-                            temp_t7_3 = temp_v0_5 + 8;
+                            temp_t7_3 = &temp_v0_5[1];
                             spA0 = temp_t7_3;
                             temp_v0_5->words.w0 = ((((temp_t1 + ((&D_801D8A48 + (D_801C6A84 * 9) + phi_a1)->unk_1 * 2))->unk_1204A + 0x10) * 4) & 0xFFF) | 0xE4000000 | ((((phi_a3 + 0x10) * 4) & 0xFFF) << 0xC);
                             temp_v0_5->words.w1 = (((temp_t1 + ((&D_801D8A48 + (D_801C6A84 * 9) + phi_a1)->unk_1 * 2))->unk_1204A * 4) & 0xFFF) | (((phi_a3 * 4) & 0xFFF) << 0xC);
-                            spA0 = temp_t7_3 + 8;
+                            spA0 = &temp_t7_3[1];
                             temp_t7_3->words.w0 = 0xE1000000;
                             temp_t7_3->words.w1 = 0;
                             temp_t6_6 = spA0;
-                            spA0 = temp_t6_6 + 8;
+                            spA0 = &temp_t6_6[1];
                             temp_t6_6->words.w0 = 0xF1000000;
                             temp_t6_6->words.w1 = 0x4000400;
                             temp_a1 = (phi_a1 + 1) & 0xFFFF;
@@ -6919,66 +6921,66 @@ loop_22:
                         }
                     }
                     temp_t8_2 = spA0;
-                    spA0 = temp_t8_2 + 8;
+                    spA0 = &temp_t8_2[1];
                     temp_t8_2->words.w1 = 0;
                     temp_t8_2->words.w0 = 0xE7000000;
                     temp_v0_7 = spA0;
                     if (*temp_a0 == 0) {
                         temp_v0_8 = spA0;
-                        spA0 = temp_v0_8 + 8;
+                        spA0 = &temp_v0_8[1];
                         temp_v0_8->words.w0 = 0xFA000000;
                         temp_v0_8->words.w1 = (*temp_v1 & 0xFF) | (D_801F6B0C << 0x18) | ((D_801F6B10 & 0xFF) << 0x10) | ((D_801F6B0E & 0xFF) << 8);
                         temp_v0_9 = spA0;
-                        spA0 = temp_v0_9 + 8;
+                        spA0 = &temp_v0_9[1];
                         temp_v0_9->words.w0 = 0xFB000000;
                         temp_v0_9->words.w1 = (D_801F6B12 << 0x18) | ((D_801F6B16 & 0xFF) << 0x10) | ((D_801F6B14 & 0xFF) << 8);
                     } else {
-                        spA0 = temp_v0_7 + 8;
+                        spA0 = &temp_v0_7[1];
                         temp_v0_7->words.w0 = 0xFA000000;
                         temp_v0_7->words.w1 = (*temp_v1 & 0xFF) | (D_801F6B18 << 0x18) | ((D_801F6B1C & 0xFF) << 0x10) | ((D_801F6B1A & 0xFF) << 8);
                         temp_v0_10 = spA0;
-                        spA0 = temp_v0_10 + 8;
+                        spA0 = &temp_v0_10[1];
                         temp_v0_10->words.w0 = 0xFB000000;
                         temp_v0_10->words.w1 = (D_801F6B1E << 0x18) | ((D_801F6B22 & 0xFF) << 0x10) | ((D_801F6B20 & 0xFF) << 8);
                     }
                     temp_v0_11 = spA0;
-                    spA0 = temp_v0_11 + 8;
+                    spA0 = &temp_v0_11[1];
                     temp_v0_11->words.w0 = 0xFD700000;
                     temp_v0_11->words.w1 = *(&D_801D0364 + (*temp_a0 * 4));
                     temp_t6_7 = spA0;
-                    spA0 = temp_t6_7 + 8;
+                    spA0 = &temp_t6_7[1];
                     temp_t6_7->words.w1 = 0x7000000;
                     temp_t6_7->words.w0 = 0xF5700000;
                     temp_t6_8 = spA0;
-                    spA0 = temp_t6_8 + 8;
+                    spA0 = &temp_t6_8[1];
                     temp_t6_8->words.w1 = 0;
                     temp_t6_8->words.w0 = 0xE6000000;
                     temp_t8_3 = spA0;
-                    spA0 = temp_t8_3 + 8;
+                    spA0 = &temp_t8_3[1];
                     temp_t8_3->words.w0 = 0xF3000000;
                     temp_t8_3->words.w1 = 0x707F400;
                     temp_t8_4 = spA0;
-                    spA0 = temp_t8_4 + 8;
+                    spA0 = &temp_t8_4[1];
                     temp_t8_4->words.w1 = 0;
                     temp_t8_4->words.w0 = 0xE7000000;
                     temp_t7_4 = spA0;
-                    spA0 = temp_t7_4 + 8;
+                    spA0 = &temp_t7_4[1];
                     temp_t7_4->words.w1 = 0;
                     temp_t7_4->words.w0 = 0xF5680400;
                     temp_t6_9 = spA0;
-                    spA0 = temp_t6_9 + 8;
+                    spA0 = &temp_t6_9[1];
                     temp_t6_9->words.w0 = 0xF2000000;
                     temp_t6_9->words.w1 = 0x3C03C;
                     temp_v0_12 = spA0;
-                    temp_t7_5 = temp_v0_12 + 8;
+                    temp_t7_5 = &temp_v0_12[1];
                     spA0 = temp_t7_5;
                     temp_v0_12->words.w0 = ((((temp_t1 + (*temp_a0 * 2))->unk_1204A + 0x10) * 4) & 0xFFF) | 0xE4000000 | ((((phi_a3_2 + 0x10) * 4) & 0xFFF) << 0xC);
                     temp_v0_12->words.w1 = (((temp_t1 + (*temp_a0 * 2))->unk_1204A * 4) & 0xFFF) | (((phi_a3_2 * 4) & 0xFFF) << 0xC);
-                    spA0 = temp_t7_5 + 8;
+                    spA0 = &temp_t7_5[1];
                     temp_t7_5->words.w0 = 0xE1000000;
                     temp_t7_5->words.w1 = 0;
                     temp_t6_10 = spA0;
-                    spA0 = temp_t6_10 + 8;
+                    spA0 = &temp_t6_10[1];
                     temp_t6_10->words.w0 = 0xF1000000;
                     temp_t6_10->words.w1 = 0x4000400;
                     phi_a3_2 = (phi_a3_2 + 0x12) & 0xFFFF;
@@ -7033,77 +7035,77 @@ void func_80153EF0(GlobalContext *arg0, Gfx **arg1) {
     sp70 = *arg1;
     func_8012C680(temp_a0);
     temp_t8 = sp70;
-    sp70 = temp_t8 + 8;
+    sp70 = &temp_t8[1];
     temp_t8->words.w0 = 0xFC309661;
     temp_t8->words.w1 = 0x552EFF7F;
     temp_t3 = sp70;
-    sp70 = temp_t3 + 8;
+    sp70 = &temp_t3[1];
     temp_t3->words.w1 = 0x2000;
     temp_t3->words.w0 = 0xE3001201;
     temp_t7 = sp70;
-    sp70 = temp_t7 + 8;
+    sp70 = &temp_t7[1];
     temp_t7->words.w1 = 0x10;
     temp_t7->words.w0 = 0xE3001A01;
     temp_t2 = sp70;
-    sp70 = temp_t2 + 8;
+    sp70 = &temp_t2[1];
     temp_t2->words.w0 = 0xFA000000;
     temp_t0 = arg0 + 0x4908;
     temp_t2->words.w1 = temp_t0->unk_1203C & 0xFF;
     temp_t7_2 = sp70;
-    sp70 = temp_t7_2 + 8;
+    sp70 = &temp_t7_2[1];
     temp_t7_2->words.w1 = 0x8C28A0FF;
     temp_t7_2->words.w0 = 0xFB000000;
     temp_t1 = sp70;
-    sp70 = temp_t1 + 8;
+    sp70 = &temp_t1[1];
     temp_t1->words.w1 = (u32) &D_02002AA0;
     temp_t1->words.w0 = 0xFD900000;
     temp_t5 = sp70;
-    sp70 = temp_t5 + 8;
+    sp70 = &temp_t5[1];
     temp_t5->words.w0 = 0xF5900000;
     temp_t5->words.w1 = 0x7000060;
     temp_t9 = sp70;
-    sp70 = temp_t9 + 8;
+    sp70 = &temp_t9[1];
     temp_t9->words.w1 = 0;
     temp_t9->words.w0 = 0xE6000000;
     temp_t3_2 = sp70;
-    sp70 = temp_t3_2 + 8;
+    sp70 = &temp_t3_2[1];
     temp_t3_2->words.w1 = 0x701F100;
     temp_t3_2->words.w0 = 0xF3000000;
     temp_t7_3 = sp70;
-    sp70 = temp_t7_3 + 8;
+    sp70 = &temp_t7_3[1];
     temp_t7_3->words.w1 = 0;
     temp_t7_3->words.w0 = 0xE7000000;
     temp_t9_2 = sp70;
-    sp70 = temp_t9_2 + 8;
+    sp70 = &temp_t9_2[1];
     temp_t9_2->words.w1 = 0x60;
     temp_t9_2->words.w0 = 0xF5881000;
     temp_t4 = sp70;
-    sp70 = temp_t4 + 8;
+    sp70 = &temp_t4[1];
     temp_t4->words.w1 = 0xFC000;
     temp_t4->words.w0 = 0xF2000000;
     temp_v0 = sp70;
     temp_v1 = gGameInfo;
-    sp70 = temp_v0 + 8;
+    sp70 = &temp_v0[1];
     temp_v0->words.w0 = (((temp_v1->data[1420] + temp_v1->data[1421]) * 4) & 0xFFF) | 0xE4500000;
     temp_v0->words.w1 = (gGameInfo->data[1421] * 4) & 0xFFF;
     temp_t2_2 = sp70;
-    sp70 = temp_t2_2 + 8;
+    sp70 = &temp_t2_2[1];
     temp_t2_2->words.w1 = 0;
     temp_t2_2->words.w0 = 0xE1000000;
     temp_t5_2 = sp70;
-    sp70 = temp_t5_2 + 8;
+    sp70 = &temp_t5_2[1];
     temp_t5_2->words.w1 = 0xCC0400;
     temp_t5_2->words.w0 = 0xF1000000;
     temp_t9_3 = sp70;
-    sp70 = temp_t9_3 + 8;
+    sp70 = &temp_t9_3[1];
     temp_t9_3->words.w1 = 0;
     temp_t9_3->words.w0 = 0xE7000000;
     temp_t2_3 = sp70;
-    sp70 = temp_t2_3 + 8;
+    sp70 = &temp_t2_3[1];
     temp_t2_3->words.w1 = 0xFF2DFEFF;
     temp_t2_3->words.w0 = 0xFCFF97FF;
     temp_t6 = sp70;
-    sp70 = temp_t6 + 8;
+    sp70 = &temp_t6[1];
     temp_t6->words.w1 = 0xFF;
     temp_t6->words.w0 = 0xFB000000;
     temp_v0_2 = temp_t0->unk_11F04;
@@ -7132,6 +7134,13 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
     Gfx *temp_t8;
     Gfx *temp_t9;
     View *temp_s0;
+    f32 temp_a1;
+    f32 temp_a1_2;
+    f32 temp_a1_3;
+    f32 temp_a1_4;
+    f32 temp_a1_5;
+    f32 temp_a1_6;
+    f32 temp_a1_7;
     s16 temp_a2_5;
     s16 temp_a2_6;
     s16 temp_a3;
@@ -7169,13 +7178,6 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
     u16 temp_v1_6;
     u16 temp_v1_8;
     u16 temp_v1_9;
-    u8 *temp_a1;
-    u8 *temp_a1_2;
-    u8 *temp_a1_3;
-    u8 *temp_a1_4;
-    u8 *temp_a1_5;
-    u8 *temp_a1_6;
-    u8 *temp_a1_7;
     u8 temp_a2_3;
     u8 temp_a2_4;
     u8 temp_a2_7;
@@ -7248,8 +7250,8 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
     sp84 = temp_t5 + 8;
     temp_s0 = arg0 + 0x4908;
     temp_t5->words.w0 = 0xDB06001C;
-    temp_t5->words.w1 = temp_s0->unk_11EF8;
-    if (temp_s0->unk_11F10 != 0) {
+    temp_t5->words.w1 = temp_s0[204].fovy;
+    if (temp_s0[204].eye.z != 0) {
         if (temp_s0->unk_12090 == 0) {
             func_80152C64(temp_s0);
             func_8012C680(&sp84);
@@ -7262,11 +7264,11 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
         }
         func_8012C680(&sp84);
         temp_t7 = sp84;
-        sp84 = temp_t7 + 8;
+        sp84 = &temp_t7[1];
         temp_t7->words.w1 = 0;
         temp_t7->words.w0 = 0xE2001E01;
         temp_t2 = sp84;
-        sp84 = temp_t2 + 8;
+        sp84 = &temp_t2[1];
         temp_t2->words.w0 = 0xFCFF97FF;
         temp_t2->words.w1 = 0xFF2DFEFF;
         temp_v1 = gGameInfo;
@@ -7292,19 +7294,19 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
                 func_80153E7C(arg0, (void *) &sp84, temp_a2);
             } else {
                 temp_t3 = sp84;
-                sp84 = temp_t3 + 8;
+                sp84 = &temp_t3[1];
                 temp_t3->words.w1 = 0;
                 temp_t3->words.w0 = 0xE7000000;
                 temp_t6 = sp84;
-                sp84 = temp_t6 + 8;
+                sp84 = &temp_t6[1];
                 temp_t6->words.w0 = 0xE200001C;
                 temp_t6->words.w1 = 0x504340;
                 temp_t2_2 = sp84;
-                sp84 = temp_t2_2 + 8;
+                sp84 = &temp_t2_2[1];
                 temp_t2_2->words.w1 = 0;
                 temp_t2_2->words.w0 = 0xFA000000;
                 temp_t5_2 = sp84;
-                sp84 = temp_t5_2 + 8;
+                sp84 = &temp_t5_2[1];
                 temp_t5_2->words.w1 = 0xFF;
                 temp_t5_2->words.w0 = 0xFB000000;
             }
@@ -7352,11 +7354,11 @@ void func_801541D4(GlobalContext *arg0, Gfx **arg1) {
         case 12:                                    /* switch 1 */
         case 50:                                    /* switch 1 */
             func_8019C300(1U);
-            temp_s0->unk_11F00 = func_8019CF78();
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78();
             arg0->msgCtx.unk1202A = 1;
             temp_v1_3 = temp_s0->unk_1202C;
             if ((temp_v1_3 != 0x41) && (temp_v1_3 != 0x42)) {
-                temp_s0->unk_11F00->unk_2 = 0U;
+                temp_s0[204].zFar->unk_2 = 0U;
                 D_801C6A74 = 0;
                 func_80147564(arg0);
             }
@@ -7463,28 +7465,28 @@ block_94:
             }
             break;
         case 13:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF78(&gGameInfo);
-            temp_a1 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78(&gGameInfo);
+            temp_a1 = temp_s0[204].zFar;
             temp_v1_7 = temp_a1->unk_2;
-            phi_a1 = temp_a1;
+            phi_a1 = (bitwise u8 *) temp_a1;
             if (temp_v1_7 != 0) {
                 phi_a2_2 = temp_v1_7;
                 if ((temp_v1_7 == 1) && (D_801C6A74 == 8)) {
                     D_801C6A74 = 0;
-                    phi_a2_2 = temp_s0->unk_11F00->unk_2;
+                    phi_a2_2 = temp_s0[204].zFar->unk_2;
                 }
-                phi_a1 = temp_s0->unk_11F00;
+                phi_a1 = (bitwise u8 *) temp_s0[204].zFar;
                 if (phi_a2_2 == (D_801C6A74 + 1)) {
-                    temp_v0_11 = temp_s0->unk_11F00->unk_0;
+                    temp_v0_11 = *(bitwise u8 *) temp_s0[204].zFar;
                     (&D_801CFC98)[phi_a2_2].unk_-1 = temp_v0_11;
                     temp_s0->unk_12048 = temp_v0_11;
-                    (&D_801CFC98)[temp_s0->unk_11F00->unk_2] = 0xFF;
+                    (&D_801CFC98)[temp_s0[204].zFar->unk_2] = 0xFF;
                     D_801C6A74 += 1;
-                    phi_a1 = temp_s0->unk_11F00;
+                    phi_a1 = (bitwise u8 *) temp_s0[204].zFar;
                 }
             }
-            temp_s0->unk_12028 = (s16) phi_a1->unk_1;
-            temp_v0_12 = temp_s0->unk_11F00->unk_1;
+            temp_s0->unk_12028 = (s16) phi_a1[1];
+            temp_v0_12 = temp_s0[204].zFar->unk_1;
             if ((s32) temp_v0_12 < 0x17) {
                 if (temp_v0_12 == 0x13) {
                     func_8019C268();
@@ -7494,15 +7496,15 @@ block_94:
                     func_8019C2E4(0, 0x14);
                     func_801477B4(arg0);
                     arg0->msgCtx.unk1202A = 0x2A;
-                } else if ((temp_v0_12 == 0x16) || (temp_v0_12 == 0xC) || (temp_v0_12 == 0xD) || (temp_v0_12 == 0xE) || (((gBitFlags + 0x18)[temp_v0_12] & gSaveContext.inventory.questItems) != 0)) {
+                } else if ((temp_v0_12 == 0x16) || (temp_v0_12 == 0xC) || (temp_v0_12 == 0xD) || (temp_v0_12 == 0xE) || (((&gBitFlags[6])[temp_v0_12] & gSaveContext.inventory.questItems) != 0)) {
                     D_801C6A7C = (s16) temp_v0_12;
-                    temp_s0->unk_1202E = (s16) temp_s0->unk_11F00->unk_1;
-                    temp_s0->unk_12028 = (s16) temp_s0->unk_11F00->unk_1;
+                    temp_s0->unk_1202E = (s16) temp_s0[204].zFar->unk_1;
+                    temp_s0->unk_12028 = (s16) temp_s0[204].zFar->unk_1;
                     temp_s0->unk_11F22 = 0xE;
                     temp_s0->unk_12023 = 0x14;
                     temp_v1_8 = temp_s0->unk_1202C;
                     if (temp_v1_8 == 0x38) {
-                        temp_v0_13 = temp_s0->unk_11F00->unk_1;
+                        temp_v0_13 = temp_s0[204].zFar->unk_1;
                         if (((s32) temp_v0_13 < 6) || (temp_v0_13 == 0x16)) {
                             func_8019C300(0U, (s32) phi_a1);
                             play_sound(0x4827U);
@@ -7516,7 +7518,7 @@ block_94:
                             Interface_ChangeAlpha(1U);
                         }
                     } else if (temp_v1_8 == 0x31) {
-                        if ((s32) temp_s0->unk_11F00->unk_1 < 0xB) {
+                        if ((s32) temp_s0[204].zFar->unk_1 < 0xB) {
                             func_8019C300(0U, (s32) phi_a1);
                             play_sound(0x4827U);
                             temp_s0->unk_12023 = 0xA;
@@ -7657,8 +7659,8 @@ block_94:
                 func_8019C300(0U);
                 func_8014D7B4(arg0);
                 temp_s0->unk_11F22 = 0x13;
-                temp_s0->unk_11F00 = func_8019CF78();
-                temp_s0->unk_11F00->unk_2 = 0U;
+                temp_s0[204].zFar = (bitwise f32) func_8019CF78();
+                temp_s0[204].zFar->unk_2 = 0U;
                 D_801C6A74 = 0;
                 func_80147564(arg0);
                 func_80152EC0(arg0);
@@ -7785,12 +7787,12 @@ block_94:
             break;
         case 20:                                    /* switch 1 */
         case 26:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF9C(&gGameInfo);
-            temp_a1_2 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF9C(&gGameInfo);
+            temp_a1_2 = temp_s0[204].zFar;
             if (temp_a1_2->unk_1 == 0) {
                 temp_v1_13 = temp_s0->unk_1202C;
                 if ((temp_v1_13 == 0x3F) || (temp_v1_13 == 0x40)) {
-                    func_8019C300(0U, (s32) temp_a1_2);
+                    func_8019C300(0U, (bitwise s32) temp_a1_2);
                 }
                 if (((s32) temp_s0->unk_1202C >= 0x43) && ((s32) temp_s0->unk_1202C < 0x47)) {
                     func_8019C300(0U);
@@ -7805,12 +7807,12 @@ block_94:
                 if ((D_801C6A74 != 0) && (temp_a1_2->unk_2 == 1)) {
                     D_801C6A74 = 0;
                 }
-                temp_v1_14 = temp_s0->unk_11F00->unk_2;
+                temp_v1_14 = (bitwise void *) temp_s0[204].zFar->unk_2;
                 if ((temp_v1_14 != 0) && (temp_v1_14 == (D_801C6A74 + 1))) {
-                    temp_v0_22 = temp_s0->unk_11F00->unk_0;
+                    temp_v0_22 = *(bitwise void *) temp_s0[204].zFar;
                     (&D_801CFC98)[temp_v1_14].unk_-1 = temp_v0_22;
                     temp_s0->unk_12048 = temp_v0_22;
-                    (&D_801CFC98)[temp_s0->unk_11F00->unk_2] = 0xFF;
+                    (&D_801CFC98)[temp_s0[204].zFar->unk_2] = 0xFF;
                     D_801C6A74 += 1;
                 }
             }
@@ -7820,17 +7822,17 @@ block_94:
             break;
         case 28:                                    /* switch 1 */
         case 51:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF78(&gGameInfo);
-            temp_a1_3 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78(&gGameInfo);
+            temp_a1_3 = temp_s0[204].zFar;
             temp_v1_15 = temp_a1_3->unk_2;
             if ((temp_v1_15 != 0) && (temp_v1_15 == (D_801C6A74 + 1))) {
                 temp_v0_23 = temp_a1_3->unk_0;
                 (&D_801CFC98)[temp_v1_15].unk_-1 = temp_v0_23;
                 temp_s0->unk_12048 = temp_v0_23;
-                (&D_801CFC98)[temp_s0->unk_11F00->unk_2] = 0xFF;
+                (&D_801CFC98)[temp_s0[204].zFar->unk_2] = 0xFF;
                 D_801C6A74 += 1;
             }
-            temp_a2_3 = temp_s0->unk_11F00->unk_1;
+            temp_a2_3 = (bitwise void *) temp_s0[204].zFar->unk_1;
             if ((s32) temp_a2_3 < 0x17) {
                 temp_v1_16 = temp_s0->unk_1202C;
                 if ((temp_v1_16 == 0x41) || (temp_v1_16 == 0x42)) {
@@ -7839,7 +7841,7 @@ block_94:
                 } else {
                     temp_s0->unk_12028 = (s16) temp_a2_3;
                     temp_s0->unk_11F22 = 0x1D;
-                    temp_a2_4 = temp_s0->unk_11F00->unk_1;
+                    temp_a2_4 = temp_s0[204].zFar->unk_1;
                     if (temp_a2_4 == 0xE) {
                         Item_Give(arg0, 0x73U);
                     } else {
@@ -7854,7 +7856,7 @@ block_94:
             } else if (temp_a2_3 == 0x17) {
                 temp_s0->unk_12028 = (s16) temp_a2_3;
                 temp_s0->unk_11F22 = 0x34;
-                Item_Give(arg0, (*(&D_801CFCB8 + (temp_s0->unk_11F00->unk_1 * 2)) + 0x61) & 0xFF);
+                Item_Give(arg0, (*(&D_801CFCB8 + (temp_s0[204].zFar->unk_1 * 2)) + 0x61) & 0xFF);
                 temp_s0->unk_12023 = 0x14;
                 func_8019C2E4(0, 0x14);
                 play_sound(0x4807U);
@@ -7885,8 +7887,8 @@ block_94:
         case 39:                                    /* switch 1 */
             func_8019CD08(1);
             func_8019C300(1U);
-            temp_s0->unk_11F00 = func_8019CF6C();
-            temp_s0->unk_11F00->unk_2 = 0U;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF6C();
+            temp_s0[204].zFar->unk_2 = 0U;
             D_801C6A74 = 0;
             D_801C6A78 = 0;
             func_80147564(arg0);
@@ -7894,8 +7896,8 @@ block_94:
             func_80153E7C(arg0, (void *) &sp84);
             break;
         case 40:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF6C((u32) &gGameInfo);
-            temp_v1_19 = temp_s0->unk_11F00->unk_2;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF6C((u32) &gGameInfo);
+            temp_v1_19 = temp_s0[204].zFar->unk_2;
             if ((temp_v1_19 != 0) && (temp_v1_19 == (D_801C6A74 + 1))) {
                 temp_a2_5 = D_801C6A78;
                 if ((s32) temp_a2_5 >= 8) {
@@ -7903,19 +7905,19 @@ block_94:
                     phi_v1_12 = 0;
                     do {
                         temp_v1_20 = (phi_v1_12 + 1) & 0xFFFF;
-                        (&D_801CFC98)[phi_v0].unk_0 = (&D_801CFC98)[phi_v0].unk_1;
+                        (&D_801CFC98)[phi_v0].unk_0 = (&(&D_801CFC98)[phi_v0])[1];
                         phi_v0 = (phi_v0 + 1) & 0xFFFF;
                         phi_v1_12 = temp_v1_20;
                     } while (temp_v1_20 < 8);
                     D_801C6A78 = temp_a2_5 - 1;
                 }
-                temp_v0_24 = temp_s0->unk_11F00->unk_0;
+                temp_v0_24 = *(bitwise u8 *) temp_s0[204].zFar;
                 (&D_801CFC98)[D_801C6A78] = temp_v0_24;
                 temp_s0->unk_12048 = temp_v0_24;
                 D_801C6A78 += 1;
                 (&D_801CFC98)[D_801C6A78] = 0xFF;
                 D_801C6A74 += 1;
-                if (temp_s0->unk_11F00->unk_2 == 8) {
+                if (temp_s0[204].zFar->unk_2 == 8) {
                     D_801C6A74 = 0;
                 }
             }
@@ -7923,10 +7925,10 @@ block_94:
             break;
         case 41:                                    /* switch 1 */
         case 46:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF9C(&gGameInfo);
-            temp_a1_4 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF9C(&gGameInfo);
+            temp_a1_4 = temp_s0[204].zFar;
             temp_v1_21 = temp_a1_4->unk_2;
-            phi_a1_2 = (s32) temp_a1_4;
+            phi_a1_2 = (bitwise s32) temp_a1_4;
             if (temp_v1_21 != 0) {
                 temp_a3 = D_801C6A74;
                 if (temp_v1_21 == (temp_a3 + 1)) {
@@ -7936,18 +7938,18 @@ block_94:
                         phi_v1_13 = 0;
                         do {
                             temp_v1_22 = (phi_v1_13 + 1) & 0xFFFF;
-                            (&D_801CFC98)[phi_v0_2].unk_0 = (&D_801CFC98)[phi_v0_2].unk_1;
+                            (&D_801CFC98)[phi_v0_2].unk_0 = (&(&D_801CFC98)[phi_v0_2])[1];
                             phi_v0_2 = (phi_v0_2 + 1) & 0xFFFF;
                             phi_v1_13 = temp_v1_22;
                         } while (temp_v1_22 < 8);
                         D_801C6A78 = temp_a2_6 - 1;
                     }
-                    (&D_801CFC98)[D_801C6A78] = temp_s0->unk_11F00->unk_0;
+                    (&D_801CFC98)[D_801C6A78] = *(bitwise u8 *) temp_s0[204].zFar;
                     D_801C6A78 += 1;
                     (&D_801CFC98)[D_801C6A78] = 0xFF;
                     D_801C6A74 = temp_a3 + 1;
-                    phi_a1_2 = (s32) temp_s0->unk_11F00;
-                    if (temp_s0->unk_11F00->unk_2 == 8) {
+                    phi_a1_2 = (s32) (bitwise u8 *) temp_s0[204].zFar;
+                    if (temp_s0[204].zFar->unk_2 == 8) {
                         D_801C6A74 = 0;
                         D_801C6A78 = D_801C6A74;
                     }
@@ -7955,7 +7957,7 @@ block_94:
             }
             temp_v0_25 = temp_s0->unk_12023;
             if (temp_v0_25 == 0) {
-                if (temp_s0->unk_11F00->unk_1 == 0) {
+                if (temp_s0[204].zFar->unk_1 == 0) {
                     func_8019C300(0U, phi_a1_2);
                     arg0->msgCtx.unk1202A = 0x11;
                     func_801477B4(arg0);
@@ -7977,8 +7979,8 @@ block_94:
             func_80153E7C(arg0, (void *) &sp84);
             break;
         case 43:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF6C((u32) &gGameInfo);
-            temp_a1_5 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF6C((u32) &gGameInfo);
+            temp_a1_5 = temp_s0[204].zFar;
             temp_v1_23 = temp_a1_5->unk_2;
             if (temp_v1_23 != 0) {
                 temp_a3_2 = D_801C6A74;
@@ -7990,7 +7992,7 @@ block_94:
                     (&D_801CFC98)[D_801C6A74] = 0xFF;
                 }
             }
-            temp_v0_28 = temp_s0->unk_11F00->unk_1;
+            temp_v0_28 = (bitwise void *) temp_s0[204].zFar->unk_1;
             if (temp_v0_28 == 0) {
                 temp_s0->unk_12023 = 0x14;
                 gSaveContext.unk_F65 = 1;
@@ -8003,7 +8005,7 @@ block_94:
                     phi_v1_15 = temp_v1_24;
                 } while (temp_v1_24 < 0x80);
             } else if (temp_v0_28 == 0xFF) {
-                func_8019CD08(0, temp_s0->unk_11F00);
+                func_8019CD08(0, (bitwise void *) temp_s0[204].zFar);
                 play_sound(0x4827U);
                 func_801477B4(arg0);
                 temp_s0->unk_11F22 = 0x2C;
@@ -8017,8 +8019,8 @@ block_94:
             break;
         case 47:                                    /* switch 1 */
             func_8019C300(1U);
-            temp_s0->unk_11F00 = func_8019CF78();
-            temp_s0->unk_11F00->unk_2 = 0U;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78();
+            temp_s0[204].zFar->unk_2 = 0U;
             D_801C6A74 = 0;
             arg0->msgCtx.unk1202A = 1;
             func_80147564(arg0);
@@ -8026,12 +8028,12 @@ block_94:
             temp_s0->unk_11F22 = 0x30;
             break;
         case 48:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF78(&gGameInfo);
-            temp_a1_6 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78(&gGameInfo);
+            temp_a1_6 = temp_s0[204].zFar;
             temp_v1_25 = temp_a1_6->unk_2;
             if ((temp_v1_25 != 0) && (temp_v1_25 == (D_801C6A74 + 1))) {
                 temp_s0->unk_12048 = (u8) temp_a1_6->unk_0;
-                temp_s0->unk_11F00->unk_2 = 0U;
+                temp_s0[204].zFar->unk_2 = 0U;
                 D_801C6A74 = 0;
                 func_80147564(arg0);
                 temp_s0->unk_11F22 = 0x31;
@@ -8040,8 +8042,8 @@ block_94:
         case 53:                                    /* switch 1 */
             func_8019C300(1U);
             func_8019C300(1U);
-            temp_s0->unk_11F00 = func_8019CF78();
-            temp_s0->unk_11F00->unk_2 = 0U;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78();
+            temp_s0[204].zFar->unk_2 = 0U;
             D_801C6A74 = 0;
             arg0->msgCtx.unk1202A = 1;
             func_80147564(arg0);
@@ -8052,22 +8054,22 @@ block_94:
             func_80153E7C(arg0, (void *) &sp84);
             break;
         case 54:                                    /* switch 1 */
-            temp_s0->unk_11F00 = func_8019CF78(&gGameInfo);
-            temp_a1_7 = temp_s0->unk_11F00;
+            temp_s0[204].zFar = (bitwise f32) func_8019CF78(&gGameInfo);
+            temp_a1_7 = temp_s0[204].zFar;
             temp_v1_26 = temp_a1_7->unk_2;
             if (temp_v1_26 != 0) {
                 temp_a3_3 = D_801C6A74;
                 if (temp_v1_26 == (temp_a3_3 + 1)) {
                     (&D_801CFC98)[temp_v1_26].unk_-1 = (u8) temp_a1_7->unk_0;
-                    (&D_801CFC98)[temp_s0->unk_11F00->unk_2] = 0xFF;
+                    (&D_801CFC98)[temp_s0[204].zFar->unk_2] = 0xFF;
                     D_801C6A74 = temp_a3_3 + 1;
                 }
             }
-            temp_a2_7 = temp_s0->unk_11F00->unk_1;
+            temp_a2_7 = (bitwise void *) temp_s0[204].zFar->unk_1;
             if ((s32) temp_a2_7 < 0x17) {
                 temp_s0->unk_12028 = (s16) temp_a2_7;
                 temp_s0->unk_11F22 = 0x37;
-                Item_Give(arg0, (*(&D_801CFCB8 + (temp_s0->unk_11F00->unk_1 * 2)) + 0x61) & 0xFF);
+                Item_Give(arg0, (*(&D_801CFCB8 + (temp_s0[204].zFar->unk_1 * 2)) + 0x61) & 0xFF);
                 temp_s0->unk_12023 = 0x14;
                 play_sound(0x4807U);
             } else if (temp_a2_7 == 0xFF) {
@@ -8155,15 +8157,15 @@ block_351:
                 break;
             }
             temp_t5_3 = sp84;
-            sp84 = temp_t5_3 + 8;
+            sp84 = &temp_t5_3[1];
             temp_t5_3->words.w1 = 0;
             temp_t5_3->words.w0 = 0xE7000000;
             temp_t9 = sp84;
-            sp84 = temp_t9 + 8;
+            sp84 = &temp_t9[1];
             temp_t9->words.w0 = 0xFCFF97FF;
             temp_t9->words.w1 = 0xFF2DFEFF;
             temp_t7_3 = sp84;
-            sp84 = temp_t7_3 + 8;
+            sp84 = &temp_t7_3[1];
             temp_t7_3->words.w1 = 0xFF;
             temp_t7_3->words.w0 = 0xFB000000;
             func_80153E7C(arg0, (void *) &sp84);
@@ -8230,7 +8232,7 @@ void func_80156758(GlobalContext *arg0) {
         func_801541D4(arg0, &sp3C);
     }
     temp_t1 = sp3C;
-    sp3C = temp_t1 + 8;
+    sp3C = &temp_t1[1];
     temp_t1->words.w1 = 0;
     temp_t1->words.w0 = 0xDF000000;
     Graph_BranchDlist(sp38, sp3C);
@@ -9048,7 +9050,7 @@ block_157:
         case 43:
             if (~(globalCtx->state.input[0].press.button | ~0x4000) == 0) {
                 sp30 = &globalCtx->msgCtx;
-                func_8019CD08(0, (u8 *) 0, 0x10000);
+                func_8019CD08(0, (void *) 0, 0x10000);
                 play_sound(0x4827U);
                 func_801477B4(globalCtx);
                 globalCtx->msgCtx.unk11F22 = 0x2C;

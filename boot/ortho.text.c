@@ -40,12 +40,12 @@ void guOrthoF(f32 (*mf)[4], f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale)
     temp_f12 = f - n;
     mf[0][0] = 2.0f / temp_f0;
     temp_f2 = t - b;
-    mf->unk_28 = (f32) (-2.0f / temp_f12);
-    mf->unk_14 = (f32) (2.0f / temp_f2);
-    mf->unk_30 = (f32) (-(r + l) / temp_f0);
-    mf->unk_34 = (f32) (-(t + b) / temp_f2);
-    mf->unk_3C = 1.0f;
-    mf->unk_38 = (f32) (-(f + n) / temp_f12);
+    mf[2][2] = -2.0f / temp_f12;
+    mf[1][1] = 2.0f / temp_f2;
+    mf[3][0] = -(r + l) / temp_f0;
+    mf[3][1] = -(t + b) / temp_f2;
+    mf[3][3] = 1.0f;
+    mf[3][2] = -(f + n) / temp_f12;
     temp_f18 = mf[0][1];
     temp_f12_2 = mf[0][0] * scale;
     temp_f14 = mf[0][2];
@@ -63,12 +63,12 @@ void guOrthoF(f32 (*mf)[4], f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale)
     phi_f16_2 = temp_f16;
     if (1 != 4) {
         do {
-            temp_f18_2 = phi_v0->unk_14;
-            temp_f14_2 = phi_v0->unk_18;
+            temp_f18_2 = phi_v0[1][1];
+            temp_f14_2 = phi_v0[1][2];
             temp_v1 = phi_v1 + 1;
-            temp_f16_2 = phi_v0->unk_1C;
+            temp_f16_2 = phi_v0[1][3];
             phi_v0[0][0] = phi_f12;
-            temp_f12_3 = phi_v0->unk_10 * scale;
+            temp_f12_3 = phi_v0[1][0] * scale;
             phi_v0[0][1] = phi_f18 * scale;
             phi_v0[0][2] = phi_f14 * scale;
             temp_v0 = phi_v0 + 0x10;

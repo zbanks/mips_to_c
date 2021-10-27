@@ -154,13 +154,13 @@ void DmSa_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     if ((u32) this->alpha < 0xFFU) {
         temp_v0 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0 + 8;
+        sp40->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060030;
         sp38 = temp_v0;
         sp38->words.w1 = func_80A2EB58(globalCtx->state.gfxCtx, this->alpha);
     } else {
         temp_v0_2 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0_2 + 8;
+        sp40->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060030;
         sp34 = temp_v0_2;
         sp34->words.w1 = func_80A2EBB0(globalCtx->state.gfxCtx, this->alpha);

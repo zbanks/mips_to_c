@@ -340,17 +340,17 @@ void func_80C011CC(Actor *arg0) {
     SkelAnime *temp_a0;
 
     temp_a0 = arg0 + 0x144;
-    if ((arg0->unk_2DC == 5) && ((sp24 = temp_a0, (func_801378B8(temp_a0, 9.0f) != 0)) || (func_801378B8(temp_a0, 10.0f) != 0) || (func_801378B8(sp24, 17.0f) != 0) || (func_801378B8(sp24, 18.0f) != 0))) {
+    if ((arg0[2].targetArrowOffset == 5) && ((sp24 = temp_a0, (func_801378B8(temp_a0, 9.0f) != 0)) || (func_801378B8(temp_a0, 10.0f) != 0) || (func_801378B8(sp24, 17.0f) != 0) || (func_801378B8(sp24, 18.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    temp_a0_2 = arg0 + 0x144;
-    if ((arg0->unk_2DC == 0x13) && ((sp24 = (SkelAnime *) temp_a0_2, (func_801378B8((SkelAnime *) temp_a0_2, 2.0f) != 0)) || (func_801378B8((SkelAnime *) temp_a0_2, 6.0f) != 0))) {
+    temp_a0_2 = &arg0[1];
+    if (((bitwise s32) arg0[2].targetArrowOffset == 0x13) && ((sp24 = (SkelAnime *) temp_a0_2, (func_801378B8((SkelAnime *) temp_a0_2, 2.0f) != 0)) || (func_801378B8((SkelAnime *) temp_a0_2, 6.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    if ((arg0->unk_2DC == 0x12) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 15.0f) != 0)) {
+    if (((bitwise s32) arg0[2].targetArrowOffset == 0x12) && (func_801378B8((SkelAnime *) &arg0[1], 15.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
-    if ((arg0->unk_2DC == 7) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 8.0f) != 0)) {
+    if (((bitwise s32) arg0[2].targetArrowOffset == 7) && (func_801378B8((SkelAnime *) &arg0[1], 8.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x292DU);
     }
 }
@@ -504,7 +504,7 @@ void func_80C014E4(EnBomjimb *this, GlobalContext *globalCtx) {
                 this->unk_2CC += 1;
             }
         }
-        if (sp84->unk_A74 != 0x1000000) {
+        if ((bitwise s32) sp84[8].targetArrowOffset != 0x1000000) {
             temp_v0_2 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
             phi_v1_2 = temp_v0_2 << 0x10;
             phi_f0 = 200.0f;
@@ -544,7 +544,7 @@ void func_80C01A24(EnBomjimb *this, GlobalContext *globalCtx) {
         temp_v0 = this->unk_2E4;
         this->unk_2E8.base.acFlags = temp_v1 & 0xFFFD;
         if ((temp_v0 != 0) && (temp_v0->update != 0)) {
-            temp_v0->unk_2C4 = 90000.0f;
+            temp_v0[2].focus.pos.x = 90000.0f;
         }
         this->actor.speedXZ = 0.0f;
         this->unk_2E4 = NULL;
@@ -579,7 +579,7 @@ void func_80C01B74(EnBomjimb *this, GlobalContext *globalCtx) {
         temp_v0 = this->unk_2E4;
         this->unk_2E8.base.acFlags = temp_v1 & 0xFFFD;
         if ((temp_v0 != 0) && (temp_v0->update != 0)) {
-            temp_v0->unk_2C4 = 90000.0f;
+            temp_v0[2].focus.pos.x = 90000.0f;
         }
         this->actor.speedXZ = 0.0f;
         this->unk_2E4 = NULL;
@@ -761,7 +761,7 @@ void func_80C0217C(EnBomjimb *this, GlobalContext *globalCtx) {
     sp50 = 0;
     sp54 = globalCtx->actorCtx.actorList[2].first;
     if ((func_80C012FC(this) == 0) && (func_80C013B4(this) == 0) && (func_80C013F0(this, globalCtx) == 0)) {
-        if (sp54->unk_A74 == 0x1000000) {
+        if ((bitwise s32) sp54[8].targetArrowOffset == 0x1000000) {
             Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, (s16) 0);
             func_80C01494(this);
             return;
@@ -854,7 +854,7 @@ void func_80C02570(EnBomjimb *this, GlobalContext *globalCtx) {
             this->actionFunc = func_80C0217C;
             return;
         }
-        if ((sp2C->unk_A74 == 0x1000000) || (temp_f0 > 410.0f)) {
+        if (((bitwise s32) sp2C[8].targetArrowOffset == 0x1000000) || (temp_f0 > 410.0f)) {
             Math_SmoothStepToS(temp_a0, this->actor.yawTowardsPlayer, 1, 0xBB8, (s16) 0);
             func_80C01494(this);
         }
@@ -1122,7 +1122,7 @@ s32 func_80C02FA8(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     }
     if (arg1 == 0x11) {
         arg4->x += arg5->unk_28A;
-        arg4->z += arg5->unk_288;
+        arg4->z += arg5[2].id;
     }
     if ((arg1 == 0x13) && (arg5->unk_2C8 != 0)) {
         *arg2 = NULL;
@@ -1149,17 +1149,17 @@ void EnBomjimb_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C03274 + (this->unk_2C2 * 4)));
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80C03280 + (this->unk_2C8 * 4)));
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80C03260 + (this->unk_2C8 * 4)));

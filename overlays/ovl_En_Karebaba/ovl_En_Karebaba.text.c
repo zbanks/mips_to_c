@@ -21,6 +21,12 @@ typedef struct EnKarebaba {
     /* 0x27C */ ColliderCylinder unk_27C;           /* inferred */
 } EnKarebaba;                                       /* size = 0x2C8 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnKarebaba_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -280,7 +286,7 @@ void func_808F1374(Actor *arg0, GlobalContext *arg1) {
 
     if (arg0->unk_1EC == 0xA) {
         arg0->unk_1EC = 0U;
-        arg0->unk_1F0 = 0.0f;
+        arg0[1].colChkInfo.displacement.z = 0.0f;
         if (arg0->params == 2) {
             phi_a3 = 1;
         } else {
@@ -334,7 +340,7 @@ void func_808F155C(Actor *arg0) {
     arg0->shape.rot.x = -0x4000;
     arg0->unk_1EE = 0;
     arg0->world.pos.y = arg0->home.pos.y + 14.0f;
-    arg0->unk_188 = func_808F15B0;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F15B0;
 }
 
 void func_808F15B0(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -354,7 +360,7 @@ void func_808F15B0(EnKarebaba *this, GlobalContext *globalCtx) {
 void func_808F1648(Actor *arg0) {
     Actor_SetScale(arg0, 0.005f);
     arg0->shape.rot.x = -0x4000;
-    arg0->unk_188 = func_808F169C;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F169C;
     arg0->world.pos.y = arg0->home.pos.y + 14.0f;
 }
 
@@ -367,7 +373,7 @@ void func_808F169C(EnKarebaba *this, GlobalContext *globalCtx) {
 void func_808F16FC(Actor *arg0) {
     SkelAnime_ChangeAnim(arg0 + 0x144, &D_060002B8, 4.0f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_060002B8), (u8) 0, -3.0f);
     Audio_PlayActorSound2(arg0, 0x39E2U);
-    arg0->unk_188 = func_808F1778;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F1778;
 }
 
 void func_808F1778(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -390,22 +396,22 @@ void func_808F1778(EnKarebaba *this, GlobalContext *globalCtx) {
 void func_808F1878(Actor *arg0) {
     s16 phi_v0;
 
-    if (func_808F1A58 != arg0->unk_188) {
+    if (func_808F1A58 != arg0[1].focus.pos.z) {
         Actor_SetScale(arg0, 0.01f);
         arg0->unk_290 = 6;
         arg0->unk_28D = (u8) (arg0->unk_28D & 0xFFFB);
-        arg0->unk_2BC = 0xF;
+        arg0[2].world.rot.z = 0xF;
         if (arg0->params == 1) {
-            arg0->unk_2BE = 0x50;
+            arg0[2].world.unk_12 = 0x50;
             phi_v0 = 0x50;
         } else {
-            arg0->unk_2BE = 0x23;
+            arg0[2].world.unk_12 = 0x23;
             phi_v0 = 0x23;
         }
         arg0->unk_272 = phi_v0;
     }
     arg0->unk_1EE = 0x28;
-    arg0->unk_188 = func_808F190C;
+    arg0[1].focus.pos.z = func_808F190C;
 }
 
 void func_808F190C(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -509,7 +515,7 @@ void func_808F1BF8(Actor *arg0) {
         arg0->unk_1EE = 3;
     }
     Audio_PlayActorSound2(arg0, 0x3862U);
-    arg0->unk_188 = func_808F1C84;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F1C84;
     arg0->flags |= 0x30;
 }
 
@@ -595,7 +601,7 @@ void func_808F1FAC(Actor *arg0) {
     if (arg0->unk_1EC == 0xA) {
         arg0->unk_1EE = 3;
     }
-    arg0->unk_188 = func_808F200C;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F200C;
 }
 
 void func_808F200C(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -636,8 +642,8 @@ void func_808F20FC(Actor *arg0, GlobalContext *arg1) {
     func_800BC154(arg1, arg1 + 0x1CA0, arg0, 8U);
     arg0->unk_1EE = 0xC8;
     arg0->flags &= -0x21;
-    arg0->unk_188 = func_808F21A4;
-    arg0->unk_1F0 = 0.0f;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F21A4;
+    arg0[1].colChkInfo.displacement.z = 0.0f;
 }
 
 void func_808F21A4(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -726,7 +732,7 @@ void func_808F24F8(Actor *arg0) {
     arg0->shape.shadowScale = 22.0f;
     arg0->unk_270 = (s16) *D_808F2DEC;
     Actor_SetScale(arg0, 0.0f);
-    arg0->unk_188 = func_808F241C;
+    arg0[1].focus.pos.z = (bitwise f32) func_808F241C;
 }
 
 void func_808F254C(EnKarebaba *this, GlobalContext *globalCtx) {
@@ -819,19 +825,19 @@ void func_808F280C(EnKarebaba *arg0, GraphicsContext **arg1) {
     temp_s0 = temp_a0;
     func_8012C448(temp_a0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = 0xFF;
     temp_v0->words.w0 = 0xFA000000;
     func_800C0094(arg0->unk_22C, arg0->actor.home.pos.x, arg0->actor.home.pos.y, arg0->actor.home.pos.z, (MtxF *) &sp40);
     SysMatrix_InsertMatrix((MtxF *) &sp40, 0);
     Matrix_Scale(0.15f, 1.0f, 0.15f, 1);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp30 = temp_v0_2;
     sp30->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) D_04076BC0;
     temp_v0_3->words.w0 = 0xDE000000;
 }
@@ -875,11 +881,11 @@ void EnKarebaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if (((s32) temp_v0_2 >= 0x29) || ((temp_v0_2 & 1) != 0)) {
             SysMatrix_InsertTranslation(0.0f, 0.0f, 200.0f, 1);
             temp_s0 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_s0 + 8;
+            temp_s5->polyOpa.p = &temp_s0[1];
             temp_s0->words.w0 = 0xDA380003;
             temp_s0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v1 = temp_s5->polyOpa.p;
-            temp_s5->polyOpa.p = temp_v1 + 8;
+            temp_s5->polyOpa.p = &temp_v1[1];
             temp_v1->words.w0 = 0xDE000000;
             temp_v1->words.w1 = (u32) &D_06003070;
         }
@@ -908,18 +914,18 @@ void EnKarebaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
             do {
                 SysMatrix_InsertTranslation(0.0f, 0.0f, -2000.0f, 1);
                 temp_s0_2 = temp_s5->polyOpa.p;
-                temp_s5->polyOpa.p = temp_s0_2 + 8;
+                temp_s5->polyOpa.p = &temp_s0_2[1];
                 temp_s0_2->words.w0 = 0xDA380003;
                 temp_s0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v1_2 = temp_s5->polyOpa.p;
-                temp_s5->polyOpa.p = temp_v1_2 + 8;
+                temp_s5->polyOpa.p = &temp_v1_2[1];
                 temp_v1_2->words.w0 = 0xDE000000;
                 temp_v1_2->words.w1 = *phi_s2;
                 SysMatrix_GetStateTranslation(phi_s1);
                 if ((phi_s3 == 0) && (func_808F1C84 == this->actionFunc)) {
                     SysMatrix_GetStateTranslation((Vec3f *) &this->actor.focus);
                 }
-                temp_s1 = phi_s1 + 0xC;
+                temp_s1 = &phi_s1[1];
                 phi_s2 += 4;
                 phi_s1 = temp_s1;
                 phi_s3 += 0xC;
@@ -935,21 +941,21 @@ void EnKarebaba_Draw(Actor *thisx, GlobalContext *globalCtx) {
     Matrix_Scale(sp8C, sp8C, sp8C, 1);
     Matrix_RotateY(this->actor.home.rot.y, 1U);
     temp_s0_3 = temp_s5->polyOpa.p;
-    temp_s5->polyOpa.p = temp_s0_3 + 8;
+    temp_s5->polyOpa.p = &temp_s0_3[1];
     temp_s0_3->words.w0 = 0xDA380003;
     temp_s0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v1_3 = temp_s5->polyOpa.p;
-    temp_s5->polyOpa.p = temp_v1_3 + 8;
+    temp_s5->polyOpa.p = &temp_v1_3[1];
     temp_v1_3->words.w0 = 0xDE000000;
     temp_v1_3->words.w1 = (u32) &D_060010F0;
     if (func_808F1C84 == this->actionFunc) {
         SysMatrix_InsertRotation(-0x4000, (s16) (this->actor.shape.rot.y - this->actor.home.rot.y), 0, 1);
         temp_s0_4 = temp_s5->polyOpa.p;
-        temp_s5->polyOpa.p = temp_s0_4 + 8;
+        temp_s5->polyOpa.p = &temp_s0_4[1];
         temp_s0_4->words.w0 = 0xDA380003;
         temp_s0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1_4 = temp_s5->polyOpa.p;
-        temp_s5->polyOpa.p = temp_v1_4 + 8;
+        temp_s5->polyOpa.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xDE000000;
         temp_v1_4->words.w1 = (u32) &D_06001828;
         SysMatrix_GetStateTranslation(&this->unk_220);

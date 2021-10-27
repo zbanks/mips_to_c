@@ -152,7 +152,7 @@ loop_36:
         } else {
             phi_v0 = __osContRamWrite(pfs->queue, pfs->channel, temp_t3, phi_s1, 0);
         }
-        phi_s1 += 0x20;
+        phi_s1 = &phi_s1[32];
         if (phi_v0 != 0) {
             return phi_v0;
         }

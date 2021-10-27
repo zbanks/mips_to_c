@@ -21,6 +21,13 @@ typedef struct ObjBoat {
     /* 0x164 */ void *unk_164;                      /* inferred */
 } ObjBoat;                                          /* size = 0x168 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ char pad_12[0x1];
+    /* 0x13 */ u8 unk_13;                           /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_ObjBoat_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -229,7 +236,7 @@ void func_80B9B428(Actor *this, GlobalContext *globalCtx) {
         temp_a3 = globalCtx->csCtx.npcActions[temp_v0];
         temp_v1 = temp_a3->unk0;
         phi_v1 = temp_v1;
-        if (temp_v1 != this->unk_15F) {
+        if (temp_v1 != this[1].home.unk_13) {
             this->shape.rot.x = (s16) temp_a3->unk_6;
             temp_v0_2 = temp_a3->unk0;
             phi_v0_2 = (u8) temp_v0_2;
@@ -240,7 +247,7 @@ void func_80B9B428(Actor *this, GlobalContext *globalCtx) {
                 if (temp_v0_2 == 3) {
                     phi_v0 = &temp_a0_3[temp_v0_3->unk1];
                 }
-                this->unk_163 = (u8) phi_v0->count;
+                this[1].targetMode = (s8) phi_v0->count;
                 sp44 = temp_a3;
                 temp_v0_4 = Lib_SegmentedToVirtual(phi_v0->points);
                 this->unk_164 = temp_v0_4;
@@ -256,14 +263,14 @@ void func_80B9B428(Actor *this, GlobalContext *globalCtx) {
                 this->speedXZ = phi_f6 * 0.005493164f;
                 phi_v0_2 = (u8) temp_a3->unk0;
             }
-            this->unk_15F = phi_v0_2;
+            this[1].home.unk_13 = phi_v0_2;
             return;
         }
         if (temp_v1 != 1) {
             sp44 = temp_a3;
             Math_Vec3s_ToVec3f((Vec3f *) &sp34, (Vec3s *) this->unk_164);
             temp_v0_5 = this->unk_15C;
-            if (((s32) temp_v0_5 < (s32) this->unk_163) && (Math_Vec3f_StepTo((Vec3f *) &this->world, (Vec3f *) &sp34, this->speedXZ) < this->speedXZ)) {
+            if (((s32) temp_v0_5 < (s32) (u8) this[1].targetMode) && (Math_Vec3f_StepTo((Vec3f *) &this->world, (Vec3f *) &sp34, this->speedXZ) < this->speedXZ)) {
                 this->unk_15C = (u8) (temp_v0_5 + 1);
                 this->unk_164 = (void *) (this->unk_164 + 6);
             }

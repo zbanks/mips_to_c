@@ -66,7 +66,7 @@ void EffectEnIceBlock_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
     if (func_80A22D40(this, globalCtx) != 0) {
         sp2C = (f32) this->regs[1] * 0.1f * 0.01f;
         temp_v0 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0 + 8;
+        temp_s2->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060018;
         temp_v0->words.w1 = (u32) globalCtx->objectCtx.status[this->regs[0]].segment;
         func_8012C2DC(globalCtx->state.gfxCtx);
@@ -75,11 +75,11 @@ void EffectEnIceBlock_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
         SysMatrix_InsertZRotation_s(this->regs[2], 1);
         temp_v0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_2 + 8;
+        temp_s2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDA380003;
         temp_v0_2->words.w1 = Matrix_NewMtx(temp_s2);
         temp_v0_3 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_3 + 8;
+        temp_s2->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = (u32) &D_06000A38;
     }

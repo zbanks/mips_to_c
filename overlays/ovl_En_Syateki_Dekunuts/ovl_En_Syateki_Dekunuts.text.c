@@ -297,17 +297,17 @@ void func_80A2BFC4(void *arg0) {
     sp18 = (f32) (arg0->unk_1E4 + (arg0->unk_1E8 * 6))->unk_2;
     sp1C = (f32) (arg0->unk_1E4 + (arg0->unk_1E8 * 6))->unk_4;
     sp4.unk_0 = (f32) sp14.unk_0;
-    sp4.unk_4 = (s32) sp14.unk_4;
-    sp4.unk_8 = (s32) sp14.unk_8;
+    sp4.unk_4 = (f32) (&sp14)[1];
+    sp4.unk_8 = (f32) (&sp14)[2];
     arg0->unk_108 = (f32) sp4.unk_0;
     temp_v1 = arg0->unk_92;
-    arg0->unk_10C = (s32) sp4.unk_4;
-    arg0->unk_110 = (s32) sp4.unk_8;
+    arg0->unk_10C = (f32) sp4.unk_4;
+    arg0->unk_110 = (f32) sp4.unk_8;
     arg0->unk_24 = (f32) sp4.unk_0;
-    arg0->unk_28 = (s32) sp4.unk_4;
+    arg0->unk_28 = (f32) sp4.unk_4;
     arg0->unk_32 = temp_v1;
     arg0->unk_BE = temp_v1;
-    arg0->unk_2C = (s32) sp4.unk_8;
+    arg0->unk_2C = (f32) sp4.unk_8;
     arg0->unk_1EE = (s16) (0x8C - (temp_v0->unk_27C * 0x14));
     if ((temp_v0->unk_27C & 1) != 0) {
         arg0->unk_1F0 = 1;
@@ -358,9 +358,9 @@ void func_80A2C1AC(Actor *arg0) {
     temp_a0 = arg0;
     arg0 = arg0;
     Audio_PlayActorSound2(temp_a0, 0x387CU);
-    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A2CAE8, 0);
+    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A2CAE8, 0);
     temp_v0 = arg0->yawTowardsPlayer;
-    arg0->unk_188 = func_80A2C208;
+    arg0[1].focus.pos.z = (bitwise f32) func_80A2C208;
     arg0->shape.rot.y = temp_v0;
     arg0->world.rot.y = temp_v0;
 }
@@ -469,9 +469,9 @@ void func_80A2C4D0(Actor *arg0, GlobalContext *arg1) {
     }
     Audio_PlayActorSound2(arg0, 0x3880U);
     arg0->unk_1E2 = 0;
-    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) D_80A2CAE8, 4);
+    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) D_80A2CAE8, 4);
     arg0->unk_1D8 = 0xA0;
-    arg0->unk_188 = func_80A2C5DC;
+    arg0[1].focus.pos.z = (bitwise f32) func_80A2C5DC;
 }
 
 void func_80A2C5DC(EnSyatekiDekunuts *this, GlobalContext *globalCtx) {
@@ -586,11 +586,11 @@ void EnSyatekiDekunuts_Draw(Actor *thisx, GlobalContext *globalCtx) {
                 SysMatrix_InsertTranslation(temp_f20, temp_f22, temp_f24, 0);
                 Matrix_Scale(0.02f, 0.02f, 0.02f, 1);
                 temp_v0_2 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_2 + 8;
+                temp_s0->polyOpa.p = &temp_v0_2[1];
                 temp_v0_2->words.w0 = 0xDA380003;
                 temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v0_3 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_3 + 8;
+                temp_s0->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = (u32) &D_06001E50;
                 temp_v0_3->words.w0 = 0xDE000000;
                 temp_s2 = phi_s2 + 1;

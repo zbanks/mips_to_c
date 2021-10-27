@@ -229,7 +229,7 @@ f32 func_80A667F0(void *arg0, ObjDriftice *arg1) {
         temp_f20 = phi_f20 + (Math_SinS(phi_s0->unk_2) * phi_s0->unk_8);
         phi_s0 += 0x14;
         phi_s2 = temp_s2;
-        phi_s3 += 0x14;
+        phi_s3 = &phi_s3[5];
         phi_f20 = temp_f20;
     } while (temp_s2 != 3);
     return temp_f20;
@@ -259,7 +259,7 @@ void func_80A66930(s16 *arg0, ObjDriftice *arg1, s16 *arg2, s16 *arg3) {
             phi_f20 = 0.01f;
         }
         Math_StepToS(arg0 + 2, (s16) (s32) (1200.0f * phi_f20), 0x64);
-        Math_StepToS(arg0 + 6, (s16) (s32) (Math_CosS((s16) (s32) ((f32) arg0->unk_4 * 6.5536f)) * (120.0f * phi_f20)), 0x28);
+        Math_StepToS(arg0 + 6, (s16) (s32) (Math_CosS((s16) (s32) ((f32) arg0[2] * 6.5536f)) * (120.0f * phi_f20)), 0x28);
         Math_StepToF(arg0 + 8, 1.0f, 0.02f);
         phi_s0 = (s16) (s32) (2500.0f * phi_f20);
     } else {
@@ -268,35 +268,35 @@ void func_80A66930(s16 *arg0, ObjDriftice *arg1, s16 *arg2, s16 *arg3) {
         Math_StepToF(arg0 + 8, 0.0f, 0.02f);
         phi_s0 = 0;
     }
-    Math_ScaledStepToS(arg0, arg1->actor.yawTowardsPlayer, arg0->unk_2);
+    Math_ScaledStepToS(arg0, arg1->actor.yawTowardsPlayer, arg0[1]);
     *arg3 = arg0->unk_0;
-    Math_ScaledStepToS(arg0 + 4, phi_s0, arg0->unk_6);
-    temp_s0 = arg0 + 0xC;
+    Math_ScaledStepToS(&arg0[2], phi_s0, arg0[3]);
+    temp_s0 = &arg0[6];
     phi_s3 = arg0;
     phi_s0_2 = temp_s0;
     phi_s2 = 0;
-    phi_s4 = (f32 *) (temp_s0 + 8);
+    phi_s4 = (f32 *) &temp_s0[4];
     do {
-        if ((s32) phi_s3->unk_C > 0) {
+        if ((s32) phi_s3[6] > 0) {
             phi_s0_2->unk_0 += -1;
         } else {
             temp_s1 = (phi_s2 * 0xC) + &D_80A676B8;
             phi_s0_2->unk_0 = Rand_S16Offset(0x1E, 0x46);
-            phi_s0_2->unk_4 = Rand_S16Offset(temp_s1->unk_0, temp_s1->unk_2);
+            phi_s0_2[2] = Rand_S16Offset(temp_s1->unk_0, temp_s1->unk_2);
             phi_s0_2->unk_C = (f32) ((Rand_ZeroOne() * temp_s1->unk_8) + temp_s1->unk_4);
             phi_s0_2->unk_10 = (f32) (fabsf(phi_s0_2->unk_C - phi_s0_2->unk_8) * 0.033333335f);
         }
-        phi_s0_2->unk_2 = (s16) (phi_s0_2->unk_2 + phi_s0_2->unk_4);
+        phi_s0_2[1] += phi_s0_2[2];
         Math_StepToF(phi_s4, phi_s0_2->unk_C, phi_s0_2->unk_10);
         temp_s2 = phi_s2 + 1;
-        temp_f22 = phi_f22 + (Math_SinS(phi_s0_2->unk_2) * phi_s0_2->unk_8);
+        temp_f22 = phi_f22 + (Math_SinS(phi_s0_2[1]) * phi_s0_2->unk_8);
         phi_s3 += 0x14;
         phi_s0_2 += 0x14;
         phi_s2 = temp_s2;
-        phi_s4 += 0x14;
+        phi_s4 = &phi_s4[5];
         phi_f22 = temp_f22;
     } while (temp_s2 != 2);
-    *arg2 = (s32) (temp_f22 * arg0->unk_8) + arg0->unk_4;
+    *arg2 = (s32) (temp_f22 * arg0->unk_8) + arg0[2];
 }
 
 void func_80A66C4C(void *arg0, ObjDriftice *arg1, s16 *arg2, s16 *arg3) {
@@ -345,7 +345,7 @@ void func_80A66C4C(void *arg0, ObjDriftice *arg1, s16 *arg2, s16 *arg3) {
         phi_s3 += 0x14;
         phi_s0 += 0x14;
         phi_s2 = temp_s2;
-        phi_s4 += 0x14;
+        phi_s4 = &phi_s4[5];
         phi_f20 = temp_f20;
     } while (temp_s2 != 3);
     *arg2 = (s16) (s32) temp_f20;

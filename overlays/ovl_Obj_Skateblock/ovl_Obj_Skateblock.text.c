@@ -9,6 +9,12 @@ typedef struct ObjSkateblock {
     /* 0x1C2 */ char pad_1C2[0x2];                  /* maybe part of unk_1C1[3]? */
 } ObjSkateblock;                                    /* size = 0x1C4 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_ObjSkateblock_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -241,7 +247,7 @@ s32 func_80A21150(f32 *arg0) {
     s32 temp_v0;
     s32 phi_v0;
 
-    temp_f2 = arg0->unk_148;
+    temp_f2 = arg0[82];
     if (fabsf(temp_f2) > 0.1f) {
         if (temp_f2 > 0.0f) {
             phi_v0 = (arg0->unk_150 + 0x2000) << 0x10;
@@ -271,7 +277,7 @@ void func_80A211F4(f32 *arg0, s32 arg1) {
     s32 phi_v0;
 
     phi_v0 = 0;
-    if (arg0->unk_148 > 0.0f) {
+    if (arg0[82] > 0.0f) {
         phi_v0 = 1;
     }
     if ((arg1 == 0) && (phi_v0 != 0)) {
@@ -314,9 +320,9 @@ void func_80A212F0(f32 *arg0, f32 *arg1, s16 arg2) {
 
     sp1C = Math_SinS(arg2);
     temp_f0 = Math_CosS(arg2);
-    arg0->unk_0 = (arg1->unk_8 * sp1C) + (arg1->unk_0 * temp_f0);
-    arg0->unk_4 = (f32) arg1->unk_4;
-    arg0->unk_8 = (f32) ((arg1->unk_8 * temp_f0) - (arg1->unk_0 * sp1C));
+    arg0->unk_0 = (arg1[2] * sp1C) + (arg1->unk_0 * temp_f0);
+    arg0[1] = arg1[1];
+    arg0[2] = (arg1[2] * temp_f0) - (arg1->unk_0 * sp1C);
 }
 
 s32 func_80A21370(f32 *arg0, f32 *arg1) {
@@ -343,7 +349,7 @@ s32 func_80A21370(f32 *arg0, f32 *arg1) {
     s32 phi_v0_2;
     s32 phi_t0_2;
 
-    sp90 = arg0->unk_28 + 40.0f;
+    sp90 = arg0[10] + 40.0f;
     sp70 = arg1 + 0x830;
     temp_fp = &sp8C;
     phi_s1 = arg0;
@@ -356,13 +362,13 @@ s32 func_80A21370(f32 *arg0, f32 *arg1) {
     phi_f20 = -32000.0f;
     phi_s3 = 0;
     do {
-        phi_s1->unk_184 = 0;
-        phi_s1->unk_188 = -32000.0f;
-        phi_s1->unk_18C = 0x32;
-        sp8C = phi_s4->unk_0 + (phi_s5->unk_0 * arg0->unk_58) + arg0->unk_24;
+        phi_s1[97] = 0.0f;
+        phi_s1[98] = -32000.0f;
+        phi_s1[99] = 7e-44.0f;
+        sp8C = phi_s4->unk_0 + (phi_s5->unk_0 * arg0[22]) + arg0[9];
         sp88 = phi_t0;
         sp98 = phi_v0;
-        sp94 = phi_s4->unk_4 + (phi_s5->unk_4 * arg0->unk_60) + arg0->unk_2C;
+        sp94 = phi_s4->unk_4 + (phi_s5->unk_4 * arg0[24]) + arg0[11];
         temp_f0 = func_800C4240(sp70, phi_s2, phi_s6, arg0, temp_fp, 0.0f);
         phi_s2->unk_4 = temp_f0;
         phi_s1 += 0xC;
@@ -387,8 +393,8 @@ s32 func_80A21370(f32 *arg0, f32 *arg1) {
     } while (temp_s3 != 5);
     if (phi_v0_2 >= 0) {
         temp_v1 = arg0 + (phi_v0_2 * 0xC);
-        arg0->unk_80 = (s32) temp_v1->unk_184;
-        arg0->unk_88 = (f32) temp_v1->unk_188;
+        arg0[32] = temp_v1->unk_184;
+        arg0[34] = temp_v1->unk_188;
         arg0->unk_85 = (s8) temp_v1->unk_18C;
     }
     return phi_t0_2;
@@ -416,11 +422,11 @@ s32 func_80A21548(f32 *arg0) {
     temp_a2->unk_1C1 = (u8) (temp_a2->unk_1C1 & 0xFFFB);
     arg0 = temp_a2;
     if (func_80A21370(temp_a0, temp_a2) != 0) {
-        temp_f12 = arg0->unk_28 - 10.0f;
+        temp_f12 = arg0[10] - 10.0f;
         phi_f2 = -32000.0f;
         phi_v1 = 0;
-        if (temp_f12 < arg0->unk_188) {
-            temp_f0 = arg0->unk_188;
+        if (temp_f12 < arg0[98]) {
+            temp_f0 = arg0[98];
             if (temp_f0 > -32000.0f) {
                 phi_f2 = temp_f0;
                 phi_v1 = 1;
@@ -460,9 +466,9 @@ s32 func_80A21548(f32 *arg0) {
             }
         }
         if (phi_v1 != 0) {
-            arg0->unk_28 = phi_f2_5;
+            arg0[10] = phi_f2_5;
             arg0->unk_1C1 = (u8) (arg0->unk_1C1 | 4);
-            arg0->unk_68 = 0.0f;
+            arg0[26] = 0.0f;
         }
         return phi_v1;
     }
@@ -509,7 +515,7 @@ s32 func_80A216D4(f32 *arg0, f32 *arg1, f32 arg2, Vec3f *arg3) {
 
     temp_a2 = arg0->unk_150;
     phi_a2 = temp_a2;
-    if (arg0->unk_148 < 0.0f) {
+    if (arg0[82] < 0.0f) {
         phi_a2 = (s16) (temp_a2 - 0x8000);
     }
     sp96 = phi_a2;
@@ -518,7 +524,7 @@ s32 func_80A216D4(f32 *arg0, f32 *arg1, f32 arg2, Vec3f *arg3) {
     temp_f0 = Math3D_Distance(arg0 + 0x24, arg0 + 0x108);
     sp9C = 0;
     temp_s3 = &spD4;
-    temp_f2 = temp_f0 + (300.0f * arg0->unk_60) + arg2;
+    temp_f2 = temp_f0 + (300.0f * arg0[24]) + arg2;
     temp_f24 = temp_f2 * spE8;
     temp_s5 = &spC8;
     temp_f26 = temp_f2 * spE4;
@@ -527,18 +533,18 @@ s32 func_80A216D4(f32 *arg0, f32 *arg1, f32 arg2, Vec3f *arg3) {
     phi_f20 = 3.4028235e38f;
     do {
         temp_a1 = &spBC;
-        spBC = phi_s1->unk_0 + (phi_s0->unk_0 * arg0->unk_58);
+        spBC = phi_s1->unk_0 + (phi_s0->unk_0 * arg0[22]);
         spC4 = 0.0f;
-        spC0 = phi_s1->unk_4 + (phi_s0->unk_4 * arg0->unk_5C);
+        spC0 = phi_s1->unk_4 + (phi_s0->unk_4 * arg0[23]);
         func_80A212F0(temp_s3, temp_a1, sp96);
-        temp_f8 = spD4 + arg0->unk_108;
+        temp_f8 = spD4 + arg0[66];
         spD4 = temp_f8;
-        temp_f16 = spD8 + arg0->unk_10C;
+        temp_f16 = spD8 + arg0[67];
         temp_a2_2 = temp_s5;
         spD8 = temp_f16;
         spCC = temp_f16;
         spC8 = temp_f24 + temp_f8;
-        temp_f18 = spDC + arg0->unk_110;
+        temp_f18 = spDC + arg0[68];
         temp_f4 = temp_f26 + temp_f18;
         spDC = temp_f18;
         spD0 = temp_f4;
@@ -606,7 +612,7 @@ s32 func_80A21990(f32 *arg0, s32 arg1, void *arg2) {
 
     temp_s6 = arg0->unk_150;
     phi_s6 = temp_s6;
-    if (arg0->unk_148 < 0.0f) {
+    if (arg0[82] < 0.0f) {
         phi_s6 = (s16) (temp_s6 - 0x8000);
     }
     sp100 = Math_SinS(phi_s6);
@@ -614,7 +620,7 @@ s32 func_80A21990(f32 *arg0, s32 arg1, void *arg2) {
     temp_f0 = Math3D_Distance(arg0 + 0x24, arg0 + 0x108);
     spB4 = 0;
     temp_s3 = &spEC;
-    temp_f12 = -(temp_f0 + (300.0f * arg0->unk_60) + 2.0f);
+    temp_f12 = -(temp_f0 + (300.0f * arg0[24]) + 2.0f);
     temp_f28 = temp_f12 * sp100;
     temp_f30 = temp_f12 * temp_f26;
     phi_s2 = D_80A22AC4;
@@ -624,16 +630,16 @@ s32 func_80A21990(f32 *arg0, s32 arg1, void *arg2) {
         spDC = 0.0f;
         temp_a1 = &spD4;
         spD8 = -10.0f;
-        spD4 = *phi_s2 + (*phi_s1 * arg0->unk_58);
+        spD4 = *phi_s2 + (*phi_s1 * arg0[22]);
         func_80A212F0(temp_s3, temp_a1, phi_s6);
-        temp_f10 = spEC + arg0->unk_24;
+        temp_f10 = spEC + arg0[9];
         spEC = temp_f10;
-        temp_f18 = spF0 + arg0->unk_28;
+        temp_f18 = spF0 + arg0[10];
         temp_a2 = &spE0;
         spF0 = temp_f18;
         spE4 = temp_f18;
         spE0 = temp_f28 + temp_f10;
-        temp_f8 = spF4 + arg0->unk_2C;
+        temp_f8 = spF4 + arg0[11];
         temp_f4 = temp_f30 + temp_f8;
         spF4 = temp_f8;
         spE8 = temp_f4;
@@ -642,8 +648,8 @@ s32 func_80A21990(f32 *arg0, s32 arg1, void *arg2) {
             if (temp_f0_2 < phi_f22) {
                 spB4 = 1;
                 arg2->unk_4 = 0.0f;
-                arg2->unk_0 = (f32) ((spC8 - spEC) + (300.0f * arg0->unk_60 * sp100));
-                arg2->unk_8 = (f32) ((spD0 - spF4) + (300.0f * arg0->unk_60 * temp_f26));
+                arg2->unk_0 = (f32) ((spC8 - spEC) + (300.0f * arg0[24] * sp100));
+                arg2->unk_8 = (f32) ((spD0 - spF4) + (300.0f * arg0[24] * temp_f26));
                 phi_f22 = temp_f0_2;
             }
         }
@@ -667,9 +673,9 @@ s32 func_80A21990(f32 *arg0, s32 arg1, void *arg2) {
 
 void func_80A21C88(f32 *arg0, s16 arg1) {
     if ((arg1 == 0) || (arg1 == 1)) {
-        arg0->unk_16C = (void *) (arg0 + 0x24);
+        arg0[91] = arg0 + 0x24;
     } else {
-        arg0->unk_16C = (void *) (arg0 + 0x2C);
+        arg0[91] = arg0 + 0x2C;
     }
     arg0->unk_170 = arg1;
 }
@@ -677,20 +683,20 @@ void func_80A21C88(f32 *arg0, s16 arg1) {
 void func_80A21CB4(f32 *arg0, f32 *arg1) {
     void *temp_v0;
 
-    temp_v0 = arg1->unk_1CCC;
+    temp_v0 = arg1[1843];
     temp_v0->unk_A70 = (s32) (temp_v0->unk_A70 & ~0x10);
-    arg0->unk_148 = 0.0f;
+    arg0[82] = 0.0f;
 }
 
 void func_80A21CD8(f32 *arg0) {
     f32 temp_f2;
 
-    temp_f2 = arg0->unk_78;
-    arg0->unk_68 = (f32) (arg0->unk_68 + arg0->unk_74);
-    if (arg0->unk_68 < temp_f2) {
-        arg0->unk_68 = temp_f2;
+    temp_f2 = arg0[30];
+    arg0[26] += arg0[29];
+    if (arg0[26] < temp_f2) {
+        arg0[26] = temp_f2;
     }
-    arg0->unk_28 = (f32) (arg0->unk_28 + arg0->unk_68);
+    arg0[10] += arg0[26];
 }
 
 void func_80A21D1C(Actor *arg0) {
@@ -777,7 +783,7 @@ void func_80A21F74(Actor *arg0, GlobalContext *arg1) {
     temp_v1 = arg0->unk_150;
     phi_v1 = temp_v1;
     phi_s1 = 0;
-    if (arg0->unk_148 < 0.0f) {
+    if (arg0[1].flags < 0.0f) {
         phi_v1 = (s16) (temp_v1 - 0x8000);
     }
     arg0->unk_17C = (s16) (arg0->unk_17C + 1);
@@ -793,13 +799,13 @@ void func_80A21F74(Actor *arg0, GlobalContext *arg1) {
         spA0 = 12.0f;
         do {
             if (!(phi_f22 < (Rand_ZeroOne() * 1.2f))) {
-                arg0->unk_180 = (f32) (arg0->unk_180 + Rand_ZeroOne());
-                temp_f2 = arg0->unk_180;
+                arg0[1].focus.pos.x += Rand_ZeroOne();
+                temp_f2 = arg0[1].focus.pos.x;
                 if (temp_f2 > 1.0f) {
-                    arg0->unk_180 = (f32) (temp_f2 - 1.0f);
+                    arg0[1].focus.pos.x = temp_f2 - 1.0f;
                 }
                 temp_a1 = &sp9C;
-                sp9C = (arg0->unk_180 - 0.5f) * 600.0f * arg0->scale.x;
+                sp9C = (arg0[1].focus.pos.x - 0.5f) * 600.0f * arg0->scale.x;
                 spA4 = (arg0->scale.z * -300.0f) + 4.0f;
                 func_80A212F0(temp_s2, temp_a1, sp8A);
                 spA8 += arg0->world.pos.x;
@@ -872,11 +878,11 @@ void func_80A22334(f32 *arg0, f32 *arg1) {
 }
 
 void func_80A2244C(f32 *arg0) {
-    arg0->unk_15C = func_80A224A4;
+    arg0[87] = func_80A224A4;
     arg0->unk_17A = 0xF;
-    arg0->unk_168 = (f32) *(&D_80A22AF8 + (arg0->unk_170 * 4));
-    arg0->unk_164 = 0.0f;
-    arg0->unk_68 = (f32) arg0->unk_74;
+    arg0[90] = *(&D_80A22AF8 + (arg0->unk_170 * 4));
+    arg0[89] = 0.0f;
+    arg0[26] = arg0[29];
     func_80A21F68();
 }
 
@@ -889,8 +895,8 @@ void func_80A224A4(Actor *arg0, f32 *arg1) {
 
     sp28 = 0;
     sp24 = 0;
-    Math_StepToF(arg0 + 0x164, arg0->unk_168, 0.75f);
-    temp_v1 = arg0->unk_16C;
+    Math_StepToF(arg0 + 0x164, arg0[1].world.pos.x, 0.75f);
+    temp_v1 = arg0[1].world.pos.y;
     *temp_v1 += arg0->unk_164;
     if (func_80A21934(arg0, arg1) != 0) {
         Audio_PlayActorSound2(arg0, 0x2835U);
@@ -908,11 +914,11 @@ void func_80A224A4(Actor *arg0, f32 *arg1) {
     } else if (sp28 != 0) {
         func_80A22308((ObjSkateblock *) arg0);
     }
-    temp_v0 = arg0->unk_17A;
+    temp_v0 = arg0[1].world.unk_12;
     if ((s32) temp_v0 > 0) {
-        arg0->unk_17A = (s16) (temp_v0 - 1);
+        arg0[1].world.unk_12 = temp_v0 - 1;
     }
-    if ((sp24 != 0) || (sp28 != 0) || (arg0->unk_17A == 1)) {
+    if ((sp24 != 0) || (sp28 != 0) || (arg0[1].world.unk_12 == 1)) {
         func_80A21CB4((f32 *) arg0, arg1);
     }
     temp_v0_2 = arg0->unk_1C1;
@@ -940,9 +946,9 @@ void func_80A2264C(f32 *arg0, f32 *arg1) {
     func_80A21CD8(arg0);
     temp_ret = func_80A21548(arg0, arg1);
     temp_v0 = temp_ret;
-    if (((temp_v0 != 0) || ((arg0->unk_160 - arg0->unk_28) > 300.0f)) && (sp20 = temp_v0, (func_800C9B40((CollisionContext *) (arg1 + 0x830), arg0->unk_80, (s32) arg0->unk_85) == 0xC))) {
-        func_800C62BC((GlobalContext *) arg1, (DynaCollisionContext *) (arg1 + 0x880), arg0->unk_144);
-        arg0->unk_13C = 0;
+    if (((temp_v0 != 0) || ((arg0[88] - arg0[10]) > 300.0f)) && (sp20 = temp_v0, (func_800C9B40((CollisionContext *) &arg1[524], (bitwise CollisionPoly *) arg0[32], (s32) arg0->unk_85) == 0xC))) {
+        func_800C62BC((GlobalContext *) arg1, (DynaCollisionContext *) &arg1[544], (bitwise s32) arg0[81]);
+        arg0[79] = 0.0f;
         func_80A22728(arg0);
         return;
     }
@@ -952,7 +958,7 @@ void func_80A2264C(f32 *arg0, f32 *arg1) {
 }
 
 void func_80A22728(f32 *arg0) {
-    arg0->unk_15C = func_80A2273C;
+    arg0[87] = func_80A2273C;
 }
 
 void func_80A2273C(DynaPolyActor *arg0, ? arg1) {
@@ -980,9 +986,9 @@ void func_80A227C0(f32 *arg0, f32 *arg1) {
         arg0->unk_17A = (s16) (temp_v0 - 1);
         return;
     }
-    func_800C6314((GlobalContext *) arg1, (DynaCollisionContext *) (arg1 + 0x880), arg0->unk_144);
-    arg0->unk_13C = ObjSkateblock_Draw;
-    if (Math_StepToF(arg0 + 0x28, arg0->unk_C, 1.0f) != 0) {
+    func_800C6314((GlobalContext *) arg1, (DynaCollisionContext *) &arg1[544], (bitwise s32) arg0[81]);
+    arg0[79] = (bitwise f32) ObjSkateblock_Draw;
+    if (Math_StepToF(&arg0[10], arg0[3], 1.0f) != 0) {
         func_80A22308((ObjSkateblock *) arg0);
     }
     if (func_800CAF70((DynaPolyActor *) arg0) != 0) {
@@ -1013,16 +1019,16 @@ void ObjSkateblock_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     AnimatedMat_DrawStep(globalCtx, (AnimatedMaterial *) D_80A22A18, 0U);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA00FFFF;
     temp_v0_2->words.w1 = (sp2C->unk_0 << 0x18) | (sp2C->unk_1 << 0x10) | (sp2C->unk_2 << 8) | 0xFF;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_050182A8;
     func_80A21E9C(this, globalCtx);

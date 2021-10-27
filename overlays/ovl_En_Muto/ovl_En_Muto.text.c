@@ -345,7 +345,7 @@ s32 func_80BE8328(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
         arg4->x += arg5->unk_266;
     }
     if (arg1 == 0xF) {
-        arg4->x += arg5->unk_25A;
+        arg4->x += arg5[1].textId;
         arg4->z += arg5->unk_258;
     }
     return 0;

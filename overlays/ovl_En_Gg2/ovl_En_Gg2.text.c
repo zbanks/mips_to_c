@@ -211,7 +211,7 @@ void func_80B3AC50(EnGg2 *arg0) {
     sp40.unk_0 = (s32) temp_v0->world.pos.x;
     sp40.unk_4 = (s32) temp_v0->world.pos.y;
     sp40.unk_8 = (s32) temp_v0->world.pos.z;
-    sp44 = temp_v0->unk_C44 + 3.0f;
+    sp44 = temp_v0[9].shape.feetPos[1].x + 3.0f;
     sp34.unk_0 = (s32) arg0->actor.world.pos.x;
     sp34.unk_4 = (s32) arg0->actor.world.pos.y;
     sp34.unk_8 = (s32) arg0->actor.world.pos.z;
@@ -331,21 +331,21 @@ void func_80B3B120(Actor *arg0, GlobalContext *arg1) {
     s32 temp_v0;
     u8 *temp_t6;
 
-    temp_t6 = arg0->unk_1D8;
+    temp_t6 = arg0[1].xyzDistToPlayerSq;
     sp2C = temp_t6;
     if (temp_t6 != 0) {
-        func_80B3B7E4(temp_t6, arg0->unk_1DC, arg0 + 0x24, &sp30);
+        func_80B3B7E4(temp_t6, arg0[1].xzDistToPlayer, arg0 + 0x24, &sp30);
         Math_SmoothStepToS(arg0 + 0x32, sp32, 4, 0x3E8, (s16) 1);
         arg0->shape.rot.y = arg0->world.rot.y;
         Math_SmoothStepToS(arg0 + 0xBC, sp30, 4, 0x3E8, (s16) 1);
         arg0->world.rot.x = (s16) -(s32) arg0->shape.rot.x;
-        if (func_80B3B648(arg0, arg0->unk_1D8, arg0->unk_1DC) != 0) {
-            temp_v0 = arg0->unk_1DC;
-            if (temp_v0 >= (*arg0->unk_1D8 - 2)) {
+        if (func_80B3B648(arg0, arg0[1].xyzDistToPlayerSq, arg0[1].xzDistToPlayer) != 0) {
+            temp_v0 = arg0[1].xzDistToPlayer;
+            if (temp_v0 >= (*arg0[1].xyzDistToPlayerSq - 2)) {
                 arg0->unk_1D4 = func_80B3AE60;
                 arg0->speedXZ = 0.0f;
             } else {
-                arg0->unk_1DC = (s32) (temp_v0 + 1);
+                arg0[1].xzDistToPlayer = temp_v0 + 1;
             }
         }
         Math_ApproachF(arg0 + 0x70, 5.0f, 0.2f, 1.0f);
@@ -366,9 +366,9 @@ void func_80B3B21C(Actor *arg0, GlobalContext *arg1) {
 
 void func_80B3B294(Actor *arg0, GlobalContext *arg1) {
     s16 sp30;
+    f32 temp_v0_2;
     s16 temp_v0;
     s16 temp_v0_3;
-    s32 temp_v0_2;
     u8 *temp_a0;
     u8 temp_t0;
     u8 temp_t1;
@@ -404,17 +404,17 @@ void func_80B3B294(Actor *arg0, GlobalContext *arg1) {
             gSaveContext.weekEventReg[20] = temp_t4;
             gSaveContext.weekEventReg[20] = temp_t4 | 0x10;
         }
-        temp_a0 = arg0->unk_1D8;
+        temp_a0 = arg0[1].xyzDistToPlayerSq;
         if (temp_a0 != 0) {
-            func_80B3B7E4(temp_a0, arg0->unk_1DC, arg0 + 0x24, &sp30);
+            func_80B3B7E4(temp_a0, arg0[1].xzDistToPlayer, arg0 + 0x24, &sp30);
             Math_SmoothStepToS(arg0 + 0x32, sp32, 4, 0x3E8, (s16) 1);
             arg0->shape.rot.y = arg0->world.rot.y;
             Math_SmoothStepToS(arg0 + 0xBC, sp30, 4, 0x3E8, (s16) 1);
             arg0->world.rot.x = (s16) -(s32) arg0->shape.rot.x;
-            if (func_80B3B648(arg0, arg0->unk_1D8, arg0->unk_1DC) != 0) {
-                temp_v0_2 = arg0->unk_1DC;
-                if (temp_v0_2 < (*arg0->unk_1D8 - 1)) {
-                    arg0->unk_1DC = (s32) (temp_v0_2 + 1);
+            if (func_80B3B648(arg0, arg0[1].xyzDistToPlayerSq, arg0[1].xzDistToPlayer) != 0) {
+                temp_v0_2 = arg0[1].xzDistToPlayer;
+                if ((bitwise s32) temp_v0_2 < (*arg0[1].xyzDistToPlayerSq - 1)) {
+                    arg0[1].xzDistToPlayer = (bitwise f32) ((bitwise s32) temp_v0_2 + 1);
                 } else {
                     arg0->unk_2F1 = 1U;
                     temp_v0_3 = arg1->sceneNum;
@@ -535,10 +535,10 @@ f32 func_80B3B7E4(u8 *arg0, s32 arg1, Vec3f *arg2, s16 *arg3) {
     if (arg0 != 0) {
         temp_v1 = (arg1 * 6) + Lib_SegmentedToVirtual(arg0->unk_4);
         sp20 = (f32) temp_v1->unk_0;
-        sp24 = (f32) temp_v1->unk_2;
-        sp28 = (f32) temp_v1->unk_4;
+        sp24 = (f32) temp_v1[1];
+        sp28 = (f32) temp_v1[2];
     }
-    arg3->unk_2 = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
+    arg3[1] = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
     arg3->unk_0 = Math_Vec3f_Pitch(arg2, (Vec3f *) &sp20);
     return sp24 - arg2->y;
 }
@@ -579,7 +579,7 @@ void EnGg2_Init(Actor *thisx, GlobalContext *globalCtx) {
     u8 temp_v0_2;
     EnGg2 *this = (EnGg2 *) thisx;
 
-    if (gSaveContext.inventory.items[gItemSlots[0x33]] == 0x33) {
+    if (gSaveContext.inventory.items[gItemSlots[51]] == 0x33) {
         Actor_MarkForDeath((Actor *) this);
         return;
     }
@@ -693,14 +693,14 @@ void EnGg2_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80B3BD44(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     s16 temp_v0;
 
-    temp_v0 = arg5->unk_2EE;
+    temp_v0 = arg5[125].x;
     if ((temp_v0 != 5) && (temp_v0 != 7)) {
         if (arg1 == 1) {
             arg1 = arg1;
-            Matrix_RotateY(arg5->unk_2F6, 1U);
+            Matrix_RotateY(arg5[126].y, 1U);
         }
         if (arg1 == 2) {
-            SysMatrix_InsertZRotation_s(arg5->unk_2F4, 1);
+            SysMatrix_InsertZRotation_s(arg5[126].x, 1);
         }
     }
     return 0;
@@ -724,7 +724,7 @@ void EnGg2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C2DC(temp_a0);
     if (((this->actor.flags & 0x80) == 0x80) || (this->unk_2F0 == 1)) {
         temp_v0 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0 + 8;
+        temp_s1->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         sp30 = temp_v0;
         sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80B3C0AC + (this->unk_2EA * 4)));

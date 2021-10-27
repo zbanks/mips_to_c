@@ -403,10 +403,10 @@ f32 func_80BECEAC(u8 *arg0, s32 arg1, Vec3f *arg2, s16 *arg3) {
     if (arg0 != 0) {
         temp_v1 = (arg1 * 6) + Lib_SegmentedToVirtual(arg0->unk_4);
         sp20 = (f32) temp_v1->unk_0;
-        sp24 = (f32) temp_v1->unk_2;
-        sp28 = (f32) temp_v1->unk_4;
+        sp24 = (f32) temp_v1[1];
+        sp28 = (f32) temp_v1[2];
     }
-    arg3->unk_2 = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
+    arg3[1] = Math_Vec3f_Yaw(arg2, (Vec3f *) &sp20);
     arg3->unk_0 = Math_Vec3f_Pitch(arg2, (Vec3f *) &sp20);
     return sp24 - arg2->y;
 }
@@ -434,7 +434,7 @@ s32 func_80BECFBC(Actor *arg0) {
                 if (temp_v0 != 3) {
                     return 0;
                 }
-                func_801149A0(0x2C, gItemSlots[0x2C]);
+                func_801149A0(0x2C, gItemSlots[44]);
                 return 7;
             }
             return 0x9A;
@@ -537,7 +537,7 @@ s32 func_80BED140(GlobalContext *arg0) {
 s32 func_80BED208(Actor *arg0) {
     u8 temp_t6;
 
-    temp_t6 = gItemSlots[0xA];
+    temp_t6 = gItemSlots[10];
     if (gSaveContext.inventory.items[temp_t6] != 0xA) {
         return 0;
     }
@@ -557,7 +557,7 @@ s32 func_80BED27C(Actor *arg0) {
     u32 temp_v1;
     u8 temp_a1;
 
-    temp_v1 = *(gUpgradeMasks + 4);
+    temp_v1 = gUpgradeMasks[1];
     temp_v0 = gSaveContext.inventory.upgrades;
     temp_a1 = gUpgradeShifts[1];
     if (((u32) (temp_v0 & temp_v1) >> temp_a1) == 3) {
@@ -613,22 +613,22 @@ void func_80BED3BC(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5600:
-            temp_a2->unk_33C = 0x15E1U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E1;
             phi_a3 = 0x15E1U & 0xFFFF;
             goto block_31;
         case 5601:
-            temp_a2->unk_33C = 0x15E2U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E2;
             phi_a3 = 0x15E2U & 0xFFFF;
             goto block_31;
         case 5602:
-            temp_a2->unk_33C = 0xFFU;
+            temp_a2[2].colChkInfo.cylYShift = 0xFF;
             phi_a3 = 0xFFU & 0xFFFF;
             goto block_31;
         case 5607:
@@ -636,18 +636,18 @@ void func_80BED3BC(Actor *arg0, GlobalContext *arg1) {
             phi_a3 = 0x15E8U & 0xFFFF;
             if ((temp_v0 & 0x20) == 0) {
                 gSaveContext.weekEventReg[61] = temp_v0 | 0x20;
-                temp_a2->unk_33C = 0x15E8U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15E8;
             } else {
-                temp_a2->unk_33C = 0x15E9U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15E9;
                 phi_a3 = 0x15E9U & 0xFFFF;
             }
             goto block_31;
         case 5608:
-            temp_a2->unk_33C = 0x15E9U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E9;
             phi_a3 = 0x15E9U & 0xFFFF;
             goto block_31;
         case 5609:
-            temp_a2->unk_33C = 0x15EAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
             phi_a3 = 0x15EAU & 0xFFFF;
             goto block_31;
         case 5610:
@@ -674,65 +674,65 @@ void func_80BED3BC(Actor *arg0, GlobalContext *arg1) {
                             arg0->unk_32C = temp_t0;
                             arg1->msgCtx.unk11F22 = 0x43;
                             arg1->msgCtx.unk12023 = 4;
-                            arg0->unk_33C = 0x15EFU;
+                            arg0[2].colChkInfo.cylYShift = 0x15EF;
                             arg0->unk_2D8 = func_80BEF360;
                             return;
                         }
                         arg0 = arg0;
                         play_sound(0x4806U);
-                        arg0->unk_33C = 0x15EEU;
+                        arg0[2].colChkInfo.cylYShift = 0x15EE;
                         phi_a2_2 = arg0;
                         goto block_27;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x15EDU;
+                    arg0[2].colChkInfo.cylYShift = 0x15ED;
                     phi_a2_2 = arg0;
                     goto block_27;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x15ECU;
+                arg0[2].colChkInfo.cylYShift = 0x15EC;
                 phi_a2_2 = arg0;
                 goto block_27;
             }
             if ((temp_v0_2 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0_2 & 0xFFEF);
-                temp_a2->unk_33C = 0x15EBU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15EB;
                 phi_a3 = 0x15EBU & 0xFFFF;
             } else {
 block_27:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_31;
         case 5604:
-            temp_a2->unk_33C = 0x15E5U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E5;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
             phi_a3 = 0x15E5U & 0xFFFF;
             goto block_31;
         case 5605:
-            temp_a2->unk_33C = 0x15E6U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E6;
             arg0 = temp_a2;
             func_80BED090(arg1, temp_a2, temp_a3);
             gSaveContext.weekEventReg[61] |= 0x10;
             arg0->unk_32C = (u16) (arg0->unk_32C | 0x20);
-            phi_a3 = arg0->unk_33C;
+            phi_a3 = arg0[2].colChkInfo.cylYShift;
             phi_a2 = arg0;
             goto block_31;
         case 5615:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             goto block_31;
         }
     } else {
         if (temp_a3 == 0) {
             phi_a3 = 0x15E7U & 0xFFFF;
             if (arg1->actorCtx.actorList[2].first->unk_14B != 3) {
-                temp_a2->unk_33C = 0x15E0U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15E0;
                 phi_a3 = 0x15E0U & 0xFFFF;
             } else {
-                temp_a2->unk_33C = 0x15E7U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15E7;
             }
         }
     default:
@@ -756,23 +756,23 @@ void func_80BED680(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5616:
-            temp_a2->unk_33C = 0x15F1U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15F1;
             phi_a3 = 0x15F1U & 0xFFFF;
             goto block_25;
         case 5617:
         case 5618:
-            temp_a2->unk_33C = 0x15F3U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15F3;
             phi_a3 = 0x15F3U & 0xFFFF;
             goto block_25;
         case 5619:
-            temp_a2->unk_33C = 0x15EAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
             phi_a3 = 0x15EAU & 0xFFFF;
             goto block_25;
         case 5610:
@@ -799,53 +799,53 @@ void func_80BED680(Actor *arg0, GlobalContext *arg1) {
                             arg0->unk_32C = temp_t4;
                             arg1->msgCtx.unk11F22 = 0x43;
                             arg1->msgCtx.unk12023 = 4;
-                            arg0->unk_33C = 0x15EFU;
+                            arg0[2].colChkInfo.cylYShift = 0x15EF;
                             arg0->unk_2D8 = func_80BEF360;
                             return;
                         }
                         arg0 = arg0;
                         play_sound(0x4806U);
-                        arg0->unk_33C = 0x15EEU;
+                        arg0[2].colChkInfo.cylYShift = 0x15EE;
                         phi_a2_2 = arg0;
                         goto block_23;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x15EDU;
+                    arg0[2].colChkInfo.cylYShift = 0x15ED;
                     phi_a2_2 = arg0;
                     goto block_23;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x15ECU;
+                arg0[2].colChkInfo.cylYShift = 0x15EC;
                 phi_a2_2 = arg0;
                 goto block_23;
             }
             if ((temp_v0 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0 & 0xFFEF);
-                temp_a2->unk_33C = 0x15EBU;
-                phi_a3 = 0x15EBU & 0xFFFF;
+                temp_a2[2].colChkInfo.cylYShift = 0x15EB;
+                phi_a3 = 0x15EB & 0xFFFF;
             } else {
 block_23:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_25;
         case 5615:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = (u16) temp_a2[2].colChkInfo.cylYShift;
             goto block_25;
         }
     } else {
         if (temp_a3 == 0) {
             arg0 = temp_a2;
             phi_a2 = arg0;
-            if ((func_80BED140(arg1, temp_a2, temp_a3) != 0) && (temp_v0_3 = gSaveContext.weekEventReg[61], phi_a3 = 0x15F0U & 0xFFFF, ((temp_v0_3 & 0x40) == 0))) {
+            if ((func_80BED140(arg1, temp_a2, temp_a3) != 0) && (temp_v0_3 = gSaveContext.weekEventReg[61], phi_a3 = 0x15F0 & 0xFFFF, ((temp_v0_3 & 0x40) == 0))) {
                 gSaveContext.weekEventReg[61] = temp_v0_3 | 0x40;
-                arg0->unk_33C = 0x15F0U;
+                arg0[2].colChkInfo.cylYShift = 0x15F0;
             } else {
-                arg0->unk_33C = 0x15F2U;
-                phi_a3 = 0x15F2U & 0xFFFF;
+                arg0[2].colChkInfo.cylYShift = 0x15F2;
+                phi_a3 = 0x15F2 & 0xFFFF;
             }
         }
     default:
@@ -870,26 +870,26 @@ void func_80BED8A4(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5620:
-            temp_a2->unk_33C = 0x15F5U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15F5;
             phi_a3 = 0x15F5U & 0xFFFF;
             goto block_34;
         case 5621:
-            temp_a2->unk_33C = 0x15F6U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15F6;
             phi_a3 = 0x15F6U & 0xFFFF;
             goto block_34;
         case 5622:
-            temp_a2->unk_33C = 0xFFU;
+            temp_a2[2].colChkInfo.cylYShift = 0xFF;
             phi_a3 = 0xFFU & 0xFFFF;
             goto block_34;
         case 5628:
-            temp_a2->unk_33C = 0x15FDU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15FD;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
             phi_a3 = 0x15FDU & 0xFFFF;
             goto block_34;
@@ -898,18 +898,18 @@ void func_80BED8A4(Actor *arg0, GlobalContext *arg1) {
             phi_a3 = 0x15FFU & 0xFFFF;
             if ((temp_v0 & 1) == 0) {
                 gSaveContext.weekEventReg[62] = temp_v0 | 1;
-                temp_a2->unk_33C = 0x15FFU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15FF;
             } else {
-                temp_a2->unk_33C = 0x1600U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1600;
                 phi_a3 = 0x1600U & 0xFFFF;
             }
             goto block_34;
         case 5631:
-            temp_a2->unk_33C = 0x1600U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1600;
             phi_a3 = 0x1600U & 0xFFFF;
             goto block_34;
         case 5632:
-            temp_a2->unk_33C = 0x15EAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
             phi_a3 = 0x15EAU & 0xFFFF;
             goto block_34;
         case 5610:
@@ -936,52 +936,52 @@ void func_80BED8A4(Actor *arg0, GlobalContext *arg1) {
                             arg0->unk_32C = temp_t3;
                             arg1->msgCtx.unk11F22 = 0x43;
                             arg1->msgCtx.unk12023 = 4;
-                            arg0->unk_33C = 0x15EFU;
+                            arg0[2].colChkInfo.cylYShift = 0x15EF;
                             arg0->unk_2D8 = func_80BEF360;
                             return;
                         }
                         arg0 = arg0;
                         play_sound(0x4806U);
-                        arg0->unk_33C = 0x1601U;
+                        arg0[2].colChkInfo.cylYShift = 0x1601;
                         phi_a2_2 = arg0;
                         goto block_30;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x1603U;
+                    arg0[2].colChkInfo.cylYShift = 0x1603;
                     phi_a2_2 = arg0;
                     goto block_30;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x1602U;
+                arg0[2].colChkInfo.cylYShift = 0x1602;
                 phi_a2_2 = arg0;
                 goto block_30;
             }
             if ((temp_v0_2 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0_2 & 0xFFEF);
-                temp_a2->unk_33C = 0x1604U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1604;
                 phi_a3 = 0x1604U & 0xFFFF;
             } else {
 block_30:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_34;
         case 5625:
-            temp_a2->unk_33C = 0x15FAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15FA;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
             phi_a3 = 0x15FAU & 0xFFFF;
             goto block_34;
         case 5626:
-            temp_a2->unk_33C = 0x15FBU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15FB;
             gSaveContext.weekEventReg[61] |= 0x80;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 0x20);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             goto block_34;
         case 5615:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             goto block_34;
         }
     } else {
@@ -989,12 +989,12 @@ block_30:
             temp_v0_4 = arg1->actorCtx.actorList[2].first->unk_14B;
             phi_a3 = 0x15F4U & 0xFFFF;
             if (temp_v0_4 == 3) {
-                temp_a2->unk_33C = 0x15F4U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15F4;
             } else if (temp_v0_4 == 1) {
-                temp_a2->unk_33C = 0x15FEU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15FE;
                 phi_a3 = 0x15FEU & 0xFFFF;
             } else {
-                temp_a2->unk_33C = 0x15FCU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15FC;
                 phi_a3 = 0x15FCU & 0xFFFF;
             }
         }
@@ -1019,23 +1019,23 @@ void func_80BEDB88(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5616:
-            temp_a2->unk_33C = 0x1605U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1605;
             phi_a3 = 0x1605U & 0xFFFF;
             goto block_25;
         case 5618:
         case 5637:
-            temp_a2->unk_33C = 0x1606U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1606;
             phi_a3 = 0x1606U & 0xFFFF;
             goto block_25;
         case 5638:
-            temp_a2->unk_33C = 0x15EAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
             phi_a3 = 0x15EAU & 0xFFFF;
             goto block_25;
         case 5610:
@@ -1062,51 +1062,51 @@ void func_80BEDB88(Actor *arg0, GlobalContext *arg1) {
                             arg0->unk_32C = temp_t6;
                             arg1->msgCtx.unk11F22 = 0x43;
                             arg1->msgCtx.unk12023 = 4;
-                            arg0->unk_33C = 0x15EFU;
+                            arg0[2].colChkInfo.cylYShift = 0x15EF;
                             arg0->unk_2D8 = func_80BEF360;
                             return;
                         }
                         arg0 = arg0;
                         play_sound(0x4806U);
-                        arg0->unk_33C = 0x1601U;
+                        arg0[2].colChkInfo.cylYShift = 0x1601;
                         phi_a2_2 = arg0;
                         goto block_23;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x1603U;
+                    arg0[2].colChkInfo.cylYShift = 0x1603;
                     phi_a2_2 = arg0;
                     goto block_23;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x1602U;
+                arg0[2].colChkInfo.cylYShift = 0x1602;
                 phi_a2_2 = arg0;
                 goto block_23;
             }
             if ((temp_v0 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0 & 0xFFEF);
-                temp_a2->unk_33C = 0x15EBU;
-                phi_a3 = 0x15EBU & 0xFFFF;
+                temp_a2[2].colChkInfo.cylYShift = 0x15EB;
+                phi_a3 = 0x15EB & 0xFFFF;
             } else {
 block_23:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_25;
         case 5615:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = (u16) temp_a2[2].colChkInfo.cylYShift;
             goto block_25;
         }
     } else {
         if (temp_a3 == 0) {
-            if ((arg1->actorCtx.actorList[2].first->unk_14B == 3) && (temp_v0_3 = gSaveContext.weekEventReg[62], phi_a3 = 0x15F0U & 0xFFFF, ((temp_v0_3 & 2) == 0))) {
+            if ((arg1->actorCtx.actorList[2].first->unk_14B == 3) && (temp_v0_3 = gSaveContext.weekEventReg[62], phi_a3 = 0x15F0 & 0xFFFF, ((temp_v0_3 & 2) == 0))) {
                 gSaveContext.weekEventReg[62] = temp_v0_3 | 2;
-                temp_a2->unk_33C = 0x15F0U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15F0;
             } else {
-                temp_a2->unk_33C = 0x15F2U;
-                phi_a3 = 0x15F2U & 0xFFFF;
+                temp_a2[2].colChkInfo.cylYShift = 0x15F2;
+                phi_a3 = 0x15F2 & 0xFFFF;
             }
         }
     default:
@@ -1131,26 +1131,26 @@ void func_80BEDDAC(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5639:
-            temp_a2->unk_33C = 0x1608U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1608;
             phi_a3 = 0x1608U & 0xFFFF;
             goto block_32;
         case 5640:
-            temp_a2->unk_33C = 0x15E2U;
+            temp_a2[2].colChkInfo.cylYShift = 0x15E2;
             phi_a3 = 0x15E2U & 0xFFFF;
             goto block_32;
         case 5602:
-            temp_a2->unk_33C = 0xFFU;
+            temp_a2[2].colChkInfo.cylYShift = 0xFF;
             phi_a3 = 0xFFU & 0xFFFF;
             goto block_32;
         case 5646:
-            temp_a2->unk_33C = 0x160FU;
+            temp_a2[2].colChkInfo.cylYShift = 0x160F;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
             phi_a3 = 0x160FU & 0xFFFF;
             goto block_32;
@@ -1159,18 +1159,18 @@ void func_80BEDDAC(Actor *arg0, GlobalContext *arg1) {
             phi_a3 = 0x1611U & 0xFFFF;
             if ((temp_v0 & 8) == 0) {
                 gSaveContext.weekEventReg[62] = temp_v0 | 8;
-                temp_a2->unk_33C = 0x1611U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1611;
             } else {
-                temp_a2->unk_33C = 0x1612U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1612;
                 phi_a3 = 0x1612U & 0xFFFF;
             }
             goto block_32;
         case 5649:
-            temp_a2->unk_33C = 0x1612U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1612;
             phi_a3 = 0x1612U & 0xFFFF;
             goto block_32;
         case 5650:
-            temp_a2->unk_33C = 0x15EAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
             phi_a3 = 0x15EAU & 0xFFFF;
             goto block_32;
         case 5610:
@@ -1196,46 +1196,46 @@ void func_80BEDDAC(Actor *arg0, GlobalContext *arg1) {
                         arg0->unk_32C = temp_t2;
                         arg1->msgCtx.unk11F22 = 0x43;
                         arg1->msgCtx.unk12023 = 4;
-                        arg0->unk_33C = 0x15EFU;
+                        arg0[2].colChkInfo.cylYShift = 0x15EF;
                         arg0->unk_2D8 = func_80BEF360;
                         return;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x1613U;
+                    arg0[2].colChkInfo.cylYShift = 0x1613;
                     phi_a2_2 = arg0;
                     goto block_28;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x15EDU;
+                arg0[2].colChkInfo.cylYShift = 0x15ED;
                 phi_a2_2 = arg0;
                 goto block_28;
             }
             if ((temp_v0_2 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0_2 & 0xFFEF);
-                temp_a2->unk_33C = 0x15EBU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15EB;
                 phi_a3 = 0x15EBU & 0xFFFF;
             } else {
 block_28:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_32;
         case 5644:
-            temp_a2->unk_33C = 0x15FAU;
+            temp_a2[2].colChkInfo.cylYShift = 0x15FA;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
             phi_a3 = 0x15FAU & 0xFFFF;
             goto block_32;
         case 5626:
-            temp_a2->unk_33C = 0x160DU;
+            temp_a2[2].colChkInfo.cylYShift = 0x160D;
             gSaveContext.weekEventReg[62] |= 4;
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 0x20);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             goto block_32;
         case 5615:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             goto block_32;
         }
     } else {
@@ -1243,12 +1243,12 @@ block_28:
             temp_v0_4 = arg1->actorCtx.actorList[2].first->unk_14B;
             phi_a3 = 0x1607U & 0xFFFF;
             if (temp_v0_4 == 1) {
-                temp_a2->unk_33C = 0x1607U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1607;
             } else if (temp_v0_4 == 2) {
-                temp_a2->unk_33C = 0x1610U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1610;
                 phi_a3 = 0x1610U & 0xFFFF;
             } else {
-                temp_a2->unk_33C = 0x160EU;
+                temp_a2[2].colChkInfo.cylYShift = 0x160E;
                 phi_a3 = 0x160EU & 0xFFFF;
             }
         }
@@ -1273,23 +1273,23 @@ void func_80BEE070(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
     if ((s32) temp_a3 > 0) {
         switch (temp_a3) {
         case 5652:
-            temp_a2->unk_33C = 0x1615U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1615;
             phi_a3 = 0x1615U & 0xFFFF;
             goto block_23;
         case 5653:
         case 5654:
-            temp_a2->unk_33C = 0x1617U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1617;
             phi_a3 = 0x1617U & 0xFFFF;
             goto block_23;
         case 5655:
-            temp_a2->unk_33C = 0x1618U;
+            temp_a2[2].colChkInfo.cylYShift = 0x1618;
             phi_a3 = 0x1618U & 0xFFFF;
             goto block_23;
         case 5656:
@@ -1315,45 +1315,45 @@ void func_80BEE070(Actor *arg0, GlobalContext *arg1) {
                         arg0->unk_32C = temp_t5;
                         arg1->msgCtx.unk11F22 = 0x43;
                         arg1->msgCtx.unk12023 = 4;
-                        arg0->unk_33C = 0x161AU;
+                        arg0[2].colChkInfo.cylYShift = 0x161A;
                         arg0->unk_2D8 = func_80BEF360;
                         return;
                     }
                     arg0 = arg0;
                     play_sound(0x4806U);
-                    arg0->unk_33C = 0x1613U;
+                    arg0[2].colChkInfo.cylYShift = 0x1613;
                     phi_a2_2 = arg0;
                     goto block_21;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x15EDU;
+                arg0[2].colChkInfo.cylYShift = 0x15ED;
                 phi_a2_2 = arg0;
                 goto block_21;
             }
             if ((temp_v0 & 0x10) != 0) {
                 temp_a2->unk_32C = (u16) (temp_v0 & 0xFFEF);
-                temp_a2->unk_33C = 0x1619U;
-                phi_a3 = 0x1619U & 0xFFFF;
+                temp_a2[2].colChkInfo.cylYShift = 0x1619;
+                phi_a3 = 0x1619 & 0xFFFF;
             } else {
 block_21:
-                phi_a3 = phi_a2_2->unk_33C;
+                phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
                 phi_a2 = phi_a2_2;
             }
             goto block_23;
         case 5658:
             temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-            phi_a3 = temp_a2->unk_33C;
+            phi_a3 = (u16) temp_a2[2].colChkInfo.cylYShift;
             goto block_23;
         }
     } else {
         if (temp_a3 == 0) {
-            if ((arg1->actorCtx.actorList[2].first->unk_14B == 1) && (temp_v0_3 = gSaveContext.weekEventReg[62], phi_a3 = 0x1614U & 0xFFFF, ((temp_v0_3 & 0x10) == 0))) {
+            if ((arg1->actorCtx.actorList[2].first->unk_14B == 1) && (temp_v0_3 = gSaveContext.weekEventReg[62], phi_a3 = 0x1614 & 0xFFFF, ((temp_v0_3 & 0x10) == 0))) {
                 gSaveContext.weekEventReg[62] = temp_v0_3 | 0x10;
-                temp_a2->unk_33C = 0x1614U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1614;
             } else {
-                temp_a2->unk_33C = 0x1616U;
-                phi_a3 = 0x1616U & 0xFFFF;
+                temp_a2[2].colChkInfo.cylYShift = 0x1616;
+                phi_a3 = 0x1616 & 0xFFFF;
             }
         }
     default:
@@ -1377,7 +1377,7 @@ void func_80BEE274(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
@@ -1385,11 +1385,11 @@ void func_80BEE274(Actor *arg0, GlobalContext *arg1) {
         if ((s32) temp_a3 >= 0x15EB) {
             switch (temp_a3) {
             case 5659:
-                temp_a2->unk_33C = 0x161CU;
+                temp_a2[2].colChkInfo.cylYShift = 0x161C;
                 phi_a3 = 0x161CU & 0xFFFF;
                 break;
             case 5660:
-                temp_a2->unk_33C = 0x15E2U;
+                temp_a2[2].colChkInfo.cylYShift = 0x15E2;
                 phi_a3 = 0x15E2U & 0xFFFF;
                 break;
             case 5668:
@@ -1397,35 +1397,35 @@ void func_80BEE274(Actor *arg0, GlobalContext *arg1) {
                 phi_a3 = 0x1625U & 0xFFFF;
                 if ((temp_v0 & 0x40) == 0) {
                     gSaveContext.weekEventReg[62] = temp_v0 | 0x40;
-                    temp_a2->unk_33C = 0x1625U;
+                    temp_a2[2].colChkInfo.cylYShift = 0x1625;
                 } else {
-                    temp_a2->unk_33C = 0x1627U;
+                    temp_a2[2].colChkInfo.cylYShift = 0x1627;
                     phi_a3 = 0x1627U & 0xFFFF;
                 }
                 break;
             case 5669:
             case 5671:
-                temp_a2->unk_33C = 0x1626U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1626;
                 phi_a3 = 0x1626U & 0xFFFF;
                 break;
             case 5670:
-                temp_a2->unk_33C = 0x15EAU;
+                temp_a2[2].colChkInfo.cylYShift = 0x15EA;
                 phi_a3 = 0x15EAU & 0xFFFF;
                 break;
             case 5665:
-                temp_a2->unk_33C = 0x1622U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1622;
                 temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
                 phi_a3 = 0x1622U & 0xFFFF;
                 break;
             case 5666:
-                temp_a2->unk_33C = 0x1623U;
+                temp_a2[2].colChkInfo.cylYShift = 0x1623;
                 gSaveContext.weekEventReg[62] |= 0x20;
                 temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 0x20);
-                phi_a3 = temp_a2->unk_33C;
+                phi_a3 = temp_a2[2].colChkInfo.cylYShift;
                 break;
             case 5673:
                 temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-                phi_a3 = temp_a2->unk_33C;
+                phi_a3 = temp_a2[2].colChkInfo.cylYShift;
                 break;
             }
             goto block_34;
@@ -1455,29 +1455,29 @@ void func_80BEE274(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_32C = temp_t9;
                     arg1->msgCtx.unk11F22 = 0x43;
                     arg1->msgCtx.unk12023 = 4;
-                    arg0->unk_33C = 0x1629U;
+                    arg0[2].colChkInfo.cylYShift = 0x1629;
                     arg0->unk_2D8 = func_80BEF360;
                     return;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x1613U;
+                arg0[2].colChkInfo.cylYShift = 0x1613;
                 phi_a2_2 = arg0;
                 goto block_30;
             }
             arg0 = arg0;
             play_sound(0x4806U);
-            arg0->unk_33C = 0x15EDU;
+            arg0[2].colChkInfo.cylYShift = 0x15ED;
             phi_a2_2 = arg0;
             goto block_30;
         }
         if ((temp_v0_2 & 0x10) != 0) {
             temp_a2->unk_32C = (s16) (temp_v0_2 & 0xFFEF);
-            temp_a2->unk_33C = 0x1628;
+            temp_a2[2].colChkInfo.cylYShift = 0x1628;
             phi_a3 = 0x1628 & 0xFFFF;
         } else {
 block_30:
-            phi_a3 = phi_a2_2->unk_33C;
+            phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
             phi_a2 = phi_a2_2;
         }
         goto block_34;
@@ -1486,16 +1486,16 @@ block_30:
         if (temp_a3 != 0x15E2) {
 
         } else {
-            temp_a2->unk_33C = 0xFF;
+            temp_a2[2].colChkInfo.cylYShift = 0xFF;
             phi_a3 = 0xFF & 0xFFFF;
         }
     } else {
         phi_a3 = 0x1624 & 0xFFFF;
         if (arg1->actorCtx.actorList[2].first->unk_14B == 2) {
-            temp_a2->unk_33C = 0x161B;
+            temp_a2[2].colChkInfo.cylYShift = 0x161B;
             phi_a3 = 0x161B & 0xFFFF;
         } else {
-            temp_a2->unk_33C = 0x1624;
+            temp_a2[2].colChkInfo.cylYShift = 0x1624;
         }
     }
 block_34:
@@ -1517,7 +1517,7 @@ void func_80BEE530(Actor *arg0, GlobalContext *arg1) {
     Actor *phi_a2_2;
 
     temp_a2 = arg0;
-    temp_a3 = temp_a2->unk_33C;
+    temp_a3 = temp_a2[2].colChkInfo.cylYShift;
     phi_a3 = temp_a3;
     phi_a2 = temp_a2;
     phi_a2_2 = temp_a2;
@@ -1529,20 +1529,20 @@ void func_80BEE530(Actor *arg0, GlobalContext *arg1) {
                         if (temp_a3 != 0x162D) {
 
                         } else {
-                            temp_a2->unk_33C = 0x15EAU;
+                            temp_a2[2].colChkInfo.cylYShift = 0x15EA;
                             phi_a3 = 0x15EAU & 0xFFFF;
                         }
                     } else {
-                        temp_a2->unk_33C = 0x162DU;
+                        temp_a2[2].colChkInfo.cylYShift = 0x162D;
                         phi_a3 = 0x162DU & 0xFFFF;
                     }
                 } else {
-                    temp_a2->unk_33C = 0x162BU;
+                    temp_a2[2].colChkInfo.cylYShift = 0x162B;
                     phi_a3 = 0x162BU & 0xFFFF;
                 }
             } else {
                 temp_a2->unk_32C = (u16) (temp_a2->unk_32C | 1);
-                phi_a3 = temp_a2->unk_33C;
+                phi_a3 = temp_a2[2].colChkInfo.cylYShift;
             }
             goto block_27;
         }
@@ -1568,38 +1568,38 @@ void func_80BEE530(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_32C = temp_t4;
                     arg1->msgCtx.unk11F22 = 0x43;
                     arg1->msgCtx.unk12023 = 4;
-                    arg0->unk_33C = 0x15EFU;
+                    arg0[2].colChkInfo.cylYShift = 0x15EF;
                     arg0->unk_2D8 = func_80BEF360;
                     return;
                 }
                 arg0 = arg0;
                 play_sound(0x4806U);
-                arg0->unk_33C = 0x1613U;
+                arg0[2].colChkInfo.cylYShift = 0x1613;
                 phi_a2_2 = arg0;
                 goto block_25;
             }
             arg0 = arg0;
             play_sound(0x4806U);
-            arg0->unk_33C = 0x15EDU;
+            arg0[2].colChkInfo.cylYShift = 0x15ED;
             phi_a2_2 = arg0;
             goto block_25;
         }
         if ((temp_v0 & 0x10) != 0) {
             temp_a2->unk_32C = (s16) (temp_v0 & 0xFFEF);
-            temp_a2->unk_33C = 0x162E;
+            temp_a2[2].colChkInfo.cylYShift = 0x162E;
             phi_a3 = 0x162E & 0xFFFF;
         } else {
 block_25:
-            phi_a3 = phi_a2_2->unk_33C;
+            phi_a3 = phi_a2_2[2].colChkInfo.cylYShift;
             phi_a2 = phi_a2_2;
         }
         goto block_27;
     }
     if ((arg1->actorCtx.actorList[2].first->unk_14B == 2) && (temp_v0_3 = gSaveContext.weekEventReg[62], phi_a3 = 0x162A & 0xFFFF, ((temp_v0_3 & 0x80) == 0))) {
         gSaveContext.weekEventReg[62] = temp_v0_3 | 0x80;
-        temp_a2->unk_33C = 0x162A;
+        temp_a2[2].colChkInfo.cylYShift = 0x162A;
     } else {
-        temp_a2->unk_33C = 0x162C;
+        temp_a2[2].colChkInfo.cylYShift = 0x162C;
         phi_a3 = 0x162C & 0xFFFF;
     }
 block_27:
@@ -1631,7 +1631,7 @@ void func_80BEE73C(Actor *arg0, GlobalContext *arg1) {
         if (temp_v0 == 0x2B) {
             temp_t8 = *(&D_80BF048C + (temp_a3_2 * 2));
             temp_v1->textId = temp_t8;
-            arg0->unk_33C = temp_t8;
+            arg0[2].colChkInfo.cylYShift = temp_t8;
             if ((temp_t8 & 0xFFFF) == 0x15E4) {
                 temp_v1->unk_A87 = (s8) temp_v0;
                 arg0->unk_2D8 = func_80BEF20C;
@@ -1641,7 +1641,7 @@ void func_80BEE73C(Actor *arg0, GlobalContext *arg1) {
         } else if (temp_v0 == 0x2F) {
             temp_t4 = *(&D_80BF0494 + (temp_a3_2 * 2));
             temp_v1->textId = temp_t4;
-            arg0->unk_33C = temp_t4;
+            arg0[2].colChkInfo.cylYShift = temp_t4;
             if ((temp_t4 & 0xFFFF) == 0x15F9) {
                 temp_v1->unk_A87 = (s8) temp_v0;
                 arg0->unk_2D8 = func_80BEF20C;
@@ -1651,7 +1651,7 @@ void func_80BEE73C(Actor *arg0, GlobalContext *arg1) {
         } else if (temp_v0 == 0x30) {
             temp_t0 = *(&D_80BF049C + (temp_a3_2 * 2));
             temp_v1->textId = temp_t0;
-            arg0->unk_33C = temp_t0;
+            arg0[2].colChkInfo.cylYShift = temp_t0;
             if ((temp_t0 & 0xFFFF) == 0x160C) {
                 temp_v1->unk_A87 = (s8) temp_v0;
                 arg0->unk_2D8 = func_80BEF20C;
@@ -1661,7 +1661,7 @@ void func_80BEE73C(Actor *arg0, GlobalContext *arg1) {
         } else if (temp_v0 == 0x31) {
             temp_t6 = *(&D_80BF04A4 + (temp_a3_2 * 2));
             temp_v1->textId = temp_t6;
-            arg0->unk_33C = temp_t6;
+            arg0[2].colChkInfo.cylYShift = temp_t6;
             if ((temp_t6 & 0xFFFF) == 0x1621) {
                 temp_v1->unk_A87 = (s8) temp_v0;
                 arg0->unk_2D8 = func_80BEF20C;
@@ -1672,14 +1672,14 @@ void func_80BEE73C(Actor *arg0, GlobalContext *arg1) {
             temp_t2 = *(&D_80BF04AC + (temp_a3_2 * 2));
             temp_v1->textId = temp_t2;
             arg0->unk_2D8 = func_80BEF18C;
-            arg0->unk_33C = temp_t2;
+            arg0[2].colChkInfo.cylYShift = temp_t2;
         }
         func_801477B4(arg1);
         return;
     }
     if (temp_v0 < 0) {
         temp_t5 = *(&D_80BF04AC + (temp_a3_2 * 2));
-        arg0->unk_33C = temp_t5;
+        arg0[2].colChkInfo.cylYShift = temp_t5;
         arg0 = arg0;
         func_80151938(arg1, temp_t5 & 0xFFFF);
         arg0->unk_2D8 = func_80BEF18C;
@@ -1700,7 +1700,7 @@ void func_80BEE938(Actor *arg0, GlobalContext *arg1) {
                 }
                 if ((gSaveContext.weekEventReg[62] & 0x20) != 0) {
                     if (((s32) (temp_v1 & 4) >> 2) != 0) {
-                        arg0->unk_2DC = func_80BEE530;
+                        arg0[2].targetArrowOffset = func_80BEE530;
                         return;
                     }
                     Actor_MarkForDeath(arg0);
@@ -1710,12 +1710,12 @@ void func_80BEE938(Actor *arg0, GlobalContext *arg1) {
                     Actor_MarkForDeath(arg0);
                     return;
                 }
-                arg0->unk_2DC = func_80BEE274;
+                arg0[2].targetArrowOffset = (bitwise f32) func_80BEE274;
                 return;
             }
             if ((gSaveContext.weekEventReg[62] & 4) != 0) {
                 if (((s32) (temp_v1 & 4) >> 2) != 0) {
-                    arg0->unk_2DC = func_80BEE070;
+                    arg0[2].targetArrowOffset = (bitwise f32) func_80BEE070;
                     return;
                 }
                 Actor_MarkForDeath(arg0);
@@ -1725,12 +1725,12 @@ void func_80BEE938(Actor *arg0, GlobalContext *arg1) {
                 Actor_MarkForDeath(arg0);
                 return;
             }
-            arg0->unk_2DC = func_80BEDDAC;
+            arg0[2].targetArrowOffset = (bitwise f32) func_80BEDDAC;
             return;
         }
         if ((gSaveContext.weekEventReg[61] & 0x80) != 0) {
             if (((s32) (temp_v1 & 4) >> 2) != 0) {
-                arg0->unk_2DC = func_80BEDB88;
+                arg0[2].targetArrowOffset = (bitwise f32) func_80BEDB88;
                 return;
             }
             Actor_MarkForDeath(arg0);
@@ -1740,12 +1740,12 @@ void func_80BEE938(Actor *arg0, GlobalContext *arg1) {
             Actor_MarkForDeath(arg0);
             return;
         }
-        arg0->unk_2DC = func_80BED8A4;
+        arg0[2].targetArrowOffset = (bitwise f32) func_80BED8A4;
         return;
     }
     if ((gSaveContext.weekEventReg[61] & 0x10) != 0) {
         if (((s32) (temp_v1 & 4) >> 2) != 0) {
-            arg0->unk_2DC = func_80BED680;
+            arg0[2].targetArrowOffset = (bitwise f32) func_80BED680;
             return;
         }
         Actor_MarkForDeath(arg0);
@@ -1755,7 +1755,7 @@ void func_80BEE938(Actor *arg0, GlobalContext *arg1) {
         Actor_MarkForDeath(arg0);
         return;
     }
-    arg0->unk_2DC = func_80BED3BC;
+    arg0[2].targetArrowOffset = (bitwise f32) func_80BED3BC;
 }
 
 void func_80BEEB20(Actor *arg0, GlobalContext *arg1) {
@@ -1772,7 +1772,7 @@ void func_80BEEB20(Actor *arg0, GlobalContext *arg1) {
     s16 phi_v0_4;
 
     sp26 = (s16) (s32) arg0->unk_15C;
-    sp24 = SkelAnime_GetFrameCount(*(D_80BF031C + (arg0->unk_338 * 0x10)));
+    sp24 = SkelAnime_GetFrameCount(*(D_80BF031C + (arg0[2].colChkInfo.cylRadius * 0x10)));
     Math_ApproachS(arg0 + 0xBE, arg0->yawTowardsPlayer, 2, 0xE38);
     temp_f0 = arg0->yDistToPlayer;
     phi_v0 = 0;
@@ -1789,62 +1789,62 @@ void func_80BEEB20(Actor *arg0, GlobalContext *arg1) {
         if (phi_v0_2 != 0) {
             Audio_PlayActorSound2(arg0, 0x3987U);
             arg0->unk_2D8 = func_80BEEDC0;
-            arg0->unk_338 = 3;
+            arg0[2].colChkInfo.cylRadius = 3;
             arg0->unk_322 = 0x40;
-            func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 3);
+            func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 3);
             return;
         }
         goto block_8;
     }
 block_8:
     if (sp26 == sp24) {
-        temp_v0 = arg0->unk_338;
+        temp_v0 = arg0[2].colChkInfo.cylRadius;
         if ((temp_v0 == 4) || (temp_v0 == 0x12)) {
-            arg0->unk_338 = 0x11;
+            arg0[2].colChkInfo.cylRadius = 0x11;
             arg0->unk_322 = 0;
             Audio_PlayActorSound2(arg0, 0x387DU);
-            func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 0x11);
+            func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 0x11);
             return;
         }
         if (temp_v0 == 2) {
-            arg0->unk_338 = 0x10;
+            arg0[2].colChkInfo.cylRadius = 0x10;
             arg0->unk_322 = 0x20;
             Audio_PlayActorSound2(arg0, 0x387CU);
-            func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 0x10);
+            func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 0x10);
             return;
         }
         if (temp_v0 == 0x11) {
-            temp_v1 = arg0->unk_33A;
+            temp_v1 = arg0[2].colChkInfo.cylHeight;
             if (temp_v1 == 0) {
 
             } else {
-                arg0->unk_33A = (s16) (temp_v1 - 1);
-                phi_v0_3 = arg0->unk_33A;
+                arg0[2].colChkInfo.cylHeight = temp_v1 - 1;
+                phi_v0_3 = arg0[2].colChkInfo.cylHeight;
             }
             if (phi_v0_3 == 0) {
                 temp_f6 = Rand_ZeroOne() * 10.0f;
-                arg0->unk_338 = 2;
+                arg0[2].colChkInfo.cylRadius = 2;
                 arg0->unk_322 = 0x20;
-                arg0->unk_33A = (s16) (s32) temp_f6;
-                func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 2);
+                arg0[2].colChkInfo.cylHeight = (s16) (s32) temp_f6;
+                func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 2);
                 return;
             }
             /* Duplicate return node #26. Try simplifying control flow for better match */
             return;
         }
         if (temp_v0 == 0x10) {
-            temp_v1_2 = arg0->unk_33A;
+            temp_v1_2 = arg0[2].colChkInfo.cylHeight;
             if (temp_v1_2 == 0) {
 
             } else {
-                arg0->unk_33A = (s16) (temp_v1_2 - 1);
-                phi_v0_4 = arg0->unk_33A;
+                arg0[2].colChkInfo.cylHeight = temp_v1_2 - 1;
+                phi_v0_4 = arg0[2].colChkInfo.cylHeight;
             }
             if (phi_v0_4 == 0) {
-                arg0->unk_33A = Rand_S16Offset(0x28, 0x28);
-                arg0->unk_338 = 0x12;
+                arg0[2].colChkInfo.cylHeight = Rand_S16Offset(0x28, 0x28);
+                arg0[2].colChkInfo.cylRadius = 0x12;
                 arg0->unk_322 = 0x20;
-                func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 0x12);
+                func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 0x12);
             }
         }
         /* Duplicate return node #26. Try simplifying control flow for better match */
@@ -1869,7 +1869,7 @@ void func_80BEEE10(Actor *arg0, GlobalContext *arg1) {
     Math_SmoothStepToS(arg0 + 0xBE, arg0->yawTowardsPlayer, 3, 0x7D0, (s16) 0);
     arg0->world.rot.y = arg0->shape.rot.y;
     if (func_800B84D0(arg0, arg1) != 0) {
-        arg0->unk_2DC(arg0, arg1);
+        (bitwise ? (*)(Actor *, GlobalContext *)) arg0[2].targetArrowOffset(arg0, arg1);
         arg0->unk_2D8 = func_80BEEFA8;
         return;
     }
@@ -1906,8 +1906,8 @@ block_8:
         }
     } else {
 block_16:
-        arg0->unk_338 = 4;
-        func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, 4);
+        arg0[2].colChkInfo.cylRadius = 4;
+        func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, 4);
         arg0->unk_2D8 = func_80BEEB20;
     }
 }
@@ -1931,7 +1931,7 @@ void func_80BEEFA8(Actor *arg0, GlobalContext *arg1) {
                 temp_a3->unk_32C = (u16) (temp_v0_2 & 0xFFFE);
                 arg1->msgCtx.unk11F22 = 0x43;
                 arg1->msgCtx.unk12023 = 4;
-                temp_a3->unk_33C = 0;
+                temp_a3[2].colChkInfo.cylYShift = 0;
                 temp_a3->unk_2D8 = func_80BEEE10;
                 return;
             }
@@ -1942,15 +1942,15 @@ void func_80BEEFA8(Actor *arg0, GlobalContext *arg1) {
                 temp_a3->unk_32C = (u16) (temp_t5 & 0xFFFB);
                 arg1->msgCtx.unk11F22 = 0x43;
                 arg1->msgCtx.unk12023 = 4;
-                temp_a3->unk_338 = 8;
-                temp_a3->unk_33C = 0;
-                temp_a2 = temp_a3->unk_338;
+                temp_a3[2].colChkInfo.cylRadius = 8;
+                temp_a3[2].colChkInfo.cylYShift = 0;
+                temp_a2 = temp_a3[2].colChkInfo.cylRadius;
                 arg0 = temp_a3;
                 func_8013BC6C(temp_a3 + 0x144, D_80BF031C, (s32) temp_a2);
                 arg0->unk_2D8 = func_80BEF518;
                 return;
             }
-            temp_a3->unk_2DC(temp_a3, arg1);
+            temp_a3[2].targetArrowOffset(temp_a3, arg1);
             return;
         }
         /* Duplicate return node #16. Try simplifying control flow for better match */
@@ -1967,11 +1967,11 @@ void func_80BEEFA8(Actor *arg0, GlobalContext *arg1) {
                 arg0 = arg0;
                 func_8019F230();
                 arg0->unk_32C = (u16) (arg0->unk_32C | 0x10);
-                arg0->unk_2DC(arg0, arg1);
+                arg0[2].targetArrowOffset(arg0, arg1);
                 return;
             }
             arg0->unk_32C = (u16) (arg0->unk_32C | 8);
-            arg0->unk_2DC(arg0, arg1);
+            arg0[2].targetArrowOffset(arg0, arg1);
             return;
         }
         /* Duplicate return node #16. Try simplifying control flow for better match */
@@ -2058,7 +2058,7 @@ void func_80BEF4B8(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0;
     if (func_800B84D0(arg0, arg1) != 0) {
         arg0 = temp_a0;
-        temp_a0->unk_2DC(temp_a0, arg1);
+        (bitwise ? (*)(Actor *, GlobalContext *)) temp_a0[2].targetArrowOffset(temp_a0, arg1);
         arg0->unk_2D8 = func_80BEEFA8;
         return;
     }
@@ -2071,7 +2071,7 @@ void func_80BEF518(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t2;
 
     sp26 = (s16) (s32) arg0->unk_15C;
-    sp24 = SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80BF031C[arg0->unk_338].animationSeg);
+    sp24 = SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80BF031C[arg0[2].colChkInfo.cylRadius].animationSeg);
     switch (sp26) {
     case 10:
         arg0->unk_33E = 1;
@@ -2133,9 +2133,9 @@ block_12:
     }
 block_19:
     if (sp26 == sp24) {
-        arg0->unk_338 = 0x13;
+        arg0[2].colChkInfo.cylRadius = 0x13;
         arg0->unk_33E = 3;
-        func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_80BF031C, (s32) arg0->unk_338);
+        func_8013BC6C((SkelAnime *) &arg0[1], D_80BF031C, (s32) arg0[2].colChkInfo.cylRadius);
         Audio_PlayActorSound2(arg0, 0x387DU);
         temp_t2 = arg0->unk_32C & 0xFFFD;
         arg0->unk_32C = temp_t2;
@@ -2186,25 +2186,25 @@ void func_80BEF83C(Actor *arg0, GlobalContext *arg1) {
     s16 phi_v0;
 
     sp32 = (s16) (s32) arg0->unk_15C;
-    if (sp32 == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80BF031C[arg0->unk_338].animationSeg)) {
+    if (sp32 == SkelAnime_GetFrameCount((AnimationHeaderCommon *) D_80BF031C[arg0[2].colChkInfo.cylRadius].animationSeg)) {
         Math_SmoothStepToS(arg0 + 0x362, 0x1C71, 3, 0x100, (s16) 0);
         arg0->unk_352 = (s16) (arg0->unk_352 + arg0->unk_362);
         arg0->shape.yOffset = 1500.0f;
     }
     Math_SmoothStepToS(arg0 + 0xBE, arg0->unk_368, 3, 0x7D0, (s16) 0);
-    temp_v1 = arg0->unk_33A;
+    temp_v1 = arg0[2].colChkInfo.cylHeight;
     arg0->world.rot.y = arg0->shape.rot.y;
     if (temp_v1 == 0) {
         phi_v0 = 0;
     } else {
-        arg0->unk_33A = (s16) (temp_v1 - 1);
-        phi_v0 = arg0->unk_33A;
+        arg0[2].colChkInfo.cylHeight = temp_v1 - 1;
+        phi_v0 = arg0[2].colChkInfo.cylHeight;
     }
     if (phi_v0 == 0) {
         if ((arg0->unk_35C & 3) == 0) {
             sp34.unk_0 = arg0->world.pos.x;
-            sp34.unk_4 = (f32) arg0->world.pos.y;
-            sp34.unk_8 = (?32) arg0->world.pos.z;
+            (&sp34)[1] = arg0->world.pos.y;
+            (&sp34)[2] = arg0->world.pos.z;
             func_800B14D4(arg1, 20.0f, (Vec3f *) &sp34);
         }
         arg0->velocity.y = 5.0f;
@@ -2216,9 +2216,9 @@ void func_80BEF83C(Actor *arg0, GlobalContext *arg1) {
         func_800B14D4(arg1, 20.0f, (Vec3f *) temp_a2);
     }
     if ((arg0->home.pos.y + 22.5f) < arg0->world.pos.y) {
-        arg0->unk_338 = 9;
-        arg0->unk_34C = 0.3f;
-        func_8013BC6C(arg0 + 0x144, D_80BF031C, (s32) arg0->unk_338);
+        arg0[2].colChkInfo.cylRadius = 9;
+        arg0[2].shape.yOffset = 0.3f;
+        func_8013BC6C(arg0 + 0x144, D_80BF031C, (s32) arg0[2].colChkInfo.cylRadius);
         Audio_PlayActorSound2(arg0, 0x3987U);
         arg0->unk_2D8 = func_80BEF9F0;
     }
@@ -2259,12 +2259,12 @@ void func_80BEFAF0(Actor *arg0, ? arg1) {
     u8 *temp_t6;
 
     sp32 = 0;
-    temp_t6 = arg0->unk_330;
+    temp_t6 = arg0[2].colChkInfo.displacement.y;
     arg0->velocity.y = 0.0f;
     arg0->gravity = 0.0f;
     sp2C = temp_t6;
     if (temp_t6 != 0) {
-        sp34 = func_80BECEAC(temp_t6, arg0->unk_334, arg0 + 0x24, &sp38);
+        sp34 = func_80BECEAC(temp_t6, arg0[2].colChkInfo.displacement.z, arg0 + 0x24, &sp38);
         if ((arg0->bgCheckFlags & 8) != 0) {
             sp3A = arg0->wallYaw;
         }
@@ -2277,13 +2277,13 @@ void func_80BEFAF0(Actor *arg0, ? arg1) {
         arg0->unk_352 = (s16) (arg0->unk_352 + arg0->unk_362);
         arg0->shape.rot.y = arg0->world.rot.y;
         arg0->world.rot.x = (s16) -(s32) sp38;
-        if ((func_80BECD10(arg0, arg0->unk_330, arg0->unk_334) != 0) && (sp34 < 10.0f)) {
-            temp_v0 = arg0->unk_334;
-            if (temp_v0 >= (*arg0->unk_330 - 1)) {
+        if ((func_80BECD10(arg0, arg0[2].colChkInfo.displacement.y, arg0[2].colChkInfo.displacement.z) != 0) && (sp34 < 10.0f)) {
+            temp_v0 = arg0[2].colChkInfo.displacement.z;
+            if (temp_v0 >= (*arg0[2].colChkInfo.displacement.y - 1)) {
                 ActorCutscene_Stop(arg0->unk_360);
                 arg0->unk_2D8 = func_80BEFD74;
             } else {
-                arg0->unk_334 = (s32) (temp_v0 + 1);
+                arg0[2].colChkInfo.displacement.z = temp_v0 + 1;
             }
         }
     } else if (arg0->yDistToPlayer > 500.0f) {
@@ -2291,7 +2291,7 @@ void func_80BEFAF0(Actor *arg0, ? arg1) {
         arg0->unk_2D8 = func_80BEFD74;
     }
     if ((arg0->params & 3) == 2) {
-        if (arg0->unk_334 >= 3) {
+        if (arg0[2].colChkInfo.displacement.z >= 3) {
             sp32 = 1;
         }
         Math_ApproachF(arg0 + 0x70, 1.5f, 0.2f, 1.0f);
@@ -2383,13 +2383,13 @@ s32 func_80BEFFB4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     s16 temp_v0_2;
     s16 temp_v0_3;
 
-    temp_v0 = arg5->unk_338;
-    if (((temp_v0 == 4) && (arg5->unk_33E == 0)) || ((temp_v0 == 8) && (arg5->unk_33E == 0)) || (temp_v0 == 0x12) || (temp_v0 == 2) || (temp_v0 == 3) || (temp_v0 == 0x11) || (temp_v0 == 5) || (temp_v0 == 6) || (temp_v0 == 7) || (temp_v0 == 0x10)) {
+    temp_v0 = arg5[137].y;
+    if (((temp_v0 == 4) && (arg5[138].y == 0)) || ((temp_v0 == 8) && (arg5[138].y == 0)) || (temp_v0 == 0x12) || (temp_v0 == 2) || (temp_v0 == 3) || (temp_v0 == 0x11) || (temp_v0 == 5) || (temp_v0 == 6) || (temp_v0 == 7) || (temp_v0 == 0x10)) {
         if ((arg1 == 0x10) || (arg1 == 0x15) || (arg1 == 0x1B) || (arg1 == 0x17) || (arg1 == 0x18) || (arg1 == 0xF)) {
             goto block_40;
         }
     } else if ((temp_v0 == 8) || (temp_v0 == 0x13)) {
-        temp_v0_2 = arg5->unk_33E;
+        temp_v0_2 = arg5[138].y;
         if (temp_v0_2 != 1) {
             if ((temp_v0_2 != 2) && (temp_v0_2 != 3)) {
 
@@ -2404,7 +2404,7 @@ block_40:
         *arg2 = NULL;
     }
     if (arg1 == 0x1A) {
-        temp_v0_3 = arg5->unk_338;
+        temp_v0_3 = arg5[137].y;
         if ((temp_v0_3 == 6) || (temp_v0_3 == 5) || (temp_v0_3 == 7)) {
             *arg2 = &D_06001350;
         } else {
@@ -2428,8 +2428,8 @@ void func_80BF0190(GlobalContext *arg0, s32 arg1, Actor *arg2) {
         Matrix_Scale(arg2->unk_340, arg2->unk_344, arg2->unk_348, 1);
     }
     phi_a1 = arg1;
-    if ((arg2->unk_338 == 9) && ((arg1 == 0x10) || (arg1 == 0x15) || (arg1 == 0x1B))) {
-        temp_f12 = arg2->unk_34C;
+    if ((arg2[2].colChkInfo.cylRadius == 9) && ((arg1 == 0x10) || (arg1 == 0x15) || (arg1 == 0x1B))) {
+        temp_f12 = arg2[2].shape.yOffset;
         arg1 = arg1;
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         phi_a1 = arg1;

@@ -291,13 +291,13 @@ void func_80140730(OSViMode *arg0) {
     GameInfo *temp_v1;
     s16 temp_a1;
 
-    gGameInfo->data[144] = (s16) arg0->unk_68;
-    gGameInfo->data[145] = (s16) arg0->unk_54;
+    gGameInfo->data[144] = (s16) arg0[1].comRegs.leap;
+    gGameInfo->data[145] = (s16) arg0[1].comRegs.ctrl;
     gGameInfo->data[146] = (s16) arg0->unk_50;
-    gGameInfo->data[147] = (s16) arg0->unk_64;
-    gGameInfo->data[148] = (s16) arg0->unk_60;
-    gGameInfo->data[149] = (s16) arg0->unk_5C;
-    gGameInfo->data[150] = (s16) arg0->unk_58;
+    gGameInfo->data[147] = (s16) arg0[1].comRegs.hSync;
+    gGameInfo->data[148] = (s16) arg0[1].comRegs.vSync;
+    gGameInfo->data[149] = (s16) arg0[1].comRegs.burst;
+    gGameInfo->data[150] = (s16) arg0[1].comRegs.width;
     temp_v1 = gGameInfo;
     if (temp_v1->data[154] == 1) {
         temp_v1->data[154] = 0;
@@ -468,18 +468,18 @@ void func_80140970(void *arg0, u16 *arg1) {
             }
         }
         if (~(phi_v0_9 | ~4) == 0) {
-            if (~(arg1->unk_C | ~0x800) == 0) {
+            if (~(arg1[6] | ~0x800) == 0) {
                 arg0->unk_70 = (s32) (arg0->unk_70 == 0);
             }
-            phi_v1 = arg1->unk_C;
-            if (~(arg1->unk_C | ~0x400) == 0) {
+            phi_v1 = arg1[6];
+            if (~(arg1[6] | ~0x400) == 0) {
                 arg0->unk_74 = (s32) (arg0->unk_74 == 0);
-                phi_v1 = arg1->unk_C;
+                phi_v1 = arg1[6];
             }
             phi_v1_2 = phi_v1;
             if (~(phi_v1 | ~0x200) == 0) {
                 arg0->unk_78 = (s32) (arg0->unk_78 == 0);
-                phi_v1_2 = arg1->unk_C;
+                phi_v1_2 = arg1[6];
             }
             if (~(phi_v1_2 | ~0x100) == 0) {
                 arg0->unk_7C = (s32) (arg0->unk_7C == 0);
@@ -556,15 +556,15 @@ void func_80140D10(void *arg0, Gfx **gfx, u32 arg2) {
     temp_v0 = *gfx;
     temp_v0->words.w0 = 0xE7000000;
     temp_v0->words.w1 = 0;
-    temp_v0_2 = temp_v0 + 8;
+    temp_v0_2 = &temp_v0[1];
     temp_v0_2->words.w1 = -1;
     temp_v0_2->words.w0 = 0xEE000000;
-    temp_v0_3 = temp_v0_2 + 8;
+    temp_v0_3 = &temp_v0_2[1];
     phi_v0 = temp_v0_3;
     if (arg0->unk_4 == 1) {
         temp_v0_3->words.w1 = (u32) &D_0E0001C8;
         temp_v0_3->words.w0 = 0xDE000000;
-        phi_v0 = temp_v0_3 + 8;
+        phi_v0 = &temp_v0_3[1];
     }
     temp_a3 = arg0->unk_0;
     phi_v0_2 = phi_v0;

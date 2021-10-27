@@ -132,8 +132,8 @@ void func_809225D0(void *arg0, f32 *arg1, f32 arg2) {
     temp_f2 = arg0->unk_4;
     temp_f14 = arg0->unk_8;
     arg0->unk_0 = (f32) (temp_f0 + ((arg1->unk_0 - temp_f0) * arg2));
-    arg0->unk_4 = (f32) (temp_f2 + ((arg1->unk_4 - temp_f2) * arg2));
-    arg0->unk_8 = (f32) (temp_f14 + ((arg1->unk_8 - temp_f14) * arg2));
+    arg0->unk_4 = (f32) (temp_f2 + ((arg1[1] - temp_f2) * arg2));
+    arg0->unk_8 = (f32) (temp_f14 + ((arg1[2] - temp_f14) * arg2));
 }
 
 void func_80922628(ArrowIce *this, GlobalContext *globalCtx) {
@@ -234,14 +234,14 @@ void func_809227F4(ArrowIce *this, GlobalContext *globalCtx) {
     }
     sp34 = temp_v0;
     func_809225D0((bitwise void *) 1.0f, temp_a0, (bitwise f32) temp_a1, 0x3D4CCCCD);
-    if ((temp_v0->unk_261 & 1) != 0) {
+    if ((temp_v0[1].isDrawn & 1) != 0) {
         Audio_PlayActorSound2((Actor *) this, 0x183BU);
         ArrowIce_SetupAction(this, func_80922628);
         this->unk_146 = 0x20;
         this->unk_148 = 0xFF;
         return;
     }
-    if ((s32) temp_v0->unk_260 < 0x22) {
+    if ((s32) temp_v0[1].colorFilterTimer < 0x22) {
         temp_v0_2 = this->unk_148;
         if ((s32) temp_v0_2 < 0x23) {
             Actor_MarkForDeath((Actor *) this);
@@ -290,7 +290,7 @@ void ArrowIce_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp70 = globalCtx->state.frames;
     temp_v1 = this->actor.parent;
     if ((temp_v1 != 0) && (temp_v1->update != 0) && ((s32) this->unk_146 < 0xFF)) {
-        if ((temp_v1->unk_261 & 2) != 0) {
+        if ((temp_v1[1].isDrawn & 2) != 0) {
             phi_v0 = this;
         } else {
             phi_v0 = (ArrowIce *) temp_v1;
@@ -305,30 +305,30 @@ void ArrowIce_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if (this->unk_15C > 0.0f) {
             temp_s0->polyXlu.p = func_8012BFC4(temp_s0->polyXlu.p);
             temp_v0 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0 + 8;
+            temp_s0->polyXlu.p = &temp_v0[1];
             temp_v0->words.w0 = 0xFA000000;
             temp_f0 = this->unk_15C;
             temp_v0->words.w1 = (((s32) (temp_f0 * 10.0f) & 0xFF) << 0x10) | (((s32) (50.0f * temp_f0) & 0xFF) << 8) | ((s32) (150.0f * temp_f0) & 0xFF);
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = 0x30;
             temp_v0_2->words.w0 = 0xE3001A01;
             temp_v0_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_3 + 8;
+            temp_s0->polyXlu.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0xC0;
             temp_v0_3->words.w0 = 0xE3001801;
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDE000000;
             temp_v0_4->words.w1 = (u32) &D_0E0002E0;
         }
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v1_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_2 + 8;
+        temp_s0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFA008080;
         temp_v1_2->words.w1 = ((s32) ((f32) this->unk_148 * 0.5f) & 0xFF) | 0xAAFFFF00;
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0xFF80;
         temp_v0_5->words.w0 = 0xFB000000;
         SysMatrix_InsertRotation(0x4000, 0, 0, 1);
@@ -341,22 +341,22 @@ void ArrowIce_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_Scale(temp_f12, this->unk_158 * 3.0f, temp_f12, 1);
         SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, 1);
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         sp48 = temp_v0_6;
         sp48->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = (u32) &D_80924060;
         temp_v0_7->words.w0 = 0xDE000000;
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xDE000000;
         temp_v1_3 = 0x1FF - ((sp70 * 0xA) & 0x1FF);
         sp40 = temp_v0_8;
         sp40->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0x1FF - ((sp70 * 5) & 0x1FF), 0U, 0x80, 0x20, 1, temp_v1_3, temp_v1_3, 4, 0x10);
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = (u32) &D_80924110;
         temp_v0_9->words.w0 = 0xDE000000;
     }

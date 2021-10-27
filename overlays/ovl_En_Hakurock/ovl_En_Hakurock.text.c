@@ -148,24 +148,24 @@ loop_1:
         sp2E = (s16) (Rand_Next() >> 0x10);
         sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
         sp24 = Math_CosS(sp2C);
-        temp_s0->unk_C = (f32) (Math_SinS(sp2E) * (sp28 * sp24));
-        temp_s0->unk_10 = (f32) (Math_SinS(sp2C) * sp28);
+        temp_s0[1].x = Math_SinS(sp2E) * (sp28 * sp24);
+        temp_s0[1].y = Math_SinS(sp2C) * sp28;
         sp24 = Math_CosS(sp2C);
-        temp_s0->unk_14 = (f32) (Math_CosS(sp2E) * (sp28 * sp24));
+        temp_s0[1].z = Math_CosS(sp2E) * (sp28 * sp24);
         if ((arg2 == 1) || (arg2 == 3)) {
-            temp_s0->unk_24 = (f32) ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-            temp_s0->x = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0->unk_C) + arg1->x;
-            temp_s0->y = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_10) + arg1->y;
+            temp_s0[3].x = (Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f;
+            temp_s0->x = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0[1].x) + arg1->x;
+            temp_s0->y = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0[1].y) + arg1->y;
             temp_f18 = Rand_ZeroFloat(2.0f) + 9.0f;
             temp_s0->unk_1A = 1;
-            temp_s0->z = (temp_f18 * temp_s0->unk_14) + arg1->z;
+            temp_s0->z = (temp_f18 * temp_s0[1].z) + arg1->z;
         } else {
-            temp_s0->unk_24 = (f32) ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-            temp_s0->x = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C) + arg1->x;
-            temp_s0->y = ((Rand_ZeroFloat(3.0f) + 1.0f) * temp_s0->unk_10) + arg1->y;
+            temp_s0[3].x = (Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f;
+            temp_s0->x = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0[1].x) + arg1->x;
+            temp_s0->y = ((Rand_ZeroFloat(3.0f) + 1.0f) * temp_s0[1].y) + arg1->y;
             temp_f8 = Rand_ZeroFloat(2.0f) + 3.0f;
             temp_s0->unk_1A = 0;
-            temp_s0->z = (temp_f8 * temp_s0->unk_14) + arg1->z;
+            temp_s0->z = (temp_f8 * temp_s0[1].z) + arg1->z;
         }
         temp_s0->unk_1C = (s16) (Rand_Next() >> 0x10);
         temp_s0->unk_1E = (s16) (Rand_Next() >> 0x10);
@@ -277,11 +277,11 @@ void func_80B220A8(Actor *arg0) {
     arg0->shape.rot.x = (s16) (Rand_Next() >> 0x10);
     arg0->shape.rot.y = (s16) (Rand_Next() >> 0x10);
     arg0->shape.rot.z = (s16) (Rand_Next() >> 0x10);
-    arg0->unk_148 = 0xA;
-    arg0->unk_18C = (s16) (s32) (arg0->scale.x * 2500.0f);
-    temp_v1 = arg0->unk_18C;
-    arg0->unk_190 = (s16) -(s32) temp_v1;
-    arg0->unk_18E = (s16) (temp_v1 * 2);
+    arg0[1].flags = 0xA;
+    arg0[1].focus.rot.x = (s16) (s32) (arg0->scale.x * 2500.0f);
+    temp_v1 = arg0[1].focus.rot.x;
+    arg0[1].focus.rot.z = (s16) -(s32) temp_v1;
+    arg0[1].focus.rot.y = temp_v1 * 2;
     Math_Vec3f_Copy(&arg0->prevPos, (Vec3f *) &arg0->world);
     arg0->unk_144 = func_80B221E8;
 }
@@ -321,9 +321,9 @@ void func_80B222AC(Actor *arg0, void *arg1) {
     Actor_SetScale(arg0, (Rand_ZeroFloat(5.0f) + 17.0f) * 0.01f);
     arg0->scale.x *= 0.6f;
     arg0->scale.z *= 0.6f;
-    arg0->unk_18C = (s16) (s32) (arg0->scale.x * 150.0f);
-    arg0->unk_190 = (s16) (s32) (arg0->scale.y * -750.0f);
-    arg0->unk_18E = (s16) ((s32) arg0->unk_190 * -2);
+    arg0[1].focus.rot.x = (s16) (s32) (arg0->scale.x * 150.0f);
+    arg0[1].focus.rot.z = (s16) (s32) (arg0->scale.y * -750.0f);
+    arg0[1].focus.rot.y = (s32) arg0[1].focus.rot.z * -2;
     Math_Vec3f_Copy(&arg0->prevPos, (Vec3f *) &arg0->world);
     arg0->params = 2;
     arg0->unk_144 = func_80B2242C;
@@ -376,16 +376,16 @@ void func_80B22500(EnHakurock *this, GlobalContext *globalCtx) {
             func_80B21FFC(this);
             return;
         }
-        if ((globalCtx->actorCtx.actorList[2].first == temp_v0_2) && ((globalCtx->actorCtx.actorList[2].first->unk_A74 & 0x81000) != 0) && (globalCtx->actorCtx.actorList[2].first->unk_AD0 > 8.0f)) {
+        if ((globalCtx->actorCtx.actorList[2].first == temp_v0_2) && ((globalCtx->actorCtx.actorList[2].first[8].targetArrowOffset & 0x81000) != 0) && (globalCtx->actorCtx.actorList[2].first->unk_AD0 > 8.0f)) {
             globalCtx->actorCtx.actorList[2].first->unk_AD0 = -5.0f;
-            globalCtx->actorCtx.actorList[2].first->unk_B08 = -5.0f;
+            globalCtx->actorCtx.actorList[2].first[8].shape.feetPos[1].z = -5.0f;
             temp_v0_3 = globalCtx->actorCtx.actorList[2].first->world.rot.y;
             globalCtx->actorCtx.actorList[2].first->unk_B8C = 4;
-            globalCtx->actorCtx.actorList[2].first->unk_AD4 = temp_v0_3;
+            globalCtx->actorCtx.actorList[2].first[8].colChkInfo.cylYShift = temp_v0_3;
             globalCtx->actorCtx.actorList[2].first->home.rot.y = temp_v0_3;
             globalCtx->actorCtx.actorList[2].first->shape.rot.y = temp_v0_3;
             globalCtx->actorCtx.actorList[2].first->velocity.y = 5.0f;
-            globalCtx->actorCtx.actorList[2].first->unk_B0C = (f32) (globalCtx->actorCtx.actorList[2].first->unk_B0C + (-5.0f * 0.05f));
+            globalCtx->actorCtx.actorList[2].first[8].projectedPos.x += -5.0f * 0.05f;
             return;
         }
         /* Duplicate return node #16. Try simplifying control flow for better match */
@@ -400,12 +400,12 @@ void func_80B226AC(Actor *arg0) {
     arg0->draw = func_80B229A4;
     Actor_SetScale(arg0, 0.35f);
     arg0->scale.y = 0.5f;
-    arg0->unk_18C = (s16) (s32) (arg0->scale.x * 270.0f);
-    arg0->unk_148 = 0;
+    arg0[1].focus.rot.x = (s16) (s32) (arg0->scale.x * 270.0f);
+    arg0[1].flags = 0;
     arg0->unk_144 = func_80B22750;
     arg0->shape.shadowScale = 0.0f;
-    arg0->unk_190 = (s16) (s32) (0.5f * -750.0f);
-    arg0->unk_18E = (s16) ((s32) arg0->unk_190 * -2);
+    arg0[1].focus.rot.z = (s16) (s32) (0.5f * -750.0f);
+    arg0[1].focus.rot.y = (s32) arg0[1].focus.rot.z * -2;
 }
 
 void func_80B22750(EnHakurock *this, GlobalContext *globalCtx) {
@@ -464,17 +464,17 @@ void func_80B228F4(Actor *arg0, GraphicsContext **arg1) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA000080;
     temp_v0->words.w1 = 0xFFB918FF;
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp18 = temp_v0_2;
     sp18->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_3 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_3 + 8;
+    sp24->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_0406AB30;
     temp_v0_3->words.w0 = 0xDE000000;
 }
@@ -492,16 +492,16 @@ void func_80B229A4(Actor *arg0, GraphicsContext **arg1) {
     func_8012C28C(temp_a0);
     SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(*arg1);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06011100;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_06011178;
     temp_v0_3->words.w0 = 0xDE000000;
 }

@@ -315,11 +315,11 @@ void EnGakufu_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp8C = this;
     temp_s0 = globalCtx->state.gfxCtx;
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = 0;
     temp_v0->words.w0 = 0xE7000000;
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060008;
     temp_v0_2->words.w1 = (u32) globalCtx->interfaceCtx.parameterSegment;
     phi_s3 = 0;
@@ -332,54 +332,54 @@ loop_2:
         SysMatrix_InsertTranslation((f32) phi_s4, *(&D_80AFD204 + (phi_s2->unk_148 * 4)) * 7.5f, 1.0f, 1);
         Matrix_Scale(0.6f, 0.6f, 0.6f, 1);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE3001001;
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFD700000;
         temp_v0_5->words.w1 = *(&D_80AFD218 + (phi_s2->unk_148 * 4));
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x7090240;
         temp_v0_6->words.w0 = 0xF5700000;
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0;
         temp_v0_7->words.w0 = 0xE6000000;
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x707F400;
         temp_v0_8->words.w0 = 0xF3000000;
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = 0;
         temp_v0_9->words.w0 = 0xE7000000;
         temp_v0_10 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_10 + 8;
+        temp_s0->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0x90240;
         temp_v0_10->words.w0 = 0xF5680400;
         temp_v0_11 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_11 + 8;
+        temp_s0->polyXlu.p = &temp_v0_11[1];
         temp_v0_11->words.w0 = 0xF2000000;
         temp_v0_11->words.w1 = 0x3C03C;
         if (phi_s2->unk_148 == 0) {
             temp_v0_12 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_12 + 8;
+            temp_s0->polyXlu.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0x5096FFC8;
             temp_v0_12->words.w0 = 0xFA000000;
         } else {
             temp_v0_13 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_13 + 8;
+            temp_s0->polyXlu.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0xFFFF32C8;
             temp_v0_13->words.w0 = 0xFA000000;
         }
         temp_v0_14 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_14 + 8;
+        temp_s0->polyXlu.p = &temp_v0_14[1];
         temp_v0_14->words.w0 = 0xDE000000;
         temp_v0_14->words.w1 = (u32) sp40;
         SysMatrix_StatePop();
@@ -392,7 +392,7 @@ loop_2:
         }
     }
     temp_v0_15 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_15 + 8;
+    temp_s0->polyXlu.p = &temp_v0_15[1];
     temp_v0_15->words.w0 = 0xDB060008;
     temp_v0_15->words.w1 = (u32) globalCtx->sceneSegment;
 }

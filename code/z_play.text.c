@@ -33,6 +33,38 @@ typedef struct ActorContext {
     /* 0x27A */ char pad_27A[0xA];                  /* maybe part of unk278[6]? */
 } ActorContext;                                     /* size = 0x284 */
 
+typedef struct {
+    /* 0x0 */ u8 numTransitionActors;
+    /* 0x1 */ char pad_1[0x2];                      /* maybe part of numTransitionActors[3]? */
+    /* 0x3 */ ? unk_3;                              /* inferred */
+    /* 0x3 */ char pad_3[0x1];
+    /* 0x4 */ TransitionActorEntry *transitionActorList;
+} DoorContext;                                      /* size = 0x8 */
+
+typedef struct GameAllocNode {
+    /* 0x00 */ GameAllocNode *next;
+    /* 0x04 */ GameAllocNode *prev;
+    /* 0x08 */ u32 size;
+    /* 0x0C */ s32 unk_C;                           /* inferred */
+} GameAllocNode;                                    /* size = 0x10 */
+
+typedef struct GameState {
+    /* 0x00 */ GraphicsContext *gfxCtx;
+    /* 0x04 */ void (*main)(GameState *);
+    /* 0x08 */ void (*destroy)(GameState *);
+    /* 0x0C */ void (*nextGameStateInit)(GameState *);
+    /* 0x10 */ u32 nextGameStateSize;
+    /* 0x14 */ Input input[4];
+    /* 0x74 */ TwoHeadArena heap;
+    /* 0x84 */ GameAlloc alloc;
+    /* 0x98 */ DoorContext unk_98;                  /* inferred */
+    /* 0x9B */ u8 running;                          /* overlap */
+    /* 0x9C */ u32 frames;                          /* overlap */
+    /* 0xA0 */ char pad_A0[0x2];
+    /* 0xA2 */ u8 framerateDivisor;
+    /* 0xA3 */ char pad_A3[0x1];
+} GameState;                                        /* size = 0xA4 */
+
 typedef struct GlobalContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
@@ -227,17 +259,17 @@ struct _mips2c_stack_Play_GetCamera {};             /* size 0x0 */
 
 struct _mips2c_stack_Play_Init {
     /* 0x00 */ char pad_0[0x3C];
-    /* 0x3C */ CollisionContext *sp3C;              /* inferred */
-    /* 0x40 */ Camera *sp40;                        /* inferred */
-    /* 0x44 */ View *sp44;                          /* inferred */
+    /* 0x3C */ void **sp3C;                         /* inferred */
+    /* 0x40 */ s8 *sp40;                            /* inferred */
+    /* 0x44 */ Input *sp44;                         /* inferred */
     /* 0x48 */ Camera *sp48;                        /* inferred */
-    /* 0x4C */ PreRender *sp4C;                     /* inferred */
+    /* 0x4C */ void (**sp4C)(GameState *);          /* inferred */
     /* 0x50 */ char pad_50[0x10];                   /* maybe part of sp4C[5]? */
     /* 0x60 */ s32 sp60;                            /* inferred */
     /* 0x64 */ char pad_64[0x23];                   /* maybe part of sp60[9]? */
     /* 0x87 */ u8 sp87;                             /* inferred */
     /* 0x88 */ char pad_88[0x8];                    /* maybe part of sp87[9]? */
-    /* 0x90 */ Actor *sp90;                         /* inferred */
+    /* 0x90 */ TransitionActorEntry *sp90;          /* inferred */
     /* 0x94 */ s32 sp94;                            /* inferred */
     /* 0x98 */ char pad_98[0x8];                    /* maybe part of sp94[3]? */
     /* 0xA0 */ GraphicsContext *spA0;               /* inferred */
@@ -570,14 +602,14 @@ struct _mips2c_stack_func_8016A268 {};              /* size 0x0 */
 
 ? ActorCutscene_ClearWaiting();                     /* extern */
 ? ActorCutscene_Update();                           /* extern */
-? Actor_Init(GameState *, PreRender *, s32);        /* extern */
+? Actor_Init(GameState *, s8 *, s32);               /* extern */
 ? MainHeap_Cleanup();                               /* extern */
 ? ShrinkWindow_Init();                              /* extern */
 ? TransitionFade_Destroy(? *);                      /* extern */
 ? TransitionFade_Draw(? *, Gfx **);                 /* extern */
-? TransitionFade_SetColor(PreRender *, ?);          /* extern */
-? TransitionFade_SetType(PreRender *, ?);           /* extern */
-? TransitionFade_Start(PreRender *);                /* extern */
+? TransitionFade_SetColor(TwoHeadArena *, ?);       /* extern */
+? TransitionFade_SetType(TwoHeadArena *, ?);        /* extern */
+? TransitionFade_Start(TwoHeadArena *);             /* extern */
 ? TransitionFade_Update(? *, u8);                   /* extern */
 ? func_800BA9B4(ActorContext *, GlobalContext *);   /* extern */
 f32 func_800C40B4(CollisionContext *, CollisionPoly **, ? *, f32 *); /* extern */
@@ -585,7 +617,7 @@ s32 func_800C9EBC(void *, s32, s32, f32 *, s32 *, ? *); /* extern */
 s32 func_800CA6D8(void *, s32);                     /* extern */
 ? func_800DE308(Camera *, s16, s16, GlobalContext *); /* extern */
 s32 func_800DFD78(Camera *, ?, Vec3f *, s32);       /* extern */
-? func_800DFF18(Camera *, ?);                       /* extern */
+? func_800DFF18(s8 *, ?);                           /* extern */
 ? func_800E007C(Camera *, Camera *, s16, GlobalContext *); /* extern */
 ? func_800E01B8(f32 *, Camera *);                   /* extern */
 ? func_800E9470();                                  /* extern */
@@ -593,7 +625,7 @@ s32 func_800DFD78(Camera *, ?, Vec3f *, s32);       /* extern */
 ? func_800F6834(GlobalContext *, s32);              /* extern */
 ? func_800F694C(GlobalContext *);                   /* extern */
 ? func_800F8CD4(GlobalContext *, EnvironmentContext *, LightContext *, PauseContext *, MessageContext *, GameOverContext *, GraphicsContext *); /* extern */
-? func_800F9728(GlobalContext *, EnvironmentContext *, View *, GraphicsContext *, f32, s32, s32); /* extern */
+? func_800F9728(GlobalContext *, EnvironmentContext *, View *, GraphicsContext *, f32, f32, f32); /* extern */
 ? func_800FA9FC(GlobalContext *, View *, GraphicsContext *); /* extern */
 ? func_800FB758(GameState *);                       /* extern */
 ? func_800FBCBC(GlobalContext *);                   /* extern */
@@ -609,7 +641,7 @@ s32 func_800FE590(GlobalContext *);                 /* extern */
 ? func_8011F0E0(GlobalContext *);                   /* extern */
 ? func_801210E0(GlobalContext *);                   /* extern */
 ? func_80121F94(GlobalContext *);                   /* extern */
-? func_80122660(void *);                            /* extern */
+? func_80122660(void **);                           /* extern */
 s32 func_80122670(FrameAdvanceContext *, Input *);  /* extern */
 ? func_8013EE48(?);                                 /* extern */
 ? func_80140EA0(void *);                            /* extern */
@@ -857,8 +889,8 @@ void func_80165460(void **arg0) {
         temp_t0->unk_2A0 = (void *) (temp_v1_2 + 8);
         temp_v1_2->unk_0 = 0xDE000000;
         temp_v1_2->unk_4 = sp34;
-        arg0->unk_18B5C = (s32) temp_t0->unk_2CC;
-        arg0->unk_18B60 = (s32) arg0->unk_18E64;
+        arg0[25303] = temp_t0->unk_2CC;
+        arg0[25304] = arg0[25497];
         if (D_801F6DFD == 2) {
             temp_a0_2 = arg0 + 0x18B4C;
             sp1C = temp_a0_2;
@@ -872,7 +904,7 @@ void func_80165460(void **arg0) {
         sp3C = arg0->unk_0;
         func_801705B4(phi_a0, &sp34);
         temp_t8 = sp34;
-        sp34 = temp_t8 + 8;
+        sp34 = &temp_t8[1];
         temp_t8->words.w1 = 0;
         temp_t8->words.w0 = 0xDF000000;
         sp3C = arg0->unk_0;
@@ -1771,12 +1803,12 @@ f32 func_801668B4(Vec3f *arg0, s32 *arg1, s32 *arg2) {
 
     temp_a1 = arg0 + 0x830;
     temp_t7 = &sp38;
-    sp38 = arg0->unk_1CCC->unk_28;
+    sp38 = arg0[614].y->unk_28;
     sp2C = temp_a1;
-    if (func_800C9EBC(temp_a1, arg1->unk_0, arg1->unk_8, temp_t7, &sp34, &sp30) == 0) {
+    if (func_800C9EBC(temp_a1, arg1->unk_0, arg1[2], temp_t7, &sp34, &sp30) == 0) {
         return -32000.0f;
     }
-    if (sp38 < arg1->unk_4) {
+    if (sp38 < arg1[1]) {
         return -32000.0f;
     }
     *arg2 = func_800CA6D8(sp2C, sp34);
@@ -1784,7 +1816,7 @@ f32 func_801668B4(Vec3f *arg0, s32 *arg1, s32 *arg2) {
 }
 
 void func_80166968(GlobalContext *globalCtx, Camera *camera) {
-    s32 sp28;
+    f32 sp28;
     Actor *sp24;
     Camera *temp_a3;
     Vec3f *temp_a1;
@@ -1818,7 +1850,7 @@ void func_80166968(GlobalContext *globalCtx, Camera *camera) {
                 Quake_SetCountdown(D_801D0D58, 0x3E8);
             }
         }
-        if ((sp24->unk_A74 & 0x8000) != 0) {
+        if (((bitwise s32) sp24[8].targetArrowOffset & 0x8000) != 0) {
             Quake2_SetType(8);
             Quake2_ClearType(4);
             return;
@@ -2318,9 +2350,9 @@ void func_80167814(GlobalContext *globalCtx) {
 
     sp5C = 0;
     sp44 = globalCtx + 0x10000;
-    gSegments->unk_10 = (void *) (globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment + 0x80000000);
-    gSegments->unk_14 = (void *) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
-    gSegments->unk_8 = (void *) (globalCtx->sceneSegment + 0x80000000);
+    gSegments[4] = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment + 0x80000000);
+    gSegments[5] = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
+    gSegments[2] = (u32) (globalCtx->sceneSegment + 0x80000000);
     temp_a2 = gGameInfo;
     if (temp_a2->data[185] == 2) {
         temp_a2->data[185] = 3;
@@ -2369,7 +2401,7 @@ void func_80167814(GlobalContext *globalCtx) {
             SkelAnime_AnimationCtxReset(temp_a0);
             Object_UpdateBank(&globalCtx->objectCtx);
             if ((phi_v0 == 0) && (gGameInfo->data[936] == 0)) {
-                globalCtx->gameplayFrames = sp40->unk_840 + 1;
+                globalCtx->gameplayFrames = sp40[25].unk_0C + 1;
                 func_8013EE48(1);
                 temp_v1_3 = globalCtx->actorCtx.unk_0;
                 if ((temp_v1_3 != 0) && (temp_t2 = temp_v1_3 - 1, globalCtx->actorCtx.unk_0 = temp_t2, (((s32) temp_v1_3 < 5) != 0))) {
@@ -2530,13 +2562,13 @@ void func_80167F0C(GlobalContext *arg0) {
         sp30 = temp_a0;
         sp34 = Graph_GfxPlusOne(temp_a0);
         temp_v1 = temp_a3->overlay.p;
-        temp_a3->overlay.p = temp_v1 + 8;
+        temp_a3->overlay.p = &temp_v1[1];
         temp_v1->words.w0 = 0xDE000000;
         temp_v1->words.w1 = (u32) sp34;
         sp2C = temp_a3;
         func_80141778(D_801F6D4C, &sp34, arg0->unk_18E60, temp_a3);
         temp_t0 = sp34;
-        sp34 = temp_t0 + 8;
+        sp34 = &temp_t0[1];
         temp_t0->words.w1 = 0;
         temp_t0->words.w0 = 0xDF000000;
         sp2C = temp_a3;
@@ -2637,43 +2669,43 @@ void func_80168090(GlobalContext *globalCtx) {
         func_8012CF0C(temp_s1, 0, 0, 0U, (u8) 0, (u8) 0);
         sp40 = globalCtx + 0x18000;
     }
-    gSegments->unk_10 = (void *) (globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment + 0x80000000);
-    gSegments->unk_14 = (void *) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
-    gSegments->unk_8 = (void *) (globalCtx->sceneSegment + 0x80000000);
+    gSegments[4] = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment + 0x80000000);
+    gSegments[5] = (u32) (globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment + 0x80000000);
+    gSegments[2] = (u32) (globalCtx->sceneSegment + 0x80000000);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060010;
     temp_v0_2->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment;
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060010;
     temp_v0_3->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment;
     temp_v0_4 = temp_s1->overlay.p;
-    temp_s1->overlay.p = temp_v0_4 + 8;
+    temp_s1->overlay.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060010;
     temp_v0_4->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.mainKeepIndex].segment;
     temp_v0_5 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_5 + 8;
+    temp_s1->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDB060014;
     temp_v0_5->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment;
     temp_v0_6 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_6 + 8;
+    temp_s1->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDB060014;
     temp_v0_6->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment;
     temp_v0_7 = temp_s1->overlay.p;
-    temp_s1->overlay.p = temp_v0_7 + 8;
+    temp_s1->overlay.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDB060014;
     temp_v0_7->words.w1 = (u32) globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment;
     temp_v0_8 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_8 + 8;
+    temp_s1->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDB060008;
     temp_v0_8->words.w1 = (u32) globalCtx->sceneSegment;
     temp_v0_9 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_9 + 8;
+    temp_s1->polyXlu.p = &temp_v0_9[1];
     temp_v0_9->words.w0 = 0xDB060008;
     temp_v0_9->words.w1 = (u32) globalCtx->sceneSegment;
     temp_v0_10 = temp_s1->overlay.p;
-    temp_s1->overlay.p = temp_v0_10 + 8;
+    temp_s1->overlay.p = &temp_v0_10[1];
     temp_v0_10->words.w0 = 0xDB060008;
     temp_v0_10->words.w1 = (u32) globalCtx->sceneSegment;
     sp3C = globalCtx + 0x10000;
@@ -2712,24 +2744,24 @@ void func_80168090(GlobalContext *globalCtx) {
     globalCtx->unk_1883C = (Mtx *) temp_v1;
     SysMatrix_ToRSPMatrix(sp48, sp40->unk_83C);
     SysMatrix_InsertYRotation_f((f32) (s16) (func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000) * 0.0000958738f, 0);
-    SysMatrix_GetStateAsRSPMatrix(sp40->unk_83C + 0x40);
+    SysMatrix_GetStateAsRSPMatrix(&sp40->unk_83C[1]);
     temp_v0_12 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_12 + 8;
+    temp_s1->polyOpa.p = &temp_v0_12[1];
     temp_v0_12->words.w0 = 0xDB060004;
     temp_v0_12->words.w1 = (u32) sp40->unk_83C;
     temp_v0_13 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_13 + 8;
+    temp_s1->polyXlu.p = &temp_v0_13[1];
     temp_v0_13->words.w0 = 0xDB060004;
     temp_v0_13->words.w1 = (u32) sp40->unk_83C;
     temp_v0_14 = temp_s1->overlay.p;
-    temp_s1->overlay.p = temp_v0_14 + 8;
+    temp_s1->overlay.p = &temp_v0_14[1];
     temp_v0_14->words.w0 = 0xDB060004;
     temp_v0_14->words.w1 = (u32) sp40->unk_83C;
     temp_a0_2 = temp_s1->polyOpa.p;
     sp214 = temp_a0_2;
     sp218 = Graph_GfxPlusOne(temp_a0_2);
     temp_v0_15 = temp_s1->overlay.p;
-    temp_s1->overlay.p = temp_v0_15 + 8;
+    temp_s1->overlay.p = &temp_v0_15[1];
     temp_v0_15->words.w0 = 0xDE000000;
     temp_v0_15->words.w1 = (u32) sp218;
     temp_v0_16 = sp40->unk_B4A;
@@ -2750,7 +2782,7 @@ void func_80168090(GlobalContext *globalCtx) {
         VisMono_Draw(&D_801F6D18, &sp218, MIPS2C_ERROR(Read from unset register $a2));
     }
     temp_t0 = sp218;
-    sp218 = temp_t0 + 8;
+    sp218 = &temp_t0[1];
     temp_t0->words.w1 = 0;
     temp_t0->words.w0 = 0xDF000000;
     Graph_BranchDlist(sp214, sp218);
@@ -2784,7 +2816,7 @@ void func_80168090(GlobalContext *globalCtx) {
                 func_80170798((PreRender *) sp44, &sp8C);
             }
             temp_t7 = sp8C;
-            sp8C = temp_t7 + 8;
+            sp8C = &temp_t7[1];
             temp_t7->words.w0 = 0xDE000000;
             temp_t7->words.w1 = (u32) &D_0E000140;
             temp_s1->polyOpa.p = sp8C;
@@ -2833,7 +2865,7 @@ void func_80168090(GlobalContext *globalCtx) {
             sp25C = globalCtx->view.eye.x + sp3C->unk_7008;
             sp260 = globalCtx->view.eye.y + sp3C->unk_700C;
             sp264 = globalCtx->view.eye.z + sp3C->unk_7010;
-            func_800F9728(globalCtx, &globalCtx->envCtx, sp38, temp_s1, temp_t0_2->unk_0, temp_t0_2->unk_4, temp_t0_2->unk_8);
+            func_800F9728(globalCtx, &globalCtx->envCtx, sp38, temp_s1, temp_t0_2->unk_0, temp_t0_2[1], temp_t0_2[2]);
         }
         func_800FBCBC(globalCtx);
         temp_v1_3 = gGameInfo;
@@ -2859,7 +2891,7 @@ void func_80168090(GlobalContext *globalCtx) {
             sp70 = temp_a0_5;
             sp74 = Graph_GfxPlusOne(temp_a0_5);
             temp_v0_20 = temp_s1->overlay.p;
-            temp_s1->overlay.p = temp_v0_20 + 8;
+            temp_s1->overlay.p = &temp_v0_20[1];
             temp_v0_20->words.w0 = 0xDE000000;
             temp_v0_20->words.w1 = (u32) sp74;
             globalCtx->pauseBgPreRender.fbuf = (u16 *) temp_s1->framebuffer;
@@ -2882,7 +2914,7 @@ void func_80168090(GlobalContext *globalCtx) {
                 func_80170730((PreRender *) sp44, &sp74);
             }
             temp_t4 = sp74;
-            sp74 = temp_t4 + 8;
+            sp74 = &temp_t4[1];
             temp_t4->words.w1 = 0;
             temp_t4->words.w0 = 0xDF000000;
             Graph_BranchDlist(sp70, sp74);
@@ -3016,7 +3048,7 @@ f32 func_80169100(? *arg0, MtxF *arg1, CollisionPoly **arg2, ? *arg3, f32 *arg4)
     temp_f0 = temp_ret;
     if (temp_f0 > -32000.0f) {
         sp2C = temp_f0;
-        func_800C0094(*arg2, arg4->unk_0, temp_f0, arg4->unk_8, arg1);
+        func_800C0094(*arg2, arg4->unk_0, temp_f0, arg4[2], arg1);
     } else {
         arg1->mf[1][0] = 0.0f;
         arg1->mf[0][2] = 0.0f;
@@ -3031,9 +3063,9 @@ f32 func_80169100(? *arg0, MtxF *arg1, CollisionPoly **arg2, ? *arg3, f32 *arg4)
         arg1->mf[1][2] = 0.0f;
         arg1->mf[1][1] = 1.0f;
         arg1->mf[3][0] = arg4->unk_0;
-        arg1->mf[3][1] = arg4->unk_4;
+        arg1->mf[3][1] = arg4[1];
         arg1->mf[3][3] = 1.0f;
-        arg1->mf[3][2] = arg4->unk_8;
+        arg1->mf[3][2] = arg4[2];
     }
     return temp_ret;
 }
@@ -3078,15 +3110,15 @@ void func_801692C4(GameState *arg0, s8 arg1) {
     arg0->unk_18868 = 0;
     arg0->unk_18864 = 0;
     arg0->unk_1886C = 0;
-    arg0->unk_18754 = 0;
+    arg0[610].alloc.base.size = 0;
     arg0->unk_18846 = 0;
     Object_InitBank(arg0, arg0 + 0x17D88);
-    LightContext_Init((GlobalContext *) arg0, arg0 + 0x818);
-    Door_InitContext(arg0, arg0 + 0x18760);
-    Room_Init((GlobalContext *) arg0, arg0 + 0x186E0);
+    LightContext_Init((GlobalContext *) arg0, (LightContext *) &arg0[12].input[3].press);
+    Door_InitContext(arg0, &arg0[610].unk_98);
+    Room_Init((GlobalContext *) arg0, (RoomContext *) &arg0[610].input[0].cur.errno);
     gSaveContext.worldMapArea = 0;
-    Scene_ProcessHeader((GlobalContext *) arg0, arg0->unk_B0);
-    func_8016927C((GlobalContext *) arg0, (s16) arg0->unk_18874);
+    Scene_ProcessHeader((GlobalContext *) arg0, (SceneCmd *) arg0[1].nextGameStateInit);
+    func_8016927C((GlobalContext *) arg0, (s16) (u8) arg0[612].input[3].prev.stick_x);
 }
 
 void Play_SceneInit(GlobalContext *arg0, s32 arg1, s32 arg2) {
@@ -3101,7 +3133,7 @@ void Play_SceneInit(GlobalContext *arg0, s32 arg1, s32 arg2) {
     sp1C = temp_a1;
     arg0->sceneSegment = Play_LoadScene(arg0, (RomFile *) temp_a1);
     sp1C->unk_D = 0;
-    *(gSegments + 8) = (u32) (arg0->sceneSegment + 0x80000000);
+    gSegments[2] = (u32) (arg0->sceneSegment + 0x80000000);
     func_801692C4((GameState *) arg0, (s8) arg2);
     Room_AllocateAndLoad(arg0, &arg0->roomCtx);
 }
@@ -3525,8 +3557,8 @@ s32 FrameAdvance_IsEnabled(GlobalContext *globalCtx) {
 
     temp_a1 = arg0 + 0x830;
     sp2C.unk_0 = arg1->unk_0;
-    sp2C.unk_4 = (f32) arg1->unk_4;
-    sp2C.unk_8 = (s32) arg1->unk_8;
+    (&sp2C)[1] = arg1->unk_4;
+    (&sp2C)[2] = arg1->unk_8;
     sp24 = temp_a1;
     if ((func_800CA1AC(arg0, temp_a1, sp2C, sp34, &sp30, &sp3C) == 1) && (arg1->unk_4 < sp30) && (func_800C40B4(sp24, &sp38, &sp28, &sp2C) != -32000.0f)) {
         return 1;
@@ -3589,26 +3621,19 @@ void func_8016A268(s32 arg0, s16 arg1, s32 arg2, s32 arg3, u8 arg4, u8 arg5) {
 void Play_Init(GameState *thisx) {
     GraphicsContext *spA0;
     s32 sp94;
-    Actor *sp90;
+    TransitionActorEntry *sp90;
     u8 sp87;
     s32 sp60;
-    PreRender *sp4C;
+    void (**sp4C)(GameState *);
     Camera *sp48;
-    View *sp44;
-    Camera *sp40;
-    CollisionContext *sp3C;
-    Actor *temp_a1_4;
-    Camera *temp_a0_3;
-    CollisionContext *temp_a1_3;
-    CollisionContext *temp_a2;
+    Input *sp44;
+    s8 *sp40;
+    void **sp3C;
     GameState *temp_v0_3;
-    PreRender *temp_a0_5;
-    PreRender *temp_a0_6;
-    PreRender *temp_a1_2;
-    PreRender *temp_t0;
+    Input *temp_a0_2;
+    TransitionActorEntry *temp_a1_4;
+    TwoHeadArena *temp_a0_6;
     TwoHeadArena *temp_a0_7;
-    View *temp_a0_2;
-    View *temp_a0_4;
     s32 temp_a0;
     s32 temp_a1;
     s32 temp_t8;
@@ -3616,6 +3641,8 @@ void Play_Init(GameState *thisx) {
     s32 temp_v0_11;
     s32 temp_v0_7;
     s32 temp_v0_8;
+    s8 *temp_a0_3;
+    s8 *temp_a1_2;
     u16 temp_v0_2;
     u16 temp_v0_4;
     u16 temp_v0_5;
@@ -3624,16 +3651,21 @@ void Play_Init(GameState *thisx) {
     u32 temp_a2_2;
     u32 temp_a2_3;
     u32 temp_v1_2;
+    u8 *temp_a1_3;
     u8 temp_v0_10;
     u8 temp_v0_13;
     u8 temp_v1;
+    void (**temp_a0_4)(GameState *);
+    void (**temp_a0_5)(GameState *);
+    void (**temp_t0)(GameState *);
+    void **temp_a2;
     void *temp_v0_12;
     s32 phi_a0;
     s32 phi_a0_2;
     GameState *phi_v0;
     s32 phi_a1;
     Camera *phi_a0_3;
-    PreRender *phi_t0;
+    void (**phi_t0)(GameState *);
 
     temp_v0 = gSaveContext.respawnFlag;
     spA0 = thisx->gfxCtx;
@@ -3699,9 +3731,9 @@ block_7:
     Game_ResizeHeap(thisx, 0U);
     func_80163804((GlobalContext *) thisx);
     ShrinkWindow_Init();
-    temp_a0_2 = thisx + 0xB8;
+    temp_a0_2 = thisx[1].input;
     sp44 = temp_a0_2;
-    View_Init(temp_a0_2, spA0);
+    View_Init((View *) temp_a0_2, spA0);
     func_801A3EC0(0);
     Quake_Init();
     Quake2_Init((GlobalContext *) thisx);
@@ -3714,28 +3746,28 @@ block_7:
         phi_v0 = temp_v0_3;
         phi_a1 = temp_a1;
     } while (temp_a1 < 4);
-    temp_a0_3 = thisx + 0x220;
-    temp_a2 = thisx + 0x830;
+    temp_a0_3 = &thisx[3].input[1].prev.stick_x;
+    temp_a2 = &thisx[12].heap.tail;
     sp3C = temp_a2;
     sp40 = temp_a0_3;
-    Camera_Init(temp_a0_3, sp44, temp_a2, (GlobalContext *) thisx);
-    func_800DE308(temp_a0_3, 7);
-    phi_a0_3 = thisx + 0x398;
+    Camera_Init((Camera *) temp_a0_3, (View *) sp44, (CollisionContext *) temp_a2, (GlobalContext *) thisx);
+    func_800DE308((Camera *) temp_a0_3, 7);
+    phi_a0_3 = (Camera *) &thisx[5].input[3].prev.stick_x;
     phi_t0 = NULL;
     do {
         sp48 = phi_a0_3;
         sp4C = phi_t0;
-        Camera_Init(phi_a0_3, sp44, sp3C, (GlobalContext *) thisx);
+        Camera_Init(phi_a0_3, (View *) sp44, (CollisionContext *) sp3C, (GlobalContext *) thisx);
         func_800DE308(phi_a0_3, 0x100);
         temp_t0 = phi_t0 + 0x178;
-        phi_a0_3 += 0x178;
+        phi_a0_3 = &phi_a0_3[1];
         phi_t0 = temp_t0;
     } while (temp_t0 != 0x468);
     thisx->unk_800 = sp40;
-    sp40->uid = 0;
+    sp40->unk_130 = 0;
     thisx->unk_810 = 0;
     func_800DFF18(sp40, 0x7F);
-    Sram_Alloc(thisx, thisx + 0x46B8);
+    Sram_Alloc(thisx, (SramContext *) &thisx[110].input[1].rel.stick_x);
     func_801AAAA0((GlobalContext *) thisx);
     Message_Init((GlobalContext *) thisx);
     func_801AA610((GlobalContext *) thisx);
@@ -3743,11 +3775,11 @@ block_7:
     EffFootmark_Init((GlobalContext *) thisx);
     Effect_Init((GlobalContext *) thisx);
     EffectSS_Init((GlobalContext *) thisx, 0x64);
-    CollisionCheck_InitContext((GlobalContext *) thisx, thisx + 0x18884);
-    temp_a0_4 = thisx + 0x17104;
-    sp44 = temp_a0_4;
+    CollisionCheck_InitContext((GlobalContext *) thisx, (CollisionCheckContext *) &thisx[612].heap);
+    temp_a0_4 = &thisx[576].main;
+    sp44 = (Input *) temp_a0_4;
     SkelAnime_AnimationCtxReset((AnimationContext *) temp_a0_4);
-    Cutscene_Init((GlobalContext *) thisx, thisx + 0x1F24);
+    Cutscene_Init((GlobalContext *) thisx, (CutsceneContext *) &thisx[48].input[3].prev.stick_x);
     temp_v0_4 = gSaveContext.nextCutsceneIndex;
     if (temp_v0_4 != 0xFFEF) {
         gSaveContext.cutscene = (s32) temp_v0_4;
@@ -3797,30 +3829,30 @@ block_7:
     }
     func_80165608();
     gGameInfo->data[190] = 0;
-    temp_a0_5 = thisx + 0x18B4C;
+    temp_a0_5 = &thisx[617].destroy;
     gGameInfo->data[185] = 0;
     sp4C = temp_a0_5;
-    PreRender_Init(temp_a0_5);
-    PreRender_SetValuesSave(temp_a0_5, (u32) D_801FBBCC, (u32) D_801FBBCE, NULL, NULL, NULL);
-    PreRender_SetValues(temp_a0_5, (u32) D_801FBBCC, (u32) D_801FBBCE, NULL, NULL);
-    thisx->unk_18E64 = (s32) D_801FBB90;
-    thisx->unk_18E5C = D_80780000;
-    thisx->unk_18E68 = D_80784600;
-    thisx->unk_18E58 = D_80784600;
-    thisx->unk_18E60 = D_80784600;
+    PreRender_Init((PreRender *) temp_a0_5);
+    PreRender_SetValuesSave((PreRender *) temp_a0_5, (u32) D_801FBBCC, (u32) D_801FBBCE, NULL, NULL, NULL);
+    PreRender_SetValues((PreRender *) temp_a0_5, (u32) D_801FBBCC, (u32) D_801FBBCE, NULL, NULL);
+    thisx[621].alloc.base.unk_C = D_801FBB90;
+    thisx[621].alloc.base.prev = (GameAllocNode *) D_80780000;
+    thisx[621].alloc.head = (GameAllocNode *) D_80784600;
+    thisx[621].alloc.base.next = (GameAllocNode *) D_80784600;
+    thisx[621].alloc.base.size = (u32) D_80784600;
     D_801F6D10 = 0;
     thisx->unk_18B4A = 0;
     D_801D0D54 = 0;
-    func_80122660(thisx + 0x828);
+    func_80122660(&thisx[12].heap.bufp);
     Rand_Seed((u32) osGetTime());
     SysMatrix_StateAlloc(thisx);
     thisx->main = (void (*)(GameState *)) Play_Update;
     thisx->destroy = (void (*)(GameState *)) Play_Fini;
-    thisx->unk_18875 = -0x14;
+    thisx[612].input[3].prev.stick_y = -0x14;
     thisx->unk_18876 = 0;
-    thisx->unk_18878 = 0;
-    thisx->unk_18845 = 0;
-    thisx->unk_18844 = 0;
+    thisx[612].input[3].press.button = 0;
+    thisx[612].input[1].prev.stick_y = 0;
+    thisx[612].input[1].prev.stick_x = 0;
     if (gSaveContext.gameMode != 1) {
         temp_v0_10 = gSaveContext.nextTransition;
         if (temp_v0_10 == 0xFF) {
@@ -3832,8 +3864,8 @@ block_7:
     } else {
         thisx->unk_1887F = 2;
     }
-    temp_a0_6 = thisx + 0x18E48;
-    sp4C = temp_a0_6;
+    temp_a0_6 = &thisx[621].heap;
+    sp4C = (void (**)(GameState *)) temp_a0_6;
     TransitionFade_Init((void *) temp_a0_6);
     TransitionFade_SetType(temp_a0_6, 3);
     TransitionFade_SetColor(temp_a0_6, 0xA0A0A0FF);
@@ -3854,19 +3886,19 @@ block_7:
     D_801F6D4C->unk_13 = 0;
     func_800F12D0((GlobalContext *) thisx);
     temp_a0_7 = &thisx->heap;
-    sp4C = (PreRender *) temp_a0_7;
+    sp4C = (void (**)(GameState *)) temp_a0_7;
     THA_GetSize(temp_a0_7);
     temp_v0_11 = THA_GetSize(temp_a0_7);
     sp94 = temp_v0_11;
     temp_v0_12 = THA_AllocEndAlign16(temp_a0_7, (u32) temp_v0_11);
     temp_a2_2 = (temp_v0_12 + 8) & ~0xF;
     MainHeap_Init(temp_a2_2, (sp94 - temp_a2_2) + temp_v0_12);
-    temp_a1_2 = thisx + 0x1CA0;
-    sp4C = temp_a1_2;
+    temp_a1_2 = &thisx[44].input[3].rel.stick_x;
+    sp4C = (void (**)(GameState *)) temp_a1_2;
     sp48 = thisx + 0x18000;
     Actor_Init(thisx, temp_a1_2, thisx->unk_18850);
-    temp_a1_3 = thisx + 0x186E0;
-    sp3C = temp_a1_3;
+    temp_a1_3 = &thisx[610].input[0].cur.errno;
+    sp3C = (void **) temp_a1_3;
     if (Room_HandleLoadCallbacks((GlobalContext *) thisx, (RoomContext *) temp_a1_3) == 0) {
         do {
 
@@ -3875,19 +3907,19 @@ block_7:
     if ((((s32) gSaveContext.day % 5) != 0) && ((temp_v0_13 = sp48->unk_6E3, (temp_v0_13 == 1)) || (temp_v0_13 == 5))) {
         Actor_Spawn((ActorContext *) sp4C, (GlobalContext *) thisx, 0x15A, 0.0f, 0.0f, 0.0f, (s16) 0, (s16) 0, (s16) 0, (s16) 0);
     }
-    temp_a1_4 = thisx->unk_1CCC;
+    temp_a1_4 = thisx[44].unk_98.transitionActorList;
     sp90 = temp_a1_4;
-    func_800DE0EC(sp40, temp_a1_4);
+    func_800DE0EC((Camera *) sp40, (Actor *) temp_a1_4);
     D_801D0D50 = 0;
-    temp_a2_3 = temp_a1_4->params & 0xFF;
+    temp_a2_3 = temp_a1_4[1].rotY & 0xFF;
     if (temp_a2_3 != 0xFF) {
-        func_800DFB14(sp40, temp_a2_3);
+        func_800DFB14((Camera *) sp40, temp_a2_3);
     }
-    func_800F15D8(sp40);
+    func_800F15D8((Camera *) sp40);
     func_801129E4(thisx);
     func_800FB758(thisx);
-    gSaveContext.seqIndex = thisx->unk_814;
-    gSaveContext.nightSeqIndex = thisx->unk_815;
+    gSaveContext.seqIndex = (u8) thisx[12].input[3].prev.stick_x;
+    gSaveContext.nightSeqIndex = (u8) thisx[12].input[3].prev.stick_y;
     func_80135EE8((GlobalContext *) thisx, (AnimationContext *) sp44);
     func_800EDBE0((GlobalContext *) thisx);
     gSaveContext.respawnFlag = 0;

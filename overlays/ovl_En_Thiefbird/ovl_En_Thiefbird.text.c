@@ -30,6 +30,12 @@ typedef struct EnThiefbird {
     /* 0x3F0 */ char pad_3F0[0x5A0];                /* maybe part of unk_3EC[361]? */
 } EnThiefbird;                                      /* size = 0x990 */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnThiefbird_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -437,7 +443,7 @@ loop_1:
     if (gSaveContext.playerForm == 4) {
         temp_a3 = (s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts;
         phi_a3 = temp_a3;
-        if (gSaveContext.inventory.items[gItemSlots[0x10]] == 0x10) {
+        if (gSaveContext.inventory.items[gItemSlots[16]] == 0x10) {
             phi_a3 = temp_a3 + 4;
         }
     }
@@ -771,16 +777,16 @@ loop_5:
 void func_80C11454(Actor *arg0) {
     arg0->unk_18C = 0xA;
     arg0->flags &= -0x201;
-    arg0->unk_3D8 = 0.5f;
-    arg0->unk_3DC = 0.75f;
-    arg0->unk_3D4 = 1.0f;
+    arg0[3].home.pos.y = 0.5f;
+    arg0[3].home.pos.z = 0.75f;
+    arg0[3].home.pos.x = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
 
 void func_80C114C0(Actor *arg0, GlobalContext *arg1) {
     if (arg0->unk_18C == 0xA) {
         arg0->unk_18C = 0U;
-        arg0->unk_3D4 = 0.0f;
+        arg0[3].home.pos.x = 0.0f;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x350), 0xB, 2, 0.2f, 0.2f);
         arg0->flags |= 0x200;
     }
@@ -963,14 +969,14 @@ void func_80C11C60(Actor *arg0) {
     SkelAnime_ChangeAnimDefaultStop(arg0 + 0x144, &D_06000088);
     arg0->bgCheckFlags &= 0xFFFE;
     arg0->shape.rot.x = 0;
-    arg0->unk_18E = 0x28;
+    arg0[1].focus.rot.y = 0x28;
     arg0->velocity.y = 0.0f;
     Audio_PlayActorSound2(arg0, 0x3A99U);
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x28);
     arg0->unk_281 = (u8) (arg0->unk_281 & 0xFFFE);
     arg0->flags |= 0x10;
-    arg0->unk_192 = 0x1C00;
-    arg0->unk_188 = func_80C11D14;
+    arg0[1].focus.unk_12 = 0x1C00;
+    arg0[1].focus.pos.z = (bitwise f32) func_80C11D14;
 }
 
 void func_80C11D14(EnThiefbird *this, GlobalContext *globalCtx) {
@@ -1040,7 +1046,7 @@ void func_80C11DF0(EnThiefbird *this, GlobalContext *globalCtx) {
         do {
             func_800B3030(globalCtx, phi_s1, &D_801D15B0, &D_801D15B0, (s16) 0x8C, (s16) 0, 0);
             temp_s0 = phi_s0 + 0xC;
-            phi_s1 += 0xC;
+            phi_s1 = &phi_s1[1];
             phi_s0 = temp_s0;
         } while (temp_s0 < 0x84);
         temp_s3 = &this->actor.world;
@@ -1087,12 +1093,12 @@ void func_80C11F6C(Actor *arg0, GlobalContext *arg1) {
     }
     arg0->unk_281 = (u8) (arg0->unk_281 & 0xFFFE);
     if (arg0->unk_3E8 == 0) {
-        arg0->unk_190 = -0x1000;
-        arg0->unk_192 = (s16) (arg0->yawTowardsPlayer + 0x8000);
+        arg0[1].focus.rot.z = -0x1000;
+        arg0[1].focus.unk_12 = arg0->yawTowardsPlayer + 0x8000;
     } else {
-        arg0->unk_190 = Actor_PitchToPoint(arg0, &D_80C13920);
+        arg0[1].focus.rot.z = Actor_PitchToPoint(arg0, &D_80C13920);
     }
-    arg0->unk_18E = 0x28;
+    arg0[1].focus.rot.y = 0x28;
     if (Rand_ZeroOne() < 0.9f) {
         Item_DropCollectible(arg1, (Vec3f *) &arg0->focus, 0U);
     }
@@ -1102,7 +1108,7 @@ void func_80C11F6C(Actor *arg0, GlobalContext *arg1) {
     if (Rand_ZeroOne() < 0.3f) {
         Item_DropCollectible(arg1, (Vec3f *) &arg0->focus, 0U);
     }
-    arg0->unk_188 = func_80C1215C;
+    arg0[1].focus.pos.z = (bitwise f32) func_80C1215C;
 }
 
 void func_80C1215C(EnThiefbird *this, GlobalContext *globalCtx) {
@@ -1159,10 +1165,10 @@ void func_80C12308(Actor *arg0) {
     arg0 = arg0;
     SkelAnime_ChangeAnimTransitionRepeat(temp_a0, &D_06000278, -4.0f);
     func_80C10984(arg0, 0xF);
-    arg0->unk_190 = -0x1000;
-    arg0->unk_192 = (s16) (arg0->yawTowardsPlayer + 0x8000);
-    arg0->unk_18E = 0x28;
-    arg0->unk_188 = func_80C12378;
+    arg0[1].focus.rot.z = -0x1000;
+    arg0[1].focus.unk_12 = arg0->yawTowardsPlayer + 0x8000;
+    arg0[1].focus.rot.y = 0x28;
+    arg0[1].focus.pos.z = (bitwise f32) func_80C12378;
 }
 
 void func_80C12378(EnThiefbird *this, GlobalContext *globalCtx) {
@@ -1378,10 +1384,10 @@ void func_80C12B1C(Actor *arg0, GlobalContext *arg1) {
     if ((temp_v0 & 2) != 0) {
         arg0->unk_281 = (u8) (temp_v0 & 0xFFFD);
         arg0->unk_280 = (u8) (arg0->unk_280 & 0xFFFD);
-        func_800BE258(arg0, arg0->unk_28C);
+        func_800BE258(arg0, arg0[2].flags);
         func_80C114C0(arg0, arg1);
-        arg0->unk_194 = 0;
-        phi_v0 = arg0->unk_28C;
+        arg0[1].sfx = 0;
+        phi_v0 = (void *) arg0[2].flags;
         phi_v1 = 0;
 loop_2:
         phi_v1_2 = phi_v1;
@@ -1399,20 +1405,20 @@ loop_2:
             func_80C11454(arg0);
         } else if (temp_v0_2 == 4) {
             arg0->unk_18C = 0x14;
-            arg0->unk_3D8 = 0.5f;
-            arg0->unk_3D4 = 4.0f;
+            arg0[3].home.pos.y = 0.5f;
+            arg0[3].home.pos.x = 4.0f;
             if (phi_v1_2 != 0xC0) {
-                temp_v0_3 = arg0->unk_28C + phi_v1_2;
+                temp_v0_3 = arg0[2].flags + phi_v1_2;
                 Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) temp_v0_3->unk_E, (f32) temp_v0_3->unk_10, (f32) temp_v0_3->unk_12, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
             }
         } else if (temp_v0_2 == 2) {
             arg0->unk_18C = 0;
-            arg0->unk_3D8 = 0.5f;
-            arg0->unk_3D4 = 4.0f;
+            arg0[3].home.pos.y = 0.5f;
+            arg0[3].home.pos.x = 4.0f;
         } else if (temp_v0_2 == 5) {
             arg0->unk_18C = 0x1E;
-            arg0->unk_3D8 = 0.5f;
-            arg0->unk_3D4 = 2.0f;
+            arg0[3].home.pos.y = 0.5f;
+            arg0[3].home.pos.x = 2.0f;
         }
         if (arg0->unk_3E8 != 0) {
             arg0->colChkInfo.damage = 0;
@@ -1448,9 +1454,9 @@ void func_80C12D00(EnThiefbird *arg0) {
             Math_Vec3f_Sum(temp_s1, &D_80C1368C, temp_s1);
             phi_s0->unk_1C = (s16) (phi_s0->unk_1C + 1);
             Math_StepToF((f32 *) temp_s1, 0.0f, 0.05f);
-            Math_StepToF(phi_s0 + 0x14, 0.0f, 0.05f);
-            if (phi_s0->unk_10 < -0.5f) {
-                phi_s0->unk_10 = -0.5f;
+            Math_StepToF(&phi_s0[1].z, 0.0f, 0.05f);
+            if (phi_s0[1].y < -0.5f) {
+                phi_s0[1].y = -0.5f;
             }
             if ((phi_s2 & 1) != 0) {
                 phi_f20 = -1.0f;
@@ -1461,7 +1467,7 @@ void func_80C12D00(EnThiefbird *arg0) {
             phi_s0->unk_1E = (s16) (phi_s0->unk_1E + (s32) (1638.0f * fabsf(Math_SinS((s16) (phi_s0->unk_1C * 0xBB8))) * phi_f20));
         }
         temp_s2 = phi_s2 + 1;
-        phi_s0 += 0x24;
+        phi_s0 = &phi_s0[3];
         phi_s2 = temp_s2;
     } while (temp_s2 != 0x28);
 }
@@ -1530,7 +1536,7 @@ s32 func_80C130EC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     } else if (arg1 == 0x10) {
         *arg2 = NULL;
     } else if (arg1 == 8) {
-        arg4->z += arg5->unk_194;
+        arg4->z += arg5[1].sfx;
     }
     return 0;
 }
@@ -1566,9 +1572,9 @@ void func_80C1315C(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
         temp_v1->words.w0 = 0xDA380003;
         sp44 = temp_v1;
         temp_v1->words.w1 = Matrix_NewMtx(*arg0);
-        temp_v1->unk_8 = 0xDE000000;
-        temp_v1->unk_C = (s32) arg4->unk_3E4;
-        sp3C->polyOpa.p = temp_v1 + 0x10;
+        temp_v1[1].words.w0 = 0xDE000000;
+        temp_v1[1].words.w1 = arg4->unk_3E4;
+        sp3C->polyOpa.p = &temp_v1[2];
         goto block_11;
     }
     if (arg1 == 0x10) {
@@ -1584,8 +1590,8 @@ void func_80C1315C(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
             sp2C = temp_a1;
             sp44 = phi_v1;
             phi_v1->words.w1 = Matrix_NewMtx(*temp_a2);
-            phi_v1->unk_8 = 0xDE000000;
-            phi_v1->unk_C = (s32) arg4->unk_3E8;
+            phi_v1[1].words.w0 = 0xDE000000;
+            phi_v1[1].words.w1 = arg4->unk_3E8;
             if (&D_060033B0 == arg4->unk_3E8) {
                 temp_a1->polyXlu.p = phi_v1 + 0x10;
             } else {
@@ -1627,10 +1633,10 @@ void func_80C13354(EnThiefbird *arg0, GraphicsContext **arg1) {
     temp_t6 = *arg1;
     sp5C = temp_t6;
     temp_s1 = temp_t6->polyOpa.p;
-    temp_s1->words.w1 = sSetupDL + 0x4B0;
+    temp_s1->words.w1 = &sSetupDL[150];
     temp_s1->words.w0 = 0xDE000000;
-    temp_s1->unk_C = &D_06003060;
-    temp_s1->unk_8 = 0xDE000000U;
+    temp_s1[1].words.w1 = &D_06003060;
+    temp_s1[1].words.w0 = 0xDE000000;
     phi_s0 = arg0 + 0x3F0;
     phi_s1 = temp_s1 + 0x10;
     phi_s3 = 0;
@@ -1646,8 +1652,8 @@ void func_80C13354(EnThiefbird *arg0, GraphicsContext **arg1) {
             Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
             phi_s1->words.w0 = 0xDA380003;
             phi_s1->words.w1 = Matrix_NewMtx(*arg1);
-            phi_s1->unk_8 = 0xDE000000U;
-            phi_s1->unk_C = &D_060030D8;
+            phi_s1[1].words.w0 = 0xDE000000;
+            phi_s1[1].words.w1 = &D_060030D8;
             phi_s1_2 = phi_s1 + 0x10;
         }
         temp_s3 = phi_s3 + 1;
@@ -1667,5 +1673,5 @@ void EnThiefbird_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     func_80C13354(this, (GraphicsContext **) globalCtx);
     func_800BE680(globalCtx, (Actor *) this, (Vec3f []) &this->unk_350, 0xB, this->unk_3D8, this->unk_3DC, this->unk_3D4, (u8) (s32) this->unk_18C);
-    Math_Vec3s_ToVec3f((Vec3f *) &this->actor.focus, this->unk_270.elements + 0x70);
+    Math_Vec3s_ToVec3f((Vec3f *) &this->actor.focus, (Vec3s *) &this->unk_270.elements[1].dim.worldSphere);
 }

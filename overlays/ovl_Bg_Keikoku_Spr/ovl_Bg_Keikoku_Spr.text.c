@@ -47,22 +47,22 @@ void BgKeikokuSpr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = globalCtx->state.gfxCtx;
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060001F8));
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000100;
     temp_v0_2->words.w0 = 0xDE000000;
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060003F8));
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_06000300;
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060005F8));
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_06000500;
 }

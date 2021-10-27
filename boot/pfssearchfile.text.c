@@ -56,7 +56,7 @@ loop_6:
 loop_14:
                 temp_v0_5 = phi_v0 + 1;
                 phi_v0 = temp_v0_5;
-                if (phi_v0->unk_10 != *phi_v1) {
+                if (phi_v0[16] != *phi_v1) {
                     phi_a0 = 1;
                 } else {
                     phi_v1 += 1;
@@ -73,7 +73,7 @@ loop_14:
 loop_20:
                     temp_v0_6 = phi_v0_2 + 1;
                     phi_v0_2 = temp_v0_6;
-                    if (phi_v0_2->unk_C != *phi_v1_2) {
+                    if (phi_v0_2[12] != *phi_v1_2) {
                         phi_a0_2 = 1;
                     } else {
                         phi_v1_2 += 1;

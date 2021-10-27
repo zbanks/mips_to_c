@@ -394,7 +394,7 @@ void func_80A1B840(f32 *arg0) {
             phi_v1->mf[0][0] = phi_f18 + phi_a0->unk_0;
             temp_a0 = phi_a0 + 0x10;
             temp_v1 = phi_v1 + 0x10;
-            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0->unk_4);
+            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0[1]);
             temp_v1->unk_-8 = (f32) (phi_v1->mf[0][2] + temp_a0->unk_-8);
             temp_v1->unk_-4 = (f32) (phi_v1->mf[0][3] + temp_a0->unk_-4);
             phi_f18 = temp_f18_2;
@@ -798,7 +798,7 @@ void func_80A1C838(Actor *arg0, GlobalContext *arg1) {
         }
     }
     temp_v0_2 = arg0->unk_156;
-    temp_a2 = arg0 + 0x144;
+    temp_a2 = &arg0[1];
     if (((temp_v0_2 & 8) == 0) && (arg0->xzDistToPlayer > 28.0f)) {
         arg0->unk_156 = (u8) (temp_v0_2 | 8);
     }
@@ -825,7 +825,7 @@ void func_80A1C838(Actor *arg0, GlobalContext *arg1) {
 }
 
 void func_80A1CBF8(Actor *arg0) {
-    arg0->unk_1E4 = func_80A1CC0C;
+    arg0[1].colChkInfo.damageTable = func_80A1CC0C;
 }
 
 void func_80A1CC0C(Actor *arg0, GlobalContext *arg1) {
@@ -861,7 +861,7 @@ void func_80A1CD10(Actor *arg0) {
     f32 phi_f12;
     f32 phi_f12_2;
 
-    arg0->unk_1E4 = func_80A1CEF4;
+    arg0[1].colChkInfo.damageTable = func_80A1CEF4;
     arg0->unk_1E8 = 0x40;
     if ((arg0->unk_1EA & 2) != 0) {
         temp_f12 = (Rand_ZeroOne() * 1.2f) - 1.1f;
@@ -952,7 +952,7 @@ void func_80A1CEF4(Actor *arg0, GlobalContext *arg1) {
     arg0->shape.rot.y += D_80A1D3FC;
     func_80A1C5E8(arg0, arg1);
     temp_a1 = &arg1->colChkCtx;
-    temp_a2_2 = arg0 + 0x144;
+    temp_a2_2 = &arg0[1];
     sp20 = temp_a2_2;
     sp24 = temp_a1;
     CollisionCheck_SetOC(arg1, temp_a1, (Collider *) temp_a2_2);
@@ -990,12 +990,12 @@ void ObjFlowerpot_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp3C = temp_v0;
     sp3C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_060012E0;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_a1 = &this->unk_144;
@@ -1014,13 +1014,13 @@ void ObjFlowerpot_Draw(Actor *thisx, GlobalContext *globalCtx) {
             if ((temp_f0 > -150.0f) && (temp_f0 < 400.0f)) {
                 func_80A1B840((this->unk_1EB << 6) + &D_80A1D838);
                 temp_v0_3 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_3 + 8;
+                temp_s1->polyOpa.p = &temp_v0_3[1];
                 temp_v0_3->words.w0 = 0xDA380003;
                 temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             }
         }
         temp_v0_4 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_4 + 8;
+        temp_s1->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = (u32) &D_06001408;
     }

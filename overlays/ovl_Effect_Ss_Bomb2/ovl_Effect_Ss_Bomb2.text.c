@@ -87,25 +87,25 @@ void func_80978138(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     temp_v0 = SkinMatrix_MtxFToNewMtx(temp_s0, (MtxF *) &sp8C);
     if (temp_v0 != 0) {
         temp_v1 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1 + 8;
+        temp_s0->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) temp_v0;
         temp_v1->words.w0 = 0xDA380003;
         func_8012C974(temp_s0);
         temp_v1_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_2 + 8;
+        temp_s0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFA000000;
         temp_v1_2->words.w1 = (this->regs[5] & 0xFF) | (this->regs[2] << 0x18) | ((this->regs[3] & 0xFF) << 0x10) | ((this->regs[4] & 0xFF) << 8);
         temp_v1_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_3 + 8;
+        temp_s0->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFB000000;
         temp_v1_3->words.w1 = ((this->regs[8] & 0xFF) << 8) | (this->regs[6] << 0x18) | ((this->regs[7] & 0xFF) << 0x10);
         temp_v1_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_4 + 8;
+        temp_s0->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xDB060020;
         sp28 = temp_v1_4;
         sp28->words.w1 = Lib_SegmentedToVirtual(*(&D_80978800 + (this->regs[1] * 4)));
         temp_v1_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_5 + 8;
+        temp_s0->polyXlu.p = &temp_v1_5[1];
         temp_v1_5->words.w0 = 0xDE000000;
         temp_v1_5->words.w1 = (u32) this->gfx;
     }
@@ -146,7 +146,7 @@ void func_80978304(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     phi_f22 = 0.925f;
     if (temp_v0 != 0) {
         temp_v1 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v1 + 8;
+        temp_s2->polyXlu.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) temp_v0;
         temp_v1->words.w0 = 0xDA380003;
         temp_v0_2 = SkinMatrix_MtxFToNewMtx(temp_s2, (MtxF *) &sp13C);
@@ -154,23 +154,23 @@ void func_80978304(GlobalContext *globalCtx, u32 index, EffectSs *this) {
         if (temp_v0_2 != 0) {
             func_8012C974(temp_s2);
             temp_v1_2 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_2 + 8;
+            temp_s2->polyXlu.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xFA000000;
             temp_v1_2->words.w1 = (this->regs[5] & 0xFF) | (this->regs[2] << 0x18) | ((this->regs[3] & 0xFF) << 0x10) | ((this->regs[4] & 0xFF) << 8);
             temp_v1_3 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_3 + 8;
+            temp_s2->polyXlu.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xFB000000;
             temp_v1_3->words.w1 = ((this->regs[8] & 0xFF) << 8) | (this->regs[6] << 0x18) | ((this->regs[7] & 0xFF) << 0x10);
             temp_s0 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_s0 + 8;
+            temp_s2->polyXlu.p = &temp_s0[1];
             temp_s0->words.w0 = 0xDB060020;
             temp_s0->words.w1 = Lib_SegmentedToVirtual(*(&D_80978820 + (this->regs[1] * 4)));
             temp_v1_4 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_4 + 8;
+            temp_s2->polyXlu.p = &temp_v1_4[1];
             temp_v1_4->words.w1 = (u32) &D_0401A538;
             temp_v1_4->words.w0 = 0xDE000000;
             temp_v1_5 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v1_5 + 8;
+            temp_s2->polyXlu.p = &temp_v1_5[1];
             temp_v1_5->words.w1 = (u32) &D_0401A590;
             temp_v1_5->words.w0 = 0xDE000000;
             SysMatrix_FromRSPMatrix((RSPMatrix *) temp_s1, (MtxF *) &spBC);
@@ -181,12 +181,12 @@ void func_80978304(GlobalContext *globalCtx, u32 index, EffectSs *this) {
                 SysMatrix_InsertZRotation_f(((f32) this->life * 0.02f) + 180.0f, 1);
                 Matrix_Scale(phi_f22, phi_f22, phi_f22, 1);
                 temp_s0_2 = temp_s2->polyXlu.p;
-                temp_s2->polyXlu.p = temp_s0_2 + 8;
+                temp_s2->polyXlu.p = &temp_s0_2[1];
                 temp_s0_2->words.w0 = 0xDA380003;
                 temp_s0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
                 temp_v1_6 = temp_s2->polyXlu.p;
                 temp_s1_2 = phi_s1 - 1;
-                temp_s2->polyXlu.p = temp_v1_6 + 8;
+                temp_s2->polyXlu.p = &temp_v1_6[1];
                 temp_v1_6->words.w1 = (u32) &D_0401A590;
                 temp_v1_6->words.w0 = 0xDE000000;
                 phi_f22 -= 0.15f;

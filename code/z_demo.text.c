@@ -762,7 +762,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             func_800EB364(globalCtx, csCtx, cmd);
             return;
         case 2:
-            if (gSaveContext.inventory.items[gItemSlots[0x43]] == 0x43) {
+            if (gSaveContext.inventory.items[gItemSlots[67]] == 0x43) {
                 globalCtx->nextEntranceIndex = 0x2400;
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -772,7 +772,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 3:
-            if (gSaveContext.inventory.items[gItemSlots[0x40]] == 0x40) {
+            if (gSaveContext.inventory.items[gItemSlots[64]] == 0x40) {
                 globalCtx->nextEntranceIndex = 0x4600;
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -782,7 +782,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 4:
-            if (gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) {
+            if (gSaveContext.inventory.items[gItemSlots[60]] == 0x3C) {
                 globalCtx->nextEntranceIndex = 0x6400;
                 gSaveContext.nextCutsceneIndex = 0xFFF1;
             } else {
@@ -792,7 +792,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 5:
-            if (gSaveContext.inventory.items[gItemSlots[0x47]] == 0x47) {
+            if (gSaveContext.inventory.items[gItemSlots[71]] == 0x47) {
                 globalCtx->nextEntranceIndex = 0xD400;
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -802,7 +802,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 6:
-            if (gSaveContext.inventory.items[gItemSlots[0x3D]] == 0x3D) {
+            if (gSaveContext.inventory.items[gItemSlots[61]] == 0x3D) {
                 globalCtx->nextEntranceIndex = 0x2400;
                 gSaveContext.nextCutsceneIndex = 0xFFF1;
             } else {
@@ -812,7 +812,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 7:
-            if (gSaveContext.inventory.items[gItemSlots[0x46]] == 0x46) {
+            if (gSaveContext.inventory.items[gItemSlots[70]] == 0x46) {
                 globalCtx->nextEntranceIndex = 0x2400;
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
             } else {
@@ -827,7 +827,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 9:
-            if (gSaveContext.inventory.items[gItemSlots[0x3F]] == 0x3F) {
+            if (gSaveContext.inventory.items[gItemSlots[63]] == 0x3F) {
                 globalCtx->nextEntranceIndex = 0x5400;
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
             } else {
@@ -837,7 +837,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 10:
-            if (gSaveContext.inventory.items[gItemSlots[0x39]] == 0x39) {
+            if (gSaveContext.inventory.items[gItemSlots[57]] == 0x39) {
                 globalCtx->nextEntranceIndex = 0x7E00;
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -847,7 +847,7 @@ void func_800EB6F8(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
             globalCtx->sceneLoadFlag = 0x14;
             return;
         case 11:
-            if (gSaveContext.inventory.items[gItemSlots[0x3E]] == 0x3E) {
+            if (gSaveContext.inventory.items[gItemSlots[62]] == 0x3E) {
                 globalCtx->nextEntranceIndex = 0x5410;
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
             } else {
@@ -901,9 +901,9 @@ void func_800EBCD0(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdBase *
     temp_v1 = globalCtx->actorCtx.actorList[2].first;
     if ((cmd->startFrame == csCtx->frames) && (cmd->base == 1)) {
         gSaveContext.hasTatl = 1;
-        if (temp_v1->unk_A80 == 0) {
+        if ((bitwise s32) temp_v1[8].scale.z == 0) {
             sp34 = temp_v1;
-            temp_v1->unk_A80 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x10, temp_v1->world.pos.x, temp_v1->world.pos.y, temp_v1->world.pos.z, (s16) 0, (s16) 0, (s16) 0, (s16) 0);
+            temp_v1[8].scale.z = (bitwise f32) Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x10, temp_v1->world.pos.x, temp_v1->world.pos.y, temp_v1->world.pos.z, (s16) 0, (s16) 0, (s16) 0, (s16) 0);
         }
     }
 }
@@ -1054,83 +1054,83 @@ s32 func_800EC6D4(void) {
     s32 phi_v1_20;
 
     phi_v1_20 = 0;
-    if (gSaveContext.inventory.items[gItemSlots->unk_36] == 0x36) {
+    if (gSaveContext.inventory.items[gItemSlots[54]] == 0x36) {
         phi_v1_20 = 1;
     }
     phi_v1_19 = phi_v1_20;
-    if (gSaveContext.inventory.items[gItemSlots->unk_37] == 0x37) {
+    if (gSaveContext.inventory.items[gItemSlots[55]] == 0x37) {
         phi_v1_19 = phi_v1_20 + 1;
     }
     phi_v1_18 = phi_v1_19;
-    if (gSaveContext.inventory.items[gItemSlots->unk_38] == 0x38) {
+    if (gSaveContext.inventory.items[gItemSlots[56]] == 0x38) {
         phi_v1_18 = phi_v1_19 + 1;
     }
     phi_v1_17 = phi_v1_18;
-    if (gSaveContext.inventory.items[gItemSlots->unk_39] == 0x39) {
+    if (gSaveContext.inventory.items[gItemSlots[57]] == 0x39) {
         phi_v1_17 = phi_v1_18 + 1;
     }
     phi_v1_16 = phi_v1_17;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3A] == 0x3A) {
+    if (gSaveContext.inventory.items[gItemSlots[58]] == 0x3A) {
         phi_v1_16 = phi_v1_17 + 1;
     }
     phi_v1_15 = phi_v1_16;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3B] == 0x3B) {
+    if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
         phi_v1_15 = phi_v1_16 + 1;
     }
     phi_v1_14 = phi_v1_15;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3C] == 0x3C) {
+    if (gSaveContext.inventory.items[gItemSlots[60]] == 0x3C) {
         phi_v1_14 = phi_v1_15 + 1;
     }
     phi_v1_13 = phi_v1_14;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3D] == 0x3D) {
+    if (gSaveContext.inventory.items[gItemSlots[61]] == 0x3D) {
         phi_v1_13 = phi_v1_14 + 1;
     }
     phi_v1_12 = phi_v1_13;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3E] == 0x3E) {
+    if (gSaveContext.inventory.items[gItemSlots[62]] == 0x3E) {
         phi_v1_12 = phi_v1_13 + 1;
     }
     phi_v1_11 = phi_v1_12;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3F] == 0x3F) {
+    if (gSaveContext.inventory.items[gItemSlots[63]] == 0x3F) {
         phi_v1_11 = phi_v1_12 + 1;
     }
     phi_v1_10 = phi_v1_11;
-    if (gSaveContext.inventory.items[gItemSlots->unk_40] == 0x40) {
+    if (gSaveContext.inventory.items[gItemSlots[64]] == 0x40) {
         phi_v1_10 = phi_v1_11 + 1;
     }
     phi_v1_9 = phi_v1_10;
-    if (gSaveContext.inventory.items[gItemSlots->unk_41] == 0x41) {
+    if (gSaveContext.inventory.items[gItemSlots[65]] == 0x41) {
         phi_v1_9 = phi_v1_10 + 1;
     }
     phi_v1_8 = phi_v1_9;
-    if (gSaveContext.inventory.items[gItemSlots->unk_42] == 0x42) {
+    if (gSaveContext.inventory.items[gItemSlots[66]] == 0x42) {
         phi_v1_8 = phi_v1_9 + 1;
     }
     phi_v1_7 = phi_v1_8;
-    if (gSaveContext.inventory.items[gItemSlots->unk_43] == 0x43) {
+    if (gSaveContext.inventory.items[gItemSlots[67]] == 0x43) {
         phi_v1_7 = phi_v1_8 + 1;
     }
     phi_v1_6 = phi_v1_7;
-    if (gSaveContext.inventory.items[gItemSlots->unk_44] == 0x44) {
+    if (gSaveContext.inventory.items[gItemSlots[68]] == 0x44) {
         phi_v1_6 = phi_v1_7 + 1;
     }
     phi_v1_5 = phi_v1_6;
-    if (gSaveContext.inventory.items[gItemSlots->unk_45] == 0x45) {
+    if (gSaveContext.inventory.items[gItemSlots[69]] == 0x45) {
         phi_v1_5 = phi_v1_6 + 1;
     }
     phi_v1_4 = phi_v1_5;
-    if (gSaveContext.inventory.items[gItemSlots->unk_46] == 0x46) {
+    if (gSaveContext.inventory.items[gItemSlots[70]] == 0x46) {
         phi_v1_4 = phi_v1_5 + 1;
     }
     phi_v1_3 = phi_v1_4;
-    if (gSaveContext.inventory.items[gItemSlots->unk_47] == 0x47) {
+    if (gSaveContext.inventory.items[gItemSlots[71]] == 0x47) {
         phi_v1_3 = phi_v1_4 + 1;
     }
     phi_v1_2 = phi_v1_3;
-    if (gSaveContext.inventory.items[gItemSlots->unk_48] == 0x48) {
+    if (gSaveContext.inventory.items[gItemSlots[72]] == 0x48) {
         phi_v1_2 = phi_v1_3 + 1;
     }
     phi_v1 = phi_v1_2;
-    if (gSaveContext.inventory.items[gItemSlots->unk_49] == 0x49) {
+    if (gSaveContext.inventory.items[gItemSlots[73]] == 0x49) {
         phi_v1 = phi_v1_2 + 1;
     }
     return phi_v1;
@@ -1166,7 +1166,7 @@ void func_800EC924(GlobalContext *globalCtx, CutsceneContext *csCtx, CsCmdTextbo
                 temp_v1 = temp_a3->type;
                 if (temp_v1 == 4) {
                     temp_v0 = gSaveContext.inventory.questItems;
-                    if (((gBitFlags->unk_0 & temp_v0) != 0) && ((gBitFlags->unk_4 & temp_v0) != 0) && ((gBitFlags->unk_8 & temp_v0) != 0) && ((gBitFlags->unk_C & temp_v0) != 0)) {
+                    if (((gBitFlags->unk_0 & temp_v0) != 0) && ((gBitFlags[1] & temp_v0) != 0) && ((gBitFlags[2] & temp_v0) != 0) && ((gBitFlags[3] & temp_v0) != 0)) {
                         temp_a1 = temp_a3->textId1;
                         if (temp_a1 != 0xFFFF) {
                             func_801518B0(globalCtx, temp_a1, NULL);
@@ -1302,7 +1302,7 @@ void func_800ECD7C(CutsceneContext *csCtx, u8 **cutscenePtr, s16 index) {
     temp_a0 = *cutscenePtr;
     cutscenePtr = cutscenePtr;
     bcopy((void *) temp_a0, (void *) &sp30, 4U);
-    *cutscenePtr += 4;
+    *cutscenePtr = &(*cutscenePtr)[4];
     phi_a1 = 0;
     if (sp30 > 0) {
         do {

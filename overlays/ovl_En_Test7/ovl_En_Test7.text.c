@@ -245,7 +245,7 @@ struct _mips2c_stack_func_80AF2EC8 {
 
 struct _mips2c_stack_func_80AF2F98 {
     /* 0x00 */ char pad_0[0x24];
-    /* 0x24 */ s32 *sp24;                           /* inferred */
+    /* 0x24 */ s16 *sp24;                           /* inferred */
     /* 0x28 */ char pad_28[0x4];
     /* 0x2C */ f32 sp2C;                            /* inferred */
     /* 0x30 */ char pad_30[0x8];                    /* maybe part of sp2C[3]? */
@@ -339,17 +339,17 @@ void func_80AF0838(s32 *arg0) {
     phi_v0 = 0;
     do {
         phi_v1->unk_0 = 0;
-        phi_v1->unk_4 = 0;
-        phi_v1->unk_8 = 0.0f;
-        phi_v1->unk_C = 0.0f;
-        phi_v1->unk_10 = 0.0f;
-        phi_v1->unk_14 = 0.0f;
-        phi_v1->unk_18 = 0.0f;
-        phi_v1->unk_1C = 0.0f;
-        phi_v1->unk_20 = 0.0f;
-        phi_v1->unk_24 = 0.0f;
-        phi_v1->unk_28 = 0.0f;
-        phi_v1->unk_2C = 0.00001f;
+        phi_v1[1] = 0;
+        phi_v1[2] = 0;
+        phi_v1[3] = 0;
+        phi_v1[4] = 0;
+        phi_v1[5] = 0;
+        phi_v1[6] = 0;
+        phi_v1[7] = 0;
+        phi_v1[8] = 0;
+        phi_v1[9] = 0;
+        phi_v1[10] = 0;
+        phi_v1[11] = 0x3727C5AC;
         phi_v1->unk_30 = 0;
         phi_v1->unk_32 = 0;
         phi_v1->unk_34 = 0;
@@ -357,54 +357,54 @@ void func_80AF0838(s32 *arg0) {
         phi_v1->unk_38 = 0;
         phi_v1->unk_3A = 0;
         temp_v0 = phi_v0 + 4;
-        phi_v1->unk_3C = 0;
-        phi_v1->unk_40 = 0;
-        phi_v1->unk_44 = 0.0f;
-        phi_v1->unk_48 = 0.0f;
-        phi_v1->unk_4C = 0.0f;
-        phi_v1->unk_50 = 0.0f;
-        phi_v1->unk_54 = 0.0f;
-        phi_v1->unk_58 = 0.0f;
-        phi_v1->unk_5C = 0.0f;
-        phi_v1->unk_60 = 0.0f;
-        phi_v1->unk_64 = 0.0f;
-        phi_v1->unk_68 = 0.00001f;
+        phi_v1[15] = 0;
+        phi_v1[16] = 0;
+        phi_v1[17] = 0;
+        phi_v1[18] = 0;
+        phi_v1[19] = 0;
+        phi_v1[20] = 0;
+        phi_v1[21] = 0;
+        phi_v1[22] = 0;
+        phi_v1[23] = 0;
+        phi_v1[24] = 0;
+        phi_v1[25] = 0;
+        phi_v1[26] = 0x3727C5AC;
         phi_v1->unk_6C = 0;
         phi_v1->unk_6E = 0;
         phi_v1->unk_70 = 0;
         phi_v1->unk_72 = 0;
         phi_v1->unk_74 = 0;
         phi_v1->unk_76 = 0;
-        phi_v1->unk_78 = 0;
-        phi_v1->unk_7C = 0;
-        phi_v1->unk_80 = 0.0f;
-        phi_v1->unk_84 = 0.0f;
-        phi_v1->unk_88 = 0.0f;
-        phi_v1->unk_8C = 0.0f;
-        phi_v1->unk_90 = 0.0f;
-        phi_v1->unk_94 = 0.0f;
-        phi_v1->unk_98 = 0.0f;
-        phi_v1->unk_9C = 0.0f;
-        phi_v1->unk_A0 = 0.0f;
-        phi_v1->unk_A4 = 0.00001f;
+        phi_v1[30] = 0;
+        phi_v1[31] = 0;
+        phi_v1[32] = 0;
+        phi_v1[33] = 0;
+        phi_v1[34] = 0;
+        phi_v1[35] = 0;
+        phi_v1[36] = 0;
+        phi_v1[37] = 0;
+        phi_v1[38] = 0;
+        phi_v1[39] = 0;
+        phi_v1[40] = 0;
+        phi_v1[41] = 0x3727C5AC;
         phi_v1->unk_A8 = 0;
         phi_v1->unk_AA = 0;
         phi_v1->unk_AC = 0;
         phi_v1->unk_AE = 0;
         phi_v1->unk_B0 = 0;
         phi_v1->unk_B2 = 0;
-        phi_v1->unk_B4 = 0;
-        phi_v1->unk_B8 = 0;
-        phi_v1->unk_BC = 0.0f;
-        phi_v1->unk_C0 = 0.0f;
-        phi_v1->unk_C4 = 0.0f;
-        phi_v1->unk_C8 = 0.0f;
-        phi_v1->unk_CC = 0.0f;
-        phi_v1->unk_D0 = 0.0f;
-        phi_v1->unk_D4 = 0.0f;
-        phi_v1->unk_D8 = 0.0f;
-        phi_v1->unk_DC = 0.0f;
-        phi_v1->unk_E0 = 0.00001f;
+        phi_v1[45] = 0;
+        phi_v1[46] = 0;
+        phi_v1[47] = 0;
+        phi_v1[48] = 0;
+        phi_v1[49] = 0;
+        phi_v1[50] = 0;
+        phi_v1[51] = 0;
+        phi_v1[52] = 0;
+        phi_v1[53] = 0;
+        phi_v1[54] = 0;
+        phi_v1[55] = 0;
+        phi_v1[56] = 0x3727C5AC;
         phi_v1->unk_E4 = 0;
         phi_v1->unk_E6 = 0;
         phi_v1->unk_E8 = 0;
@@ -425,29 +425,29 @@ void func_80AF0984(s32 *arg0, f32 *arg1, s32 *arg2) {
     f32 temp_f4;
 
     sp26 = (s16) (s32) (Rand_ZeroOne() * 65535.0f);
-    arg0->unk_8 = (?32) arg1->unk_0;
-    arg0->unk_C = (f32) arg1->unk_4;
-    arg0->unk_10 = (?32) arg1->unk_8;
+    arg0[2] = arg1->unk_0;
+    arg0[3] = arg1[1];
+    arg0[4] = arg1[2];
     if (arg2 != 0) {
         Math_CosS(sp26);
-        arg0->unk_8 = (f32) arg0->unk_8;
-        arg0->unk_C = (f32) (arg0->unk_C + ((Rand_ZeroOne() * 100.0f) - 20.0f));
+        arg0[2] = arg0[2];
+        arg0[3] += (Rand_ZeroOne() * 100.0f) - 20.0f;
         Math_SinS(sp26);
-        arg0->unk_10 = (?32) arg0->unk_10;
+        arg0[4] = arg0[4];
     }
     sp20 = (Rand_ZeroOne() * 4.0f) + 2.0f;
-    arg0->unk_14 = (f32) (Math_CosS(sp26) * sp20);
-    arg0->unk_18 = Rand_ZeroOne();
+    arg0[5] = Math_CosS(sp26) * sp20;
+    arg0[6] = Rand_ZeroOne();
     temp_f4 = Math_SinS(sp26) * sp20;
-    arg0->unk_20 = 0.0f;
-    arg0->unk_24 = 0.0f;
-    arg0->unk_28 = 0.0f;
-    arg0->unk_2C = 0.25f;
-    arg0->unk_1C = temp_f4;
+    arg0[8] = 0;
+    arg0[9] = 0;
+    arg0[10] = 0;
+    arg0[11] = 0x3E800000;
+    arg0[7] = temp_f4;
     arg0->unk_30 = (s16) (s32) (Rand_ZeroOne() * 65536.0f);
     arg0->unk_32 = (s16) (s32) (Rand_ZeroOne() * 65536.0f);
     temp_f0 = Rand_ZeroOne();
-    arg0->unk_4 = 0x3C;
+    arg0[1] = 0x3C;
     arg0->unk_34 = (s16) (s32) (temp_f0 * 65536.0f);
     if (Rand_ZeroOne() < 0.9f) {
         arg0->unk_0 = 1;
@@ -698,19 +698,19 @@ void func_80AF14FC(GraphicsContext **arg0, s32 *arg1) {
     func_8012C1C0(temp_a0);
     SysMatrix_StatePush();
     temp_v1 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v1 + 8;
+    temp_s1->polyOpa.p = &temp_v1[1];
     temp_v1->words.w1 = -1;
     temp_v1->words.w0 = 0xFA000080;
     temp_v1_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v1_2 + 8;
+    temp_s1->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = -1;
     temp_v1_2->words.w0 = 0xFB000000;
     phi_s0 = arg1;
     phi_s2 = 0;
     do {
         if (phi_s0->unk_0 != 0) {
-            temp_f12 = phi_s0->unk_8;
-            if ((temp_f12 > 30000.0f) || (temp_f12 < -30000.0f) || (temp_f14 = phi_s0->unk_C, (temp_f14 > 30000.0f)) || (temp_f14 < -30000.0f) || (temp_f0 = phi_s0->unk_10, (temp_f0 > 30000.0f)) || (temp_f0 < -30000.0f)) {
+            temp_f12 = phi_s0[2];
+            if ((temp_f12 > 30000.0f) || (temp_f12 < -30000.0f) || (temp_f14 = phi_s0[3], (temp_f14 > 30000.0f)) || (temp_f14 < -30000.0f) || (temp_f0 = phi_s0[4], (temp_f0 > 30000.0f)) || (temp_f0 < -30000.0f)) {
                 phi_s0->unk_0 = 0;
             } else {
                 SysMatrix_InsertTranslation(temp_f12, temp_f14, temp_f0, 0);
@@ -720,7 +720,7 @@ void func_80AF14FC(GraphicsContext **arg0, s32 *arg1) {
                     SkinMatrix_SetRotateYRP((MtxF *) &sp6C, phi_s0->unk_30, phi_s0->unk_32, phi_s0->unk_34);
                     SysMatrix_InsertMatrix((MtxF *) &sp6C, 1);
                 }
-                temp_f12_2 = phi_s0->unk_2C;
+                temp_f12_2 = phi_s0[11];
                 Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
                 if (phi_s0->unk_0 == 2) {
                     SysMatrix_InsertTranslation(0.0f, 30.0f, 0.0f, 1);
@@ -728,11 +728,11 @@ void func_80AF14FC(GraphicsContext **arg0, s32 *arg1) {
                 temp_v0 = Matrix_NewMtx(*arg0);
                 if (temp_v0 != 0) {
                     temp_v1_3 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v1_3 + 8;
+                    temp_s1->polyOpa.p = &temp_v1_3[1];
                     temp_v1_3->words.w1 = (u32) temp_v0;
                     temp_v1_3->words.w0 = 0xDA380003;
                     temp_v1_4 = temp_s1->polyOpa.p;
-                    temp_s1->polyOpa.p = temp_v1_4 + 8;
+                    temp_s1->polyOpa.p = &temp_v1_4[1];
                     temp_v1_4->words.w1 = (u32) &D_04081628;
                     temp_v1_4->words.w0 = 0xDE000000;
                 }
@@ -1313,13 +1313,13 @@ void func_80AF2C48(Actor *arg0, GlobalContext *arg1) {
 
     temp_f0 = arg0->home.pos.x;
     temp_f2 = arg0->home.pos.y;
-    arg0->unk_148 = 11.0f;
-    temp_f14 = (f32) (0x28 - arg0->unk_1E54) / 40.0f;
+    arg0[1].flags = 0x41300000;
+    temp_f14 = (f32) (0x28 - arg0[23].update) / 40.0f;
     temp_f12 = arg0->home.pos.z;
     arg0->unk_144 = (s32) (arg0->unk_144 | 4);
-    arg0->unk_150 = 0.05f;
-    arg0->unk_154 = 0.05f;
-    arg0->unk_158 = (s16) (arg0->unk_158 + 0x2EE0);
+    arg0[1].home.pos.y = 0.05f;
+    arg0[1].home.pos.z = 0.05f;
+    arg0[1].home.rot.x += 0x2EE0;
     arg0->world.pos.x = ((arg0->world.pos.x - temp_f0) * temp_f14) + temp_f0;
     arg0->world.pos.y = ((arg0->world.pos.y - temp_f2) * temp_f14) + temp_f2;
     arg0->world.pos.z = ((arg0->world.pos.z - temp_f12) * temp_f14) + temp_f12;
@@ -1330,7 +1330,7 @@ void func_80AF2C48(Actor *arg0, GlobalContext *arg1) {
     sp20->at.y = arg0->world.pos.y + 40.0f;
     sp20->at.z = arg0->world.pos.z;
     func_800B9010(arg0, 0x1C4U);
-    if (arg0->unk_1E54 >= 0x28) {
+    if ((s32) arg0[23].update >= 0x28) {
         arg0->unk_144 = (s32) (arg0->unk_144 & ~4);
         func_80AF082C((EnTest7 *) arg0, func_80AF2F98);
     }
@@ -1381,45 +1381,45 @@ void func_80AF2F98(Actor *arg0, void (*arg1)(EnTest7 *, ?)) {
     void *sp3C;
     void *sp38;
     f32 sp2C;
-    s32 *sp24;
+    s16 *sp24;
     f32 temp_f0;
     f32 temp_f0_2;
     f32 temp_f2;
     f32 temp_f2_2;
-    s32 *temp_a0;
-    s32 temp_v0_2;
+    s16 *temp_a0;
+    void (*temp_v0_2)(Actor *, GlobalContext *);
     void *temp_v0;
 
     temp_v0 = arg1->unk_1CCC;
     sp3C = temp_v0;
     sp38 = temp_v0;
     func_800B9010(arg0, 0x1C4U);
-    temp_a0 = arg0 + 0x15C;
+    temp_a0 = &arg0[1].home.rot.z;
     sp2C.unk_0 = arg0->world.pos.x;
-    sp2C.unk_4 = (f32) arg0->world.pos.y;
-    sp2C.unk_8 = (f32) arg0->world.pos.z;
+    (&sp2C)[1] = arg0->world.pos.y;
+    (&sp2C)[2] = arg0->world.pos.z;
     sp24 = temp_a0;
-    func_80AF0C30(temp_a0, &sp2C, (s32 *)1);
-    func_80AF0C30(temp_a0, &sp2C, (s32 *)1);
-    temp_v0_2 = arg0->unk_1E54;
-    arg0->unk_14C = (f32) (0x46 - temp_v0_2);
-    if (temp_v0_2 >= 0x47) {
+    func_80AF0C30((s32 *) temp_a0, &sp2C, (s32 *)1);
+    func_80AF0C30((s32 *) temp_a0, &sp2C, (s32 *)1);
+    temp_v0_2 = arg0[23].update;
+    arg0[1].home.pos.x = (f32) (0x46 - temp_v0_2);
+    if ((s32) temp_v0_2 >= 0x47) {
         func_80AF082C((EnTest7 *) arg0, func_80AF30F4);
     }
-    temp_f0 = arg0->unk_14C;
+    temp_f0 = arg0[1].home.pos.x;
     if (temp_f0 > 11.0f) {
-        arg0->unk_158 = (s16) (arg0->unk_158 + 0x2EE0);
+        arg0[1].home.rot.x += 0x2EE0;
         temp_f2 = ((-0.35f * (temp_f0 - 11.0f)) / 19.0f) + 0.4f;
-        arg0->unk_150 = temp_f2;
-        arg0->unk_154 = temp_f2;
+        arg0[1].home.pos.y = temp_f2;
+        arg0[1].home.pos.z = temp_f2;
         return;
     }
     sp38->unk_13C = (s32) arg0->unk_1E98;
-    temp_f0_2 = arg0->unk_14C;
-    arg0->unk_148 = temp_f0_2;
+    temp_f0_2 = arg0[1].home.pos.x;
+    arg0[1].flags = (bitwise u32) temp_f0_2;
     temp_f2_2 = ((temp_f0_2 * -0.29999998f) / 11.0f) + 0.7f;
-    arg0->unk_150 = temp_f2_2;
-    arg0->unk_154 = temp_f2_2;
+    arg0[1].home.pos.y = temp_f2_2;
+    arg0[1].home.pos.z = temp_f2_2;
     sp3C->unk_A70 = (s32) (sp3C->unk_A70 & 0xDFFFFFFF);
 }
 
@@ -1428,7 +1428,7 @@ void func_80AF30F4(Actor *arg0, void (*arg1)(EnTest7 *, ?)) {
     void *temp_v0;
 
     temp_v0 = arg1->unk_1CCC;
-    if (arg0->unk_1E54 >= 0x5B) {
+    if (arg0[23].update >= 0x5B) {
         temp_t8 = temp_v0->unk_A6C & ~0x20;
         temp_v0->unk_A6C = temp_t8;
         temp_v0->unk_A6C = (s32) (temp_t8 & 0xDFFFFFFF);

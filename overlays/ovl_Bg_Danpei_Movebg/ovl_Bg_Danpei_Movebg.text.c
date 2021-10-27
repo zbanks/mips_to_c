@@ -102,7 +102,7 @@ void BgDanpeiMovebg_Init(Actor *thisx, GlobalContext *globalCtx) {
 
 void func_80AF6EA8(BgDanpeiMovebg *arg0, GlobalContext *arg1) {
     if (func_8013D8DC(arg0->unk_1D4, arg1) != 0) {
-        *(gSegments + 0x18) = (u32) (arg1->objectCtx.status[arg0->unk_1D4].segment + 0x80000000);
+        gSegments[6] = (u32) (arg1->objectCtx.status[arg0->unk_1D4].segment + 0x80000000);
         arg0->actor.draw = func_80AF74CC;
         arg0->actor.objBankIndex = arg0->unk_1D4;
         Actor_ProcessInitChain((Actor *) arg0, D_80AF753C);
@@ -252,10 +252,10 @@ void func_80AF746C(BgDanpeiMovebg *arg0, GlobalContext *arg1) {
 }
 
 void func_80AF74CC(Actor *this, GlobalContext *globalCtx) {
-    Gfx *temp_a2;
+    f32 temp_a2;
 
-    temp_a2 = this->unk_1D0;
-    if (temp_a2 != 0) {
-        func_800BDFC0(globalCtx, temp_a2);
+    temp_a2 = this[1].yDistToWater;
+    if ((bitwise s32) temp_a2 != 0) {
+        func_800BDFC0(globalCtx, (bitwise Gfx *) temp_a2);
     }
 }

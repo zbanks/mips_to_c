@@ -788,7 +788,7 @@ block_6:
     void *temp_v1;
 
     temp_v1 = *arg2;
-    if (((gBitFlags + 0x18)[((temp_v1->unk_1 << 8) | temp_v1->unk_2) & 0xFFFF] & gSaveContext.inventory.questItems) != 0) {
+    if (((&gBitFlags[6])[((temp_v1->unk_1 << 8) | temp_v1->unk_2) & 0xFFFF] & gSaveContext.inventory.questItems) != 0) {
         *arg2 = temp_v1 + (s16) ((temp_v1->unk_3 << 8) | temp_v1->unk_4);
     }
     return 0;
@@ -965,7 +965,7 @@ block_6:
     void *temp_v1;
 
     temp_v1 = *arg2;
-    if ((gSaveContext.inventory.ammo[gItemSlots[0xC]] != 0) || ((arg1->unk_1CA5 & 1) != 0)) {
+    if ((gSaveContext.inventory.ammo[gItemSlots[12]] != 0) || ((arg1->unk_1CA5 & 1) != 0)) {
         *arg2 = temp_v1 + (s16) ((temp_v1->unk_1 << 8) | temp_v1->unk_2);
     }
     return 0;

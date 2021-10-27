@@ -186,7 +186,7 @@ void func_80800A44(GameState *arg0) {
 
     if (arg0->unk_25C == 0) {
         temp_t0 = arg0 + 0x14;
-        temp_v0 = temp_t0->unk_C;
+        temp_v0 = temp_t0[6];
         if ((~(temp_v0 | 0xFFFF7FFF) == 0) || (~(temp_v0 | ~0x1000) == 0)) {
             phi_v1 = 0;
             do {
@@ -213,7 +213,7 @@ void func_80800A44(GameState *arg0) {
                 temp_v1_2(arg0, temp_v0_3->unk_8, arg0->unk_248, &gSaveContext);
             }
         }
-        if (~((arg0 + 0x14)->unk_C | ~0x4000) == 0) {
+        if (~((arg0 + 0x14)[6] | ~0x4000) == 0) {
             temp_v1_3 = gSaveContext.playerForm - 1;
             phi_v1_2 = (u8) temp_v1_3;
             if (temp_v1_3 < 0) {
@@ -221,7 +221,7 @@ void func_80800A44(GameState *arg0) {
             }
             gSaveContext.playerForm = phi_v1_2;
         }
-        if (~((arg0 + 0x14)->unk_C | ~0x2000) == 0) {
+        if (~((arg0 + 0x14)[6] | ~0x2000) == 0) {
             temp_v0_4 = gSaveContext.cutscene;
             if (temp_v0_4 == 0x8000) {
                 gSaveContext.cutscene = 0;
@@ -272,7 +272,7 @@ void func_80800A44(GameState *arg0) {
                     }
                 }
             }
-        } else if (~((arg0 + 0x14)->unk_C | ~0x10) == 0) {
+        } else if (~((arg0 + 0x14)[6] | ~0x10) == 0) {
             temp_v0_5 = gSaveContext.cutscene;
             if (temp_v0_5 == 0x8000) {
                 gSaveContext.cutscene = 0xFFFA;
@@ -329,20 +329,20 @@ block_68:
         if (gSaveContext.cutscene == 0x8800) {
             gSaveContext.isNight = 1;
         }
-        if (~((arg0 + 0x14)->unk_C | ~8) == 0) {
+        if (~((arg0 + 0x14)[6] | ~8) == 0) {
             arg0->unk_248 = (s32) (arg0->unk_248 - 1);
         }
-        phi_v0 = (arg0 + 0x14)->unk_C;
-        if (~((arg0 + 0x14)->unk_C | ~4) == 0) {
+        phi_v0 = (arg0 + 0x14)[6];
+        if (~((arg0 + 0x14)[6] | ~4) == 0) {
             arg0->unk_248 = (s32) (arg0->unk_248 + 1);
-            phi_v0 = (arg0 + 0x14)->unk_C;
+            phi_v0 = (arg0 + 0x14)[6];
         }
         phi_v0_2 = phi_v0;
         if (~(phi_v0 | ~2) == 0) {
             temp_v1_4 = gSaveContext.day;
             if (temp_v1_4 >= 2) {
                 gSaveContext.day = temp_v1_4 - 1;
-                phi_v0_2 = (arg0 + 0x14)->unk_C;
+                phi_v0_2 = (arg0 + 0x14)[6];
             }
         }
         if (~(phi_v0_2 | ~1) == 0) {
@@ -355,61 +355,61 @@ block_68:
         temp_t6 = gGameInfo;
         temp_v1_6 = temp_t6->data[126];
         if (temp_v0_6 != 0) {
-            arg0->unk_260 = (s32) ((s32) (temp_v1_6 * temp_v0_6) / 7);
+            arg0[3].heap.size = (s32) (temp_v1_6 * temp_v0_6) / 7;
         } else {
-            if (~((arg0 + 0x14)->unk_C | ~0x800) == 0) {
-                if (arg0->unk_26C == 1) {
-                    arg0->unk_264 = 0;
+            if (~((arg0 + 0x14)[6] | ~0x800) == 0) {
+                if (arg0[3].heap.tail == 1) {
+                    arg0[3].heap.bufp = NULL;
                 }
-                if (arg0->unk_264 == 0) {
-                    arg0->unk_264 = 0x14;
-                    arg0->unk_26C = 1;
+                if (arg0[3].heap.bufp == 0) {
+                    arg0[3].heap.bufp = (void *)0x14;
+                    arg0[3].heap.tail = 1;
                     sp24 = arg0 + 0x14;
                     sp2C = (s32) temp_v1_6;
                     play_sound(0x1800U);
-                    arg0->unk_260 = (s32) temp_v1_6;
+                    arg0[3].heap.size = (s32) temp_v1_6;
                 }
             }
             phi_a1 = 1;
-            if ((~((arg0 + 0x14)->unk_0 | ~0x800) == 0) && (arg0->unk_264 == 0)) {
+            if ((~((arg0 + 0x14)->unk_0 | ~0x800) == 0) && (arg0[3].heap.bufp == 0)) {
                 sp2C = (s32) temp_t6->data[126];
                 sp24 = arg0 + 0x14;
                 play_sound(0x1800U);
-                arg0->unk_260 = (s32) ((s32) temp_t6->data[126] * 3);
+                arg0[3].heap.size = (s32) temp_t6->data[126] * 3;
             }
-            if (~((arg0 + 0x14)->unk_C | ~0x400) == 0) {
-                if (phi_a1 == arg0->unk_270) {
-                    arg0->unk_268 = 0;
+            if (~((arg0 + 0x14)[6] | ~0x400) == 0) {
+                if (phi_a1 == arg0[3].alloc.base.next) {
+                    arg0[3].heap.head = NULL;
                 }
-                if (arg0->unk_268 == 0) {
-                    arg0->unk_268 = 0x14;
-                    arg0->unk_270 = phi_a1;
+                if (arg0[3].heap.head == 0) {
+                    arg0[3].heap.head = (void *)0x14;
+                    arg0[3].alloc.base.next = phi_a1;
                     sp24 = arg0 + 0x14;
                     sp2C = (s32) temp_t6->data[126];
                     play_sound(0x1800U);
-                    arg0->unk_260 = (s32) -(s32) temp_t6->data[126];
+                    arg0[3].heap.size = -(s32) temp_t6->data[126];
                 }
             }
-            if ((~((arg0 + 0x14)->unk_0 | ~0x400) == 0) && (arg0->unk_268 == 0)) {
+            if ((~((arg0 + 0x14)->unk_0 | ~0x400) == 0) && (arg0[3].heap.head == 0)) {
                 sp20 = -(s32) temp_t6->data[126];
                 sp2C = (s32) temp_t6->data[126];
                 sp24 = arg0 + 0x14;
                 play_sound(0x1800U);
-                arg0->unk_260 = (s32) (sp20 * 3);
+                arg0[3].heap.size = sp20 * 3;
             }
-            temp_v0_7 = (arg0 + 0x14)->unk_C;
+            temp_v0_7 = (arg0 + 0x14)[6];
             phi_v0_3 = temp_v0_7;
             if ((~(temp_v0_7 | ~0x200) == 0) || (~((arg0 + 0x14)->unk_0 | ~0x200) == 0)) {
                 sp2C = (s32) temp_t6->data[126];
                 sp24 = arg0 + 0x14;
                 play_sound(0x1800U);
-                arg0->unk_260 = (s32) temp_t6->data[126];
-                phi_v0_3 = (arg0 + 0x14)->unk_C;
+                arg0[3].heap.size = (s32) temp_t6->data[126];
+                phi_v0_3 = (arg0 + 0x14)[6];
             }
             if ((~(phi_v0_3 | ~0x100) == 0) || (~((arg0 + 0x14)->unk_0 | ~0x100) == 0)) {
                 sp20 = -(s32) temp_t6->data[126];
                 play_sound(0x1800U);
-                arg0->unk_260 = sp20;
+                arg0[3].heap.size = sp20;
             }
         }
     }
@@ -422,13 +422,13 @@ block_68:
         arg0->unk_24C = temp_v0_8;
         arg0->unk_218 = temp_v0_8;
     }
-    temp_t5_2 = arg0->unk_25C + arg0->unk_260;
+    temp_t5_2 = arg0->unk_25C + arg0[3].heap.size;
     temp_at = temp_t5_2 < -7;
     arg0->unk_25C = temp_t5_2;
     if (temp_at != 0) {
         temp_v0_9 = arg0->unk_210;
         temp_v1_7 = arg0->unk_24C;
-        arg0->unk_260 = 0;
+        arg0[3].heap.size = 0;
         temp_t8_2 = arg0->unk_218 + 1;
         temp_t3 = (s32) (temp_t8_2 + temp_v0_9) % temp_v0_9;
         arg0->unk_218 = temp_t8_2;
@@ -446,7 +446,7 @@ block_68:
     phi_a0_2 = temp_a0;
     phi_v1_4 = temp_v1_8;
     if (arg0->unk_25C >= 8) {
-        arg0->unk_260 = 0;
+        arg0[3].heap.size = 0;
         arg0->unk_25C = 0;
         if (temp_v1_8 == temp_a0) {
             temp_v0_10 = arg0->unk_210;
@@ -478,25 +478,25 @@ block_68:
     gGameInfo->data[2576] = (s16) arg0->unk_218;
     gGameInfo->data[2577] = (s16) arg0->unk_24C;
     gGameInfo->data[2578] = (s16) arg0->unk_21C;
-    temp_a1 = arg0->unk_264;
+    temp_a1 = arg0[3].heap.bufp;
     temp_t9 = temp_a1 - 1;
     phi_a1_2 = temp_a1;
     if (temp_a1 != 0) {
-        arg0->unk_264 = temp_t9;
+        arg0[3].heap.bufp = temp_t9;
         phi_a1_2 = temp_t9;
     }
     if (phi_a1_2 == 0) {
-        arg0->unk_26C = 0;
+        arg0[3].heap.tail = 0;
     }
-    temp_v0_13 = arg0->unk_268;
+    temp_v0_13 = arg0[3].heap.head;
     temp_t2 = temp_v0_13 - 1;
     phi_v0_4 = temp_v0_13;
     if (temp_v0_13 != 0) {
-        arg0->unk_268 = temp_t2;
+        arg0[3].heap.head = temp_t2;
         phi_v0_4 = temp_t2;
     }
     if (phi_v0_4 == 0) {
-        arg0->unk_270 = 0;
+        arg0[3].alloc.base.next = 0;
     }
 }
 
@@ -515,14 +515,14 @@ void func_808013B8(GraphicsContext **arg0, GfxPrint *arg1) {
     phi_s0 = 0;
     do {
         GfxPrint_SetPos(arg1, 9, phi_s0 + 4);
-        temp_v0 = arg0->unk_210;
-        temp_hi = (s32) (arg0->unk_24C + phi_s0 + temp_v0) % temp_v0;
-        if (temp_hi == arg0->unk_218) {
+        temp_v0 = arg0[132];
+        temp_hi = (s32) (arg0[147] + phi_s0 + temp_v0) % temp_v0;
+        if (temp_hi == arg0[134]) {
             GfxPrint_SetColor(arg1, 0xFFU, 0x14U, 0x14U, 0xFFU);
         } else {
             GfxPrint_SetColor(arg1, 0xC8U, 0xC8U, 0x37U, 0xFFU);
         }
-        temp_a2 = *(arg0->unk_214 + (temp_hi * 0xC));
+        temp_a2 = *(arg0[133] + (temp_hi * 0xC));
         phi_a2 = temp_a2;
         if (temp_a2 == 0) {
             phi_a2 = "**Null**";
@@ -533,7 +533,7 @@ void func_808013B8(GraphicsContext **arg0, GfxPrint *arg1) {
     } while (temp_s0 != 0x14);
     GfxPrint_SetColor(arg1, 0x9BU, 0x37U, 0x96U, 0xFFU);
     GfxPrint_SetPos(arg1, 0x14, 0x1A);
-    GfxPrint_Printf(arg1, "OPT=%d", arg0->unk_248);
+    GfxPrint_Printf(arg1, "OPT=%d", arg0[146]);
 }
 
 void func_80801594(GraphicsContext **arg0, GfxPrint *arg1) {
@@ -752,15 +752,15 @@ void Select_Init(GameState *thisx) {
     thisx->unk_210 = 0x8F;
     thisx = thisx;
     ShrinkWindow_Init();
-    View_Init(thisx + 0xA8, thisx->gfxCtx);
+    View_Init((View *) &thisx[1].main, thisx->gfxCtx);
     thisx->unk_208 = 0xA;
     thisx->unk_25C = 0;
-    thisx->unk_260 = 0;
-    thisx->unk_264 = 0;
-    thisx->unk_268 = 0;
-    thisx->unk_26C = 0;
-    thisx->unk_270 = 0;
-    thisx->unk_274 = 0;
+    thisx[3].heap.size = 0;
+    thisx[3].heap.bufp = NULL;
+    thisx[3].heap.head = NULL;
+    thisx[3].heap.tail = NULL;
+    thisx[3].alloc.base.next = NULL;
+    thisx[3].alloc.base.prev = NULL;
     temp_v0 = gGameInfo->data[2576];
     if (((s32) temp_v0 >= 0) && ((s32) temp_v0 < thisx->unk_210)) {
         thisx->unk_218 = (s32) temp_v0;

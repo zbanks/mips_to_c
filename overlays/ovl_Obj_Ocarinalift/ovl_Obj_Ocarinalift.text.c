@@ -165,16 +165,16 @@ void func_80AC96D0(Actor *arg0, GlobalContext *arg1) {
     f32 temp_f0;
     f32 temp_f0_2;
     f32 temp_f2;
+    f32 temp_v0;
     s32 temp_a0;
     s32 temp_a1;
     s32 temp_v1;
-    void *temp_v0;
     void *temp_v1_2;
     f32 phi_f0;
     f32 phi_f12;
 
     func_800B9010(arg0, 0x2103U);
-    Math_Vec3s_ToVec3f((Vec3f *) &sp48, arg0->unk_170 + (arg0->unk_168 * 6) + (arg0->unk_16C * 6));
+    Math_Vec3s_ToVec3f((Vec3f *) &sp48, (bitwise s32) arg0[1].world.pos.z + ((bitwise s32) arg0[1].world.pos.x * 6) + ((bitwise s32) arg0[1].world.pos.y * 6));
     temp_a2 = &arg0->velocity;
     sp28 = temp_a2;
     Math_Vec3f_Diff((Vec3f *) &sp48, (Vec3f *) &arg0->world, temp_a2);
@@ -198,29 +198,29 @@ void func_80AC96D0(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     sp34 = 1;
-    temp_v1 = arg0->unk_168 + arg0->unk_16C;
-    arg0->unk_168 = temp_v1;
+    temp_v1 = (bitwise s32) arg0[1].world.pos.x + (bitwise s32) arg0[1].world.pos.y;
+    arg0[1].world.pos.x = (bitwise f32) temp_v1;
     temp_a0 = arg0->unk_164;
     temp_a1 = ((s32) arg0->params >> 0xC) & 3;
     arg0->speedXZ *= 0.4f;
-    if (((temp_v1 >= temp_a0) && (arg0->unk_16C > 0)) || ((temp_v1 <= 0) && (arg0->unk_16C < 0))) {
+    if (((temp_v1 >= temp_a0) && ((bitwise s32) arg0[1].world.pos.y > 0)) || ((temp_v1 <= 0) && ((bitwise s32) arg0[1].world.pos.y < 0))) {
         if (temp_a1 == 0) {
-            arg0->unk_16C = (s32) -arg0->unk_16C;
-            arg0->unk_174 = 0xA;
+            arg0[1].world.pos.y = (bitwise f32) -(bitwise s32) arg0[1].world.pos.y;
+            arg0[1].world.rot.x = 0xA;
             func_80AC9A68(arg0, temp_a1);
         } else {
-            temp_v1_2 = arg0->unk_170 + (temp_a0 * 6);
-            if (arg0->unk_16C > 0) {
-                arg0->unk_168 = 0;
+            temp_v1_2 = (bitwise s32) arg0[1].world.pos.z + (temp_a0 * 6);
+            if ((bitwise s32) arg0[1].world.pos.y > 0) {
+                arg0[1].world.pos.x = 0.0f;
             } else {
-                arg0->unk_168 = temp_a0;
+                arg0[1].world.pos.x = (bitwise f32) temp_a0;
             }
-            temp_v0 = arg0->unk_170;
+            temp_v0 = arg0[1].world.pos.z;
             if ((temp_v1_2->unk_0 != temp_v0->unk_0) || (temp_v1_2->unk_2 != temp_v0->unk_2) || (temp_v1_2->unk_4 != temp_v0->unk_4)) {
                 func_80AC99C0(arg0, temp_a1);
                 func_800C62BC(arg1, arg1 + 0x880, arg0->unk_144);
                 sp34 = 0;
-            } else if ((temp_a1 == 1) && ((((s32) arg0->params >> 7) & 0x1F) == arg0->unk_168)) {
+            } else if ((temp_a1 == 1) && ((((s32) arg0->params >> 7) & 0x1F) == (bitwise s32) arg0[1].world.pos.x)) {
                 func_80AC9AB8((ObjOcarinalift *) arg0, temp_a1);
             }
         }
@@ -228,7 +228,7 @@ void func_80AC96D0(Actor *arg0, GlobalContext *arg1) {
         func_80AC9AB8((ObjOcarinalift *) arg0, temp_a1);
     }
     if (sp34 != 0) {
-        func_80AC94C0((ObjOcarinalift *) arg0, arg0->unk_168);
+        func_80AC94C0((ObjOcarinalift *) arg0, (bitwise s32) arg0[1].world.pos.x);
     }
 }
 
@@ -240,10 +240,10 @@ void func_80AC99D4(DynaPolyActor *arg0, GlobalContext *arg1) {
     s16 temp_v0;
 
     if (func_800CAF70(arg0) == 0) {
-        func_80AC94C0((ObjOcarinalift *) arg0, arg0->unk_168);
+        func_80AC94C0((ObjOcarinalift *) arg0, (bitwise s32) arg0[1].actor.home.pos.y);
         func_800C6314(arg1, arg1 + 0x880, arg0->bgId);
         temp_v0 = arg0->actor.params;
-        if (((((s32) temp_v0 >> 0xC) & 3) == 1) && ((((s32) temp_v0 >> 7) & 0x1F) == arg0->unk_168)) {
+        if (((((s32) temp_v0 >> 0xC) & 3) == 1) && ((((s32) temp_v0 >> 7) & 0x1F) == (bitwise s32) arg0[1].actor.home.pos.y)) {
             func_80AC9AB8((ObjOcarinalift *) arg0);
             return;
         }
@@ -330,7 +330,7 @@ void func_80AC9C48(Actor *arg0, GlobalContext *arg1) {
         temp_a0_2 = temp_a1->cutscene;
         arg0 = temp_a1;
         ActorCutscene_StartAndSetUnkLinkFields((s16) temp_a0_2, temp_a1);
-        arg0->unk_176 = 0x32;
+        arg0[1].world.rot.y = 0x32;
         func_80AC96B4((ObjOcarinalift *) arg0);
         return;
     }

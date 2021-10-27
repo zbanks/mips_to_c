@@ -247,7 +247,7 @@ void func_80ADEE4C(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0 + 0x144;
     sp20 = temp_a0;
     if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
-        if (&D_0600A280 == arg0->unk_14C) {
+        if (&D_0600A280 == arg0[1].home.pos.x) {
             SkelAnime_ChangeAnimTransitionStop(sp20, &D_0600AD98, 5.0f);
         } else {
             SkelAnime_ChangeAnimTransitionRepeat(sp20, &D_06009890, -4.0f);
@@ -570,12 +570,12 @@ void EnTakaraya_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_v0 = gSaveContext.playerForm;
     if ((temp_v0 == 3) || (temp_v0 == 4)) {
         temp_v1_2 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v1_2 + 8;
+        sp30->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB060020;
         temp_v1_2->words.w1 = (u32) D_80ADFB10[this->unk_2AC];
     } else {
         temp_v1 = sp30->polyOpa.p;
-        sp30->polyOpa.p = temp_v1 + 8;
+        sp30->polyOpa.p = &temp_v1[1];
         temp_v1->words.w0 = 0xDB060020;
         temp_v1->words.w1 = (u32) D_80ADFB00[this->unk_2AC];
     }

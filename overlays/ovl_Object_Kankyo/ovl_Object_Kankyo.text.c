@@ -1,3 +1,10 @@
+typedef struct GameAllocNode {
+    /* 0x00 */ GameAllocNode *next;
+    /* 0x04 */ GameAllocNode *prev;
+    /* 0x08 */ u32 size;
+    /* 0x0C */ MtxF unk_C;                          /* inferred */
+} GameAllocNode;                                    /* size = 0x10 */
+
 typedef struct ObjectKankyo {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ f32 unk_144;                       /* inferred */
@@ -813,6 +820,7 @@ void func_808DD3C8(void *arg0, GameState *arg1) {
     Gfx *temp_v0_9;
     Gfx *temp_v1_2;
     GraphicsContext *temp_s1;
+    MtxF *temp_s5;
     f32 *temp_a1;
     f32 *temp_s7;
     f32 temp_f0;
@@ -822,6 +830,7 @@ void func_808DD3C8(void *arg0, GameState *arg1) {
     f32 temp_f2;
     s16 temp_s2;
     s32 temp_v0;
+    u8 *temp_s4;
     u8 temp_v1;
     void *temp_v0_2;
     f32 phi_f0;
@@ -879,6 +888,8 @@ void func_808DD3C8(void *arg0, GameState *arg1) {
                 spCC = temp_v0_2->unk_160 + temp_v0_2->unk_154;
                 func_80169474((GlobalContext *) arg1, (Vec3f *) temp_a1, (Vec3f *) &spB8);
                 if ((spB8 >= 0.0f) && (spB8 < 320.0f) && (spBC >= 0.0f) && (spBC < 240.0f)) {
+                    temp_s5 = &arg1[611].alloc.base.unk_C;
+                    temp_s4 = &arg1[1].input[1].press.errno;
                     if (spB4 == 0) {
                         spB4 = 1;
                         temp_v0_3 = temp_s1->polyXlu.p;
@@ -895,22 +906,22 @@ void func_808DD3C8(void *arg0, GameState *arg1) {
                         temp_v0_5->words.w0 = 0xD9FDFFFF;
                         temp_s1->polyXlu.p = Gfx_CallSetupDL(temp_s1->polyXlu.p, 0U);
                         temp_v0_6 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_6 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_6[1];
                         temp_v0_6->words.w0 = 0xE200001C;
                         temp_v0_6->words.w1 = 0xC8104B50;
                         temp_v0_7 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_7 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_7[1];
                         temp_v0_7->words.w1 = 0x10000;
                         temp_v0_7->words.w0 = 0xD9FFFFFF;
                         temp_v0_8 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_8 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_8[1];
                         temp_v0_8->words.w0 = 0xDB060020;
                         temp_v0_8->words.w1 = Lib_SegmentedToVirtual((void *) D_0408EBE0);
                     }
                     SysMatrix_InsertTranslation(spC4, spC8, spCC, 0);
                     temp_f12 = 0.05f + ((f32) (phi_s2 & 7) * 0.008f);
                     Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
-                    temp_f2 = Math_Vec3f_DistXYZ((Vec3f *) temp_s7, arg1 + 0xE0) / 300.0f;
+                    temp_f2 = Math_Vec3f_DistXYZ((Vec3f *) temp_s7, (Vec3f *) temp_s4) / 300.0f;
                     if (phi_f20 < temp_f2) {
                         phi_f0_2 = 0.0f;
                     } else {
@@ -923,20 +934,20 @@ void func_808DD3C8(void *arg0, GameState *arg1) {
                         phi_f0_2 = phi_f2_2;
                     }
                     temp_v0_9 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0_9 + 8;
+                    temp_s1->polyXlu.p = &temp_v0_9[1];
                     temp_v0_9->words.w1 = 0;
                     temp_v0_9->words.w0 = 0xE7000000;
                     temp_v1_2 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v1_2 + 8;
+                    temp_s1->polyXlu.p = &temp_v1_2[1];
                     temp_v1_2->words.w0 = 0xFA000000;
                     temp_v1_2->words.w1 = ((u32) (160.0f * phi_f0_2) & 0xFF) | ~0xFF;
-                    SysMatrix_InsertMatrix(arg1 + 0x187FC, 1);
+                    SysMatrix_InsertMatrix(temp_s5, 1);
                     temp_v0_10 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0_10 + 8;
+                    temp_s1->polyXlu.p = &temp_v0_10[1];
                     temp_v0_10->words.w0 = 0xDA380003;
                     temp_v0_10->words.w1 = Matrix_NewMtx(arg1->gfxCtx);
                     temp_v0_11 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0_11 + 8;
+                    temp_s1->polyXlu.p = &temp_v0_11[1];
                     temp_v0_11->words.w1 = (u32) &D_04023130;
                     temp_v0_11->words.w0 = 0xDE000000;
                 }
@@ -1049,24 +1060,24 @@ block_9:
                         temp_v0_4->words.w0 = 0xDA380003;
                         temp_v0_4->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
                         temp_v0_5 = temp_s0->polyXlu.p;
-                        temp_s0->polyXlu.p = temp_v0_5 + 8;
+                        temp_s0->polyXlu.p = &temp_v0_5[1];
                         temp_v0_5->words.w0 = 0xDB060020;
                         temp_v0_5->words.w1 = Lib_SegmentedToVirtual((void *) D_0408EBE0);
                         temp_v0_6 = temp_s0->polyXlu.p;
-                        temp_s0->polyXlu.p = temp_v0_6 + 8;
+                        temp_s0->polyXlu.p = &temp_v0_6[1];
                         temp_v0_6->words.w1 = 0;
                         temp_v0_6->words.w0 = 0xD9FDFFFF;
                         temp_s0->polyXlu.p = Gfx_CallSetupDL(temp_s0->polyXlu.p, 0U);
                         temp_v0_7 = temp_s0->polyXlu.p;
-                        temp_s0->polyXlu.p = temp_v0_7 + 8;
+                        temp_s0->polyXlu.p = &temp_v0_7[1];
                         temp_v0_7->words.w0 = 0xE200001C;
                         temp_v0_7->words.w1 = 0xC8104B50;
                         temp_v0_8 = temp_s0->polyXlu.p;
-                        temp_s0->polyXlu.p = temp_v0_8 + 8;
+                        temp_s0->polyXlu.p = &temp_v0_8[1];
                         temp_v0_8->words.w1 = 0x10000;
                         temp_v0_8->words.w0 = 0xD9FFFFFF;
                         temp_v0_9 = temp_s0->polyXlu.p;
-                        temp_s0->polyXlu.p = temp_v0_9 + 8;
+                        temp_s0->polyXlu.p = &temp_v0_9[1];
                         temp_v0_9->words.w1 = (u32) &D_04023130;
                         temp_v0_9->words.w0 = 0xDE000000;
                     }
@@ -1133,7 +1144,7 @@ void func_808DDE9C(void *arg0, void *arg1) {
             if (!(temp_f20 < -252.0f) || !(temp_f20 > -500.0f) || !(temp_f2 > 3820.0f) || !(temp_f2 < 4150.0f)) {
                 SysMatrix_InsertTranslation(temp_f20, temp_f22, temp_f2, 0);
                 temp_v0_3 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_3 + 8;
+                temp_s1->polyXlu.p = &temp_v0_3[1];
                 temp_v0_3->words.w1 = (u32) &D_01000000;
                 temp_v0_3->words.w0 = 0xDA380001;
                 temp_s0_2 = (s32) (phi_s4 << 0x15) >> 0x10;
@@ -1145,11 +1156,11 @@ void func_808DDE9C(void *arg0, void *arg1) {
                     Matrix_Scale(2.0f, 4.0f, 2.0f, 1);
                 }
                 temp_v0_4 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_4 + 8;
+                temp_s1->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xDA380003;
                 temp_v0_4->words.w1 = Matrix_NewMtx(arg1->unk_0);
                 temp_v0_5 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_5 + 8;
+                temp_s1->polyXlu.p = &temp_v0_5[1];
                 temp_v0_5->words.w1 = (u32) &D_040706E0;
                 temp_v0_5->words.w0 = 0xDE000000;
             }
@@ -1163,11 +1174,11 @@ void func_808DDE9C(void *arg0, void *arg1) {
             if (phi_s5 == 0) {
                 func_8012C2DC(arg1->unk_0);
                 temp_v0_6 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_6 + 8;
+                temp_s1->polyXlu.p = &temp_v0_6[1];
                 temp_v0_6->words.w1 = -1;
                 temp_v0_6->words.w0 = 0xFB000000;
                 temp_v0_7 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_7 + 8;
+                temp_s1->polyXlu.p = &temp_v0_7[1];
                 temp_v0_7->words.w1 = -0x9C;
                 temp_v0_7->words.w0 = 0xFA000000;
                 phi_s5 = (phi_s5 + 1) & 0xFF;
@@ -1180,11 +1191,11 @@ void func_808DDE9C(void *arg0, void *arg1) {
                 temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 temp_v0_8 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_8 + 8;
+                temp_s1->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w0 = 0xDA380003;
                 temp_v0_8->words.w1 = Matrix_NewMtx(arg1->unk_0);
                 temp_v0_9 = temp_s1->polyXlu.p;
-                temp_s1->polyXlu.p = temp_v0_9 + 8;
+                temp_s1->polyXlu.p = &temp_v0_9[1];
                 temp_v0_9->words.w1 = (u32) D_04030100;
                 temp_v0_9->words.w0 = 0xDE000000;
             }

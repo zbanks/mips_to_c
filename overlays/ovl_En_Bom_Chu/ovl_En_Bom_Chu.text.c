@@ -559,22 +559,22 @@ void func_808F818C(Actor *arg0, GlobalContext *arg1) {
         sp4E = temp_a3_2;
         sp48 = Math_SinS(temp_a3_2);
         temp_f0 = Math_CosS(temp_a3_2);
-        temp_f14 = arg0->unk_154;
-        temp_f2 = arg0->unk_14C;
+        temp_f14 = arg0[1].home.pos.z;
+        temp_f2 = arg0[1].home.pos.x;
         temp_f16 = arg0->unk_160;
         temp_f10 = temp_f14 * temp_f0;
-        temp_f14_2 = arg0->unk_16C;
+        temp_f14_2 = arg0[1].world.pos.y;
         temp_f18 = sp48 * temp_f2;
         temp_f2_2 = arg0->unk_158;
-        arg0->unk_14C = (f32) ((temp_f14 * sp48) + (temp_f0 * temp_f2));
-        arg0->unk_154 = (f32) (temp_f10 - temp_f18);
+        arg0[1].home.pos.x = (temp_f14 * sp48) + (temp_f0 * temp_f2);
+        arg0[1].home.pos.z = temp_f10 - temp_f18;
         temp_f4 = sp48 * temp_f2_2;
         temp_f2_3 = arg0->unk_164;
         arg0->unk_158 = (f32) ((temp_f16 * sp48) + (temp_f0 * temp_f2_2));
         arg0->unk_160 = (f32) ((temp_f16 * temp_f0) - temp_f4);
         temp_f6 = sp48 * temp_f2_3;
         arg0->unk_164 = (f32) ((temp_f14_2 * sp48) + (temp_f0 * temp_f2_3));
-        arg0->unk_16C = (f32) ((temp_f14_2 * temp_f0) - temp_f6);
+        arg0[1].world.pos.y = (temp_f14_2 * temp_f0) - temp_f6;
     }
     temp_a1_2 = &sp68;
     temp_a2 = &sp5C;
@@ -707,16 +707,16 @@ void EnBomChu_Draw(Actor *thisx, GlobalContext *globalCtx) {
     }
     temp_v0_2 = temp_s1->polyOpa.p;
     temp_f0 = (f32) phi_a0_2 / (f32) phi_a1;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_v0_2->words.w1 = (((s32) (temp_f0 * 209.0f) + 9) << 0x18) | ((((s32) (temp_f0 * 34.0f) + 9) & 0xFF) << 0x10) | ((((s32) (temp_f0 * -35.0f) + 0x23) & 0xFF) << 8) | 0xFF;
     SysMatrix_InsertTranslation(this->unk_170 * 100.0f, 0.0f, 0.0f, 1);
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_4 + 8;
+    temp_s1->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_04016360;
 }

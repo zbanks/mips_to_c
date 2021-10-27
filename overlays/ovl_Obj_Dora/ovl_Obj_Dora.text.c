@@ -164,8 +164,8 @@ void ObjDora_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_s0 = (Vec3f *) &sp60;
 loop_2:
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s0);
-        temp_s0_2 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        temp_s0_2 = &phi_s0[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0_2;
         if (temp_s0_2 != &sp84) {
             goto loop_2;
@@ -192,18 +192,18 @@ void func_80B60CB0(ObjDora *arg0, GlobalContext *arg1) {
 }
 
 void func_80B60CC0(Actor *arg0) {
-    if (arg0->unk_3A0 == 1) {
-        arg0->unk_390 = 2.0f;
-        arg0->unk_394 = 5461.0f;
-        arg0->unk_398 = 1820.0f;
+    if (arg0[2].freezeTimer == 1) {
+        arg0[2].prevPos.x = 2.0f;
+        arg0[2].prevPos.y = 5461.0f;
+        arg0[2].prevPos.z = 1820.0f;
     } else {
-        arg0->unk_390 = 4.0f;
-        arg0->unk_394 = 12743.0f;
-        arg0->unk_398 = 5461.0f;
+        arg0[2].prevPos.x = 4.0f;
+        arg0[2].prevPos.y = 12743.0f;
+        arg0[2].prevPos.z = 5461.0f;
     }
     arg0->unk_39C = 0;
-    arg0->unk_39E = 0;
-    arg0->unk_38C = func_80B60D34;
+    arg0[2].textId = 0;
+    arg0[2].uncullZoneDownward = func_80B60D34;
 }
 
 void func_80B60D34(ObjDora *arg0, ? arg1) {
@@ -253,10 +253,10 @@ void func_80B60EE8(Actor *arg0, GlobalContext *arg1) {
     if (((temp_v0 & 2) != 0) && ((sp22 = gSaveContext.time, temp_a0 = arg0->colChkInfo.damageEffect, arg0->unk_155 = (u8) (temp_v0 & 0xFFFD), arg0->unk_3A8 = 5, (temp_a0 == 0xE)) || (temp_a0 == 0xF))) {
         if (temp_a0 == 0xF) {
             Audio_PlayActorSound2(arg0, 0x295AU);
-            arg0->unk_3A0 = 1;
+            arg0[2].freezeTimer = 1;
         } else {
             Audio_PlayActorSound2(arg0, 0x2956U);
-            arg0->unk_3A0 = 2;
+            arg0[2].freezeTimer = 2;
         }
         func_800BC848(arg0, arg1, 5, 0xA);
         func_80B60CC0(arg0);
@@ -281,7 +281,7 @@ void func_80B60EE8(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_3A8 = (s16) (temp_v0_4 - 1);
         return;
     }
-    CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) (arg0 + 0x144));
+    CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) &arg0[1]);
 }
 
 void ObjDora_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -321,41 +321,41 @@ void ObjDora_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_StatePush();
         SysMatrix_InsertXRotation_s(this->unk_3A2, 1);
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp40 = phi_f0;
         sp34 = temp_v0;
         sp34->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06004160;
         temp_v0_2->words.w0 = 0xDE000000;
         SysMatrix_InsertTranslation(D_80B614B4, D_80B614B4 + phi_f0, D_80B614B4 + phi_f0, 1);
         SysMatrix_InsertXRotation_s((s16) (this->unk_3A4 - this->unk_3A2), 1);
         SysMatrix_InsertTranslation(-D_80B614B8, -D_80B614B8, -D_80B614B8, 1);
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp2C = temp_v0_3;
         sp2C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
+        temp_s0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_06003FD0;
         temp_v0_4->words.w0 = 0xDE000000;
         SysMatrix_StatePop();
         return;
     }
     temp_v0_5 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_5 + 8;
+    temp_s0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDA380003;
     sp24 = temp_v0_5;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_6 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_6 + 8;
+    temp_s0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = (u32) &D_06003FD0;
     temp_v0_6->words.w0 = 0xDE000000;
     temp_v0_7 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_7 + 8;
+    temp_s0->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = (u32) &D_06004160;
     temp_v0_7->words.w0 = 0xDE000000;
 }

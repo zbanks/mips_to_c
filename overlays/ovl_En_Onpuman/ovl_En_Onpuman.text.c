@@ -154,20 +154,20 @@ void func_80B1202C(Actor *arg0, GlobalContext *arg1) {
                     }
                 }
             } else {
-                arg0->unk_2A4 = (u16) (arg0->unk_2A4 | 1);
+                arg0[2].params |= 1;
                 func_80151938(arg1, 0x8DAU);
             }
         }
     }
-    temp_v0_4 = arg0->unk_2A4;
+    temp_v0_4 = arg0[2].params;
     if ((temp_v0_4 & 1) != 0) {
         temp_a0_3 = arg0->cutscene;
         if (temp_a0_3 == -1) {
-            arg0->unk_2A4 = (u16) (temp_v0_4 & 0xFFFE);
+            arg0[2].params = temp_v0_4 & 0xFFFE;
             return;
         }
         if (ActorCutscene_GetCanPlayNext((s16) temp_a0_3) != 0) {
-            arg0->unk_2A4 = (u16) (arg0->unk_2A4 & 0xFFFE);
+            arg0[2].params &= 0xFFFE;
             ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
             return;
         }

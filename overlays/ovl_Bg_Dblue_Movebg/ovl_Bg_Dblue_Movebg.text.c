@@ -6,7 +6,7 @@ typedef struct BgDblueMovebg {
     /* 0x15C */ void (*actionFunc)(BgDblueMovebg *, GlobalContext *);
     /* 0x160 */ s32 unk_160;                        /* inferred */
     /* 0x164 */ ? *unk_164;                         /* inferred */
-    /* 0x168 */ s32 unk_168;                        /* inferred */
+    /* 0x168 */ u32 unk_168;                        /* inferred */
     /* 0x16C */ void *unk_16C;                      /* inferred */
     /* 0x170 */ s8 unk_170;                         /* inferred */
     /* 0x171 */ s8 unk_171;                         /* inferred */
@@ -306,7 +306,7 @@ void BgDblueMovebg_Init(Actor *thisx, GlobalContext *globalCtx) {
         goto block_9;
     }
     if (temp_v1 == 6) {
-        if (D_80A2BBF4.unk_1 != 0) {
+        if ((&D_80A2BBF4)[1] != 0) {
             Actor_MarkForDeath((Actor *) this);
             return;
         }
@@ -317,7 +317,7 @@ void BgDblueMovebg_Init(Actor *thisx, GlobalContext *globalCtx) {
         this->actor.room = -1;
         this->unk_171 = (s8) temp_t0;
         this->unk_170 = temp_t1;
-        D_80A2BBF4.unk_1 = 1U;
+        (&D_80A2BBF4)[1] = 1;
         goto block_9;
     }
 block_9:
@@ -839,10 +839,10 @@ void func_80A2ABD0(BgDblueMovebg *arg0, GlobalContext *arg1) {
                 }
                 temp_s7 = phi_s7 + 2;
                 phi_s5 += 0x2000;
-                phi_s6 += 0xC;
+                phi_s6 = &phi_s6[1];
                 phi_s0 += 1;
-                phi_s2 += 4;
-                phi_s3 += 2;
+                phi_s2 = &phi_s2[1];
+                phi_s3 = &phi_s3[1];
                 phi_s7 = temp_s7;
             } while (temp_s7 != 0x10);
         }
@@ -998,19 +998,19 @@ void BgDblueMovebg_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 void func_80A2B274(Actor *this, GlobalContext *globalCtx) {
     Actor *temp_a3;
+    CollisionPoly *temp_a1;
+    f32 temp_a2;
     s16 temp_v1;
-    s32 temp_a1;
-    s32 temp_a2;
 
     temp_a3 = this;
     if (temp_a3 != D_80A2BBF0) {
         Actor_MarkForDeath(temp_a3);
         return;
     }
-    temp_a1 = temp_a3->unk_1C0;
-    temp_a2 = temp_a3->unk_1BC;
+    temp_a1 = temp_a3[1].wallPoly;
+    temp_a2 = temp_a3[1].minVelocityY;
     this = temp_a3;
-    temp_v1 = *(&D_80A2B96C + (func_80A29A80(globalCtx, temp_a1, temp_a2, (BgDblueMovebg *) temp_a3) * 2));
+    temp_v1 = *(&D_80A2B96C + (func_80A29A80(globalCtx, (s32) temp_a1, (bitwise s32) temp_a2, (BgDblueMovebg *) temp_a3) * 2));
     if (temp_v1 != 0) {
         if ((s32) temp_v1 > 0) {
             func_8019FC20(&this->projectedPos, 0x2173);
@@ -1032,13 +1032,13 @@ void func_80A2B308(Actor *this, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = this->unk_164;
 }
@@ -1079,28 +1079,28 @@ void BgDblueMovebg_Draw(Actor *thisx, GlobalContext *globalCtx) {
             temp_s0->words.w0 = 0xDA380003;
             temp_s0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             if (this->unk_160 == 6) {
-                temp_s0->unk_C = &D_060052B8;
-                temp_s0->unk_8 = 0xDE000000;
+                temp_s0[1].words.w1 = (u32) &D_060052B8;
+                temp_s0[1].words.w0 = 0xDE000000;
                 if (this->unk_164 != 0) {
-                    temp_s0->unk_10 = 0xDE000000;
-                    temp_s0->unk_14 = (? *) this->unk_164;
-                    temp_s2->polyOpa.p = temp_s0 + 0x18;
+                    temp_s0[2].words.w0 = 0xDE000000;
+                    temp_s0[2].words.w1 = (u32) this->unk_164;
+                    temp_s2->polyOpa.p = &temp_s0[3];
                 } else {
-                    temp_s2->polyOpa.p = temp_s0 + 0x10;
+                    temp_s2->polyOpa.p = &temp_s0[2];
                 }
             } else {
-                temp_s0->unk_8 = 0xDE000000;
-                temp_s0->unk_C = (? *) this->unk_164;
-                temp_s2->polyOpa.p = temp_s0 + 0x10;
+                temp_s0[1].words.w0 = 0xDE000000;
+                temp_s0[1].words.w1 = (u32) this->unk_164;
+                temp_s2->polyOpa.p = &temp_s0[2];
             }
         }
         if (this->unk_168 != 0) {
             temp_s1 = func_8012C2B4(temp_s2->polyXlu.p);
             temp_s1->words.w0 = 0xDA380003;
             temp_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            temp_s1->unk_8 = 0xDE000000;
-            temp_s1->unk_C = (s32) this->unk_168;
-            temp_s2->polyXlu.p = temp_s1 + 0x10;
+            temp_s1[1].words.w0 = 0xDE000000;
+            temp_s1[1].words.w1 = this->unk_168;
+            temp_s2->polyXlu.p = &temp_s1[2];
         }
     }
     SysMatrix_StatePop();

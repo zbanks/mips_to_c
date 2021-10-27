@@ -407,22 +407,22 @@ void func_80BB178C(Actor *arg0, GlobalContext *arg1) {
 
     temp_a0 = arg1;
     sp34.unk_0 = arg0->world.pos.x;
-    sp34.unk_4 = (s32) arg0->world.pos.y;
-    sp34.unk_8 = (s32) arg0->world.pos.z;
+    (&sp34)[1] = arg0->world.pos.y;
+    (&sp34)[2] = arg0->world.pos.z;
     if ((arg0->unk_230 & 1) != 0) {
         arg0->unk_220 = (s16) (s32) sp34;
         arg0->unk_222 = (s16) (s32) sp38;
         arg0->unk_222 = (s16) (arg0->unk_222 + (s32) arg0->shape.yOffset);
         arg0->unk_21E = 0x14;
         arg0->unk_224 = (s16) (s32) sp3C;
-        arg0->unk_226 = (s16) (s32) ((f32) arg0->unk_21E * arg0->unk_228);
+        arg0->unk_226 = (s16) (s32) ((f32) arg0->unk_21E * arg0[1].shape.feetPos[1].y);
         phi_a2 = arg0 + 0x1D8;
     } else {
         arg0->unk_1D2 = (s16) (s32) sp34;
-        arg0->unk_1D4 = (s16) (s32) sp38;
+        arg0[1].bgCheckFlags = (u16) (s32) sp38;
         arg0->unk_1CC = (s16) (s32) 24.0f;
         arg0->unk_1CE = (s16) (s32) 62.0f;
-        arg0->unk_1D6 = (s16) (s32) sp3C;
+        arg0[1].yawTowardsPlayer = (s16) (s32) sp3C;
         phi_a2 = arg0 + 0x18C;
     }
     if (phi_a2 != 0) {
@@ -487,13 +487,13 @@ void func_80BB19C0(Vec3f *arg0, EnGeg *arg1, GlobalContext *arg2) {
     sp3C = (Math_CosS(temp_a0_3) * 50.0f) + temp_s0->world.pos.z;
     if (Math_Vec3f_DistXZ(temp_a0_2, (Vec3f *) &sp34) < sp2C) {
         arg0->x = sp40.unk_0;
-        arg0->y = sp40.unk_4;
-        arg0->z = sp40.unk_8;
+        arg0->y = (&sp40)[1];
+        arg0->z = (&sp40)[2];
         return;
     }
     arg0->x = sp34.unk_0;
-    arg0->y = sp34.unk_4;
-    arg0->z = sp34.unk_8;
+    arg0->y = (&sp34)[1];
+    arg0->z = (&sp34)[2];
 }
 
 s32 func_80BB1B14(EnGeg *arg0, GlobalContext *arg1) {
@@ -634,7 +634,7 @@ void func_80BB1D04(EnGeg *arg0) {
         sp40.unk_0 = (f32) temp_t0->world.pos.x;
         sp40.unk_4 = (f32) temp_t0->world.pos.y;
         sp40.unk_8 = (f32) temp_t0->world.pos.z;
-        sp44 = temp_t0->unk_C44 + 3.0f;
+        sp44 = temp_t0[9].shape.feetPos[1].x + 3.0f;
     }
     sp34.unk_0 = (s32) arg0->world.pos.x;
     sp34.unk_4 = (s32) arg0->world.pos.y;
@@ -666,18 +666,18 @@ void func_80BB1D04(EnGeg *arg0) {
 }
 
 void func_80BB1FCC(EnGeg *arg0, GlobalContext *arg1) {
-    *(gSegments + 0x18) = (arg1 + (arg0->unk_248 * 0x44))->unk_17D98 + 0x80000000;
+    gSegments[6] = (arg1 + (arg0->unk_248 * 0x44))->unk_17D98 + 0x80000000;
     SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
 }
 
 void func_80BB2020(EnGeg *arg0, GlobalContext *arg1) {
-    *(gSegments + 0x18) = (arg1 + (arg0->unk_248 * 0x44))->unk_17D98 + 0x80000000;
+    gSegments[6] = (arg1 + (arg0->unk_248 * 0x44))->unk_17D98 + 0x80000000;
     func_8013BC6C(arg0 + 0x144, D_80BB3EF4, arg0->unk_4AC);
 }
 
 ? func_80BB2088(Actor *arg0, GlobalContext *arg1) {
+    f32 temp_v0_2;
     s16 temp_v0;
-    s32 temp_v0_2;
     s16 phi_v1;
 
     temp_v0 = arg0->unk_242;
@@ -695,7 +695,7 @@ void func_80BB2020(EnGeg *arg0, GlobalContext *arg1) {
         arg0->unk_46E = 0;
         return 1;
     }
-    if ((Actor_IsActorFacingLinkAndWithinRange(arg0, 300.0f, 0x7FF8) != 0) && ((temp_v0_2 = arg0->unk_4AC, (temp_v0_2 == 5)) || ((temp_v0_2 == 0xD) && (arg0->unk_496 == 0xD69)))) {
+    if ((Actor_IsActorFacingLinkAndWithinRange(arg0, 300.0f, 0x7FF8) != 0) && ((temp_v0_2 = arg0[3].shape.feetPos[1].x, ((bitwise s32) temp_v0_2 == 5)) || (((bitwise s32) temp_v0_2 == 0xD) && (arg0->unk_496 == 0xD69)))) {
         arg0->unk_230 = (u16) (arg0->unk_230 | 2);
         func_80BB1D64(arg0, arg1);
     } else {
@@ -1203,7 +1203,7 @@ void func_80BB31B8(EnGeg *this, GlobalContext *globalCtx) {
     s32 phi_a2;
 
     phi_a2 = 0x88;
-    if (gSaveContext.inventory.items[gItemSlots[0x42]] == 0x42) {
+    if (gSaveContext.inventory.items[gItemSlots[66]] == 0x42) {
         if (Player_GetMask(globalCtx) == 0xD) {
             this->unk_496 = 0xD8B;
             phi_a2 = 5;
@@ -1359,8 +1359,8 @@ void EnGeg_Update(Actor *thisx, GlobalContext *globalCtx) {
     arg2->unk_8 = (s32) sp7C.unk_8;
     if ((arg4 == 0) && (arg5 == 0)) {
         arg3->unk_0 = sp68;
-        arg3->unk_2 = sp6A;
-        arg3->unk_4 = sp6C;
+        arg3[1] = sp6A;
+        arg3[2] = sp6C;
         return 1;
     }
     if (arg5 != 0) {
@@ -1368,8 +1368,8 @@ void EnGeg_Update(Actor *thisx, GlobalContext *globalCtx) {
         sp6A = arg1;
     }
     Math_SmoothStepToS(arg3, sp68, 3, 0x2AA8, (s16) 0xB6);
-    Math_SmoothStepToS(arg3 + 2, sp6A, 3, 0x2AA8, (s16) 0xB6);
-    Math_SmoothStepToS(arg3 + 4, sp6C, 3, 0x2AA8, (s16) 0xB6);
+    Math_SmoothStepToS(&arg3[1], sp6A, 3, 0x2AA8, (s16) 0xB6);
+    Math_SmoothStepToS(&arg3[2], sp6C, 3, 0x2AA8, (s16) 0xB6);
     return 1;
 }
 
@@ -1388,17 +1388,17 @@ void func_80BB387C(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
     GraphicsContext *temp_a0;
 
     sp38.unk_0 = D_80BB4064.unk_0;
-    sp38.unk_4 = (s32) D_80BB4064.unk_4;
-    sp38.unk_8 = (s32) D_80BB4064.unk_8;
+    (&sp38)[1] = D_80BB4064.unk_4;
+    (&sp38)[2] = D_80BB4064.unk_8;
     sp2C.unk_0 = D_80BB4070.unk_0;
-    sp2C.unk_4 = (s32) D_80BB4070.unk_4;
-    sp2C.unk_8 = (s32) D_80BB4070.unk_8;
+    (&sp2C)[1] = D_80BB4070.unk_4;
+    (&sp2C)[2] = D_80BB4070.unk_8;
     if (arg1 == 0x11) {
         if ((arg4->unk_230 & 0x40) == 0) {
             func_8012C28C(*arg0);
             temp_a0 = *arg0;
             temp_v1 = temp_a0->polyOpa.p;
-            temp_a0->polyOpa.p = temp_v1 + 8;
+            temp_a0->polyOpa.p = &temp_v1[1];
             temp_v1->words.w1 = (u32) &D_06004DB0;
             temp_v1->words.w0 = 0xDE000000;
         }
@@ -1435,11 +1435,11 @@ void func_80BB39F8(GlobalContext *arg0, s32 arg1, Actor *arg2) {
             }
             func_80BB3728((s16) (arg2->unk_468 + arg2->unk_46C + 0x4000), (s16) (arg2->unk_46A + arg2->unk_46E + arg2->shape.rot.y + 0x4000), arg2 + 0x470, arg2 + 0x47C, phi_v0, phi_v1);
             SysMatrix_StatePop();
-            SysMatrix_InsertTranslation(arg2->unk_470, arg2->unk_474, arg2->unk_478, 0);
+            SysMatrix_InsertTranslation(arg2[3].colChkInfo.displacement.x, arg2[3].colChkInfo.displacement.y, arg2[3].colChkInfo.displacement.z, 0);
             Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-            Matrix_RotateY(arg2->unk_47E, 1U);
-            SysMatrix_InsertXRotation_s(arg2->unk_47C, 1);
-            SysMatrix_InsertZRotation_s(arg2->unk_480, 1);
+            Matrix_RotateY(arg2[3].colChkInfo.cylHeight, 1U);
+            SysMatrix_InsertXRotation_s(arg2[3].colChkInfo.cylRadius, 1);
+            SysMatrix_InsertZRotation_s(arg2[3].colChkInfo.cylYShift, 1);
             SysMatrix_StatePush();
             return;
         }
@@ -1475,16 +1475,16 @@ void func_80BB3BE0(Actor *arg0, GlobalContext *arg1) {
     sp38 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0 + 8;
+    sp38->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = sp38;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80BB4088 + (arg0->unk_23E * 4)));
     temp_v0_2 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0_2 + 8;
+    sp38->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xE7000000;
-    func_801343C0(arg1, arg0->unk_148, arg0->unk_164, (s32) arg0->unk_146, func_80BB3860, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80BB387C, func_80BB39F8, arg0);
+    func_801343C0(arg1, arg0[1].flags, arg0->unk_164, (s32) arg0[1].category, func_80BB3860, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80BB387C, func_80BB39F8, arg0);
 }
 
 void func_80BB3CB4(void *arg0, void *arg1) {
@@ -1506,11 +1506,11 @@ void func_80BB3CB4(void *arg0, void *arg1) {
     Matrix_Scale(arg0->unk_58, arg0->unk_5C, arg0->unk_60, 1);
     SysMatrix_InsertXRotation_s((s16) (s32) sp24, 1);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(arg1->unk_0);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_060091A8;
 }

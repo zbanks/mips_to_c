@@ -297,20 +297,20 @@ s32 func_80BDE27C(Actor *arg0, s32 arg1) {
     phi_v1 = 0;
     phi_t0 = 0;
     if ((arg1 == 1) || (arg1 == 2)) {
-        temp_v0 = arg0->unk_4F8;
+        temp_v0 = arg0[3].next;
         if ((temp_v0 != 1) && (temp_v0 != 2)) {
             goto block_6;
         }
-    } else if (arg1 != arg0->unk_4F8) {
+    } else if (arg1 != arg0[3].next) {
 block_6:
         phi_v1 = 1;
     }
     temp_a0 = arg0 + 0x144;
     if (phi_v1 != 0) {
-        arg0->unk_4F8 = arg1;
+        arg0[3].next = arg1;
         arg0 = arg0;
         temp_t0 = func_8013BC6C(temp_a0, D_80BDFFF0, arg1);
-        arg0->unk_4C8 = (f32) arg0->unk_160;
+        arg0[3].uncullZoneForward = arg0->unk_160;
         phi_t0 = temp_t0;
     }
     return phi_t0;
@@ -401,7 +401,7 @@ s32 func_80BDE4E0(Actor *arg0, s16 *arg1, s16 arg2) {
     void *temp_v0;
 
     sp44 = 0;
-    temp_v0 = arg0->unk_368;
+    temp_v0 = arg0[2].shape.feetPos[1].x;
     if ((temp_v0 == 0) || (temp_v0->unk_138 == 0)) {
         return 1;
     }
@@ -412,7 +412,7 @@ s32 func_80BDE4E0(Actor *arg0, s16 *arg1, s16 arg2) {
         *arg1 += 1;
     }
     if ((arg2 + 1) == *arg1) {
-        Math_Vec3f_Copy((Vec3f *) &sp28, arg0->unk_368 + 0x24);
+        Math_Vec3f_Copy((Vec3f *) &sp28, (bitwise s32) arg0[2].shape.feetPos[1].x + 0x24);
         Math_Vec3f_Copy((Vec3f *) &sp34, (Vec3f *) &arg0->world);
         temp_v0_2 = Math_Vec3f_Yaw((Vec3f *) &sp34, (Vec3f *) &sp28);
         temp_lo = temp_v0_2 / 0x16C;
@@ -439,7 +439,7 @@ s32 func_80BDE678(Actor *arg0, s16 *arg1, s16 arg2) {
     s16 phi_v0;
 
     sp24 = 0;
-    temp_v0 = arg0->unk_368;
+    temp_v0 = arg0[2].shape.feetPos[1].x;
     if ((temp_v0 == 0) || (temp_v0->unk_138 == 0)) {
         return 1;
     }
@@ -478,7 +478,7 @@ s32 func_80BDE7FC(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t6;
     s32 phi_v1;
 
-    temp_t6 = arg0->unk_4E6;
+    temp_t6 = arg0[3].colorFilterParams;
     temp_a1 = func_80BDE484(arg0, 0);
     phi_v1 = 0;
     switch (temp_t6) {
@@ -494,7 +494,7 @@ s32 func_80BDE7FC(Actor *arg0, GlobalContext *arg1) {
             if ((temp_v0 != 0) && (temp_v0->update != 0)) {
                 func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(temp_a1)), arg0->child);
             }
-            arg0->unk_4E6 = (u16) ((s16) arg0->unk_4E6 + 1);
+            arg0[3].colorFilterParams = (s16) arg0[3].colorFilterParams + 1;
             phi_v1 = 1;
         }
         break;
@@ -503,12 +503,12 @@ s32 func_80BDE7FC(Actor *arg0, GlobalContext *arg1) {
     case 5:
     case 7:
         func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(temp_a1)), arg0);
-        arg0->unk_4E6 = (u16) ((s16) arg0->unk_4E6 + 1);
+        arg0[3].colorFilterParams = (s16) arg0[3].colorFilterParams + 1;
         phi_v1 = 1;
         break;
     case 9:
         ActorCutscene_Stop(temp_a1);
-        arg0->unk_4E6 = (u16) ((s16) arg0->unk_4E6 + 1);
+        arg0[3].colorFilterParams = (s16) arg0[3].colorFilterParams + 1;
         phi_v1 = 1;
         break;
     }
@@ -596,7 +596,7 @@ block_10:
 
     temp_v0 = arg0->unk_35C;
     if (temp_v0 == 3) {
-        arg0->unk_4EC = func_80BDE92C;
+        arg0[3].parent = func_80BDE92C;
         return &D_80BDFD14;
     }
     if (temp_v0 != 1) {
@@ -604,10 +604,10 @@ block_10:
             return NULL;
         }
         if (((gSaveContext.weekEventReg[89] & 8) == 0) && ((gSaveContext.weekEventReg[85] & 0x80) != 0)) {
-            arg0->unk_4EC = (s32 (*)(GlobalContext *, GlobalContext *)) func_80BDE7FC;
+            arg0[3].parent = (s32 (*)(GlobalContext *, GlobalContext *)) func_80BDE7FC;
             return &D_80BDFCBC;
         }
-        arg0->unk_4EC = func_80BDEA14;
+        arg0[3].parent = func_80BDEA14;
         arg0 = arg0;
         if (Player_GetMask(arg1) != 2) {
             return &D_80BDFDE8;
@@ -624,7 +624,7 @@ block_10:
     if (arg1->actorCtx.actorList[2].first->unk_14B == 3) {
         return &D_80BDFDD0;
     }
-    if (gSaveContext.inventory.items[gItemSlots[0x37]] != 0x37) {
+    if (gSaveContext.inventory.items[gItemSlots[55]] != 0x37) {
         return &D_80BDFE8C;
     }
     if (Player_GetMask(arg1) == 2) {
@@ -653,18 +653,18 @@ s32 func_80BDEC2C(Actor *arg0, GlobalContext *arg1) {
             temp_v0 = temp_a2->unk_A87;
             if (temp_v0 == 0x33) {
                 arg0->unk_4C2 = (u16) (temp_t9 | 0x800);
-                arg0->unk_4F4 = (s32) temp_a2->unk_A87;
+                arg0[3].prev = (Actor *) temp_a2->unk_A87;
             } else if (temp_v0 != 0) {
                 arg0->unk_4C2 = (u16) (arg0->unk_4C2 | 0x1000);
-                arg0->unk_4F4 = (s32) temp_a2->unk_A87;
+                arg0[3].prev = (Actor *) temp_a2->unk_A87;
             }
             func_8013AED4(arg0 + 0x4C2, 0U, 7U);
-            arg0->unk_4E6 = 0;
-            arg0->unk_4EC = 0;
-            arg0->child = arg0->unk_368;
-            arg0->unk_360 = func_80BDEABC(arg0, arg1);
+            arg0[3].colorFilterParams = 0;
+            arg0[3].parent = NULL;
+            arg0->child = (bitwise Actor *) arg0[2].shape.feetPos[1].x;
+            arg0[2].shape.feetPos[0].y = (bitwise f32) func_80BDEABC(arg0, arg1);
             arg0->unk_4C2 = (u16) (arg0->unk_4C2 | 0x20);
-            arg0->unk_188 = func_80BDF6C4;
+            arg0[1].focus.pos.z = (bitwise f32) func_80BDF6C4;
             phi_v1 = 1;
         }
     }
@@ -768,36 +768,36 @@ void func_80BDEF3C(Actor *arg0, ? arg1) {
     u16 temp_t4;
     u16 temp_t8;
 
-    temp_v0 = arg0->unk_4E4;
+    temp_v0 = arg0[3].freezeTimer;
     if (temp_v0 == 0) {
         func_80BDE27C(arg0, 7);
         temp_t8 = arg0->unk_4C2 & 0xFFDF;
         arg0->unk_4C2 = temp_t8;
         arg0->unk_4C2 = (u16) (temp_t8 | 0x200);
-        arg0->unk_4E4 = (s16) (arg0->unk_4E4 + 1);
+        arg0[3].freezeTimer = (s16) arg0[3].freezeTimer + 1;
         return;
     }
-    if ((temp_v0 == 1) && (func_801378B8((SkelAnime *) (arg0 + 0x144), arg0->unk_154) != 0)) {
+    if ((temp_v0 == 1) && (func_801378B8((SkelAnime *) &arg0[1], arg0[1].home.pos.z) != 0)) {
         func_80BDE27C(arg0, 0);
         temp_t4 = arg0->unk_4C2 & 0xFDFF;
         arg0->unk_4C2 = temp_t4;
         arg0->unk_4C2 = (u16) (temp_t4 | 0x20);
-        arg0->unk_4E4 = (s16) (arg0->unk_4E4 + 1);
+        arg0[3].freezeTimer = (s16) arg0[3].freezeTimer + 1;
     }
 }
 
 void func_80BDEFE4(Actor *arg0, ? arg1) {
     s16 temp_v0;
 
-    temp_v0 = arg0->unk_4E4;
+    temp_v0 = arg0[3].freezeTimer;
     if (temp_v0 == 0) {
         func_80BDE27C(arg0, 6);
-        arg0->unk_4E4 = (s16) (arg0->unk_4E4 + 1);
+        arg0[3].freezeTimer = (s16) arg0[3].freezeTimer + 1;
         return;
     }
-    if ((temp_v0 == 1) && (func_801378B8((SkelAnime *) (arg0 + 0x144), arg0->unk_154) != 0)) {
+    if ((temp_v0 == 1) && (func_801378B8((SkelAnime *) &arg0[1], arg0[1].home.pos.z) != 0)) {
         func_80BDE27C(arg0, 5);
-        arg0->unk_4E4 = (s16) (arg0->unk_4E4 + 1);
+        arg0[3].freezeTimer = (s16) arg0[3].freezeTimer + 1;
     }
 }
 
@@ -916,7 +916,7 @@ s32 func_80BDF308(Actor *arg0, ? arg1, u8 *arg2) {
         if (temp_v0 != 2) {
 
         } else {
-            arg0->unk_4F0 = 0;
+            arg0[3].child = NULL;
             arg0->unk_4EA = 0;
             func_80BDE27C(arg0, 2);
         }
@@ -994,7 +994,7 @@ block_8:
     case 3:
     case 4:
         arg0 = temp_a3;
-        func_80BDE678(temp_a3, temp_a3 + 0x4EA, 3, temp_a3);
+        func_80BDE678(temp_a3, (s16 *) &temp_a3[3].dropFlag, 3, temp_a3);
         phi_a3_2 = arg0;
         goto block_8;
     }
@@ -1181,7 +1181,7 @@ void func_80BDFA34(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 0x10) {
         func_8013AD9C((s16) (arg2->unk_4DC + 0x4000), (s16) (arg2->unk_4DE + arg2->shape.rot.y + 0x4000), arg2 + 0x36C, arg2 + 0x378, phi_v0, phi_v1);
         SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(arg2->unk_36C, arg2->unk_370, arg2->unk_374, 0);
+        SysMatrix_InsertTranslation(arg2[2].shape.feetPos[1].y, arg2[2].shape.feetPos[1].z, arg2[2].projectedPos.x, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
         Matrix_RotateY(arg2->unk_37A, 1U);
         SysMatrix_InsertXRotation_s(arg2->unk_378, 1);
@@ -1211,15 +1211,15 @@ void EnAl_Draw(Actor *thisx, GlobalContext *globalCtx) {
         do {
             SysMatrix_SetCurrentState(phi_s2);
             temp_v0 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0 + 8;
+            temp_s3->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_2 = temp_s3->polyOpa.p;
             temp_s1 = phi_s1 + 4;
-            temp_s3->polyOpa.p = temp_v0_2 + 8;
+            temp_s3->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_2->words.w1 = temp_s1->unk_-4;
-            phi_s2 += 0x40;
+            phi_s2 = &phi_s2[1];
             phi_s1 = temp_s1;
         } while (temp_s1 != &D_80BE0094);
     }

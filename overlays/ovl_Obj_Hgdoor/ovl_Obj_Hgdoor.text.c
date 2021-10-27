@@ -264,28 +264,28 @@ void ObjHgdoor_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     if ((this->dyna.actor.params & 0x8000) != 0) {
         temp_v0_2 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_2 + 8;
+        sp24->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06001AB0;
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_3 = sp24->polyOpa.p;
-        sp24->polyOpa.p = temp_v0_3 + 8;
+        sp24->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_06001BA8;
         temp_v0_3->words.w0 = 0xDE000000;
         return;
     }
     temp_v0_4 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_4 + 8;
+    sp24->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06001670;
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_5 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_5 + 8;
+    sp24->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_06001768;
     temp_v0_5->words.w0 = 0xDE000000;
 }

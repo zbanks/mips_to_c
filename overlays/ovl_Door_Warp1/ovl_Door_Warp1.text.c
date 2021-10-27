@@ -308,11 +308,11 @@ s32 func_808B849C(DoorWarp1 *arg0, GlobalContext *arg1) {
     phi_v1 = 0;
     if ((temp_v0 == 0x1F) && ((gBitFlags->unk_0 & gSaveContext.inventory.questItems) == 0)) {
         phi_v1 = 1;
-    } else if ((temp_v0 == 0x44) && ((gBitFlags->unk_4 & gSaveContext.inventory.questItems) == 0)) {
+    } else if ((temp_v0 == 0x44) && ((gBitFlags[1] & gSaveContext.inventory.questItems) == 0)) {
         phi_v1 = 2;
-    } else if ((temp_v0 == 0x5F) && ((gBitFlags->unk_8 & gSaveContext.inventory.questItems) == 0)) {
+    } else if ((temp_v0 == 0x5F) && ((gBitFlags[2] & gSaveContext.inventory.questItems) == 0)) {
         phi_v1 = 3;
-    } else if ((temp_v0 == 0x36) && ((gBitFlags->unk_C & gSaveContext.inventory.questItems) == 0)) {
+    } else if ((temp_v0 == 0x36) && ((gBitFlags[3] & gSaveContext.inventory.questItems) == 0)) {
         phi_v1 = 4;
     }
     return phi_v1;
@@ -485,11 +485,11 @@ void func_808B8C48(Actor *arg0, GlobalContext *arg1) {
 
     arg0->shape.yOffset = 0.0f;
     Actor_SetScale(arg0, 0.1f);
-    Lights_PointNoGlowSetInfo(arg0 + 0x1E0, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0xFF);
-    Lights_PointNoGlowSetInfo(arg0 + 0x1F4, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0xFF);
+    Lights_PointNoGlowSetInfo((LightInfo *) &arg0[1].yDistToPlayer, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0xFF);
+    Lights_PointNoGlowSetInfo((LightInfo *) &arg0[1].colChkInfo.cylRadius, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0xFF);
     temp_t0 = arg0->params;
     temp_v1 = temp_t0 & 0xFF;
-    if (((temp_v1 == 2) && ((gBitFlags->unk_0 & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 3) && ((gBitFlags->unk_4 & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 4) && ((gBitFlags->unk_8 & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 5) && ((gBitFlags->unk_C & gSaveContext.inventory.questItems) != 0))) {
+    if (((temp_v1 == 2) && ((gBitFlags->unk_0 & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 3) && ((gBitFlags[1] & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 4) && ((gBitFlags[2] & gSaveContext.inventory.questItems) != 0)) || ((temp_v1 == 5) && ((gBitFlags[3] & gSaveContext.inventory.questItems) != 0))) {
         Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x38, arg0->world.pos.x, arg0->world.pos.y + 10.0f, arg0->world.pos.z, (s16) (s32) arg0->world.rot.x, (s16) (s32) arg0->world.rot.y, (s16) (s32) arg0->world.rot.z, (s32) (s16) ((s16) (temp_t0 & 0xFF00) | 6));
         DoorWarp1_SetupAction((DoorWarp1 *) arg0, func_808BAAF4);
         return;
@@ -499,14 +499,14 @@ void func_808B8C48(Actor *arg0, GlobalContext *arg1) {
 
 void func_808B8E78(Actor *arg0, GlobalContext *arg1) {
     Actor_SetScale(arg0, 0.1f);
-    Lights_PointNoGlowSetInfo(arg0 + 0x1E0, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0);
-    Lights_PointNoGlowSetInfo(arg0 + 0x1F4, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0);
+    Lights_PointNoGlowSetInfo((LightInfo *) &arg0[1].yDistToPlayer, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0);
+    Lights_PointNoGlowSetInfo((LightInfo *) &arg0[1].colChkInfo.cylRadius, (s16) (s32) arg0->world.pos.x, (s16) (s32) arg0->world.pos.y, (s16) (s32) arg0->world.pos.z, (u8) 0xC8, (u8) 0xFF, (u8) 0xFF, (s16) 0);
     Actor_SetScale(arg0, 3.0f);
     arg0->unk_1D4 = 1;
     arg0->unk_1D0 = 0;
-    arg0->unk_1A8 = 0.0f;
-    arg0->unk_1AC = 0.0f;
-    arg0->unk_1A4 = 700.0f;
+    arg0[1].velocity.x = 0.0f;
+    arg0[1].velocity.y = 0.0f;
+    arg0[1].scale.z = 700.0f;
     if (arg1->sceneNum == 0x16) {
         DoorWarp1_SetupAction((DoorWarp1 *) arg0, func_808B96A0);
         return;
@@ -617,7 +617,7 @@ void func_808B93A0(DoorWarp1 *this, GlobalContext *globalCtx) {
             func_8019F208();
             func_800B7298(globalCtx, (Actor *) this, 9U);
             sp20->unk_3A0 = (f32) this->actor.world.pos.x;
-            sp20->unk_3A8 = (f32) this->actor.world.pos.z;
+            sp20[2].parent = (bitwise Actor *) this->actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
@@ -719,7 +719,7 @@ void func_808B977C(DoorWarp1 *this, GlobalContext *globalCtx) {
         func_801A5CFC(0x2826U, &temp_v1->projectedPos, 4U, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         func_800B7298(globalCtx, (Actor *) this, 9U);
         temp_v1->unk_3A0 = (f32) this->actor.world.pos.x;
-        temp_v1->unk_3A8 = (f32) this->actor.world.pos.z;
+        temp_v1[2].parent = (bitwise Actor *) this->actor.world.pos.z;
         this->unk_1CA = 1;
         DoorWarp1_SetupAction(this, func_808B9840);
     }
@@ -906,7 +906,7 @@ void func_808B9F10(DoorWarp1 *this, GlobalContext *globalCtx) {
         Interface_ChangeAlpha(1U);
         func_800B7298(globalCtx, (Actor *) this, 9U);
         sp24->unk_3A0 = (f32) this->actor.world.pos.x;
-        sp24->unk_3A8 = (f32) this->actor.world.pos.z;
+        sp24[2].parent = (bitwise Actor *) this->actor.world.pos.z;
         this->unk_1CA = 0x14;
         DoorWarp1_SetupAction(this, func_808B9FD0);
     }
@@ -1268,17 +1268,17 @@ void func_808BACCC(Actor *arg0, GlobalContext *arg1) {
     sp30 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp30->polyXlu.p;
-    sp30->polyXlu.p = temp_v0 + 8;
+    sp30->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFA00FFFF;
-    temp_v0->words.w1 = ((u32) arg0->unk_1B8 & 0xFF) | 0xC8FFFF00;
+    temp_v0->words.w1 = ((u32) arg0[1].gravity & 0xFF) | 0xC8FFFF00;
     temp_v0_2 = sp30->polyXlu.p;
-    sp30->polyXlu.p = temp_v0_2 + 8;
+    sp30->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
-    temp_v0_2->words.w1 = ((u32) arg0->unk_1B8 & 0xFF) | 0x64FF00;
+    temp_v0_2->words.w1 = ((u32) arg0[1].gravity & 0xFF) | 0x64FF00;
     temp_t3 = sp30->polyXlu.p;
     sp30 = sp30;
     sp30->polyXlu.p = SkelAnime_Draw2(arg1, arg0->unk_160, arg0->unk_17C, NULL, NULL, arg0, temp_t3);
-    SkelAnime_FrameUpdateMatrix(arg0 + 0x15C);
+    SkelAnime_FrameUpdateMatrix((SkelAnime *) &arg0[1].home.rot.z);
 }
 
 void func_808BAE9C(DoorWarp1 *arg0, GlobalContext *arg1) {
@@ -1339,14 +1339,14 @@ void func_808BAE9C(DoorWarp1 *arg0, GlobalContext *arg1) {
     sp84 = temp_f0_2;
     func_8012C2DC(arg1->state.gfxCtx);
     temp_v1 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v1 + 8;
+    temp_s0->polyXlu.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFA000080;
     temp_a0 = (u32) (255.0f * temp_f0_2) & 0xFF;
     temp_a1 = (temp_a0 << 0x18) | 0xFF0000 | 0xFF00;
     temp_v1->words.w1 = temp_a1 | ((u32) arg0->unk_1B4 & 0xFF);
     temp_v0 = temp_s0->polyXlu.p;
     temp_t0 = (temp_a0 << 0x10) | 0xFF00 | 0xFF;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w1 = temp_t0;
     temp_v0->words.w0 = 0xFB000000;
     sp44 = temp_t0;
@@ -1357,13 +1357,13 @@ void func_808BAE9C(DoorWarp1 *arg0, GlobalContext *arg1) {
     }
     Matrix_Scale(phi_f12, phi_f12, phi_f12, 1);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060028;
     sp70 = temp_v0_2;
     sp70->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     SysMatrix_StatePush();
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     temp_a2 = sp94 & 0xFF;
     temp_a3 = -(s32) ((s16) (s32) (2.0f * arg0->unk_1AC) & 0x1FF);
@@ -1373,28 +1373,28 @@ void func_808BAE9C(DoorWarp1 *arg0, GlobalContext *arg1) {
     temp_f12 = (((f32) arg0->unk_1C6 * sp90) / 100.0f) + 1.0f;
     Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060024;
     sp68 = temp_v0_4;
     sp68->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_060001A0;
     temp_v0_5->words.w0 = 0xDE000000;
     sp4C = &D_060001A0;
     SysMatrix_StatePop();
     if (arg0->unk_1B0 > 0.0f) {
         temp_v1_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_2 + 8;
+        temp_s0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFA000080;
         temp_v1_2->words.w1 = sp48 | ((u32) arg0->unk_1B0 & 0xFF);
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xFB000000;
         temp_v0_6->words.w1 = sp44;
         sp94 *= 2;
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDB060020;
         temp_a2_2 = sp94 & 0xFF;
         temp_a3_2 = -(s32) ((s16) (s32) arg0->unk_1AC & 0x1FF);
@@ -1404,11 +1404,11 @@ void func_808BAE9C(DoorWarp1 *arg0, GlobalContext *arg1) {
         temp_f12_2 = (((f32) arg0->unk_1C8 * sp8C) / 100.0f) + 1.0f;
         Matrix_Scale(temp_f12_2, 1.0f, temp_f12_2, 1);
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xDB060024;
         temp_v0_8->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xDE000000;
         temp_v0_9->words.w1 = (u32) sp4C;
     }
@@ -1468,23 +1468,23 @@ void func_808BB4F4(void *arg0, GlobalContext *arg1) {
     sp5C = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0_2 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_2 + 8;
+    sp5C->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFB000000;
     temp_a2 = (sp60 * 3) + &sp64;
     temp_v0_2->words.w1 = (temp_a2->unk_2 << 8) | (temp_a2->unk_0 << 0x18) | (temp_a2->unk_1 << 0x10) | 0xFF;
     temp_v0_3 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_3 + 8;
+    sp5C->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = -1;
     temp_v0_3->words.w0 = 0xFA000080;
     temp_v0_4 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_4 + 8;
+    sp5C->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDA380003;
     sp28 = temp_a2;
     sp5C = sp5C;
     sp4C = temp_v0_4;
     sp4C->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_5 = sp5C->polyXlu.p;
-    sp5C->polyXlu.p = temp_v0_5 + 8;
+    sp5C->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_06004690;
     temp_v0_5->words.w0 = 0xDE000000;
     sp44 = arg1->state.gfxCtx;
@@ -1494,19 +1494,19 @@ void func_808BB4F4(void *arg0, GlobalContext *arg1) {
     Matrix_Scale(1.0f, 0.0f, 1.0f, 1);
     func_8012C2DC(arg1->state.gfxCtx);
     temp_v0_6 = sp44->polyXlu.p;
-    sp44->polyXlu.p = temp_v0_6 + 8;
+    sp44->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xFB000000;
     temp_v0_6->words.w1 = (sp28->unk_2 << 8) | (sp28->unk_0 << 0x18) | (sp28->unk_1 << 0x10) | 0xFF;
     temp_v0_7 = sp44->polyXlu.p;
-    sp44->polyXlu.p = temp_v0_7 + 8;
+    sp44->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xFA000080;
     temp_v0_7->words.w1 = arg0->unk_203 | ~0xFF;
     temp_v0_8 = sp44->polyXlu.p;
-    sp44->polyXlu.p = temp_v0_8 + 8;
+    sp44->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDA380003;
     temp_v0_8->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
     temp_v0_9 = sp44->polyXlu.p;
-    sp44->polyXlu.p = temp_v0_9 + 8;
+    sp44->polyXlu.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = (u32) &D_060058C8;
     temp_v0_9->words.w0 = 0xDE000000;
 }

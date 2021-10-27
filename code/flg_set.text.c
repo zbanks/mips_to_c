@@ -183,7 +183,7 @@ void FlagSet_Draw(GameState *gameState) {
     temp_v0_2 = Graph_GfxPlusOne(temp_a0);
     temp_s0 = temp_v0_2;
     temp_a0_2 = sp94->overlay.p;
-    sp94->overlay.p = temp_a0_2 + 8;
+    sp94->overlay.p = &temp_a0_2[1];
     temp_a0_2->words.w1 = (u32) temp_v0_2;
     temp_a0_2->words.w0 = 0xDE000000;
     GfxPrint_Init((GfxPrint *) &sp54);
@@ -218,7 +218,7 @@ void FlagSet_Draw(GameState *gameState) {
     GfxPrint_Destroy((GfxPrint *) &sp54);
     temp_s0_2->words.w0 = 0xDF000000;
     temp_s0_2->words.w1 = 0;
-    temp_s0_3 = temp_s0_2 + 8;
+    temp_s0_3 = &temp_s0_2[1];
     Graph_BranchDlist(sp8C, temp_s0_3);
     sp94->polyOpa.p = temp_s0_3;
 }

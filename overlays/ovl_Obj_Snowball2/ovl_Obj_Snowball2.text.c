@@ -583,7 +583,7 @@ void func_80B39C9C(Actor *arg0, GlobalContext *arg1) {
         }
     }
     temp_a1 = &arg1->colChkCtx;
-    temp_a2 = arg0 + 0x144;
+    temp_a2 = &arg0[1];
     if (arg0->xzDistToPlayer < 800.0f) {
         sp2C = temp_a1;
         sp28 = temp_a2;
@@ -610,7 +610,7 @@ void func_80B39F60(Actor *arg0) {
     temp_f10 = (600.0f - arg0->shape.yOffset) * arg0->scale.y;
     arg0->unk_1AC = 4;
     arg0->shape.yOffset = 600.0f;
-    arg0->unk_1A4 = func_80B39FA8;
+    arg0[1].scale.z = func_80B39FA8;
     arg0->world.pos.y += temp_f10;
 }
 
@@ -649,7 +649,7 @@ void func_80B3A0D8(Actor *arg0) {
     arg0 = arg0;
     arg0->unk_1A8 = Rand_S16Offset(-0x1388, 0xFA0);
     arg0->unk_1AA = Rand_S16Offset(-0x320, 0x640);
-    arg0->unk_1A4 = func_80B3A13C;
+    arg0[1].scale.z = func_80B3A13C;
 }
 
 void func_80B3A13C(Actor *arg0, GlobalContext *arg1) {
@@ -734,7 +734,7 @@ void func_80B3A13C(Actor *arg0, GlobalContext *arg1) {
     arg0->shape.rot.x += arg0->unk_1A8;
     arg0->shape.rot.y += arg0->unk_1AA;
     func_80B38E20((ObjSnowball2 *) arg0);
-    temp_a2_2 = arg0 + 0x144;
+    temp_a2_2 = &arg0[1];
     temp_a1 = &arg1->colChkCtx;
     sp2C = temp_a1;
     sp28 = temp_a2_2;
@@ -757,7 +757,7 @@ void func_80B3A498(Actor *arg0) {
     arg0->world.pos.y = temp_f0 + (arg0->shape.yOffset * arg0->scale.y);
     arg0->shape.yOffset = 0.0f;
     arg0->speedXZ = 0.0f;
-    arg0->unk_1A4 = func_80B3A500;
+    arg0[1].scale.z = func_80B3A500;
     arg0->home.pos.z = arg0->world.pos.z;
 }
 
@@ -802,7 +802,7 @@ void func_80B3A500(Actor *arg0, Actor *arg1) {
     arg0->velocity.y *= phi_f0;
     arg0->velocity.y += arg0->gravity;
     arg0->world.pos.y += arg0->velocity.y;
-    if (((arg1->unk_18840 & 0xF) == 0) || (sp20 = temp_f12, sp24 = temp_f14, phi_f14 = temp_f14, phi_f12 = temp_f12, ((Rand_Next() >> 0x10) == 0))) {
+    if (((arg1[309].next & 0xF) == 0) || (sp20 = temp_f12, sp24 = temp_f14, phi_f14 = temp_f14, phi_f12 = temp_f12, ((Rand_Next() >> 0x10) == 0))) {
         sp20 = temp_f2 * 600.0f;
         sp24 = temp_f4 - temp_f6;
         func_80B395C4((bitwise GlobalContext *) (temp_f2 * 600.0f), (bitwise Vec3f *) (temp_f4 - temp_f6), arg1, arg0 + 8);
@@ -829,7 +829,7 @@ void func_80B3A500(Actor *arg0, Actor *arg1) {
         return;
     }
     func_80B38E20((bitwise ObjSnowball2 *) phi_f12, phi_f14, arg0);
-    CollisionCheck_SetOC((GlobalContext *) arg1, arg1 + 0x18884, (Collider *) (arg0 + 0x144));
+    CollisionCheck_SetOC((GlobalContext *) arg1, (CollisionCheckContext *) &arg1[310].world.pos.z, (Collider *) &arg0[1]);
 }
 
 void ObjSnowball2_Update(Actor *thisx, GlobalContext *globalCtx) {

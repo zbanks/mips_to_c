@@ -513,18 +513,18 @@ void func_808D8940(EnSw *arg0, GlobalContext *arg1) {
         } else {
             phi_s0->unk_464 = 0x50;
         }
-        phi_s0->unk_47C = (s16) phi_s0->unk_464;
+        phi_s0[3].colChkInfo.cylRadius = phi_s0->unk_464;
         phi_s4->unk_418 = 0.45000002f;
         temp_v0 = arg0->unk_412;
         if ((temp_v0 == 0) || (temp_v0 == 1) || (temp_v0 == 0xA)) {
-            phi_s1->unk_384 = (f32) ((Rand_ZeroOne() - 0.5f) * 20.0f);
+            phi_s1[2].uncullZoneForward = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
-            phi_s1->unk_384 = (f32) (((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f);
+            phi_s1[2].uncullZoneForward = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
         }
-        phi_s1->unk_380 = (f32) (Math_SinS(phi_s2) * 10.0f);
+        phi_s1[2].projectedW = Math_SinS(phi_s2) * 10.0f;
         temp_s3 = phi_s3 + 4;
         temp_s1 = phi_s1 + 0xC;
-        temp_s1->unk_37C = (f32) (Math_CosS(phi_s2) * 10.0f);
+        temp_s1[2].projectedPos.z = Math_CosS(phi_s2) * 10.0f;
         phi_s0 += 2;
         phi_s4 += 4;
         phi_s1 = temp_s1;
@@ -606,13 +606,13 @@ void func_808D8ED0(Actor *arg0, GlobalContext *arg1) {
     do {
         Math_Vec3f_Copy((Vec3f *) &sp54, temp_s4);
         temp_a1 = &sp54;
-        sp54 += phi_s0->unk_380;
-        sp58 += phi_s0->unk_384;
-        sp5C += phi_s0->unk_388;
+        sp54 += phi_s0[2].projectedW;
+        sp58 += phi_s0[2].uncullZoneForward;
+        sp5C += phi_s0[2].uncullZoneScale;
         Math_Vec3f_Copy(phi_s2, (Vec3f *) temp_a1);
         temp_s1 = phi_s1 + 0xC;
         phi_s0 += 0xC;
-        phi_s2 += 0xC;
+        phi_s2 = &phi_s2[1];
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x90);
     func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x380), 0xC, 3, 0.1f, 0.3f);
@@ -705,7 +705,7 @@ void func_808D90F0(Actor *arg0, s32 arg1, s16 arg2) {
         sp38 = (f32) arg1->normal.x * 0.00003051851f;
         sp3C = (f32) arg1->normal.y * 0.00003051851f;
         sp40 = (f32) arg1->normal.z * 0.00003051851f;
-        temp_f12 = (arg0->unk_368 * sp38) + (sp3C * arg0->unk_36C) + (sp40 * arg0->unk_370);
+        temp_f12 = (arg0[2].shape.feetPos[1].x * sp38) + (sp3C * arg0[2].shape.feetPos[1].y) + (sp40 * arg0[2].shape.feetPos[1].z);
         if (fabsf(temp_f12) >= 0.999f) {
             return 0;
         }
@@ -757,14 +757,14 @@ void func_808D93BC(Actor *arg0) {
 
     temp_a0 = &sp18;
     temp_a1 = arg0 + 0x30;
-    sp18 = arg0->unk_35C;
-    sp1C = arg0->unk_360;
-    sp20 = arg0->unk_364;
-    sp28 = arg0->unk_368;
-    sp2C = arg0->unk_36C;
-    sp30 = arg0->unk_370;
-    sp38 = arg0->unk_350;
-    sp3C = arg0->unk_354;
+    sp18 = arg0[2].shape.feetPos[0].x;
+    sp1C = arg0[2].shape.feetPos[0].y;
+    sp20 = arg0[2].shape.feetPos[0].z;
+    sp28 = arg0[2].shape.feetPos[1].x;
+    sp2C = arg0[2].shape.feetPos[1].y;
+    sp30 = arg0[2].shape.feetPos[1].z;
+    sp38 = arg0[2].shape.shadowDraw;
+    sp3C = arg0[2].shape.shadowScale;
     temp_f8 = arg0->unk_358;
     arg0 = arg0;
     sp40 = temp_f8;
@@ -815,22 +815,22 @@ void func_808D94D0(Actor *arg0, Vec3f *arg1, s32 arg2, s32 arg3, s16 arg4) {
     sp68 = 0x32;
     sp64 = 0x32;
     func_808D90F0(arg0, arg3, arg4);
-    arg0->speedXZ = arg0->unk_44C;
+    arg0->speedXZ = arg0[3].floorPoly;
     temp_f14 = arg0->speedXZ;
     temp_s4 = &sp90;
-    sp90 = arg0->world.pos.x + (2.0f * arg0->unk_368);
+    sp90 = arg0->world.pos.x + (2.0f * arg0[2].shape.feetPos[1].x);
     temp_s5 = &sp84;
     temp_a2 = temp_s5;
-    sp94 = arg0->world.pos.y + (2.0f * arg0->unk_36C);
-    temp_f12 = arg0->unk_370;
+    sp94 = arg0->world.pos.y + (2.0f * arg0[2].shape.feetPos[1].y);
+    temp_f12 = arg0[2].shape.feetPos[1].z;
     temp_f20 = 2.0f * temp_f14;
     sp98 = arg0->world.pos.z + (2.0f * temp_f12);
-    sp84 = arg0->world.pos.x - (arg0->unk_368 * 4.0f);
-    sp88 = arg0->world.pos.y - (arg0->unk_36C * 4.0f);
-    sp8C = arg0->world.pos.z - (arg0->unk_370 * 4.0f);
+    sp84 = arg0->world.pos.x - (arg0[2].shape.feetPos[1].x * 4.0f);
+    sp88 = arg0->world.pos.y - (arg0[2].shape.feetPos[1].y * 4.0f);
+    sp8C = arg0->world.pos.z - (arg0[2].shape.feetPos[1].z * 4.0f);
     if (func_808D9440((bitwise Vec3f *) temp_f12, (bitwise Vec3f *) temp_f14, arg1, (Vec3f *) temp_s4, (CollisionPoly **) temp_a2, &sp6C, &spA0, &sp68) != 0) {
-        sp84 = (arg0->unk_350 * temp_f20) + sp90;
-        sp88 = (arg0->unk_354 * temp_f20) + sp94;
+        sp84 = (arg0[2].shape.shadowDraw * temp_f20) + sp90;
+        sp88 = (arg0[2].shape.shadowScale * temp_f20) + sp94;
         sp8C = (arg0->unk_358 * temp_f20) + sp98;
         if (func_808D9440(arg1, (Vec3f *) temp_s4, (Vec3f *) temp_s5, (Vec3f *) &sp78, &spA4, &sp64) != 0) {
             func_808D91C4(arg0, spA4);
@@ -851,17 +851,17 @@ void func_808D94D0(Actor *arg0, Vec3f *arg1, s32 arg2, s32 arg3, s16 arg4) {
         phi_s1 = 0;
 loop_7:
         if (phi_s1 == 0) {
-            sp84 = sp90 - (arg0->unk_350 * temp_f20_2);
-            sp88 = sp94 - (arg0->unk_354 * temp_f20_2);
+            sp84 = sp90 - (arg0[2].shape.shadowDraw * temp_f20_2);
+            sp88 = sp94 - (arg0[2].shape.shadowScale * temp_f20_2);
             sp8C = sp98 - (arg0->unk_358 * temp_f20_2);
         } else if (phi_s1 == 1) {
-            sp84 = (arg0->unk_35C * temp_f20_2) + sp90;
-            sp88 = (arg0->unk_360 * temp_f20_2) + sp94;
-            sp8C = (arg0->unk_364 * temp_f20_2) + sp98;
+            sp84 = (arg0[2].shape.feetPos[0].x * temp_f20_2) + sp90;
+            sp88 = (arg0[2].shape.feetPos[0].y * temp_f20_2) + sp94;
+            sp8C = (arg0[2].shape.feetPos[0].z * temp_f20_2) + sp98;
         } else {
-            sp84 = sp90 - (arg0->unk_35C * temp_f20_2);
-            sp88 = sp94 - (arg0->unk_360 * temp_f20_2);
-            sp8C = sp98 - (arg0->unk_364 * temp_f20_2);
+            sp84 = sp90 - (arg0[2].shape.feetPos[0].x * temp_f20_2);
+            sp88 = sp94 - (arg0[2].shape.feetPos[0].y * temp_f20_2);
+            sp8C = sp98 - (arg0[2].shape.feetPos[0].z * temp_f20_2);
         }
         temp_s1 = phi_s1 + 1;
         phi_s1 = temp_s1;
@@ -879,7 +879,7 @@ loop_7:
     arg0->shape.rot.y = arg0->world.rot.y;
     arg0->shape.rot.z = arg0->world.rot.z;
     if (temp_f14_2 != 0.0f) {
-        arg0->unk_44C = temp_f14_2;
+        arg0[3].floorPoly = temp_f14_2;
     }
     if (arg2 == 1) {
         Actor_SetVelocityAndMoveXYRotation(arg0);
@@ -984,8 +984,8 @@ s32 func_808D99C8(Actor *arg0, GlobalContext *arg1) {
         phi_v1 = arg0->unk_454;
     }
     if (phi_v1 == 0) {
-        if (func_801378B8(arg0 + 0x144, arg0->unk_154) == 0) {
-            sp2E = (s16) (s32) (80.0f * (arg0->unk_154 - arg0->unk_15C) * arg0->unk_450);
+        if (func_801378B8(arg0 + 0x144, arg0[1].home.pos.z) == 0) {
+            sp2E = (s16) (s32) (80.0f * (arg0[1].home.pos.z - arg0->unk_15C) * arg0->unk_450);
         } else {
             if (arg0->unk_456 != 0) {
                 if ((arg0->params & 3) == 0) {
@@ -1034,9 +1034,9 @@ s32 func_808D99C8(Actor *arg0, GlobalContext *arg1) {
     } else {
         temp_f0 = arg0->speedXZ;
         temp_a1 = arg0 + 0x24;
-        arg0->velocity.x = (temp_f0 * arg0->unk_368) + (temp_f0 * arg0->unk_350);
+        arg0->velocity.x = (temp_f0 * arg0[2].shape.feetPos[1].x) + (temp_f0 * arg0[2].shape.shadowDraw);
         arg0->velocity.y = 14.0f;
-        arg0->velocity.z = (temp_f0 * arg0->unk_370) + (temp_f0 * arg0->unk_358);
+        arg0->velocity.z = (temp_f0 * arg0[2].shape.feetPos[1].z) + (temp_f0 * arg0->unk_358);
         sp24 = temp_a1;
         Math_Vec3f_Copy((Vec3f *) &sp3C, temp_a1);
         Math_Vec3f_Copy((Vec3f *) &sp30, temp_a1);
@@ -1066,12 +1066,12 @@ void func_808D9DA0(Actor *arg0) {
 
     SkinMatrix_SetRotateYRP((MtxF *) &sp24, arg0->shape.rot.x, arg0->shape.rot.y, arg0->shape.rot.z);
     SkinMatrix_Vec3fMtxFMultXYZ((MtxF *) &sp24, &D_808DBAAC, arg0 + 0x368);
-    arg0->unk_350 = Math_SinS(arg0->shape.rot.y);
-    arg0->unk_354 = 0.0f;
+    arg0[2].shape.shadowDraw = Math_SinS(arg0->shape.rot.y);
+    arg0[2].shape.shadowScale = 0.0f;
     arg0->unk_358 = Math_CosS(arg0->shape.rot.y);
-    arg0->unk_35C = Math_SinS((s16) (arg0->shape.rot.y + 0x4000));
-    arg0->unk_360 = 0.0f;
-    arg0->unk_364 = Math_CosS((s16) (arg0->shape.rot.y + 0x4000));
+    arg0[2].shape.feetPos[0].x = Math_SinS((s16) (arg0->shape.rot.y + 0x4000));
+    arg0[2].shape.feetPos[0].y = 0.0f;
+    arg0[2].shape.feetPos[0].z = Math_CosS((s16) (arg0->shape.rot.y + 0x4000));
 }
 
 void func_808D9E44(Actor *arg0) {
@@ -1096,9 +1096,9 @@ void func_808D9E44(Actor *arg0) {
     sp18 = temp_a3;
     Math_Vec3f_Copy((Vec3f *) &sp1C, temp_a3);
     temp_a1 = &sp1C;
-    sp1C += arg0->unk_368 * 16.0f;
-    sp20 += arg0->unk_36C * 16.0f;
-    sp24 += arg0->unk_370 * 16.0f;
+    sp1C += arg0[2].shape.feetPos[1].x * 16.0f;
+    sp20 += arg0[2].shape.feetPos[1].y * 16.0f;
+    sp24 += arg0[2].shape.feetPos[1].z * 16.0f;
     Math_Vec3f_Copy(sp18, (Vec3f *) temp_a1);
 }
 
@@ -1120,10 +1120,10 @@ void func_808D9F78(Actor *arg0, GlobalContext *arg1, s32 arg2) {
     Actor_SetScale(arg0, 0.02f);
     func_808D9DA0(arg0);
     arg0->speedXZ = 10.0f;
-    arg0->unk_44C = 10.0f;
+    arg0[3].floorPoly = (bitwise CollisionPoly *) 10.0f;
     func_808D94D0(arg0, (Vec3f *) arg1, 0, 0, (s16) 0);
     arg0->speedXZ = 0.0f;
-    arg0->unk_44C = 0.0f;
+    arg0[3].floorPoly = (bitwise CollisionPoly *) 0.0f;
     arg0->unk_450 = 1.0f;
     Math_Vec3f_Copy((Vec3f *) &arg0->home, (Vec3f *) &arg0->world);
     arg0->unk_410 = (u16) (arg0->unk_410 | 4);
@@ -1132,10 +1132,10 @@ void func_808D9F78(Actor *arg0, GlobalContext *arg1, s32 arg2) {
 void func_808DA024(Actor *arg0, Vec3f *arg1) {
     func_808D9DA0();
     arg0->speedXZ = 10.0f;
-    arg0->unk_44C = 10.0f;
+    arg0[3].floorPoly = 10.0f;
     func_808D94D0(arg0, arg1, 0, 0, (s16) 0);
     arg0->speedXZ = 0.0f;
-    arg0->unk_44C = 0.0f;
+    arg0[3].floorPoly = (bitwise CollisionPoly *) 0.0f;
     arg0->unk_450 = 1.0f;
 }
 
@@ -1164,13 +1164,13 @@ s32 func_808DA08C(Actor *arg0, GlobalContext *arg1) {
                 phi_v0 += 8;
                 phi_v1 = temp_v1;
             } while (temp_v1 != 0xC);
-            arg0->unk_45C = 0;
+            arg0[3].bgCheckFlags = 0;
         } else if (func_808D90C4(arg0) == 0) {
             Audio_PlaySoundAtPosition(arg1, arg0 + 0x24, 0x28, 0x3885U);
             Enemy_StartFinishingBlow(arg1, arg0);
             arg0->flags &= -2;
             if ((arg0->params & 3) == 0) {
-                func_8013BC6C((SkelAnime *) (arg0 + 0x144), D_808DBA64, 3);
+                func_8013BC6C((SkelAnime *) &arg0[1], D_808DBA64, 3);
             }
             temp_v0 = arg0->colChkInfo.damageEffect;
             if (temp_v0 != 2) {
@@ -1178,25 +1178,25 @@ s32 func_808DA08C(Actor *arg0, GlobalContext *arg1) {
                     if (temp_v0 != 4) {
                         if (temp_v0 != 5) {
                             arg0->unk_412 = 1U;
-                            arg0->unk_45C = 0;
+                            arg0[3].bgCheckFlags = 0;
                         } else {
                             arg0->unk_412 = 0x1EU;
-                            arg0->unk_45C = 0x14;
+                            arg0[3].bgCheckFlags = 0x14;
                             func_808D8B58(arg0);
                         }
                     } else {
                         arg0->unk_412 = 0x14U;
-                        arg0->unk_45C = 0x14;
+                        arg0[3].bgCheckFlags = 0x14;
                         func_808D8B58(arg0);
                     }
                 } else {
                     arg0->unk_412 = 0xAU;
-                    arg0->unk_45C = 0;
+                    arg0[3].bgCheckFlags = 0;
                     func_808D8B58(arg0);
                 }
             } else {
                 arg0->unk_412 = 0U;
-                arg0->unk_45C = 0x14;
+                arg0[3].bgCheckFlags = 0x14;
                 func_808D8B58(arg0);
             }
             if (((arg0->params & 3) == 0) && (arg0->unk_412 != 0xA)) {
@@ -1882,7 +1882,7 @@ void EnSw_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 s32 func_808DB7F4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
-    if ((arg5->unk_1C & 3) != 0) {
+    if ((arg5[4].z & 3) != 0) {
         switch (arg1) {
         case 23:
             *arg2 = &D_06004788;

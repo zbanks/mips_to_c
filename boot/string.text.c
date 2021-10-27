@@ -21,7 +21,7 @@ loop_1:
         if (phi_v1 == 0) {
             return NULL;
         }
-        temp_v1_2 = phi_a0->unk_1;
+        temp_v1_2 = phi_a0[1];
         temp_a0 = phi_a0 + 1;
         phi_v1 = temp_v1_2;
         phi_a0 = temp_a0;
@@ -47,7 +47,7 @@ u32 strlen(s8 *__s) {
             temp_v1 = phi_v1 + 1;
             phi_v1 = temp_v1;
             phi_v1_2 = temp_v1;
-        } while (phi_v1->unk_1 != 0);
+        } while (phi_v1[1] != 0);
     }
     return phi_v1_2 - __s;
 }

@@ -310,21 +310,21 @@ void func_808FA01C(Actor *arg0, GlobalContext *arg1, void *arg2) {
     temp_v0 = arg0->colChkInfo.damageEffect;
     if (temp_v0 == 2) {
         arg0->unk_1E0 = 0;
-        arg0->unk_220 = 0.85f;
-        arg0->unk_21C = 4.0f;
+        arg0[1].shape.feetPos[0].z = 0.85f;
+        arg0[1].shape.feetPos[0].y = 4.0f;
         return;
     }
     if (temp_v0 == 4) {
         arg0->unk_1E0 = 0x14;
-        arg0->unk_220 = 0.85f;
-        arg0->unk_21C = 4.0f;
+        arg0[1].shape.feetPos[0].z = 0.85f;
+        arg0[1].shape.feetPos[0].y = 4.0f;
         Actor_Spawn(arg1 + 0x1CA0, arg1, 0xA2, (f32) arg2->unk_26, (f32) arg2->unk_28, (f32) arg2->unk_2A, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         return;
     }
     if (temp_v0 == 5) {
         arg0->unk_1E0 = 0x1E;
-        arg0->unk_220 = 0.85f;
-        arg0->unk_21C = 4.0f;
+        arg0[1].shape.feetPos[0].z = 0.85f;
+        arg0[1].shape.feetPos[0].y = 4.0f;
     }
 }
 
@@ -333,10 +333,10 @@ void func_808FA11C(Actor *arg0) {
     arg0->unk_15C = 3;
     arg0->unk_174 = 0;
     arg0->unk_1EE = 0x50;
-    arg0->unk_220 = 0.85f;
+    arg0[1].shape.feetPos[0].z = 0.85f;
     arg0->flags &= -0x401;
-    arg0->unk_224 = 1.2750001f;
-    arg0->unk_21C = 1.0f;
+    arg0[1].shape.feetPos[1].x = 1.2750001f;
+    arg0[1].shape.feetPos[0].y = 1.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x50);
 }
 
@@ -348,7 +348,7 @@ void func_808FA19C(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_1E0 = 0U;
         arg0->unk_15C = 0;
         arg0->unk_174 = 1;
-        arg0->unk_21C = 0.0f;
+        arg0[1].shape.feetPos[0].y = 0.0f;
         temp_f0 = arg0->scale.y;
         func_800BF7CC(arg1, arg0, (Vec3f []) (arg0 + 0x234), 0x14, 2, temp_f0 * 23.333334f, temp_f0 * 20.000002f);
         arg0->flags |= 0x400;
@@ -366,13 +366,13 @@ void func_808FA260(Actor *arg0) {
 
     arg0->unk_1E1 = 1;
     arg0->unk_1E6 = 0x14;
-    arg0->unk_1F6 = 0x9C4;
-    arg0->unk_210 = 0.0f;
-    arg0->unk_338 = 0x1770;
-    arg0->unk_33C = 0;
+    arg0[1].colChkInfo.cylHeight = 0x9C4;
+    arg0[1].shape.shadowScale = 0.0f;
+    arg0[2].colChkInfo.cylRadius = 0x1770;
+    arg0[2].colChkInfo.cylYShift = 0;
     temp_v1 = (1 * 4) + D_808FC1E4;
-    arg0->unk_330 = 0.8f;
-    arg0->unk_328 = (f32) *D_808FC1E4;
+    arg0[2].colChkInfo.displacement.y = 0.8f;
+    arg0[2].colChkInfo.damageTable = *D_808FC1E4;
     temp_v0 = arg0 + (1 << 5);
     temp_v0->unk_338 = 0x1770;
     temp_v0->unk_33C = 0;
@@ -440,16 +440,16 @@ void func_808FA3F8(Actor *arg0, void *arg1) {
     arg0->unk_1F0 = 8;
     arg0->unk_1E1 = 0;
     arg0->speedXZ = 0.0f;
-    arg0->unk_218 = 0.0f;
-    arg0->unk_210 = 0.0f;
-    arg0->unk_1F6 = 0x1388;
-    arg0->unk_33C = 0;
-    arg0->unk_338 = 0;
-    arg0->unk_328 = 0.0f;
+    arg0[1].shape.feetPos[0].x = 0.0f;
+    arg0[1].shape.shadowScale = 0.0f;
+    arg0[1].colChkInfo.cylHeight = 0x1388;
+    arg0[2].colChkInfo.cylYShift = 0;
+    arg0[2].colChkInfo.cylRadius = 0;
+    arg0[2].colChkInfo.damageTable = 0.0f;
     temp_v0 = arg0 + (1 << 5);
     arg0->unk_204 = 0.15f;
-    arg0->unk_20C = 512.0f;
-    arg0->unk_330 = 1.0f;
+    arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x44000000;
+    arg0[2].colChkInfo.displacement.y = 1.0f;
     temp_v0->unk_39C = 0;
     temp_v0->unk_398 = 0;
     temp_v0->unk_388 = 0.0f;
@@ -487,10 +487,10 @@ void func_808FA4F4(Actor *arg0, GlobalContext *arg1) {
         temp_s1->unk_AE8 = 0x64;
         arg0->flags |= 1;
         arg0->unk_1F0 = 0x6E;
-        arg0->unk_1F6 = 0x9C4;
-        arg0->unk_210 = 0.0f;
-        arg0->unk_20C = 2048.0f;
-        if ((arg0->unk_1E2 == 0) && (gSaveContext.playerForm == 4) && (phi_v1 = 1, (((s32) (gSaveContext.equips.equipment & *(gEquipMasks + 2)) >> gEquipShifts[1]) == 1))) {
+        arg0[1].colChkInfo.cylHeight = 0x9C4;
+        arg0[1].shape.shadowScale = 0.0f;
+        arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x45000000;
+        if ((arg0->unk_1E2 == 0) && (gSaveContext.playerForm == 4) && (phi_v1 = 1, (((s32) (gSaveContext.equips.equipment & gEquipMasks[1]) >> gEquipShifts[1]) == 1))) {
             sp34 = 1;
             arg0->unk_1E2 = func_8012ED78(arg1, 1);
         } else {
@@ -527,15 +527,15 @@ void func_808FA6B8(Actor *arg0) {
     }
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) (s32) arg0->unk_1EC);
     arg0->unk_1E6 = 0x14;
-    arg0->unk_1F6 = 0x9C4;
-    arg0->unk_338 = 0;
-    arg0->unk_33C = 0;
+    arg0[1].colChkInfo.cylHeight = 0x9C4;
+    arg0[2].colChkInfo.cylRadius = 0;
+    arg0[2].colChkInfo.cylYShift = 0;
     temp_v0 = arg0 + (1 << 5);
-    arg0->unk_210 = 0.0f;
+    arg0[1].shape.shadowScale = 0.0f;
     arg0->unk_204 = 0.0f;
-    arg0->unk_20C = 0.0f;
-    arg0->unk_328 = 0.0f;
-    arg0->unk_330 = 1.0f;
+    arg0[1].shape.shadowDraw = (bitwise void (*)(Actor *, Lights *, GlobalContext *)) 0.0f;
+    arg0[2].colChkInfo.damageTable = (bitwise DamageTable *) 0.0f;
+    arg0[2].colChkInfo.displacement.y = 1.0f;
     temp_v0->unk_39C = 0;
     temp_v0->unk_398 = 0;
     temp_v0->unk_37C = 0;
@@ -628,11 +628,11 @@ void func_808FA910(Actor *arg0) {
     arg0->unk_214 = 0.0f;
     func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x28);
     temp_a0 = arg0;
-    temp_a0->unk_338 = 0;
-    temp_a0->unk_33C = 0;
+    temp_a0[2].colChkInfo.cylRadius = 0;
+    temp_a0[2].colChkInfo.cylYShift = 0;
     temp_v0 = temp_a0 + (1 << 5);
-    temp_a0->unk_210 = 0.0f;
-    temp_a0->unk_328 = 0.0f;
+    temp_a0[1].shape.shadowScale = 0.0f;
+    temp_a0[2].colChkInfo.damageTable = (bitwise DamageTable *) 0.0f;
     temp_v0->unk_39C = 0;
     temp_v0->unk_398 = 0;
     temp_v0->unk_37C = 0;
@@ -655,20 +655,20 @@ void func_808FA9CC(Actor *arg0) {
     void *temp_v1;
 
     arg0->unk_1F2 = 0;
-    arg0->unk_1F4 = 0;
-    arg0->unk_1F6 = 0x9C4;
-    arg0->unk_1F8 = 0;
+    arg0[1].colChkInfo.cylRadius = 0;
+    arg0[1].colChkInfo.cylHeight = 0x9C4;
+    arg0[1].colChkInfo.cylYShift = 0;
     arg0->unk_1FA = 0;
     arg0->unk_200 = 0.0f;
-    arg0->unk_208 = 0.0f;
-    arg0->unk_33C = 0;
-    arg0->unk_33A = 0;
-    arg0->unk_338 = 0;
+    arg0[1].shape.yOffset = 0.0f;
+    arg0[2].colChkInfo.cylYShift = 0;
+    arg0[2].colChkInfo.cylHeight = 0;
+    arg0[2].colChkInfo.cylRadius = 0;
     temp_v1 = arg0 + (1 << 5);
     arg0->unk_204 = 0.15f;
-    arg0->unk_20C = 2048.0f;
-    arg0->unk_32C = 1.0f;
-    arg0->unk_330 = 1.0f;
+    arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x45000000;
+    arg0[2].colChkInfo.displacement.x = 1.0f;
+    arg0[2].colChkInfo.displacement.y = 1.0f;
     temp_v1->unk_39C = 0;
     temp_v1->unk_39A = 0;
     temp_v1->unk_398 = 0;
@@ -1008,8 +1008,8 @@ void func_808FB42C(EnRr *this, GlobalContext *globalCtx) {
             Math_StepToF(phi_s2, (f32) (phi_s0 + 0x3B) - ((f32) this->unk_1E4 * 25.0f), 50.0f);
             temp_s0 = phi_s0 + 1;
             temp_f0 = (f32) (4 - phi_s0);
-            phi_s1->unk_C = (f32) ((temp_f0 * temp_f0 * (f32) this->unk_1E4 * 0.003f) + 1.0f);
-            phi_s2 += 0x20;
+            phi_s1[3] = (temp_f0 * temp_f0 * (f32) this->unk_1E4 * 0.003f) + 1.0f;
+            phi_s2 = &phi_s2[8];
             phi_s0 = temp_s0;
             phi_s1 += 0x20;
         } while (temp_s0 != 5);
@@ -1178,14 +1178,14 @@ void EnRr_Update(Actor *thisx, GlobalContext *globalCtx) {
         do {
             Math_SmoothStepToS(phi_s5, phi_s1->unk_338, 5, (s16) (s32) (this->unk_210 * 1000.0f), (s16) 0);
             Math_SmoothStepToS(phi_s4, phi_s0_2->unk_18, 5, (s16) (s32) (this->unk_210 * 1000.0f), (s16) 0);
-            Math_StepToF(phi_s3, phi_s0_2->unk_C, this->unk_210 * 0.2f);
-            Math_StepToF(phi_s0_2, phi_s0_2->unk_4, this->unk_210 * 300.0f);
+            Math_StepToF(phi_s3, phi_s0_2[3], this->unk_210 * 0.2f);
+            Math_StepToF(phi_s0_2, phi_s0_2[1], this->unk_210 * 300.0f);
             temp_s2_2 = phi_s2 + 0x20;
-            phi_s5 += 0x20;
+            phi_s5 = &phi_s5[16];
             phi_s1 += 0x20;
-            phi_s4 += 0x20;
-            phi_s0_2 += 0x20;
-            phi_s3 += 0x20;
+            phi_s4 = &phi_s4[16];
+            phi_s0_2 = &phi_s0_2[8];
+            phi_s3 = &phi_s3[8];
             phi_s2 = temp_s2_2;
         } while (temp_s2_2 != 0xA0);
         Math_StepToF(&this->unk_210, 1.0f, 0.2f);
@@ -1248,11 +1248,11 @@ void EnRr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp9C = temp_a0_2;
     func_8012C28C(temp_a0_2);
     temp_v0 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0 + 8;
+    sp9C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = (u32) temp_s0;
     temp_v0->words.w0 = 0xDB060030;
     temp_v0_2 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_2 + 8;
+    sp9C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     temp_a3 = 0 & 0x3F;
     temp_v0_2->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0 & 0x7F, temp_a3, 0x20, 0x10, 1, temp_a3, ((s32) this->unk_1E8 * -6) & 0x7F, 0x20, 0x10);
@@ -1260,7 +1260,7 @@ void EnRr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_f12 = this->unk_32C * (1.0f + this->unk_334);
     Matrix_Scale(temp_f12, 1.0f, temp_f12, 1);
     temp_v0_3 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_3 + 8;
+    sp9C->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_a1 = &this->unk_234;
@@ -1275,14 +1275,14 @@ void EnRr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_StatePop();
     temp_s1 = &this->actor.unk20;
     phi_s1 = temp_s1;
-    phi_s3 = temp_s1 + 0x324;
+    phi_s3 = &temp_s1[402];
     phi_s5 = (RSPMatrix *) temp_s5;
     phi_s2 = 1;
     phi_s0 = temp_s0_4 + 0xC;
     do {
         temp_f20 = (phi_s1->unk_334 + 1.0f) * phi_s1->unk_32C;
         SysMatrix_InsertTranslation(0.0f, phi_s1->unk_324 + 1000.0f, 0.0f, 1);
-        SysMatrix_InsertRotation(phi_s3->unk_1A, phi_s3->unk_1C, phi_s3->unk_1E, 1);
+        SysMatrix_InsertRotation(phi_s3[13], phi_s3[14], phi_s3[15], 1);
         SysMatrix_StatePush();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, 1);
         SysMatrix_GetStateAsRSPMatrix(phi_s5);
@@ -1297,7 +1297,7 @@ void EnRr_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_GetStateTranslationAndScaledX(1842.1053f, temp_s0_6);
         SysMatrix_GetStateTranslationAndScaledX(-1842.1053f, temp_s0_7);
         SysMatrix_StatePop();
-        phi_s5 += 0x40;
+        phi_s5 = &phi_s5[1];
         phi_s0 = temp_s0_7 + 0xC;
         if (phi_s2 == 3) {
             SysMatrix_GetStateTranslation((Vec3f *) &spA4);
@@ -1312,7 +1312,7 @@ void EnRr_Draw(Actor *thisx, GlobalContext *globalCtx) {
     this->unk_194.dim.pos.y = (s16) (s32) (((this->unk_22C - spA8) * 0.85f) + spA8);
     this->unk_194.dim.pos.z = (s16) (s32) (((this->unk_230 - spAC) * 0.85f) + spAC);
     temp_v0_4 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_4 + 8;
+    sp9C->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_06000470;
     temp_v0_4->words.w0 = 0xDE000000;
     func_800BE680(globalCtx, (Actor *) this, (Vec3f []) sp80, 0x14, this->actor.scale.y * 66.66667f * this->unk_220, this->unk_224, this->unk_21C, (u8) (s32) this->unk_1E0);

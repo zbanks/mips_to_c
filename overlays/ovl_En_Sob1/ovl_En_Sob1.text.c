@@ -415,7 +415,7 @@ void EnSob1_ChangeAnim(SkelAnime *arg0, ? *arg1, s32 arg2) {
 }
 
 void EnSob1_SetupAction(Actor *arg0, void (*arg1)(EnSob1 *, GlobalContext *)) {
-    arg0->unk_188 = arg1;
+    arg0[1].focus.pos.z = arg1;
 }
 
 s32 EnSob1_TestItemSelected(GlobalContext *arg0) {
@@ -445,7 +445,7 @@ s16 EnSob1_GetTalkOption(Actor *arg0, GlobalContext *arg1) {
     u8 temp_v1_2;
     void *temp_v0;
 
-    temp_v1 = arg0->unk_3CC;
+    temp_v1 = arg0[3].id;
     temp_v0 = arg1->actorCtx.actorList[2].first;
     if (temp_v1 == 2) {
         if ((gSaveContext.day == 1) && ((s32) gSaveContext.time >= 0x4000)) {
@@ -612,7 +612,7 @@ u16 EnSob1_GetWelcome(EnSob1 *arg0, GlobalContext *arg1) {
 s16 EnSob1_GetGoodbye(Actor *arg0) {
     s32 temp_v0;
 
-    if (arg0->unk_3CC == 2) {
+    if (arg0[3].id == 2) {
         temp_v0 = gSaveContext.day;
         if (temp_v0 == 1) {
             return 0x64C;
@@ -636,7 +636,7 @@ void EnSob1_EndInteractionBombShop(Actor *arg0, GlobalContext *arg1) {
     temp_a2 = arg0;
     temp_a2->unk_321 = 0;
     temp_a2->unk_358 = 0;
-    temp_a2->unk_390 = 0;
+    temp_a2[2].prevPos.x = 0.0f;
     arg0 = temp_a2;
     temp_v0 = EnSob1_GetGoodbye(temp_a2, temp_a2);
     temp_a1 = temp_v0 & 0xFFFF;
@@ -660,7 +660,7 @@ void EnSob1_SpawnShopItems(EnSob1 *arg0, GlobalContext *arg1, s16 *arg2) {
         if ((s32) temp_v0 < 0) {
             phi_s1->items[0] = NULL;
         } else {
-            phi_s1->items[0] = Actor_Spawn(arg1 + 0x1CA0, arg1, 2, (f32) phi_s0->unk_2, (f32) phi_s0->unk_4, (f32) phi_s0->unk_6, (s16) 0, (s16) 0, (s16) 0, (s16) (s32) temp_v0);
+            phi_s1->items[0] = Actor_Spawn(arg1 + 0x1CA0, arg1, 2, (f32) phi_s0[1], (f32) phi_s0[2], (f32) phi_s0[3], (s16) 0, (s16) 0, (s16) 0, (s16) (s32) temp_v0);
         }
         temp_s2 = phi_s2 + 4;
         phi_s0 += 8;
@@ -674,7 +674,7 @@ s32 EnSob1_GetObjIndices(EnSob1 *arg0, GlobalContext *arg1, s16 *arg2) {
     s16 temp_a1;
     s16 temp_t6;
 
-    temp_t6 = arg2->unk_2;
+    temp_t6 = arg2[1];
     sp1C = (s32) temp_t6;
     if (temp_t6 != 0x283) {
         arg0 = arg0;
@@ -686,7 +686,7 @@ s32 EnSob1_GetObjIndices(EnSob1 *arg0, GlobalContext *arg1, s16 *arg2) {
     }
     arg0->objIndices[1] = -1;
 block_4:
-    temp_a1 = arg2->unk_4;
+    temp_a1 = arg2[2];
     if (temp_a1 != 0x283) {
         arg0 = arg0;
         arg0->objIndices[2] = Object_GetIndex(arg1 + 0x17D88, temp_a1);
@@ -759,9 +759,9 @@ void EnSob1_EndInteraction(GlobalContext *arg0, Actor *arg1) {
     void *sp24;
 
     sp24 = arg0->actorCtx.actorList[2].first;
-    if (arg1->unk_39E == 2) {
-        ActorCutscene_Stop(arg1->unk_3A0);
-        arg1->unk_39E = 0;
+    if (arg1[2].textId == 2) {
+        ActorCutscene_Stop(arg1[2].freezeTimer);
+        arg1[2].textId = 0;
     }
     func_800B84D0(arg1, arg0);
     arg0->msgCtx.unk11F22 = 0x43;
@@ -769,7 +769,7 @@ void EnSob1_EndInteraction(GlobalContext *arg0, Actor *arg1) {
     Interface_ChangeAlpha(0x32U);
     arg1->unk_321 = 0;
     arg1->unk_358 = 0;
-    arg1->unk_390 = 0;
+    arg1[2].prevPos.x = 0.0f;
     sp24->unk_A70 = (s32) (sp24->unk_A70 & 0xDFFFFFFF);
     arg0->interfaceCtx.unk_222 = 0;
     arg0->interfaceCtx.unk_224 = 0;
@@ -781,7 +781,7 @@ s32 EnSob1_TestEndInteraction(Actor *arg0, GlobalContext *arg1, Input *arg2) {
 
     phi_v0 = 0;
     if (~(arg2->press.button | ~0x4000) == 0) {
-        if (arg0->unk_3CC == 2) {
+        if (arg0[3].id == 2) {
             EnSob1_EndInteractionBombShop(arg0, arg1, arg0);
             return 1;
         }
@@ -831,7 +831,7 @@ void EnSob1_TalkToShopkeeper(GlobalContext *arg0, Actor *arg1) {
     func_80151938(arg0, temp_v0 & 0xFFFF);
     func_8011552C(arg0, 6);
     arg1->unk_358 = 0;
-    arg1->unk_390 = 0;
+    arg1[2].prevPos.x = 0.0f;
 }
 
 void EnSob1_SetupLookToShopkeeperFromShelf(s32 arg0, Actor *arg1) {
@@ -1002,7 +1002,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(Actor *arg0, GlobalContext *arg1) {
         arg1 = arg1;
         arg0 = arg0;
         func_8019F230();
-        if (arg0->unk_3CC == 2) {
+        if (arg0[3].id == 2) {
             EnSob1_EndInteractionBombShop(arg0, arg1, (Actor *) arg1, arg0);
             return 1;
         }
@@ -1092,7 +1092,7 @@ void EnSob1_EndWalk(Actor *arg0, GlobalContext *arg1) {
 
     sp2E = (s16) (s32) (arg0->unk_15C / arg0->unk_160);
     sp2C = (s16) (SkelAnime_GetFrameCount(&D_06009120) / (s32) (s16) (s32) arg0->unk_160);
-    Math_SmoothStepToS(arg0 + 0x32, EnSob1_GetXZAngleAndDistanceSqToPoint(arg0->unk_1E0, arg0->unk_1E4 - 1, arg0 + 0x24, &sp30), 4, 0x3E8, (s16) 1);
+    Math_SmoothStepToS(arg0 + 0x32, EnSob1_GetXZAngleAndDistanceSqToPoint(arg0[1].yDistToPlayer, arg0[1].colChkInfo.damageTable - 1, arg0 + 0x24, &sp30), 4, 0x3E8, (s16) 1);
     arg0->shape.rot.y = arg0->world.rot.y;
     Math_ApproachF(arg0 + 0x70, 0.5f, 0.2f, 1.0f);
     if (sp30 < 12.0f) {
@@ -1192,20 +1192,20 @@ void EnSob1_ItemPurchased(Actor *arg0, GlobalContext *arg1) {
     void *temp_v1;
 
     temp_v1 = arg1->actorCtx.actorList[2].first;
-    if (arg0->unk_39E == 0) {
+    if (arg0[2].textId == 0) {
         sp24 = temp_v1;
-        if (ActorCutscene_GetCanPlayNext(arg0->unk_3A0) != 0) {
+        if (ActorCutscene_GetCanPlayNext(arg0[2].freezeTimer) != 0) {
             sp24 = temp_v1;
-            ActorCutscene_StartAndSetFlag(arg0->unk_3A0, arg0);
+            ActorCutscene_StartAndSetFlag(arg0[2].freezeTimer, arg0);
             temp_v1->unk_A70 = (s32) (temp_v1->unk_A70 | 0x20000000);
             EnSob1_SetupAction(arg0, EnSob1_ContinueShopping);
-            arg0->unk_39E = 2;
+            arg0[2].textId = 2;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            arg0->unk_3A0 = (s16) arg0->unk_3A6;
-            ActorCutscene_SetIntentToPlay(arg0->unk_3A0);
+            arg0[2].freezeTimer = (u16) arg0->unk_3A6;
+            ActorCutscene_SetIntentToPlay((s16) arg0[2].freezeTimer);
         }
     }
     if (func_800B84D0(arg0, arg1) != 0) {
@@ -1290,11 +1290,11 @@ s32 EnSob1_HasPlayerSelectedItem(GlobalContext *arg0, Actor *arg1) {
     }
     if (EnSob1_TestItemSelected(arg0) != 0) {
         if (sp24->unk_1A0 == 0) {
-            arg1->unk_18C = (s32) arg1->unk_188;
+            arg1->unk_18C = (f32) arg1[1].focus.pos.z;
             func_80151938(arg0, (arg1 + (arg1->unk_322 * 4))->unk_2EC->unk_198);
             play_sound(0x4808U);
             arg1->unk_358 = 0;
-            arg1->unk_390 = 0;
+            arg1[2].prevPos.x = 0.0f;
             arg1->unk_321 = 0;
             EnSob1_SetupAction(arg1, EnSob1_SelectItem);
             return 1;
@@ -1378,22 +1378,22 @@ void EnSob1_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
     temp_v0 = temp_a1->unk_1B4(arg0, temp_a1);
     switch (temp_v0) {
     case 0:
-        if (arg1->unk_39E == 2) {
-            ActorCutscene_Stop(arg1->unk_3A0);
-            arg1->unk_39E = 0;
+        if (arg1[2].textId == 2) {
+            ActorCutscene_Stop(arg1[2].freezeTimer);
+            arg1[2].textId = 0;
         }
         func_8019F208();
         temp_a1_2 = (arg1 + (arg1->unk_322 * 4))->unk_2EC;
         temp_a1_2->unk_1BC(arg0, temp_a1_2);
         EnSob1_SetupBuyItemWithFanfare(arg0, arg1);
         arg1->unk_321 = 0;
-        arg1->unk_3AC = 0.0f;
+        arg1[2].child = NULL;
         sp24->unk_1A4(arg0, sp24);
         return;
     case 1:
         func_8019F208();
         sp24->unk_1B8(arg0, sp24);
-        temp_v0_2 = arg1->unk_3CC;
+        temp_v0_2 = arg1[3].id;
         if ((temp_v0_2 == 1) && (sp24->unk_1C == 0x20)) {
             EnSob1_SetupCanBuy(arg0, arg1, 0xBD7U);
         } else if ((temp_v0_2 == 0) && (sp24->unk_1C == 0x1D)) {
@@ -1404,32 +1404,32 @@ void EnSob1_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
             EnSob1_SetupCanBuy(arg0, arg1, *(&sBuySuccessTextIds + (temp_v0_2 * 2)));
         }
         arg1->unk_321 = 0;
-        arg1->unk_3AC = 0.0f;
+        arg1[2].child = NULL;
         sp24->unk_1A4(arg0, sp24);
         return;
     case 2:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNoRoomTextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNoRoomTextIds + (arg1[3].id * 2)));
         return;
     case 3:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNeedEmptyBottleTextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNeedEmptyBottleTextIds + (arg1[3].id * 2)));
         return;
     case 4:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNeedRupeesTextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNeedRupeesTextIds + (arg1[3].id * 2)));
         return;
     case 5:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sCannotGetNowTextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sCannotGetNowTextIds + (arg1[3].id * 2)));
         return;
     case 6:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sCannotGetNow2TextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sCannotGetNow2TextIds + (arg1[3].id * 2)));
         return;
     case 7:
         play_sound(0x4806U);
-        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNoRoom2TextIds + (arg1->unk_3CC * 2)));
+        EnSob1_SetupCannotBuy(arg0, arg1, *(&sNoRoom2TextIds + (arg1[3].id * 2)));
         return;
     case 8:
         play_sound(0x4806U);
@@ -1544,8 +1544,8 @@ void EnSob1_PositionSelectedItem(EnSob1 *arg0) {
 
     temp_t0 = (arg0->shopType * 0xC) + &sSelectedItemPositions;
     sp1C.unk_0 = temp_t0->unk_0;
-    sp1C.unk_4 = (s32) temp_t0->unk_4;
-    sp1C.unk_8 = (s32) temp_t0->unk_8;
+    (&sp1C)[1] = temp_t0->unk_4;
+    (&sp1C)[2] = temp_t0->unk_8;
     temp_v0 = arg0->cursorIdx;
     temp_v1 = (arg0->shopType * 0x18) + (temp_v0 * 8) + &sShops;
     temp_f12 = arg0->shopItemSelectedTween;
@@ -1781,7 +1781,7 @@ void EnSob1_Blink(EnSob1 *this) {
 }
 
 void EnSob1_ChangeObject(EnSob1 *arg0, GlobalContext *arg1) {
-    *(gSegments + 0x18) = (arg1 + (arg0->objIndices[2] * 0x44))->unk_17D98 + 0x80000000;
+    gSegments[6] = (arg1 + (arg0->objIndices[2] * 0x44))->unk_17D98 + 0x80000000;
 }
 
 s32 EnSob1_AreObjectsLoaded(EnSob1 *arg0, GlobalContext *arg1) {
@@ -1814,7 +1814,7 @@ void EnSob1_InitZoraShopkeeper(EnSob1 *this, GlobalContext *globalCtx) {
     temp_a1 = &this->skelAnime;
     sp30 = temp_a1;
     SkelAnime_InitSV(globalCtx, temp_a1, &D_0600D208, NULL, this->limbDrawTable, this->transitionDrawTable, 0x14);
-    *(gSegments + 0x18) = (u32) (globalCtx->objectCtx.status[this->objIndices[2]].segment + 0x80000000);
+    gSegments[6] = (u32) (globalCtx->objectCtx.status[this->objIndices[2]].segment + 0x80000000);
     SkelAnime_ChangeAnim(sp30, (AnimationHeader *) &D_0600078C, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_0600078C), (u8) 0, 0.0f);
     this->actor.draw = EnSob1_DrawZoraShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
@@ -1827,7 +1827,7 @@ void EnSob1_InitGoronShopkeeper(EnSob1 *this, GlobalContext *globalCtx) {
     temp_a1 = &this->skelAnime;
     sp30 = temp_a1;
     SkelAnime_InitSV(globalCtx, temp_a1, &D_06011AC8, NULL, this->limbDrawTable, this->transitionDrawTable, 0x12);
-    *(gSegments + 0x18) = (u32) (globalCtx->objectCtx.status[this->objIndices[2]].segment + 0x80000000);
+    gSegments[6] = (u32) (globalCtx->objectCtx.status[this->objIndices[2]].segment + 0x80000000);
     SkelAnime_ChangeAnim(sp30, (AnimationHeader *) &D_060000FC, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_060000FC), (u8) 0, 0.0f);
     this->actor.draw = EnSob1_DrawGoronShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
@@ -1988,48 +1988,48 @@ void EnSob1_DrawCursor(GraphicsContext **arg0, EnSob1 *arg1, f32 arg2, f32 arg3,
         sp18 = temp_a2;
         func_8012C654(temp_a2);
         temp_v0 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0 + 8;
+        sp18->overlay.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFA000000;
         temp_v0->words.w1 = (arg1->cursorColor.r << 0x18) | ((arg1->cursorColor.g & 0xFF) << 0x10) | ((arg1->cursorColor.b & 0xFF) << 8) | (arg1->cursorColor.a & 0xFF);
         temp_v0_2 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_2 + 8;
+        sp18->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFD700000;
         temp_v0_2->words.w1 = (u32) &D_0401F740;
         temp_v0_3 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_3 + 8;
+        sp18->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xF5700000;
         temp_v0_3->words.w1 = 0x7050140;
         temp_v0_4 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_4 + 8;
+        sp18->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE6000000;
         temp_v0_5 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_5 + 8;
+        sp18->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x703F800;
         temp_v0_5->words.w0 = 0xF3000000;
         temp_v0_6 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_6 + 8;
+        sp18->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0;
         temp_v0_6->words.w0 = 0xE7000000;
         temp_v0_7 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_7 + 8;
+        sp18->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xF5600200;
         temp_v0_7->words.w1 = 0x50140;
         temp_v0_8 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_8 + 8;
+        sp18->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xF2000000;
         temp_v0_8->words.w1 = 0x3C03C;
         temp_v0_9 = sp18->overlay.p;
         temp_f0 = 16.0f * arg4;
-        sp18->overlay.p = temp_v0_9 + 8;
+        sp18->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = (((s32) ((arg2 + temp_f0) * 4.0f) & 0xFFF) << 0xC) | 0xE4000000 | ((s32) ((arg3 + temp_f0 + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_9->words.w1 = (((s32) ((arg2 - temp_f0) * 4.0f) & 0xFFF) << 0xC) | ((s32) (((arg3 - temp_f0) + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_10 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_10 + 8;
+        sp18->overlay.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0;
         temp_v0_10->words.w0 = 0xE1000000;
         temp_v0_11 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_11 + 8;
+        sp18->overlay.p = &temp_v0_11[1];
         temp_a1 = (s32) ((1.0f / arg4) * 1024.0f) & 0xFFFF;
         temp_v0_11->words.w1 = (temp_a1 << 0x10) | temp_a1;
         temp_v0_11->words.w0 = 0xF1000000;
@@ -2105,35 +2105,35 @@ void EnSob1_DrawStickDirectionPrompt(GraphicsContext **arg0, EnSob1 *arg1) {
         sp4C = temp_t1;
         func_8012C654(temp_a2);
         temp_v0_2 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_2 + 8;
+        temp_a2->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFC119623;
         temp_v0_2->words.w1 = 0xFF2FFFFF;
         temp_v0_3 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_3 + 8;
+        temp_a2->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFD700000;
         temp_v0_3->words.w1 = (u32) &D_0401F8C0;
         temp_v0_4 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_4 + 8;
+        temp_a2->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xF5700000;
         temp_v0_4->words.w1 = 0x7000040;
         temp_v0_5 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_5 + 8;
+        temp_a2->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0;
         temp_v0_5->words.w0 = 0xE6000000;
         temp_v0_6 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_6 + 8;
+        temp_a2->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x70BF400;
         temp_v0_6->words.w0 = 0xF3000000;
         temp_v0_7 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_7 + 8;
+        temp_a2->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0;
         temp_v0_7->words.w0 = 0xE7000000;
         temp_v0_8 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_8 + 8;
+        temp_a2->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x40;
         temp_v0_8->words.w0 = 0xF5680400;
         temp_v0_9 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_9 + 8;
+        temp_a2->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xF2000000;
         temp_v0_9->words.w1 = 0x3C05C;
         if (temp_t1 != 0) {
@@ -2192,7 +2192,7 @@ s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext *arg0, s32 arg1, Gfx **a
 
 s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 0xF) {
-        SysMatrix_InsertXRotation_s(arg5->unk_1EE, 1);
+        SysMatrix_InsertXRotation_s(arg5[82].y, 1);
     }
     return 0;
 }
@@ -2243,17 +2243,17 @@ void EnSob1_DrawZoraShopkeeper(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0xFF;
     temp_v0->words.w0 = 0xFB000000;
     temp_v0_2 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_2 + 8;
+    sp40->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060030;
     sp40 = sp40;
     sp34 = temp_v0_2;
     sp34->words.w1 = EnSob1_EndDList(globalCtx->state.gfxCtx);
     temp_v0_3 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_3 + 8;
+    sp40->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&sZoraShopkeeperEyeTextures + (this->eyeTexIndex * 4)));
@@ -2306,7 +2306,7 @@ void EnSob1_DrawGoronShopkeeper(Actor *thisx, GlobalContext *globalCtx) {
     sp38 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp38->polyOpa.p;
-    sp38->polyOpa.p = temp_v0 + 8;
+    sp38->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&sGoronShopkeeperEyeTextures + (this->eyeTexIndex * 4)));
@@ -2364,7 +2364,7 @@ void EnSob1_DrawBombShopkeeper(Actor *thisx, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp4C = temp_v0;
     sp4C->words.w1 = Lib_SegmentedToVirtual(&D_06005458);
@@ -2400,19 +2400,19 @@ void EnSob1_DrawBombShopkeeper(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_4 + 8;
+    temp_s1->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060020;
     temp_v0_4->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, (s32) sp5C * -0x14, 0x20, 0x80);
     temp_v0_5 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_5 + 8;
+    temp_s1->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFA008080;
     temp_v0_5->words.w1 = 0xFFFF00FF;
     temp_v0_6 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_6 + 8;
+    temp_s1->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0xFF000000;
     temp_v0_6->words.w0 = 0xFB000000;
 }

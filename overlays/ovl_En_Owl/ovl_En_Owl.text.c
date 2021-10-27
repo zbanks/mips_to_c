@@ -1,3 +1,67 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ s16 unk_3A;                         /* inferred */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct EnOwl {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder unk_144;           /* inferred */
@@ -405,7 +469,7 @@ void EnOwl_Init(Actor *thisx, GlobalContext *globalCtx) {
             if (temp_s0_2 != 3) {
                 goto block_17;
             }
-            if ((*(gBitFlags + 0x3C) & gSaveContext.inventory.questItems) != 0) {
+            if ((gBitFlags[15] & gSaveContext.inventory.questItems) != 0) {
                 Actor_MarkForDeath((Actor *) this);
                 return;
             }
@@ -524,7 +588,7 @@ void func_8095ABA8(Actor *arg0) {
     func_8095AB4C();
     arg0->unk_40B = 0;
     arg0->unk_3DE = 0;
-    arg0->unk_3E8 = (u16) (arg0->unk_3E8 | 0x10);
+    arg0[3].params |= 0x10;
     arg0->unk_40C = 4;
     arg0->unk_408 = 0;
     arg0->unk_40A = 0;
@@ -545,9 +609,9 @@ void func_8095AC50(Actor *arg0, GlobalContext *arg1) {
         if ((arg0->unk_3DA & 0x3F) == 0) {
             func_8095AAD0((EnOwl *) arg0, arg1);
         } else {
-            arg0->unk_3E8 = (u16) (arg0->unk_3E8 & 0xFFFD);
+            arg0[3].params = (u16) arg0[3].params & 0xFFFD;
             func_8095ABA8(arg0);
-            arg0->unk_410 = func_8095AB1C;
+            arg0[3].focus.pos.z = (bitwise f32) func_8095AB1C;
         }
         arg0->flags &= 0xFFFEFFFF;
     }
@@ -826,7 +890,7 @@ void func_8095B76C(EnOwl *this, GlobalContext *globalCtx) {
         temp_t4 = this->unk_3F8 + 1;
         this->actor.world.pos.x = (f32) temp_v1->unk_0;
         this->unk_3F8 = temp_t4;
-        this->actor.world.pos.z = (f32) temp_v1->unk_4;
+        this->actor.world.pos.z = (f32) temp_v1[2];
         if (temp_t4 >= (s32) this->unk_3F4->unk_0) {
             this->actionFunc = func_8095B6C8;
             return;
@@ -1046,7 +1110,7 @@ void func_8095BF78(Actor *arg0, GlobalContext *arg1) {
     if (arg0->xzDistToPlayer > 6000.0f) {
         Actor_MarkForDeath(arg0);
     }
-    Math_SmoothStepToS(&arg0->world.rot.y, arg0->unk_3EC, 2, 0x80, (s16) 0x40);
+    Math_SmoothStepToS(&arg0->world.rot.y, arg0[3].unk20, 2, 0x80, (s16) 0x40);
     temp_f0 = arg0->speedXZ;
     arg0->shape.rot.y = arg0->world.rot.y;
     if (temp_f0 < 16.0f) {
@@ -1190,24 +1254,24 @@ void func_8095C568(Actor *arg0) {
     s16 temp_v1;
     u16 temp_v0;
 
-    temp_v0 = arg0->unk_3E8;
+    temp_v0 = arg0[3].params;
     if ((temp_v0 & 0x40) != 0) {
-        temp_v1 = arg0->unk_406;
+        temp_v1 = arg0[3].unk_3A;
         if (((s32) temp_v1 < 0) || ((s32) (arg0 + (temp_v1 * 2))->unk_400 < 0)) {
-            arg0->unk_3E8 = (u16) (temp_v0 & 0xFFBF);
+            arg0[3].params = temp_v0 & 0xFFBF;
             return;
         }
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay((arg0 + (arg0->unk_406 * 2))->unk_400);
+            ActorCutscene_SetIntentToPlay((arg0 + (arg0[3].unk_3A * 2))->unk_400);
             return;
         }
-        if (ActorCutscene_GetCanPlayNext((arg0 + (arg0->unk_406 * 2))->unk_400) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields((arg0 + (arg0->unk_406 * 2))->unk_400, arg0);
-            arg0->unk_3E8 = (u16) (arg0->unk_3E8 & 0xFFBF);
+        if (ActorCutscene_GetCanPlayNext((arg0 + (arg0[3].unk_3A * 2))->unk_400) != 0) {
+            ActorCutscene_StartAndSetUnkLinkFields((arg0 + (arg0[3].unk_3A * 2))->unk_400, arg0);
+            arg0[3].params = (u16) arg0[3].params & 0xFFBF;
             return;
         }
-        ActorCutscene_SetIntentToPlay((arg0 + (arg0->unk_406 * 2))->unk_400);
+        ActorCutscene_SetIntentToPlay((arg0 + (arg0[3].unk_3A * 2))->unk_400);
         /* Duplicate return node #9. Try simplifying control flow for better match */
     }
 }
@@ -1483,12 +1547,12 @@ void func_8095CCF4(Actor *this, GlobalContext *globalCtx) {
     s16 temp_v0;
     s16 temp_v0_2;
 
-    if ((globalCtx->actorCtx.actorList[2].first->unk_A74 * 8) < 0) {
+    if (((bitwise s32) globalCtx->actorCtx.actorList[2].first[8].targetArrowOffset * 8) < 0) {
         Actor_MarkForDeath(this);
         return;
     }
     temp_f2 = this->world.pos.y;
-    if (temp_f2 < (this->unk_3F0 - 1000.0f)) {
+    if (temp_f2 < (this[3].world.pos.x - 1000.0f)) {
         Actor_MarkForDeath(this);
         return;
     }
@@ -1516,10 +1580,10 @@ s32 func_8095CE18(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
             if (arg1 != 4) {
                 if (arg1 != 5) {
 
-                } else if ((arg5->unk_3E8 & 8) == 0) {
+                } else if ((arg5[3].params & 8) == 0) {
                     arg4->y += (s32) ((f32) arg5->unk_3D8 * 1.5f);
                 }
-            } else if ((arg5->unk_3E8 & 8) == 0) {
+            } else if ((arg5[3].params & 8) == 0) {
                 arg4->y -= (s32) ((f32) arg5->unk_3D8 * 1.5f);
             }
         } else {
@@ -1539,7 +1603,7 @@ void func_8095CF44(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     f32 sp18;
 
     sp20 = 0.0f;
-    if ((arg4->unk_3E8 & 2) != 0) {
+    if ((arg4[3].params & 2) != 0) {
         sp18 = 700.0f;
         sp1C = 400.0f;
     } else {
@@ -1563,7 +1627,7 @@ void EnOwl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp34 = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp34->polyOpa.p;
-    sp34->polyOpa.p = temp_v0 + 8;
+    sp34->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp2C = temp_v0;
     sp2C->words.w1 = Lib_SegmentedToVirtual(*(&D_8095D32C + (this->unk_3E0 * 4)));
@@ -1590,41 +1654,41 @@ void func_8095D074(Actor *this, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(0.0f, 0.0f, -500.0f, 1);
     if ((s32) this->unk_3DC >= 0x20) {
         temp_v0 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0 + 8;
+        temp_s0->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp30 = temp_v0;
         sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         func_8012C28C(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xE200001C;
         temp_v0_2->words.w1 = 0xC8113078;
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = 0xFF;
         temp_v0_3->words.w0 = 0xFB000000;
         temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
+        temp_s0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDE000000;
         temp_v0_4->words.w1 = (u32) &D_06001200;
         return;
     }
     temp_v0_5 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_5 + 8;
+    temp_s0->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDA380003;
     sp20 = temp_v0_5;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0_6 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_6 + 8;
+    temp_s0->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xE200001C;
     temp_v0_6->words.w1 = 0xC81041C8;
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xFB000000;
     temp_v0_7->words.w1 = (this->unk_3DC * 8) & 0xFF;
     temp_v0_8 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_8 + 8;
+    temp_s0->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) &D_06001200;
     temp_v0_8->words.w0 = 0xDE000000;
 }

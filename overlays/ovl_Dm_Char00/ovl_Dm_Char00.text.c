@@ -456,7 +456,7 @@ void func_80AA5BF8(Actor *arg0, void *arg1) {
             Audio_PlayActorSound2(arg0, 0x29C1U);
         }
     }
-    if ((arg0->unk_261 == 0x35) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 16.0f) != 0)) {
+    if ((arg0[1].isDrawn == 0x35) && (func_801378B8((SkelAnime *) &arg0[1], 16.0f) != 0)) {
         Audio_PlayActorSound2(arg0, 0x2924U);
     }
 }
@@ -576,7 +576,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
             if (temp_v0 != 0x63) {
                 return;
             }
-            if ((gSaveContext.sceneSetupIndex == 0) && (arg1->unk_1F36 == 0)) {
+            if ((gSaveContext.sceneSetupIndex == 0) && (arg1[13].actor.unk_22 == 0)) {
                 func_80AA5D10();
                 return;
             }
@@ -586,7 +586,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
         switch (temp_v0) {
         case 26:
             if (gSaveContext.sceneSetupIndex == 0) {
-                temp_v0_2 = arg1->unk_1F36;
+                temp_v0_2 = arg1[13].actor.unk_22;
                 if (temp_v0_2 == 0) {
                     func_80AA5720();
                     return;
@@ -607,7 +607,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
         case 25:
             temp_v0_3 = gSaveContext.sceneSetupIndex;
             if (temp_v0_3 == 0) {
-                temp_v0_4 = arg1->unk_1F36;
+                temp_v0_4 = arg1[13].actor.unk_22;
                 if (temp_v0_4 == 0) {
                     func_80AA58CC();
                     return;
@@ -624,7 +624,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
                 return;
             }
             if (temp_v0_3 == 2) {
-                temp_v0_5 = arg1->unk_1F36;
+                temp_v0_5 = arg1[13].actor.unk_22;
                 if (temp_v0_5 == 0) {
                     func_80AA59E4();
                     return;
@@ -641,7 +641,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
         case 45:
             temp_v0_6 = gSaveContext.sceneSetupIndex;
             if (temp_v0_6 == 3) {
-                temp_v0_7 = arg1->unk_1F36;
+                temp_v0_7 = arg1[13].actor.unk_22;
                 if (temp_v0_7 == 0) {
                     func_80AA5AF4();
                     return;
@@ -654,7 +654,7 @@ void func_80AA5EBC(DmChar00 *arg1) {
                 return;
             }
             if (temp_v0_6 == 7) {
-                temp_v0_8 = arg1->unk_1F36;
+                temp_v0_8 = arg1[13].actor.unk_22;
                 if (temp_v0_8 == 0) {
                     func_80AA5BF8();
                     return;
@@ -669,14 +669,14 @@ void func_80AA5EBC(DmChar00 *arg1) {
             /* Duplicate return node #49. Try simplifying control flow for better match */
             return;
         case 27:
-            if ((gSaveContext.sceneSetupIndex == 0) && (arg1->unk_1F36 == 1)) {
+            if ((gSaveContext.sceneSetupIndex == 0) && (arg1[13].actor.unk_22 == 1)) {
                 func_80AA5DC8();
                 return;
             }
             /* Duplicate return node #49. Try simplifying control flow for better match */
             return;
         case 35:
-            if ((gSaveContext.sceneSetupIndex == 0) && (arg1->unk_1F36 == 0)) {
+            if ((gSaveContext.sceneSetupIndex == 0) && (arg1[13].actor.unk_22 == 0)) {
                 func_80AA5D6C();
             }
             /* Duplicate return node #49. Try simplifying control flow for better match */
@@ -737,13 +737,13 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
     Actor *temp_a3;
     s16 temp_a1;
     s32 temp_t7;
-    s8 temp_t0;
-    s8 temp_t7_2;
     u16 temp_a1_2;
     u16 temp_a1_3;
     u16 temp_t2;
     u32 temp_v0;
+    u8 temp_t0;
     u8 temp_t2_2;
+    u8 temp_t7_2;
     u8 temp_v0_2;
     void *temp_a0;
     void *temp_v1;
@@ -762,73 +762,73 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
         temp_a0 = temp_v1->unk_1F4C;
         if (arg1->csCtx.frames == temp_a0->unk_2) {
             temp_a1_3 = temp_a0->unk_0;
-            if (arg0->unk_260 != temp_a1_3) {
-                arg0->unk_260 = (u8) temp_a1_3;
+            if (arg0[1].colorFilterTimer != temp_a1_3) {
+                arg0[1].colorFilterTimer = (u8) temp_a1_3;
                 temp_t2 = temp_v1->unk_1F4C->unk_0;
                 switch (temp_t2) {                  /* switch 1 */
                 case 1:                             /* switch 1 */
                 default:                            /* switch 1 */
-                    arg0->unk_261 = 0U;
+                    arg0[1].isDrawn = 0;
                     break;
                 case 2:                             /* switch 1 */
-                    arg0->unk_261 = 2U;
+                    arg0[1].isDrawn = 2;
                     break;
                 case 3:                             /* switch 1 */
-                    arg0->unk_261 = 3U;
+                    arg0[1].isDrawn = 3;
                     break;
                 case 4:                             /* switch 1 */
-                    arg0->unk_261 = 4U;
+                    arg0[1].isDrawn = 4;
                     break;
                 case 5:                             /* switch 1 */
-                    arg0->unk_261 = 5U;
+                    arg0[1].isDrawn = 5;
                     break;
                 case 6:                             /* switch 1 */
-                    arg0->unk_261 = 6U;
+                    arg0[1].isDrawn = 6;
                     break;
                 case 7:                             /* switch 1 */
-                    arg0->unk_261 = 7U;
+                    arg0[1].isDrawn = 7;
                     break;
                 case 8:                             /* switch 1 */
-                    arg0->unk_261 = 0x14U;
+                    arg0[1].isDrawn = 0x14;
                     break;
                 case 9:                             /* switch 1 */
-                    arg0->unk_261 = 0x15U;
+                    arg0[1].isDrawn = 0x15;
                     break;
                 case 10:                            /* switch 1 */
-                    arg0->unk_261 = 0xEU;
+                    arg0[1].isDrawn = 0xE;
                     break;
                 case 11:                            /* switch 1 */
-                    arg0->unk_261 = 0xFU;
+                    arg0[1].isDrawn = 0xF;
                     break;
                 case 12:                            /* switch 1 */
-                    arg0->unk_261 = 0x12U;
+                    arg0[1].isDrawn = 0x12;
                     break;
                 case 13:                            /* switch 1 */
-                    arg0->unk_261 = 0x19U;
+                    arg0[1].isDrawn = 0x19;
                     break;
                 case 14:                            /* switch 1 */
-                    arg0->unk_261 = 0x1BU;
+                    arg0[1].isDrawn = 0x1B;
                     break;
                 case 15:                            /* switch 1 */
-                    arg0->unk_261 = 0x18U;
+                    arg0[1].isDrawn = 0x18;
                     break;
                 case 16:                            /* switch 1 */
-                    arg0->unk_261 = 0xAU;
+                    arg0[1].isDrawn = 0xA;
                     break;
                 case 17:                            /* switch 1 */
-                    arg0->unk_261 = 0xCU;
+                    arg0[1].isDrawn = 0xC;
                     break;
                 case 18:                            /* switch 1 */
-                    arg0->unk_261 = 0xDU;
+                    arg0[1].isDrawn = 0xD;
                     break;
                 case 19:                            /* switch 1 */
-                    arg0->unk_261 = 0x1DU;
+                    arg0[1].isDrawn = 0x1D;
                     break;
                 case 20:                            /* switch 1 */
-                    arg0->unk_261 = 0x1FU;
+                    arg0[1].isDrawn = 0x1F;
                     break;
                 case 21:                            /* switch 1 */
-                    arg0->unk_261 = 0x21U;
+                    arg0[1].isDrawn = 0x21;
                     break;
                 case 22:                            /* switch 1 */
                     temp_a0_2 = arg0;
@@ -836,104 +836,104 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
                     Actor_MarkForDeath(temp_a0_2);
                     break;
                 case 23:                            /* switch 1 */
-                    arg0->unk_261 = 0x23U;
+                    arg0[1].isDrawn = 0x23;
                     break;
                 case 24:                            /* switch 1 */
-                    arg0->unk_261 = 0x25U;
+                    arg0[1].isDrawn = 0x25;
                     break;
                 case 25:                            /* switch 1 */
-                    arg0->unk_261 = 0x27U;
+                    arg0[1].isDrawn = 0x27;
                     break;
                 case 26:                            /* switch 1 */
-                    arg0->unk_261 = 0x29U;
+                    arg0[1].isDrawn = 0x29;
                     break;
                 case 27:                            /* switch 1 */
-                    arg0->unk_261 = 0x2DU;
+                    arg0[1].isDrawn = 0x2D;
                     break;
                 case 28:                            /* switch 1 */
-                    arg0->unk_261 = 0x2EU;
+                    arg0[1].isDrawn = 0x2E;
                     break;
                 case 30:                            /* switch 1 */
-                    arg0->unk_261 = 0x30U;
+                    arg0[1].isDrawn = 0x30;
                     break;
                 case 31:                            /* switch 1 */
-                    arg0->unk_261 = 0x32U;
+                    arg0[1].isDrawn = 0x32;
                     break;
                 case 32:                            /* switch 1 */
-                    arg0->unk_261 = 0x34U;
+                    arg0[1].isDrawn = 0x34;
                     break;
                 case 33:                            /* switch 1 */
-                    arg0->unk_261 = 0x35U;
+                    arg0[1].isDrawn = 0x35;
                     break;
                 case 35:                            /* switch 1 */
-                    arg0->unk_261 = 0x37U;
+                    arg0[1].isDrawn = 0x37;
                     break;
                 case 36:                            /* switch 1 */
-                    arg0->unk_261 = 0x39U;
+                    arg0[1].isDrawn = 0x39;
                     break;
                 case 37:                            /* switch 1 */
-                    arg0->unk_261 = 0x3AU;
+                    arg0[1].isDrawn = 0x3A;
                     break;
                 case 38:                            /* switch 1 */
-                    arg0->unk_261 = 0x3BU;
+                    arg0[1].isDrawn = 0x3B;
                     break;
                 case 39:                            /* switch 1 */
-                    arg0->unk_261 = 0x3DU;
+                    arg0[1].isDrawn = 0x3D;
                     break;
                 case 40:                            /* switch 1 */
-                    arg0->unk_261 = 0x3EU;
+                    arg0[1].isDrawn = 0x3E;
                     break;
                 case 41:                            /* switch 1 */
-                    arg0->unk_261 = 0x40U;
+                    arg0[1].isDrawn = 0x40;
                     break;
                 case 42:                            /* switch 1 */
-                    arg0->unk_261 = 0x42U;
+                    arg0[1].isDrawn = 0x42;
                     break;
                 case 43:                            /* switch 1 */
-                    arg0->unk_261 = 0x44U;
+                    arg0[1].isDrawn = 0x44;
                     break;
                 case 44:                            /* switch 1 */
-                    arg0->unk_261 = 0x45U;
+                    arg0[1].isDrawn = 0x45;
                     break;
                 case 45:                            /* switch 1 */
-                    arg0->unk_261 = 0x46U;
+                    arg0[1].isDrawn = 0x46;
                     break;
                 case 46:                            /* switch 1 */
-                    arg0->unk_261 = 0x43U;
+                    arg0[1].isDrawn = 0x43;
                     break;
                 case 47:                            /* switch 1 */
-                    arg0->unk_261 = 0x47U;
+                    arg0[1].isDrawn = 0x47;
                     break;
                 case 48:                            /* switch 1 */
-                    arg0->unk_261 = 0x49U;
+                    arg0[1].isDrawn = 0x49;
                     break;
                 case 49:                            /* switch 1 */
-                    arg0->unk_261 = 0x4AU;
+                    arg0[1].isDrawn = 0x4A;
                     break;
                 case 50:                            /* switch 1 */
-                    arg0->unk_261 = 0x4BU;
+                    arg0[1].isDrawn = 0x4B;
                     break;
                 case 51:                            /* switch 1 */
-                    arg0->unk_261 = 0x4DU;
+                    arg0[1].isDrawn = 0x4D;
                     break;
                 case 52:                            /* switch 1 */
-                    arg0->unk_261 = 0x4EU;
+                    arg0[1].isDrawn = 0x4E;
                     break;
                 case 53:                            /* switch 1 */
-                    arg0->unk_261 = 0x4FU;
+                    arg0[1].isDrawn = 0x4F;
                     break;
                 case 54:                            /* switch 1 */
-                    arg0->unk_261 = 0x50U;
+                    arg0[1].isDrawn = 0x50;
                     break;
                 case 55:                            /* switch 1 */
-                    arg0->unk_261 = 0x52U;
+                    arg0[1].isDrawn = 0x52;
                     break;
                 case 56:                            /* switch 1 */
-                    arg0->unk_261 = 0x53U;
+                    arg0[1].isDrawn = 0x53;
                     break;
                 }
                 arg0 = arg0;
-                func_80AA5580((SkelAnime *) (arg0 + 0x144), (arg0->unk_261 * 0x18) + &D_80AA6FB0, 0, arg0);
+                func_80AA5580((SkelAnime *) &arg0[1], (arg0[1].isDrawn * 0x18) + &D_80AA6FB0, 0, arg0);
             }
         }
         sp18 = arg0 + 0x144;
@@ -941,19 +941,19 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
         func_800EDF24(arg0, arg1, sp20);
         phi_a0 = sp18;
     } else {
-        arg0->unk_260 = 0x63U;
-        phi_a0 = (SkelAnime *) (arg0 + 0x144);
+        arg0[1].colorFilterTimer = 0x63;
+        phi_a0 = (SkelAnime *) &arg0[1];
     }
     arg0 = arg0;
     sp18 = phi_a0;
     temp_a3 = arg0;
-    if (func_801378B8(phi_a0, arg0->unk_154) != 0) {
-        temp_v0_2 = temp_a3->unk_261;
+    if (func_801378B8(phi_a0, arg0[1].home.pos.z) != 0) {
+        temp_v0_2 = temp_a3[1].isDrawn;
         switch (temp_v0_2) {                        /* switch 2 */
         case 4:                                     /* switch 2 */
         case 5:                                     /* switch 2 */
             temp_t2_2 = temp_v0_2 + 4;
-            temp_a3->unk_261 = temp_t2_2;
+            temp_a3[1].isDrawn = temp_t2_2;
             arg0 = temp_a3;
             func_80AA5580(phi_a0, ((temp_t2_2 & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
             arg0->unk_15C = 37.0f;
@@ -963,7 +963,7 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
         case 20:                                    /* switch 2 */
         case 21:                                    /* switch 2 */
             temp_t7_2 = temp_v0_2 + 2;
-            temp_a3->unk_261 = temp_t7_2;
+            temp_a3[1].isDrawn = temp_t7_2;
             func_80AA5580(phi_a0, ((temp_t7_2 & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
             return;
         case 10:                                    /* switch 2 */
@@ -991,16 +991,16 @@ void func_80AA62FC(Actor *arg0, GlobalContext *arg1) {
         case 80:                                    /* switch 2 */
         case 83:                                    /* switch 2 */
             temp_t0 = temp_v0_2 + 1;
-            temp_a3->unk_261 = temp_t0;
+            temp_a3[1].isDrawn = temp_t0;
             func_80AA5580(phi_a0, ((temp_t0 & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
             return;
         case 45:                                    /* switch 2 */
-            temp_a3->unk_261 = 0x13;
-            func_80AA5580(phi_a0, ((0x13 & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
+            temp_a3[1].isDrawn = 0x13;
+            func_80AA5580(phi_a0, ((0x13U & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
             return;
         case 70:                                    /* switch 2 */
         case 77:                                    /* switch 2 */
-            temp_a3->unk_261 = 0;
+            temp_a3[1].isDrawn = 0;
             func_80AA5580(phi_a0, ((0 & 0xFF) * 0x18) + &D_80AA6FB0, 0, temp_a3);
             /* Duplicate return node #71. Try simplifying control flow for better match */
             return;
@@ -1053,7 +1053,7 @@ s32 func_80AA6A6C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     f32 sp1C;
 
     if (arg1 == 6) {
-        sp28 = ((Math_SinS((s16) (arg5->unk_262 << 0xC)) * 0.1f) + 1.0f) * 0.012f * (arg5->unk_58 * 124.99999f);
+        sp28 = ((Math_SinS((s16) (arg5[101].z << 0xC)) * 0.1f) + 1.0f) * 0.012f * (arg5->unk_58 * 124.99999f);
         SysMatrix_MultiplyVector3fByState(&D_80AA7808, (Vec3f *) &sp1C);
         SysMatrix_InsertTranslation(sp1C, sp20, sp24, 0);
         Matrix_Scale(sp28, sp28, sp28, 1);
@@ -1092,26 +1092,26 @@ void DmChar00_Draw(Actor *thisx, GlobalContext *globalCtx) {
             phi_a0 = 0x1FF - temp_a0_2;
         }
         temp_v0 = sp58->polyXlu.p;
-        sp58->polyXlu.p = temp_v0 + 8;
+        sp58->polyXlu.p = &temp_v0[1];
         temp_v0->words.w1 = (u32) temp_a3;
         temp_v0->words.w0 = 0xDB060020;
-        temp_v0_2 = temp_a3 + 8;
+        temp_v0_2 = &temp_a3[1];
         temp_a3->words.w0 = 0xE7000000;
         temp_a3->words.w1 = 0;
         temp_v0_2->words.w0 = 0xFA000001;
-        temp_v0_3 = temp_v0_2 + 8;
+        temp_v0_3 = &temp_v0_2[1];
         temp_v0_2->words.w1 = ((u32) this->unk_240 << 0x18) | (((u32) this->unk_244 & 0xFF) << 0x10) | (((u32) this->unk_248 & 0xFF) << 8) | ((u32) (this->unk_24C * 1.0f) & 0xFF);
         temp_v0_3->words.w0 = 0xE200001C;
         temp_v0_3->words.w1 = 0xC184B50;
-        temp_v0_4 = temp_v0_3 + 8;
+        temp_v0_4 = &temp_v0_3[1];
         temp_v0_4->words.w0 = 0xDF000000;
         temp_v0_4->words.w1 = 0;
         temp_v0_5 = sp58->polyXlu.p;
-        sp58->polyXlu.p = temp_v0_5 + 8;
+        sp58->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xFB000000;
         temp_v0_5->words.w1 = ((s32) this->unk_250 << 0x18) | (((s32) this->unk_254 & 0xFF) << 0x10) | (((s32) this->unk_258 & 0xFF) << 8) | ((s32) ((f32) phi_a0 * 1.0f) & 0xFF);
         temp_v0_6 = sp58->polyXlu.p;
-        sp58->polyXlu.p = temp_v0_6 + 8;
+        sp58->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x40;
         temp_v0_6->words.w0 = 0xE3001803;
         temp_t5 = sp58->polyXlu.p;

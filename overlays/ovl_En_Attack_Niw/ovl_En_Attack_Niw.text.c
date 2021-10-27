@@ -265,7 +265,7 @@ s32 func_809585B0(Actor *arg0, GlobalContext *arg1) {
     s16 sp1C;
     s32 phi_v0;
 
-    Actor_SetHeight(arg0, arg0->unk_2DC);
+    Actor_SetHeight(arg0, arg0[2].targetArrowOffset);
     func_800B8898(arg1, arg0, &sp1E, &sp1C);
     if ((arg0->projectedPos.z < -20.0f) || ((s32) sp1E < 0) || ((s32) sp1E >= 0x141) || ((s32) sp1C < 0) || (phi_v0 = 1, (((s32) sp1C < 0xF1) == 0))) {
         phi_v0 = 0;
@@ -475,10 +475,10 @@ void EnAttackNiw_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
     if (this->actor.xyzDistToPlayerSq < (20.0f * 20.0f)) {
         temp_v0_8 = this->actor.parent;
-        if ((temp_v0_8->update != 0) && (temp_v0_8 != 0) && (temp_v0_8 != 0) && (temp_v0_8->unk_25E == 0) && (sp40->unk_D5C == 0)) {
+        if ((temp_v0_8->update != 0) && (temp_v0_8 != 0) && (temp_v0_8 != 0) && ((s16) temp_v0_8[1].colorFilterParams == 0) && (sp40->unk_D5C == 0)) {
             sp44 = temp_v0_8;
             func_800B8D50(globalCtx, (Actor *) this, 2.0f, this->actor.world.rot.y, 0.0f, 0x10U);
-            sp44->unk_25E = 0x46;
+            sp44[1].colorFilterParams = 0x46;
         }
     }
     if (this->unk_256 == 0) {
@@ -493,14 +493,14 @@ void EnAttackNiw_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 s32 func_80958F6C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0xD) {
-        arg4->y += (s32) arg5->unk_2B4;
+        arg4->y += (s32) arg5[2].world.pos.z;
     }
     if (arg1 == 0xF) {
         arg4->z += (s32) arg5->unk_2B8;
     }
     if (arg1 == 0xB) {
-        arg4->x += (s32) arg5->unk_2B0;
-        arg4->y += (s32) arg5->unk_2AC;
+        arg4->x += (s32) arg5[2].world.pos.y;
+        arg4->y += (s32) arg5[2].world.pos.x;
         arg4->z += (s32) arg5->unk_2A8;
     }
     if (arg1 == 7) {

@@ -99,7 +99,7 @@ struct _mips2c_stack_func_8099CFAC {
 
 struct _mips2c_stack_func_8099D3C0 {
     /* 0x00 */ char pad_0[0x30];
-    /* 0x30 */ SkelAnime *sp30;                     /* inferred */
+    /* 0x30 */ f32 *sp30;                           /* inferred */
     /* 0x34 */ char pad_34[0xC];
 };                                                  /* size = 0x40 */
 
@@ -142,9 +142,9 @@ void func_8099C290(f32 *arg0, s16 arg1) {
     f32 sp20;
 
     sp20 = Math_CosS(arg1);
-    sp24 = (Math_SinS(arg1) * arg0->unk_8) + (sp20 * arg0->unk_0);
+    sp24 = (Math_SinS(arg1) * arg0[2]) + (sp20 * arg0->unk_0);
     sp20 = Math_SinS(arg1);
-    arg0->unk_8 = (f32) ((Math_CosS(arg1) * arg0->unk_8) + (-sp20 * arg0->unk_0));
+    arg0[2] = (Math_CosS(arg1) * arg0[2]) + (-sp20 * arg0->unk_0);
     arg0->unk_0 = sp24;
 }
 
@@ -571,23 +571,23 @@ block_18:
 }
 
 void func_8099D3C0(Actor *this, GlobalContext *globalCtx) {
-    SkelAnime *sp30;
-    SkelAnime *temp_a0;
+    f32 *sp30;
+    f32 *temp_a0;
 
-    temp_a0 = this + 0x1DC;
+    temp_a0 = &this[1].xzDistToPlayer;
     sp30 = temp_a0;
-    if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
-        if (&D_06004348 == this->unk_1E4) {
-            SkelAnime_ChangeAnim(sp30, (AnimationHeader *) &D_06004E98, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06004E98), (u8) 2, 1.0f);
-            this->unk_274(this, globalCtx);
+    if (SkelAnime_FrameUpdateMatrix((SkelAnime *) temp_a0) != 0) {
+        if (&D_06004348 == this[1].colChkInfo.damageTable) {
+            SkelAnime_ChangeAnim((SkelAnime *) sp30, (AnimationHeader *) &D_06004E98, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(&D_06004E98), (u8) 2, 1.0f);
+            this[1].init(this, globalCtx);
             return;
         }
-        SkelAnime_ChangeAnim(sp30, &D_06004348, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_06004348), (u8) 0, 1.0f);
+        SkelAnime_ChangeAnim((SkelAnime *) sp30, &D_06004348, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_06004348), (u8) 0, 1.0f);
         /* Duplicate return node #4. Try simplifying control flow for better match */
-        this->unk_274(this, globalCtx);
+        this[1].init(this, globalCtx);
         return;
     }
-    this->unk_274(this, globalCtx);
+    this[1].init(this, globalCtx);
 }
 
 s32 func_8099D4AC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
@@ -615,5 +615,5 @@ void EnCow_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 void func_8099D59C(Actor *this, GlobalContext *globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->unk_1E0, this->unk_1FC, (s32) this->unk_1DE, NULL, NULL, this);
+    SkelAnime_DrawSV(globalCtx, (bitwise void **) this[1].yDistToPlayer, this->unk_1FC, (s32) this->unk_1DE, NULL, NULL, this);
 }

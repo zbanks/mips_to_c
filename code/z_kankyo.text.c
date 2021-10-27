@@ -287,7 +287,7 @@ struct _mips2c_stack_func_800FB9B4 {
 
 struct _mips2c_stack_func_800FBCBC {
     /* 0x00 */ char pad_0[0x3C];
-    /* 0x3C */ ?32 sp3C;                            /* inferred */
+    /* 0x3C */ f32 sp3C;                            /* inferred */
     /* 0x40 */ f32 sp40;                            /* inferred */
     /* 0x44 */ f32 sp44;                            /* inferred */
 };                                                  /* size = 0x48 */
@@ -1733,12 +1733,12 @@ loop_10:
                     temp_v1 = &sp68->ambientColor[phi_s1_2];
                     sp64 = temp_v1;
                     sp6C = temp_v0_4;
-                    sp90 = func_800F6EA4((f32) (phi_s0_2->unk_22 + temp_v0_4->unk_6), (f32) (phi_s0_2->unk_6 + temp_v1->unk_6), temp_f0);
+                    sp90 = func_800F6EA4((f32) (phi_s0_2->unk_22 + temp_v0_4[6]), (f32) (phi_s0_2->unk_6 + temp_v1[6]), temp_f0);
                     temp_v1_2 = &sp60->ambientColor[phi_s1_2];
                     temp_a0_2 = &sp58->ambientColor[phi_s1_2];
                     sp54 = temp_a0_2;
                     sp5C = temp_v1_2;
-                    temp_v0_5 = func_800F6EA4((f32) (phi_s0_2->unk_5A + temp_v1_2->unk_6), (f32) (phi_s0_2->unk_3E + temp_a0_2->unk_6), (bitwise f32) temp_a0_2, temp_f0);
+                    temp_v0_5 = func_800F6EA4((f32) (phi_s0_2->unk_5A + temp_v1_2[6]), (f32) (phi_s0_2->unk_3E + temp_a0_2[6]), (bitwise f32) temp_a0_2, temp_f0);
                     temp_t7_2 = temp_v0_5 & 0xFF;
                     sp91 = temp_v0_5;
                     temp_f16_2 = (f32) sp90;
@@ -1747,8 +1747,8 @@ loop_10:
                         phi_f16 = temp_f16_2 + 4294967296.0f;
                     }
                     phi_s2_2->unk_C4.diffuseColor1[0] = (u8) (u32) (phi_f16 + ((f32) (temp_t7_2 - sp90) * phi_f26));
-                    sp90 = func_800F6EA4((f32) (phi_s0_2->unk_28 + sp6C->unk_C), (f32) (phi_s0_2->unk_C + sp64->unk_C), temp_f0);
-                    temp_v0_6 = func_800F6EA4((f32) (phi_s0_2->unk_60 + sp5C->unk_C), (f32) (phi_s0_2->unk_44 + sp54->unk_C), temp_f0);
+                    sp90 = func_800F6EA4((f32) (phi_s0_2->unk_28 + sp6C[12]), (f32) (phi_s0_2->unk_C + sp64[12]), temp_f0);
+                    temp_v0_6 = func_800F6EA4((f32) (phi_s0_2->unk_60 + sp5C[12]), (f32) (phi_s0_2->unk_44 + sp54[12]), temp_f0);
                     temp_s1_3 = phi_s1_2 + 1;
                     temp_f18 = (f32) ((temp_v0_6 & 0xFF) - sp90);
                     sp91 = temp_v0_6;
@@ -1766,8 +1766,8 @@ loop_10:
                 phi_s0_3 = &spA4;
                 phi_s2_3 = envCtx;
                 do {
-                    sp90 = func_800F6EA4((f32) (phi_s0_3->unk_2E + sp70->ambientColor[phi_s1_3].unk_F), (f32) (phi_s0_3->unk_12 + sp68->ambientColor[phi_s1_3].unk_F), temp_f0);
-                    temp_v0_7 = func_800F6EA4((f32) (phi_s0_3->unk_66 + sp60->ambientColor[phi_s1_3].unk_F), (f32) (phi_s0_3->unk_4A + sp58->ambientColor[phi_s1_3].unk_F), temp_f0);
+                    sp90 = func_800F6EA4((f32) (phi_s0_3->unk_2E + (&sp70->ambientColor[phi_s1_3])[15]), (f32) (phi_s0_3->unk_12 + (&sp68->ambientColor[phi_s1_3])[15]), temp_f0);
+                    temp_v0_7 = func_800F6EA4((f32) (phi_s0_3->unk_66 + (&sp60->ambientColor[phi_s1_3])[15]), (f32) (phi_s0_3->unk_4A + (&sp58->ambientColor[phi_s1_3])[15]), temp_f0);
                     temp_s1_4 = phi_s1_3 + 1;
                     temp_f18_2 = (f32) ((temp_v0_7 & 0xFF) - sp90);
                     sp91 = temp_v0_7;
@@ -1819,12 +1819,12 @@ loop_10:
                 do {
                     temp_v1_4 = phi_v1_3 + 1;
                     temp_v1_4->unk_C3 = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2];
-                    temp_v1_4->unk_C4.ambientColor[2] = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2].unk_3;
-                    temp_v1_4->unk_C4.diffuseDir1[2] = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2].unk_6;
-                    temp_v1_4->unk_C4.diffuseColor1[2] = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2].unk_9;
-                    temp_v1_4->unk_C4.diffusePos2[2] = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2].unk_C;
+                    temp_v1_4->unk_C4.ambientColor[2] = (s8) (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2])[3];
+                    temp_v1_4->unk_C4.diffuseDir1[2] = (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2])[6];
+                    temp_v1_4->unk_C4.diffuseColor1[2] = (s8) (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2])[9];
+                    temp_v1_4->unk_C4.diffusePos2[2] = (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2])[12];
                     temp_v0_10 = phi_v0_2 + 1;
-                    temp_v1_4->unk_C4.diffuseColor[2] = temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2].unk_F;
+                    temp_v1_4->unk_C4.diffuseColor[2] = (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_2])[15];
                     phi_v0_2 = temp_v0_10;
                     phi_v1_3 = temp_v1_4;
                 } while (temp_v0_10 != 3);
@@ -1862,25 +1862,25 @@ loop_10:
                         phi_f10_2 = temp_f10_2 + 4294967296.0f;
                     }
                     phi_v1_4->unk_C4.ambientColor[0] = (u8) (u32) (phi_f10_2 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4] - temp_a0_4) * envCtx->unk_DC));
-                    temp_a1_3 = temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4].unk_3;
-                    phi_v1_4->unk_C4.diffuseDir1[0] = (s8) (s32) ((f32) temp_a1_3 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4].unk_3 - temp_a1_3) * envCtx->unk_DC));
-                    temp_a0_5 = temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4].unk_6;
+                    temp_a1_3 = (s8) (&temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4])[3];
+                    phi_v1_4->unk_C4.diffuseDir1[0] = (s8) (s32) ((f32) temp_a1_3 + ((f32) ((s8) (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4])[3] - temp_a1_3) * envCtx->unk_DC));
+                    temp_a0_5 = (&temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4])[6];
                     temp_f8_2 = (f32) temp_a0_5;
                     phi_f8 = temp_f8_2;
                     if ((s32) temp_a0_5 < 0) {
                         phi_f8 = temp_f8_2 + 4294967296.0f;
                     }
-                    phi_v1_4->unk_C4.diffuseColor1[0] = (u8) (u32) (phi_f8 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4].unk_6 - temp_a0_5) * envCtx->unk_DC));
-                    temp_a1_4 = temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4].unk_9;
-                    phi_v1_4->unk_C4.diffusePos2[0] = (s8) (s32) ((f32) temp_a1_4 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4].unk_9 - temp_a1_4) * envCtx->unk_DC));
-                    temp_a0_6 = temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4].unk_C;
+                    phi_v1_4->unk_C4.diffuseColor1[0] = (u8) (u32) (phi_f8 + ((f32) ((&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4])[6] - temp_a0_5) * envCtx->unk_DC));
+                    temp_a1_4 = (s8) (&temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4])[9];
+                    phi_v1_4->unk_C4.diffusePos2[0] = (s8) (s32) ((f32) temp_a1_4 + ((f32) ((s8) (&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4])[9] - temp_a1_4) * envCtx->unk_DC));
+                    temp_a0_6 = (&temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4])[12];
                     temp_f10_3 = (f32) temp_a0_6;
                     phi_f10_3 = temp_f10_3;
                     if ((s32) temp_a0_6 < 0) {
                         phi_f10_3 = temp_f10_3 + 4294967296.0f;
                     }
-                    phi_v1_4->unk_C4.diffuseColor[0] = (u8) (u32) (phi_f10_3 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4].unk_C - temp_a0_6) * envCtx->unk_DC));
-                    temp_a1_5 = temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4].unk_F;
+                    phi_v1_4->unk_C4.diffuseColor[0] = (u8) (u32) (phi_f10_3 + ((f32) ((&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4])[12] - temp_a0_6) * envCtx->unk_DC));
+                    temp_a1_5 = (&temp_s4[envCtx->unk_C2].ambientColor[phi_v0_4])[15];
                     temp_v0_13 = phi_v0_4 + 1;
                     temp_f16_6 = (f32) temp_a1_5;
                     phi_v0_4 = temp_v0_13;
@@ -1889,7 +1889,7 @@ loop_10:
                         phi_f16_5 = temp_f16_6 + 4294967296.0f;
                     }
                     temp_v1_6 = phi_v1_4 + 1;
-                    temp_v1_6->unk_C4.diffuseColor[2] = (u8) (u32) (phi_f16_5 + ((f32) (temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4].unk_F - temp_a1_5) * envCtx->unk_DC));
+                    temp_v1_6->unk_C4.diffuseColor[2] = (u8) (u32) (phi_f16_5 + ((f32) ((&temp_s4[envCtx->unk_C1].ambientColor[phi_v0_4])[15] - temp_a1_5) * envCtx->unk_DC));
                     phi_v1_4 = temp_v1_6;
                 } while (temp_v0_13 != 3);
                 temp_f0_3 = envCtx->unk_DC;
@@ -2307,7 +2307,7 @@ block_14:
             sp44 = arg0->state.gfxCtx;
             func_8012C148(arg0->state.gfxCtx);
             temp_v0_2 = arg0->state.gfxCtx->polyOpa.p;
-            arg0->state.gfxCtx->polyOpa.p = temp_v0_2 + 8;
+            arg0->state.gfxCtx->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_2->words.w1 = (u32) &D_0407AB70;
         }
@@ -2507,10 +2507,10 @@ void func_800F9824(GlobalContext *globalCtx, EnvironmentContext *envCtx, View *v
                 Math_SmoothStepToF(sp5C, 0.0f, 0.5f, 0.05f, 0.001f);
             }
             temp_a0 = gfxCtx->polyXlu.p;
-            gfxCtx->polyXlu.p = temp_a0 + 8;
+            gfxCtx->polyXlu.p = &temp_a0[1];
             gfxCtx->polyXlu.p = func_8012C7FC(temp_a0);
             temp_v1 = gfxCtx->polyXlu.p;
-            gfxCtx->polyXlu.p = temp_v1 + 8;
+            gfxCtx->polyXlu.p = &temp_v1[1];
             temp_v0 = (phi_s2 * 3) + &D_801BE874;
             temp_v1->words.w0 = 0xFA000000;
             temp_v1->words.w1 = (temp_v0->unk_2 << 8) | (temp_v0->unk_0 << 0x18) | (temp_v0->unk_1 << 0x10) | ((u32) (phi_f20_2 * envCtx->unk_88) & 0xFF);
@@ -2518,23 +2518,23 @@ void func_800F9824(GlobalContext *globalCtx, EnvironmentContext *envCtx, View *v
             temp_s2 = phi_s2 + 1;
             if (temp_v0_2 != 0) {
                 temp_a0_2 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_2 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_2[1];
                 temp_a0_2->words.w1 = (u32) temp_v0_2;
                 temp_a0_2->words.w0 = 0xDA380003;
                 temp_a0_3 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_3 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_3[1];
                 temp_a0_3->words.w0 = 0xFCFF97FF;
                 temp_a0_3->words.w1 = 0xFF2DFEFF;
                 temp_a0_4 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_4 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_4[1];
                 temp_a0_4->words.w1 = 0x30;
                 temp_a0_4->words.w0 = 0xE3001A01;
                 temp_a0_5 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_5 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_5[1];
                 temp_a0_5->words.w1 = 0xC0;
                 temp_a0_5->words.w0 = 0xE3001801;
                 temp_a0_6 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_6 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_6[1];
                 temp_a0_6->words.w1 = (u32) &D_01000000;
                 temp_a0_6->words.w0 = 0xDA380001;
                 temp_v0_3 = *(&D_801BE8E4 + temp_s1);
@@ -2543,13 +2543,13 @@ void func_800F9824(GlobalContext *globalCtx, EnvironmentContext *envCtx, View *v
 
                     } else {
                         temp_a0_7 = gfxCtx->polyXlu.p;
-                        gfxCtx->polyXlu.p = temp_a0_7 + 8;
+                        gfxCtx->polyXlu.p = &temp_a0_7[1];
                         temp_a0_7->words.w1 = (u32) &D_040549A8;
                         temp_a0_7->words.w0 = 0xDE000000;
                     }
                 } else {
                     temp_a0_8 = gfxCtx->polyXlu.p;
-                    gfxCtx->polyXlu.p = temp_a0_8 + 8;
+                    gfxCtx->polyXlu.p = &temp_a0_8[1];
                     temp_a0_8->words.w1 = (u32) &D_04054940;
                     temp_a0_8->words.w0 = 0xDE000000;
                 }
@@ -2575,11 +2575,11 @@ void func_800F9824(GlobalContext *globalCtx, EnvironmentContext *envCtx, View *v
                     phi_f0 = 1.0f;
                 }
                 temp_a0_9 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_9 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_9[1];
                 temp_a0_9->words.w1 = 0x30;
                 temp_a0_9->words.w0 = 0xE3001A01;
                 temp_a0_10 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_10 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_10[1];
                 temp_a0_10->words.w1 = 0xC0;
                 temp_a0_10->words.w0 = 0xE3001801;
                 if ((bitwise s32) sp60 == 0) {
@@ -2593,11 +2593,11 @@ void func_800F9824(GlobalContext *globalCtx, EnvironmentContext *envCtx, View *v
                     spBC = 0.0f;
                 }
                 temp_v0_4 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_v0_4 + 8;
+                gfxCtx->polyXlu.p = &temp_v0_4[1];
                 temp_v0_4->words.w0 = 0xFA000000;
                 temp_v0_4->words.w1 = ((((u32) (spBC * 75.0f) + 0xB4) & 0xFF) << 0x10) | 0xFF000000 | ((((u32) (spBC * 155.0f) + 0x64) & 0xFF) << 8) | ((u32) envCtx->unk_84 & 0xFF);
                 temp_a0_11 = gfxCtx->polyXlu.p;
-                gfxCtx->polyXlu.p = temp_a0_11 + 8;
+                gfxCtx->polyXlu.p = &temp_a0_11[1];
                 temp_a0_11->words.w1 = (u32) &D_0E0002C8;
                 temp_a0_11->words.w0 = 0xDE000000;
                 return;
@@ -2673,9 +2673,9 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
     f32 phi_f2;
     f32 phi_f2_2;
 
-    sp114 = arg0->unk_1CCC;
+    sp114 = arg0[44].frames;
     if (arg0->unk_170FA != 0) {
-        temp_v0 = arg0->unk_170F7;
+        temp_v0 = arg0[575].running;
         phi_v0 = temp_v0;
         phi_s6 = (s32) temp_v0;
     } else {
@@ -2690,7 +2690,7 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
             }
             phi_f0 = phi_f2;
         }
-        temp_t8 = arg0->unk_170F7;
+        temp_t8 = arg0[575].running;
         temp_f6 = (f32) temp_t8;
         phi_f6 = temp_f6;
         if ((s32) temp_t8 < 0) {
@@ -2744,7 +2744,7 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
     temp_s3 = &spD4;
     temp_a1 = temp_s3;
     spD4 = (f32) arg0->unk_170B0 * phi_f0_2;
-    spD8 = (f32) arg0->unk_170B2 + 100.0f;
+    spD8 = (f32) (s16) arg0[575].input[2].rel.button + 100.0f;
     spDC = (f32) arg0->unk_170B4 * phi_f0_2;
     spC6 = 0x4000 - Math_Vec3f_Pitch(&D_801D15B0, (Vec3f *) temp_a1);
     temp_s3_2 = Math_Vec3f_Yaw(&D_801D15B0, (Vec3f *) temp_s3) + 0x8000;
@@ -2758,7 +2758,7 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
             temp_f20_2 = Rand_ZeroOne();
             SysMatrix_InsertTranslation(((temp_f22_2 - 0.7f) * 100.0f) + spF0, ((temp_f20_2 - 0.7f) * 100.0f) + spEC, ((Rand_ZeroOne() - 0.7f) * 100.0f) + spE8, 0);
             temp_v0_5 = arg2->polyXlu.p;
-            arg2->polyXlu.p = temp_v0_5 + 8;
+            arg2->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDA380001;
             temp_v0_5->words.w1 = (u32) sp84;
             temp_s0 = (s32) (phi_s2 << 0x15) >> 0x10;
@@ -2766,12 +2766,12 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
             SysMatrix_InsertXRotation_s((s16) (spC6 + temp_s0), 1);
             Matrix_Scale(0.3f, 1.0f, 0.3f, 1);
             temp_v0_6 = arg2->polyXlu.p;
-            arg2->polyXlu.p = temp_v0_6 + 8;
+            arg2->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(arg2);
             temp_v0_7 = arg2->polyXlu.p;
             temp_s2 = phi_s2 + 1;
-            arg2->polyXlu.p = temp_v0_7 + 8;
+            arg2->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xDE000000;
             temp_v0_7->words.w1 = (u32) sp78;
             phi_s2 = temp_s2;
@@ -2784,11 +2784,11 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
             if (phi_s3 == 0) {
                 func_8012C2DC(arg2);
                 temp_v0_8 = arg2->polyXlu.p;
-                arg2->polyXlu.p = temp_v0_8 + 8;
+                arg2->polyXlu.p = &temp_v0_8[1];
                 temp_v0_8->words.w1 = -1;
                 temp_v0_8->words.w0 = 0xFB000000;
                 temp_v0_9 = arg2->polyXlu.p;
-                arg2->polyXlu.p = temp_v0_9 + 8;
+                arg2->polyXlu.p = &temp_v0_9[1];
                 temp_v0_9->words.w1 = -0x9C;
                 temp_v0_9->words.w0 = 0xFA000000;
                 phi_s3 = (phi_s3 + 1) & 0xFF;
@@ -2798,12 +2798,12 @@ void func_800FA3C4(GameState *arg0, GameState *arg1, GraphicsContext *arg2) {
             temp_f12_2 = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
             temp_v0_10 = arg2->polyXlu.p;
-            arg2->polyXlu.p = temp_v0_10 + 8;
+            arg2->polyXlu.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0xDA380003;
             temp_v0_10->words.w1 = Matrix_NewMtx(arg2);
             temp_v0_11 = arg2->polyXlu.p;
             temp_s2_2 = phi_s2_2 + 1;
-            arg2->polyXlu.p = temp_v0_11 + 8;
+            arg2->polyXlu.p = &temp_v0_11[1];
             temp_v0_11->words.w0 = 0xDE000000;
             temp_v0_11->words.w1 = (u32) sp84;
             phi_s2_2 = temp_s2_2;
@@ -2921,7 +2921,7 @@ void func_800FAC20(GraphicsContext **arg0) {
         if (temp_v0_2 != 3) {
             temp_v1_2 = sp40->polyOpa.p;
             temp_f4 = 255.0f * phi_f0_2;
-            sp40->polyOpa.p = temp_v1_2 + 8;
+            sp40->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xFA000000;
             temp_f6 = (s32) temp_f4;
             if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
@@ -2940,7 +2940,7 @@ block_13:
             temp_v1_2->words.w1 = (arg0->unk_821 << 8) | (arg0->unk_81F << 0x18) | (arg0->unk_820 << 0x10) | (phi_t5 & 0xFF);
         } else {
             temp_v1_3 = sp40->polyOpa.p;
-            sp40->polyOpa.p = temp_v1_3 + 8;
+            sp40->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xFA000000;
             temp_f16 = 255.0f * D_801F4E74;
             temp_f18 = (s32) temp_f16;
@@ -2960,7 +2960,7 @@ block_19:
             temp_v1_3->words.w1 = (((arg0->unk_821 + 0x10) & 0xFF) << 8) | ((arg0->unk_81F + 0x10) << 0x18) | (((arg0->unk_820 + 0x10) & 0xFF) << 0x10) | (phi_t6 & 0xFF);
         }
         temp_v0_3 = sp40->polyOpa.p;
-        sp40->polyOpa.p = temp_v0_3 + 8;
+        sp40->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDE000000;
         temp_v0_3->words.w1 = (u32) &D_0E0002C8;
     }
@@ -2971,11 +2971,11 @@ block_19:
         sp2C = temp_a0_2;
         func_8012C080(temp_a0_2);
         temp_a0_3 = sp2C->polyOpa.p;
-        sp2C->polyOpa.p = temp_a0_3 + 8;
+        sp2C->polyOpa.p = &temp_a0_3[1];
         temp_a0_3->words.w0 = 0xFA000000;
         temp_a0_3->words.w1 = arg0->unk_170F5 | (arg0->unk_170F2 << 0x18) | (arg0->unk_170F3 << 0x10) | (arg0->unk_170F4 << 8);
         temp_a0_4 = sp2C->polyOpa.p;
-        sp2C->polyOpa.p = temp_a0_4 + 8;
+        sp2C->polyOpa.p = &temp_a0_4[1];
         temp_a0_4->words.w0 = 0xDE000000;
         temp_a0_4->words.w1 = (u32) &D_0E0002C8;
     }
@@ -2991,11 +2991,11 @@ void func_800FAF74(GraphicsContext **arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4) {
     sp1C = temp_a0;
     func_8012C080(temp_a0);
     temp_v1 = sp1C->polyOpa.p;
-    sp1C->polyOpa.p = temp_v1 + 8;
+    sp1C->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xFA000000;
     temp_v1->words.w1 = (arg1 << 0x18) | (arg2 << 0x10) | (arg3 << 8) | arg4;
     temp_v1_2 = sp1C->polyOpa.p;
-    sp1C->polyOpa.p = temp_v1_2 + 8;
+    sp1C->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDE000000;
     temp_v1_2->words.w1 = (u32) &D_0E0002C8;
 }
@@ -3142,14 +3142,14 @@ block_12:
                 phi_v1 = temp_s0->unk_0;
             }
         } else {
-            temp_f14 = arg0->unk_E0;
-            temp_f2 = arg0->unk_EC - temp_f14;
-            temp_f12 = arg0->unk_F4 - arg0->unk_E8;
+            temp_f14 = arg0[56];
+            temp_f2 = arg0[59] - temp_f14;
+            temp_f12 = arg0[61] - arg0[58];
             temp_f0 = sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12));
             temp_f20 = temp_f12 / temp_f0;
             temp_s0->unk_10 = (f32) (temp_f14 + ((temp_f2 / temp_f0) * 9500.0f));
             temp_s0->unk_14 = (f32) ((Rand_ZeroOne() * 1000.0f) + 4000.0f);
-            temp_s0->unk_18 = (f32) (arg0->unk_E8 + (temp_f20 * 9500.0f));
+            temp_s0->unk_18 = (f32) (arg0[58] + (temp_f20 * 9500.0f));
             temp_f16 = (Rand_ZeroOne() - 0.5f) * 5000.0f;
             temp_s0->unk_8 = 0.0f;
             temp_s0->unk_4 = temp_f16;
@@ -3182,16 +3182,16 @@ block_12:
             temp_v0_4->words.w0 = 0xDA380003;
             temp_v0_4->words.w1 = Matrix_NewMtx(arg0->unk_0);
             temp_v0_5 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_5 + 8;
+            temp_s2->polyXlu.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDB060020;
             temp_v0_5->words.w1 = Lib_SegmentedToVirtual(*(&D_801BE90C + (temp_s0->unk_1E * 4)));
             func_8012C9BC(arg0->unk_0);
             temp_v0_6 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_6 + 8;
+            temp_s2->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w1 = (u32) &D_01000000;
             temp_v0_6->words.w0 = 0xDA380001;
             temp_v0_7 = temp_s2->polyXlu.p;
-            temp_s2->polyXlu.p = temp_v0_7 + 8;
+            temp_s2->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_0403F230;
             temp_v0_7->words.w0 = 0xDE000000;
         }
@@ -3359,23 +3359,23 @@ block_18:
 void func_800FBCBC(GlobalContext *arg0) {
     f32 sp44;
     f32 sp40;
-    ?32 sp3C;
-    ?32 *temp_t2;
-    ?32 *temp_t7;
+    f32 sp3C;
+    f32 *temp_t2;
+    f32 *temp_t7;
 
     if (D_801F4E32 != 0) {
         temp_t7 = &sp3C;
         sp3C = D_801F4E38.unk_0;
         sp40 = D_801F4E38.unk_4;
         sp44 = D_801F4E38.unk_8;
-        func_800F9824(arg0, arg0 + 0x17004, arg0 + 0xB8, arg0->state.gfxCtx, (Vec3f) temp_t7->unk_0, temp_t7->unk_4, temp_t7->unk_8, (s8) D_801F4E44, (s8) D_801F4E48, (s32) D_801F4E4C, 0);
+        func_800F9824(arg0, arg0 + 0x17004, arg0 + 0xB8, arg0->state.gfxCtx, (bitwise Vec3f) temp_t7->unk_0, temp_t7[1], temp_t7[2], (s8) D_801F4E44, (s8) D_801F4E48, (s32) D_801F4E4C, 0);
     }
     if (D_801F4E4E != 0) {
         temp_t2 = &sp3C;
         sp3C = D_801F4E50.unk_0;
         sp40 = D_801F4E50.unk_4;
         sp44 = D_801F4E50.unk_8;
-        func_800F9824(arg0, arg0 + 0x17004, arg0 + 0xB8, arg0->state.gfxCtx, (Vec3f) temp_t2->unk_0, temp_t2->unk_4, temp_t2->unk_8, (s8) D_801F4E5C, (s8) D_801F4E60, (s32) D_801F4E64, 0);
+        func_800F9824(arg0, arg0 + 0x17004, arg0 + 0xB8, arg0->state.gfxCtx, (bitwise Vec3f) temp_t2->unk_0, temp_t2[1], temp_t2[2], (s8) D_801F4E5C, (s8) D_801F4E60, (s32) D_801F4E64, 0);
     }
 }
 
@@ -3490,8 +3490,8 @@ void func_800FC158(GlobalContext *arg0) {
             temp_s0_4 = phi_s0 + 1;
             temp_s3 = phi_s3 + 2;
             temp_s3->unk_70A0 = 0;
-            phi_s1 += 2;
-            phi_s2 += 2;
+            phi_s1 = &phi_s1[1];
+            phi_s2 = &phi_s2[1];
             phi_s3 = temp_s3;
             phi_s0 = temp_s0_4;
         } while (temp_s0_4 != 3);
@@ -3560,19 +3560,19 @@ void func_800FC444(void *arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
             sp28 = (u32) arg5;
             arg0->unk_2B0 = func_8012BFC4(arg0->unk_2B0);
             temp_v0 = arg0->unk_2B0;
-            arg0->unk_2B0 = (Gfx *) (temp_v0 + 8);
+            arg0->unk_2B0 = &temp_v0[1];
             temp_v0->words.w0 = 0xFA000000;
             temp_v0->words.w1 = (arg1 << 0x18) | ((arg2 & 0xFF) << 0x10) | ((arg3 & 0xFF) << 8) | arg4;
             temp_v0_2 = arg0->unk_2B0;
-            arg0->unk_2B0 = (Gfx *) (temp_v0_2 + 8);
+            arg0->unk_2B0 = &temp_v0_2[1];
             temp_v0_2->words.w1 = 0x30;
             temp_v0_2->words.w0 = 0xE3001A01;
             temp_v0_3 = arg0->unk_2B0;
-            arg0->unk_2B0 = (Gfx *) (temp_v0_3 + 8);
+            arg0->unk_2B0 = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0xC0;
             temp_v0_3->words.w0 = 0xE3001801;
             temp_v0_4 = arg0->unk_2B0;
-            arg0->unk_2B0 = (Gfx *) (temp_v0_4 + 8);
+            arg0->unk_2B0 = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDE000000;
             temp_v0_4->words.w1 = (u32) &D_0E0002C8;
             phi_a2 = arg2;
@@ -3583,25 +3583,25 @@ void func_800FC444(void *arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
             sp24 = &D_0E0002C8;
             arg0->unk_2C0 = func_8012BFC4(arg0->unk_2C0);
             temp_v0_5 = arg0->unk_2C0;
-            arg0->unk_2C0 = (Gfx *) (temp_v0_5 + 8);
+            arg0->unk_2C0 = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xFA000000;
             temp_v0_5->words.w1 = sp28;
             if (arg4 == 0xFF) {
                 temp_v0_6 = arg0->unk_2C0;
-                arg0->unk_2C0 = (Gfx *) (temp_v0_6 + 8);
+                arg0->unk_2C0 = &temp_v0_6[1];
                 temp_v0_6->words.w0 = 0xE200001C;
                 temp_v0_6->words.w1 = 0xF0A4000;
             }
             temp_v0_7 = arg0->unk_2C0;
-            arg0->unk_2C0 = (Gfx *) (temp_v0_7 + 8);
+            arg0->unk_2C0 = &temp_v0_7[1];
             temp_v0_7->words.w1 = 0x30;
             temp_v0_7->words.w0 = 0xE3001A01;
             temp_v0_8 = arg0->unk_2C0;
-            arg0->unk_2C0 = (Gfx *) (temp_v0_8 + 8);
+            arg0->unk_2C0 = &temp_v0_8[1];
             temp_v0_8->words.w1 = 0xC0;
             temp_v0_8->words.w0 = 0xE3001801;
             temp_v0_9 = arg0->unk_2C0;
-            arg0->unk_2C0 = (Gfx *) (temp_v0_9 + 8);
+            arg0->unk_2C0 = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xDE000000;
             temp_v0_9->words.w1 = (u32) sp24;
         }
@@ -3972,34 +3972,34 @@ void func_800FC64C(void *arg0, s32 arg1) {
         sp64 = temp_v1_7;
         temp_v1_7->polyXlu.p = func_8012C3A4(temp_v1_7->polyXlu.p);
         temp_v0_7 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_7 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0x20;
         temp_v0_7->words.w0 = 0xE3001A01;
         temp_v0_8 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_8 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x80;
         temp_v0_8->words.w0 = 0xE3001801;
         temp_v0_9 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_9 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xFA000080;
         temp_v0_9->words.w1 = (phi_ra << 0x18) | (sp79 << 0x10) | (sp7A << 8) | sp3C->unk_70EF;
         temp_v0_10 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_10 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w0 = 0xFB000000;
         temp_v0_10->words.w1 = (temp_t2 << 0x18) | ((temp_t3 & 0xFF) << 0x10) | ((temp_t4 & 0xFF) << 8) | sp3C->unk_70F0;
         temp_v0_11 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_11 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_11[1];
         temp_v0_11->words.w0 = 0xDB060020;
         sp6C = phi_f14;
         sp64 = temp_v1_7;
         sp4C = temp_v0_11;
         sp4C->words.w1 = Gfx_TwoTexScroll(arg0->unk_0, 0, sp82 & 0xFFF, 0U, 0x200, 0x20, 1, sp80 & 0xFFF, 0xFFF - (sp7E & 0xFFF), 0x100, 0x40);
         temp_v0_12 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_12 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_12[1];
         temp_v0_12->words.w1 = 0;
         temp_v0_12->words.w0 = 0xE3001001;
         temp_v0_13 = temp_v1_7->polyXlu.p;
-        temp_v1_7->polyXlu.p = temp_v0_13 + 8;
+        temp_v1_7->polyXlu.p = &temp_v0_13[1];
         temp_v0_13->words.w0 = 0xDE000000;
         temp_v0_13->words.w1 = (u32) &D_050089D0;
     }
@@ -4486,7 +4486,7 @@ void func_800FE3E0(GlobalContext *arg0) {
         temp_v0_2->words.w1 = sp2C;
         func_800FDC94(arg0, &sp2C);
         temp_t0 = sp2C;
-        sp2C = temp_t0 + 8;
+        sp2C = &temp_t0[1];
         temp_t0->words.w1 = 0;
         temp_t0->words.w0 = 0xDF000000;
         Graph_BranchDlist(temp_a0, sp2C);
@@ -4657,7 +4657,7 @@ void func_800FE7A8(s32 arg0, void *arg1) {
         phi_f6 = temp_f6 + 4294967296.0f;
     }
     arg1->unk_0 = (u8) (s32) (((f32) temp_a0->unk_0 * sp24) + (temp_f0 * phi_f6));
-    temp_t8 = temp_a0->unk_1;
+    temp_t8 = temp_a0[1];
     temp_f6_2 = (f32) temp_t8;
     phi_f6_2 = temp_f6_2;
     if ((s32) temp_t8 < 0) {
@@ -4670,7 +4670,7 @@ void func_800FE7A8(s32 arg0, void *arg1) {
         phi_f4 = temp_f4 + 4294967296.0f;
     }
     arg1->unk_1 = (u8) (s32) ((phi_f6_2 * sp24) + (temp_f0 * phi_f4));
-    temp_t2 = temp_a0->unk_2;
+    temp_t2 = temp_a0[2];
     temp_f4_2 = (f32) temp_t2;
     phi_f4_2 = temp_f4_2;
     if ((s32) temp_t2 < 0) {
@@ -4683,7 +4683,7 @@ void func_800FE7A8(s32 arg0, void *arg1) {
         phi_f10 = temp_f10 + 4294967296.0f;
     }
     arg1->unk_2 = (u8) (s32) ((phi_f4_2 * sp24) + (temp_f0 * phi_f10));
-    temp_t6 = temp_a0->unk_3;
+    temp_t6 = temp_a0[3];
     temp_f10_2 = (f32) temp_t6;
     phi_f10_2 = temp_f10_2;
     if ((s32) temp_t6 < 0) {

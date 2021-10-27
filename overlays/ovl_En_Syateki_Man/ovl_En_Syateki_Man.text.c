@@ -397,7 +397,7 @@ void func_809C6A04(Actor *arg0, GlobalContext *arg1) {
             arg1->msgCtx.unk12023 = 4;
             arg0->unk_26A = 7;
             sp24->unk_A6C = (s32) (sp24->unk_A6C | 0x20);
-            arg0->unk_188 = func_809C7FFC;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C7FFC;
             return;
         }
         arg1 = arg1;
@@ -459,7 +459,7 @@ void func_809C6C2C(Actor *arg0, GlobalContext *arg1) {
             arg1->interfaceCtx.hbaAmmo = 0x50;
             func_80123F2C(arg1, 0x50);
             arg0->unk_26A = 1;
-            arg0->unk_188 = func_809C80C0;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C80C0;
             func_801A2BB8(0x25);
             return;
         case 2610:
@@ -470,7 +470,7 @@ void func_809C6C2C(Actor *arg0, GlobalContext *arg1) {
                 temp_t0 = gSaveContext.weekEventReg[63] & 0xFE;
                 gSaveContext.weekEventReg[63] = temp_t0;
                 gSaveContext.weekEventReg[63] = temp_t0 & 0xFD;
-                arg0->unk_188 = func_809C6848;
+                arg0[1].focus.pos.z = (bitwise f32) func_809C6848;
                 gSaveContext.minigameState = 3;
                 arg0->unk_26A = 0;
                 return;
@@ -489,7 +489,7 @@ void func_809C6C2C(Actor *arg0, GlobalContext *arg1) {
             temp_v1->freezeTimer = 0;
             gSaveContext.minigameState = 3;
             temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C | 0x20);
-            arg0->unk_188 = func_809C7A90;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C7A90;
             func_809C7A90((EnSyatekiMan *) arg0, temp_a3_2);
             /* Duplicate return node #10. Try simplifying control flow for better match */
             return;
@@ -751,7 +751,7 @@ void func_809C7380(Actor *arg0, GlobalContext *arg1) {
                     arg0->unk_284 = 0x3FC;
                 }
                 if (arg0->unk_26A == 4) {
-                    sp24->unk_A74 = (s32) (sp24->unk_A74 & ~0x400);
+                    sp24[8].targetArrowOffset &= -0x401;
                     gSaveContext.minigameState = 3;
                 }
                 arg0->unk_26A = 3;
@@ -785,7 +785,7 @@ void func_809C7380(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_284 = 0x3F8;
         }
         if (arg0->unk_26A == 4) {
-            sp24->unk_A74 = (s32) (sp24->unk_A74 & ~0x400);
+            sp24[8].targetArrowOffset &= -0x401;
             gSaveContext.minigameState = 3;
         }
         arg0->unk_26A = 3;
@@ -858,7 +858,7 @@ void func_809C7620(Actor *arg0, GlobalContext *arg1) {
             temp_t3 = gSaveContext.weekEventReg[63] | 1;
             gSaveContext.weekEventReg[63] = temp_t3;
             gSaveContext.weekEventReg[63] = temp_t3 & 0xFD;
-            arg0->unk_188 = func_809C8710;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C8710;
             return;
         case 1022:
         case 1024:
@@ -871,7 +871,7 @@ void func_809C7620(Actor *arg0, GlobalContext *arg1) {
             func_80123F2C(arg1, 0x63);
             arg0->unk_26A = 1;
             func_801A2BB8(0x25);
-            arg0->unk_188 = func_809C8808;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C8808;
             return;
         case 1025:
             if ((gSaveContext.weekEventReg[63] & 2) != 0) {
@@ -880,7 +880,7 @@ void func_809C7620(Actor *arg0, GlobalContext *arg1) {
                 gSaveContext.weekEventReg[63] = temp_t4;
                 gSaveContext.weekEventReg[63] = temp_t4 & 0xFD;
                 arg0->unk_26A = 0;
-                arg0->unk_188 = func_809C72D8;
+                arg0[1].focus.pos.z = (bitwise f32) func_809C72D8;
                 return;
             }
             func_801518B0(temp_a3_2, 0x402U, arg0);
@@ -893,7 +893,7 @@ void func_809C7620(Actor *arg0, GlobalContext *arg1) {
                 gSaveContext.weekEventReg[63] = temp_t2;
                 gSaveContext.weekEventReg[63] = temp_t2 & 0xFD;
                 arg0->unk_26A = 0;
-                arg0->unk_188 = func_809C72D8;
+                arg0[1].focus.pos.z = (bitwise f32) func_809C72D8;
                 return;
             }
             func_801518B0(temp_a3_2, 0x404U, arg0);
@@ -912,7 +912,7 @@ void func_809C7620(Actor *arg0, GlobalContext *arg1) {
             temp_a3_2->msgCtx.unk12023 = 4;
             temp_v1->freezeTimer = 0;
             gSaveContext.minigameState = 3;
-            arg0->unk_188 = func_809C7D14;
+            arg0[1].focus.pos.z = (bitwise f32) func_809C7D14;
             func_809C7D14((EnSyatekiMan *) arg0, temp_a3_2);
             /* Duplicate return node #23. Try simplifying control flow for better match */
             return;
@@ -1598,11 +1598,11 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec
     }
     if (arg1 == 0xF) {
         SysMatrix_InsertTranslation(3000.0f, 0.0f, 0.0f, 1);
-        SysMatrix_InsertZRotation_s(arg5->unk_258, 1);
-        SysMatrix_InsertXRotation_s(arg5->unk_25A, 1);
+        SysMatrix_InsertZRotation_s(arg5[100].x, 1);
+        SysMatrix_InsertXRotation_s(arg5[100].y, 1);
         SysMatrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, 1);
     } else if (arg1 == 8) {
-        SysMatrix_InsertXRotation_s((s16) ((s32) arg5->unk_260 * -1), 1);
+        SysMatrix_InsertXRotation_s((s16) ((s32) arg5[101].y * -1), 1);
     }
     return 0;
 }
@@ -1643,13 +1643,13 @@ void EnSyatekiMan_Draw(Actor *this, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C5B0(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp3C = sp3C;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_809C94B8 + (self->unk_264 * 4)));
     temp_v0_2 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0_2 + 8;
+    sp3C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp30 = temp_v0_2;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_809C94B8 + (self->unk_264 * 4)));

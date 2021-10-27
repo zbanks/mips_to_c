@@ -1,5 +1,70 @@
 CRASHED
 
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ char pad_3A[0x2];                   /* maybe part of unk39[3]? */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ s8 unk_52;                          /* inferred */
+    /* 0x053 */ u8 unk_53;                          /* inferred */
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
 typedef struct EnKusa {
     /* 0x000 */ Actor actor;
     /* 0x144 */ void (*actionFunc)(EnKusa *, GlobalContext *);
@@ -264,7 +329,7 @@ void func_809349E0(f32 *arg0) {
             phi_v1->mf[0][0] = phi_f18 + phi_a0->unk_0;
             temp_a0 = phi_a0 + 0x10;
             temp_v1 = phi_v1 + 0x10;
-            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0->unk_4);
+            temp_v1->unk_-C = (f32) (phi_v1->mf[0][1] + phi_a0[1]);
             temp_v1->unk_-8 = (f32) (phi_v1->mf[0][2] + temp_a0->unk_-8);
             temp_v1->unk_-4 = (f32) (phi_v1->mf[0][3] + temp_a0->unk_-4);
             phi_f18 = temp_f18_2;
@@ -975,7 +1040,7 @@ void func_80936414(Actor *this, GlobalContext *globalCtx) {
     if ((temp_f0 <= 1200.0f) || (((this->unk_198 & 1) != 0) && (temp_f0 < 1300.0f))) {
         if ((temp_a3->roomCtx.currRoom.unk3 == 0) && (func_809359AC == this->unk_144) && (temp_f0 > -150.0f) && (temp_f0 < 400.0f)) {
             globalCtx = temp_a3;
-            func_809349E0((this->unk_196 << 6) + &D_80936AD8, this, temp_a3);
+            func_809349E0((this[1].unk_52 << 6) + &D_80936AD8, this, temp_a3);
             phi_a3 = globalCtx;
         }
         func_800BDFC0(phi_a3, (Gfx *) &D_050078A0);
@@ -988,17 +1053,17 @@ void func_80936414(Actor *this, GlobalContext *globalCtx) {
         sp24 = (s32) ((1300.0f - temp_f0) * 2.55f);
         func_8012C2DC(temp_a0);
         temp_v0 = sp20->polyXlu.p;
-        sp20->polyXlu.p = temp_v0 + 8;
+        sp20->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp20 = sp20;
         sp18 = temp_v0;
         sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = sp20->polyXlu.p;
-        sp20->polyXlu.p = temp_v0_2 + 8;
+        sp20->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA000000;
         temp_v0_2->words.w1 = (sp24 & 0xFF) | ~0xFF;
         temp_v0_3 = sp20->polyXlu.p;
-        sp20->polyXlu.p = temp_v0_3 + 8;
+        sp20->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_05007938;
         temp_v0_3->words.w0 = 0xDE000000;
     }
@@ -1011,7 +1076,7 @@ void func_809365CC(Actor *this, GlobalContext *globalCtx) {
 
     temp_a3 = globalCtx;
     phi_a3 = temp_a3;
-    if (this->unk_197 != 0) {
+    if (this[1].unk_53 != 0) {
         func_800BDFC0(temp_a3, &D_060002E0);
         return;
     }
@@ -1019,7 +1084,7 @@ void func_809365CC(Actor *this, GlobalContext *globalCtx) {
         temp_f0 = this->projectedPos.z;
         if ((temp_f0 > -150.0f) && (temp_f0 < 400.0f)) {
             globalCtx = temp_a3;
-            func_809349E0((this->unk_196 << 6) + &D_80936AD8, this, temp_a3);
+            func_809349E0((this[1].unk_52 << 6) + &D_80936AD8, this, temp_a3);
             phi_a3 = globalCtx;
         }
     }

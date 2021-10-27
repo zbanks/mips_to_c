@@ -213,8 +213,8 @@ s32 func_80B83C80(Vec3f *arg0, f32 *arg1) {
     }
     temp_f2 = 1.0f / sqrtf(temp_f0);
     arg1->unk_0 = arg0->x * temp_f2;
-    arg1->unk_4 = (f32) (arg0->y * temp_f2);
-    arg1->unk_8 = (f32) (arg0->z * temp_f2);
+    arg1[1] = arg0->y * temp_f2;
+    arg1[2] = arg0->z * temp_f2;
     return 1;
 }
 
@@ -493,11 +493,11 @@ void func_80B84568(Actor *arg0, GlobalContext *arg1) {
         if (sp30 < sp34) {
             goto block_4;
         }
-        arg0->unk_198 = sp30;
+        arg0[1].targetArrowOffset = sp30;
         return;
     }
 block_4:
-    arg0->unk_198 = sp34;
+    arg0[1].targetArrowOffset = sp34;
 }
 
 void func_80B84610(BgDblueWaterfall *arg0, GlobalContext *arg1) {
@@ -533,7 +533,7 @@ block_9:
     temp_s1->world.pos.x += sp34;
     temp_s1->world.pos.z += sp3C;
     temp_s1->unk_B80 = 8.0f;
-    temp_s1->unk_B84 = (s16) arg0->actor.yawTowardsPlayer;
+    temp_s1[9].unk20 = arg0->actor.yawTowardsPlayer;
 }
 
 void BgDblueWaterfall_Init(Actor *thisx, GlobalContext *globalCtx) {
@@ -865,7 +865,7 @@ void BgDblueWaterfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp44 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = sp44->polyXlu.p;
-    sp44->polyXlu.p = temp_v0 + 8;
+    sp44->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     this = this;
     sp44 = sp44;
@@ -884,11 +884,11 @@ void BgDblueWaterfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp44 = sp44;
         AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) temp_a1);
         temp_v0_3 = sp44->polyXlu.p;
-        sp44->polyXlu.p = temp_v0_3 + 8;
+        sp44->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFA00008A;
         temp_v0_3->words.w1 = (sp38 & 0xFF) | ~0xFF;
         temp_v0_4 = sp44->polyXlu.p;
-        sp44->polyXlu.p = temp_v0_4 + 8;
+        sp44->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) &D_0600B280;
         temp_v0_4->words.w0 = 0xDE000000;
     }
@@ -917,22 +917,22 @@ void BgDblueWaterfall_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp44 = sp44;
             func_8012C28C(globalCtx->state.gfxCtx);
             temp_v0_9 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v0_9 + 8;
+            sp44->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xDB060024;
             temp_v0_9->words.w1 = (u32) D_801AEFA0;
             temp_v0_10 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v0_10 + 8;
+            sp44->polyOpa.p = &temp_v0_10[1];
             temp_v0_10->words.w1 = -1;
             temp_v0_10->words.w0 = 0xFA00009B;
             temp_v0_11 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v0_11 + 8;
+            sp44->polyOpa.p = &temp_v0_11[1];
             temp_v0_11->words.w0 = 0xDA380003;
             this = this;
             sp44 = sp44;
             sp18 = temp_v0_11;
             sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_12 = sp44->polyOpa.p;
-            sp44->polyOpa.p = temp_v0_12 + 8;
+            sp44->polyOpa.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = (u32) &D_06003358;
             temp_v0_12->words.w0 = 0xDE000000;
             phi_a3 = this;

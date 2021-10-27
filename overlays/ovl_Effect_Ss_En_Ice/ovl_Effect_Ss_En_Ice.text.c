@@ -127,23 +127,23 @@ block_6:
     Matrix_RotateY(this->regs[1], 1U);
     SysMatrix_InsertXRotation_s(this->regs[2], 1);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp48 = temp_v0_2;
     sp48->words.w1 = Matrix_NewMtx(temp_s1);
     func_8012C2DC(globalCtx->state.gfxCtx);
     func_800BCC68((Vec3f *) this, globalCtx);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060020;
     sp44 = temp_v0_3;
     sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, sp58 & 0xFF, 0x20, 0x10, 1, 0U, (sp58 * 2) & 0xFF, 0x40, 0x20);
     temp_v0_4 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_4 + 8;
+    temp_s1->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xFA000080;
     temp_v0_4->words.w1 = (this->regs[7] & 0xFF) | (this->regs[4] << 0x18) | ((this->regs[5] & 0xFF) << 0x10) | ((this->regs[6] & 0xFF) << 8);
     temp_v1_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v1_2 + 8;
+    temp_s1->polyXlu.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xFB000000;
     temp_f16 = (s32) sp54;
     if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
@@ -161,11 +161,11 @@ block_10:
     }
     temp_v1_2->words.w1 = ((this->regs[10] & 0xFF) << 8) | (this->regs[8] << 0x18) | ((this->regs[9] & 0xFF) << 0x10) | (phi_t8 & 0xFF);
     temp_v0_5 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_5 + 8;
+    temp_s1->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = (u32) &D_04050648;
     temp_v0_5->words.w0 = 0xDE000000;
     temp_v0_6 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_6 + 8;
+    temp_s1->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = (u32) &D_040506E0;
     temp_v0_6->words.w0 = 0xDE000000;
 }

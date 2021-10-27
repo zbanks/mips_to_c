@@ -664,8 +664,8 @@ void func_80BA0374(EnZob *this, GlobalContext *globalCtx) {
             case 4615:
                 func_801477B4(temp_a3);
                 this->actionFunc = func_80BA0318;
-                sp2C->unk_A90 = this;
-                sp2C->unk_A74 = (s32) (sp2C->unk_A74 | 0x20);
+                sp2C[8].speedXZ = (bitwise f32) this;
+                sp2C[8].targetArrowOffset = (bitwise f32) ((bitwise s32) sp2C[8].targetArrowOffset | 0x20);
                 /* Duplicate return node #20. Try simplifying control flow for better match */
                 return;
             }

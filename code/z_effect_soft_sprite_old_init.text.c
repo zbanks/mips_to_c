@@ -857,33 +857,33 @@ void EffectSs_DrawGEffect(GlobalContext *globalCtx, EffectSs *this, void *textur
     SkinMatrix_SetScale((MtxF *) &spD0, temp_f0, temp_f0, temp_f0);
     SkinMatrix_MtxFMtxFMult((MtxF *) &sp110, &globalCtx->mf_187FC, (MtxF *) &sp50);
     SkinMatrix_MtxFMtxFMult((MtxF *) &sp50, (MtxF *) &spD0, (MtxF *) &sp90);
-    *(gSegments + 0x18) = (u32) (sp44 + 0x80000000);
+    gSegments[6] = (u32) (sp44 + 0x80000000);
     temp_v1 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v1 + 8;
+    temp_s0->polyXlu.p = &temp_v1[1];
     temp_v1->words.w1 = (u32) sp44;
     temp_v1->words.w0 = 0xDB060018;
     temp_v0 = SkinMatrix_MtxFToNewMtx(temp_s0, (MtxF *) &sp90);
     if (temp_v0 != 0) {
         temp_v1_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_2 + 8;
+        temp_s0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = (u32) temp_v0;
         temp_v1_2->words.w0 = 0xDA380003;
         temp_v1_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_3 + 8;
+        temp_s0->polyXlu.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xDB060020;
         sp30 = temp_v1_3;
         sp30->words.w1 = Lib_SegmentedToVirtual(texture);
         func_8012C9BC(temp_s0);
         temp_v1_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_4 + 8;
+        temp_s0->polyXlu.p = &temp_v1_4[1];
         temp_v1_4->words.w0 = 0xFA000000;
         temp_v1_4->words.w1 = (this->regs[6] & 0xFF) | (this->regs[3] << 0x18) | ((this->regs[4] & 0xFF) << 0x10) | ((this->regs[5] & 0xFF) << 8);
         temp_v1_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_5 + 8;
+        temp_s0->polyXlu.p = &temp_v1_5[1];
         temp_v1_5->words.w0 = 0xFB000000;
         temp_v1_5->words.w1 = (this->regs[10] & 0xFF) | (this->regs[7] << 0x18) | ((this->regs[8] & 0xFF) << 0x10) | ((this->regs[9] & 0xFF) << 8);
         temp_v1_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v1_6 + 8;
+        temp_s0->polyXlu.p = &temp_v1_6[1];
         temp_v1_6->words.w0 = 0xDE000000;
         temp_v1_6->words.w1 = (u32) this->gfx;
     }
@@ -1652,8 +1652,8 @@ void EffectSsIcePiece_SpawnBurst(GlobalContext *arg0, void *arg1, f32 arg2) {
     phi_s0 = &D_801AE404;
     do {
         temp_s1->unk_0 = arg1->unk_0;
-        temp_s1->unk_4 = (s32) arg1->unk_4;
-        temp_s1->unk_8 = (s32) arg1->unk_8;
+        temp_s1[1] = arg1->unk_4;
+        temp_s1[2] = arg1->unk_8;
         temp_f14 = phi_s0->unk_0;
         temp_f2 = Rand_ZeroFloat(1.0f) + 0.5f;
         temp_f16 = phi_s0->unk_4;

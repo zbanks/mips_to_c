@@ -217,8 +217,8 @@ void Quake_UpdateShakeInfo(QuakeRequest *req, ShakeInfo *shake, f32 verticalPert
         phi_s1 = temp_s1;
     }
     sp28.unk_0 = (f32) phi_s1->unk_0;
-    sp28.unk_8 = (f32) phi_s1->unk_8;
-    sp28.unk_4 = (f32) phi_s1->unk_4;
+    sp28.unk_8 = (f32) phi_s1[2];
+    sp28.unk_4 = (f32) phi_s1[1];
     shake->eyeOffset.x = sp28.unk_0;
     shake->eyeOffset.y = sp28.unk_4;
     shake->eyeOffset.z = sp28.unk_8;
@@ -635,7 +635,7 @@ s16 Quake_Calc(Camera *camera, QuakeCamCalc *camData) {
                 }
             }
         }
-        temp_s1 = phi_s1 + 0x24;
+        temp_s1 = &phi_s1[1];
         phi_s1 = temp_s1;
         phi_s2_2 = phi_s2;
     } while (temp_s1 != &sQuake2Context);
@@ -645,7 +645,7 @@ s16 Quake_Calc(Camera *camera, QuakeCamCalc *camData) {
 void Quake2_Init(GlobalContext *globalCtx) {
     sQuake2Context.unk_0 = globalCtx;
     View_ClearQuake(&globalCtx->view);
-    sQuake2Context.unk_4 = 0;
+    (&sQuake2Context)[1] = NULL;
     sQuake2Context.unk_8 = 0;
     sQuake2Context.unk_A = 0;
 }
@@ -664,14 +664,14 @@ s16 Quake2_GetType(void) {
 }
 
 void Quake2_SetType(s32 type) {
-    if (sQuake2Context.unk_4 < type) {
-        sQuake2Context.unk_4 = type;
+    if ((&sQuake2Context)[1] < type) {
+        (&sQuake2Context)[1] = type;
     }
 }
 
 void Quake2_ClearType(s32 type) {
-    if (type == sQuake2Context.unk_4) {
-        sQuake2Context.unk_4 = 0;
+    if (type == (&sQuake2Context)[1]) {
+        (&sQuake2Context)[1] = NULL;
     }
 }
 
@@ -708,6 +708,7 @@ void Quake2_Update(void) {
     f32 sp28;
     f32 sp24;
     GlobalContext *temp_a2;
+    GlobalContext *temp_v0;
     Player *temp_a1;
     f32 temp_f0;
     f32 temp_f0_2;
@@ -729,7 +730,6 @@ void Quake2_Update(void) {
     s16 temp_v0_3;
     s16 temp_v0_5;
     s16 temp_v0_7;
-    s32 temp_v0;
     s32 temp_v0_4;
     s32 temp_v0_6;
     void *temp_a3;
@@ -747,9 +747,9 @@ void Quake2_Update(void) {
     } else {
         sp34 = temp_f0;
     }
-    temp_v0 = sQuake2Context.unk_4;
+    temp_v0 = (&sQuake2Context)[1];
     if (temp_v0 != 0) {
-        if ((temp_v0 & 0x800) != 0) {
+        if (((s32) temp_v0 & 0x800) != 0) {
             sQuake2Context.unk_8 = 2;
             D_801C0EE4 = 0x3F0;
             D_801C0EE8 = 0x156;
@@ -768,7 +768,7 @@ void Quake2_Update(void) {
             phi_f18 = -0.01f;
             goto block_66;
         }
-        if ((temp_v0 & 0x400) != 0) {
+        if (((s32) temp_v0 & 0x400) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x3F0;
@@ -790,7 +790,7 @@ void Quake2_Update(void) {
             phi_f18 = 0.01f;
             goto block_66;
         }
-        if ((temp_v0 & 0x200) != 0) {
+        if (((s32) temp_v0 & 0x200) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x1FC;
@@ -812,7 +812,7 @@ void Quake2_Update(void) {
             phi_f18 = 0.3f;
             goto block_66;
         }
-        if ((temp_v0 & 0x100) != 0) {
+        if (((s32) temp_v0 & 0x100) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x2710;
@@ -841,7 +841,7 @@ void Quake2_Update(void) {
             }
             goto block_66;
         }
-        if ((temp_v0 & 0x80) != 0) {
+        if (((s32) temp_v0 & 0x80) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x4B0;
@@ -862,7 +862,7 @@ void Quake2_Update(void) {
             phi_f18 = 0.03f;
             goto block_66;
         }
-        if ((temp_v0 & 0x40) != 0) {
+        if (((s32) temp_v0 & 0x40) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x9C4;
@@ -891,7 +891,7 @@ void Quake2_Update(void) {
             }
             goto block_66;
         }
-        if ((temp_v0 & 0x20) != 0) {
+        if (((s32) temp_v0 & 0x20) != 0) {
             sQuake2Context.unk_8 = 2;
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EE4 = 0x9C4;
@@ -913,7 +913,7 @@ void Quake2_Update(void) {
             phi_f18 = -0.6f;
             goto block_66;
         }
-        if ((temp_v0 & 0x10) != 0) {
+        if (((s32) temp_v0 & 0x10) != 0) {
             if (sQuake2Context.unk_A == 2) {
                 D_801C0EEC = sQuake2Context.unk_8;
                 D_801C0EE4 = 0x760;
@@ -934,7 +934,7 @@ void Quake2_Update(void) {
             phi_f18 = -0.4f;
             goto block_66;
         }
-        if ((temp_v0 & 8) != 0) {
+        if (((s32) temp_v0 & 8) != 0) {
             D_801C0EE4 = 0x3F0;
             D_801C0EE8 = 0x156;
             sQuake2Context.unk_8 = 2;
@@ -989,7 +989,7 @@ block_48:
             }
             goto block_66;
         }
-        if ((temp_v0 & 4) != 0) {
+        if (((s32) temp_v0 & 4) != 0) {
             D_801C0EE4 = 0x3F0;
             D_801C0EE8 = 0x156;
             sQuake2Context.unk_8 = 2;
@@ -1034,7 +1034,7 @@ block_48:
             phi_f16 = temp_f14_3;
             goto block_66;
         }
-        if ((temp_v0 & 1) != 0) {
+        if (((s32) temp_v0 & 1) != 0) {
             D_801C0EE4 = 0x3F0;
             D_801C0EE8 = 0x156;
             sQuake2Context.unk_8 = 2;
@@ -1079,7 +1079,7 @@ block_69:
         if (temp_v0_7 != 0) {
             sQuake2Context.unk_8 = (s16) (temp_v0_7 - 1);
             if (sQuake2Context.unk_8 == 0) {
-                sQuake2Context.unk_4 = 0;
+                (&sQuake2Context)[1] = NULL;
             }
         }
     }
@@ -1096,15 +1096,15 @@ s32 Quake_NumActiveQuakes(void) {
         phi_v1_4 = 1;
     }
     phi_v1_3 = phi_v1_4;
-    if (*(sQuakeRequest + 0x2C) != 0) {
+    if (sQuakeRequest[1].callbackIdx != 0) {
         phi_v1_3 = phi_v1_4 + 1;
     }
     phi_v1_2 = phi_v1_3;
-    if (*(sQuakeRequest + 0x50) != 0) {
+    if (sQuakeRequest[2].callbackIdx != 0) {
         phi_v1_2 = phi_v1_3 + 1;
     }
     phi_v1 = phi_v1_2;
-    if (*(sQuakeRequest + 0x74) != 0) {
+    if (sQuakeRequest[3].callbackIdx != 0) {
         phi_v1 = phi_v1_2 + 1;
     }
     return phi_v1;

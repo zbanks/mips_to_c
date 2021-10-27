@@ -246,11 +246,11 @@ void func_80194930(? *arg0, void *arg1, u8 *arg2) {
 
     temp_v0 = arg0->unk_39;
     temp_f2 = arg2->unk_C;
-    sp27 = arg2->unk_2;
+    sp27 = arg2[2];
     temp_a3 = arg1;
     sp26 = arg2->unk_0;
     temp_a0 = arg1;
-    sp24 = (u8) arg2->unk_4;
+    sp24 = (u8) arg2[4];
     arg1->unk_0 = (u8) arg0->unk_D8;
     arg1->unk_1 = (u8) arg0->unk_D9;
     arg1->unk_10 = (s32) arg0->unk_E8;
@@ -342,12 +342,12 @@ void func_80194930(? *arg0, void *arg1, u8 *arg2) {
     }
     arg1->unk_8 = (s16) (s32) (phi_f2_2 * phi_f12 * 4095.999f);
     arg1->unk_A = (s16) (s32) (phi_f2_2 * phi_f14 * 4095.999f);
-    arg1->unk_2 = (u8) arg2->unk_1;
+    arg1->unk_2 = (u8) arg2[1];
     arg1->unk_14 = (s32) arg2->unk_14;
-    arg1->unk_7 = (u8) arg2->unk_18;
+    arg1->unk_7 = (u8) arg2[24];
     arg1->unk_E = (u16) arg2->unk_1A;
     arg1->unk_5 = sp26;
-    arg1->unk_19 = (u8) arg2->unk_3;
+    arg1->unk_19 = (u8) arg2[3];
 }
 
 void func_80194DB0(void *arg0, f32 arg1) {
@@ -475,21 +475,21 @@ void func_80194F84(void) {
                 phi_s0 = temp_s0_2;
                 phi_s0_2 = temp_s0_2;
                 if (temp_a0 >= 0x7FFFFFFFU) {
-                    if ((temp_s1 != temp_a0->unk_3C) && (temp_s0_2->unk_4 == 0)) {
-                        temp_s0_2->unk_34 = (u8) (temp_s0_2->unk_34 | 0x10);
+                    if ((temp_s1 != temp_a0->unk_3C) && (temp_s0_2[4] == 0)) {
+                        temp_s0_2[52] |= 0x10;
                         temp_s0_2->unk_0 = 1;
-                        temp_s0_2->unk_4 = 2U;
+                        temp_s0_2[4] = 2;
                         temp_s0_2->unk_40 = (f32) D_80200C70.unk_2888;
                         phi_v0 = 1U & 0xFF;
                         goto block_19;
                     }
-                    if ((((u32) temp_a0->unk_0 >> 0x1F) != 0) || (temp_s0_2->unk_4 != 0) || ((s32) temp_s0_2->unk_0 <= 0)) {
+                    if ((((u32) temp_a0->unk_0 >> 0x1F) != 0) || (temp_s0_2[4] != 0) || ((s32) temp_s0_2->unk_0 <= 0)) {
                         temp_a1 = temp_a0->unk_60;
                         temp_v0_2 = temp_a1->unk_50;
                         if (temp_v0_2 == 0) {
                             func_80197AA4(temp_a1, temp_a1);
                             temp_s0_2->unk_0 = 1;
-                            temp_s0_2->unk_4 = 1U;
+                            temp_s0_2[4] = 1;
                         } else {
                             if (((*temp_v0_2 * 4) >= 0) || ((temp_a1->unk_3 & 0x40) == 0)) {
 
@@ -504,12 +504,12 @@ block_15:
                         func_801961BC(temp_s1);
                         func_8019617C(temp_s1->unk_C + 0x10, temp_s1);
                         temp_s0_2->unk_0 = 1;
-                        temp_s0_2->unk_4 = 2U;
+                        temp_s0_2[4] = 2;
                         goto block_18;
                     }
                     goto block_54;
                 }
-            } else if ((temp_s0->unk_4 != 0) || ((s32) temp_s0->unk_0 <= 0)) {
+            } else if ((temp_s0[4] != 0) || ((s32) temp_s0->unk_0 <= 0)) {
 block_18:
                 phi_v0 = *phi_s0_2;
                 phi_s0 = phi_s0_2;
@@ -517,10 +517,10 @@ block_19:
                 if (phi_v0 != 0) {
                     temp_s2 = temp_s1 + 0xD8;
                     phi_s2 = temp_s2;
-                    if (((s32) phi_s0->unk_4 > 0) || ((*temp_s2 * 4) < 0)) {
+                    if (((s32) phi_s0[4] > 0) || ((*temp_s2 * 4) < 0)) {
                         temp_s2_2 = temp_s1 + 0xD8;
                         phi_s2 = temp_s2_2;
-                        if (((phi_s0->unk_34 & 0xF) == 0) || ((*temp_s2_2 * 4) < 0)) {
+                        if (((phi_s0[52] & 0xF) == 0) || ((*temp_s2_2 * 4) < 0)) {
                             if (phi_s0->unk_10 != (void *)-1) {
                                 func_80194F20(temp_s1);
                                 temp_a1_2 = phi_s0->unk_10;
@@ -550,7 +550,7 @@ block_19:
                         } else {
                             goto block_35;
                         }
-                    } else if ((phi_s0->unk_34 & 0xF) == 0) {
+                    } else if ((phi_s0[52] & 0xF) == 0) {
                         temp_a0_2 = phi_s0->unk_14;
                         if (temp_a0_2 != (void *)-1) {
                             temp_a0_2->unk_0 = (u8) (temp_a0_2->unk_0 | 2);
@@ -562,7 +562,7 @@ block_19:
 block_35:
                         sp60 = func_80197188(phi_s0 + 0x34);
                         func_80196FEC(temp_s1);
-                        temp_v0_3 = phi_s0->unk_4;
+                        temp_v0_3 = phi_s0[4];
                         if ((temp_v0_3 == 1) || (temp_v0_3 == 2)) {
                             temp_v0_5 = phi_s0 + 0x1C;
                             sp70 = temp_v0_5->unk_8;

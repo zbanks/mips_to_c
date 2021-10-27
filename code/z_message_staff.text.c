@@ -1374,7 +1374,7 @@ block_35:
                             func_8014C70C(arg0, (sp4C + sp44->unk_1FEC)->unk_11881, (s16) (sp44->unk_206A + 0xA), temp_v1_8);
                             phi_s5_11 = temp_v1_8;
                         } else if (temp_s0 == 0x15) {
-                            temp_s0_8 = _message_texture_staticSegmentRomStart + 0x900;
+                            temp_s0_8 = &_message_texture_staticSegmentRomStart[2304];
                             sp76 = 2;
                             DmaMgr_SendRequest0(sp44->unk_1EF8 + 0x1000, (u32) temp_s0_8, 0x900U);
                             DmaMgr_SendRequest0(sp44->unk_1EF8 + 0x1900, (u32) temp_s0_8, 0x900U);

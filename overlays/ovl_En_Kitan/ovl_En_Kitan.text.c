@@ -11,6 +11,12 @@ typedef struct EnKitan {
     /* 0x2D8 */ void (*actionFunc)(EnKitan *, GlobalContext *);
 } EnKitan;                                          /* size = 0x2DC */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnKitan_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -237,9 +243,9 @@ void func_80C094A8(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0 + 0x144;
     arg0 = arg0;
     SkelAnime_FrameUpdateMatrix(temp_a0);
-    temp_v0 = arg0->unk_2D6;
+    temp_v0 = arg0[2].focus.unk_12;
     if ((s32) temp_v0 > 0) {
-        arg0->unk_2D6 = (s16) (temp_v0 - 1);
+        arg0[2].focus.unk_12 = temp_v0 - 1;
         arg0->scale.x *= 0.7f;
         Actor_SetScale(arg0, arg0->scale.x);
         return;
@@ -329,7 +335,7 @@ void func_80C09708(Actor *arg0, GlobalContext *arg1) {
             case 1205:
                 func_801477B4(arg1);
                 arg0->unk_2D8 = func_80C094A8;
-                arg0->unk_2D6 = 4;
+                arg0[2].focus.unk_12 = 4;
                 func_80C0923C(arg0, arg1, 0x1E);
                 Audio_PlaySoundAtPosition(arg1, (Vec3f *) &arg0->world, 0x1E, 0x3A87U);
                 Actor_SetCollectibleFlag(arg1, (s32) (arg0->params & 0xFE00) >> 9);
@@ -347,11 +353,11 @@ void func_80C09708(Actor *arg0, GlobalContext *arg1) {
     } else if (func_80147624(arg1) != 0) {
         if (arg1->msgCtx.unk1206C == (arg1->msgCtx.choiceIndex + 1)) {
             play_sound(0x485AU);
-            arg0->unk_2D6 = (s16) (arg0->unk_2D6 + 1);
-            if ((s32) arg0->unk_2D6 < 5) {
+            arg0[2].focus.unk_12 += 1;
+            if ((s32) arg0[2].focus.unk_12 < 5) {
                 arg1->msgCtx.unk11F10 = 0;
             } else {
-                arg0->unk_2D6 = 0;
+                arg0[2].focus.unk_12 = 0;
                 arg0->unk_2D0 = 0;
                 func_80151938(arg1, 0x4B4U);
             }
@@ -361,7 +367,7 @@ void func_80C09708(Actor *arg0, GlobalContext *arg1) {
         play_sound(0x485BU);
         SkelAnime_ChangeAnimTransitionRepeat(sp24, &D_06000CE8, -5.0f);
         func_80151938(arg1, 0x4B3U);
-        arg0->unk_2D6 = 0;
+        arg0[2].focus.unk_12 = 0;
         arg0->unk_2D0 = 0;
     }
 }
@@ -376,21 +382,21 @@ void func_80C09990(Actor *arg0, GlobalContext *arg1) {
     if (func_800B84D0(arg0, arg1) != 0) {
         arg0->unk_2D8 = func_80C09708;
         func_801518B0(arg1, 0x4B0U, arg0);
-        arg0->unk_2D6 = 0;
+        arg0[2].focus.unk_12 = 0;
         SkelAnime_ChangeAnimTransitionRepeat(sp24, &D_06000CE8, -5.0f);
         func_801A3098(0x73U);
         return;
     }
-    if (((s32) arg0->unk_2D6 <= 0) || (Player_GetMask(arg1) != 5)) {
+    if (((s32) arg0[2].focus.unk_12 <= 0) || (Player_GetMask(arg1) != 5)) {
         arg0->unk_2D8 = func_80C094A8;
-        arg0->unk_2D6 = 4;
+        arg0[2].focus.unk_12 = 4;
         func_80C0923C(arg0, arg1, 0x1E);
         Audio_PlaySoundAtPosition(arg1, (Vec3f *) &arg0->world, 0x1E, 0x3A87U);
         return;
     }
     if (func_80C09390(arg0, arg1) != 0) {
         func_800B8614(arg0, arg1, 130.0f);
-        arg0->unk_2D6 = (s16) (arg0->unk_2D6 - 1);
+        arg0[2].focus.unk_12 += -1;
     }
 }
 
@@ -402,10 +408,10 @@ void func_80C09AA4(Actor *arg0, GlobalContext *arg1) {
     temp_a0 = arg0 + 0x144;
     arg0 = arg0;
     SkelAnime_FrameUpdateMatrix(temp_a0);
-    temp_v0 = arg0->unk_2D6;
+    temp_v0 = arg0[2].focus.unk_12;
     temp_a0_2 = arg0;
     if ((s32) temp_v0 > 0) {
-        arg0->unk_2D6 = (s16) (temp_v0 - 1);
+        arg0[2].focus.unk_12 = temp_v0 - 1;
         arg0->scale.x = (arg0->scale.x * 0.3f) + 0.0105f;
         Actor_SetScale(arg0, arg0->scale.x);
         return;
@@ -414,7 +420,7 @@ void func_80C09AA4(Actor *arg0, GlobalContext *arg1) {
     Actor_SetScale(temp_a0_2, 0.015f);
     arg0->unk_2D8 = func_80C09990;
     arg0->flags |= 1;
-    arg0->unk_2D6 = 0x258;
+    arg0[2].focus.unk_12 = 0x258;
 }
 
 void func_80C09B50(EnKitan *arg0, GlobalContext *arg1) {
@@ -458,5 +464,5 @@ void func_80C09C90(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
 
 void func_80C09CD0(Actor *this, GlobalContext *globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->unk_148, this->unk_164, (s32) this->unk_146, func_80C09C74, func_80C09C90, this);
+    SkelAnime_DrawSV(globalCtx, (void **) this[1].flags, this->unk_164, (s32) this[1].category, func_80C09C74, func_80C09C90, this);
 }

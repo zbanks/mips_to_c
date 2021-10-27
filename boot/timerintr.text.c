@@ -167,10 +167,10 @@ u64 __osInsertTimer(OSTimer *t) {
         if ((temp_t0 >= temp_t2) && ((temp_t2 < temp_t0) || ((u32) temp_t7->unk_14 < temp_t1))) {
 loop_4:
             sp20 = &sp28;
-            temp_t5 = sp28.unk_4;
+            temp_t5 = (&sp28)[1];
             temp_t7_2 = sp34->unk_14;
             temp_t0_2 = (sp28.unk_0 - sp34->unk_10) - (temp_t5 < temp_t7_2);
-            sp28.unk_4 = (u32) (temp_t5 - temp_t7_2);
+            (&sp28)[1] = temp_t5 - temp_t7_2;
             sp28.unk_0 = temp_t0_2;
             temp_t3 = sp34->next;
             sp34 = temp_t3;

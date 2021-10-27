@@ -217,21 +217,21 @@ void guLookAtHiliteF(f32 (*mf)[4], LookAt *l, Hilite *h, f32 xEye, f32 yEye, f32
     l->l[1].l.pad2 = 0;
     l->l[1].l.dir[2] = (s8) (s32) phi_f0_6;
     mf[0][0] = temp_f24;
-    mf->unk_10 = temp_f26;
-    mf->unk_20 = temp_f28;
-    mf->unk_30 = (f32) -((xEye * temp_f24) + (yEye * temp_f26) + (zEye * temp_f28));
+    mf[1][0] = temp_f26;
+    mf[2][0] = temp_f28;
+    mf[3][0] = -((xEye * temp_f24) + (yEye * temp_f26) + (zEye * temp_f28));
     mf[0][1] = xUp;
-    mf->unk_14 = yUp;
-    mf->unk_24 = zUp;
-    mf->unk_34 = (f32) -((xEye * xUp) + (yEye * yUp) + (zEye * zUp));
+    mf[1][1] = yUp;
+    mf[2][1] = zUp;
+    mf[3][1] = -((xEye * xUp) + (yEye * yUp) + (zEye * zUp));
     mf[0][2] = sp88;
-    mf->unk_18 = sp84;
-    mf->unk_28 = sp80;
+    mf[1][2] = sp84;
+    mf[2][2] = sp80;
     mf[0][3] = 0.0f;
-    mf->unk_1C = 0.0f;
-    mf->unk_2C = 0.0f;
-    mf->unk_3C = 1.0f;
-    mf->unk_38 = (f32) -((xEye * sp88) + (yEye * sp84) + (zEye * sp80));
+    mf[1][3] = 0.0f;
+    mf[2][3] = 0.0f;
+    mf[3][3] = 1.0f;
+    mf[3][2] = -((xEye * sp88) + (yEye * sp84) + (zEye * sp80));
 }
 
 void guLookAtHilite(Mtx *m, LookAt *l, Hilite *h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight) {

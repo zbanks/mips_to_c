@@ -233,8 +233,8 @@ void ObjKendoKanban_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_s0 = (Vec3f *) &sp70;
 loop_2:
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s0);
-        temp_s0_2 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        temp_s0_2 = &phi_s0[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0_2;
         if (temp_s0_2 != &sp94) {
             goto loop_2;
@@ -326,97 +326,97 @@ void func_80B658A4(Actor *arg0, GlobalContext *arg1) {
     s8 temp_v0_2;
     u8 temp_v0;
 
-    temp_v0 = arg0->unk_30C;
+    temp_v0 = arg0[2].wallBgId;
     if (temp_v0 == 0) {
         temp_v0_2 = arg1->actorCtx.actorList[2].first->unk_ADA;
         if ((temp_v0_2 == 0) || (temp_v0_2 == 1) || (temp_v0_2 == 0x14)) {
-            arg0->unk_30C = 5U;
+            arg0[2].wallBgId = 5;
             arg0->unk_304 = 0x71C;
             arg0->velocity.x = D_80B6666C.unk_0;
             arg0->velocity.y = D_80B6666C.unk_4;
             arg0->velocity.z = D_80B6666C.unk_8;
-            arg0->unk_2CC = (s32) D_80B6669C.unk_0;
+            arg0[2].focus.pos.z = D_80B6669C.unk_0;
             arg0->unk_2D0 = (s32) D_80B6669C.unk_4;
             arg0->unk_2D4 = (s32) D_80B6669C.unk_8;
             Actor_SpawnAsChild(&arg1->actorCtx, arg0, arg1, 0x209, arg0->home.pos.x - 5.0f, arg0->home.pos.y, arg0->home.pos.z, (s16) 0, (s16) 0, (s16) 0, 0xA);
-            arg0->unk_29C = (s32) D_80B666DC.unk_0;
-            arg0->unk_2A0 = (s32) D_80B666DC.unk_4;
-            arg0->unk_2A4 = (s32) D_80B666DC.unk_8;
-            arg0->unk_2A8 = (s32) D_80B666E8.unk_0;
-            arg0->unk_2AC = (s32) D_80B666E8.unk_4;
-            arg0->unk_2B0 = (s32) D_80B666E8.unk_8;
-            arg0->unk_2B4 = (s32) D_80B66730.unk_0;
-            arg0->unk_2B8 = (s32) D_80B66730.unk_4;
-            arg0->unk_2BC = (s32) D_80B66730.unk_8;
-            arg0->unk_2C0 = (s32) D_80B66724.unk_0;
-            arg0->unk_2C4 = (s32) D_80B66724.unk_4;
-            arg0->unk_2C8 = (s32) D_80B66724.unk_8;
+            arg0->unk_29C = (f32) D_80B666DC.unk_0;
+            arg0->unk_2A0 = (f32) D_80B666DC.unk_4;
+            arg0->unk_2A4 = (f32) D_80B666DC.unk_8;
+            arg0->unk_2A8 = (f32) D_80B666E8.unk_0;
+            arg0[2].world.pos.x = D_80B666E8.unk_4;
+            arg0[2].world.pos.y = D_80B666E8.unk_8;
+            arg0[2].world.pos.z = D_80B66730.unk_0;
+            arg0->unk_2B8 = (f32) D_80B66730.unk_4;
+            arg0->unk_2BC = (f32) D_80B66730.unk_8;
+            arg0->unk_2C0 = (f32) D_80B66724.unk_0;
+            arg0[2].focus.pos.x = D_80B66724.unk_4;
+            arg0[2].focus.pos.y = D_80B66724.unk_8;
         } else {
-            arg0->unk_30C = 0xCU;
+            arg0[2].wallBgId = 0xC;
             arg0->unk_304 = -0x71C;
             arg0->velocity.x = D_80B66678.unk_0;
             arg0->velocity.y = D_80B66678.unk_4;
             arg0->velocity.z = D_80B66678.unk_8;
-            arg0->unk_2CC = (s32) D_80B666A8.unk_0;
+            arg0[2].focus.pos.z = D_80B666A8.unk_0;
             arg0->unk_2D0 = (s32) D_80B666A8.unk_4;
             arg0->unk_2D4 = (s32) D_80B666A8.unk_8;
             Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x209, arg0->home.pos.x, arg0->home.pos.y + 5.0f, arg0->home.pos.z, (s16) 0, (s16) 0, (s16) 0, 3);
-            arg0->unk_29C = (s32) D_80B666F4.unk_0;
-            arg0->unk_2A0 = (s32) D_80B666F4.unk_4;
-            arg0->unk_2A4 = (s32) D_80B666F4.unk_8;
-            arg0->unk_2A8 = (s32) D_80B6670C.unk_0;
-            arg0->unk_2AC = (s32) D_80B6670C.unk_4;
-            arg0->unk_2B0 = (s32) D_80B6670C.unk_8;
-            arg0->unk_2B4 = (s32) D_80B66730.unk_0;
-            arg0->unk_2B8 = (s32) D_80B66730.unk_4;
-            arg0->unk_2BC = (s32) D_80B66730.unk_8;
-            arg0->unk_2C0 = (s32) D_80B66718.unk_0;
-            arg0->unk_2C4 = (s32) D_80B66718.unk_4;
-            arg0->unk_2C8 = (s32) D_80B66718.unk_8;
+            arg0->unk_29C = (f32) D_80B666F4.unk_0;
+            arg0->unk_2A0 = (f32) D_80B666F4.unk_4;
+            arg0->unk_2A4 = (f32) D_80B666F4.unk_8;
+            arg0->unk_2A8 = (f32) D_80B6670C.unk_0;
+            arg0[2].world.pos.x = D_80B6670C.unk_4;
+            arg0[2].world.pos.y = D_80B6670C.unk_8;
+            arg0[2].world.pos.z = D_80B66730.unk_0;
+            arg0->unk_2B8 = (f32) D_80B66730.unk_4;
+            arg0->unk_2BC = (f32) D_80B66730.unk_8;
+            arg0->unk_2C0 = (f32) D_80B66718.unk_0;
+            arg0[2].focus.pos.x = D_80B66718.unk_4;
+            arg0[2].focus.pos.y = D_80B66718.unk_8;
         }
     } else if (temp_v0 == 0xA) {
         arg0->unk_304 = 0x71C;
         arg0->velocity.x = D_80B66660.unk_0;
         arg0->velocity.y = D_80B66660.unk_4;
         arg0->velocity.z = D_80B66660.unk_8;
-        arg0->unk_2CC = (s32) D_80B66690.unk_0;
+        arg0[2].focus.pos.z = D_80B66690.unk_0;
         arg0->unk_2D0 = (s32) D_80B66690.unk_4;
         arg0->unk_2D4 = (s32) D_80B66690.unk_8;
-        arg0->unk_29C = (s32) D_80B666D0.unk_0;
-        arg0->unk_2A0 = (s32) D_80B666D0.unk_4;
-        arg0->unk_2A4 = (s32) D_80B666D0.unk_8;
-        arg0->unk_2A8 = (s32) D_80B666DC.unk_0;
-        arg0->unk_2AC = (s32) D_80B666DC.unk_4;
-        arg0->unk_2B0 = (s32) D_80B666DC.unk_8;
-        arg0->unk_2B4 = (s32) D_80B66724.unk_0;
-        arg0->unk_2B8 = (s32) D_80B66724.unk_4;
-        arg0->unk_2BC = (s32) D_80B66724.unk_8;
-        arg0->unk_2C0 = (s32) D_80B66718.unk_0;
-        arg0->unk_2C4 = (s32) D_80B66718.unk_4;
-        arg0->unk_2C8 = (s32) D_80B66718.unk_8;
+        arg0->unk_29C = (f32) D_80B666D0.unk_0;
+        arg0->unk_2A0 = (f32) D_80B666D0.unk_4;
+        arg0->unk_2A4 = (f32) D_80B666D0.unk_8;
+        arg0->unk_2A8 = (f32) D_80B666DC.unk_0;
+        arg0[2].world.pos.x = D_80B666DC.unk_4;
+        arg0[2].world.pos.y = D_80B666DC.unk_8;
+        arg0[2].world.pos.z = D_80B66724.unk_0;
+        arg0->unk_2B8 = (f32) D_80B66724.unk_4;
+        arg0->unk_2BC = (f32) D_80B66724.unk_8;
+        arg0->unk_2C0 = (f32) D_80B66718.unk_0;
+        arg0[2].focus.pos.x = D_80B66718.unk_4;
+        arg0[2].focus.pos.y = D_80B66718.unk_8;
     } else if (temp_v0 == 3) {
         arg0->unk_304 = 0x71C;
         arg0->velocity.x = D_80B66684.unk_0;
         arg0->velocity.y = D_80B66684.unk_4;
         arg0->velocity.z = D_80B66684.unk_8;
-        arg0->unk_2CC = (s32) D_80B666B4.unk_0;
+        arg0[2].focus.pos.z = D_80B666B4.unk_0;
         arg0->unk_2D0 = (s32) D_80B666B4.unk_4;
         arg0->unk_2D4 = (s32) D_80B666B4.unk_8;
-        arg0->unk_29C = (s32) D_80B666D0.unk_0;
-        arg0->unk_2A0 = (s32) D_80B666D0.unk_4;
-        arg0->unk_2A4 = (s32) D_80B666D0.unk_8;
-        arg0->unk_2A8 = (s32) D_80B666E8.unk_0;
-        arg0->unk_2AC = (s32) D_80B666E8.unk_4;
-        arg0->unk_2B0 = (s32) D_80B666E8.unk_8;
-        arg0->unk_2B4 = (s32) D_80B6670C.unk_0;
-        arg0->unk_2B8 = (s32) D_80B6670C.unk_4;
-        arg0->unk_2BC = (s32) D_80B6670C.unk_8;
-        arg0->unk_2C0 = (s32) D_80B666F4.unk_0;
-        arg0->unk_2C4 = (s32) D_80B666F4.unk_4;
-        arg0->unk_2C8 = (s32) D_80B666F4.unk_8;
+        arg0->unk_29C = (f32) D_80B666D0.unk_0;
+        arg0->unk_2A0 = (f32) D_80B666D0.unk_4;
+        arg0->unk_2A4 = (f32) D_80B666D0.unk_8;
+        arg0->unk_2A8 = (f32) D_80B666E8.unk_0;
+        arg0[2].world.pos.x = D_80B666E8.unk_4;
+        arg0[2].world.pos.y = D_80B666E8.unk_8;
+        arg0[2].world.pos.z = D_80B6670C.unk_0;
+        arg0->unk_2B8 = (f32) D_80B6670C.unk_4;
+        arg0->unk_2BC = (f32) D_80B6670C.unk_8;
+        arg0->unk_2C0 = (f32) D_80B666F4.unk_0;
+        arg0[2].focus.pos.x = D_80B666F4.unk_4;
+        arg0[2].focus.pos.y = D_80B666F4.unk_8;
     }
     arg0->unk_30A = 0;
-    arg0->unk_268 = func_80B65CE0;
+    arg0[1].child = (Actor *) func_80B65CE0;
 }
 
 void func_80B65CE0(ObjKendoKanban *this, GlobalContext *globalCtx) {
@@ -430,7 +430,7 @@ void func_80B65CE0(ObjKendoKanban *this, GlobalContext *globalCtx) {
 }
 
 void func_80B65D54(Actor *arg0) {
-    arg0->unk_268 = func_80B65D68;
+    arg0[1].child = func_80B65D68;
 }
 
 void func_80B65D68(ObjKendoKanban *this, GlobalContext *globalCtx) {
@@ -438,7 +438,7 @@ void func_80B65D68(ObjKendoKanban *this, GlobalContext *globalCtx) {
 
     sp1C = globalCtx->actorCtx.actorList[2].first;
     if (func_80B6618C() == 1) {
-        sp1C->unk_AC0 = 700.0f;
+        sp1C[8].colChkInfo.damageTable = (DamageTable *)0x442F0000;
     }
 }
 
@@ -469,18 +469,18 @@ void func_80B65DA8(Actor *arg0, GlobalContext *arg1) {
     s16 phi_v0_2;
 
     temp_a3 = arg0 + 0x24;
-    sp5C.unk_0 = (f32) arg0->unk_26C;
-    sp5C.unk_4 = (f32) arg0->unk_270;
-    sp5C.unk_8 = (f32) arg0->unk_274;
+    sp5C.unk_0 = (f32) arg0[1].prev;
+    sp5C.unk_4 = (f32) arg0[1].next;
+    sp5C.unk_8 = (f32) arg0[1].init;
     sp48.unk_0 = temp_a3->x;
-    sp48.unk_4 = (s32) temp_a3->y;
-    sp48.unk_8 = (s32) temp_a3->z;
+    (&sp48)[1] = temp_a3->y;
+    (&sp48)[2] = temp_a3->z;
     temp_f8 = sp48 - arg0->unk_2D8;
     sp48 = temp_f8;
-    sp4C -= arg0->unk_2DC;
-    temp_f10 = sp50 - arg0->unk_2E0;
+    sp4C -= arg0[2].targetArrowOffset;
+    temp_f10 = sp50 - arg0[2].scale.x;
     sp50 = temp_f10;
-    temp_f10_2 = (arg0->unk_2F0 * temp_f10) + (arg0->unk_2F8 * -temp_f8);
+    temp_f10_2 = (arg0[2].velocity.y * temp_f10) + (arg0[2].speedXZ * -temp_f8);
     sp38 = temp_f10_2;
     phi_v1 = arg0;
     phi_v0 = 0;
@@ -491,19 +491,19 @@ void func_80B65DA8(Actor *arg0, GlobalContext *arg1) {
         arg0->unk_304 = (s16) (arg0->unk_304 - 0x64);
     }
     do {
-        if (phi_v1->unk_270 < sp60) {
-            sp5C.unk_0 = (f32) phi_v1->unk_26C;
-            sp5C.unk_4 = (f32) phi_v1->unk_270;
-            sp5C.unk_8 = (f32) phi_v1->unk_274;
+        if (phi_v1[1].next < sp60) {
+            sp5C.unk_0 = (f32) phi_v1[1].prev;
+            sp5C.unk_4 = (f32) phi_v1[1].next;
+            sp5C.unk_8 = (f32) phi_v1[1].init;
             phi_a2 = phi_v0;
         }
         temp_v0 = phi_v0 + 1;
         phi_v1 += 0xC;
         phi_v0 = temp_v0;
     } while (temp_v0 != 4);
-    if (phi_a2 != arg0->unk_2FC) {
+    if (phi_a2 != arg0[2].gravity) {
         arg0->unk_300 = 1;
-        arg0->unk_2FC = phi_a2;
+        arg0[2].gravity = phi_a2;
         temp_t2 = arg0 + (phi_a2 * 0xC);
         temp_v0_2 = arg0 + 0x2E4;
         temp_v0_2->x = temp_t2->unk_29C;
@@ -709,30 +709,30 @@ void ObjKendoKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     if (this->unk_30C == 0) {
         temp_s1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_s1 + 8;
+        temp_s0->polyOpa.p = &temp_s1[1];
         temp_s1->words.w0 = 0xDA380003;
         temp_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1 + 8;
+        temp_s0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w1 = (u32) &D_06000180;
         temp_v1->words.w0 = 0xDE000000;
     } else {
         SysMatrix_InsertRotationAroundUnitVector_s(this->unk_302, (Vec3f *) &this->unk_2F0, 1);
         SysMatrix_InsertTranslation(-this->unk_2E4, -this->unk_2E8, -this->unk_2EC, 1);
         temp_s1_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_s1_2 + 8;
+        temp_s0->polyOpa.p = &temp_s1_2[1];
         temp_s1_2->words.w0 = 0xDA380003;
         temp_s1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         if ((this->unk_30C & 1) != 0) {
             temp_v1_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_2 + 8;
+            temp_s0->polyOpa.p = &temp_v1_2[1];
             temp_v1_2->words.w0 = 0xDE000000;
             temp_v1_2->words.w1 = D_80B666C0;
         }
         phi_a0 = this->unk_30C;
         if ((this->unk_30C & 2) != 0) {
             temp_v1_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_3 + 8;
+            temp_s0->polyOpa.p = &temp_v1_3[1];
             temp_v1_3->words.w0 = 0xDE000000;
             temp_v1_3->words.w1 = D_80B666C4;
             phi_a0 = this->unk_30C;
@@ -740,14 +740,14 @@ void ObjKendoKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
         phi_a0_2 = phi_a0;
         if ((phi_a0 & 4) != 0) {
             temp_v1_4 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_4 + 8;
+            temp_s0->polyOpa.p = &temp_v1_4[1];
             temp_v1_4->words.w0 = 0xDE000000;
             temp_v1_4->words.w1 = D_80B666C8;
             phi_a0_2 = this->unk_30C;
         }
         if ((phi_a0_2 & 8) != 0) {
             temp_v1_5 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v1_5 + 8;
+            temp_s0->polyOpa.p = &temp_v1_5[1];
             temp_v1_5->words.w0 = 0xDE000000;
             temp_v1_5->words.w1 = D_80B666CC;
         }
@@ -758,8 +758,8 @@ void ObjKendoKanban_Draw(Actor *thisx, GlobalContext *globalCtx) {
     do {
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s2);
         temp_s0_2 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
-        phi_s2 += 0xC;
+        phi_s1 = &phi_s1[1];
+        phi_s2 = &phi_s2[1];
         phi_s0 = temp_s0_2;
     } while (temp_s0_2 != 0x30);
     SysMatrix_MultiplyVector3fByState((Vec3f *) &this->unk_2CC, (Vec3f *) &this->unk_2D8);

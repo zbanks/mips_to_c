@@ -432,7 +432,7 @@ void EnGinkoMan_WaitForDialogueInput(Actor *arg0, GlobalContext *arg1) {
                     temp_v1 = arg1 + 0x10000;
                     if (arg1->msgCtx.choiceIndex == 0) {
                         temp_v0_2 = arg1->msgCtx.bankRupeesSelected;
-                        if ((gSaveContext.roomInf[127][0] & 0xFFFF) < (temp_v0_2 + arg0->unk_25A)) {
+                        if ((gSaveContext.roomInf[127][0] & 0xFFFF) < (temp_v0_2 + arg0[1].textId)) {
                             arg1 = arg1;
                             play_sound(0x4806U);
                             func_800BDC5C(arg0 + 0x144, (ActorAnimationEntry []) animations, 0);
@@ -440,7 +440,7 @@ void EnGinkoMan_WaitForDialogueInput(Actor *arg0, GlobalContext *arg1) {
                             arg0->unk_258 = 0x476;
                             return;
                         }
-                        if ((s32) (*(gUpgradeCapacities + 0x18))[(u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]] < (temp_v0_2 + gSaveContext.rupees)) {
+                        if ((s32) gUpgradeCapacities[3][(u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]] < (temp_v0_2 + gSaveContext.rupees)) {
                             arg1 = arg1;
                             play_sound(0x4806U);
                             func_801518B0(arg1, 0x475U, arg0);
@@ -466,7 +466,7 @@ void EnGinkoMan_WaitForDialogueInput(Actor *arg0, GlobalContext *arg1) {
                         }
                         arg0->unk_262 = (s16) gSaveContext.roomInf[127][0];
                         temp_v0_4 = gSaveContext.roomInf[127][0];
-                        gSaveContext.roomInf[127][0] = (((temp_v0_4 & 0xFFFF) - (arg1 + 0x10000)->unk_6980) - arg0->unk_25A) | (temp_v0_4 & 0xFFFF0000);
+                        gSaveContext.roomInf[127][0] = (((temp_v0_4 & 0xFFFF) - (arg1 + 0x10000)->unk_6980) - (s16) arg0[1].textId) | (temp_v0_4 & 0xFFFF0000);
                         func_801159EC((arg1 + 0x10000)->unk_6982);
                         return;
                     }
@@ -486,7 +486,7 @@ void EnGinkoMan_WaitForDialogueInput(Actor *arg0, GlobalContext *arg1) {
                 sp20 = arg1 + 0x10000;
                 arg1 = arg1;
                 func_8019F208();
-                arg0->unk_25C = (s16) arg1->msgCtx.choiceIndex;
+                arg0[1].freezeTimer = (u16) arg1->msgCtx.choiceIndex;
                 if (arg0->unk_260 == 0) {
                     arg0->unk_260 = 1;
                     func_801518B0(arg1, 0x469U, arg0);
@@ -505,7 +505,7 @@ block_44:
                 if ((s32) gSaveContext.rupees < arg1->msgCtx.bankRupeesSelected) {
                     arg1 = arg1;
                     play_sound(0x4806U);
-                    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) animations, 1);
+                    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) animations, 1);
                     func_801518B0(arg1, 0x459U, arg0);
                     arg0->unk_258 = 0x459;
                     return;
@@ -525,12 +525,12 @@ block_44:
                 } else {
                     sp20 = temp_v1_2;
                     arg1 = arg1;
-                    func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) animations, 1);
+                    func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) animations, 1);
                     func_801518B0(arg1, 0x453U, arg0);
                     arg0->unk_258 = 0x453;
                 }
                 if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
-                    arg0->unk_25E = 1;
+                    arg0[1].colorFilterParams = 1;
                 }
                 sp20 = arg1 + 0x10000;
                 func_801159EC((s16) ((s32) (arg1 + 0x10000)->unk_6980 * -1));
@@ -541,7 +541,7 @@ block_44:
             }
             arg1 = arg1;
             func_8019F230();
-            func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) animations, 1);
+            func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) animations, 1);
             if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
                 func_801518B0(arg1, 0x456U, arg0);
                 arg0->unk_258 = 0x456;
@@ -603,13 +603,13 @@ void EnGinkoMan_WaitForRupeeCount(Actor *arg0, GlobalContext *arg1) {
             }
             func_801518B0(arg1, 0x471U, arg0);
             arg0->unk_258 = 0x471;
-            arg0->unk_25A = 0;
+            arg0[1].textId = 0;
             /* Duplicate return node #12. Try simplifying control flow for better match */
             return;
         }
         if (arg1->msgCtx.bankRupeesSelected == 0) {
             arg1 = arg1;
-            func_800BDC5C((SkelAnime *) (arg0 + 0x144), (ActorAnimationEntry []) animations, 1);
+            func_800BDC5C((SkelAnime *) &arg0[1], (ActorAnimationEntry []) animations, 1);
             func_801518B0(arg1, 0x457U, arg0);
             arg0->unk_258 = 0x457;
             return;
@@ -667,7 +667,7 @@ void EnGinkoMan_BankAward(EnGinkoMan *this, GlobalContext *globalCtx) {
     temp_v0 = this->curTextId;
     if (temp_v0 == 0x45B) {
         if ((gSaveContext.weekEventReg[10] & 8) == 0) {
-            func_800B8A1C((Actor *) this, globalCtx, ((u32) (gSaveContext.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]) + 8, 500.0f, 100.0f);
+            func_800B8A1C((Actor *) this, globalCtx, ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4]) + 8, 500.0f, 100.0f);
             return;
         }
         func_800B8A1C((Actor *) this, globalCtx, 2, 500.0f, 100.0f);
@@ -798,7 +798,7 @@ block_7:
 
 void EnGinkoMan_FacePlayer(Actor *arg0, GlobalContext *arg1) {
     SkelAnime_FrameUpdateMatrix(arg0 + 0x144);
-    if (&D_06004A7C != arg0->unk_14C) {
+    if (&D_06004A7C != arg0[1].home.pos.x) {
         func_800E9250(arg1, arg0, arg0 + 0x24C, arg0 + 0x252, (Vec3f) arg0->focus.pos.x, arg0->focus.pos.y, arg0->focus.pos.z);
         return;
     }
@@ -821,12 +821,12 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f
     }
     if (arg1 == 0xF) {
         SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
-        SysMatrix_InsertXRotation_s(arg5->unk_24E, 1);
-        SysMatrix_InsertZRotation_s(arg5->unk_24C, 1);
+        SysMatrix_InsertXRotation_s(arg5[98].y, 1);
+        SysMatrix_InsertZRotation_s(arg5[98].x, 1);
         SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
     } else if (arg1 == 8) {
-        SysMatrix_InsertXRotation_s((s16) ((s32) arg5->unk_254 * -1), 1);
-        SysMatrix_InsertZRotation_s((s16) ((s32) arg5->unk_252 * -1), 1);
+        SysMatrix_InsertXRotation_s((s16) ((s32) arg5[99].y * -1), 1);
+        SysMatrix_InsertZRotation_s((s16) ((s32) arg5[99].x * -1), 1);
     }
     return 0;
 }
@@ -849,17 +849,17 @@ void EnGinkoMan_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x32, 0x50, 0, 0);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, 0x32, 0x50, 0, 0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0;
     temp_v0_3->words.w0 = 0xE7000000;
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, EnGinkoMan_OverrideLimbDraw, EnGinkoMan_PostLimbDraw, (Actor *) this);

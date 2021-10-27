@@ -12,6 +12,12 @@ typedef struct ObjLift {
     /* 0x17A */ char pad_17A[0x2];
 } ObjLift;                                          /* size = 0x17C */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_ObjLift_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -229,13 +235,13 @@ void func_8093D8B4(DynaPolyActor *arg0, GlobalContext *arg1) {
         func_8093D9C0(arg0);
     } else {
         arg0->unk_160 = (s16) (arg0->unk_160 + 0x2710);
-        arg0->unk_174 = (s16) (s32) (Math_SinS(arg0->unk_160) * 300.0f);
+        arg0[1].actor.home.rot.z = (s16) (s32) (Math_SinS(arg0->unk_160) * 300.0f);
         temp_f16 = Math_CosS(arg0->unk_160) * 300.0f;
         arg0->unk_162 = (s16) (arg0->unk_162 + 0x4650);
-        arg0->unk_176 = (s16) (s32) temp_f16;
-        arg0->unk_16C = Math_SinS(arg0->unk_162);
+        arg0[1].actor.home.unk_12 = (s16) (s32) temp_f16;
+        arg0[1].actor.home.pos.z = Math_SinS(arg0->unk_162);
         arg0->unk_164 = (s16) (arg0->unk_164 + 0x4650);
-        arg0->unk_168 = (f32) (Math_SinS(arg0->unk_164) * 3.0f);
+        arg0[1].actor.home.pos.y = Math_SinS(arg0->unk_164) * 3.0f;
         arg0->unk_170 = (f32) (Math_CosS(arg0->unk_164) * 3.0f);
     }
     if ((arg0->unk_166 & 3) == 3) {
@@ -274,7 +280,7 @@ void func_8093DA48(Actor *arg0, GlobalContext *arg1) {
     if ((*(&D_8093DDA0 + ((arg0->params & 1) * 4)) - 0.001f) <= (temp_f0 - arg0->world.pos.y)) {
         func_8093D3C0(arg0, arg1);
         Audio_PlaySoundAtPosition(arg1, (Vec3f *) &arg0->world, 0x14, 0x2839U);
-        if ((s32) arg0->unk_178 > 0) {
+        if ((s32) arg0[1].world.rot.z > 0) {
             func_8093DB70(arg0);
             func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->unk_144);
             return;
@@ -288,7 +294,7 @@ void func_8093DA48(Actor *arg0, GlobalContext *arg1) {
 void func_8093DB70(Actor *arg0) {
     arg0->unk_15C = func_8093DB90;
     arg0->draw = NULL;
-    arg0->unk_166 = (s16) arg0->unk_178;
+    arg0[1].unk_22 = arg0[1].world.rot.z;
 }
 
 void func_8093DB90(ObjLift *arg0, GlobalContext *arg1) {
@@ -335,9 +341,9 @@ void func_8093DC90(Actor *arg0, GlobalContext *arg1) {
     s16 sp20;
 
     Math_Vec3f_Sum(arg0 + 0x24, arg0 + 0x168, (Vec3f *) &sp28);
-    sp20 = arg0->unk_174 + arg0->home.rot.x;
+    sp20 = arg0[1].world.rot.x + arg0->home.rot.x;
     sp22 = arg0->home.rot.y;
-    sp24 = arg0->unk_176 + arg0->home.rot.z;
+    sp24 = arg0[1].world.rot.y + arg0->home.rot.z;
     SysMatrix_SetStateRotationAndTranslation(sp28, sp2C, sp30, (Vec3s *) &sp20);
     Matrix_Scale(arg0->scale.x, arg0->scale.y, arg0->scale.z, 1);
     func_800BDFC0(arg1, &D_06000D10);

@@ -675,7 +675,7 @@ s32 func_80BA4530(EnToto *this, GlobalContext *globalCtx) {
         if (func_80BA44D4(temp_s0, temp_s2) != 0) {
             Math_Vec3s_ToVec3f((Vec3f *) &temp_s2->world, temp_s0 + 6);
             temp_s2->shape.rot.y = 0;
-            temp_s2->unk_AD4 = 0;
+            temp_s2[8].colChkInfo.cylYShift = 0;
             return func_80BA407C(this, globalCtx);
         }
         if ((gSaveContext.weekEventReg[50] & 1) == 0) {
@@ -967,7 +967,7 @@ void EnToto_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual((sp + (this->unk260 * 4))->unk_4C);

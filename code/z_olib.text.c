@@ -18,7 +18,7 @@ struct _mips2c_stack_OLib_DbCameraVec3fSum {
 
 struct _mips2c_stack_OLib_Vec3fDiffBinAng {
     /* 0x00 */ char pad_0[0x1C];
-    /* 0x1C */ s16 sp1C;                            /* inferred */
+    /* 0x1C */ u16 sp1C;                            /* inferred */
     /* 0x1E */ s16 sp1E;                            /* inferred */
     /* 0x20 */ s16 sp20;                            /* inferred */
     /* 0x22 */ char pad_22[0x2];
@@ -218,8 +218,8 @@ Vec3f *OLib_Vec3fDistNormalize(Vec3f *dest, Vec3f *a, Vec3f *b) {
     sp24 = temp_f10;
     sp28 = temp_f18 / temp_f0;
     dest->x = temp_t6->unk_0;
-    dest->y = temp_t6->unk_4;
-    dest->z = temp_t6->unk_8;
+    dest->y = temp_t6[1];
+    dest->z = temp_t6[2];
     return dest;
 }
 
@@ -240,8 +240,8 @@ Vec3f *OLib_VecSphToVec3f(Vec3f *dest, VecSph *sph) {
     sp38 = sph->r * sp2C;
     sp3C = sph->r * sp30 * sp24;
     dest->x = temp_t6->unk_0;
-    dest->y = temp_t6->unk_4;
-    dest->z = temp_t6->unk_8;
+    dest->y = temp_t6[1];
+    dest->z = temp_t6[2];
     return dest;
 }
 
@@ -297,7 +297,7 @@ VecSph *OLib_Vec3fToVecSph(VecSph *dest, Vec3f *vec) {
         sp2E = (s16) (s32) ((func_80086B30(temp_f12_2, vec->z) * 57.295776f * 182.04167f) + 0.5f);
     }
     dest->r = sp28.unk_0;
-    dest->unk_4 = (s32) sp28.unk_4;
+    dest->unk_4 = (f32) (&sp28)[1];
     return dest;
 }
 
@@ -352,8 +352,8 @@ Vec3f *OLib_VecSphAddToVec3f(Vec3f *dest, Vec3f *a, VecSph *sph) {
     sp28 = a->y + sp1C;
     sp2C = a->z + sp20;
     dest->x = temp_t6->unk_0;
-    dest->y = temp_t6->unk_4;
-    dest->z = temp_t6->unk_8;
+    dest->y = temp_t6[1];
+    dest->z = temp_t6[2];
     return dest;
 }
 
@@ -366,8 +366,8 @@ Vec3f *OLib_Vec3fDiffRad(Vec3f *dest, Vec3f *a, Vec3f *b) {
     sp20 = func_80086B30(b->x - a->x, b->z - a->z);
     sp24 = 0.0f;
     dest->x = sp1C.unk_0;
-    dest->y = sp1C.unk_4;
-    dest->z = sp1C.unk_8;
+    dest->y = (&sp1C)[1];
+    dest->z = (&sp1C)[2];
     return dest;
 }
 
@@ -384,8 +384,8 @@ Vec3f *OLib_Vec3fDiffDegF(Vec3f *dest, Vec3f *a, Vec3f *b) {
     sp18 = sp24 * 57.295776f;
     sp1C = sp28 * 57.295776f;
     dest->x = temp_t6->unk_0;
-    dest->y = temp_t6->unk_4;
-    dest->z = temp_t6->unk_8;
+    dest->y = temp_t6[1];
+    dest->z = temp_t6[2];
     return dest;
 }
 
@@ -393,16 +393,16 @@ Vec3s *OLib_Vec3fDiffBinAng(Vec3s *dest, Vec3f *a, Vec3f *b) {
     f32 sp24;
     s16 sp20;
     s16 sp1E;
-    s16 sp1C;
-    s16 *temp_t0;
+    u16 sp1C;
+    u16 *temp_t0;
 
     OLib_Vec3fDiffRad((Vec3f *) &sp24, a, b);
     sp20 = 0;
     temp_t0 = &sp1C;
-    sp1C = (s16) (s32) ((sp24 * 57.295776f * 182.04167f) + 0.5f);
+    sp1C = (u16) (s32) ((sp24 * 57.295776f * 182.04167f) + 0.5f);
     sp1E = (s16) (s32) ((sp28 * 57.295776f * 182.04167f) + 0.5f);
     dest->unk_0 = (unaligned s32) temp_t0->unk_0;
-    dest->z = (s16) temp_t0->unk_4;
+    dest->z = (s16) temp_t0[2];
     return dest;
 }
 

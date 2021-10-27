@@ -214,7 +214,7 @@ void Graph_InitTHGA(GraphicsContext *gfxCtx) {
     temp_s1 = &gGfxPools[gfxCtx->displaylistCounter & 1];
     temp_t0 = temp_s1->unk8;
     graphDlEntry = temp_t0;
-    *(gSegments + 0x38) = (u32) temp_t0;
+    gSegments[14] = (u32) temp_t0;
     temp_s1->headMagic = 0x1234;
     temp_s1->tailMagic = 0x5678;
     temp_a1 = temp_s1->polyOpaBuffer;
@@ -239,24 +239,24 @@ void Graph_InitTHGA(GraphicsContext *gfxCtx) {
     gfxCtx->unk1A0 = sp2C;
     temp_v0 = get_framebuffer((s32) gfxCtx->framebufferCounter % 2);
     gfxCtx->framebuffer = temp_v0;
-    *(gSegments + 0x3C) = (u32) temp_v0;
+    gSegments[15] = (u32) temp_v0;
     gfxCtx->zbuffer = get_zbuffer();
     temp_v0_2 = graphDlEntry;
-    temp_v0_2->unk_2A0 = 0xDE010000U;
-    (temp_v0_2 + 0x2A0)->words.w1 = (u32) sp38;
+    temp_v0_2[84].words.w0 = 0xDE010000;
+    temp_v0_2[84].words.w1 = (u32) sp38;
     temp_v0_3 = graphDlEntry;
-    temp_v0_3->unk_2A8 = 0xDE010000U;
-    (temp_v0_3 + 0x2A8)->words.w1 = (u32) sp34;
+    temp_v0_3[85].words.w0 = 0xDE010000;
+    temp_v0_3[85].words.w1 = (u32) sp34;
     temp_v0_4 = graphDlEntry;
-    temp_v0_4->unk_2B0 = 0xDE010000U;
-    (temp_v0_4 + 0x2B0)->words.w1 = (u32) sp30;
+    temp_v0_4[86].words.w0 = 0xDE010000;
+    temp_v0_4[86].words.w1 = (u32) sp30;
     temp_v0_5 = graphDlEntry;
-    temp_v0_5->unk_2B8 = 0xDE010000U;
-    (temp_v0_5 + 0x2B8)->words.w1 = (u32) sp2C;
+    temp_v0_5[87].words.w0 = 0xDE010000;
+    temp_v0_5[87].words.w1 = (u32) sp2C;
     temp_v0_6 = graphDlEntry;
-    temp_v0_6->unk_2C0 = 0xDF000000;
-    (temp_v0_6 + 0x2C0)->words.w1 = 0;
-    temp_v0_7 = graphDlEntry + 0x2F8;
+    temp_v0_6[88].words.w0 = 0xDF000000;
+    temp_v0_6[88].words.w1 = 0;
+    temp_v0_7 = &graphDlEntry[95];
     temp_v0_7->words.w1 = (u32) sp28;
     temp_v0_7->words.w0 = 0xDE010000;
 }
@@ -269,22 +269,22 @@ GameStateOverlay *Graph_GetNextGameState(GameState *gamestate) {
         return &gGameStateOverlayTable;
     }
     if (temp_v0 == Select_Init) {
-        return &gGameStateOverlayTable + 0x30;
+        return &(&gGameStateOverlayTable)[1];
     }
     if (temp_v0 == Title_Init) {
-        return &gGameStateOverlayTable + 0x60;
+        return &(&gGameStateOverlayTable)[2];
     }
     if (temp_v0 == Play_Init) {
-        return &gGameStateOverlayTable + 0x90;
+        return &(&gGameStateOverlayTable)[3];
     }
     if (temp_v0 == Opening_Init) {
-        return &gGameStateOverlayTable + 0xC0;
+        return &(&gGameStateOverlayTable)[4];
     }
     if (temp_v0 == FileChoose_Init) {
-        return &gGameStateOverlayTable + 0xF0;
+        return &(&gGameStateOverlayTable)[5];
     }
     if (temp_v0 == Daytelop_Init) {
-        return &gGameStateOverlayTable + 0x120;
+        return &(&gGameStateOverlayTable)[6];
     }
     return NULL;
 }
@@ -476,50 +476,50 @@ void Graph_RenderFrame(GraphicsContext *gfxCtx, GameState *gamestate) {
     Graph_InitTHGA(gfxCtx);
     Game_Update(gamestate);
     temp_v1 = gfxCtx->unk1A4.p;
-    gfxCtx->unk1A4.p = temp_v1 + 8;
+    gfxCtx->unk1A4.p = &temp_v1[1];
     temp_v1->words.w1 = 0;
     temp_v1->words.w0 = 0xDF000000;
     temp_v1_2 = gfxCtx->polyOpa.p;
-    gfxCtx->polyOpa.p = temp_v1_2 + 8;
+    gfxCtx->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w1 = 0;
     temp_v1_2->words.w0 = 0xDF000000;
     temp_v1_3 = gfxCtx->polyXlu.p;
-    gfxCtx->polyXlu.p = temp_v1_3 + 8;
+    gfxCtx->polyXlu.p = &temp_v1_3[1];
     temp_v1_3->words.w1 = 0;
     temp_v1_3->words.w0 = 0xDF000000;
     temp_v1_4 = gfxCtx->overlay.p;
-    gfxCtx->overlay.p = temp_v1_4 + 8;
+    gfxCtx->overlay.p = &temp_v1_4[1];
     temp_v1_4->words.w1 = 0;
     temp_v1_4->words.w0 = 0xDF000000;
     temp_v1_5 = gfxCtx->unk1B8.p;
-    gfxCtx->unk1B8.p = temp_v1_5 + 8;
+    gfxCtx->unk1B8.p = &temp_v1_5[1];
     temp_v1_5->words.w1 = 0;
     temp_v1_5->words.w0 = 0xDF000000;
     temp_v0 = graphDlEntry;
     temp_v0->words.w0 = 0xDB060038;
-    temp_v0_2 = temp_v0 + 8;
+    temp_v0_2 = &temp_v0[1];
     temp_v0->words.w1 = (u32) graphDlEntry;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = (u32) &D_0E0002B8;
-    temp_v0_3 = temp_v0_2 + 8;
+    temp_v0_3 = &temp_v0_2[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_0E0002A0;
-    temp_v0_4 = temp_v0_3 + 8;
+    temp_v0_4 = &temp_v0_3[1];
     temp_v0_4->words.w0 = 0xDE000000;
     temp_v0_4->words.w1 = (u32) &D_0E0002A8;
-    temp_v0_5 = temp_v0_4 + 8;
+    temp_v0_5 = &temp_v0_4[1];
     temp_v0_5->words.w1 = (u32) &D_0E0002B0;
     temp_v0_5->words.w0 = 0xDE000000;
-    temp_v0_6 = temp_v0_5 + 8;
+    temp_v0_6 = &temp_v0_5[1];
     temp_v0_6->words.w1 = (u32) &D_0E0002F8;
     temp_v0_6->words.w0 = 0xDE000000;
-    temp_v0_7 = temp_v0_6 + 8;
+    temp_v0_7 = &temp_v0_6[1];
     temp_v0_7->words.w0 = 0xE7000000;
     temp_v0_7->words.w1 = 0;
-    temp_v0_8 = temp_v0_7 + 8;
+    temp_v0_8 = &temp_v0_7[1];
     temp_v0_8->words.w0 = 0xE9000000;
     temp_v0_8->words.w1 = 0;
-    temp_v0_9 = temp_v0_8 + 8;
+    temp_v0_9 = &temp_v0_8[1];
     temp_v0_9->words.w0 = 0xDF000000;
     temp_v0_9->words.w1 = 0;
     sp7C = 0;

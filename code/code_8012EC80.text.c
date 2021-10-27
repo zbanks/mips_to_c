@@ -141,7 +141,7 @@ s32 func_8012EC80(GlobalContext *globalCtx) {
 }
 
 void func_8012ED34(s16 equipment) {
-    gSaveContext.equips.equipment = ((equipment & 0xFFFF) << gEquipShifts[1]) | (gSaveContext.equips.equipment & *(gEquipNegMasks + 2));
+    gSaveContext.equips.equipment = ((equipment & 0xFFFF) << gEquipShifts[1]) | (gSaveContext.equips.equipment & gEquipNegMasks[1]);
 }
 
 u8 func_8012ED78(GlobalContext *globalCtx, s16 equipment) {
@@ -150,8 +150,8 @@ u8 func_8012ED78(GlobalContext *globalCtx, s16 equipment) {
 
     temp_v0 = gSaveContext.equips.equipment;
     temp_v1 = gEquipShifts[1];
-    if (((s32) (temp_v0 & *(gEquipMasks + 2)) >> temp_v1) != 0) {
-        gSaveContext.equips.equipment = (0 << temp_v1) | (temp_v0 & *(gEquipNegMasks + 2));
+    if (((s32) (temp_v0 & gEquipMasks[1]) >> temp_v1) != 0) {
+        gSaveContext.equips.equipment = (0 << temp_v1) | (temp_v0 & gEquipNegMasks[1]);
         func_80123C90(globalCtx->actorCtx.actorList[2].first, &gSaveContext);
         return 1U;
     }

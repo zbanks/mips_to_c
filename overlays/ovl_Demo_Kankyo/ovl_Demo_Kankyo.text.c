@@ -217,17 +217,17 @@ void func_808CE45C(Actor *arg0, GlobalContext *arg1) {
                     spB8 = arg1->view.eye.y + (temp_f20 * 80.0f);
                     spB4 = arg1->view.eye.z + (temp_f22 * 80.0f);
                     temp_v0_3 = phi_s0->unk_144;
-                    phi_s0->unk_154 = (f32) phi_s0->unk_148;
-                    phi_s0->unk_158 = (f32) phi_s0->unk_14C;
-                    phi_s0->unk_15C = (f32) phi_s0->unk_150;
+                    phi_s0[1].home.pos.z = phi_s0[1].flags;
+                    phi_s0->unk_158 = (f32) phi_s0[1].home.pos.x;
+                    phi_s0->unk_15C = (f32) phi_s0[1].home.pos.y;
                     if (temp_v0_3 == 1) {
                         if (phi_s4 < 0x20) {
                             if (Rand_ZeroOne() < 0.5f) {
-                                phi_s0->unk_18C = (u16) ((s32) (Rand_ZeroOne() * 200.0f) + 0xC8);
+                                phi_s0[1].focus.rot.x = (s32) (Rand_ZeroOne() * 200.0f) + 0xC8;
                             } else {
-                                phi_s0->unk_18C = (u16) (-0xC8 - (s32) (Rand_ZeroOne() * 200.0f));
+                                phi_s0[1].focus.rot.x = -0xC8 - (s32) (Rand_ZeroOne() * 200.0f);
                             }
-                            phi_s0->unk_18E = (u16) ((s32) (Rand_ZeroOne() * 50.0f) + 0xF);
+                            phi_s0[1].focus.rot.y = (s32) (Rand_ZeroOne() * 50.0f) + 0xF;
                             phi_s0->unk_190 = (f32) (((Rand_ZeroOne() * 10.0f) + 10.0f) * 0.01f);
                             temp_f0_2 = Rand_ZeroOne();
                             if (temp_f0_2 < 0.2f) {
@@ -240,43 +240,43 @@ void func_808CE45C(Actor *arg0, GlobalContext *arg1) {
                                 D_808D03C4 = 0xF;
                             }
                             if ((D_808D03C4 & phi_s4) == 0) {
-                                phi_s0->unk_14C = 0.0f;
+                                phi_s0[1].home.pos.x = 0.0f;
                             }
                             phi_s0->unk_144 = 2U;
                             phi_s0->unk_17C = 0.0f;
                         }
                         Math_SmoothStepToF(phi_s0 + 0x188, 0.1f, 0.1f, 0.001f, 0.00001f);
                         Math_SmoothStepToF(phi_s0 + 0x178, phi_s0->unk_17C, 0.5f, 0.2f, 0.02f);
-                        phi_s0->unk_148 = (f32) (phi_s0->unk_148 + (__sinf(phi_s0->unk_16C) * phi_s0->unk_178));
-                        phi_s0->unk_14C = (f32) (phi_s0->unk_14C + (__sinf(phi_s0->unk_170) * phi_s0->unk_178));
+                        phi_s0[1].flags += __sinf(phi_s0[1].world.pos.y) * phi_s0->unk_178;
+                        phi_s0[1].home.pos.x += __sinf(phi_s0[1].world.pos.z) * phi_s0->unk_178;
                         temp_v0_4 = (phi_s4 >> 1) & 3;
-                        phi_s0->unk_150 = (f32) (phi_s0->unk_150 + (__sinf(phi_s0->unk_174) * phi_s0->unk_178));
+                        phi_s0[1].home.pos.y += __sinf(phi_s0->unk_174) * phi_s0->unk_178;
                         if (temp_v0_4 != 0) {
                             if (temp_v0_4 != 1) {
                                 if (temp_v0_4 != 2) {
                                     if (temp_v0_4 != 3) {
 
                                     } else {
-                                        phi_s0->unk_16C = (f32) (phi_s0->unk_16C + (0.01f * Rand_ZeroOne()));
-                                        phi_s0->unk_170 = (f32) (phi_s0->unk_170 + (0.08f * Rand_ZeroOne()));
+                                        phi_s0[1].world.pos.y += 0.01f * Rand_ZeroOne();
+                                        phi_s0[1].world.pos.z += 0.08f * Rand_ZeroOne();
                                         phi_f4 = phi_s0->unk_174 + (0.05f * Rand_ZeroOne());
                                         goto block_39;
                                     }
                                 } else {
-                                    phi_s0->unk_16C = (f32) (phi_s0->unk_16C + (0.01f * Rand_ZeroOne()));
-                                    phi_s0->unk_170 = (f32) (phi_s0->unk_170 + (0.4f * Rand_ZeroOne()));
+                                    phi_s0[1].world.pos.y += 0.01f * Rand_ZeroOne();
+                                    phi_s0[1].world.pos.z += 0.4f * Rand_ZeroOne();
                                     phi_f4 = phi_s0->unk_174 + (0.004f * Rand_ZeroOne());
                                     goto block_39;
                                 }
                             } else {
-                                phi_s0->unk_16C = (f32) (phi_s0->unk_16C + (0.01f * Rand_ZeroOne()));
-                                phi_s0->unk_170 = (f32) (phi_s0->unk_170 + (0.05f * Rand_ZeroOne()));
+                                phi_s0[1].world.pos.y += 0.01f * Rand_ZeroOne();
+                                phi_s0[1].world.pos.z += 0.05f * Rand_ZeroOne();
                                 phi_f4 = phi_s0->unk_174 + (0.005f * Rand_ZeroOne());
                                 goto block_39;
                             }
                         } else {
-                            phi_s0->unk_16C = (f32) (phi_s0->unk_16C + 0.008f);
-                            phi_s0->unk_170 = (f32) (phi_s0->unk_170 + (0.05f * Rand_ZeroOne()));
+                            phi_s0[1].world.pos.y += 0.008f;
+                            phi_s0[1].world.pos.z += 0.05f * Rand_ZeroOne();
                             phi_f4 = phi_s0->unk_174 + 0.015f;
 block_39:
                             phi_s0->unk_174 = phi_f4;
@@ -293,78 +293,78 @@ block_39:
                             Math_SmoothStepToF(sp90, spA4->world.pos.x, 0.5f, 1.0f, 0.2f);
                             Math_SmoothStepToF(sp8C, spA4->world.pos.y + 50.0f, 0.5f, 1.0f, 0.2f);
                             Math_SmoothStepToF(sp88, spA4->world.pos.z, 0.5f, 1.0f, 0.2f);
-                            temp_t8 = phi_s0->unk_18E;
+                            temp_t8 = phi_s0[1].focus.rot.y;
                             temp_f8 = (f32) temp_t8;
                             phi_f8 = temp_f8;
                             if ((s32) temp_t8 < 0) {
                                 phi_f8 = temp_f8 + 4294967296.0f;
                             }
                             Math_SmoothStepToF(sp84, phi_f8 * Math_SinS((s16) (phi_s0->unk_182 - 0x8000)), 0.5f, 2.0f, 0.2f);
-                            temp_t9_2 = phi_s0->unk_18E;
+                            temp_t9_2 = phi_s0[1].focus.rot.y;
                             temp_f10 = (f32) temp_t9_2;
                             phi_f10 = temp_f10;
                             if ((s32) temp_t9_2 < 0) {
                                 phi_f10 = temp_f10 + 4294967296.0f;
                             }
                             Math_SmoothStepToF(sp7C, phi_f10 * Math_CosS((s16) (phi_s0->unk_182 - 0x8000)), 0.5f, 2.0f, 0.2f);
-                            phi_s0->unk_182 = (u16) (phi_s0->unk_182 + phi_s0->unk_18C);
-                            phi_s0->unk_14C = (f32) (phi_s0->unk_14C + __sinf(phi_s0->unk_170));
-                            phi_s0->unk_16C = (f32) (phi_s0->unk_16C + (0.2f * Rand_ZeroOne()));
-                            phi_s0->unk_170 = (f32) (phi_s0->unk_170 + phi_s0->unk_190);
+                            phi_s0->unk_182 = (u16) (phi_s0->unk_182 + phi_s0[1].focus.rot.x);
+                            phi_s0[1].home.pos.x += __sinf(phi_s0[1].world.pos.z);
+                            phi_s0[1].world.pos.y += 0.2f * Rand_ZeroOne();
+                            phi_s0[1].world.pos.z += phi_s0->unk_190;
                             phi_s0->unk_174 = (f32) (phi_s0->unk_174 + (0.1f * Rand_ZeroOne()));
-                            temp_t3 = phi_s0->unk_18E;
+                            temp_t3 = phi_s0[1].focus.rot.y;
                             temp_f6 = (f32) temp_t3;
                             phi_f6 = temp_f6;
                             if ((s32) temp_t3 < 0) {
                                 phi_f6 = temp_f6 + 4294967296.0f;
                             }
-                            phi_s0->unk_148 = (f32) (phi_f6 * Math_SinS((s16) (phi_s0->unk_182 - 0x8000)));
-                            temp_t5 = phi_s0->unk_18E;
+                            phi_s0[1].flags = phi_f6 * Math_SinS((s16) (phi_s0->unk_182 - 0x8000));
+                            temp_t5 = phi_s0[1].focus.rot.y;
                             temp_f10_2 = (f32) temp_t5;
                             phi_f10_2 = temp_f10_2;
                             if ((s32) temp_t5 < 0) {
                                 phi_f10_2 = temp_f10_2 + 4294967296.0f;
                             }
-                            phi_s0->unk_150 = (f32) (phi_f10_2 * Math_CosS((s16) (phi_s0->unk_182 - 0x8000)));
+                            phi_s0[1].home.pos.y = phi_f10_2 * Math_CosS((s16) (phi_s0->unk_182 - 0x8000));
                         } else {
                             Math_SmoothStepToF(temp_s1, 0.1f, 0.1f, 0.001f, 0.00001f);
                             Math_SmoothStepToF(phi_s0 + 0x178, 1.5f, 0.5f, 0.1f, 0.0002f);
-                            phi_s0->unk_148 = (f32) ((phi_s0->prevPos.y - phi_s0->unk_160) + phi_s0->uncullZoneScale);
-                            phi_s0->unk_14C = (f32) ((phi_s0->prevPos.z - phi_s0->unk_164) + phi_s0->uncullZoneDownward);
-                            phi_s0->unk_150 = (f32) ((phi_s0->unk_114 - phi_s0->unk_168) + phi_s0->prevPos.x);
+                            phi_s0[1].flags = (phi_s0->prevPos.y - phi_s0->unk_160) + phi_s0->uncullZoneScale;
+                            phi_s0[1].home.pos.x = (phi_s0->prevPos.z - phi_s0->unk_164) + phi_s0->uncullZoneDownward;
+                            phi_s0[1].home.pos.y = (phi_s0->unk_114 - phi_s0[1].world.pos.x) + phi_s0->prevPos.x;
                         }
                     }
-                    if ((phi_s0->unk_144 != 2) && ((temp_f12_2 = -130.0f, temp_f2_2 = (phi_s0->unk_148 + phi_s0->unk_160) - spBC, phi_f2 = temp_f2_2, (temp_f2_2 > 130.0f)) || (temp_f2_2 < temp_f12_2) || (temp_f0_3 = (phi_s0->unk_14C + phi_s0->unk_164) - spB8, (temp_f0_3 > 130.0f)) || (temp_f0_3 < temp_f12_2) || (temp_f0_4 = (phi_s0->unk_150 + phi_s0->unk_168) - spB4, (temp_f0_4 > 130.0f)) || (temp_f0_4 < temp_f12_2))) {
+                    if ((phi_s0->unk_144 != 2) && ((temp_f12_2 = -130.0f, temp_f2_2 = (phi_s0[1].flags + phi_s0->unk_160) - spBC, phi_f2 = temp_f2_2, (temp_f2_2 > 130.0f)) || (temp_f2_2 < temp_f12_2) || (temp_f0_3 = (phi_s0[1].home.pos.x + phi_s0->unk_164) - spB8, (temp_f0_3 > 130.0f)) || (temp_f0_3 < temp_f12_2) || (temp_f0_4 = (phi_s0[1].home.pos.y + phi_s0[1].world.pos.x) - spB4, (temp_f0_4 > 130.0f)) || (temp_f0_4 < temp_f12_2))) {
                         if (temp_f2_2 > 130.0f) {
-                            phi_s0->unk_148 = 0.0f;
+                            phi_s0[1].flags = 0.0f;
                             phi_s0->unk_160 = (f32) (spBC - 130.0f);
-                            phi_f2 = (phi_s0->unk_148 + phi_s0->unk_160) - spBC;
+                            phi_f2 = (phi_s0[1].flags + phi_s0->unk_160) - spBC;
                         }
                         if (phi_f2 < temp_f12_2) {
-                            phi_s0->unk_148 = 0.0f;
+                            phi_s0[1].flags = 0.0f;
                             phi_s0->unk_160 = (f32) (spBC + 130.0f);
                         }
-                        temp_f0_5 = (phi_s0->unk_14C + phi_s0->unk_164) - spB8;
+                        temp_f0_5 = (phi_s0[1].home.pos.x + phi_s0->unk_164) - spB8;
                         phi_f0 = temp_f0_5;
                         if (temp_f0_5 > 50.0f) {
-                            phi_s0->unk_14C = 0.0f;
+                            phi_s0[1].home.pos.x = 0.0f;
                             phi_s0->unk_164 = (f32) (spB8 - 50.0f);
-                            phi_f0 = (phi_s0->unk_14C + phi_s0->unk_164) - spB8;
+                            phi_f0 = (phi_s0[1].home.pos.x + phi_s0->unk_164) - spB8;
                         }
                         if (phi_f0 < -50.0f) {
-                            phi_s0->unk_14C = 0.0f;
+                            phi_s0[1].home.pos.x = 0.0f;
                             phi_s0->unk_164 = (f32) (spB8 + 50.0f);
                         }
-                        temp_f0_6 = (phi_s0->unk_150 + phi_s0->unk_168) - spB4;
+                        temp_f0_6 = (phi_s0[1].home.pos.y + phi_s0[1].world.pos.x) - spB4;
                         phi_f0_2 = temp_f0_6;
                         if (temp_f0_6 > 130.0f) {
-                            phi_s0->unk_150 = 0.0f;
-                            phi_s0->unk_168 = (f32) (spB4 - 130.0f);
-                            phi_f0_2 = (phi_s0->unk_150 + phi_s0->unk_168) - spB4;
+                            phi_s0[1].home.pos.y = 0.0f;
+                            phi_s0[1].world.pos.x = spB4 - 130.0f;
+                            phi_f0_2 = (phi_s0[1].home.pos.y + phi_s0[1].world.pos.x) - spB4;
                         }
                         if (phi_f0_2 < temp_f12_2) {
-                            phi_s0->unk_150 = 0.0f;
-                            phi_s0->unk_168 = (f32) (spB4 + 130.0f);
+                            phi_s0[1].home.pos.y = 0.0f;
+                            phi_s0[1].world.pos.x = spB4 + 130.0f;
                         }
                     }
                     goto block_74;
@@ -372,20 +372,20 @@ block_39:
             } else {
                 phi_s0->unk_160 = (f32) (temp_f16 + (spCC * 80.0f));
                 phi_s0->unk_164 = (f32) (arg1->view.eye.y + (spC8 * 80.0f));
-                phi_s0->unk_168 = (f32) (arg1->view.eye.z + (spC4 * 80.0f));
+                phi_s0[1].world.pos.x = arg1->view.eye.z + (spC4 * 80.0f);
                 temp_f8_2 = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                phi_s0->unk_14C = 30.0f;
-                phi_s0->unk_148 = temp_f8_2;
-                phi_s0->unk_150 = (f32) ((Rand_ZeroOne() - 0.5f) * 160.0f);
+                phi_s0[1].home.pos.x = 30.0f;
+                phi_s0[1].flags = temp_f8_2;
+                phi_s0[1].home.pos.y = (Rand_ZeroOne() - 0.5f) * 160.0f;
                 temp_f0_7 = Rand_ZeroOne();
                 phi_s0->unk_184 = 0;
                 phi_s0->unk_17C = (f32) ((temp_f0_7 * 1.6f) + 0.5f);
                 phi_s0->unk_180 = (u16) (u32) (Rand_ZeroOne() * 65535.0f);
-                phi_s0->unk_188 = 0.1f;
-                phi_s0->unk_16C = (f32) (Rand_ZeroOne() * 360.0f);
-                phi_s0->unk_170 = (f32) (Rand_ZeroOne() * 360.0f);
+                phi_s0[1].focus.pos.z = 0.1f;
+                phi_s0[1].world.pos.y = Rand_ZeroOne() * 360.0f;
+                phi_s0[1].world.pos.z = Rand_ZeroOne() * 360.0f;
                 temp_f0_8 = Rand_ZeroOne();
-                phi_s0->unk_194 = 0;
+                phi_s0[1].sfx = 0;
                 phi_s0->unk_144 = (u8) (phi_s0->unk_144 + 1);
                 phi_s0->unk_174 = (f32) (temp_f0_8 * 360.0f);
 block_74:
@@ -714,11 +714,11 @@ void func_808CF970(s32 arg0, GlobalContext *arg1) {
         temp_s2 = arg1->state.gfxCtx;
         temp_s2->polyXlu.p = Gfx_CallSetupDL(temp_s2->polyXlu.p, 0x14U);
         temp_v0 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0 + 8;
+        temp_s2->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDB060020;
         temp_v0->words.w1 = Lib_SegmentedToVirtual((void *) &D_04079B10);
         temp_v0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_2 + 8;
+        temp_s2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = (u32) D_0407AB10;
         phi_s3 = 0;
@@ -786,7 +786,7 @@ block_27:
                         }
                     }
                     temp_v0_9 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_9 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_9[1];
                     temp_v0_9->words.w1 = 0;
                     temp_v0_9->words.w0 = 0xE7000000;
                     temp_v0_10 = phi_s3 & 1;
@@ -795,21 +795,21 @@ block_27:
 
                         } else {
                             temp_v0_11 = temp_s2->polyXlu.p;
-                            temp_s2->polyXlu.p = temp_v0_11 + 8;
+                            temp_s2->polyXlu.p = &temp_v0_11[1];
                             temp_v0_11->words.w0 = 0xFA000000;
                             temp_v0_11->words.w1 = temp_s0->unk_184 | ~0xFF;
                             temp_v0_12 = temp_s2->polyXlu.p;
-                            temp_s2->polyXlu.p = temp_v0_12 + 8;
+                            temp_s2->polyXlu.p = &temp_v0_12[1];
                             temp_v0_12->words.w0 = 0xFB000000;
                             temp_v0_12->words.w1 = temp_s0->unk_184 | 0x64FF00;
                         }
                     } else {
                         temp_v0_13 = temp_s2->polyXlu.p;
-                        temp_s2->polyXlu.p = temp_v0_13 + 8;
+                        temp_s2->polyXlu.p = &temp_v0_13[1];
                         temp_v0_13->words.w0 = 0xFA000000;
                         temp_v0_13->words.w1 = temp_s0->unk_184 | ~0x64FF;
                         temp_v0_14 = temp_s2->polyXlu.p;
-                        temp_s2->polyXlu.p = temp_v0_14 + 8;
+                        temp_s2->polyXlu.p = &temp_v0_14[1];
                         temp_v0_14->words.w0 = 0xFB000000;
                         temp_v0_14->words.w1 = temp_s0->unk_184 | 0xFAB40000;
                     }
@@ -822,11 +822,11 @@ block_27:
                     }
                     SysMatrix_InsertZRotation_f(phi_f18 * 20.0f * 0.017453292f, 1);
                     temp_v0_15 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_15 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_15[1];
                     temp_v0_15->words.w0 = 0xDA380003;
                     temp_v0_15->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
                     temp_v0_16 = temp_s2->polyXlu.p;
-                    temp_s2->polyXlu.p = temp_v0_16 + 8;
+                    temp_s2->polyXlu.p = &temp_v0_16[1];
                     temp_v0_16->words.w1 = (u32) D_0407AB58;
                     temp_v0_16->words.w0 = 0xDE000000;
                 }
@@ -922,7 +922,7 @@ void func_808CFE04(void *arg0, GlobalContext *arg1) {
                         temp_s0->unk_184 = (u8) (u32) (160.0f * phi_f0_2);
                     }
                     temp_v0 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0 + 8;
+                    temp_s1->polyXlu.p = &temp_v0[1];
                     temp_v0->words.w1 = 0;
                     temp_v0->words.w0 = 0xE7000000;
                     temp_v0_2 = phi_s5 & 1;
@@ -931,26 +931,26 @@ void func_808CFE04(void *arg0, GlobalContext *arg1) {
 
                         } else {
                             temp_v0_3 = temp_s1->polyXlu.p;
-                            temp_s1->polyXlu.p = temp_v0_3 + 8;
+                            temp_s1->polyXlu.p = &temp_v0_3[1];
                             temp_v0_3->words.w0 = 0xFA000000;
                             temp_v0_3->words.w1 = temp_s0->unk_184 | 0xC8C8BE00;
                             temp_v0_4 = temp_s1->polyXlu.p;
-                            temp_s1->polyXlu.p = temp_v0_4 + 8;
+                            temp_s1->polyXlu.p = &temp_v0_4[1];
                             temp_v0_4->words.w0 = 0xFB000000;
                             temp_v0_4->words.w1 = temp_s0->unk_184 | 0xC8C81E00;
                         }
                     } else {
                         temp_v0_5 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_5 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_5[1];
                         temp_v0_5->words.w0 = 0xFA000000;
                         temp_v0_5->words.w1 = temp_s0->unk_184 | 0xE6E6DC00;
                         temp_v0_6 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_6 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_6[1];
                         temp_v0_6->words.w0 = 0xFB000000;
                         temp_v0_6->words.w1 = temp_s0->unk_184 | 0xE6E61E00;
                     }
                     temp_v0_7 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0_7 + 8;
+                    temp_s1->polyXlu.p = &temp_v0_7[1];
                     temp_v0_7->words.w1 = (u32) &D_04023348;
                     temp_v0_7->words.w0 = 0xDE000000;
                     SysMatrix_InsertMatrix(sp54, 1);
@@ -962,17 +962,17 @@ void func_808CFE04(void *arg0, GlobalContext *arg1) {
                     }
                     SysMatrix_InsertZRotation_f(phi_f6 * 20.0f * 0.017453292f, 1);
                     temp_v0_8 = temp_s1->polyXlu.p;
-                    temp_s1->polyXlu.p = temp_v0_8 + 8;
+                    temp_s1->polyXlu.p = &temp_v0_8[1];
                     temp_v0_8->words.w0 = 0xDA380003;
                     temp_v0_8->words.w1 = Matrix_NewMtx(arg1->state.gfxCtx);
                     if (arg0->unk_1C == 1) {
                         temp_v0_9 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_9 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_9[1];
                         temp_v0_9->words.w1 = (u32) &D_06001000;
                         temp_v0_9->words.w0 = 0xDE000000;
                     } else {
                         temp_v0_10 = temp_s1->polyXlu.p;
-                        temp_s1->polyXlu.p = temp_v0_10 + 8;
+                        temp_s1->polyXlu.p = &temp_v0_10[1];
                         temp_v0_10->words.w1 = (u32) &D_04023428;
                         temp_v0_10->words.w0 = 0xDE000000;
                     }

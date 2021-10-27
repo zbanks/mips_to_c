@@ -149,33 +149,33 @@ void EffectSsFireTail_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
     }
     Matrix_Scale(1.0f, sp8C, 1.0f / sp8C, 1);
     temp_v0_3 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_3 + 8;
+    temp_s2->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDA380003;
     sp70 = temp_v0_3;
     sp70->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0_4 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_4 + 8;
+    temp_s2->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xFA000080;
     temp_v0_4->words.w1 = ((this->regs[6] & 0xFF) << 8) | (this->regs[4] << 0x18) | ((this->regs[5] & 0xFF) << 0x10) | 0xFF;
     temp_v0_5 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_5 + 8;
+    temp_s2->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFB000000;
     temp_v0_5->words.w1 = ((this->regs[9] & 0xFF) << 8) | (this->regs[7] << 0x18) | ((this->regs[8] & 0xFF) << 0x10);
     temp_v0_6 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_6 + 8;
+    temp_s2->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xDB060020;
     sp64 = temp_v0_6;
     sp64->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, ((s32) globalCtx->state.frames * -0x14) & 0x1FF, 0x20, 0x80);
     if (this->regs[12] != 0) {
         temp_v0_7 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_7 + 8;
+        temp_s2->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = (u32) &D_0407D650;
         temp_v0_7->words.w0 = 0xDE000000;
         return;
     }
     temp_v0_8 = temp_s2->polyXlu.p;
-    temp_s2->polyXlu.p = temp_v0_8 + 8;
+    temp_s2->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = (u32) D_0407D590;
     temp_v0_8->words.w0 = 0xDE000000;
 }

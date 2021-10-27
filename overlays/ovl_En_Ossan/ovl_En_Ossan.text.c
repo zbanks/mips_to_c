@@ -1,3 +1,73 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ s16 unk_3A;                         /* inferred */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnOssan_BeginInteraction {
     /* 0x00 */ char pad_0[0x20];
     /* 0x20 */ s16 sp20;                            /* inferred */
@@ -517,14 +587,14 @@ void EnOssan_EndInteraction(GlobalContext *arg0, Actor *arg1) {
     arg0->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(0x32U);
     arg1->unk_235 = 0;
-    arg1->unk_26C = 0;
+    arg1[1].prev = NULL;
     arg1->unk_2A4 = 0;
     sp24->unk_A70 = (s32) (sp24->unk_A70 & 0xDFFFFFFF);
     arg0->interfaceCtx.unk_222 = 0;
     arg0->interfaceCtx.unk_224 = 0;
-    if (arg1->unk_2C2 == 2) {
+    if (arg1[2].unk_3A == 2) {
         ActorCutscene_Stop(arg1->unk_2C0);
-        arg1->unk_2C2 = 0;
+        arg1[2].unk_3A = 0;
     }
     if (arg1->params == 0) {
         EnOssan_SetupAction((EnOssan *) arg1, EnOssan_BeginInteraction);
@@ -967,13 +1037,13 @@ s32 EnOssan_FacingShopkeeperDialogResult(Actor *arg0, GlobalContext *arg1) {
     sp24 = temp_a3;
     func_8019F208();
     if ((arg0->params == 1) && (temp_v1->unk_14B == 2)) {
-        arg0->unk_402 = 9;
-        func_8013BC6C((SkelAnime *) (arg0 + 0x144), temp_a3, 9);
+        arg0[3].world.unk_12 = 9;
+        func_8013BC6C((SkelAnime *) &arg0[1], temp_a3, 9);
     }
     EnOssan_SetupAction((EnOssan *) arg0, EnOssan_TalkToShopkeeper);
     func_80151938(arg1, *(&sTalkOptionTextIds + (arg0->params * 2)));
     func_8011552C(arg1, 6);
-    arg0->unk_26C = 0;
+    arg0[1].prev = NULL;
     arg0->unk_2A4 = 0;
     return 1;
 }
@@ -1271,9 +1341,9 @@ s32 EnOssan_HasPlayerSelectedItem(GlobalContext *arg0, Actor *arg1) {
     }
     if (EnOssan_TestItemSelected(arg0) != 0) {
         if (sp24->unk_1A0 == 0) {
-            arg1->unk_18C = (s32) arg1->unk_188;
+            arg1->unk_18C = (f32) arg1[1].focus.pos.z;
             func_80151938(arg0, (arg1 + (arg1->unk_236 * 4))->unk_1E8->unk_198);
-            arg1->unk_26C = 0;
+            arg1[1].prev = NULL;
             arg1->unk_2A4 = 0;
             play_sound(0x4808U);
             arg1->unk_235 = 0;
@@ -1503,15 +1573,15 @@ void EnOssan_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
     temp_v0 = temp_s1->unk_1B4(arg0, temp_s1);
     switch (temp_v0) {
     case 0:
-        if (arg1->unk_2C2 == 2) {
+        if (arg1[2].unk_3A == 2) {
             ActorCutscene_Stop(arg1->unk_2C0);
-            arg1->unk_2C2 = 0;
+            arg1[2].unk_3A = 0;
         }
         func_8019F208();
         temp_s1->unk_1BC(arg0, temp_s1);
         EnOssan_SetupBuyItemWithFanfare(arg0, arg1);
         arg1->unk_235 = 0;
-        arg1->unk_2B4 = 0.0f;
+        arg1[2].world.pos.z = 0.0f;
         temp_s1->unk_1A4(arg0, temp_s1);
         return;
     case 1:
@@ -1519,7 +1589,7 @@ void EnOssan_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
         temp_s1->unk_1B8(arg0, temp_s1);
         EnOssan_SetupBuy(arg0, (EnOssan *) arg1, *(&sBuySuccessTextIds + (arg1->params * 2)));
         arg1->unk_235 = 0;
-        arg1->unk_2B4 = 0.0f;
+        arg1[2].world.pos.z = 0.0f;
         temp_s1->unk_1A4(arg0, temp_s1);
         return;
     case 2:
@@ -2195,48 +2265,48 @@ void EnOssan_DrawCursor(GraphicsContext **arg0, EnOssan *arg1, f32 arg2, f32 arg
         arg2 = arg2;
         func_8012C654(temp_a2);
         temp_v0 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0 + 8;
+        sp1C->overlay.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFA000000;
         temp_v0->words.w1 = (arg1->cursorColor.r << 0x18) | ((arg1->cursorColor.g & 0xFF) << 0x10) | ((arg1->cursorColor.b & 0xFF) << 8) | (arg1->cursorColor.a & 0xFF);
         temp_v0_2 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_2 + 8;
+        sp1C->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFD700000;
         temp_v0_2->words.w1 = (u32) &D_0401F740;
         temp_v0_3 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_3 + 8;
+        sp1C->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xF5700000;
         temp_v0_3->words.w1 = 0x7050140;
         temp_v0_4 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_4 + 8;
+        sp1C->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE6000000;
         temp_v0_5 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_5 + 8;
+        sp1C->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x703F800;
         temp_v0_5->words.w0 = 0xF3000000;
         temp_v0_6 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_6 + 8;
+        sp1C->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0;
         temp_v0_6->words.w0 = 0xE7000000;
         temp_v0_7 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_7 + 8;
+        sp1C->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xF5600200;
         temp_v0_7->words.w1 = 0x50140;
         temp_v0_8 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_8 + 8;
+        sp1C->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xF2000000;
         temp_v0_8->words.w1 = 0x3C03C;
         temp_v0_9 = sp1C->overlay.p;
         temp_f0 = 16.0f * arg4;
-        sp1C->overlay.p = temp_v0_9 + 8;
+        sp1C->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = (((s32) ((arg2 + temp_f0) * 4.0f) & 0xFFF) << 0xC) | 0xE4000000 | ((s32) ((arg3 + temp_f0) * 4.0f) & 0xFFF);
         temp_v0_9->words.w1 = (((s32) ((arg2 - temp_f0) * 4.0f) & 0xFFF) << 0xC) | ((s32) ((arg3 - temp_f0) * 4.0f) & 0xFFF);
         temp_v0_10 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_10 + 8;
+        sp1C->overlay.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0;
         temp_v0_10->words.w0 = 0xE1000000;
         temp_v0_11 = sp1C->overlay.p;
-        sp1C->overlay.p = temp_v0_11 + 8;
+        sp1C->overlay.p = &temp_v0_11[1];
         temp_a1 = (s32) ((1.0f / arg4) * 1024.0f) & 0xFFFF;
         temp_v0_11->words.w1 = (temp_a1 << 0x10) | temp_a1;
         temp_v0_11->words.w0 = 0xF1000000;
@@ -2312,35 +2382,35 @@ void EnOssan_DrawStickDirectionPrompts(GraphicsContext **arg0, EnOssan *arg1) {
         sp4C = temp_t1;
         func_8012C654(temp_a2);
         temp_v0_2 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_2 + 8;
+        temp_a2->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFC119623;
         temp_v0_2->words.w1 = 0xFF2FFFFF;
         temp_v0_3 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_3 + 8;
+        temp_a2->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFD700000;
         temp_v0_3->words.w1 = (u32) &D_0401F8C0;
         temp_v0_4 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_4 + 8;
+        temp_a2->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xF5700000;
         temp_v0_4->words.w1 = 0x7000040;
         temp_v0_5 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_5 + 8;
+        temp_a2->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0;
         temp_v0_5->words.w0 = 0xE6000000;
         temp_v0_6 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_6 + 8;
+        temp_a2->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x70BF400;
         temp_v0_6->words.w0 = 0xF3000000;
         temp_v0_7 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_7 + 8;
+        temp_a2->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0;
         temp_v0_7->words.w0 = 0xE7000000;
         temp_v0_8 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_8 + 8;
+        temp_a2->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x40;
         temp_v0_8->words.w0 = 0xF5680400;
         temp_v0_9 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_9 + 8;
+        temp_a2->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xF2000000;
         temp_v0_9->words.w1 = 0x3C05C;
         if (temp_t1 != 0) {
@@ -2392,15 +2462,15 @@ void EnOssan_DrawStickDirectionPrompts(GraphicsContext **arg0, EnOssan *arg1) {
 
 s32 EnOssan_OverrideLimbDrawCuriosityShopMan(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 0x10) {
-        SysMatrix_InsertXRotation_s(arg5->unk_2C8, 1);
+        SysMatrix_InsertXRotation_s(arg5[118].z, 1);
     }
     return 0;
 }
 
 s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
     if (arg1 == 0xF) {
-        SysMatrix_InsertXRotation_s(arg5->unk_406, 1);
-        SysMatrix_InsertZRotation_s(arg5->unk_404, 1);
+        SysMatrix_InsertXRotation_s(arg5[171].z, 1);
+        SysMatrix_InsertZRotation_s(arg5[171].y, 1);
     }
     return 0;
 }
@@ -2434,7 +2504,7 @@ void EnOssan_DrawCuriosityShopMan(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&sCuriosityShopManEyeTextures + (this->eyeTexIndex * 4)));
@@ -2454,7 +2524,7 @@ void EnOssan_DrawPartTimeWorker(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&sPartTimeWorkerEyeTextures + (this->eyeTexIndex * 4)));

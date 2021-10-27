@@ -410,7 +410,7 @@ void func_80BD187C(EnZov *this, GlobalContext *globalCtx) {
 }
 
 void func_80BD19FC(EnZov *this, GlobalContext *globalCtx) {
-    Actor *temp_v0_3;
+    f32 temp_v0_3;
     s16 temp_v0_2;
     u16 temp_v0;
 
@@ -428,9 +428,9 @@ void func_80BD19FC(EnZov *this, GlobalContext *globalCtx) {
         }
         func_80BD13DC(this);
         func_801518B0(globalCtx, 0x1021U, (Actor *) this);
-        temp_v0_3 = globalCtx->actorCtx.actorList[2].first->unk_A80;
+        temp_v0_3 = globalCtx->actorCtx.actorList[2].first[8].scale.z;
         temp_v0_3->unk_264 = (u16) (temp_v0_3->unk_264 | 4);
-        func_800B86C8((Actor *) this, globalCtx, globalCtx->actorCtx.actorList[2].first->unk_A80);
+        func_800B86C8((Actor *) this, globalCtx, (bitwise Actor *) globalCtx->actorCtx.actorList[2].first[8].scale.z);
         this->actionFunc = func_80BD187C;
         return;
     }
@@ -583,9 +583,9 @@ s32 func_80BD1FC8(GlobalContext *arg0, Actor *arg1) {
     temp_v0 = arg1 + 0xBC;
     sp28 = temp_v0;
     sp34 = func_8013A530(arg0, arg1, 4, arg1 + 0x3C, temp_v0, 10.0f, 300.0f, (s16) -1);
-    temp_v1 = sp34 | func_8013A530(arg0, arg1, 5, arg1 + 0x308, sp28, 50.0f, 160.0f, (s16) 0x3000);
+    temp_v1 = sp34 | func_8013A530(arg0, arg1, 5, (Vec3f *) &arg1[2].floorPoly, sp28, 50.0f, 160.0f, (s16) 0x3000);
     sp34 = temp_v1;
-    return temp_v1 | func_8013A530(arg0, arg1, 6, arg1 + 0x314, sp28, 50.0f, 160.0f, (s16) 0x3000);
+    return temp_v1 | func_8013A530(arg0, arg1, 6, (Vec3f *) &arg1[2].yDistToWater, sp28, 50.0f, 160.0f, (s16) 0x3000);
 }
 
 void EnZov_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -672,7 +672,7 @@ void func_80BD2404(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
         sp20 = temp_a1;
         SysMatrix_MultiplyVector3fByState(&D_80BD2744, temp_a1);
         Math_Vec3f_Copy(arg4 + 0x2FC, temp_a1);
-        arg4->unk_300 = (f32) (arg4->unk_300 + 10.0f);
+        arg4[2].minVelocityY += 10.0f;
     }
     if (arg1 == 0x12) {
         SysMatrix_MultiplyVector3fByState(&D_80BD2750, arg4 + 0x308);
@@ -763,9 +763,9 @@ block_25:
     sp38 = temp_t0;
     sp30 = phi_a1;
     temp_t0->words.w1 = Lib_SegmentedToVirtual(*(&D_80BD275C + (phi_v1 * 4)));
-    temp_t0->unk_8 = 0xDB060020;
+    temp_t0[1].words.w0 = 0xDB060020;
     sp38 = temp_t0;
-    temp_t0->unk_C = Lib_SegmentedToVirtual(*(&D_80BD2768 + (phi_a1 * 4)));
-    sp28->polyOpa.p = temp_t0 + 0x10;
+    temp_t0[1].words.w1 = Lib_SegmentedToVirtual(*(&D_80BD2768 + (phi_a1 * 4)));
+    sp28->polyOpa.p = &temp_t0[2];
     SkelAnime_DrawSV(globalCtx, this->unk_25C.skeleton, this->unk_25C.limbDrawTbl, (s32) this->unk_25C.dListCount, func_80BD2380, func_80BD2404, (Actor *) this);
 }

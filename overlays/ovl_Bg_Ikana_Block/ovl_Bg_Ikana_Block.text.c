@@ -520,16 +520,16 @@ void func_80B7F564(Actor *this, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     AnimatedMat_DrawStep(globalCtx, this->unk_15C, 0U);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = -1;
     temp_v0_2->words.w0 = 0xFA00FFFF;
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_050182A8;
     temp_v0_3->words.w0 = 0xDE000000;
 }

@@ -141,5 +141,5 @@ void func_80C1E4B0(void **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) 
 
 void func_80C1E568(Actor *this, GlobalContext *globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->unk_148, this->unk_164, (s32) this->unk_146, NULL, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80C1E4B0, this);
+    SkelAnime_DrawSV(globalCtx, (void **) this[1].flags, this->unk_164, (s32) this[1].category, NULL, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80C1E4B0, this);
 }

@@ -522,7 +522,7 @@ void func_80A61DF8(Actor *arg0) {
     temp_a0 = arg0;
     arg0 = arg0;
     Audio_PlayActorSound2(temp_a0, 0x6977U);
-    func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 1);
+    func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 1);
     arg0->unk_39A = 1;
     arg0->unk_3A4 = 2;
     arg0->unk_18C = func_80A61E5C;
@@ -547,9 +547,9 @@ void func_80A61E5C(Actor *arg0, GlobalContext *arg1) {
         Math_SmoothStepToS(arg0 + 0xC0, arg0->world.rot.z, 5, 0x3000, (s16) 0x100);
     } else if ((s32) temp_v0 < 0x1E) {
         arg0->unk_3A8 = (s16) (temp_v0 + 1);
-        arg0->shape.rot.y = (s32) (Math_CosS(arg0->unk_39E) * 2500.0f) + arg0->world.rot.y;
+        arg0->shape.rot.y = (s32) (Math_CosS(arg0[2].textId) * 2500.0f) + arg0->world.rot.y;
         temp_v0_2 = arg0->unk_3A8;
-        arg0->shape.rot.z = (s32) (Math_SinS(arg0->unk_39E) * 2500.0f) + arg0->world.rot.z;
+        arg0->shape.rot.z = (s32) (Math_SinS(arg0[2].textId) * 2500.0f) + arg0->world.rot.z;
         if (temp_v0_2 == 0x19) {
             arg0->unk_39A = 0;
             arg0->unk_1FC = 0;
@@ -569,7 +569,7 @@ void func_80A61E5C(Actor *arg0, GlobalContext *arg1) {
             arg0->shape.yOffset = 0.0f;
             func_80A623CC((EnBal *) arg0);
         } else if (temp_v0_3 == 0x1E) {
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 3);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 3);
             arg0->unk_BC = (unaligned s32) arg0->unk_30;
             arg0->shape.rot.z = (s16) (u16) arg0->world.rot.z;
             func_800BBDAC(arg1, arg0, (Vec3f *) &sp3C, 10.0f, 0x1E, 5.0f, (s16) 0, (s16) 0, (u8) 0);
@@ -585,7 +585,7 @@ void func_80A61E5C(Actor *arg0, GlobalContext *arg1) {
     } else if (arg0->velocity.y < 0.0f) {
         func_800B9010(arg0, 0x20A0U);
     }
-    arg0->unk_39E = (s16) (arg0->unk_39E + 0xBB8);
+    arg0[2].textId = (s16) arg0[2].textId + 0xBB8;
 }
 
 void func_80A62128(Actor *arg0) {
@@ -602,9 +602,9 @@ void func_80A62128(Actor *arg0) {
     arg0->unk_39C = 0;
     arg0->unk_39A = 0;
     arg0->unk_1FC = 0;
-    arg0->unk_1F0 = (s32) sp1C.unk_0;
+    arg0[1].colChkInfo.displacement.z = sp1C.unk_0;
     arg0->unk_1F4 = (s32) sp1C.unk_4;
-    arg0->unk_39E = 0;
+    arg0[2].textId = 0;
     arg0->unk_3A8 = 0;
     arg0->unk_18C = func_80A621C4;
     arg0->unk_1F8 = (s32) sp1C.unk_8;
@@ -618,7 +618,7 @@ void func_80A621C4(Actor *arg0, GlobalContext *arg1) {
     }
     func_80A62CF0(arg0, arg1);
     func_800B9010(arg0, 0x214AU);
-    temp_f0 = arg0->unk_1F0 * 1.1f;
+    temp_f0 = arg0[1].colChkInfo.displacement.z * 1.1f;
     arg0->unk_1F8 = temp_f0;
     arg0->unk_1F4 = temp_f0;
 }
@@ -722,12 +722,12 @@ block_5:
                 arg0->unk_39C = 1;
                 func_800BDC5C(temp_a3, (ActorAnimationEntry []) D_80A63D58, 5);
                 func_801518B0(arg1, 0x1D0CU, arg0);
-                arg0->unk_3A0 = 0x1D0C;
+                arg0[2].freezeTimer = 0x1D0C;
             } else {
                 arg0->unk_39C = 1;
                 func_800BDC5C(temp_a3, (ActorAnimationEntry []) D_80A63D58, 5);
                 func_801518B0(arg1, 0x1D05U, arg0);
-                arg0->unk_3A0 = 0x1D05;
+                arg0[2].freezeTimer = 0x1D05;
             }
             if (gSaveContext.magicAcquired == 0) {
                 arg0->unk_3B0 = 1;
@@ -736,7 +736,7 @@ block_5:
             arg0->unk_39C = 2;
             func_800BDC5C(temp_a3, (ActorAnimationEntry []) D_80A63D58, 3);
             func_801518B0(arg1, 0x1D00U, arg0);
-            arg0->unk_3A0 = 0x1D00;
+            arg0[2].freezeTimer = 0x1D00;
             if (arg0->unk_3AE == 0) {
                 arg0->unk_3B0 = 1;
             }
@@ -923,8 +923,8 @@ void func_80A62B78(EnBal *arg0, GlobalContext *arg1) {
 
     temp_s7 = &sp58;
     temp_s7->unk_0 = arg0->actor.world.pos.x;
-    temp_s7->unk_4 = (s32) arg0->actor.world.pos.y;
-    temp_s7->unk_8 = (s32) arg0->actor.world.pos.z;
+    temp_s7[1] = arg0->actor.world.pos.y;
+    temp_s7[2] = arg0->actor.world.pos.z;
     sp5C += 30.0f;
     sp58 += 20.0f * Math_SinS(arg0->actor.shape.rot.y);
     temp_f6 = 20.0f * Math_CosS(arg0->actor.shape.rot.y);
@@ -1052,33 +1052,33 @@ void func_80A62FAC(Actor *arg0, GlobalContext *arg1) {
                 play_sound(0x4806U);
                 func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
                 func_801518B0(arg1, 0x1D0AU, arg0);
-                arg0->unk_3A0 = 0x1D0A;
+                arg0[2].freezeTimer = 0x1D0A;
                 return;
             }
             sp20 = phi_v1;
             if (func_80A62DCC(arg0, arg1) != 0) {
                 play_sound(0x4806U);
-                func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
+                func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 5);
                 func_801518B0(arg1, 0x1D09U, arg0);
-                arg0->unk_3A0 = 0x1D09;
+                arg0[2].freezeTimer = 0x1D09;
                 return;
             }
             sp20 = phi_v1;
             func_8019F208();
             func_801159EC((s16) (phi_v1 * -1));
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 9);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 9);
             arg0->unk_39A = 1;
             func_801518B0(arg1, 0x1D0BU, arg0);
-            arg0->unk_3A0 = 0x1D0B;
+            arg0[2].freezeTimer = 0x1D0B;
             func_80A62ED0(arg0);
             sp24->unk_A6C = (s32) (sp24->unk_A6C | 0x20);
             func_80A634B4(arg0);
             return;
         }
         func_8019F230();
-        func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
+        func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 5);
         func_801518B0(arg1, 0x1D06U, arg0);
-        arg0->unk_3A0 = 0x1D06;
+        arg0[2].freezeTimer = 0x1D06;
         /* Duplicate return node #11. Try simplifying control flow for better match */
     }
 }
@@ -1087,35 +1087,35 @@ void func_80A63158(Actor *arg0, GlobalContext *arg1) {
     s16 temp_t7;
     u16 temp_t3;
 
-    if (((arg0->unk_3A0 != 0x1D07) || (arg1 = arg1, (func_801378B8(arg0 + 0x148, arg0->unk_158) != 0))) && (arg1 = arg1, (func_80147624(arg1) != 0))) {
-        temp_t7 = arg0->unk_3A0;
+    if (((arg0[2].freezeTimer != 0x1D07) || (arg1 = arg1, (func_801378B8(arg0 + 0x148, arg0->unk_158) != 0))) && (arg1 = arg1, (func_80147624(arg1) != 0))) {
+        temp_t7 = arg0[2].freezeTimer;
         switch (temp_t7) {                          /* switch 1 */
         case 7424:                                  /* switch 1 */
             arg1 = arg1;
             func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
             func_801518B0(arg1, 0x1D01U, arg0);
-            arg0->unk_3A0 = 0x1D01;
+            arg0[2].freezeTimer = 0x1D01;
             return;
         case 7425:                                  /* switch 1 */
             arg0->unk_39C = 1;
             func_801518B0(arg1, 0x1D02U, arg0);
-            arg0->unk_3A0 = 0x1D02;
+            arg0[2].freezeTimer = 0x1D02;
             return;
         case 7426:                                  /* switch 1 */
             arg0->unk_39A = 1;
             arg1 = arg1;
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 7);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 7);
             func_801518B0(arg1, 0x1D03U, arg0);
-            arg0->unk_3A0 = 0x1D03;
+            arg0[2].freezeTimer = 0x1D03;
             return;
         case 7427:                                  /* switch 1 */
         case 7437:                                  /* switch 1 */
             arg0->unk_39A = 0;
             arg0->unk_1FC = 0;
             arg1 = arg1;
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 5);
             func_801518B0(arg1, 0x1D04U, arg0);
-            arg0->unk_3A0 = 0x1D04;
+            arg0[2].freezeTimer = 0x1D04;
             return;
         case 7428:                                  /* switch 1 */
             temp_t3 = arg0->unk_3AE;
@@ -1123,31 +1123,31 @@ void func_80A63158(Actor *arg0, GlobalContext *arg1) {
             switch (temp_t3) {                      /* switch 2 */
             case 0:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D11U, arg0);
-                arg0->unk_3A0 = 0x1D11;
+                arg0[2].freezeTimer = 0x1D11;
                 return;
             case 1:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D12U, arg0);
-                arg0->unk_3A0 = 0x1D12;
+                arg0[2].freezeTimer = 0x1D12;
                 return;
             case 2:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D13U, arg0);
-                arg0->unk_3A0 = 0x1D13;
+                arg0[2].freezeTimer = 0x1D13;
                 return;
             case 3:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D14U, arg0);
-                arg0->unk_3A0 = 0x1D14;
+                arg0[2].freezeTimer = 0x1D14;
                 return;
             case 4:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D15U, arg0);
-                arg0->unk_3A0 = 0x1D15;
+                arg0[2].freezeTimer = 0x1D15;
                 return;
             case 5:                                 /* switch 2 */
                 func_801518B0(arg1, 0x1D16U, arg0);
-                arg0->unk_3A0 = 0x1D16;
+                arg0[2].freezeTimer = 0x1D16;
                 return;
             default:                                /* switch 2 */
                 func_801518B0(arg1, 0x1D11U, arg0);
-                arg0->unk_3A0 = 0x1D11;
+                arg0[2].freezeTimer = 0x1D11;
                 return;
             }
             break;
@@ -1155,18 +1155,18 @@ void func_80A63158(Actor *arg0, GlobalContext *arg1) {
         case 7436:                                  /* switch 1 */
             arg0->unk_39C = 2;
             arg1 = arg1;
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 7);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 7);
             func_801518B0(arg1, 0x1D0DU, arg0);
-            arg0->unk_3A0 = 0x1D0D;
+            arg0[2].freezeTimer = 0x1D0D;
             return;
         case 7430:                                  /* switch 1 */
         case 7447:                                  /* switch 1 */
             arg0->unk_39C = 0;
             arg1 = arg1;
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 6);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 6);
             arg0->unk_39A = 1;
             func_801518B0(arg1, 0x1D07U, arg0);
-            arg0->unk_3A0 = 0x1D07;
+            arg0[2].freezeTimer = 0x1D07;
             return;
         case 7431:                                  /* switch 1 */
             if ((gSaveContext.weekEventReg[10] & 1) != 0) {
@@ -1177,9 +1177,9 @@ void func_80A63158(Actor *arg0, GlobalContext *arg1) {
             arg0->unk_39A = 1;
             arg0->unk_39C = 1;
             arg1 = arg1;
-            func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 5);
+            func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 5);
             func_801518B0(arg1, 0x1D08U, arg0);
-            arg0->unk_3A0 = 0x1D08;
+            arg0[2].freezeTimer = 0x1D08;
             gSaveContext.weekEventReg[10] |= 1;
             func_80A62AC4();
             return;
@@ -1251,11 +1251,11 @@ void func_80A635F0(Actor *arg0, GlobalContext *arg1) {
     sp24 = temp_v1;
     if (func_800B84D0(arg0, arg1) != 0) {
         temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C & ~0x20);
-        func_800BDC5C(arg0 + 0x148, (ActorAnimationEntry []) D_80A63D58, 4);
+        func_800BDC5C((SkelAnime *) &arg0[1].flags, (ActorAnimationEntry []) D_80A63D58, 4);
         arg0->unk_39A = 0;
         arg0->unk_1FC = 0;
         func_801518B0(arg1, 0x1D17U, arg0);
-        arg0->unk_3A0 = 0x1D17;
+        arg0[2].freezeTimer = 0x1D17;
         arg0->flags &= 0xFFFEFFFF;
         func_80A62818(arg0);
         return;
@@ -1265,31 +1265,31 @@ void func_80A635F0(Actor *arg0, GlobalContext *arg1) {
 
 void func_80A636AC(Actor *arg0, GlobalContext *arg1) {
     ? sp38;
+    f32 temp_v1;
     s16 temp_v0;
     s16 temp_v0_3;
     s32 temp_v0_2;
-    void *temp_v1;
 
     temp_v0 = arg0->unk_39C;
     if (temp_v0 == 1) {
-        temp_v0_2 = arg0->unk_150;
+        temp_v0_2 = arg0[1].home.pos.y;
         if ((&D_0600D530 != temp_v0_2) && (&D_06000C78 != temp_v0_2)) {
             func_800E9250(arg1, arg0, arg0 + 0x38C, arg0 + 0x392, (Vec3f) arg0->focus.pos.x, arg0->focus.pos.y, arg0->focus.pos.z);
         } else {
-            func_800E8F08(arg0 + 0x38C, arg0 + 0x392);
+            func_800E8F08((Vec3s *) &arg0[2].uncullZoneDownward, arg0 + 0x392);
         }
         goto block_9;
     }
     if (temp_v0 == 2) {
-        temp_v1 = arg1->actorCtx.actorList[2].first->unk_A80;
-        if (temp_v1 != 0) {
+        temp_v1 = arg1->actorCtx.actorList[2].first[8].scale.z;
+        if ((bitwise s32) temp_v1 != 0) {
             sp38.unk_0 = (s32) temp_v1->unk_24;
             sp38.unk_4 = (s32) temp_v1->unk_28;
             sp38.unk_8 = (s32) temp_v1->unk_2C;
-            func_800E8FA4(arg0, (Vec3f *) &sp38, arg0 + 0x38C, arg0 + 0x392);
+            func_800E8FA4(arg0, (Vec3f *) &sp38, (Vec3s *) &arg0[2].uncullZoneDownward, arg0 + 0x392);
         }
     } else {
-        func_800E8F08(arg0 + 0x38C, arg0 + 0x392);
+        func_800E8F08((Vec3s *) &arg0[2].uncullZoneDownward, arg0 + 0x392);
 block_9:
     }
     if (arg0->unk_39A == 1) {
@@ -1364,7 +1364,7 @@ s32 func_80A63A10(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
             temp_a2 = (s16) temp_f18;
             sp28 = (s16) temp_f18;
             SysMatrix_InsertRotation(sp24, 0, temp_a2, 1);
-            Matrix_Scale(arg5->unk_1F0, arg5->unk_1F4, arg5->unk_1F8, 1);
+            Matrix_Scale(arg5[1].colChkInfo.displacement.z, arg5->unk_1F4, arg5->unk_1F8, 1);
             SysMatrix_InsertZRotation_s((s16) ((s32) sp28 * -1), 1);
             SysMatrix_InsertXRotation_s((s16) ((s32) sp24 * -1), 1);
         } else {
@@ -1399,7 +1399,7 @@ void EnBal_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80A63F04 + (this->unk_1FC * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;

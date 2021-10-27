@@ -285,13 +285,13 @@ s32 func_80B2FC98(void *arg0, f32 *arg1) {
         do {
             sp84 = 0.0f;
             temp_a1 = &sp78;
-            sp88 = phi_s0->unk_4 - arg1->unk_4;
+            sp88 = phi_s0->unk_4 - arg1[1];
             sp78 = 0.0f;
-            sp8C = phi_s0->unk_8 - arg1->unk_8;
-            sp7C = phi_s2->unk_4 - arg1->unk_4;
-            sp80 = phi_s2->unk_8 - arg1->unk_8;
+            sp8C = phi_s0->unk_8 - arg1[2];
+            sp7C = phi_s2->unk_4 - arg1[1];
+            sp80 = phi_s2->unk_8 - arg1[2];
             Math3D_CrossProduct((Vec3f *) temp_s5, (Vec3f *) temp_a1, phi_s1);
-            temp_s1 = phi_s1 + 0xC;
+            temp_s1 = &phi_s1[1];
             temp_s3 = phi_s3 + 0xC;
             phi_s0 = temp_s3;
             phi_s2 = phi_s0;
@@ -356,12 +356,12 @@ block_12:
             temp_a0 = &sp84;
             temp_a1_2 = &sp78;
             sp84 = phi_s0_2->unk_0 - arg1->unk_0;
-            sp8C = phi_s0_2->unk_8 - arg1->unk_8;
+            sp8C = phi_s0_2->unk_8 - arg1[2];
             sp7C = 0.0f;
             sp78 = phi_s2_2->unk_0 - arg1->unk_0;
-            sp80 = phi_s2_2->unk_8 - arg1->unk_8;
+            sp80 = phi_s2_2->unk_8 - arg1[2];
             Math3D_CrossProduct((Vec3f *) temp_a0, (Vec3f *) temp_a1_2, phi_s1_2);
-            temp_s1_2 = phi_s1_2 + 0xC;
+            temp_s1_2 = &phi_s1_2[1];
             temp_s3_2 = phi_s3_2 + 0xC;
             phi_s0_2 = temp_s3_2;
             phi_s2_2 = phi_s0_2;
@@ -417,12 +417,12 @@ block_32:
         temp_a1_3 = &sp78;
         sp84 = phi_s0_3->unk_0 - arg1->unk_0;
         sp8C = 0.0f;
-        sp88 = phi_s0_3->unk_4 - arg1->unk_4;
+        sp88 = phi_s0_3->unk_4 - arg1[1];
         sp78 = phi_s2_3->unk_0 - arg1->unk_0;
         sp80 = 0.0f;
-        sp7C = phi_s2_3->unk_4 - arg1->unk_4;
+        sp7C = phi_s2_3->unk_4 - arg1[1];
         Math3D_CrossProduct((Vec3f *) temp_a0_2, (Vec3f *) temp_a1_3, phi_s1_3);
-        temp_s1_3 = phi_s1_3 + 0xC;
+        temp_s1_3 = &phi_s1_3[1];
         temp_s3_3 = phi_s3_3 + 0xC;
         phi_s0_3 = temp_s3_3;
         phi_s2_3 = phi_s0_3;
@@ -573,7 +573,7 @@ s32 func_80B30480(void *arg0, GlobalContext *arg1, Vec3f *arg2) {
     s32 phi_s1_2;
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
-    if ((temp_v0->unk_147 == 7) && (temp_s6 = temp_v0 + 0xB9C, phi_s1 = 0, ((s32) temp_v0->unk_B28 > 0))) {
+    if ((temp_v0[1].room == 7) && (temp_s6 = temp_v0 + 0xB9C, phi_s1 = 0, ((s32) temp_v0->unk_B28 > 0))) {
 loop_3:
         temp_s0 = arg0->unk_178 + phi_s1 + 0x28;
         phi_s1_2 = phi_s1;
@@ -647,8 +647,8 @@ void ObjSpidertent_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_s0 = (Vec3f *) &sp70;
 loop_4:
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s0);
-        temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        temp_s0 = &phi_s0[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
         if (temp_s0 != &sp94) {
             goto loop_4;
@@ -769,7 +769,7 @@ void func_80B30AD4(Actor *arg0) {
     arg0->unk_3C1 = 0x50;
     arg0->unk_3C6 = 0;
     arg0->unk_3C7 = 0;
-    arg0->unk_3C8 = func_80B30AF8;
+    arg0[2].overlayEntry = func_80B30AF8;
 }
 
 void func_80B30AF8(Actor *arg0, GlobalContext *arg1) {
@@ -866,21 +866,21 @@ block_24:
             }
             arg0->unk_3C7 = phi_v0;
         }
-        arg0->unk_3B0 = (f32) (arg0->unk_3B0 + *(D_80B313A0 + 4));
+        arg0[2].prev = (bitwise Actor *) ((bitwise f32) arg0[2].prev + D_80B313A0[1]);
         phi_s7 = 0;
-        if (temp_s0->unk_20 < arg0->unk_3B0) {
+        if (temp_s0->unk_20 < (bitwise f32) arg0[2].prev) {
             arg0->unk_3C0 = (u8) (arg0->unk_3C0 | 1);
         }
-        arg0->unk_3B4 = (f32) (arg0->unk_3B4 + *(D_80B313B8 + 4));
-        if (temp_s0->unk_20 < arg0->unk_3B4) {
+        arg0[2].next = (bitwise Actor *) ((bitwise f32) arg0[2].next + D_80B313B8[1]);
+        if (temp_s0->unk_20 < (bitwise f32) arg0[2].next) {
             arg0->unk_3C0 = (u8) (arg0->unk_3C0 | 2);
         }
-        arg0->unk_3B8 = (f32) (arg0->unk_3B8 + *(D_80B313D0 + 4));
-        if (temp_s0->unk_20 < arg0->unk_3B8) {
+        arg0[2].init = (bitwise void (*)(Actor *, GlobalContext *)) ((bitwise f32) arg0[2].init + D_80B313D0[1]);
+        if (temp_s0->unk_20 < (bitwise f32) arg0[2].init) {
             arg0->unk_3C0 = (u8) (arg0->unk_3C0 | 4);
         }
-        arg0->unk_3BC = (f32) (arg0->unk_3BC + *(D_80B313E8 + 4));
-        if (temp_s0->unk_20 < arg0->unk_3BC) {
+        arg0[2].destroy = (bitwise void (*)(Actor *, GlobalContext *)) ((bitwise f32) arg0[2].destroy + D_80B313E8[1]);
+        if (temp_s0->unk_20 < (bitwise f32) arg0[2].destroy) {
             arg0->unk_3C0 = (u8) (arg0->unk_3C0 | 8);
         }
         do {
@@ -888,8 +888,8 @@ block_24:
             phi_s1 = arg0;
             phi_s0 = 0;
 loop_43:
-            temp_f0 = phi_s1->unk_3B0;
-            if (!(temp_f0 < 5.0f) && ((arg0->unk_3C0 & (1 << phi_s0)) == 0) && (func_80B2FB94(arg0 + 0x3A4, temp_f0, temp_s2, (Vec3f *) &sp60, &sp5C) != 0)) {
+            temp_f0 = phi_s1[2].prev;
+            if (!(temp_f0 < 5.0f) && ((arg0->unk_3C0 & (1 << phi_s0)) == 0) && (func_80B2FB94((Vec3f *) &arg0[2].colorFilterTimer, temp_f0, temp_s2, (Vec3f *) &sp60, &sp5C) != 0)) {
                 func_80B300F4(arg0, arg1, temp_s2, &sp60, sp5C, phi_s0);
             }
             temp_s0_2 = phi_s0 + 1;
@@ -934,10 +934,10 @@ void ObjSpidertent_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_t0 = globalCtx->state.gfxCtx;
     temp_v1 = temp_t0->polyXlu.p;
     temp_v1->words.w0 = 0xDE000000;
-    temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-    temp_v1_2 = temp_v1 + 8;
+    temp_v1->words.w1 = (u32) &sSetupDL[150];
+    temp_v1_2 = &temp_v1[1];
     temp_v1_2->words.w0 = 0xDA380003;
-    temp_v1_3 = temp_v1_2 + 8;
+    temp_v1_3 = &temp_v1_2[1];
     sp28 = temp_v1_3;
     sp2C = temp_f18;
     sp30 = temp_t1;
@@ -946,9 +946,9 @@ void ObjSpidertent_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp18 = temp_v1_2;
     temp_v1_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v1_3->words.w0 = 0xFA0000FF;
-    temp_v1_4 = temp_v1_3 + 8;
+    temp_v1_4 = &temp_v1_3[1];
     temp_v1_3->words.w1 = (this->unk_3C2 << 0x18) | (this->unk_3C3 << 0x10) | (this->unk_3C4 << 8) | (temp_f18 & 0xFF);
     temp_v1_4->words.w0 = 0xDE000000;
     temp_v1_4->words.w1 = *(&D_80B31350 + (temp_t1 * 0x28));
-    temp_t0->polyXlu.p = temp_v1_4 + 8;
+    temp_t0->polyXlu.p = &temp_v1_4[1];
 }

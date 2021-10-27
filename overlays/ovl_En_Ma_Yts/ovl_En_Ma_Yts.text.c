@@ -167,7 +167,7 @@ void func_80B8D12C(Actor *arg0, GlobalContext *arg1) {
         phi_a3 = 1;
     }
     if ((temp_v0 == 0) || (temp_v0_2 = arg0->parent, (temp_v0_2 == 0))) {
-        arg0->unk_1F0 = (s32) temp_v1->world.pos.x;
+        arg0[1].colChkInfo.displacement.z = temp_v1->world.pos.x;
         arg0->unk_1F4 = (f32) temp_v1->world.pos.y;
         arg0->unk_1F8 = (s32) temp_v1->world.pos.z;
         arg0->unk_1F4 = (f32) (arg0->unk_1F4 - -10.0f);
@@ -573,15 +573,15 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *a
 
     if (arg1 == 0xE) {
         sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E0;
-        sp4.unk_4 = (u16) arg5->unk_1E4;
+        (&sp4)[2] = arg5->unk_1E4;
         arg4->x += sp6;
-        temp_a0 = arg5->unk_14C;
+        temp_a0 = arg5[1].home.pos.x;
         if ((&D_06009E58 == temp_a0) || (&D_06007D98 == temp_a0)) {
             arg4->z += sp4;
         }
     } else if (arg1 == 0xD) {
         sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E6;
-        sp4.unk_4 = (u16) arg5->unk_1EA;
+        (&sp4)[2] = (s16) arg5->unk_1EA;
         arg4->x += sp6;
         arg4->z += sp4;
     }
@@ -618,12 +618,12 @@ void EnMaYts_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060024;
     temp_a0_2 = *(&D_80B8E308 + (this->mouthTexIndex * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;
     temp_v1_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1_2 + 8;
+    sp30->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060020;
     temp_a0_3 = *(&D_80B8E318 + (this->eyeTexIndex * 4));
     temp_v1_2->words.w1 = (temp_a0_3 & 0xFFFFFF) + gSegments[(u32) (temp_a0_3 * 0x10) >> 0x1C] + 0x80000000;
@@ -642,13 +642,13 @@ void EnMaYts_DrawSleeping(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_060043A0;
     temp_v0_2->words.w0 = 0xDE000000;
 }

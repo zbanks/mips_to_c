@@ -385,7 +385,7 @@ void EnMaYto_ChooseAction(EnMaYto *this, GlobalContext *globalCtx) {
         return;
     case 3:
         this->unk310 = 0;
-        if ((gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) && ((gSaveContext.weekEventReg[52] & 1) != 0) && ((Rand_Next() & 0x80) != 0)) {
+        if ((gSaveContext.inventory.items[gItemSlots[60]] == 0x3C) && ((gSaveContext.weekEventReg[52] & 1) != 0) && ((Rand_Next() & 0x80) != 0)) {
             EnMaYto_SetupBeginWarmFuzzyFeelingCs(this);
             return;
         }
@@ -1061,7 +1061,7 @@ void EnMaYto_PostMilkRunGiveReward(EnMaYto *this, GlobalContext *globalCtx) {
         EnMaYto_SetupPostMilkRunExplainReward(this);
         return;
     }
-    if (gSaveContext.inventory.items[gItemSlots[0x3C]] == 0x3C) {
+    if (gSaveContext.inventory.items[gItemSlots[60]] == 0x3C) {
         func_800B8A1C((Actor *) this, globalCtx, 7, 500.0f, 100.0f);
         this->unk310 = 2;
         return;
@@ -1402,17 +1402,17 @@ void func_80B90C78(Actor *arg0, GlobalContext *arg1) {
         phi_a3 = 1;
     }
     if (temp_v0 == 0) {
-        arg0->unk_1F0 = (s32) sp2C->world.pos.x;
+        arg0[1].colChkInfo.displacement.z = sp2C->world.pos.x;
         arg0->unk_1F4 = (s32) sp2C->world.pos.y;
-        arg0->unk_1EC = 0.0f;
+        arg0[1].colChkInfo.displacement.y = 0.0f;
         arg0->unk_1F8 = (s32) sp2C->world.pos.z;
     } else if (temp_v0 == 1) {
         sp2A = phi_a3;
         Math_Vec3f_StepTo(arg0 + 0x1F0, arg0->child + 0x24, 8.0f);
-        arg0->unk_1EC = 0.0f;
+        arg0[1].colChkInfo.displacement.y = 0.0f;
     }
     if (arg0->unk_320 == 0) {
-        if (EnMaYto_WarmFuzzyFeelingCs == arg0->unk_188) {
+        if (EnMaYto_WarmFuzzyFeelingCs == arg0[1].focus.pos.z) {
             arg0->unk_1E2 = 0;
             arg0->unk_1E0 = 0;
         } else {
@@ -1420,7 +1420,7 @@ void func_80B90C78(Actor *arg0, GlobalContext *arg1) {
         }
     } else {
         Math_SmoothStepToS(arg0 + 0x1E2, 0, 3, 0x71C, (s16) 0xB6);
-        Math_SmoothStepToS(arg0 + 0x1E0, 0x18E3, 5, 0x71C, (s16) 0xB6);
+        Math_SmoothStepToS((s16 *) &arg0[1].yDistToPlayer, 0x18E3, 5, 0x71C, (s16) 0xB6);
     }
     EnMaYto_UpdateEyes((EnMaYto *) arg0);
 }
@@ -1430,7 +1430,7 @@ void EnMaYto_UpdateCollision(Actor *arg0, GlobalContext *arg1) {
     ColliderCylinder *temp_a2;
 
     temp_a2 = arg0 + 0x18C;
-    if (EnMaYto_WarmFuzzyFeelingCs != arg0->unk_188) {
+    if (EnMaYto_WarmFuzzyFeelingCs != arg0[1].focus.pos.z) {
         sp1C = temp_a2;
         arg1 = arg1;
         Collider_UpdateCylinder(arg0, temp_a2);
@@ -1586,12 +1586,12 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *a
 
     if (arg1 == 9) {
         sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E0;
-        sp4.unk_4 = (u16) arg5->unk_1E4;
+        (&sp4)[2] = arg5->unk_1E4;
         arg4->x += sp6;
         arg4->z += sp4;
     } else if (arg1 == 2) {
-        temp_a0 = arg5->unk_14C;
-        if ((&D_06007E28 != temp_a0) && (&D_06003D54 != temp_a0) && ((sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E6, sp4.unk_4 = (u16) arg5->unk_1EA, arg4->x += sp6, temp_a0_2 = arg5->unk_14C, (&D_0600A174 == temp_a0_2)) || (&D_060070EC == temp_a0_2) || (&D_06003D54 == temp_a0_2))) {
+        temp_a0 = arg5[1].home.pos.x;
+        if ((&D_06007E28 != temp_a0) && (&D_06003D54 != temp_a0) && ((sp4.unk_0 = (s32) (unaligned s32) arg5->unk_1E6, (&sp4)[2] = (s16) arg5->unk_1EA, arg4->x += sp6, temp_a0_2 = arg5[1].home.pos.x, (&D_0600A174 == temp_a0_2)) || (&D_060070EC == temp_a0_2) || (&D_06003D54 == temp_a0_2))) {
             arg4->z += sp4;
         }
     }
@@ -1620,24 +1620,24 @@ void EnMaYto_Draw(Actor *thisx, GlobalContext *globalCtx) {
     phi_a2 = temp_a2;
     if ((this->type == 1) && ((gSaveContext.weekEventReg[22] & 1) != 0)) {
         temp_v0 = temp_a2->polyOpa.p;
-        temp_a2->polyOpa.p = temp_v0 + 8;
+        temp_a2->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp3C = temp_v0;
         sp3C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_a2->polyOpa.p;
-        temp_a2->polyOpa.p = temp_v0_2 + 8;
+        temp_a2->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06005430;
         temp_v0_2->words.w0 = 0xDE000000;
         phi_a2 = globalCtx->state.gfxCtx;
     }
     func_8012C28C(phi_a2);
     temp_v0_3 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_3 + 8;
+    temp_a2->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060024;
     sp34 = temp_v0_3;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80B915C8 + (this->mouthTexIndex * 4)));
     temp_v0_4 = temp_a2->polyOpa.p;
-    temp_a2->polyOpa.p = temp_v0_4 + 8;
+    temp_a2->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060020;
     sp30 = temp_v0_4;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80B915D8 + (this->eyeTexIndex * 4)));

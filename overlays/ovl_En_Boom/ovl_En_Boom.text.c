@@ -256,17 +256,17 @@ void EnBoom_Destroy(Actor *thisx, GlobalContext *globalCtx) {
         temp_v0 = this->actor.child;
         if (temp_v0 != 0) {
             temp_v0->parent = NULL;
-            temp_v1->unk_A7C = temp_v0;
+            temp_v1[8].scale.y = (bitwise f32) temp_v0;
         } else {
             temp_v0_2 = this->actor.parent;
             if (temp_v0_2 != 0) {
                 temp_v0_2->child = NULL;
             } else {
-                temp_v1->unk_A7C = NULL;
+                temp_v1[8].scale.y = 0.0f;
                 temp_v1->unk_A6C = (s32) (temp_v1->unk_A6C & 0xFDFFFFFF);
             }
         }
-        temp_v1->unk_A74 = (s32) (temp_v1->unk_A74 | 0x800000);
+        temp_v1[8].targetArrowOffset = (bitwise f32) ((bitwise s32) temp_v1[8].targetArrowOffset | 0x800000);
     }
 }
 
@@ -520,11 +520,11 @@ void EnBoom_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_RotateY((s16) (this->unk_1CD * 0x2EE0), 1U);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0_2 + 8;
+    sp3C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_2->words.w1 = *sp58;
 }

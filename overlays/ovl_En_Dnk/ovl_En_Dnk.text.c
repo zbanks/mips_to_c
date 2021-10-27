@@ -101,7 +101,7 @@ struct _mips2c_stack_func_80A52134 {
 s32 func_80A514F0(SkelAnime *arg0, s16 arg1);       /* static */
 ? func_80A515C4(EnDnk *arg0);                       /* static */
 void func_80A51648(Actor *arg0, GlobalContext *arg1); /* static */
-void func_80A518DC(EnDnk *this, GlobalContext *globalCtx); /* static */
+void func_80A518DC(s32 arg0, ? arg1);               /* static */
 s32 func_80A51A78(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5, Actor *actor); /* static */
 void func_80A51AA4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4); /* static */
 void func_80A51CB8(Actor *arg0, GlobalContext *arg1); /* static */
@@ -228,7 +228,7 @@ void func_80A51648(Actor *arg0, GlobalContext *arg1) {
     u32 temp_t5;
 
     if (func_8013D8DC(arg0->unk_28E, arg1) == 1) {
-        *(gSegments + 0x18) = (u32) (arg1->objectCtx.status[arg0->unk_28E].segment + 0x80000000);
+        gSegments[6] = (u32) (arg1->objectCtx.status[arg0->unk_28E].segment + 0x80000000);
         arg0->draw = func_80A52018;
         arg0->objBankIndex = arg0->unk_28E;
         ActorShape_Init(arg0 + 0xBC, 0.0f, NULL, 18.0f);
@@ -260,12 +260,12 @@ void func_80A51648(Actor *arg0, GlobalContext *arg1) {
             temp_t5 = arg0->flags & ~1;
             arg0->flags = temp_t5;
             arg0->flags = temp_t5 | 0x30;
-            arg0->unk_188 = func_80A51890;
+            arg0[1].focus.pos.z = (bitwise f32) func_80A51890;
             Actor_SetScale(arg0, 0.1f);
             return;
         }
         arg0->flags &= -2;
-        arg0->unk_188 = func_80A518DC;
+        arg0[1].focus.pos.z = (bitwise f32) func_80A518DC;
         Actor_SetScale(arg0, 0.01f);
         /* Duplicate return node #11. Try simplifying control flow for better match */
     }
@@ -277,7 +277,7 @@ void func_80A51890(EnDnk *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80A518DC(EnDnk *this, GlobalContext *globalCtx) {
+void func_80A518DC(s32 arg0, ? arg1) {
 
 }
 
@@ -402,7 +402,7 @@ void func_80A51AA4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
     sp30 = temp_v0_2;
     sp30->words.w1 = Matrix_NewMtx(*arg0);
     temp_v0_3 = temp_a1->polyOpa.p;
-    temp_a1->polyOpa.p = temp_v0_3 + 8;
+    temp_a1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (arg4 + (arg1 * 4))->unk_260;
 }
@@ -418,16 +418,16 @@ void func_80A51CB8(Actor *arg0, GlobalContext *arg1) {
     sp28 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v0 + 8;
+    sp28->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp28 = sp28;
     sp20 = temp_v0;
-    sp20->words.w1 = Lib_SegmentedToVirtual(*(&D_80A5245C + (arg0->unk_2A0 * 4)));
+    sp20->words.w1 = Lib_SegmentedToVirtual(*(&D_80A5245C + (arg0[2].home.rot.z * 4)));
     temp_v0_2 = sp28->polyOpa.p;
-    sp28->polyOpa.p = temp_v0_2 + 8;
+    sp28->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = 0;
     temp_v0_2->words.w0 = 0xE7000000;
-    SkelAnime_Draw(arg1, arg0->unk_148, arg0->unk_164, func_80A51A78, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80A51AA4, arg0);
+    SkelAnime_Draw(arg1, arg0[1].flags, arg0->unk_164, func_80A51A78, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80A51AA4, arg0);
 }
 
 s32 func_80A51D78(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
@@ -492,14 +492,14 @@ void func_80A51DA4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
     sp30 = temp_v0_2;
     sp30->words.w1 = Matrix_NewMtx(*arg0);
     temp_v0_3 = temp_a1->polyOpa.p;
-    temp_a1->polyOpa.p = temp_v0_3 + 8;
+    temp_a1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (arg4 + (arg1 * 4))->unk_260;
 }
 
 void func_80A51FC0(Actor *arg0, GlobalContext *arg1) {
     func_8012C28C(arg1->state.gfxCtx);
-    SkelAnime_Draw(arg1, arg0->unk_148, arg0->unk_164, func_80A51D78, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80A51DA4, arg0);
+    SkelAnime_Draw(arg1, arg0[1].flags, arg0->unk_164, func_80A51D78, (void (*)(GlobalContext *, s32, Gfx **, Vec3s *, Actor *)) func_80A51DA4, arg0);
 }
 
 void func_80A52018(Actor *thisx, GlobalContext *globalCtx) {

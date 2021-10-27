@@ -74,8 +74,8 @@ struct _mips2c_stack_func_80BE9EF8 {
 
 struct _mips2c_stack_func_80BEA088 {
     /* 0x00 */ char pad_0[0x18];
-    /* 0x18 */ void *sp18;                          /* inferred */
-    /* 0x1C */ void *sp1C;                          /* inferred */
+    /* 0x18 */ void (*sp18)(Actor *, GlobalContext *); /* inferred */
+    /* 0x1C */ void (*sp1C)(Actor *, GlobalContext *); /* inferred */
 };                                                  /* size = 0x20 */
 
 struct _mips2c_stack_func_80BEA254 {
@@ -91,8 +91,8 @@ struct _mips2c_stack_func_80BEA394 {
     /* 0x28 */ char pad_28[0x8];                    /* maybe part of sp24[3]? */
     /* 0x30 */ s32 sp30;                            /* inferred */
     /* 0x34 */ s32 sp34;                            /* inferred */
-    /* 0x38 */ void *sp38;                          /* inferred */
-    /* 0x3C */ Actor *sp3C;                         /* inferred */
+    /* 0x38 */ void (*sp38)(Actor *, GlobalContext *); /* inferred */
+    /* 0x3C */ void (*sp3C)(Actor *, GlobalContext *); /* inferred */
 };                                                  /* size = 0x40 */
 
 struct _mips2c_stack_func_80BEA8F0 {
@@ -132,7 +132,7 @@ struct _mips2c_stack_func_80BEADD4 {
 
 struct _mips2c_stack_func_80BEB06C {};              /* size 0x0 */
 
-? func_800E0308(Camera *, Actor *);                 /* extern */
+? func_800E0308(Camera *, void (*)(Actor *, GlobalContext *)); /* extern */
 ? func_801A1FB4(?, s32 *, ?, ?);                    /* extern */
 void func_80BE9C74(Actor *arg0);                    /* static */
 void func_80BE9CE8(Actor *arg0, s16 arg1, Actor *); /* static */
@@ -141,7 +141,7 @@ void func_80BE9DF8(Actor *arg0, Actor *);           /* static */
 void func_80BE9E94(EnDt *, GlobalContext *);        /* static */
 void func_80BE9EF8(GlobalContext *arg0, GlobalContext *arg1, GlobalContext *); /* static */
 void func_80BEA088(Actor *arg0, GlobalContext *arg1); /* static */
-void func_80BEA254(Actor *arg0, GlobalContext *arg1, void *, Actor *); /* static */
+void func_80BEA254(Actor *arg0, GlobalContext *arg1, void (*)(Actor *, GlobalContext *), Actor *); /* static */
 void func_80BEA394(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80BEA8F0(Actor *arg0, GlobalContext *arg1); /* static */
 void func_80BEAAF8(Actor *arg0, GlobalContext *arg1); /* static */
@@ -247,7 +247,7 @@ void func_80BE9CE8(Actor *arg0, s16 arg1) {
     sp34 = phi_f2;
     temp_v1_2 = arg0->unk_246;
     temp_f0 = (f32) SkelAnime_GetFrameCount(*(&D_80BEB2C8 + (temp_v1 * 4)));
-    arg0->unk_250 = temp_f0;
+    arg0[1].prevPos.y = temp_f0;
     SkelAnime_ChangeAnim(arg0 + 0x144, *(&D_80BEB2C8 + (temp_v1_2 * 4)), 1.0f, 0.0f, temp_f0, (u8) (s32) *(&D_80BEB2E0 + temp_v1_2), phi_f2);
 }
 
@@ -255,7 +255,7 @@ void func_80BE9D9C(Actor *arg0) {
     void *sp18;
     void *temp_v1;
 
-    temp_v1 = (((arg0->unk_280 * 4) + 1) * 4) + &D_80BEB2E8;
+    temp_v1 = (((arg0[1].draw * 4) + 1) * 4) + &D_80BEB2E8;
     sp18 = temp_v1;
     func_80BE9CE8(temp_v1->unk_0);
     arg0->unk_24C = (s16) temp_v1->unk_4;
@@ -267,8 +267,8 @@ void func_80BE9DF8(Actor *arg0) {
     Actor *temp_v1;
     s32 temp_a3;
 
-    temp_v0 = arg0->unk_274;
-    if ((temp_v0 != 0) && (temp_v1 = arg0->unk_278, (temp_v1 != 0))) {
+    temp_v0 = arg0[1].init;
+    if ((temp_v0 != 0) && (temp_v1 = arg0[1].destroy, (temp_v1 != 0))) {
         temp_a3 = *(&D_80BEB208 + (arg0->unk_256 * 4));
         if (temp_a3 != 0) {
             if (temp_a3 != 1) {
@@ -277,18 +277,18 @@ void func_80BE9DF8(Actor *arg0) {
                 }
                 temp_v0->unk_288 = arg0;
                 temp_v1->unk_2A4 = arg0;
-                arg0->unk_27C = arg0;
+                arg0[1].update = arg0;
                 /* Duplicate return node #9. Try simplifying control flow for better match */
                 return;
             }
             temp_v0->unk_288 = temp_v1;
-            temp_v1->unk_2A4 = (Actor *) arg0->unk_278;
-            arg0->unk_27C = (Actor *) arg0->unk_278;
+            temp_v1->unk_2A4 = (Actor *) arg0[1].destroy;
+            arg0[1].update = arg0[1].destroy;
             return;
         }
         temp_v0->unk_288 = temp_v0;
-        temp_v1->unk_2A4 = (Actor *) arg0->unk_274;
-        arg0->unk_27C = (Actor *) arg0->unk_274;
+        temp_v1->unk_2A4 = (Actor *) arg0[1].init;
+        arg0[1].update = arg0[1].init;
     }
 }
 
@@ -318,42 +318,42 @@ void func_80BE9E94(EnDt *arg0, GlobalContext *arg1) {
 void func_80BE9EF8(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t4;
     SaveContext *phi_v0;
-    void (*phi_t6)(Actor *, GlobalContext *);
+    f32 phi_t6;
 
     arg0->unk_256 = 0;
     if ((gSaveContext.weekEventReg[60] & 0x10) == 0) {
         if ((gSaveContext.weekEventReg[63] & 0x80) != 0) {
             arg0->unk_256 = 0x15;
-            arg0->unk_280 = 5;
+            arg0[1].draw = (void (*)(Actor *, GlobalContext *))5;
             func_80BE9D9C(arg0);
             temp_t4 = *(&D_80BEB1D0 + (arg0->unk_256 * 2));
             arg0->textId = temp_t4;
             func_801518B0(arg1, temp_t4 & 0xFFFF, arg0);
             func_800B7298(arg1, arg0, 7U);
             arg0->unk_254 = 1;
-            phi_t6 = func_80BEA394;
+            phi_t6 = (bitwise f32) func_80BEA394;
         } else {
             goto block_5;
         }
     } else {
         if ((gSaveContext.weekEventReg[63] & 0x80) != 0) {
             arg0->unk_256 = 0x17;
-            arg0->unk_280 = 5;
-            arg0->unk_290 = 1;
+            arg0[1].draw = (void (*)(Actor *, GlobalContext *))5;
+            arg0[2].home.pos.x = 1e-45.0f;
             func_80BE9D9C(arg0);
             func_80151BB4(arg1, 7U);
         }
 block_5:
         phi_v0 = &gSaveContext;
-        if (arg0->unk_280 == 0) {
+        if (arg0[1].draw == 0) {
             if ((gSaveContext.weekEventReg[60] & 8) != 0) {
                 arg0->unk_256 = 9;
-                arg0->unk_280 = 2;
+                arg0[1].draw = (void (*)(Actor *, GlobalContext *))2;
             }
             func_80BE9D9C(arg0);
             phi_v0 = &gSaveContext;
             if ((gSaveContext.weekEventReg[60] & 8) == 0) {
-                arg0->unk_280 = 1;
+                arg0[1].draw = (void (*)(Actor *, GlobalContext *))1;
             }
         }
         arg0->textId = *(&D_80BEB1D0 + (arg0->unk_256 * 2));
@@ -361,22 +361,22 @@ block_5:
             func_80BE9DF8(arg0);
         }
         arg0->unk_254 = 1;
-        phi_t6 = func_80BEA088;
+        phi_t6 = (bitwise f32) func_80BEA088;
     }
-    arg0->unk_23C = phi_t6;
+    arg0[1].projectedW = phi_t6;
 }
 
 void func_80BEA088(Actor *arg0, GlobalContext *arg1) {
-    void *sp1C;
-    void *sp18;
+    void (*sp1C)(Actor *, GlobalContext *);
+    void (*sp18)(Actor *, GlobalContext *);
     Actor *temp_a0;
     s32 temp_v0_2;
-    void *temp_v0;
-    void *temp_v1;
-    void *phi_t0;
-    void *phi_a2;
-    void *phi_a2_2;
-    void *phi_t0_2;
+    void (*temp_v0)(Actor *, GlobalContext *);
+    void (*temp_v1)(Actor *, GlobalContext *);
+    void (*phi_t0)(Actor *, GlobalContext *);
+    void (*phi_a2)(Actor *, GlobalContext *);
+    void (*phi_a2_2)(Actor *, GlobalContext *);
+    void (*phi_t0_2)(Actor *, GlobalContext *);
     s32 phi_v0;
     Actor *phi_a3;
     Actor *phi_a3_2;
@@ -394,15 +394,15 @@ void func_80BEA088(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if ((gSaveContext.weekEventReg[63] & 0x80) == 0) {
-        temp_v0 = arg0->unk_274;
+        temp_v0 = arg0[1].init;
         if (temp_v0 != 0) {
-            temp_v1 = arg0->unk_278;
+            temp_v1 = arg0[1].destroy;
             if (temp_v1 != 0) {
                 phi_t0 = temp_v1;
                 phi_a2 = temp_v0;
             }
         }
-        arg0->unk_240 = 0;
+        arg0[1].uncullZoneForward = 0.0f;
         arg0->unk_256 = 0;
         sp18 = phi_t0;
         arg0 = arg0;
@@ -411,8 +411,8 @@ void func_80BEA088(Actor *arg0, GlobalContext *arg1) {
         phi_t0_2 = phi_t0;
         if (Player_GetMask(arg1) == 0xA) {
             arg0->unk_256 = 0xB;
-            arg0->unk_240 = 1;
-            if ((arg0->unk_274 != 0) && (arg0->unk_278 != 0)) {
+            arg0[1].uncullZoneForward = 1e-45.0f;
+            if ((arg0[1].init != 0) && (arg0[1].destroy != 0)) {
                 phi_a2->unk_27A = 4;
                 phi_t0->unk_2A0 = 6;
             }
@@ -424,7 +424,7 @@ void func_80BEA088(Actor *arg0, GlobalContext *arg1) {
     temp_v0_2 = gSaveContext.weekEventReg[63] & 0x80;
     phi_v0 = temp_v0_2;
     phi_a3 = arg0;
-    if ((temp_v0_2 == 0) && (arg0->unk_274 != 0) && (arg0->unk_278 != 0) && ((phi_a2_2->unk_28C == 1) || (phi_t0_2->unk_2AC == 1))) {
+    if ((temp_v0_2 == 0) && (arg0[1].init != 0) && (arg0[1].destroy != 0) && ((phi_a2_2->unk_28C == 1) || (phi_t0_2->unk_2AC == 1))) {
         arg0 = arg0;
         func_80BEA254(arg0, arg1, phi_a2_2, arg0);
         phi_v0 = gSaveContext.weekEventReg[63] & 0x80;
@@ -453,25 +453,25 @@ void func_80BEA254(Actor *arg0, GlobalContext *arg1) {
     s16 phi_a0;
 
     if ((gSaveContext.weekEventReg[63] & 0x80) == 0) {
-        temp_v0 = arg0->unk_274;
+        temp_v0 = arg0[1].init;
         if (temp_v0 != 0) {
-            temp_v1 = arg0->unk_278;
+            temp_v1 = arg0[1].destroy;
             if (temp_v1 != 0) {
                 sp1C = temp_v0;
                 sp18 = temp_v1;
             }
         }
-        if ((temp_v0 != 0) && (arg0->unk_278 != 0)) {
+        if ((temp_v0 != 0) && (arg0[1].destroy != 0)) {
             sp1C->unk_28C = 1;
             sp18->unk_2AC = 1;
             arg0 = arg0;
             if (Player_GetMask(arg1) == 0xA) {
                 sp1C->unk_27A = 4;
                 sp18->unk_2A0 = 6;
-                arg0->unk_280 = 5;
+                arg0[1].draw = (void (*)(Actor *, GlobalContext *))5;
                 temp_a0 = arg0;
                 if ((gSaveContext.weekEventReg[60] & 8) != 0) {
-                    arg0->unk_280 = (s32) 4;
+                    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) 4;
                 }
                 arg0 = arg0;
                 func_80BE9D9C(temp_a0);
@@ -495,17 +495,16 @@ loop_11:
         }
     }
     arg0->unk_254 = 2;
-    arg0->unk_23C = func_80BEA394;
+    arg0[1].projectedW = func_80BEA394;
 }
 
 void func_80BEA394(Actor *arg0, GlobalContext *arg1) {
-    Actor *sp3C;
-    void *sp38;
+    void (*sp3C)(Actor *, GlobalContext *);
+    void (*sp38)(Actor *, GlobalContext *);
     s32 sp34;
     s32 sp30;
     void *sp24;
     Actor *sp20;
-    Actor *temp_v0_3;
     s16 temp_a0;
     s16 temp_a3_2;
     s16 temp_v0;
@@ -513,6 +512,7 @@ void func_80BEA394(Actor *arg0, GlobalContext *arg1) {
     s16 temp_v1_2;
     s16 temp_v1_3;
     s32 temp_a3;
+    void (*temp_v0_3)(Actor *, GlobalContext *);
     void *temp_v0_2;
     s32 phi_a3;
     s16 *phi_v0;
@@ -540,16 +540,16 @@ void func_80BEA394(Actor *arg0, GlobalContext *arg1) {
             return;
         }
         sp34 = sp34;
-        ActorCutscene_StartAndSetUnkLinkFields(sp24->unk_258, arg0->unk_27C);
-        func_800B86C8(arg0, arg1, arg0->unk_27C);
+        ActorCutscene_StartAndSetUnkLinkFields(sp24->unk_258, arg0[1].update);
+        func_800B86C8(arg0, arg1, arg0[1].update);
         arg0->unk_270 = 2;
         phi_a3 = sp34;
         goto block_6;
     }
 block_6:
-    if (((gSaveContext.weekEventReg[63] & 0x80) == 0) && ((temp_v0_3 = arg0->unk_274, (temp_v0_3 != 0)) || (arg0->unk_278 != 0))) {
+    if (((gSaveContext.weekEventReg[63] & 0x80) == 0) && ((temp_v0_3 = arg0[1].init, (temp_v0_3 != 0)) || (arg0[1].destroy != 0))) {
         sp3C = temp_v0_3;
-        sp38 = arg0->unk_278;
+        sp38 = arg0[1].destroy;
     }
     if ((arg0->unk_244 == 0) && (sp34 = phi_a3, (func_80152498(&arg1->msgCtx) == 5)) && (sp34 = phi_a3, (func_80147624(arg1) != 0))) {
         temp_v1 = arg0->unk_256;
@@ -570,7 +570,7 @@ block_6:
             Scene_SetExitFade(arg1);
             arg1->sceneLoadFlag = 0x14;
             gSaveContext.weekEventReg[63] |= 0x80;
-            arg0->unk_290 = 1;
+            arg0[2].home.pos.x = 1e-45.0f;
             if (arg0->unk_270 == 2) {
                 ActorCutscene_Stop((arg0 + (phi_a3 * 2))->unk_258);
                 arg0->unk_270 = 0;
@@ -584,13 +584,13 @@ block_6:
             gSaveContext.weekEventReg[60] |= 8;
             func_801477B4(arg1);
             if ((gSaveContext.weekEventReg[63] & 0x80) == 0) {
-                if ((arg0->unk_274 != 0) && (arg0->unk_278 != 0)) {
+                if ((arg0[1].init != 0) && (arg0[1].destroy != 0)) {
                     sp3C->unk_28C = 2;
                     sp38->unk_2AC = 2;
-                    sp3C->unk_288 = (Actor *) arg0->unk_274;
-                    sp38->unk_2A4 = (void *) arg0->unk_278;
+                    sp3C->unk_288 = (Actor *) arg0[1].init;
+                    sp38->unk_2A4 = arg0[1].destroy;
                 }
-                arg0->unk_27C = arg0;
+                arg0[1].update = (void (*)(Actor *, GlobalContext *)) arg0;
             }
             if (arg0->unk_270 == 2) {
                 ActorCutscene_Stop((arg0 + (phi_a3 * 2))->unk_258);
@@ -605,10 +605,10 @@ block_6:
         if (temp_v1_2 == 8) {
             arg1->msgCtx.unk11F10 = 0;
             func_80BE9DF8(arg0, arg0);
-            func_800B86C8(arg0, arg1, arg0->unk_27C);
-            func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp24->unk_258)), arg0->unk_27C);
+            func_800B86C8(arg0, arg1, (Actor *) arg0[1].update);
+            func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp24->unk_258)), arg0[1].update);
             arg0->unk_244 = 2;
-            arg0->unk_23C = func_80BEA8F0;
+            arg0[1].projectedW = (bitwise f32) func_80BEA8F0;
             return;
         }
         if (temp_v1_2 == 0xC) {
@@ -617,17 +617,17 @@ block_6:
                 arg0->unk_244 = 0x19;
             } else {
                 func_80BE9CE8(arg0, 4);
-                SkelAnime_FrameUpdateMatrix((SkelAnime *) (arg0 + 0x144));
+                SkelAnime_FrameUpdateMatrix((SkelAnime *) &arg0[1]);
             }
         }
         if (arg0->unk_256 == 0xD) {
-            sp20 = arg0 + 0x144;
+            sp20 = &arg0[1];
             func_80BE9CE8(arg0, 4);
             SkelAnime_FrameUpdateMatrix((SkelAnime *) sp20);
         }
         func_80BE9DF8(arg0);
-        func_800B86C8(arg0, arg1, arg0->unk_27C);
-        func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp24->unk_258)), arg0->unk_27C);
+        func_800B86C8(arg0, arg1, (Actor *) arg0[1].update);
+        func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp24->unk_258)), arg0[1].update);
         arg0->textId = *(&D_80BEB1D0 + (arg0->unk_256 * 2));
         func_801477B4(arg1);
         func_801518B0(arg1, arg0->textId, arg0);
@@ -652,7 +652,7 @@ loop_42:
             ActorCutscene_Stop((arg0 + (sp30 * 2))->unk_258);
             ActorCutscene_SetIntentToPlay((arg0 + (temp_a3_2 * 2))->unk_258);
         }
-        if ((arg0->unk_256 == 3) && (arg0->unk_274 != 0) && (arg0->unk_278 != 0)) {
+        if ((arg0->unk_256 == 3) && (arg0[1].init != 0) && (arg0[1].destroy != 0)) {
             sp3C->unk_288 = arg0;
         }
         /* Duplicate return node #53. Try simplifying control flow for better match */
@@ -676,13 +676,13 @@ void func_80BEA8F0(Actor *arg0, GlobalContext *arg1) {
     temp_v0 = arg0->unk_244;
     if (temp_v0 != 0) {
         if (temp_v0 == 1) {
-            if ((arg0->unk_256 == 8) || (arg0->unk_280 == 4)) {
+            if ((arg0->unk_256 == 8) || (arg0[1].draw == 4)) {
                 func_80BE9D9C(arg0);
             }
-            temp_t7 = arg0->unk_280 + 1;
-            arg0->unk_280 = temp_t7;
+            temp_t7 = arg0[1].draw + 1;
+            arg0[1].draw = (void (*)(Actor *, GlobalContext *)) temp_t7;
             if (temp_t7 >= 6) {
-                arg0->unk_280 = 5;
+                arg0[1].draw = (void (*)(Actor *, GlobalContext *))5;
                 return;
             }
             /* Duplicate return node #19. Try simplifying control flow for better match */
@@ -691,7 +691,7 @@ void func_80BEA8F0(Actor *arg0, GlobalContext *arg1) {
         /* Duplicate return node #19. Try simplifying control flow for better match */
         return;
     }
-    if (arg0->unk_250 <= arg0->unk_15C) {
+    if (arg0[1].prevPos.y <= arg0->unk_15C) {
         sp28 = (s32) *(&D_80BEB26A + (arg0->unk_26E * 2));
         func_80BE9D9C(arg0);
         func_801477B4(arg1);
@@ -722,16 +722,16 @@ void func_80BEA8F0(Actor *arg0, GlobalContext *arg1) {
         }
         sp20 = arg0 + (*temp_v1_2 * 2);
         func_80BE9DF8(arg0);
-        func_800B86C8(arg0, arg1, arg0->unk_27C);
-        func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp20->unk_258)), arg0->unk_27C);
-        arg0->unk_23C = func_80BEA394;
+        func_800B86C8(arg0, arg1, (Actor *) arg0[1].update);
+        func_800E0308(Play_GetCamera(arg1, ActorCutscene_GetCurrentCamera(sp20->unk_258)), arg0[1].update);
+        arg0[1].projectedW = (bitwise f32) func_80BEA394;
     }
 }
 
 void func_80BEAAF8(Actor *arg0, GlobalContext *arg1) {
     func_800B8A1C(arg0, arg1, 0xC, 300.0f, 300.0f);
     arg0->unk_254 = 3;
-    arg0->unk_23C = func_80BEAB44;
+    arg0[1].projectedW = (bitwise f32) func_80BEAB44;
 }
 
 void func_80BEAB44(Actor *arg0, GlobalContext *arg1) {
@@ -745,7 +745,7 @@ void func_80BEAB44(Actor *arg0, GlobalContext *arg1) {
         arg0 = temp_a0;
         func_800B8500(temp_a0, arg1, 400.0f, 400.0f, -1);
         gSaveContext.weekEventReg[60] |= 0x10;
-        arg0->unk_23C = func_80BEABF8;
+        arg0[1].projectedW = (bitwise f32) func_80BEABF8;
         return;
     }
     func_800B8A1C(temp_a0, arg1, 0xC, 300.0f, 300.0f);
@@ -756,7 +756,7 @@ void func_80BEABF8(Actor *arg0, GlobalContext *arg1) {
     if (func_800B84D0(arg0, arg1) != 0) {
         func_80151BB4(arg1, 0x26U);
         func_80151BB4(arg1, 7U);
-        arg0->unk_23C = func_80BEA394;
+        arg0[1].projectedW = (bitwise f32) func_80BEA394;
         return;
     }
     func_800B8500(arg0, arg1, 400.0f, 400.0f, -1);
@@ -779,7 +779,7 @@ void func_80BEAC84(Actor *arg0, GlobalContext *arg1) {
     arg0->unk_24C = 3;
     arg0->unk_248 = 1;
     arg0->unk_254 = 4;
-    arg0->unk_23C = func_80BEAD2C;
+    arg0[1].projectedW = (bitwise f32) func_80BEAD2C;
     arg0->textId = *(&D_80BEB1D0 + (arg0->unk_256 * 2));
 }
 
@@ -797,7 +797,7 @@ void func_80BEAD2C(Actor *arg0, GlobalContext *arg1) {
 
 void func_80BEADB8(Actor *arg0) {
     arg0->unk_254 = 5;
-    arg0->unk_23C = func_80BEADD4;
+    arg0[1].projectedW = func_80BEADD4;
 }
 
 void func_80BEADD4(Actor *arg0, GlobalContext *arg1) {
@@ -887,7 +887,7 @@ void EnDt_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80BEB348 + (this->unk_24C * 4)));
@@ -896,7 +896,7 @@ void EnDt_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp40 = (s32) temp_v0_2;
     }
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060024;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80BEB35C + (sp40 * 4)));

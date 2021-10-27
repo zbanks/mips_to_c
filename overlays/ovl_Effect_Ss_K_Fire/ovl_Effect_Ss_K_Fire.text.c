@@ -54,31 +54,31 @@ void EffectSsKFire_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
     Matrix_Scale(sp54, sp50, sp54, 1);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0 + 8;
+    temp_s1->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp44 = temp_v0;
     sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, this->regs[2] * globalCtx->state.frames, 0x20, 0x80);
     if ((s32) this->regs[3] >= 0x64) {
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA008080;
         temp_v0_2->words.w1 = (this->regs[0] & 0xFF) | 0xFFFF0000;
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = 0xFF0A0000;
         temp_v0_3->words.w0 = 0xFB000000;
     } else {
         temp_v0_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_4 + 8;
+        temp_s1->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFA008080;
         temp_v0_4->words.w1 = (this->regs[0] & 0xFF) | ~0xFF;
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0xFFFF00;
         temp_v0_5->words.w0 = 0xFB000000;
     }
     temp_v0_6 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_6 + 8;
+    temp_s1->polyXlu.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0;
     temp_v0_6->words.w0 = 0xE7000000;
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -86,11 +86,11 @@ void EffectSsKFire_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) {
         SysMatrix_InsertYRotation_f(3.1415927f, 1);
     }
     temp_v0_7 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_7 + 8;
+    temp_s1->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDA380003;
     temp_v0_7->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_8 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_8 + 8;
+    temp_s1->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDE000000;
     temp_v0_8->words.w1 = (u32) D_0407D590;
 }

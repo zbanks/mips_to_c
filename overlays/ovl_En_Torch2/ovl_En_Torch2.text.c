@@ -152,7 +152,7 @@ void EnTorch2_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp18 = temp_t0;
         Scene_SetRenderModeXlu(temp_a0_2, 0, 1U);
         temp_v1 = temp_t0->polyOpa.p;
-        temp_t0->polyOpa.p = temp_v1 + 8;
+        temp_t0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w1 = -1;
         temp_v1->words.w0 = 0xFB000000;
         func_800BDFC0(globalCtx, sp1C);
@@ -162,7 +162,7 @@ void EnTorch2_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp18 = temp_t0;
     Scene_SetRenderModeXlu(temp_a0, 1, 2U);
     temp_v1_2 = temp_t0->polyXlu.p;
-    temp_t0->polyXlu.p = temp_v1_2 + 8;
+    temp_t0->polyXlu.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xFB000000;
     temp_v1_2->words.w1 = (this->alpha & 0xFF) | ~0xFF;
     func_800BE03C(globalCtx, sp1C);

@@ -279,7 +279,7 @@ block_11:
             return;
         }
         if ((s32) temp_v0_2 >= 3) {
-            if ((temp_v0_2 == 0xA) && (gSaveContext.inventory.items[gItemSlots[0x46]] == 0x46)) {
+            if ((temp_v0_2 == 0xA) && (gSaveContext.inventory.items[gItemSlots[70]] == 0x46)) {
                 this->textIdIndex = 0xC;
                 this->unk268 = 0;
             } else {
@@ -451,12 +451,12 @@ void EnGuruguru_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v1 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1 + 8;
+    sp30->polyOpa.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDB060020;
     temp_a0_2 = *(&D_80BC79E0 + (this->texIndex * 4));
     temp_v1->words.w1 = (temp_a0_2 & 0xFFFFFF) + gSegments[(u32) (temp_a0_2 * 0x10) >> 0x1C] + 0x80000000;
     temp_v1_2 = sp30->polyOpa.p;
-    sp30->polyOpa.p = temp_v1_2 + 8;
+    sp30->polyOpa.p = &temp_v1_2[1];
     temp_v1_2->words.w0 = 0xDB060024;
     temp_a0_3 = *(&D_80BC79E8 + (this->texIndex * 4));
     temp_v1_2->words.w1 = (temp_a0_3 & 0xFFFFFF) + gSegments[(u32) (temp_a0_3 * 0x10) >> 0x1C] + 0x80000000;

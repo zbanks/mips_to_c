@@ -151,7 +151,7 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
     temp_a0 = param_5 - 0x4000;
     sp2C = (s32) temp_a0;
     spB8 = (s16) (s32) ((Math_SinS(temp_a0) * param_4) + param_3->unk_0);
-    temp_f10 = (s32) ((Math_CosS(temp_a0) * param_4) + param_3->unk_8);
+    temp_f10 = (s32) ((Math_CosS(temp_a0) * param_4) + param_3[2]);
     temp_f18 = (s16) temp_f10;
     spBC = (s16) temp_f10;
     temp_a0_2 = param_5 + 0x4000;
@@ -159,7 +159,7 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
     sp2C = (s32) temp_a0_2;
     spBA = (s16) temp_f8;
     spB0 = (s16) (s32) ((Math_SinS(temp_a0_2) * param_4) + param_3->unk_0);
-    temp_f4 = (s32) ((Math_CosS(temp_a0_2) * param_4) + param_3->unk_8);
+    temp_f4 = (s32) ((Math_CosS(temp_a0_2) * param_4) + param_3[2]);
     temp_f8_2 = (s16) temp_f4;
     spB4 = (s16) temp_f4;
     spB2 = (s16) (s32) (func_800BFD84(param_6, (f32) spB0, (f32) temp_f8_2) + 2.0f);
@@ -179,18 +179,18 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
         sp90 = (f32) temp_v1->x;
         sp94 = (f32) temp_v1->y;
         sp98 = (f32) temp_v1->z;
-        sp54 = (f32) temp_t0_2->unk_2;
-        sp58 = (f32) temp_t0_2->unk_4;
+        sp54 = (f32) temp_t0_2[1];
+        sp58 = (f32) temp_t0_2[2];
         sp60 = (f32) spB0;
         sp64 = (f32) spB2;
-        sp5C = (f32) temp_t0_2->unk_6;
+        sp5C = (f32) temp_t0_2[3];
         sp68 = (f32) spB4;
-        sp3C = (f32) temp_t0_2->unk_8;
-        sp40 = (f32) temp_t0_2->unk_A;
+        sp3C = (f32) temp_t0_2[4];
+        sp40 = (f32) temp_t0_2[5];
         sp48 = (f32) spB8;
         spAC = temp_t0_2;
         sp4C = (f32) spBA;
-        sp44 = (f32) temp_t0_2->unk_C;
+        sp44 = (f32) temp_t0_2[6];
         sp50 = (f32) spBC;
         if ((func_80179798(temp_a0_4, temp_a1, temp_a2, temp_a3, &sp6C, &sp30) != 0) && (spAC = temp_t0_2, (func_80179798(&sp84, &sp90, &sp3C, &sp48, &sp78, &sp30) != 0))) {
             temp_v1_2 = temp_t0_2->unk_0;
@@ -218,9 +218,9 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
             }
             phi_a0->unk_0 = 0;
             phi_a0->unk_2 = (unaligned s32) spB0.unk_0;
-            phi_a0->unk_6 = (u16) spB0.unk_4;
+            phi_a0->unk_6 = (u16) (&spB0)[2];
             phi_a0->unk_8 = (unaligned s32) spB8.unk_0;
-            phi_a0->unk_C = (u16) spB8.unk_4;
+            phi_a0->unk_C = (u16) (&spB8)[2];
             phi_a0->unk_E = (s16) param_2->unk_604;
             phi_a0->unk_14 = param_6;
             param_2->unk_602 = (s16) (param_2->unk_602 + 1);
@@ -233,9 +233,9 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
         temp_v0_4 = param_2 + (param_2->unk_602 * 0x18);
         temp_v0_4->unk_0 = 0;
         temp_v0_4->unk_2 = (unaligned s32) spB0.unk_0;
-        temp_v0_4->unk_6 = (u16) spB0.unk_4;
+        temp_v0_4->unk_6 = (u16) (&spB0)[2];
         temp_v0_4->unk_8 = (unaligned s32) spB8.unk_0;
-        temp_v0_4->unk_C = (u16) spB8.unk_4;
+        temp_v0_4->unk_C = (u16) (&spB8)[2];
         temp_v0_4->unk_E = (s16) param_2->unk_604;
         temp_v0_4->unk_14 = param_6;
         param_2->unk_602 = (s16) (param_2->unk_602 + 1);
@@ -248,9 +248,9 @@ void func_800AE930(CollisionContext *colCtx, s32 param_2, f32 *param_3, f32 para
     temp_v0_5 = param_2 + (param_2->unk_602 * 0x18);
     temp_v0_5->unk_0 = 0;
     temp_v0_5->unk_2 = (unaligned s32) spB0.unk_0;
-    temp_v0_5->unk_6 = (u16) spB0.unk_4;
+    temp_v0_5->unk_6 = (u16) (&spB0)[2];
     temp_v0_5->unk_8 = (unaligned s32) spB8.unk_0;
-    temp_v0_5->unk_C = (u16) spB8.unk_4;
+    temp_v0_5->unk_C = (u16) (&spB8)[2];
     temp_v0_5->unk_14 = param_6;
     temp_v0_5->unk_E = (s16) param_2->unk_604;
     param_2->unk_602 = (s16) (param_2->unk_602 + 1);
@@ -289,7 +289,7 @@ void EffectTireMark_Init(EffTireMarkParams *params, EffTireMarkInit *init) {
     do {
         EffectTireMark_InitParticle(phi_s1);
         temp_s0 = phi_s0 + 0x18;
-        phi_s1 += 0x18;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x600);
     params->numParticles = 0;
@@ -366,11 +366,11 @@ s32 EffectTireMark_Update(EffTireMarkParams *params) {
         temp_t2->unk_C = (s32) params->unk_54;
         temp_t2->unk_10 = params->particles[3].unk_10;
         temp_t2->unk_14 = params->particles[3].unk_14;
-        phi_v0_2 = temp_a1 + 0x18;
+        phi_v0_2 = &temp_a1[1];
         phi_a1 = temp_a1;
-        phi_v1_2 = temp_a1 + 0x30;
-        phi_a0 = temp_a1 + 0x48;
-        phi_a3 = temp_a1 + 0x60;
+        phi_v1_2 = &temp_a1[2];
+        phi_a0 = &temp_a1[3];
+        phi_a3 = &temp_a1[4];
         phi_a2 = 3;
         do {
             temp_a2 = phi_a2 + 4;
@@ -435,10 +435,10 @@ void EffectTireMark_InitVertices(F3DVertexColor *vertices, EffTireMarkParticle *
     temp_v1->b = 0xFF;
     temp_v1->a = (s8) alpha;
     temp_v1->z = particle->position1.z;
-    temp_v1->unk_10 = (s16) particle->position2.x;
-    temp_v1->unk_12 = (s16) particle->position2.y;
-    temp_v1->unk_14 = (s16) particle->position2.z;
-    temp_v1_2 = &vertices[temp_v0] + 0x10;
+    temp_v1[1].x = particle->position2.x;
+    temp_v1[1].y = particle->position2.y;
+    temp_v1[1].z = particle->position2.z;
+    temp_v1_2 = &(&vertices[temp_v0])[1];
     temp_v1_2->s = 0x800;
     temp_v1_2->t = 0x400;
     temp_v1_2->r = 0xFF;
@@ -486,54 +486,54 @@ void EffectTireMark_Draw(EffTireMarkParams *params, GraphicsContext *gfxCtx) {
         gfxCtx->polyOpa.d = temp_s4;
         if (temp_s4 != 0) {
             temp_a0 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0 + 8;
+            gfxCtx->polyOpa.p = &temp_a0[1];
             temp_a0->words.w0 = 0xDA380003;
             temp_a0->words.w1 = (u32) &D_801D1DE0;
             temp_a0_2 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_2 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_2[1];
             gfxCtx->polyOpa.p = Gfx_CallSetupDL(temp_a0_2, 0x2CU);
             temp_a0_3 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_3 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_3[1];
             temp_a0_3->words.w0 = 0xE200001C;
             temp_a0_3->words.w1 = 0xC184B50;
             temp_a0_4 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_4 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_4[1];
             temp_a0_4->words.w0 = 0xFD900000;
             temp_a0_4->words.w1 = (u32) &D_04014570;
             temp_a0_5 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_5 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_5[1];
             temp_a0_5->words.w0 = 0xF5900000;
             temp_a0_5->words.w1 = 0x7014260;
             temp_a0_6 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_6 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_6[1];
             temp_a0_6->words.w1 = 0;
             temp_a0_6->words.w0 = 0xE6000000;
             temp_a0_7 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_7 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_7[1];
             temp_a0_7->words.w1 = 0x73FF100;
             temp_a0_7->words.w0 = 0xF3000000;
             temp_a0_8 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_8 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_8[1];
             temp_a0_8->words.w1 = 0;
             temp_a0_8->words.w0 = 0xE7000000;
             temp_a0_9 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_9 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_9[1];
             temp_a0_9->words.w0 = 0xF5881000;
             temp_a0_9->words.w1 = 0x14260;
             temp_a0_10 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_10 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_10[1];
             temp_a0_10->words.w0 = 0xF2000000;
             temp_a0_10->words.w1 = 0xFC07C;
             temp_a0_11 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_11 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_11[1];
             temp_a0_11->words.w0 = 0xFCFF97FF;
             temp_a0_11->words.w1 = 0xFFFDFE38;
             temp_a0_12 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_12 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_12[1];
             temp_a0_12->words.w0 = 0xD9FFFFFF;
             temp_a0_12->words.w1 = 0x200004;
             temp_a0_13 = gfxCtx->polyOpa.p;
-            gfxCtx->polyOpa.p = temp_a0_13 + 8;
+            gfxCtx->polyOpa.p = &temp_a0_13[1];
             temp_a0_13->words.w1 = 0;
             temp_a0_13->words.w0 = 0xD9FDFBFF;
             EffectTireMark_InitVertices((F3DVertexColor *) temp_s4, (EffTireMarkParticle *) params, 0, 0xFF);
@@ -570,7 +570,7 @@ void EffectTireMark_Draw(EffTireMarkParams *params, GraphicsContext *gfxCtx) {
                             temp_v0_4->unk_1A = 0x400;
                         }
                         temp_v0_5 = gfxCtx->polyOpa.p;
-                        gfxCtx->polyOpa.p = temp_v0_5 + 8;
+                        gfxCtx->polyOpa.p = &temp_v0_5[1];
                         temp_v0_5->words.w0 = 0xFA000000;
                         temp_t3 = params->color.a;
                         temp_f18 = (f32) temp_t3;
@@ -580,16 +580,16 @@ void EffectTireMark_Draw(EffTireMarkParams *params, GraphicsContext *gfxCtx) {
                         }
                         temp_v0_5->words.w1 = (params->color.r << 0x18) | (params->color.g << 0x10) | (params->color.b << 8) | ((s32) (phi_f18 * (f32) phi_s1->life * sp34) & 0xFF);
                         temp_a0_14 = gfxCtx->polyOpa.p;
-                        gfxCtx->polyOpa.p = temp_a0_14 + 8;
+                        gfxCtx->polyOpa.p = &temp_a0_14[1];
                         temp_a0_14->words.w1 = (u32) (((phi_s0 << 5) + temp_s4) - 0x20);
                         temp_a0_14->words.w0 = 0x1004008;
                         temp_a0_15 = gfxCtx->polyOpa.p;
-                        gfxCtx->polyOpa.p = temp_a0_15 + 8;
+                        gfxCtx->polyOpa.p = &temp_a0_15[1];
                         temp_a0_15->words.w1 = 0x604;
                         temp_a0_15->words.w0 = 0x6000206;
                     }
                     temp_s0 = phi_s0 + 1;
-                    phi_s1 += 0x18;
+                    phi_s1 = &phi_s1[1];
                     phi_s0 = temp_s0;
                 } while (temp_s0 < (s32) sp44->numParticles);
             }

@@ -305,9 +305,9 @@ void func_80A1DAAC(Vec3f *arg0, f32 *arg1, s16 arg2) {
 
     sp1C = Math_SinS(arg2);
     temp_f0 = Math_CosS(arg2);
-    arg0->x = (arg1->unk_8 * sp1C) + (arg1->unk_0 * temp_f0);
-    arg0->y = arg1->unk_4;
-    arg0->z = (arg1->unk_8 * temp_f0) - (arg1->unk_0 * sp1C);
+    arg0->x = (arg1[2] * sp1C) + (arg1->unk_0 * temp_f0);
+    arg0->y = arg1[1];
+    arg0->z = (arg1[2] * temp_f0) - (arg1->unk_0 * sp1C);
 }
 
 void func_80A1DB2C(ObjSpinyroll *arg0) {
@@ -342,7 +342,7 @@ loop_2:
         sp78 = temp_v0->unk_20;
         func_80A1DAAC(phi_s0, temp_a1, arg0->actor.shape.rot.y);
         Math_Vec3f_Sum(phi_s0, arg0 + 0x24, phi_s0);
-        temp_s0 = phi_s0 + 0xC;
+        temp_s0 = &phi_s0[1];
         phi_s1 += 0xC;
         phi_s0 = temp_s0;
         if (temp_s0 != &spA0) {
@@ -535,7 +535,7 @@ s32 func_80A1E074(Actor *arg0, GlobalContext *arg1, Vec3f *arg2, s32 arg3) {
     sp98 = 0;
     spCC = arg0->world.pos.y + 10.0f;
     spC0 = spCC;
-    arg0->unk_494 = 0;
+    arg0[3].shape.shadowDraw = NULL;
     temp_s7 = &spBC;
     temp_s6 = &spC8;
     phi_v0 = 0;
@@ -543,8 +543,8 @@ s32 func_80A1E074(Actor *arg0, GlobalContext *arg1, Vec3f *arg2, s32 arg3) {
     phi_f20_2 = 3.4028235e38f;
     do {
         temp_f0 = *phi_v1;
-        temp_f22 = arg0->unk_4C4 * temp_f0;
-        temp_f24 = arg0->unk_4CC * temp_f0;
+        temp_f22 = arg0[3].projectedW * temp_f0;
+        temp_f24 = arg0[3].uncullZoneScale * temp_f0;
         phi_f20 = phi_f20_2;
         phi_s3 = 0;
         phi_v0_2 = phi_v0;
@@ -661,7 +661,7 @@ s32 func_80A1E3D8(Actor *arg0, GlobalContext *arg1, f32 *arg2, s32 arg3) {
     spC8 = temp_s7;
     phi_v1 = D_80A1F1FC;
     phi_v0 = 0;
-    if (arg0->unk_4C8 > 0.0f) {
+    if (arg0[3].uncullZoneForward > 0.0f) {
         spC0 = func_80A1E394;
         phi_f26 = arg0->world.pos.y + 48.0f;
     } else {
@@ -711,8 +711,8 @@ s32 func_80A1E3D8(Actor *arg0, GlobalContext *arg1, f32 *arg2, s32 arg3) {
                 }
                 temp_s2 = phi_s2 + 1;
                 phi_s0 += 0xC;
-                phi_s3 += 0xC;
-                phi_s4 += 0xC;
+                phi_s3 = &phi_s3[3];
+                phi_s4 = &phi_s4[3];
                 phi_f22 = phi_f22_3;
                 phi_s2 = temp_s2;
                 phi_f22_2 = phi_f22_3;
@@ -1036,11 +1036,11 @@ void ObjSpinyroll_Draw(Actor *thisx, GlobalContext *globalCtx) {
             SysMatrix_SetStateRotationAndTranslation(phi_f22, this->actor.world.pos.y + this->unk_4D0, phi_f24, (Vec3s *) &sp84);
             Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
             temp_v0 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0 + 8;
+            temp_s2->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_2 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0_2 + 8;
+            temp_s2->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w1 = (u32) &D_06000460;
             temp_v0_2->words.w0 = 0xDE000000;
             temp_s1_2 = phi_s1 + 1;

@@ -331,7 +331,7 @@ void BgIkninSusceil_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_t7 = globalCtx->actorCtx.actorList[2].first;
     sp24 = temp_t7;
-    if ((this->unk168 == 0) && ((s32) this->unk166 > 0) && ((temp_t7->unk_A74 & 0x100) != 0) && (temp_t7->unk_B48 > 1000.0f)) {
+    if ((this->unk168 == 0) && ((s32) this->unk166 > 0) && (((bitwise s32) temp_t7[8].targetArrowOffset & 0x100) != 0) && ((bitwise f32) temp_t7[8].prev > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C((Actor *) this, globalCtx) != 0) && (func_80C0AE5C != this->actionFunc)) {
             func_800B8E58(sp24, 0x83EU);
@@ -347,7 +347,7 @@ void BgIkninSusceil_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->unk166 = 0;
         goto block_15;
     }
-    if ((sp24->unk_A74 & 0x100) != 0) {
+    if (((bitwise s32) sp24[8].targetArrowOffset & 0x100) != 0) {
         this->unk166 = 3;
         goto block_15;
     }

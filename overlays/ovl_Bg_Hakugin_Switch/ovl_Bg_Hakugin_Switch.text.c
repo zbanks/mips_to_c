@@ -272,7 +272,7 @@ void BgHakuginSwitch_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80B15A4C(DynaPolyActor *arg0, void (*arg1)(DynaPolyActor *, GlobalContext *, GlobalContext *, DynaPolyActor *), s16 arg2) {
-    arg0->unk_1B4 = arg1;
+    arg0[1].actor.scale.x = arg1;
     arg0->unk_1BC = arg2;
     arg0->unk_1AC = func_80B15A68;
 }
@@ -298,7 +298,7 @@ void func_80B15A68(Actor *arg0, s32 arg1) {
             ActorCutscene_StartAndSetUnkLinkFields(temp_a0_2, temp_a1);
             arg0->unk_1BF = 0x28;
         }
-        arg0->unk_1B4(arg0, arg1, arg0);
+        arg0[1].speedXZ(arg0, arg1, arg0);
         return;
     }
     if (temp_v1_2 != 0) {
@@ -419,7 +419,7 @@ block_22:
         func_80B15E0C(phi_a3_2, arg1);
         return;
     }
-    temp_a2 = phi_a3 + 0x15C;
+    temp_a2 = &phi_a3[1];
     if ((sp38->unk_14 & 1) == 0) {
         sp1C = temp_a2;
         Collider_UpdateCylinder((Actor *) phi_a3, (ColliderCylinder *) temp_a2);
@@ -531,7 +531,7 @@ void func_80B160DC(BgHakuginSwitch *arg0, GlobalContext *arg1) {
 }
 
 void func_80B16180(DynaPolyActor *arg0, void (*arg1)(DynaPolyActor *, GlobalContext *, s32), s8 arg2, s16 arg3) {
-    arg0->unk_1B4 = arg1;
+    arg0[1].actor.scale.x = arg1;
     arg0->unk_1BE = arg2;
     arg0->unk_1BC = arg3;
     arg0->unk_1AC = func_80B161A0;
@@ -546,7 +546,7 @@ void func_80B161A0(Actor *arg0, GlobalContext *arg1) {
             Actor_UnsetSwitchFlag(arg1, ((s32) arg0->params >> 8) & 0x7F);
         }
         arg0->unk_1BF = 0x32;
-        arg0->unk_1B4(arg0, arg1);
+        (bitwise ? (*)(Actor *, GlobalContext *)) arg0[1].speedXZ(arg0, arg1);
         return;
     }
     ActorCutscene_SetIntentToPlay(arg0->unk_1BC);
@@ -565,7 +565,7 @@ void func_80B16244(Actor *arg0, GlobalContext *arg1) {
         func_800BC154(arg1, arg1 + 0x1CA0, temp_a2, 0U);
         phi_a2 = arg0;
     }
-    phi_a2->unk_1AC = func_80B162AC;
+    phi_a2[1].velocity.y = func_80B162AC;
 }
 
 void func_80B162AC(DynaPolyActor *arg0, GlobalContext *arg1) {
@@ -613,7 +613,7 @@ void func_80B162AC(DynaPolyActor *arg0, GlobalContext *arg1) {
         func_80B163C4(arg0, arg1, phi_a2_2);
         return;
     }
-    temp_a2 = arg0 + 0x15C;
+    temp_a2 = &arg0[1];
     sp20 = temp_a2;
     Collider_UpdateCylinder((Actor *) arg0, (ColliderCylinder *) temp_a2);
     CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) temp_a2);
@@ -647,7 +647,7 @@ void func_80B16494(Actor *arg0, GlobalContext *arg1) {
         func_800BC154(arg1, arg1 + 0x1CA0, temp_a2, 6U);
         phi_a2 = arg0;
     }
-    phi_a2->unk_1AC = func_80B16520;
+    phi_a2[1].velocity.y = func_80B16520;
 }
 
 void func_80B16520(DynaPolyActor *arg0, GlobalContext *arg1) {

@@ -149,9 +149,9 @@ void func_80A3830C(Actor *arg0, GlobalContext *arg1) {
         }
         func_800EDF24(arg0, arg1, sp34);
     }
-    temp_a0_2 = arg0 + 0x144;
+    temp_a0_2 = &arg0[1];
     sp24 = temp_a0_2;
-    if ((func_801378B8((SkelAnime *) temp_a0_2, arg0->unk_154) != 0) && ((temp_v0_2 = arg0->unk_2B0, (temp_v0_2 == 1)) || (temp_v0_2 == 3) || (temp_v0_2 == 5))) {
+    if ((func_801378B8((SkelAnime *) temp_a0_2, arg0[1].home.pos.z) != 0) && ((temp_v0_2 = arg0->unk_2B0, (temp_v0_2 == 1)) || (temp_v0_2 == 3) || (temp_v0_2 == 5))) {
         arg0->unk_2B0 = (s16) (temp_v0_2 + 1);
         func_80A38190((SkelAnime *) temp_a0_2, (arg0->unk_2B0 * 0x18) + &D_80A387F0, 0);
     }
@@ -280,19 +280,19 @@ void DmZl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_v1 = globalCtx->state.gfxCtx;
     temp_v0 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0 + 8;
+    temp_v1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp40 = temp_v1;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80A388A8 + (this->unk_2B3 * 4)));
     temp_v0_2 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0_2 + 8;
+    temp_v1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp40 = temp_v1;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80A388A8 + (this->unk_2B2 * 4)));
     temp_v0_3 = temp_v1->polyOpa.p;
-    temp_v1->polyOpa.p = temp_v0_3 + 8;
+    temp_v1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80A38898 + (this->unk_2B4 * 4)));

@@ -95,8 +95,8 @@ void func_80AF76F0(EnSnowwd *this, GlobalContext *globalCtx) {
         if (this->actor.home.rot.z == 0) {
             if (((s32) (this->actor.params & 0xF80) >> 7) < 0x10) {
                 sp48.unk_0 = this->actor.world.pos.x;
-                sp48.unk_4 = (f32) this->actor.world.pos.y;
-                sp48.unk_8 = (f32) this->actor.world.pos.z;
+                (&sp48)[1] = this->actor.world.pos.y;
+                (&sp48)[2] = this->actor.world.pos.z;
                 sp4C += 200.0f;
                 Item_DropCollectibleRandom(globalCtx, NULL, (Vec3f *) &sp48, (s16) (((s32) (this->actor.params & 0xF80) >> 7) * 0x10));
             }
@@ -121,8 +121,8 @@ void func_80AF76F0(EnSnowwd *this, GlobalContext *globalCtx) {
         this->actor.shape.rot.x = (s16) (s32) (Math_CosS((s16) (this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) * sp54);
         this->actor.shape.rot.z = (s16) (s32) (Math_SinS((s16) (this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) * sp54);
         sp48.unk_0 = temp_t9->pos.x;
-        sp48.unk_4 = (f32) temp_t9->pos.y;
-        sp48.unk_8 = (f32) temp_t9->pos.z;
+        (&sp48)[1] = temp_t9->pos.y;
+        (&sp48)[2] = temp_t9->pos.z;
         sp48 += randPlusMinusPoint5Scaled(80.0f);
         sp4C += 100.0f + Rand_ZeroFloat(30.0f);
         sp50 += randPlusMinusPoint5Scaled(80.0f);
@@ -146,18 +146,18 @@ void EnSnowwd_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     temp_s0 = globalCtx->state.gfxCtx;
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060020;
     sp20 = temp_v0_2;
     sp20->words.w1 = Lib_SegmentedToVirtual(&D_06001AA0);
     temp_v0_3 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_3 + 8;
+    temp_s0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = (u32) &D_06000198;
     temp_v0_3->words.w0 = 0xDE000000;
 }

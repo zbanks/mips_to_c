@@ -182,7 +182,7 @@ void func_80B5EAA0(EnDragon *arg0, s32 arg1);       /* static */
 void func_80B5EB40(EnDragon *arg0, GlobalContext *arg1, s32 arg2, f32 arg3, f32); /* static */
 void func_80B5EDF0(EnDragon *arg0, s16);            /* static */
 void func_80B5EF88(EnDragon *arg0);                 /* static */
-void func_80B5F3A4(EnDragon *arg0, GlobalContext *arg1, s32 arg2, s32 arg3, s32 arg5, f32, s32, s32); /* static */
+void func_80B5F3A4(EnDragon *arg0, GlobalContext *arg1, s32 arg2, f32 arg3, f32 arg5, f32, f32, f32); /* static */
 void func_80B5F888(EnDragon *arg0);                 /* static */
 void func_80B60138(Actor *arg0, GlobalContext *arg1); /* static */
 s32 func_80B6043C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5); /* static */
@@ -279,32 +279,32 @@ void EnDragon_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.colChkInfo.damageTable = &D_80B605F4;
     this->actor.targetMode = 0xA;
     Collider_InitAndSetJntSph(globalCtx, &this->unk_2DC, (Actor *) this, &D_80B60734, &this->unk_2FC);
-    this->unk_2DC.elements->unk_1F8 = 1.0f;
+    this->unk_2DC.elements[7].dim.scale = 1.0f;
     temp_v0 = this->unk_2DC.elements;
-    temp_f0 = temp_v0->unk_1F8;
-    temp_v0->unk_1B8 = temp_f0;
-    this->unk_2DC.elements->unk_178 = temp_f0;
-    this->unk_2DC.elements->unk_138 = temp_f0;
-    this->unk_2DC.elements->unk_F8 = temp_f0;
-    this->unk_2DC.elements->unk_B8 = temp_f0;
-    this->unk_2DC.elements->unk_78 = temp_f0;
+    temp_f0 = temp_v0[7].dim.scale;
+    temp_v0[6].dim.scale = temp_f0;
+    this->unk_2DC.elements[5].dim.scale = temp_f0;
+    this->unk_2DC.elements[4].dim.scale = temp_f0;
+    this->unk_2DC.elements[3].dim.scale = temp_f0;
+    this->unk_2DC.elements[2].dim.scale = temp_f0;
+    this->unk_2DC.elements[1].dim.scale = temp_f0;
     this->unk_2DC.elements->dim.scale = temp_f0;
     this->unk_2DC.elements->dim.modelSphere.radius = 0x96;
     this->unk_2DC.elements->dim.modelSphere.center.x = 0x1A4;
-    this->unk_2DC.elements->unk_6E = 0xA0;
-    this->unk_2DC.elements->unk_68 = 0x276;
-    this->unk_2DC.elements->unk_AE = 0x82;
-    this->unk_2DC.elements->unk_A8 = 0x276;
-    this->unk_2DC.elements->unk_EE = 0xAA;
-    this->unk_2DC.elements->unk_E8 = 0x398;
-    this->unk_2DC.elements->unk_12E = 0x96;
-    this->unk_2DC.elements->unk_128 = 0x212;
-    this->unk_2DC.elements->unk_16E = 0x8C;
-    this->unk_2DC.elements->unk_168 = 0x2DA;
-    this->unk_2DC.elements->unk_1AE = 0x78;
-    this->unk_2DC.elements->unk_1A8 = 0x1AE;
-    this->unk_2DC.elements->unk_1EE = 0x6E;
-    this->unk_2DC.elements->unk_1E8 = 0xA0;
+    this->unk_2DC.elements[1].dim.modelSphere.radius = 0xA0;
+    this->unk_2DC.elements[1].dim.modelSphere.center.x = 0x276;
+    this->unk_2DC.elements[2].dim.modelSphere.radius = 0x82;
+    this->unk_2DC.elements[2].dim.modelSphere.center.x = 0x276;
+    this->unk_2DC.elements[3].dim.modelSphere.radius = 0xAA;
+    this->unk_2DC.elements[3].dim.modelSphere.center.x = 0x398;
+    this->unk_2DC.elements[4].dim.modelSphere.radius = 0x96;
+    this->unk_2DC.elements[4].dim.modelSphere.center.x = 0x212;
+    this->unk_2DC.elements[5].dim.modelSphere.radius = 0x8C;
+    this->unk_2DC.elements[5].dim.modelSphere.center.x = 0x2DA;
+    this->unk_2DC.elements[6].dim.modelSphere.radius = 0x78;
+    this->unk_2DC.elements[6].dim.modelSphere.center.x = 0x1AE;
+    this->unk_2DC.elements[7].dim.modelSphere.radius = 0x6E;
+    this->unk_2DC.elements[7].dim.modelSphere.center.x = 0xA0;
     this->actor.colChkInfo.mass = 0xFF;
     this->unk_250 = ((s32) this->actor.params >> 7) & 0x1F;
     this->unk_2BA = 0;
@@ -427,11 +427,11 @@ void func_80B5EE3C(EnDragon *this, GlobalContext *globalCtx) {
 }
 
 void func_80B5EF88(Actor *arg0) {
-    arg0->unk_2BE = 0;
-    arg0->unk_2B0 = (s16) arg0->unk_2BE;
+    arg0[2].world.unk_12 = 0;
+    arg0->unk_2B0 = (s16) arg0[2].world.unk_12;
     Audio_PlayActorSound2(arg0, 0x3963U);
     arg0->unk_2AE = 0xFA;
-    arg0->unk_248 = func_80B5EFD0;
+    arg0[1].uncullZoneDownward = (bitwise f32) func_80B5EFD0;
 }
 
 void func_80B5EFD0(EnDragon *this, GlobalContext *globalCtx) {
@@ -521,7 +521,7 @@ block_15:
     }
 }
 
-void func_80B5F3A4(EnDragon *arg0, GlobalContext *arg1, s32 arg2, s32 arg3, s32 arg5) {
+void func_80B5F3A4(EnDragon *arg0, GlobalContext *arg1, s32 arg2, f32 arg3, f32 arg5) {
     Vec3f *sp24;
     Vec3f *sp20;
     Vec3f *temp_a0;
@@ -609,7 +609,7 @@ void func_80B5F508(EnDragon *this, GlobalContext *globalCtx) {
     sp44 += Math_SinS(this->actor.world.rot.y) * *(&D_80B607E8 + (this->unk_250 * 0xC));
     sp48 += (&D_80B607E8 + (this->unk_250 * 0xC))->unk_4;
     sp4C += Math_CosS(this->actor.world.rot.y) * *(&D_80B607F0 + (this->unk_250 * 0xC));
-    func_80B5F3A4(this, globalCtx, subroutine_arg2, sp50.unk_4, sp50.unk_8, sp44.unk_0, sp44.unk_4, sp44.unk_8);
+    func_80B5F3A4(this, globalCtx, subroutine_arg2, (&sp50)[1], (&sp50)[2], sp44.unk_0, (&sp44)[1], (&sp44)[2]);
     if (*(&D_80B60858 + (this->unk_250 * 4)) < (s32) this->unk_2CA) {
         if (this->unk_2BE == 0) {
             func_800B7298(globalCtx, (Actor *) this, 6U);
@@ -676,7 +676,7 @@ void func_80B5F8D8(EnDragon *this, GlobalContext *globalCtx) {
     sp44 += -100.0f;
     sp40 = temp_f6;
     sp48 += Math_CosS(this->actor.world.rot.y) * 1200.0f;
-    func_80B5F3A4(this, globalCtx, subroutine_arg2, sp4C.unk_4, sp4C.unk_8, sp40.unk_0, sp40.unk_4, sp40.unk_8);
+    func_80B5F3A4(this, globalCtx, subroutine_arg2, (&sp4C)[1], (&sp4C)[2], sp40.unk_0, (&sp40)[1], (&sp40)[2]);
     temp_v0 = this->actor.world.rot.y;
     temp_s1->shape.rot.y = temp_v0;
     temp_s1->world.rot.y = temp_v0;
@@ -701,7 +701,7 @@ void func_80B5F8D8(EnDragon *this, GlobalContext *globalCtx) {
         }
         this->unk_2BE += 1;
     }
-    if (((this->unk_2BE != 0) && (this->unk_2D0 <= sp58)) || ((temp_s1->unk_A70 & 0x80) == 0) || (temp_v0_4 = this->unk_2DC.elements, ((temp_v0_4->info.bumperFlags & 2) != 0)) || ((temp_v0_4->unk_56 & 2) != 0) || ((temp_v0_4->unk_96 & 2) != 0)) {
+    if (((this->unk_2BE != 0) && (this->unk_2D0 <= sp58)) || ((temp_s1->unk_A70 & 0x80) == 0) || (temp_v0_4 = this->unk_2DC.elements, ((temp_v0_4->info.bumperFlags & 2) != 0)) || ((temp_v0_4[1].info.bumperFlags & 2) != 0) || ((temp_v0_4[2].info.bumperFlags & 2) != 0)) {
         temp_s1->parent = NULL;
         this->unk_2B6 = 0x1E;
         ActorCutscene_Stop(this->unk_2C0);
@@ -817,12 +817,12 @@ void func_80B60138(Actor *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     sp34 = arg1->actorCtx.actorList[2].first;
-    if ((arg0->unk_2BA == 1) && ((temp_v0 = arg0->unk_2F8, ((temp_v0->unk_96 & 2) != 0)) || ((temp_v0->unk_D6 & 2) != 0) || ((temp_v0->unk_116 & 2) != 0) || ((temp_v0->unk_156 & 2) != 0) || ((temp_v0->unk_196 & 2) != 0) || ((temp_v0->unk_1D6 & 2) != 0))) {
+    if ((arg0[2].world.rot.y == 1) && ((temp_v0 = arg0[2].speedXZ, ((temp_v0->unk_96 & 2) != 0)) || ((temp_v0->unk_D6 & 2) != 0) || ((temp_v0->unk_116 & 2) != 0) || ((temp_v0->unk_156 & 2) != 0) || ((temp_v0->unk_196 & 2) != 0) || ((temp_v0->unk_1D6 & 2) != 0))) {
         Actor_ApplyDamage(arg0);
         func_800BCB70(arg0, 0x4000, 0xFF, 0, (s16) 0x19);
         if ((s32) arg0->colChkInfo.health > 0) {
             Audio_PlayActorSound2(arg0, 0x38D1U);
-            arg0->unk_2BA = 3;
+            arg0[2].world.rot.y = 3;
         } else {
             Enemy_StartFinishingBlow(arg1, arg0);
             Audio_PlayActorSound2(arg0, 0x38D0U);
@@ -830,16 +830,16 @@ void func_80B60138(Actor *arg0, GlobalContext *arg1) {
             temp_t6 = temp_t4 & ~1;
             arg0->flags = temp_t4;
             arg0->flags = temp_t6;
-            arg0->unk_2BA = 5;
+            arg0[2].world.rot.y = 5;
             arg0->flags = temp_t6 | 0x100000;
-            arg0->unk_248 = func_80B5FCC0;
+            arg0[1].uncullZoneDownward = (bitwise f32) func_80B5FCC0;
         }
     }
-    if ((arg0->unk_2BA == 1) && (arg0->unk_2B6 == 0) && (sp34->unk_D5C == 0) && ((arg0->unk_2F8->unk_17 & 2) != 0) && (!(func_800B64FC(arg1, 1000.0f, (Vec3f *) &arg0->world, &sp30) >= 0.0f) || (sp30 != 1))) {
+    if ((arg0[2].world.rot.y == 1) && (arg0->unk_2B6 == 0) && (sp34->unk_D5C == 0) && ((arg0[2].speedXZ->unk_17 & 2) != 0) && (!(func_800B64FC(arg1, 1000.0f, (Vec3f *) &arg0->world, &sp30) >= 0.0f) || (sp30 != 1))) {
         arg0->speedXZ = 0.0f;
-        arg0->unk_2BA = 2;
+        arg0[2].world.rot.y = 2;
         arg0->flags |= 0x100000;
-        arg0->unk_248 = func_80B5F418;
+        arg0[1].uncullZoneDownward = (bitwise f32) func_80B5F418;
     }
 }
 
@@ -893,8 +893,8 @@ void EnDragon_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_80B6043C(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg4, Actor *arg5) {
     if (arg1 == 0xF) {
         arg4->x += arg5->unk_2AC;
-        arg4->y += arg5->unk_2AA;
-        arg4->z += arg5->unk_2A8;
+        arg4->y += arg5[2].unk_22;
+        arg4->z += arg5[2].unk20;
     }
     return 0;
 }
@@ -906,8 +906,8 @@ void func_80B60494(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
     f32 *temp_a0;
 
     sp18.unk_0 = D_80B60878.unk_0;
-    sp18.unk_4 = (s32) D_80B60878.unk_4;
-    sp18.unk_8 = (s32) D_80B60878.unk_8;
+    (&sp18)[1] = D_80B60878.unk_4;
+    (&sp18)[2] = D_80B60878.unk_8;
     if (arg1 == 0xF) {
         SysMatrix_MultiplyVector3fByState(&D_801D15B0, arg4 + 0x254);
         temp_a0 = &sp18;

@@ -25,6 +25,12 @@ typedef struct EnHintSkb {
     /* 0x3EA */ char pad_3EA[0x2];                  /* maybe part of unk_3E9[3]? */
 } EnHintSkb;                                        /* size = 0x3EC */
 
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ u16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnHintSkb_Destroy {
     /* 0x00 */ char pad_0[0x18];
 };                                                  /* size = 0x18 */
@@ -411,7 +417,7 @@ void func_80C2011C(Actor *arg0) {
         arg0->speedXZ = 0.0f;
     }
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_228 = func_80C2016C;
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80C2016C;
 }
 
 void func_80C2016C(EnHintSkb *this, GlobalContext *globalCtx) {
@@ -449,7 +455,7 @@ void func_80C2016C(EnHintSkb *this, GlobalContext *globalCtx) {
 }
 
 void func_80C20274(Actor *arg0) {
-    if (&D_0600697C == arg0->unk_1EC) {
+    if (&D_0600697C == arg0[1].colChkInfo.displacement.y) {
         arg0->world.rot.y = arg0->yawTowardsPlayer;
         func_800BDC5C(arg0 + 0x1E4, (ActorAnimationEntry []) D_80C21D04, 8);
         arg0->gravity = -1.0f;
@@ -462,7 +468,7 @@ void func_80C20274(Actor *arg0) {
         }
     }
     Audio_PlayActorSound2(arg0, 0x3832U);
-    arg0->unk_228 = func_80C20334;
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80C20334;
 }
 
 void func_80C20334(EnHintSkb *this, GlobalContext *globalCtx) {
@@ -523,7 +529,7 @@ void func_80C20540(Actor *arg0) {
         arg0->speedXZ = 0.0f;
     }
     Audio_PlayActorSound2(arg0, 0x389EU);
-    arg0->unk_228 = func_80C20590;
+    arg0[1].shape.feetPos[1].y = (bitwise f32) func_80C20590;
 }
 
 void func_80C20590(EnHintSkb *this, GlobalContext *globalCtx) {
@@ -670,31 +676,31 @@ void func_80C20A74(Actor *arg0, GlobalContext *arg1) {
     switch (temp_v0) {
     case 1:
         func_801518B0(arg1, 0x1149U, arg0);
-        arg0->unk_3E6 = 0x1149;
+        arg0[3].home.unk_12 = 0x1149;
         return;
     case 2:
         func_801518B0(arg1, 0x114AU, arg0);
-        arg0->unk_3E6 = 0x114A;
+        arg0[3].home.unk_12 = 0x114A;
         return;
     case 3:
         func_801518B0(arg1, 0x114BU, arg0);
-        arg0->unk_3E6 = 0x114B;
+        arg0[3].home.unk_12 = 0x114B;
         return;
     case 4:
         func_801518B0(arg1, 0x114CU, arg0);
-        arg0->unk_3E6 = 0x114C;
+        arg0[3].home.unk_12 = 0x114C;
         return;
     case 5:
         func_801518B0(arg1, 0x114DU, arg0);
-        arg0->unk_3E6 = 0x114D;
+        arg0[3].home.unk_12 = 0x114D;
         return;
     case 6:
         func_801518B0(arg1, 0x114EU, arg0);
-        arg0->unk_3E6 = 0x114E;
+        arg0[3].home.unk_12 = 0x114E;
         return;
     default:
         func_801518B0(arg1, 0x1149U, arg0);
-        arg0->unk_3E6 = 0x1149;
+        arg0[3].home.unk_12 = 0x1149;
         return;
     }
 }
@@ -705,12 +711,12 @@ void func_80C20B88(Actor *arg0, GlobalContext *arg1) {
             func_8019F208();
             arg0->unk_3E8 = (u8) (arg0->unk_3E8 | 0x10);
             func_801518B0(arg1, 0x1150U, arg0);
-            arg0->unk_3E6 = 0x1150;
+            arg0[3].home.unk_12 = 0x1150;
             return;
         }
         func_8019F230();
         func_801518B0(arg1, 0x1152U, arg0);
-        arg0->unk_3E6 = 0x1152;
+        arg0[3].home.unk_12 = 0x1152;
         /* Duplicate return node #4. Try simplifying control flow for better match */
     }
 }
@@ -720,12 +726,12 @@ void func_80C20C24(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t6;
 
     if (func_80147624(arg1) != 0) {
-        temp_t6 = arg0->unk_3E6;
+        temp_t6 = arg0[3].home.unk_12;
         switch (temp_t6) {
         case 4423:
             func_801518B0(arg1, 0x1148U, arg0);
-            arg0->unk_3E6 = 0x1148U;
-            func_800BDC5C(arg0 + 0x1E4, (ActorAnimationEntry []) D_80C21D04, 0xB);
+            arg0[3].home.unk_12 = 0x1148;
+            func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo, (ActorAnimationEntry []) D_80C21D04, 0xB);
             return;
         case 4424:
             func_80C20A74(arg0, arg1);
@@ -737,15 +743,15 @@ void func_80C20C24(Actor *arg0, GlobalContext *arg1) {
         case 4429:
         case 4430:
             func_801518B0(arg1, 0x114FU, arg0);
-            arg0->unk_3E6 = 0x114FU;
+            arg0[3].home.unk_12 = 0x114F;
             return;
         case 4434:
             func_801518B0(arg1, 0x1151U, arg0);
-            arg0->unk_3E6 = 0x1151U;
+            arg0[3].home.unk_12 = 0x1151;
             return;
         case 4432:
             func_801518B0(arg1, 0x1151U, arg0);
-            arg0->unk_3E6 = 0x1151U;
+            arg0[3].home.unk_12 = 0x1151;
             return;
         case 4433:
             func_801477B4(arg1);
@@ -902,7 +908,7 @@ block_10:
                 arg0->unk_3E8 |= 1;
                 /* fallthrough */
             case 15:                                /* switch 2 */
-                temp_v0_3 = sp2C->unk_ADA;
+                temp_v0_3 = sp2C[8].colChkInfo.atHitEffect;
                 if ((temp_v0_3 == 4) || (temp_v0_3 == 0xB) || (temp_v0_3 == 0x16) || (temp_v0_3 == 0x17)) {
                     arg0->unk_3E8 |= 1;
                 }
@@ -1021,7 +1027,7 @@ void func_80C21468(EnHintSkb *arg0, GlobalContext *arg1) {
             sp8C = Math_CosS(temp_s1) * 3.0f;
             sp88 = (Rand_ZeroOne() * 4.0f) + 4.0f;
             EffectSsEnIce_Spawn(arg1, phi_s0, 0.6f, (Vec3f *) temp_s5, &D_80C21E4C, &D_80C21E44, &D_80C21E48, 0x1E);
-            temp_s0 = phi_s0 + 0xC;
+            temp_s0 = &phi_s0[1];
             phi_s0 = temp_s0;
         } while (temp_s0 != ((phi_s4 * 0xC) + arg0 + 0x22C));
     }
@@ -1042,8 +1048,8 @@ void func_80C215E4(GlobalContext *arg0, EnHintSkb *arg1, PosRot *arg2) {
     sp50.unk_4 = (s32) D_80C21E58.unk_4;
     sp50.unk_8 = (s32) D_80C21E58.unk_8;
     sp44.unk_0 = D_80C21E64.unk_0;
-    sp44.unk_4 = (s32) D_80C21E64.unk_4;
-    sp44.unk_8 = (s32) D_80C21E64.unk_8;
+    (&sp44)[1] = D_80C21E64.unk_4;
+    (&sp44)[2] = D_80C21E64.unk_8;
     temp_f12 = (Rand_ZeroOne() - 0.5f) * 6.28f;
     sp40 = temp_f12;
     sp60 = arg1->actor.floorHeight;
@@ -1100,7 +1106,7 @@ s32 func_80C21858(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
             SysMatrix_GetStateTranslation(arg5 + 0x3C);
             goto block_7;
         }
-        if ((arg1 == 0xC) && (arg5->unk_3DE == 1)) {
+        if ((arg1 == 0xC) && (arg5[165].x == 1)) {
             arg1 = arg1;
             SysMatrix_InsertZRotation_s(0x71C, 1);
 block_7:
@@ -1113,6 +1119,8 @@ block_7:
 }
 
 void func_80C219D4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor *arg4) {
+    f32 temp_t2;
+    f32 temp_t6;
     u8 temp_v0;
     u8 temp_v0_2;
 
@@ -1128,15 +1136,17 @@ void func_80C219D4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Actor
                 func_800BBCEC(arg4, arg0, 1, arg2);
             }
         }
-        if (arg4->unk_3E2 != 0) {
+        if (arg4[3].home.rot.y != 0) {
             if ((arg1 == 2) || (arg1 == 4) || (arg1 == 5) || (arg1 == 6) || (arg1 == 7) || (arg1 == 8) || (arg1 == 9) || (arg1 == 0xD) || (arg1 == 0xE) || (arg1 == 0xF) || (arg1 == 0x10) || (arg1 == 0x11) || (arg1 == 0x12)) {
-                SysMatrix_GetStateTranslation(arg4 + (arg4->unk_2DC * 0xC) + 0x22C);
-                arg4->unk_2DC = (s32) (arg4->unk_2DC + 1);
+                temp_t6 = arg4[2].targetArrowOffset;
+                SysMatrix_GetStateTranslation(arg4 + ((((bitwise s32) temp_t6 * 4) - (bitwise s32) temp_t6) * 4) + 0x22C);
+                arg4[2].targetArrowOffset = (bitwise f32) ((bitwise s32) arg4[2].targetArrowOffset + 1);
                 return;
             }
             if ((arg1 == 0xB) && ((arg4->unk_3E8 & 2) == 0)) {
-                SysMatrix_MultiplyVector3fByState(&D_80C21E70, arg4 + (arg4->unk_2DC * 0xC) + 0x22C);
-                arg4->unk_2DC = (s32) (arg4->unk_2DC + 1);
+                temp_t2 = arg4[2].targetArrowOffset;
+                SysMatrix_MultiplyVector3fByState(&D_80C21E70, arg4 + ((((bitwise s32) temp_t2 * 4) - (bitwise s32) temp_t2) * 4) + 0x22C);
+                arg4[2].targetArrowOffset = (bitwise f32) ((bitwise s32) arg4[2].targetArrowOffset + 1);
             }
             /* Duplicate return node #29. Try simplifying control flow for better match */
             return;

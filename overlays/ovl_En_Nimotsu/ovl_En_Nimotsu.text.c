@@ -132,13 +132,13 @@ void EnNimotsu_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp2C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp2C->polyOpa.p;
-    sp2C->polyOpa.p = temp_v0 + 8;
+    sp2C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp2C = sp2C;
     sp24 = temp_v0;
     sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp2C->polyOpa.p;
-    sp2C->polyOpa.p = temp_v0_2 + 8;
+    sp2C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06013380;
     temp_v0_2->words.w0 = 0xDE000000;
     func_8012C2DC(globalCtx->state.gfxCtx);

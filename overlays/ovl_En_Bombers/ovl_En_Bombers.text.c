@@ -216,11 +216,11 @@ void func_80C038B4(Actor *arg0) {
     SkelAnime *temp_s0;
 
     temp_s0 = arg0 + 0x144;
-    if ((arg0->unk_2C4 == 2) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
+    if ((arg0[2].focus.pos.x == 2) && ((func_801378B8(temp_s0, 9.0f) != 0) || (func_801378B8(temp_s0, 10.0f) != 0) || (func_801378B8(temp_s0, 17.0f) != 0) || (func_801378B8(temp_s0, 18.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
-    temp_s0_2 = arg0 + 0x144;
-    if ((arg0->unk_2C4 == 0xF) && ((func_801378B8((SkelAnime *) temp_s0_2, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 6.0f) != 0))) {
+    temp_s0_2 = &arg0[1];
+    if (((bitwise s32) arg0[2].focus.pos.x == 0xF) && ((func_801378B8((SkelAnime *) temp_s0_2, 0.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 2.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 4.0f) != 0) || (func_801378B8((SkelAnime *) temp_s0_2, 6.0f) != 0))) {
         Audio_PlayActorSound2(arg0, 0x292CU);
     }
 }
@@ -565,7 +565,7 @@ s32 func_80C045B4(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     }
     if (arg1 == 0x11) {
         arg4->x += arg5->unk_28A;
-        arg4->z += arg5->unk_288;
+        arg4->z += arg5[2].id;
     }
     if (arg1 == 0x13) {
         *arg2 = NULL;
@@ -589,17 +589,17 @@ void EnBombers_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C0482C + (this->unk_2B8 * 4)));
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80C04838 + (this->unk_2BE * 4)));
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDB060028;
     sp30 = temp_v0_3;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80C04818 + (this->unk_2BE * 4)));

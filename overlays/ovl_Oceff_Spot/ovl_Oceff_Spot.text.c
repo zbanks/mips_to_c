@@ -98,7 +98,7 @@ void OceffSpot_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.scale.y = 0.3f;
     this->unk_16C = 0.0f;
     this->actor.world.pos.y = sp3C->world.pos.y;
-    this->actor.world.pos.x = sp3C->unk_BEC;
+    this->actor.world.pos.x = sp3C[9].floorHeight;
     this->actor.world.pos.z = sp3C->unk_BF4;
 }
 
@@ -120,9 +120,9 @@ void OceffSpot_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 void func_80972844(Actor *arg0, GlobalContext *arg1) {
     f32 temp_f0;
 
-    temp_f0 = arg0->unk_16C;
+    temp_f0 = arg0[1].world.pos.y;
     if (temp_f0 > 0.0f) {
-        arg0->unk_16C = (f32) (temp_f0 - 0.05f);
+        arg0[1].world.pos.y = temp_f0 - 0.05f;
         return;
     }
     Actor_MarkForDeath(arg0);
@@ -237,22 +237,22 @@ void OceffSpot_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0 = temp_a0;
     func_8012C2DC(temp_a0);
     temp_v0 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0 + 8;
+    temp_s0->polyXlu.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp58 = temp_t0;
     sp4C = temp_v0;
     sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_2 + 8;
+    temp_s0->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_80973350;
     temp_v0_2->words.w0 = 0xDE000000;
     temp_v0_3 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_3 + 8;
+    temp_s0->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     sp44 = temp_v0_3;
     sp44->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_t0 * 2, temp_t0 * -2, 0x20, 0x20, 1, 0U, temp_t0 * -8, 0x20, 0x20);
     temp_v0_4 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_4 + 8;
+    temp_s0->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w1 = (u32) &D_809733E8;
     temp_v0_4->words.w0 = 0xDE000000;
 }

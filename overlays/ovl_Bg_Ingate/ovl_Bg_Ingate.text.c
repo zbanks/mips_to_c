@@ -148,19 +148,19 @@ void func_80953B40(Actor *arg0) {
     u16 temp_t7;
 
     if ((gSaveContext.eventInf[3] & 0x20) == 0) {
-        arg0->unk_180 = 0xFA0;
+        arg0[1].focus.pos.x = 0xFA0;
         arg0->unk_168 = 4;
     } else {
-        arg0->unk_180 = 0x7D0;
+        arg0[1].focus.pos.x = 0x7D0;
         arg0->unk_168 = 1;
     }
-    arg0->unk_188 = 2;
+    arg0[1].focus.pos.z = 3e-45.0f;
     arg0->unk_18C = 0;
-    temp_t7 = arg0->unk_160 & ~1;
+    temp_t7 = arg0[1].params & ~1;
     temp_t8 = temp_t7 & 0xFFFF;
-    arg0->unk_160 = temp_t7;
-    arg0->unk_184 = (s32) ((s32) arg0->unk_180 / (s32) (*arg0->unk_164 - 2));
-    arg0->unk_160 = (u16) (temp_t8 & ~2);
+    arg0[1].params = temp_t7;
+    arg0[1].focus.pos.y = (s32) arg0[1].focus.pos.x / (s32) (*arg0->unk_164 - 2);
+    arg0[1].params = temp_t8 & ~2;
 }
 
 ? func_80953BEC(Actor *arg0) {
@@ -185,26 +185,26 @@ void func_80953B40(Actor *arg0) {
     func_8013AF00((void *) &sp74, 3, arg0->unk_164->count + 3);
     temp_v1 = arg0 + 0x170;
     phi_v1 = temp_v1;
-    if ((arg0->unk_160 & 1) == 0) {
+    if ((arg0[1].params & 1) == 0) {
         temp_t0 = arg0 + 0x188;
         sp50.unk_0 = D_801D15B0.x;
         temp_a1 = arg0 + 0x17C;
-        sp50.unk_4 = (f32) D_801D15B0.y;
+        (&sp50)[1] = D_801D15B0.y;
         temp_a2 = arg0 + 0x18C;
-        sp50.unk_8 = (f32) D_801D15B0.z;
+        (&sp50)[2] = D_801D15B0.z;
         sp40 = temp_t0;
         sp44 = temp_a2;
         sp48 = temp_a1;
-        func_8013B6B0(arg0->unk_164, temp_a1, temp_a2, arg0->unk_184, arg0->unk_180, temp_t0, (void *) &sp74, (Vec3f *) &sp50, (s16) (s32) arg0->unk_168);
-        arg0->unk_160 = (u16) (arg0->unk_160 | 1);
+        func_8013B6B0(arg0->unk_164, temp_a1, temp_a2, arg0[1].focus.pos.y, arg0[1].focus.pos.x, temp_t0, (void *) &sp74, (Vec3f *) &sp50, (s16) (s32) arg0->unk_168);
+        arg0[1].params |= 1;
         phi_v1 = arg0 + 0x170;
         phi_a1 = temp_a1;
         phi_a2 = temp_a2;
         phi_t0 = temp_t0;
     } else {
         sp50.unk_0 = temp_v1->x;
-        sp50.unk_4 = (f32) temp_v1->y;
-        sp50.unk_8 = (f32) temp_v1->z;
+        (&sp50)[1] = temp_v1->y;
+        (&sp50)[2] = temp_v1->z;
         phi_a1 = arg0 + 0x17C;
         phi_a2 = arg0 + 0x18C;
         phi_t0 = arg0 + 0x188;
@@ -215,8 +215,8 @@ void func_80953B40(Actor *arg0) {
     phi_v1->y = D_801D15B0.y;
     phi_v1->z = D_801D15B0.z;
     sp3C = phi_v1;
-    if (func_8013B6B0(arg0->unk_164, phi_a1, phi_a2, arg0->unk_184, arg0->unk_180, phi_t0, (void *) &sp74, phi_v1, (s16) (s32) arg0->unk_168) != 0) {
-        arg0->unk_160 = (u16) (arg0->unk_160 | 2);
+    if (func_8013B6B0(arg0->unk_164, phi_a1, phi_a2, arg0[1].focus.pos.y, arg0[1].focus.pos.x, phi_t0, (void *) &sp74, phi_v1, (s16) (s32) arg0->unk_168) != 0) {
+        arg0[1].params |= 2;
     } else {
         sp68.unk_0 = (f32) arg0->world.pos.x;
         sp68.unk_4 = (s32) arg0->world.pos.y;
@@ -271,10 +271,10 @@ void func_80953EA4(Actor *arg0, GlobalContext *arg1) {
     sp1C = temp_v0;
     func_800B7298(arg1, temp_a1, 0x3AU);
     temp_v0->unk_3A0 = (f32) arg0->world.pos.x;
-    temp_v0->unk_3A8 = (f32) arg0->world.pos.z;
+    temp_v0[2].parent = arg0->world.pos.z;
     arg0->unk_16A = 0x1E;
     arg0->unk_15C = func_80954340;
-    arg0->unk_160 = (u16) (arg0->unk_160 & 0xFFFB);
+    arg0[1].params = (u16) arg0[1].params & 0xFFFB;
 }
 
 void func_80953F14(Actor *arg0, GlobalContext *arg1) {
@@ -287,9 +287,9 @@ void func_80953F14(Actor *arg0, GlobalContext *arg1) {
     temp_v0->shape.rot.y = arg0->shape.rot.y;
     temp_v1 = temp_v0->shape.rot.y;
     temp_v0->world.rot.y = temp_v1;
-    temp_v0->unk_AD4 = temp_v1;
+    temp_v0[8].colChkInfo.cylYShift = temp_v1;
     temp_v0->focus.rot.y = temp_v1;
-    arg0->unk_160 = (u16) (arg0->unk_160 | 0x10);
+    arg0[1].params |= 0x10;
     func_80953DA8();
     temp_a0 = arg0;
     phi_a0 = temp_a0;
@@ -319,12 +319,12 @@ void func_80953F9C(Actor *arg0, GlobalContext *arg1) {
     sp24 = temp_t6;
     sp20 = Play_GetCamera(temp_a2, 0);
     if ((gSaveContext.eventInf[4] & 1) == 0) {
-        if (((gSaveContext.eventInf[3] & 0x20) == 0) && ((arg0->unk_160 & 0x10) != 0) && (arg0->unk_16C == 0)) {
+        if (((gSaveContext.eventInf[3] & 0x20) == 0) && ((arg0[1].params & 0x10) != 0) && (arg0->unk_16C == 0)) {
             arg0->textId = 0x9E3;
             func_801518B0(arg1, 0x9E3U & 0xFFFF, NULL);
-            arg0->unk_160 = (u16) (arg0->unk_160 & 0xFFEF);
+            arg0[1].params &= 0xFFEF;
         }
-        if ((arg0->unk_160 & 2) != 0) {
+        if ((arg0[1].params & 2) != 0) {
             if (arg0->unk_164->unk_1 != 0xFF) {
                 func_80953E38(arg1);
                 func_800B7298(arg1, arg0, 7U);
@@ -365,7 +365,7 @@ void func_809541B8(Actor *arg0, GlobalContext *arg1) {
     void *temp_v0;
 
     temp_v0 = arg1->actorCtx.actorList[2].first;
-    if ((arg0->unk_160 & 4) != 0) {
+    if ((arg0[1].params & 4) != 0) {
         if ((temp_v0->unk_14B == 4) && ((temp_v0->bgCheckFlags & 1) != 0) && (arg0->xzDistToPlayer < 40.0f) && (temp_a0 = arg1, (arg0->yDistToPlayer > 15.0f))) {
             arg1 = arg1;
             func_800B7298(temp_a0, arg0, 7U);
@@ -378,7 +378,7 @@ void func_809541B8(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if (func_800CAF70((DynaPolyActor *) arg0) == 0) {
-        arg0->unk_160 = (u16) (arg0->unk_160 | 4);
+        arg0[1].params = (u16) arg0[1].params | 4;
     }
 }
 
@@ -447,7 +447,7 @@ void func_809543D4(Actor *arg0, GlobalContext *arg1) {
                     arg0 = arg0;
                     func_800B7298(arg1, temp_a1, 6U);
                     arg0->unk_15C = func_809541B8;
-                    arg0->unk_160 = (u16) (arg0->unk_160 & 0xFFFB);
+                    arg0[1].params = (u16) arg0[1].params & 0xFFFB;
                     func_800FE498();
                     func_8019F230();
                 }
@@ -460,7 +460,7 @@ void func_809543D4(Actor *arg0, GlobalContext *arg1) {
                 arg0 = arg0;
                 func_800B7298(arg1, temp_a1_2, 6U);
                 arg0->unk_15C = func_809541B8;
-                arg0->unk_160 = (u16) (arg0->unk_160 & 0xFFFB);
+                arg0[1].params = (u16) arg0[1].params & 0xFFFB;
                 func_800FE498();
                 func_8019F208();
             } else {
@@ -565,13 +565,13 @@ void BgIngate_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp24 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0 + 8;
+    sp24->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp24 = sp24;
     sp1C = temp_v0;
     sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = sp24->polyOpa.p;
-    sp24->polyOpa.p = temp_v0_2 + 8;
+    sp24->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_060006B0;
     temp_v0_2->words.w0 = 0xDE000000;
 }

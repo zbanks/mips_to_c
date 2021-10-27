@@ -96,7 +96,7 @@ static ColliderCylinderInit D_80BE5DA4 = {
 };
 static f32 D_80BE5DD0 = 1.0f;
 static ? D_80BE5DD4;                                /* unable to generate initializer */
-static s32 D_80BE5E24[20] = {
+static u32 D_80BE5E24[20] = {
     0x6007D18,
     0x6007D18,
     0x6007D18,
@@ -194,8 +194,8 @@ loop_1:
     if (phi_s0->unk_24 == 0) {
         phi_s0->unk_24 = 2U;
         phi_s0->unk_0 = (s32) arg1->unk_0;
-        phi_s0->unk_4 = (s32) arg1->unk_4;
-        phi_s0->unk_8 = (s32) arg1->unk_8;
+        phi_s0->unk_4 = (s32) arg1[1];
+        phi_s0->unk_8 = (s32) arg1[2];
         phi_s0->unk_C = randPlusMinusPoint5Scaled(30.0f);
         phi_s0->unk_10 = Rand_ZeroFloat(7.0f);
         phi_s0->unk_14 = randPlusMinusPoint5Scaled(30.0f);
@@ -225,11 +225,11 @@ void EnTanron5_Init(Actor *thisx, GlobalContext *globalCtx) {
     s16 temp_v0_2;
     s32 temp_s4;
     s32 temp_t7;
-    s32 temp_t7_2;
+    u32 temp_t7_2;
     ? *phi_s1;
     s32 phi_s0;
     f32 *phi_s2;
-    s32 *phi_s3;
+    u32 *phi_s3;
     EnTanron5 *this = (EnTanron5 *) thisx;
 
     temp_v0 = this->actor.params;
@@ -279,14 +279,14 @@ void EnTanron5_Init(Actor *thisx, GlobalContext *globalCtx) {
             temp_s0 = temp_v0_3;
             temp_a0 = temp_v0_3;
             temp_v0_3->parent = this->actor.parent;
-            temp_v0_3->unk_19C = (f32) *phi_s2;
-            Actor_SetScale(temp_a0, temp_v0_3->unk_19C);
+            temp_v0_3[1].scale.x = *phi_s2;
+            Actor_SetScale(temp_a0, temp_v0_3[1].scale.x);
             temp_t7_2 = *phi_s3;
-            temp_s0->unk_148 = temp_t7_2;
+            temp_s0[1].flags = temp_t7_2;
             if (&D_06006FD0 == temp_t7_2) {
                 temp_s0->shape.rot.y = 0;
             }
-            Collider_InitAndSetCylinder(globalCtx, temp_s0 + 0x14C, temp_s0, &D_80BE5DA4);
+            Collider_InitAndSetCylinder(globalCtx, (ColliderCylinder *) &temp_s0[1].home, temp_s0, &D_80BE5DA4);
             phi_s1 += 4;
             phi_s0 = temp_s4;
             phi_s2 += 4;
@@ -377,7 +377,7 @@ void EnTanron5_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->unk_144 = temp_v0_2 - 1;
     }
     if (temp_v1->update != 0) {
-        D_80BE5DD0 = temp_v1->unk_1AC;
+        D_80BE5DD0 = temp_v1[1].velocity.y;
     } else {
         D_80BE5DD0 = 1.0f;
     }
@@ -582,12 +582,12 @@ void func_80BE5818(Actor *this, GlobalContext *globalCtx) {
         /* Duplicate return node #32. Try simplifying control flow for better match */
         return;
     }
-    temp_v1 = this->unk_144;
+    temp_v1 = this[1].id;
     if (temp_v1 == 0) {
         phi_v0 = 0;
     } else {
-        this->unk_144 = (s16) (temp_v1 - 1);
-        phi_v0 = this->unk_144;
+        this[1].id = temp_v1 - 1;
+        phi_v0 = this[1].id;
     }
     if (phi_v0 == 0) {
         Actor_MarkForDeath(this);
@@ -660,13 +660,13 @@ void EnTanron5_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp20 = temp_a0;
         func_8012C28C(temp_a0);
         temp_v0 = sp20->polyOpa.p;
-        sp20->polyOpa.p = temp_v0 + 8;
+        sp20->polyOpa.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp20 = sp20;
         sp18 = temp_v0;
         sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = sp20->polyOpa.p;
-        sp20->polyOpa.p = temp_v0_2 + 8;
+        sp20->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDE000000;
         temp_v0_2->words.w1 = (u32) this->unk_148;
     }
@@ -685,7 +685,7 @@ void func_80BE5C10(Actor *this, GlobalContext *globalCtx) {
     s32 phi_v0;
     void *phi_a1;
 
-    temp_v0 = this->unk_144;
+    temp_v0 = this[1].id;
     if (((s32) temp_v0 >= 0x33) || (phi_v0 = 0, ((temp_v0 & 1) != 0))) {
         phi_v0 = 1;
     }
@@ -701,19 +701,19 @@ void func_80BE5C10(Actor *this, GlobalContext *globalCtx) {
         sp38 = phi_a1;
         temp_s0->polyOpa.p = func_8012C724(temp_s0->polyOpa.p);
         temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
+        temp_s0->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060020;
         sp28 = temp_v0_2;
         sp28->words.w1 = Lib_SegmentedToVirtual(phi_a1);
         SysMatrix_InsertTranslation(0.0f, 200.0f, 0.0f, 1);
         SysMatrix_InsertZRotation_s(this->unk_198, 1);
         temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
+        temp_s0->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp24 = temp_v0_3;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
+        temp_s0->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = (u32) D_0405F6F0;
         temp_v0_4->words.w0 = 0xDE000000;
     }

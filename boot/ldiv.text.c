@@ -70,8 +70,8 @@ lldiv_t lldiv(lldiv_t *__return__, s64 numer, s64 numer_unk4, s64 denom, s64 den
         }
     }
     __return__->unk_0 = (s32) sp20.unk_0;
-    __return__->unk_4 = (s32) sp20.unk_4;
-    __return__->unk_8 = (s32) sp20.unk_8;
-    __return__->unk_C = (s32) sp20.unk_C;
+    __return__->unk_4 = (s32) (&sp20)[1];
+    __return__->unk_8 = (s32) (&sp20)[2];
+    __return__->unk_C = (s32) (&sp20)[3];
     return (lldiv_t) __return__;
 }

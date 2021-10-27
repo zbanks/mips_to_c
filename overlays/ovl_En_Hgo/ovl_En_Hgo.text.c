@@ -333,49 +333,49 @@ s32 func_80BD0898(Actor *arg0, GlobalContext *arg1) {
             temp_t1 = *temp_v1->unk_1F4C;
             switch (temp_t1) {
             case 1:
-                arg0->unk_218 = 0;
+                arg0[1].shape.feetPos[0].x = 0;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 0);
                 break;
             case 2:
                 arg0->draw = EnHgo_Draw;
-                arg0->unk_218 = 1;
+                arg0[1].shape.feetPos[0].x = 1;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 1);
                 break;
             case 3:
-                arg0->unk_218 = 2;
+                arg0[1].shape.feetPos[0].x = 2;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 2);
                 break;
             case 4:
-                arg0->unk_218 = 3;
+                arg0[1].shape.feetPos[0].x = 3;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 3);
                 break;
             case 5:
-                arg0->unk_218 = 4;
+                arg0[1].shape.feetPos[0].x = 4;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 4);
                 break;
             case 6:
-                arg0->unk_218 = 5;
+                arg0[1].shape.feetPos[0].x = 5;
                 func_800BDC5C(arg0 + 0x190, (ActorAnimationEntry []) D_80BD0EA0, 5);
                 break;
             }
         } else {
             temp_a0_2 = arg0 + 0x190;
             sp3C = temp_a0_2;
-            if (func_801378B8(temp_a0_2, arg0->unk_1A0) != 0) {
-                temp_v0_2 = arg0->unk_218;
+            if (func_801378B8(temp_a0_2, arg0[1].scale.y) != 0) {
+                temp_v0_2 = arg0[1].shape.feetPos[0].x;
                 if (temp_v0_2 != 1) {
                     if (temp_v0_2 != 2) {
                         if (temp_v0_2 != 5) {
 
                         } else {
-                            arg0->unk_218 = 6;
+                            arg0[1].shape.feetPos[0].x = 6;
                             func_800BDC5C(temp_a0_2, (ActorAnimationEntry []) D_80BD0EA0, 6);
                         }
                     } else {
-                        arg0->unk_218 = 3;
+                        arg0[1].shape.feetPos[0].x = 3;
                         func_800BDC5C(temp_a0_2, (ActorAnimationEntry []) D_80BD0EA0, 3);
                     }
-                } else if ((func_801378B8(temp_a0_2, arg0->unk_1A0) != 0) && (arg0->unk_312 == 0)) {
+                } else if ((func_801378B8(temp_a0_2, arg0[1].scale.y) != 0) && (arg0->unk_312 == 0)) {
                     arg0->unk_312 = 1;
                     if ((gSaveContext.sceneSetupIndex == 0) && ((temp_v0_3 = arg1->csCtx.unk_12, (temp_v0_3 == 2)) || (temp_v0_3 == 4))) {
                         Audio_PlayActorSound2(arg0, 0x6961U);
@@ -408,23 +408,23 @@ void func_80BD0B8C(Actor *arg0, GlobalContext *arg1) {
     temp_t7 = temp_a1->focus.pos.z;
     arg0 = temp_a1;
     func_800E9250(arg1, temp_a1, temp_a2, temp_a3, (Vec3f) temp_a1->focus.pos.x, temp_a1->focus.pos.y, temp_t7);
-    temp_v0 = arg0->unk_30E;
+    temp_v0 = arg0[2].wallYaw;
     if ((s32) temp_v0 >= 3) {
-        arg0->unk_30E = (s16) (temp_v0 - 1);
+        arg0[2].wallYaw = temp_v0 - 1;
         return;
     }
     if (temp_v0 == 2) {
         arg0->unk_30C = 1;
-        arg0->unk_30E = 1;
+        arg0[2].wallYaw = 1;
         return;
     }
     if (temp_v0 == 1) {
         arg0->unk_30C = 2;
-        arg0->unk_30E = 0;
+        arg0[2].wallYaw = 0;
         return;
     }
     arg0->unk_30C = 0;
-    arg0->unk_30E = 0x3C;
+    arg0[2].wallYaw = 0x3C;
 }
 
 void EnHgo_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -477,18 +477,18 @@ void EnHgo_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp30 = temp_v0;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&D_80BD0F80 + (this->unk_30C * 4)));
     SkelAnime_DrawSV(globalCtx, this->unk_190.skeleton, this->unk_190.limbDrawTbl, (s32) this->unk_190.dListCount, func_80BD0CF0, func_80BD0D38, (Actor *) this);
     SysMatrix_SetCurrentState(&this->unk_1D8);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     temp_v0_2->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_3 + 8;
+    temp_s1->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xDE000000;
     temp_v0_3->words.w1 = (u32) &D_0600F248;
 }

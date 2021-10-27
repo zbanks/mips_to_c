@@ -201,7 +201,7 @@ void func_80C18ED0(GlobalContext *arg0, s32 arg1, Actor *arg2) {
         if (arg1 == 0x12) {
             func_8013AD9C((s16) (arg2->unk_2F6 + arg2->unk_2FA + 0x4000), (s16) (arg2->unk_2F8 + arg2->unk_2FC + arg2->shape.rot.y + 0x4000), arg2 + 0x194, arg2 + 0x1AC, phi_v1, phi_v0);
             SysMatrix_StatePop();
-            SysMatrix_InsertTranslation(arg2->unk_194, arg2->unk_198, arg2->unk_19C, 0);
+            SysMatrix_InsertTranslation(arg2->unk_194, arg2[1].targetArrowOffset, arg2[1].scale.x, 0);
             Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
             Matrix_RotateY(arg2->unk_1AE, 1U);
             SysMatrix_InsertXRotation_s(arg2->unk_1AC, 1);
@@ -214,7 +214,7 @@ void func_80C18ED0(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     }
     func_8013AD9C((s16) (arg2->unk_2FA + 0x4000), (s16) (arg2->unk_2FC + arg2->shape.rot.y + 0x4000), arg2 + 0x1A0, arg2 + 0x1B2, phi_v1, phi_v0);
     SysMatrix_StatePop();
-    SysMatrix_InsertTranslation(arg2->unk_1A0, arg2->unk_1A4, arg2->unk_1A8, 0);
+    SysMatrix_InsertTranslation(arg2[1].scale.y, arg2[1].scale.z, arg2[1].velocity.x, 0);
     Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
     Matrix_RotateY(arg2->unk_1B4, 1U);
     SysMatrix_InsertXRotation_s(arg2->unk_1B2, 1);
@@ -235,13 +235,13 @@ void EnAnd_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp40 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0 + 8;
+    sp40->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp40 = sp40;
     sp38 = temp_v0;
     sp38->words.w1 = Lib_SegmentedToVirtual(*(&D_80C19220 + (this->unk_302 * 4)));
     temp_v0_2 = sp40->polyOpa.p;
-    sp40->polyOpa.p = temp_v0_2 + 8;
+    sp40->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp34 = temp_v0_2;
     sp34->words.w1 = Lib_SegmentedToVirtual(*D_80C19218);

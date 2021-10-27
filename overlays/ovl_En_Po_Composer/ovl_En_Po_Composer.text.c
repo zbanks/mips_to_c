@@ -406,7 +406,7 @@ void func_80BC53B0(Actor *arg0) {
     temp_a3->flags |= 1;
     arg0 = temp_a3;
     func_800BDC5C(temp_a3 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 8);
-    arg0->unk_234 = func_80BC5404;
+    arg0[1].projectedPos.y = func_80BC5404;
 }
 
 void func_80BC5404(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -447,7 +447,7 @@ void func_80BC5404(EnPoComposer *this, GlobalContext *globalCtx) {
 
 void func_80BC552C(Actor *arg0) {
     func_800BDC5C(arg0 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 0);
-    arg0->unk_234 = func_80BC5570;
+    arg0[1].projectedPos.y = func_80BC5570;
 }
 
 void func_80BC5570(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -458,8 +458,8 @@ void func_80BC5580(Actor *arg0) {
     arg0->unk_32C = 0;
     Audio_PlayActorSound2(arg0, 0x3873U);
     Audio_PlayActorSound2(arg0, 0x38ECU);
-    func_800BDC5C(arg0 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 1);
-    arg0->unk_234 = func_80BC55E0;
+    func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo.displacement.z, (ActorAnimationEntry []) D_80BC6808, 1);
+    arg0[1].projectedPos.y = (bitwise f32) func_80BC55E0;
 }
 
 void func_80BC55E0(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -472,7 +472,7 @@ void func_80BC55E0(EnPoComposer *this, GlobalContext *globalCtx) {
 
 void func_80BC562C(Actor *arg0) {
     func_800BDC5C(arg0 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 2);
-    arg0->unk_234 = func_80BC5670;
+    arg0[1].projectedPos.y = func_80BC5670;
 }
 
 void func_80BC5670(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -482,8 +482,8 @@ void func_80BC5670(EnPoComposer *this, GlobalContext *globalCtx) {
 void func_80BC5680(Actor *arg0) {
     arg0->unk_32E = 0;
     Audio_PlayActorSound2(arg0, 0x3A61U);
-    func_800BDC5C(arg0 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 3);
-    arg0->unk_234 = func_80BC56D0;
+    func_800BDC5C((SkelAnime *) &arg0[1].colChkInfo.displacement.z, (ActorAnimationEntry []) D_80BC6808, 3);
+    arg0[1].projectedPos.y = (bitwise f32) func_80BC56D0;
 }
 
 void func_80BC56D0(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -510,7 +510,7 @@ void func_80BC5738(Actor *arg0) {
     temp_a3->unk_32E = 0;
     arg0 = temp_a3;
     func_800BDC5C(temp_a3 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 5);
-    arg0->unk_234 = func_80BC5780;
+    arg0[1].projectedPos.y = func_80BC5780;
 }
 
 void func_80BC5780(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -537,7 +537,7 @@ void func_80BC57E8(Actor *arg0) {
     temp_a3->unk_32E = 0;
     arg0 = temp_a3;
     func_800BDC5C(temp_a3 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 7);
-    arg0->unk_234 = func_80BC5830;
+    arg0[1].projectedPos.y = func_80BC5830;
 }
 
 void func_80BC5830(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -564,7 +564,7 @@ void func_80BC5898(Actor *arg0) {
     temp_a3->unk_32E = 0;
     arg0 = temp_a3;
     func_800BDC5C(temp_a3 + 0x1F0, (ActorAnimationEntry []) D_80BC6808, 9);
-    arg0->unk_234 = func_80BC58E0;
+    arg0[1].projectedPos.y = func_80BC58E0;
 }
 
 void func_80BC58E0(EnPoComposer *this, GlobalContext *globalCtx) {
@@ -603,9 +603,9 @@ void func_80BC59BC(Actor *arg0) {
 s32 func_80BC59EC(Actor *arg0, GlobalContext *arg1) {
     u16 sp26;
     u32 sp20;
+    f32 temp_v0_2;
     s16 temp_v0_3;
     s32 temp_t9;
-    s32 temp_v0_2;
     u16 temp_a0;
     u16 temp_t3;
     u32 temp_v0;
@@ -670,13 +670,13 @@ block_20:
                 goto block_20;
             }
         }
-        if (func_80BC55E0 != arg0->unk_234) {
+        if (func_80BC55E0 != (bitwise s32) arg0[1].projectedPos.y) {
             func_800EDF24(arg0, arg1, sp20);
         } else {
             func_800EDE34(arg0, arg1, (s32) sp20);
         }
         func_80BC5CC8(arg0);
-        if ((arg0->unk_290 == 3) && (arg1->csCtx.frames == 0xCC)) {
+        if (((bitwise s32) arg0[2].home.pos.x == 3) && (arg1->csCtx.frames == 0xCC)) {
             play_sound(0x485CU);
         }
         if (arg0->unk_332 == 1) {
@@ -684,8 +684,8 @@ block_20:
         }
         return 1;
     }
-    temp_v0_2 = arg0->unk_234;
-    if ((func_80BC53A0 != temp_v0_2) && (func_80BC52F0 != temp_v0_2) && (func_80BC5404 != temp_v0_2) && (arg1->csCtx.state == 0)) {
+    temp_v0_2 = arg0[1].projectedPos.y;
+    if ((func_80BC53A0 != (bitwise s32) temp_v0_2) && (func_80BC52F0 != (bitwise s32) temp_v0_2) && (func_80BC5404 != (bitwise s32) temp_v0_2) && (arg1->csCtx.state == 0)) {
         temp_v0_3 = arg0->params;
         if ((temp_v0_3 & 0x8000) != 0) {
             func_80BC538C((EnPoComposer *) arg0, phi_a1);
@@ -693,7 +693,7 @@ block_20:
             func_80BC538C((EnPoComposer *) arg0, phi_a1);
         } else {
             arg0->unk_330 = 0;
-            if (arg0->unk_290 < 3) {
+            if ((bitwise s32) arg0[2].home.pos.x < 3) {
                 temp_v0_4 = gSaveContext.weekEventReg[14];
                 if ((temp_v0_4 & 2) == 0) {
                     gSaveContext.weekEventReg[14] = temp_v0_4 | 2;
@@ -809,7 +809,7 @@ void func_80BC5FE8(Actor *arg0, GlobalContext *arg1) {
     temp_a1 = arg1 + 0x18884;
     sp18 = temp_a1;
     CollisionCheck_SetOC(arg1, temp_a1, (Collider *) temp_a2);
-    CollisionCheck_SetOC(arg1, temp_a1, arg0 + 0x190);
+    CollisionCheck_SetOC(arg1, temp_a1, (Collider *) &arg0[1].focus.rot.z);
 }
 
 void EnPoComposer_Update(Actor *thisx, GlobalContext *globalCtx) {
@@ -829,7 +829,7 @@ s32 func_80BC60BC(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
 
     if ((arg5->unk_339 == 0) || (arg1 == 9)) {
         *arg2 = NULL;
-    } else if (((arg5->unk_1C & 0x8000) != 0) && (arg1 == 0xA)) {
+    } else if (((arg5[4].z & 0x8000) != 0) && (arg1 == 0xA)) {
         *arg2 = &D_06006FD8;
     }
     if (arg1 == 0x13) {
@@ -902,24 +902,24 @@ void EnPoComposer_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp94 = phi_t0;
         func_8012C28C(globalCtx->state.gfxCtx);
         temp_v0_6 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_6 + 8;
+        temp_s1->polyOpa.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDB060020;
         sp94 = phi_t0;
         sp74 = temp_v0_6;
         sp74->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) this->unk_336, (s32) this->unk_337, (s32) this->unk_338, (s32) this->unk_339);
         temp_v0_7 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_7 + 8;
+        temp_s1->polyOpa.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDB060028;
         sp94 = phi_t0;
         sp70 = temp_v0_7;
         sp70->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) sp98->unk_0, (s32) sp98->unk_1, (s32) sp98->unk_2, (s32) this->unk_339);
         temp_v0_8 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_8 + 8;
+        temp_s1->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xDB06002C;
         sp6C = temp_v0_8;
         sp6C->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) phi_t0->unk_0, (s32) phi_t0->unk_1, (s32) phi_t0->unk_2, (s32) this->unk_339);
         temp_v0_9 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_9 + 8;
+        temp_s1->polyOpa.p = &temp_v0_9[1];
         temp_v0_9->words.w1 = (u32) D_801AEFA0;
         temp_v0_9->words.w0 = 0xDB060030;
         temp_s1->polyOpa.p = SkelAnime_DrawSV2(globalCtx, this->unk_1F0.skeleton, this->unk_1F0.limbDrawTbl, (s32) this->unk_1F0.dListCount, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *, Gfx **)) func_80BC60BC, func_80BC617C, (Actor *) this, temp_s1->polyOpa.p);
@@ -928,24 +928,24 @@ void EnPoComposer_Draw(Actor *thisx, GlobalContext *globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_2 + 8;
+        temp_s1->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xDB060020;
         sp94 = phi_t0;
         sp64 = temp_v0_2;
         sp64->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) this->unk_336, (s32) this->unk_337, (s32) this->unk_338, (s32) this->unk_339);
         temp_v0_3 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_3 + 8;
+        temp_s1->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDB060028;
         sp94 = phi_t0;
         sp60 = temp_v0_3;
         sp60->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) sp98->unk_0, (s32) sp98->unk_1, (s32) sp98->unk_2, (s32) this->unk_339);
         temp_v0_4 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_4 + 8;
+        temp_s1->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDB06002C;
         sp5C = temp_v0_4;
         sp5C->words.w1 = Gfx_EnvColor(globalCtx->state.gfxCtx, (s32) phi_t0->unk_0, (s32) phi_t0->unk_1, (s32) phi_t0->unk_2, (s32) this->unk_339);
         temp_v0_5 = temp_s1->polyXlu.p;
-        temp_s1->polyXlu.p = temp_v0_5 + 8;
+        temp_s1->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) D_801AEF88;
         temp_v0_5->words.w0 = 0xDB060030;
         temp_s1->polyXlu.p = SkelAnime_DrawSV2(globalCtx, this->unk_1F0.skeleton, this->unk_1F0.limbDrawTbl, (s32) this->unk_1F0.dListCount, (s32 (*)(GlobalContext *, s32, Gfx **, Vec3f *, Vec3s *, Actor *, Gfx **)) func_80BC60BC, func_80BC617C, (Actor *) this, temp_s1->polyXlu.p);
@@ -961,23 +961,23 @@ void EnPoComposer_Draw(Actor *thisx, GlobalContext *globalCtx) {
         }
         phi_v1->words.w0 = 0xE7000000;
         phi_v1->words.w1 = 0;
-        phi_v1->unk_8 = 0xFB000000;
-        phi_v1->unk_C = (s32) ((this->unk_33A << 0x18) | (this->unk_33B << 0x10) | (this->unk_33C << 8) | this->unk_339);
+        phi_v1[1].words.w0 = 0xFB000000;
+        phi_v1[1].words.w1 = (this->unk_33A << 0x18) | (this->unk_33B << 0x10) | (this->unk_33C << 8) | this->unk_339;
         sp9C = phi_v1;
         SysMatrix_SetCurrentState(&this->unk_238);
-        phi_v1->unk_10 = 0xDA380003;
+        phi_v1[2].words.w0 = 0xDA380003;
         sp9C = phi_v1;
-        phi_v1->unk_14 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-        phi_v1->unk_18 = 0xDE000000;
-        phi_v1->unk_1C = &D_06006E08;
-        phi_v1->unk_24 = &D_06006F38;
-        phi_v1->unk_20 = 0xDE000000;
-        phi_v1->unk_28 = 0xE7000000;
-        phi_v1->unk_2C = 0;
-        phi_v1->unk_30 = 0xFB000000;
-        phi_v1->unk_34 = (s32) ((sp98->unk_0 << 0x18) | (sp98->unk_1 << 0x10) | (sp98->unk_2 << 8) | this->unk_339);
-        phi_v1->unk_3C = &D_06006EA8;
-        phi_v1->unk_38 = 0xDE000000;
+        phi_v1[2].words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        phi_v1[3].words.w0 = 0xDE000000;
+        phi_v1[3].words.w1 = &D_06006E08;
+        phi_v1[4].words.w1 = &D_06006F38;
+        phi_v1[4].words.w0 = 0xDE000000;
+        phi_v1[5].words.w0 = 0xE7000000;
+        phi_v1[5].words.w1 = 0;
+        phi_v1[6].words.w0 = 0xFB000000;
+        phi_v1[6].words.w1 = (sp98->unk_0 << 0x18) | (sp98->unk_1 << 0x10) | (sp98->unk_2 << 8) | this->unk_339;
+        phi_v1[7].words.w1 = &D_06006EA8;
+        phi_v1[7].words.w0 = 0xDE000000;
         if (this->unk_339 == 0xFF) {
             temp_s1->polyOpa.p = phi_v1 + 0x40;
         } else {
@@ -988,7 +988,7 @@ void EnPoComposer_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_GetStateTranslationAndScaledZ(15.0f, (Vec3f *) &sp88);
     temp_t5 = this->unk_190.elements;
     sp80.unk_0 = (s32) (unaligned s32) temp_t5->unk_30;
-    sp80.unk_4 = (u16) temp_t5->dim.worldSphere.center.z;
+    (&sp80)[2] = (u16) temp_t5->dim.worldSphere.center.z;
     temp_t5_2 = sp80 + (s32) sp88;
     temp_t8 = sp82 + (s32) sp8C;
     sp80 = temp_t5_2;

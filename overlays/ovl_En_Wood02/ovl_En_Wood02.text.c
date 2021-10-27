@@ -155,7 +155,7 @@ void func_808C3D28(Actor *arg0, GlobalContext *arg1) {
                 } else {
                     phi_v1 = (s32) arg0->home.rot.z;
                 }
-                temp_v0 = Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x41, sp7C, sp80, sp84, (s16) (s32) arg0->world.rot.x, (s16) (s32) *temp_s4, (s16) phi_v1, (s32) (s16) ((arg0->unk_144 << 8) | (arg0->params + 1)));
+                temp_v0 = Actor_SpawnAsChild(arg1 + 0x1CA0, arg0, arg1, 0x41, sp7C, sp80, sp84, (s16) (s32) arg0->world.rot.x, (s16) (s32) *temp_s4, (s16) phi_v1, (s32) (s16) ((arg0[1].id << 8) | (arg0->params + 1)));
                 if (temp_v0 != 0) {
                     temp_v0->unk_14A = phi_s3;
                     phi_s2->unk_14A = (u8) (phi_s2->unk_14A | 1);
@@ -357,7 +357,7 @@ void func_808C4458(Actor *arg0, GlobalContext *arg1, Vec3f *arg2, u16 arg3) {
     s32 temp_v0;
 
     if (arg0->unk_148 != 0) {
-        temp_a3 = arg0->unk_144;
+        temp_a3 = arg0[1].id;
         if (temp_a3 != -1) {
             if (Actor_GetCollectibleFlag(arg1, (s32) temp_a3) == 0) {
                 goto block_4;
@@ -374,7 +374,7 @@ block_4:
                 temp_v0 = func_800A8150((s32) arg0->unk_148 - 1);
                 sp24 = temp_v0;
                 if (temp_v0 >= 0) {
-                    temp_a3_2 = arg0->unk_144;
+                    temp_a3_2 = arg0[1].id;
                     if (temp_a3_2 == -1) {
                         Item_DropCollectible(arg1, arg2, (u32) temp_v0);
                     } else {
@@ -399,6 +399,7 @@ void EnWood02_Update(Actor *thisx, GlobalContext *globalCtx) {
     ColliderCylinder *temp_s0_2;
     CollisionCheckContext *temp_a1_2;
     f32 temp_f10;
+    f32 temp_v1_2;
     s16 temp_a1;
     s16 temp_v0_2;
     s16 temp_v0_5;
@@ -408,7 +409,6 @@ void EnWood02_Update(Actor *thisx, GlobalContext *globalCtx) {
     u8 temp_t2;
     u8 temp_v0;
     u8 temp_v0_4;
-    void *temp_v1_2;
     s8 phi_v0;
     s32 phi_v1;
     s32 phi_s0;
@@ -441,8 +441,8 @@ block_10:
         }
         if (this->actor.home.rot.y != 0) {
             sp58.unk_0 = this->actor.world.pos.x;
-            sp58.unk_4 = (f32) this->actor.world.pos.y;
-            sp58.unk_8 = (f32) this->actor.world.pos.z;
+            (&sp58)[1] = this->actor.world.pos.y;
+            (&sp58)[2] = this->actor.world.pos.z;
             sp5C += 200.0f;
             func_808C4458((Actor *) this, globalCtx, (Vec3f *) &sp58, 0U);
             if ((s32) this->unk_146 >= -1) {
@@ -486,7 +486,7 @@ block_10:
         }
     } else if (((s32) temp_v0_2 < 0x17) || (temp_v0_2 == 0x1A)) {
         temp_v0_3 = globalCtx->actorCtx.actorList[2].first;
-        if (((s32) this->unk_146 >= -1) && (((temp_v1_2 = temp_v0_3->unk_390, (temp_v1_2 == 0)) && (sqrtf(this->actor.xyzDistToPlayerSq) < 20.0f) && (temp_v0_3->unk_AD0 != 0.0f)) || ((temp_v1_2 != 0) && (sqrtf(this->actor.xyzDistToPlayerSq) < 60.0f) && (temp_v1_2->unk_70 != 0.0f)))) {
+        if (((s32) this->unk_146 >= -1) && (((temp_v1_2 = temp_v0_3[2].prevPos.x, ((bitwise s32) temp_v1_2 == 0)) && (sqrtf(this->actor.xyzDistToPlayerSq) < 20.0f) && (temp_v0_3->unk_AD0 != 0.0f)) || (((bitwise s32) temp_v1_2 != 0) && (sqrtf(this->actor.xyzDistToPlayerSq) < 60.0f) && (temp_v1_2->unk_70 != 0.0f)))) {
             func_808C4458((Actor *) this, globalCtx, (Vec3f *) &this->actor.world, 1U);
             this->unk_146 = -0x15;
             Audio_PlayActorSound2((Actor *) this, 0x2877U);
@@ -562,7 +562,7 @@ void EnWood02_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp3D = phi_t0;
         func_8012C28C(temp_s0);
         temp_v1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1 + 8;
+        temp_s0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w0 = 0xFA000000;
         temp_v1->words.w1 = (phi_a2 << 0x18) | ((phi_a3 & 0xFF) << 0x10) | ((phi_t0 & 0xFF) << 8) | 0x7F;
         func_800BDFC0(globalCtx, &D_06000700);
@@ -575,28 +575,28 @@ void EnWood02_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp3D = phi_t0;
         func_800BDFC0(globalCtx, *(&D_808C4D54 + temp_v0_3));
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xFB000000;
         temp_v0_4->words.w1 = (phi_a2 << 0x18) | ((phi_a3 & 0xFF) << 0x10) | ((phi_t0 & 0xFF) << 8);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDA380003;
         sp28 = temp_v0_5;
         sp28->words.w1 = Matrix_NewMtx(temp_s0);
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDE000000;
         temp_v0_6->words.w1 = *(&D_808C4D70 + ((this->unk_150 & 0xF) * 4));
         return;
     }
     func_8012C2DC(temp_s0);
     temp_v0_7 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_7 + 8;
+    temp_s0->polyXlu.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xDA380003;
     sp20 = temp_v0_7;
     sp20->words.w1 = Matrix_NewMtx(temp_s0);
     temp_v0_8 = temp_s0->polyXlu.p;
-    temp_s0->polyXlu.p = temp_v0_8 + 8;
+    temp_s0->polyXlu.p = &temp_v0_8[1];
     temp_v0_8->words.w0 = 0xDE000000;
     temp_v0_8->words.w1 = *(&D_808C4D54 + ((this->unk_150 & 0xF) * 4));
 }

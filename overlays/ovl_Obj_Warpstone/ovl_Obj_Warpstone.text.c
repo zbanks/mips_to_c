@@ -228,26 +228,26 @@ void ObjWarpstone_Draw(Actor *thisx, GlobalContext *globalCtx) {
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         SysMatrix_StatePush();
         temp_v0 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0 + 8;
+        temp_s0->polyXlu.p = &temp_v0[1];
         temp_v0->words.w1 = 0;
         temp_v0->words.w0 = 0xE7000000;
         temp_v0_2 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_2 + 8;
+        temp_s0->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFA008080;
         temp_v0_2->words.w1 = (this->dyna.actor.home.rot.x & 0xFF) | ~0x37FF;
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = 0x64C800FF;
         temp_v0_3->words.w0 = 0xFB000000;
         sp24 = globalCtx + 0x18000;
         SysMatrix_InsertZRotation_f(((f32) ((globalCtx->gameplayFrames * 0x5DC) & 0xFFFF) * 3.1415927f) / 32768.0f, 1);
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         sp38 = temp_v0_4;
         sp38->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) D_04023210;
         temp_v0_5->words.w0 = 0xDE000000;
         sp28 = D_04023210;
@@ -260,12 +260,12 @@ void ObjWarpstone_Draw(Actor *thisx, GlobalContext *globalCtx) {
         }
         SysMatrix_InsertZRotation_f((phi_f16 * 3.1415927f) / 32768.0f, 1);
         temp_v0_6 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_6 + 8;
+        temp_s0->polyXlu.p = &temp_v0_6[1];
         temp_v0_6->words.w0 = 0xDA380003;
         sp30 = temp_v0_6;
         sp30->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xDE000000;
         temp_v0_7->words.w1 = (u32) sp28;
     }

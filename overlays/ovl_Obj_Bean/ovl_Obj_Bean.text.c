@@ -431,20 +431,20 @@ void func_80936F24(DynaPolyActor *arg0) {
     f32 temp_f20_4;
     f32 temp_f2;
 
-    arg0->unk_1AC = (s16) (arg0->unk_1AC + 0xB6);
-    arg0->unk_1AE = (s16) (arg0->unk_1AE + 0xFB);
+    arg0[1].actor.sfx += 0xB6;
+    arg0[1].actor.unk_52 += 0xFB;
     arg0->unk_1B0 = (s16) (arg0->unk_1B0 + 0x64);
     Math_StepToF(arg0 + 0x1C8, 2.0f, 0.1f);
-    temp_f20 = Math_SinS((s16) (arg0->unk_1AC * 3));
-    arg0->unk_1CC = (f32) ((Math_SinS((s16) (arg0->unk_1AE * 3)) + temp_f20) * arg0->unk_1C8);
-    temp_f20_2 = Math_CosS((s16) (arg0->unk_1AC * 4));
-    arg0->unk_1D0 = (f32) ((Math_CosS((s16) (arg0->unk_1AE * 4)) + temp_f20_2) * arg0->unk_1C8);
+    temp_f20 = Math_SinS((s16) (arg0[1].actor.sfx * 3));
+    arg0[1].actor.speedXZ = (Math_SinS((s16) (arg0[1].actor.unk_52 * 3)) + temp_f20) * arg0[1].actor.velocity.z;
+    temp_f20_2 = Math_CosS((s16) (arg0[1].actor.sfx * 4));
+    arg0[1].actor.gravity = (Math_CosS((s16) (arg0[1].actor.unk_52 * 4)) + temp_f20_2) * arg0[1].actor.velocity.z;
     temp_f20_3 = Math_SinS((s16) (arg0->unk_1B0 * 5));
-    temp_f2 = ((Math_SinS((s16) (arg0->unk_1AE * 8)) * 0.01f) + (temp_f20_3 * 0.06f) + 1.07f) * 0.1f;
+    temp_f2 = ((Math_SinS((s16) (arg0[1].actor.unk_52 * 8)) * 0.01f) + (temp_f20_3 * 0.06f) + 1.07f) * 0.1f;
     arg0->actor.scale.z = temp_f2;
     arg0->actor.scale.x = temp_f2;
     arg0->actor.scale.y = ((Math_CosS((s16) (arg0->unk_1B0 * 0xA)) * 0.2f) + 1.0f) * 0.1f;
-    temp_f20_4 = Math_SinS((s16) (arg0->unk_1AC * 3));
+    temp_f20_4 = Math_SinS((s16) (arg0[1].actor.sfx * 3));
     arg0->actor.shape.rot.y = (s32) (Math_SinS((s16) (arg0->unk_1B0 * 2)) * 2100.0f) + arg0->actor.home.rot.y + (s32) (temp_f20_4 * 1000.0f);
 }
 
@@ -736,8 +736,8 @@ void func_80937B54(Actor *arg0) {
     f32 temp_f2;
 
     Math_StepToS(arg0 + 0x1EE, arg0->unk_1F0, arg0->unk_1F2);
-    Math_StepToS(arg0 + 0x1F4, arg0->unk_1F6, arg0->unk_1F8);
-    arg0->unk_1FA = (s16) (arg0->unk_1FA + arg0->unk_1F4);
+    Math_StepToS(arg0 + 0x1F4, arg0[1].colChkInfo.cylHeight, arg0[1].colChkInfo.cylYShift);
+    arg0->unk_1FA = (s16) (arg0->unk_1FA + arg0[1].colChkInfo.cylRadius);
     arg0->unk_1FC = (s16) (s32) (6372.0f - (Math_SinS(arg0->unk_1FA) * (f32) arg0->unk_1EE));
     arg0->scale.y = Math_SinS(arg0->unk_1FC) * 0.17434467f;
     temp_f2 = Math_CosS(arg0->unk_1FC) * 0.12207746f;
@@ -754,12 +754,12 @@ void func_80937C24(s32 arg0) {
 }
 
 void func_80937C30(Actor *arg0) {
-    arg0->unk_1E8 = func_80937CA0;
+    arg0[1].colChkInfo.displacement.x = func_80937CA0;
     arg0->unk_1EC = Rand_S16Offset(0xC, 0x28);
     arg0->unk_1F0 = Rand_S16Offset(0xC8, 0x190);
     arg0->unk_1F2 = 0x14;
-    arg0->unk_1F6 = Rand_S16Offset(0x64, 0x320);
-    arg0->unk_1F8 = 0x14;
+    arg0[1].colChkInfo.cylHeight = Rand_S16Offset(0x64, 0x320);
+    arg0[1].colChkInfo.cylYShift = 0x14;
 }
 
 void func_80937CA0(void *arg0) {
@@ -783,8 +783,8 @@ void func_80937D54(Actor *arg0) {
     arg0->unk_1EC = (s16) (arg0->unk_1EC - 1);
     if (arg0->unk_1EC == 0xE) {
         arg0->unk_1F0 = Rand_S16Offset(0xC8, 0x190);
-        arg0->unk_1F6 = Rand_S16Offset(0x64, 0x1F4);
-        arg0->unk_1F8 = 0x7D0;
+        arg0[1].colChkInfo.cylHeight = Rand_S16Offset(0x64, 0x1F4);
+        arg0[1].colChkInfo.cylYShift = 0x7D0;
     }
     func_80937B54(arg0);
     if ((s32) arg0->unk_1EC < 0) {
@@ -806,15 +806,15 @@ void func_80937DEC(Actor *arg0, GlobalContext *arg1) {
         if (func_809374F8(arg0, arg1) == 0) {
             goto block_4;
         }
-        arg0->unk_1FF = 1U;
+        arg0[1].colChkInfo.acHitEffect = 1;
     } else {
 block_4:
-        arg0->unk_1FF = 0U;
+        arg0[1].colChkInfo.acHitEffect = 0;
     }
-    if ((arg0->unk_1FF != 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F) == 0) && (Flags_GetSwitch(arg1, ((s32) arg0->params >> 7) & 0x7F) != 0) && (func_800FE9B4(arg1) != 0)) {
+    if ((arg0[1].colChkInfo.acHitEffect != 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F) == 0) && (Flags_GetSwitch(arg1, ((s32) arg0->params >> 7) & 0x7F) != 0) && (func_800FE9B4(arg1) != 0)) {
         Actor_SetSwitchFlag(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F);
     }
-    if ((arg0->unk_1FF != 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F) != 0)) {
+    if ((arg0[1].colChkInfo.acHitEffect != 0) && (Flags_GetSwitch(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F) != 0)) {
         Actor_MarkForDeath(arg0);
         return;
     }
@@ -823,17 +823,17 @@ block_4:
     } else {
         arg0->draw = func_80938E00;
     }
-    if ((arg0->unk_1FF != 0) && (Flags_GetSwitch(arg1, ((s32) arg0->params >> 7) & 0x7F) != 0)) {
-        arg0->unk_1FE = (u8) (arg0->unk_1FE | 5);
+    if ((arg0[1].colChkInfo.acHitEffect != 0) && (Flags_GetSwitch(arg1, ((s32) arg0->params >> 7) & 0x7F) != 0)) {
+        arg0[1].colChkInfo.atHitEffect |= 5;
         func_80937C30(arg0);
     } else {
-        arg0->unk_1FE = (u8) (arg0->unk_1FE | 1);
+        arg0[1].colChkInfo.atHitEffect |= 1;
         func_80937C10((ObjBean *) arg0);
     }
     if (Flags_GetSwitch(arg1, arg0->params & 0x7F) != 0) {
-        arg0->unk_1E4 = 5;
+        arg0[1].colChkInfo.damageTable = (DamageTable *)5;
     } else {
-        arg0->unk_1E4 = 0;
+        arg0[1].colChkInfo.damageTable = NULL;
     }
     func_80937FB0(arg0);
 }
@@ -844,38 +844,38 @@ void func_80937FB0(Actor *arg0) {
 }
 
 void func_80937FC8(Actor *arg0, GlobalContext *arg1) {
-    s16 *temp_v0;
+    f32 temp_v0;
 
-    arg0->unk_1E8(arg0);
+    arg0[1].colChkInfo.displacement.x(arg0);
     if (func_800B84D0(arg0, arg1) != 0) {
         if (func_800B8708(arg1) == 0x2E) {
             func_809383B4(arg0);
             Actor_SetSwitchFlag(arg1, ((s32) arg0->params >> 7) & 0x7F);
         }
         if (Flags_GetSwitch(arg1, arg0->params & 0x7F) != 0) {
-            arg0->unk_1E4 = 5;
+            arg0[1].colChkInfo.damageTable = (DamageTable *)5;
             return;
         }
-        arg0->unk_1E4 = 0;
+        arg0[1].colChkInfo.damageTable = NULL;
         return;
     }
-    if (arg0->unk_1E4 == 1) {
+    if (arg0[1].colChkInfo.damageTable == 1) {
         arg0->unk_1DF = 0x10;
         func_809381B0(arg0);
         return;
     }
-    if ((((arg0->unk_171 & 2) != 0) && (temp_v0 = arg0->unk_168, (temp_v0 != 0)) && (*temp_v0 == 0x1AF)) || ((arg0->unk_1FF != 0) && ((arg0->unk_1FE & 4) != 0) && (arg0->xzDistToPlayer < 300.0f) && (func_800FE9B4(arg1) != 0))) {
+    if ((((arg0->unk_171 & 2) != 0) && (temp_v0 = arg0[1].world.pos.x, ((bitwise s32) temp_v0 != 0)) && (*temp_v0 == 0x1AF)) || ((arg0[1].colChkInfo.acHitEffect != 0) && ((arg0[1].colChkInfo.atHitEffect & 4) != 0) && (arg0->xzDistToPlayer < 300.0f) && (func_800FE9B4(arg1) != 0))) {
         func_809375C8(arg0, arg1);
         Actor_SetSwitchFlag(arg1, (((s32) arg0->params >> 7) + 1) & 0x7F);
-        arg0->unk_1E4 = 6;
+        arg0[1].colChkInfo.damageTable = (DamageTable *)6;
         func_80938670(arg0);
         return;
     }
-    if (arg0->unk_1FF != 0) {
-        if ((arg0->unk_1FE & 4) != 0) {
+    if (arg0[1].colChkInfo.acHitEffect != 0) {
+        if ((arg0[1].colChkInfo.atHitEffect & 4) != 0) {
             arg0->unk_171 = (u8) (arg0->unk_171 & 0xFFFD);
             if (arg0->xzDistToPlayer < 150.0f) {
-                CollisionCheck_SetAC(arg1, &arg1->colChkCtx, arg0 + 0x160);
+                CollisionCheck_SetAC(arg1, &arg1->colChkCtx, (Collider *) &arg0[1].params);
                 return;
             }
             /* Duplicate return node #21. Try simplifying control flow for better match */
@@ -891,20 +891,20 @@ void func_809381B0(Actor *arg0) {
 }
 
 void func_809381C4(Actor *arg0, GlobalContext *arg1) {
-    arg0->unk_1E8(arg0);
+    arg0[1].colChkInfo.displacement.x(arg0);
     if (ActorCutscene_GetCanPlayNext((s16) arg0->cutscene) != 0) {
         ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->cutscene, arg0);
         if ((s32) arg0->cutscene >= 0) {
             func_800B7298(arg1, arg0, 1U);
         }
-        arg0->unk_1E4 = 2;
+        arg0[1].colChkInfo.damageTable = (DamageTable *)2;
         func_80938284(arg0);
         return;
     }
-    if (arg0->unk_1E4 == 4) {
+    if (arg0[1].colChkInfo.damageTable == 4) {
         ActorCutscene_Stop((s16) arg0->cutscene);
         play_sound(0x4806U);
-        arg0->unk_1E4 = 0;
+        arg0[1].colChkInfo.damageTable = NULL;
         func_80937FB0(arg0);
         return;
     }
@@ -916,18 +916,18 @@ void func_80938284(Actor *arg0) {
 }
 
 void func_80938298(Actor *arg0, GlobalContext *arg1) {
-    arg0->unk_1E8(arg0);
+    arg0[1].colChkInfo.displacement.x(arg0);
     if ((s32) arg0->unk_1E0 >= 3) {
-        arg0->unk_1E4 = 3;
+        arg0[1].colChkInfo.damageTable = (DamageTable *)3;
         Actor_SetSwitchFlag(arg1, arg0->params & 0x7F);
-        arg0->unk_1E4 = 5;
+        arg0[1].colChkInfo.damageTable = (DamageTable *)5;
         func_8093833C(arg0);
         return;
     }
-    if (arg0->unk_1E4 == 4) {
+    if (arg0[1].colChkInfo.damageTable == 4) {
         ActorCutscene_Stop((s16) arg0->cutscene);
         play_sound(0x4806U);
-        arg0->unk_1E4 = 0;
+        arg0[1].colChkInfo.damageTable = NULL;
         func_80937FB0(arg0);
     }
 }
@@ -943,7 +943,7 @@ void func_80938358(Actor *arg0, ? arg1) {
 
     temp_a1 = arg0;
     arg0 = temp_a1;
-    temp_a1->unk_1E8(temp_a1, temp_a1);
+    temp_a1[1].colChkInfo.displacement.x(temp_a1, temp_a1);
     if ((s32) arg0->unk_1B2 <= 0) {
         temp_a0 = arg0->cutscene;
         arg0 = arg0;
@@ -1049,7 +1049,7 @@ void func_8093868C(Actor *arg0, ? arg1) {
         arg0->scale.x *= 0.89f;
         arg0->scale.y *= 0.89f;
         arg0->scale.z *= 0.89f;
-        arg0->unk_1B8 = (f32) (arg0->unk_1B8 * 0.89f);
+        arg0[1].gravity *= 0.89f;
     }
 }
 
@@ -1292,34 +1292,34 @@ void func_80938E00(Actor *this, GlobalContext *globalCtx) {
     temp_s1 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    if ((this->unk_1FE & 4) != 0) {
+    if ((this[1].colChkInfo.atHitEffect & 4) != 0) {
         temp_v0_2 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_2 + 8;
+        temp_s1->polyOpa.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06000090;
         temp_v0_2->words.w0 = 0xDE000000;
     }
-    phi_a0 = this->unk_1FE;
-    if ((this->unk_1FE & 2) != 0) {
+    phi_a0 = this[1].colChkInfo.atHitEffect;
+    if ((this[1].colChkInfo.atHitEffect & 2) != 0) {
         temp_v0_3 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_3 + 8;
+        temp_s1->polyOpa.p = &temp_v0_3[1];
         temp_v0_3->words.w1 = (u32) &D_060002D0;
         temp_v0_3->words.w0 = 0xDE000000;
-        phi_a0 = this->unk_1FE;
+        phi_a0 = this[1].colChkInfo.atHitEffect;
     }
     if ((phi_a0 & 1) != 0) {
         SysMatrix_SetStateRotationAndTranslation(this->world.pos.x, this->world.pos.y, this->world.pos.z, (Vec3s *) &this->shape);
-        temp_f12 = this->unk_1B8;
+        temp_f12 = this[1].gravity;
         Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
         temp_v0_4 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_4 + 8;
+        temp_s1->polyOpa.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         temp_v0_4->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_5 + 8;
+        temp_s1->polyOpa.p = &temp_v0_5[1];
         temp_v0_5->words.w0 = 0xDE000000;
         temp_v0_5->words.w1 = (u32) &D_06000530;
     }

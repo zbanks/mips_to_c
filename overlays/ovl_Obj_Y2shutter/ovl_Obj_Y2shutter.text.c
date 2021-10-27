@@ -93,8 +93,8 @@ void ObjY2shutter_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80B9AA20(Actor *arg0, void *arg1, s32 arg2) {
-    arg0->unk_15C = (s16) arg1->unk_1E;
-    arg0->unk_15F = (u8) arg1->unk_1C;
+    arg0[1].home.rot.z = (s16) arg1->unk_1E;
+    arg0[1].home.unk_13 = arg1->unk_1C;
     if (arg2 == 0) {
         Audio_PlayActorSound2(arg0, 0x2859U);
     }

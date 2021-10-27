@@ -925,7 +925,7 @@ void func_808160A0(GraphicsContext **arg0) {
 
     temp_s4 = arg0 + 0x16D30;
     temp_s0 = arg0->unk_0;
-    func_8081B6BC(temp_s4, (arg0->unk_16F9C * 4) & 0xFFFF, arg0->unk_16EC8);
+    func_8081B6BC(temp_s4, (arg0->unk_16F9C * 4) & 0xFFFF, arg0[23474]);
     temp_a1 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_a1 + 8;
     temp_a1->words.w1 = 0;
@@ -1027,9 +1027,9 @@ void func_808160A0(GraphicsContext **arg0) {
             temp_a1_8 = temp_s0->polyOpa.p;
             temp_s0->polyOpa.p = temp_a1_8 + 8;
             temp_a1_8->words.w0 = 0x1004008;
-            temp_a1_8->words.w1 = temp_s4->unk_198 + (phi_t2 * 0x10);
+            temp_a1_8->words.w1 = temp_s4[1].eye.z + (phi_t2 * 0x10);
             sp1BE = phi_t2;
-            func_80821AD4(arg0->unk_0, (gItemIcons + 0x174)[phi_s1], 0x20, 0x20U, 0);
+            func_80821AD4(arg0->unk_0, (&gItemIcons[93])[phi_s1], 0x20, 0x20U, 0);
             phi_s5_2 = D_8082AF94;
         }
         temp_s1 = phi_s1 + 1;
@@ -1060,13 +1060,13 @@ void func_808160A0(GraphicsContext **arg0) {
     temp_a1_11->words.w1 = 0xFF2FFFFF;
     temp_v1_4 = gSaveContext.equips.equipment;
     phi_v1_2 = temp_v1_4;
-    if (((s32) (temp_v1_4 & gEquipMasks->unk_2) >> gEquipShifts->unk_1) != 0) {
+    if (((s32) (temp_v1_4 & gEquipMasks[1]) >> gEquipShifts[1]) != 0) {
         temp_a1_12 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_12 + 8;
         temp_a1_12->words.w0 = 0x1004008;
-        temp_a1_12->words.w1 = temp_s4->unk_198 + (temp_t2 * 0x10);
+        temp_a1_12->words.w1 = temp_s4[1].eye.z + (temp_t2 * 0x10);
         sp1BE = temp_t2;
-        func_80821AD4(arg0->unk_0, (gItemIcons + 0x140)[(s32) (gSaveContext.equips.equipment & gEquipMasks->unk_2) >> gEquipShifts->unk_1], 0x20, 0x20U, 0);
+        func_80821AD4(arg0->unk_0, (&gItemIcons[80])[(s32) (gSaveContext.equips.equipment & gEquipMasks[1]) >> gEquipShifts[1]], 0x20, 0x20U, 0);
         phi_v1_2 = gSaveContext.equips.equipment;
     }
     temp_t2_2 = temp_t2 + 4;
@@ -1074,9 +1074,9 @@ void func_808160A0(GraphicsContext **arg0) {
         temp_a1_13 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_13 + 8;
         temp_a1_13->words.w0 = 0x1004008;
-        temp_a1_13->words.w1 = temp_s4->unk_198 + (temp_t2_2 * 0x10);
+        temp_a1_13->words.w1 = temp_s4[1].eye.z + (temp_t2_2 * 0x10);
         sp1BE = temp_t2_2;
-        func_80821AD4(arg0->unk_0, (gItemIcons + 0x130)[(s32) (gSaveContext.equips.equipment & gEquipMasks->unk_0) >> gEquipShifts->unk_0], 0x20, 0x20U, 0);
+        func_80821AD4(arg0->unk_0, (&gItemIcons[76])[(s32) (gSaveContext.equips.equipment & gEquipMasks->unk_0) >> gEquipShifts->unk_0], 0x20, 0x20U, 0);
     }
     temp_a1_14 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_a1_14 + 8;
@@ -1121,26 +1121,26 @@ void func_808160A0(GraphicsContext **arg0) {
     phi_t2_2 = (s16) (temp_t2_2 + 4);
     do {
         temp_s3 = gSaveContext.inventory.questItems;
-        temp_v1_5 = (gBitFlags + 0x18)[phi_s1_2];
-        if (((temp_v1_5 & temp_s3) != 0) || ((phi_s1_2 == 1) && ((temp_v1_5 & temp_s3) == 0) && ((*(gBitFlags + 0x60) & temp_s3) != 0))) {
+        temp_v1_5 = (&gBitFlags[6])[phi_s1_2];
+        if (((temp_v1_5 & temp_s3) != 0) || ((phi_s1_2 == 1) && ((temp_v1_5 & temp_s3) == 0) && ((gBitFlags[24] & temp_s3) != 0))) {
             if ((phi_s1_2 + 6) == temp_s4->unk_26C) {
                 temp_a0_3 = phi_t2_2 * 0x10;
-                temp_v0_3 = temp_s4->unk_198 + temp_a0_3;
+                temp_v0_3 = temp_s4[1].eye.z + temp_a0_3;
                 temp_v1_6 = temp_v0_3->unk_0 - 2;
                 temp_v0_3->unk_20 = temp_v1_6;
-                *(temp_s4->unk_198 + temp_a0_3) = temp_v1_6;
-                temp_v0_4 = temp_s4->unk_198 + temp_a0_3;
+                *(temp_s4[1].eye.z + temp_a0_3) = temp_v1_6;
+                temp_v0_4 = temp_s4[1].eye.z + temp_a0_3;
                 temp_v1_7 = temp_v0_4->unk_10 + 4;
                 temp_v0_4->unk_30 = temp_v1_7;
-                (temp_s4->unk_198 + temp_a0_3)->unk_10 = temp_v1_7;
-                temp_v0_5 = temp_s4->unk_198 + temp_a0_3;
+                (temp_s4[1].eye.z + temp_a0_3)->unk_10 = temp_v1_7;
+                temp_v0_5 = temp_s4[1].eye.z + temp_a0_3;
                 temp_v1_8 = temp_v0_5->unk_2 + 2;
                 temp_v0_5->unk_12 = temp_v1_8;
-                (temp_s4->unk_198 + temp_a0_3)->unk_2 = temp_v1_8;
-                temp_v0_6 = temp_s4->unk_198 + temp_a0_3;
+                (temp_s4[1].eye.z + temp_a0_3)->unk_2 = temp_v1_8;
+                temp_v0_6 = temp_s4[1].eye.z + temp_a0_3;
                 temp_v1_9 = temp_v0_6->unk_22 - 4;
                 temp_v0_6->unk_32 = temp_v1_9;
-                (temp_s4->unk_198 + temp_a0_3)->unk_22 = temp_v1_9;
+                (temp_s4[1].eye.z + temp_a0_3)->unk_22 = temp_v1_9;
             }
             temp_a1_24 = temp_s0->polyOpa.p;
             temp_a2_4 = phi_s1_2 * 2;
@@ -1150,7 +1150,7 @@ void func_808160A0(GraphicsContext **arg0) {
             temp_a1_25 = temp_s0->polyOpa.p;
             temp_s0->polyOpa.p = temp_a1_25 + 8;
             temp_a1_25->words.w0 = 0x1004008;
-            temp_a1_25->words.w1 = temp_s4->unk_198 + (phi_t2_2 * 0x10);
+            temp_a1_25->words.w1 = temp_s4[1].eye.z + (phi_t2_2 * 0x10);
             temp_a1_26 = temp_s0->polyOpa.p;
             temp_s0->polyOpa.p = temp_a1_26 + 8;
             temp_a1_26->words.w1 = 0x602;
@@ -1173,11 +1173,11 @@ void func_808160A0(GraphicsContext **arg0) {
     temp_s0->polyOpa.p = temp_a1_29 + 8;
     temp_a1_29->words.w1 = 0xFF;
     temp_a1_29->words.w0 = 0xFB000000;
-    if ((*(gBitFlags + 0x48) & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
         temp_a1_30 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_30 + 8;
         temp_a1_30->words.w0 = 0x1004008;
-        temp_a1_30->words.w1 = temp_s4->unk_198 + (temp_t2_3 * 0x10);
+        temp_a1_30->words.w1 = temp_s4[1].eye.z + (temp_t2_3 * 0x10);
         sp1BE = temp_t2_3;
         func_80821AD4(arg0->unk_0, &D_08061000, 0x20, 0x20U, 0);
     }
@@ -1194,7 +1194,7 @@ void func_808160A0(GraphicsContext **arg0) {
         temp_a1_33 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_33 + 8;
         temp_a1_33->words.w0 = 0x1004008;
-        temp_a1_33->words.w1 = temp_s4->unk_198 + (phi_t2_3 * 0x10);
+        temp_a1_33->words.w1 = temp_s4[1].eye.z + (phi_t2_3 * 0x10);
         temp_a1_34 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_34 + 8;
         temp_a1_34->words.w0 = 0xFA000000;
@@ -1336,9 +1336,9 @@ block_81:
         temp_a1_41 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_41 + 8;
         temp_a1_41->words.w0 = 0x1004008;
-        temp_a1_41->words.w1 = temp_s4->unk_198 + (temp_t2_5 * 0x10);
+        temp_a1_41->words.w1 = temp_s4[1].eye.z + (temp_t2_5 * 0x10);
         sp1BE = temp_t2_5;
-        temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, (gItemIcons + 0x1E8)[(u32) (gSaveContext.inventory.questItems & 0xF0000000) >> 0x1C], 0x30, 0x30, 0);
+        temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, (&gItemIcons[122])[(u32) (gSaveContext.inventory.questItems & 0xF0000000) >> 0x1C], 0x30, 0x30, 0);
     }
     temp_t2_6 = temp_t2_5 + 4;
     phi_t2_5 = temp_t2_6;
@@ -1355,13 +1355,13 @@ block_81:
         if (temp_v0_13 == 2) {
             sp1BE = temp_t2_6;
             temp_v0_14 = func_8019CF9C();
-            temp_s4->unk_1AC = temp_v0_14;
+            temp_s4[1].up.y = temp_v0_14;
             phi_t2_4 = temp_t2_6;
             if (temp_v0_14->unk_2 != 0) {
                 temp_v0_15 = D_8082AEE0;
-                if (temp_s4->unk_1AC->unk_2 == (temp_v0_15 + 1)) {
+                if (temp_s4[1].up.y->unk_2 == (temp_v0_15 + 1)) {
                     D_8082AEE0 = temp_v0_15 + 1;
-                    temp_v1_12 = temp_s4->unk_1AC;
+                    temp_v1_12 = temp_s4[1].up.y;
                     (&D_8082AEE4 + temp_v1_12->unk_2)->unk_-1 = (u8) temp_v1_12->unk_0;
                 }
 loop_90:
@@ -1378,12 +1378,12 @@ loop_90:
                     }
                     temp_v1_13 = (temp_s4 + (temp_a1_44 * 2))->unk_2BE;
                     temp_a0_6 = phi_t2_4 * 0x10;
-                    (temp_s4->unk_198 + temp_a0_6)->unk_12 = temp_v1_13;
-                    (temp_s4->unk_198 + temp_a0_6)->unk_2 = temp_v1_13;
-                    temp_v0_17 = temp_s4->unk_198 + temp_a0_6;
+                    (temp_s4[1].eye.z + temp_a0_6)->unk_12 = temp_v1_13;
+                    (temp_s4[1].eye.z + temp_a0_6)->unk_2 = temp_v1_13;
+                    temp_v0_17 = temp_s4[1].eye.z + temp_a0_6;
                     temp_v1_14 = temp_v0_17->unk_2 - 0xC;
                     temp_v0_17->unk_32 = temp_v1_14;
-                    (temp_s4->unk_198 + temp_a0_6)->unk_22 = temp_v1_14;
+                    (temp_s4[1].eye.z + temp_a0_6)->unk_22 = temp_v1_14;
                     temp_a1_45 = temp_s0->polyOpa.p;
                     temp_s0->polyOpa.p = temp_a1_45 + 8;
                     temp_a1_45->words.w1 = 0;
@@ -1402,7 +1402,7 @@ loop_90:
                     temp_a1_48 = temp_s0->polyOpa.p;
                     temp_s0->polyOpa.p = temp_a1_48 + 8;
                     temp_a1_48->words.w0 = 0x1004008;
-                    temp_a1_48->words.w1 = temp_s4->unk_198 + temp_a0_6;
+                    temp_a1_48->words.w1 = temp_s4[1].eye.z + temp_a0_6;
                     sp1BE = phi_t2_4;
                     temp_s1_5 = phi_s1_5 + 1;
                     temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, *(&D_8082AFB0 + (*temp_t0_4 * 4)), 0x10, 0x10, 0);
@@ -1427,12 +1427,12 @@ loop_90:
                     temp_t0_5 = (temp_a2_6 * 9) + &D_801D8A48 + phi_s3_2;
                     temp_a0_7 = phi_t2_5 * 0x10;
                     temp_v1_16 = (temp_s4 + (temp_t0_5->unk_1 * 2))->unk_2BE;
-                    (temp_s4->unk_198 + temp_a0_7)->unk_12 = temp_v1_16;
-                    (temp_s4->unk_198 + temp_a0_7)->unk_2 = temp_v1_16;
-                    temp_v0_18 = temp_s4->unk_198 + temp_a0_7;
+                    (temp_s4[1].eye.z + temp_a0_7)->unk_12 = temp_v1_16;
+                    (temp_s4[1].eye.z + temp_a0_7)->unk_2 = temp_v1_16;
+                    temp_v0_18 = temp_s4[1].eye.z + temp_a0_7;
                     temp_v1_17 = temp_v0_18->unk_2 - 0xC;
                     temp_v0_18->unk_32 = temp_v1_17;
-                    (temp_s4->unk_198 + temp_a0_7)->unk_22 = temp_v1_17;
+                    (temp_s4[1].eye.z + temp_a0_7)->unk_22 = temp_v1_17;
                     temp_a1_49 = temp_s0->polyOpa.p;
                     temp_s0->polyOpa.p = temp_a1_49 + 8;
                     temp_a1_49->words.w1 = 0;
@@ -1458,7 +1458,7 @@ loop_90:
                     temp_a1_53 = temp_s0->polyOpa.p;
                     temp_s0->polyOpa.p = temp_a1_53 + 8;
                     temp_a1_53->words.w0 = 0x1004008;
-                    temp_a1_53->words.w1 = temp_s4->unk_198 + temp_a0_7;
+                    temp_a1_53->words.w1 = temp_s4[1].eye.z + temp_a0_7;
                     sp1BE = phi_t2_5;
                     temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, *(&D_8082AFB0 + (temp_t0_5->unk_1 * 4)), 0x10, 0x10, 0);
                     temp_s3_3 = phi_s3_2 + 1;
@@ -1468,7 +1468,7 @@ loop_90:
             }
             if (temp_s4->unk_200 != 8) {
                 temp_v0_19 = func_8019CF78();
-                temp_s4->unk_1AC = temp_v0_19;
+                temp_s4[1].up.y = temp_v0_19;
                 phi_t2_6 = (s16) (temp_t2_6 + 0x20);
                 if (temp_v0_19->unk_2 != 0) {
                     temp_a0_8 = temp_v0_19->unk_2;
@@ -1477,7 +1477,7 @@ loop_90:
                         temp_a1_54 = temp_v0_19->unk_0;
                         if ((s32) temp_a1_54 < 5) {
                             (&D_8082AEE4 + temp_a0_8)->unk_-1 = temp_a1_54;
-                            *(&D_8082AEE4 + temp_s4->unk_1AC->unk_2) = 0xFF;
+                            *(&D_8082AEE4 + temp_s4[1].up.y->unk_2) = 0xFF;
                             D_8082AEE0 = temp_v0_20 + 1;
                         }
                     }
@@ -1500,12 +1500,12 @@ loop_90:
                         }
                         temp_v1_18 = (temp_s4 + (temp_a1_55 * 2))->unk_2BE;
                         temp_a0_9 = phi_t2_6 * 0x10;
-                        (temp_s4->unk_198 + temp_a0_9)->unk_12 = temp_v1_18;
-                        (temp_s4->unk_198 + temp_a0_9)->unk_2 = temp_v1_18;
-                        temp_v0_22 = temp_s4->unk_198 + temp_a0_9;
+                        (temp_s4[1].eye.z + temp_a0_9)->unk_12 = temp_v1_18;
+                        (temp_s4[1].eye.z + temp_a0_9)->unk_2 = temp_v1_18;
+                        temp_v0_22 = temp_s4[1].eye.z + temp_a0_9;
                         temp_v1_19 = temp_v0_22->unk_2 - 0xC;
                         temp_v0_22->unk_32 = temp_v1_19;
-                        (temp_s4->unk_198 + temp_a0_9)->unk_22 = temp_v1_19;
+                        (temp_s4[1].eye.z + temp_a0_9)->unk_22 = temp_v1_19;
                         temp_a1_56 = temp_s0->polyOpa.p;
                         temp_s0->polyOpa.p = temp_a1_56 + 8;
                         temp_a1_56->words.w1 = 0;
@@ -1524,7 +1524,7 @@ loop_90:
                         temp_a1_59 = temp_s0->polyOpa.p;
                         temp_s0->polyOpa.p = temp_a1_59 + 8;
                         temp_a1_59->words.w0 = 0x1004008;
-                        temp_a1_59->words.w1 = temp_s4->unk_198 + temp_a0_9;
+                        temp_a1_59->words.w1 = temp_s4[1].eye.z + temp_a0_9;
                         sp1BE = phi_t2_6;
                         temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, *(&D_8082AFB0 + (*temp_t0_6 * 4)), 0x10, 0x10, 0);
                         phi_t3_2 = &D_8082AEE4;
@@ -1547,15 +1547,15 @@ loop_90:
                     func_8019C300(1);
                     func_8019B544((1 << temp_s4->unk_2A0) | 0x80000000);
                     temp_v0_23 = func_8019CF9C();
-                    temp_s4->unk_1AC = temp_v0_23;
+                    temp_s4[1].up.y = temp_v0_23;
                     temp_v0_23->unk_2 = 0;
-                    temp_s4->unk_1AC->unk_1 = 0xFE;
+                    temp_s4[1].up.y->unk_1 = 0xFE;
                     temp_s4->unk_200 = 5U;
                 }
             }
         }
     }
-    if (((*(gBitFlags + 0x54) & gSaveContext.inventory.questItems) != 0) && ((temp_v0_24 = arg0->unk_A4, phi_s3_5 = 0, (temp_v0_24 == 0x27)) || (temp_v0_24 == 0x28))) {
+    if (((gBitFlags[21] & gSaveContext.inventory.questItems) != 0) && ((temp_v0_24 = arg0->unk_A4, phi_s3_5 = 0, (temp_v0_24 == 0x27)) || (temp_v0_24 == 0x28))) {
         temp_a1_60 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_60 + 8;
         temp_a1_60->words.w1 = 0;
@@ -1600,7 +1600,7 @@ loop_90:
         temp_a1_63 = temp_s0->polyOpa.p;
         temp_s0->polyOpa.p = temp_a1_63 + 8;
         temp_a1_63->words.w0 = 0x1018030;
-        temp_a1_63->words.w1 = temp_s4->unk_198 + 0x980;
+        temp_a1_63->words.w1 = temp_s4[1].eye.z + 0x980;
         phi_t1_7 = 0xFD900000;
         phi_t4 = 0xF5900000;
         phi_t5 = 0x703F800;
@@ -2023,61 +2023,61 @@ void func_80819238(GraphicsContext **arg0) {
     sp9C = temp_a0;
     func_8012C628(temp_a0);
     temp_v0 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0 + 8;
+    sp9C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xE200001C;
     temp_v0->words.w1 = 0x504240;
     temp_v0_2 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_2 + 8;
+    sp9C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFCFFFFFF;
     temp_v0_2->words.w1 = 0xFFFDF6FB;
     temp_v0_3 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_3 + 8;
+    sp9C->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w1 = 0xDC;
     temp_v0_3->words.w0 = 0xFA000000;
     temp_v0_4 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_4 + 8;
+    sp9C->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xF64A8390;
     temp_v0_4->words.w1 = 0x60030;
     temp_v0_5 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_5 + 8;
+    sp9C->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w1 = 0;
     temp_v0_5->words.w0 = 0xE7000000;
     temp_v0_6 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_6 + 8;
+    sp9C->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w0 = 0xFCFF97FF;
     temp_v0_6->words.w1 = 0xFF2DFEFF;
     temp_s0 = sp9C->polyOpa.p;
     spC4 = Graph_GfxPlusOne(temp_s0);
     temp_v1 = sp9C->overlay.p;
-    sp9C->overlay.p = temp_v1 + 8;
+    sp9C->overlay.p = &temp_v1[1];
     temp_v1->words.w0 = 0xDE000000;
     temp_v1->words.w1 = (u32) spC4;
     func_80818920(&spC4, sp9C);
     temp_t8 = spC4;
-    spC4 = temp_t8 + 8;
+    spC4 = &temp_t8[1];
     temp_t8->words.w1 = 0;
     temp_t8->words.w0 = 0xDF000000;
     Graph_BranchDlist(temp_s0, spC4);
     sp9C->polyOpa.p = spC4;
     temp_v0_7 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_7 + 8;
+    sp9C->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0;
     temp_v0_7->words.w0 = 0xE7000000;
     temp_v0_8 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_8 + 8;
+    sp9C->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0xFF0000FF;
     temp_v0_8->words.w0 = 0xFA000000;
     temp_v0_9 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_9 + 8;
+    sp9C->polyOpa.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0;
     temp_v0_9->words.w0 = 0xFB000000;
     func_808190C4(arg0, (s32) ((s32) gSaveContext.health % 0x10) / 4, 0xD9, 0xF);
     temp_v0_10 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_10 + 8;
+    sp9C->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w1 = 0;
     temp_v0_10->words.w0 = 0xE7000000;
     temp_v0_11 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_11 + 8;
+    sp9C->polyOpa.p = &temp_v0_11[1];
     temp_v0_11->words.w1 = -1;
     temp_v0_11->words.w0 = 0xFA000000;
     temp_s0_2 = gSaveContext.rupees;
@@ -2278,13 +2278,13 @@ loop_44:
     } while ((s32) temp_s4_4 < 4);
     spB4 = temp_s5_2;
     func_808190C4(arg0, (s32) (gSaveContext.equips.equipment & gEquipMasks->unk_0) >> gEquipShifts->unk_0, 0x74, 0x64);
-    func_808190C4(arg0, (s32) (gSaveContext.equips.equipment & gEquipMasks->unk_2) >> gEquipShifts->unk_1, 0x91, 0x64);
+    func_808190C4(arg0, (s32) (gSaveContext.equips.equipment & gEquipMasks[1]) >> gEquipShifts[1], 0x91, 0x64);
     phi_s0_11 = 0x64;
     do {
         spBC = phi_s0_11;
         phi_s5_5 = 0xBE;
 loop_54:
-        if ((gBitFlags[phi_s1_3].unk_18 & gSaveContext.inventory.questItems) != 0) {
+        if (((&gBitFlags[phi_s1_3])[6] & gSaveContext.inventory.questItems) != 0) {
             phi_a1_7 = 1;
         }
         temp_a3 = spBC;
@@ -2308,7 +2308,7 @@ loop_54:
         phi_s3_3 = temp_s3_3;
     } while ((s32) temp_s3_3 < 2);
     temp_s0_12 = temp_s0_11 - 0xE;
-    if ((gBitFlags->unk_60 & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[24] & gSaveContext.inventory.questItems) != 0) {
         phi_a1_8 = 1;
     }
     temp_a3_2 = temp_s0_12;
@@ -2316,13 +2316,13 @@ loop_54:
     spBC = temp_s0_12;
     spB4 = temp_s5_3;
     func_808190C4(arg0, phi_a1_8, temp_s5_3, temp_a3_2);
-    if ((gBitFlags->unk_48 & gSaveContext.inventory.questItems) != 0) {
+    if ((gBitFlags[18] & gSaveContext.inventory.questItems) != 0) {
         phi_a1_9 = 1;
     }
     spB8 = phi_a1_9;
     func_808190C4(arg0, phi_a1_9, 0x38, 0x8E);
     func_808190C4(arg0, (s32) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_0) >> gUpgradeShifts->unk_0), 0x72, 0x86);
-    func_808190C4(arg0, (s32) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_4) >> gUpgradeShifts->unk_1), 0x9C, 0x86);
+    func_808190C4(arg0, (s32) ((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]), 0x9C, 0x86);
     spB8 = 0;
     spB4 = 0;
     temp_v0_12 = func_8012F22C(0x27);
@@ -2489,23 +2489,23 @@ loop_54:
     } while ((s32) temp_s4_11 < 5);
     spB4 = temp_s5_7;
     temp_v0_15 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_15 + 8;
+    sp9C->polyOpa.p = &temp_v0_15[1];
     temp_v0_15->words.w1 = 0;
     temp_v0_15->words.w0 = 0xE7000000;
     temp_v0_16 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_16 + 8;
+    sp9C->polyOpa.p = &temp_v0_16[1];
     temp_v0_16->words.w1 = 0x504240;
     temp_v0_16->words.w0 = 0xE200001C;
     temp_v0_17 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_17 + 8;
+    sp9C->polyOpa.p = &temp_v0_17[1];
     temp_v0_17->words.w1 = 0xFFFDF6FB;
     temp_v0_17->words.w0 = 0xFCFFFFFF;
     temp_v0_18 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_18 + 8;
+    sp9C->polyOpa.p = &temp_v0_18[1];
     temp_v0_18->words.w1 = 0xC878;
     temp_v0_18->words.w0 = 0xFA000000;
     temp_v0_19 = sp9C->polyOpa.p;
-    sp9C->polyOpa.p = temp_v0_19 + 8;
+    sp9C->polyOpa.p = &temp_v0_19[1];
     temp_v1_3 = &D_8082B0F8 + (D_8082B0F0 * 6);
     temp_v0_19->words.w0 = (((temp_v1_3->unk_2 + 0xF) & 0x3FF) * 4) | 0xF6000000 | (((temp_v1_3->unk_0 + temp_v1_3->unk_4) & 0x3FF) << 0xE);
     temp_v1_4 = &D_8082B0F8 + (D_8082B0F0 * 6);
@@ -2543,7 +2543,7 @@ void func_8081B240(void *arg0, GraphicsContext *arg1, s16 arg2, u16 arg3) {
 
     if (arg2 == 0xD) {
         phi_t0 = 1;
-        if ((*(gBitFlags + 0x64) & gSaveContext.inventory.questItems) == 0) {
+        if ((gBitFlags[25] & gSaveContext.inventory.questItems) == 0) {
             phi_a0 = &gItemSlots[arg2];
             phi_t0 = 0;
         } else {
@@ -2575,7 +2575,7 @@ void func_8081B240(void *arg0, GraphicsContext *arg1, s16 arg2, u16 arg3) {
             arg1->polyOpa.p = temp_v1_4 + 8;
             temp_v1_4->words.w0 = 0xFA000000;
             temp_v1_4->words.w1 = (arg0->unk_224 & 0xFF) | 0x82828200;
-        } else if (((phi_a0 == (gItemSlots + 6)) && ((&gSaveContext + *phi_a0)->unk_A0 == (gUpgradeShifts + 8 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_4) >> gUpgradeShifts->unk_1) * 2))->unk_8)) || ((temp_v0 = gUpgradeShifts + 8, (phi_a0 == (gItemSlots + 1))) && ((&gSaveContext + *phi_a0)->unk_A0 == *(temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_0) >> gUpgradeShifts->unk_0) * 2)))) || ((phi_a0 == (gItemSlots + 8)) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_18) >> gUpgradeShifts->unk_6) * 2))->unk_30)) || ((phi_a0 == (gItemSlots + 9)) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_1C) >> gUpgradeShifts->unk_7) * 2))->unk_38)) || ((phi_a0 == (gItemSlots + 7)) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_4) >> gUpgradeShifts->unk_1) * 2))->unk_8)) || ((phi_a0 == (gItemSlots + 0xC)) && (phi_t0 == 1)) || ((phi_a0 == (gItemSlots + 0xD)) && (phi_t0 == 1)) || ((phi_a0 == (gItemSlots + 0xA)) && (phi_t0 == 0x14))) {
+        } else if (((phi_a0 == &gItemSlots[6]) && ((&gSaveContext + *phi_a0)->unk_A0 == (&gUpgradeShifts[8] + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]) * 2))->unk_8)) || ((temp_v0 = &gUpgradeShifts[8], (phi_a0 == &gItemSlots[1])) && ((&gSaveContext + *phi_a0)->unk_A0 == *(temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks->unk_0) >> gUpgradeShifts->unk_0) * 2)))) || ((phi_a0 == &gItemSlots[8]) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[6]) >> gUpgradeShifts[6]) * 2))->unk_30)) || ((phi_a0 == &gItemSlots[9]) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[7]) >> gUpgradeShifts[7]) * 2))->unk_38)) || ((phi_a0 == &gItemSlots[7]) && ((&gSaveContext + *phi_a0)->unk_A0 == (temp_v0 + (((u32) (gSaveContext.inventory.upgrades & gUpgradeMasks[1]) >> gUpgradeShifts[1]) * 2))->unk_8)) || ((phi_a0 == &gItemSlots[12]) && (phi_t0 == 1)) || ((phi_a0 == &gItemSlots[13]) && (phi_t0 == 1)) || ((phi_a0 == &gItemSlots[10]) && (phi_t0 == 0x14))) {
             temp_v1_5 = arg1->polyOpa.p;
             arg1->polyOpa.p = temp_v1_5 + 8;
             temp_v1_5->words.w0 = 0xFA000000;
@@ -2607,12 +2607,12 @@ void func_8081B240(void *arg0, GraphicsContext *arg1, s16 arg2, u16 arg3) {
     arg1->polyOpa.p = func_8010CD98(arg1->polyOpa.p, (phi_t0_3 << 6) + &D_02004AA0, 8, 8, *(&D_8082B444 + temp_v1_8) + 6, (s32) *(&D_8082B454 + temp_v1_8), 8, 8, 0x400, 0x400);
 }
 
-void func_8081B6BC(View *arg0, s32 arg1, s32 arg2) {
+void func_8081B6BC(View *arg0, s32 arg1, GraphicsContext *arg2) {
     void *temp_v0;
 
     temp_v0 = arg2 + ((arg1 & 0xFFFF) * 0x10);
-    arg0->unk_1A8->unk_0 = (s16) temp_v0->unk_0;
-    arg0->unk_1A8->unk_2 = (s16) temp_v0->unk_2;
+    arg0[1].up.x->unk_0 = (s16) temp_v0->unk_0;
+    arg0[1].up.x->unk_2 = (s16) temp_v0->unk_2;
 }
 
 void func_8081B6EC(GraphicsContext **arg0) {
@@ -2675,11 +2675,11 @@ void func_8081B6EC(GraphicsContext **arg0) {
     temp_s3 = temp_a0;
     func_8012C8AC(temp_a0);
     temp_v0 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0 + 8;
+    temp_s3->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFC119623;
     temp_v0->words.w1 = 0xFF2FFFFF;
     temp_v0_2 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0_2 + 8;
+    temp_s3->polyOpa.p = &temp_v0_2[1];
     temp_s0 = arg0 + 0x16D30;
     temp_v0_2->words.w0 = 0xFA000000;
     temp_v0_2->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
@@ -2715,7 +2715,7 @@ void func_8081B6EC(GraphicsContext **arg0) {
             }
             if ((phi_v0_2 & 0xFF) < 0x18) {
                 temp_v0_5 = temp_s3->polyOpa.p;
-                temp_s3->polyOpa.p = temp_v0_5 + 8;
+                temp_s3->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0x1004008;
                 temp_v0_5->words.w1 = temp_s0->unk_190 + (phi_s2 * 0x10);
                 temp_s3->polyOpa.p = func_8010DC58(temp_s3->polyOpa.p, &D_02001360, 0x20, 0x20, 0);
@@ -2727,11 +2727,11 @@ void func_8081B6EC(GraphicsContext **arg0) {
         phi_s1 = temp_s1;
     } while (temp_s1 < 3);
     temp_v0_6 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0_6 + 8;
+    temp_s3->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0;
     temp_v0_6->words.w0 = 0xE7000000;
     temp_v0_7 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0_7 + 8;
+    temp_s3->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xFC119623;
     temp_v0_7->words.w1 = 0xFF2FFFFF;
     phi_t1 = 3;
@@ -2740,7 +2740,7 @@ void func_8081B6EC(GraphicsContext **arg0) {
     phi_s2_3 = 0;
     do {
         temp_v0_8 = temp_s3->polyOpa.p;
-        temp_s3->polyOpa.p = temp_v0_8 + 8;
+        temp_s3->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xFA000000;
         temp_v0_8->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
         phi_t1_2 = phi_t1;
@@ -2748,7 +2748,7 @@ void func_8081B6EC(GraphicsContext **arg0) {
             if ((temp_s0->unk_200 == 0) && (temp_s0->unk_204 == 0) && (temp_s0->unk_258 == 0) && (*(&D_8082B3CC + ((gSaveContext.playerForm * 0x18) + phi_s1_2)) != 0)) {
                 if ((D_8082B3C0 == 2) && (phi_t1 == phi_s1_2)) {
                     temp_v0_9 = temp_s3->polyOpa.p;
-                    temp_s3->polyOpa.p = temp_v0_9 + 8;
+                    temp_s3->polyOpa.p = &temp_v0_9[1];
                     temp_v0_9->words.w0 = 0xFA000000;
                     temp_v1 = temp_s0->unk_272 * 2;
                     temp_v0_9->words.w1 = ((*(&D_8082B30A + temp_v1) & 0xFF) << 8) | (*(&D_8082B2FA + temp_v1) << 0x18) | ((*(&D_8082B302 + temp_v1) & 0xFF) << 0x10) | (temp_s0->unk_224 & 0xFF);
@@ -2790,7 +2790,7 @@ void func_8081B6EC(GraphicsContext **arg0) {
                 }
             }
             temp_v0_18 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_18 + 8;
+            temp_s3->polyOpa.p = &temp_v0_18[1];
             temp_v0_18->words.w0 = 0x1004008;
             temp_v0_18->words.w1 = temp_s0->unk_190 + (phi_s2_2 * 0x10);
             func_80821AD4(*arg0, gItemIcons[gSaveContext.inventory.items[phi_s1_2]], 0x20, 0x20U, 0);
@@ -2805,7 +2805,7 @@ void func_8081B6EC(GraphicsContext **arg0) {
         if ((temp_v0_19 == 6) && ((temp_v1_10 = temp_s0->unk_200, (temp_v1_10 == 0)) || (phi_t1_2 == temp_v1_10)) && (temp_v0_19 != 7) && (((s32) temp_v0_19 < 8) || ((s32) temp_v0_19 >= 0x13))) {
             func_8012C628(*arg0);
             temp_v0_20 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_20 + 8;
+            temp_s3->polyOpa.p = &temp_v0_20[1];
             temp_v0_20->words.w0 = 0xFC119623;
             temp_v0_20->words.w1 = 0xFF2FFFFF;
             do {
@@ -3078,7 +3078,7 @@ block_62:
                 temp_s0->unk_284 = 0;
                 phi_s1_4 = 0x3E7U;
             }
-            if ((phi_s1_4 != 0x3E7) && (arg0->unk_16818 == 0)) {
+            if ((phi_s1_4 != 0x3E7) && (arg0[23046] == 0)) {
                 if (gSaveContext.buttonStatus[4] == 0xFF) {
                     gSaveContext.buttonStatus[4] = 0;
                     gSaveContext.unk_3F22 = 0;
@@ -3178,7 +3178,7 @@ block_109:
                     }
                     goto block_127;
                 }
-                if ((temp_v0_12 == 0) && (temp_s0->unk_1EC == 6) && (temp_s0->unk_200 == 0) && (~(arg0->unk_20 | 0xFFFF7FFF) == 0) && (arg0->unk_16818 == 0)) {
+                if ((temp_v0_12 == 0) && (temp_s0->unk_1EC == 6) && (temp_s0->unk_200 == 0) && (~(arg0->unk_20 | 0xFFFF7FFF) == 0) && (arg0[23046] == 0)) {
                     temp_s0->unk_2B9 = 1U;
                     if ((s32) temp_s0->unk_24C < 2) {
                         func_801514B0(arg0, (temp_s0->unk_25E + 0x1700) & 0xFFFF, 3);
@@ -3835,7 +3835,7 @@ void func_8081D6DC(GraphicsContext **arg0) {
 
     temp_s1 = arg0 + 0x16D30;
     temp_s0 = arg0->unk_0;
-    func_8081B6BC(temp_s1, (s16) ((arg0->unk_16F9A * 4) + 0x48) & 0xFFFF, arg0->unk_16EB4);
+    func_8081B6BC(temp_s1, (s16) ((arg0->unk_16F9A * 4) + 0x48) & 0xFFFF, arg0[23469]);
     temp_s1->unk_260 = 0x3E7;
     if (temp_s1->unk_258 == 0) {
         temp_v0 = temp_s1->unk_23A;
@@ -3847,7 +3847,7 @@ void func_8081D6DC(GraphicsContext **arg0) {
     temp_v0_2 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_2 + 8;
     temp_v0_2->words.w0 = 0x1010020;
-    temp_v0_2->words.w1 = temp_s1->unk_184 + 0x3C0;
+    temp_v0_2->words.w1 = temp_s1[1].zNear + 0x3C0;
     temp_v0_3 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w1 = 0;
@@ -3862,11 +3862,11 @@ void func_8081D6DC(GraphicsContext **arg0) {
     temp_v0_5->words.w0 = 0xFC121824;
     temp_s0->polyOpa.p = func_8010DC58(temp_s0->polyOpa.p, *(&D_8082B4AC + (gSaveContext.unk_48C8 * 4)), 0x80, 0x10, 0);
     temp_v0_6 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_6 + 8;
+    temp_s0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0;
     temp_v0_6->words.w0 = 0xE7000000;
     temp_v0_7 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_7 + 8;
+    temp_s0->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xFC119623;
     temp_v0_7->words.w1 = 0xFF2FFFFF;
     phi_s2 = 0;
@@ -3892,16 +3892,16 @@ void func_8081D6DC(GraphicsContext **arg0) {
                     }
                     func_8012C8AC(arg0->unk_0);
                     temp_v0_10 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_10 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_10[1];
                     temp_v0_10->words.w0 = 0xFC309661;
                     temp_v0_10->words.w1 = 0x552EFF7F;
                     temp_v0_11 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_11 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_11[1];
                     temp_v0_11->words.w0 = 0xFA000000;
                     temp_v1 = (gSaveContext.unk_48C8 * 3) + &D_8082B520;
                     temp_v0_11->words.w1 = (temp_v1->unk_2 << 8) | (temp_v1->unk_0 << 0x18) | (temp_v1->unk_1 << 0x10) | (D_8082B4D8 & 0xFF);
                     temp_v0_12 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_12 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_12[1];
                     temp_v0_12->words.w0 = 0xFB000000;
                     temp_v1_2 = (gSaveContext.unk_48C8 * 3) + &D_8082B52C;
                     temp_v0_12->words.w1 = (temp_v1_2->unk_2 << 8) | (temp_v1_2->unk_0 << 0x18) | (temp_v1_2->unk_1 << 0x10);
@@ -3909,41 +3909,41 @@ void func_8081D6DC(GraphicsContext **arg0) {
                     SysMatrix_InsertTranslation(-83.0f, -29.0f, -128.0f, 0);
                     Matrix_Scale(temp_f20, temp_f20, temp_f20, 1);
                     temp_v0_13 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_13 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_13[1];
                     temp_v0_13->words.w0 = 0xDA380003;
                     sp54 = temp_v0_13;
                     sp54->words.w1 = Matrix_NewMtx(arg0->unk_0);
-                    temp_s1->unk_184->unk_4E0 = -0x10;
-                    temp_v0_14 = temp_s1->unk_184;
+                    temp_s1[1].zNear->unk_4E0 = -0x10;
+                    temp_v0_14 = temp_s1[1].zNear;
                     temp_v0_14->unk_4C0 = (s16) temp_v0_14->unk_4E0;
-                    temp_v0_15 = temp_s1->unk_184;
+                    temp_v0_15 = temp_s1[1].zNear;
                     temp_v1_3 = temp_v0_15->unk_4C0 + 0x20;
                     temp_v0_15->unk_4F0 = temp_v1_3;
-                    temp_s1->unk_184->unk_4D0 = temp_v1_3;
-                    temp_s1->unk_184->unk_4D2 = 0xC;
-                    temp_v0_16 = temp_s1->unk_184;
+                    temp_s1[1].zNear->unk_4D0 = temp_v1_3;
+                    temp_s1[1].zNear->unk_4D2 = 0xC;
+                    temp_v0_16 = temp_s1[1].zNear;
                     temp_v0_16->unk_4C2 = (s16) temp_v0_16->unk_4D2;
-                    temp_v0_17 = temp_s1->unk_184;
+                    temp_v0_17 = temp_s1[1].zNear;
                     temp_v1_4 = temp_v0_17->unk_4C2 - 0x18;
                     temp_v0_17->unk_4F2 = temp_v1_4;
-                    temp_s1->unk_184->unk_4E2 = temp_v1_4;
+                    temp_s1[1].zNear->unk_4E2 = temp_v1_4;
                     temp_v0_18 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_18 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_18[1];
                     temp_v0_18->words.w0 = 0x1004008;
-                    temp_v0_18->words.w1 = (u32) (temp_s1->unk_184 + 0x4C0);
+                    temp_v0_18->words.w1 = (u32) (temp_s1[1].zNear + 0x4C0);
                     temp_s0->polyOpa.p = func_8010DE38(temp_s0->polyOpa.p, &D_0200B998, 4, 0x20, 0x18, 0);
-                    func_808259D4(temp_s1, temp_s1->unk_1F4, temp_s1->unk_1F8, temp_s1->unk_1FC);
+                    func_808259D4(temp_s1, temp_s1[1].projection.m[2][3], temp_s1[1].projection.m[3][0], temp_s1[1].projection.m[3][1]);
                     func_8012C628(arg0->unk_0);
                     temp_v0_19 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_19 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_19[1];
                     temp_v0_19->words.w1 = 0;
                     temp_v0_19->words.w0 = 0xE7000000;
                     temp_v0_20 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_20 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_20[1];
                     temp_v0_20->words.w0 = 0xFC119623;
                     temp_v0_20->words.w1 = 0xFF2FFFFF;
                     temp_v0_21 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_21 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_21[1];
                     temp_v0_21->words.w0 = 0xFA000000;
                     temp_v0_21->words.w1 = (D_8082B4D8 & 0xFF) | ~0xFF;
                     temp_v0_22 = D_8082B4C8 - 1;
@@ -3953,44 +3953,44 @@ void func_8081D6DC(GraphicsContext **arg0) {
                         D_8082B4C8 = 0x22;
                     }
                     temp_v0_23 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_23 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_23[1];
                     temp_v0_23->words.w0 = 0xFD180000;
                     temp_a1 = D_8082B4CC * 4;
                     temp_v0_23->words.w1 = *(&D_8082B4E0 + ((gSaveContext.unk_48C8 * 0x10) + temp_a1));
                     temp_v0_24 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_24 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_24[1];
                     temp_v0_24->words.w1 = 0x7000150;
                     temp_v0_24->words.w0 = 0xF5180000;
                     temp_v0_25 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_25 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_25[1];
                     temp_v0_25->words.w1 = 0;
                     temp_v0_25->words.w0 = 0xE6000000;
                     temp_v0_26 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_26 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_26[1];
                     temp_v0_26->words.w1 = 0x72FF080;
                     temp_v0_26->words.w0 = 0xF3000000;
                     temp_v0_27 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_27 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_27[1];
                     temp_v0_27->words.w1 = 0;
                     temp_v0_27->words.w0 = 0xE7000000;
                     temp_v0_28 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_28 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_28[1];
                     temp_v0_28->words.w1 = 0x150;
                     temp_v0_28->words.w0 = 0xF5181000;
                     temp_v0_29 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_29 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_29[1];
                     temp_v0_29->words.w1 = 0x7C05C;
                     temp_v0_29->words.w0 = 0xF2000000;
                     temp_v0_30 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_30 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_30[1];
                     temp_v0_30->words.w0 = 0xE4158290;
                     temp_v0_30->words.w1 = 0xD8230;
                     temp_v0_31 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_31 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_31[1];
                     temp_v0_31->words.w0 = 0xE1000000;
                     temp_v0_31->words.w1 = *(&D_8082B538 + temp_a1) << 0x10;
                     temp_v0_32 = temp_s0->polyOpa.p;
-                    temp_s0->polyOpa.p = temp_v0_32 + 8;
+                    temp_s0->polyOpa.p = &temp_v0_32[1];
                     temp_v0_32->words.w1 = 0x4000400;
                     temp_v0_32->words.w0 = 0xF1000000;
                     func_8081D240(arg0, temp_a1);
@@ -4001,37 +4001,37 @@ void func_8081D6DC(GraphicsContext **arg0) {
             temp_v1_5 = phi_s5 * 2;
             if ((gBitFlags[phi_s2] & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) != 0) {
                 temp_v0_33 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_33 + 8;
+                temp_s0->polyOpa.p = &temp_v0_33[1];
                 temp_v0_33->words.w0 = 0xFD180000;
                 temp_a1_2 = (temp_v1_5 & 0xFF) << 0x10;
                 temp_v0_33->words.w1 = *(&D_8082B4A0 + (phi_s2 * 4));
                 temp_v0_34 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_34 + 8;
+                temp_s0->polyOpa.p = &temp_v0_34[1];
                 temp_v0_34->words.w1 = 0x7000000;
                 temp_v0_34->words.w0 = 0xF5180000;
                 temp_v0_35 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_35 + 8;
+                temp_s0->polyOpa.p = &temp_v0_35[1];
                 temp_v0_35->words.w1 = 0;
                 temp_v0_35->words.w0 = 0xE6000000;
                 temp_v0_36 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_36 + 8;
+                temp_s0->polyOpa.p = &temp_v0_36[1];
                 temp_v0_36->words.w1 = 0x723F0AB;
                 temp_v0_36->words.w0 = 0xF3000000;
                 temp_v0_37 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_37 + 8;
+                temp_s0->polyOpa.p = &temp_v0_37[1];
                 temp_v0_37->words.w1 = 0;
                 temp_v0_37->words.w0 = 0xE7000000;
                 temp_v0_38 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_38 + 8;
+                temp_s0->polyOpa.p = &temp_v0_38[1];
                 temp_v0_38->words.w1 = 0;
                 temp_v0_38->words.w0 = 0xF5180C00;
                 temp_v0_39 = temp_s0->polyOpa.p;
-                temp_s0->polyOpa.p = temp_v0_39 + 8;
+                temp_s0->polyOpa.p = &temp_v0_39[1];
                 temp_v0_39->words.w1 = 0x5C05C;
                 temp_v0_39->words.w0 = 0xF2000000;
                 temp_v0_40 = temp_s0->polyOpa.p;
                 temp_a2 = (temp_v1_5 + 6) & 0xFF;
-                temp_s0->polyOpa.p = temp_v0_40 + 8;
+                temp_s0->polyOpa.p = &temp_v0_40[1];
                 temp_v0_40->words.w1 = temp_a1_2 | (temp_a2 << 8) | ((temp_v1_5 + 2) & 0xFF);
                 temp_v0_40->words.w0 = temp_a1_2 | (((temp_v1_5 + 4) & 0xFF) << 8) | temp_a2 | 0x7000000;
             }
@@ -4046,26 +4046,26 @@ void func_8081D6DC(GraphicsContext **arg0) {
         if ((temp_v0_41 == 6) && (temp_v0_41 != 7) && (((s32) temp_v0_41 < 8) || ((s32) temp_v0_41 >= 0x13))) {
             func_8012C628(arg0->unk_0);
             temp_v0_42 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_42 + 8;
+            temp_s0->polyOpa.p = &temp_v0_42[1];
             temp_v0_42->words.w0 = 0xFA000000;
             temp_v0_42->words.w1 = (temp_s1->unk_224 & 0xFF) | ~0xFF;
             temp_s0->polyOpa.p = func_8010CB80(temp_s0->polyOpa.p, &D_09007500, 0x10, 0x10, 0x3E, (s32) *(&D_8082B4BC + (gGameInfo->data[1438] * 2)), 0x10, 0x10, 0x400, 0x400);
-            if ((*(gBitFlags + 4) & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) != 0) {
+            if ((gBitFlags[1] & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) != 0) {
                 temp_s0->polyOpa.p = func_8010CB80(temp_s0->polyOpa.p, &D_0C001980, 0x10, 0x10, 0x6C, (s32) *(&D_8082B4C4 + -(s32) (func_80105318() * 2)), 0x10, 0x10, 0x400, 0x400);
             }
             temp_v0_43 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_43 + 8;
+            temp_s0->polyOpa.p = &temp_v0_43[1];
             temp_v0_43->words.w0 = 0xFA000000;
             temp_v0_43->words.w1 = (temp_s1->unk_224 & 0xFF) | ~0xFF;
             func_8012C8AC(arg0->unk_0);
         }
     }
     temp_v0_44 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_44 + 8;
+    temp_s0->polyOpa.p = &temp_v0_44[1];
     temp_v0_44->words.w1 = 0;
     temp_v0_44->words.w0 = 0xE7000000;
     temp_v0_45 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_45 + 8;
+    temp_s0->polyOpa.p = &temp_v0_45[1];
     temp_v0_45->words.w1 = 0x2000;
     temp_v0_45->words.w0 = 0xE3001201;
 }
@@ -4142,9 +4142,9 @@ loop_11:
                     func_80821A04(arg0);
                     temp_s2->unk_244 = 1;
                     temp_s2->unk_23A = 2;
-                    if ((gBitFlags->unk_8 & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) == 0) {
+                    if ((gBitFlags[2] & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) == 0) {
                         temp_s2->unk_23A = (s16) (temp_s2->unk_23A - 1);
-                        if ((gBitFlags->unk_4 & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) == 0) {
+                        if ((gBitFlags[1] & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) == 0) {
                             temp_s2->unk_23A = (s16) (temp_s2->unk_23A - 1);
                             if ((gBitFlags->unk_0 & gSaveContext.inventory.dungeonItems[gSaveContext.unk_48C8]) == 0) {
                                 temp_s2->unk_26A = 3;
@@ -4278,12 +4278,12 @@ block_73:
             }
             if (temp_s2->unk_258 == 0) {
                 temp_v0_8 = ~(arg0->unk_20 | 0xFFFF7FFF);
-                if ((temp_v0_8 == 0) && (arg0->unk_16818 == 0) && (phi_t0 == phi_v1_3)) {
+                if ((temp_v0_8 == 0) && (arg0[23046] == 0) && (phi_t0 == phi_v1_3)) {
                     temp_s2->unk_2B9 = 1;
                     func_801514B0(arg0, 0x17AF, 1, phi_a3);
                     goto block_86;
                 }
-                if ((temp_v0_8 == 0) && (arg0->unk_16818 == 0) && ((*(phi_a3 + (phi_v1_3 * 4)) & (phi_a2 + phi_a2->unk_48C8)->unk_C0) != 0)) {
+                if ((temp_v0_8 == 0) && (arg0[23046] == 0) && ((*(phi_a3 + (phi_v1_3 * 4)) & (phi_a2 + phi_a2->unk_48C8)->unk_C0) != 0)) {
                     temp_s2->unk_2B9 = 1;
                     func_801514B0(arg0, (phi_v1_3 + 0x17AC) & 0xFFFF, 1, phi_a3);
 block_86:
@@ -4396,6 +4396,7 @@ void func_8081E7D8(GraphicsContext **arg0) {
     Gfx *temp_v1_96;
     Gfx *temp_v1_9;
     GraphicsContext **temp_a3;
+    GraphicsContext *temp_a2;
     GraphicsContext *temp_t2;
     View *temp_s0;
     s16 temp_a0_10;
@@ -4426,7 +4427,6 @@ void func_8081E7D8(GraphicsContext **arg0) {
     s32 temp_a1_2;
     s32 temp_a1_3;
     s32 temp_a1_4;
-    s32 temp_a2;
     s32 temp_v0_14;
     s32 temp_v0_2;
     s32 temp_v0_3;
@@ -4480,7 +4480,7 @@ void func_8081E7D8(GraphicsContext **arg0) {
     temp_a3 = arg0;
     temp_s0 = temp_a3 + 0x16D30;
     temp_t2 = temp_a3->unk_0;
-    temp_a2 = temp_a3->unk_16EB4;
+    temp_a2 = temp_a3[23469];
     temp_a1 = (temp_a3->unk_16F9A * 4) & 0xFFFF;
     arg0 = temp_a3;
     sp38 = temp_t2;
@@ -4489,39 +4489,39 @@ void func_8081E7D8(GraphicsContext **arg0) {
         sp38 = temp_t2;
         func_8012C628(arg0->unk_0);
         temp_v1_2 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_2 + 8;
+        temp_t2->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w1 = 0;
         temp_v1_2->words.w0 = 0xE3001201;
         temp_v1_3 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_3 + 8;
+        temp_t2->polyOpa.p = &temp_v1_3[1];
         temp_v1_3->words.w0 = 0xFD100000;
         temp_v1_3->words.w1 = (u32) &D_0C006C00;
         temp_v1_4 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_4 + 8;
+        temp_t2->polyOpa.p = &temp_v1_4[1];
         temp_v1_4->words.w1 = 0;
         temp_v1_4->words.w0 = 0xE8000000;
         temp_v1_5 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_5 + 8;
+        temp_t2->polyOpa.p = &temp_v1_5[1];
         temp_v1_5->words.w1 = 0x7000000;
         temp_v1_5->words.w0 = 0xF5000100;
         temp_v1_6 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_6 + 8;
+        temp_t2->polyOpa.p = &temp_v1_6[1];
         temp_v1_6->words.w1 = 0;
         temp_v1_6->words.w0 = 0xE6000000;
         temp_v1_7 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_7 + 8;
+        temp_t2->polyOpa.p = &temp_v1_7[1];
         temp_v1_7->words.w1 = 0x73FC000;
         temp_v1_7->words.w0 = 0xF0000000;
         temp_v1_8 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_8 + 8;
+        temp_t2->polyOpa.p = &temp_v1_8[1];
         temp_v1_8->words.w1 = 0;
         temp_v1_8->words.w0 = 0xE7000000;
         temp_v1_9 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_9 + 8;
+        temp_t2->polyOpa.p = &temp_v1_9[1];
         temp_v1_9->words.w1 = 0x8000;
         temp_v1_9->words.w0 = 0xE3001001;
         temp_v1_10 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_10 + 8;
+        temp_t2->polyOpa.p = &temp_v1_10[1];
         temp_v1_10->words.w0 = 0xFA000000;
         temp_v1_10->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
         phi_t0 = 0;
@@ -4529,44 +4529,44 @@ void func_8081E7D8(GraphicsContext **arg0) {
         do {
             temp_v1_11 = temp_t2->polyOpa.p;
             temp_t0 = phi_t0 + 1;
-            temp_t2->polyOpa.p = temp_v1_11 + 8;
+            temp_t2->polyOpa.p = &temp_v1_11[1];
             temp_a0 = phi_a1 * 4;
             temp_v1_11->words.w0 = 0xFD500000;
             temp_v1_11->words.w1 = (u32) (&D_0C000000 + (phi_t0 * 0x6C0));
             temp_v1_12 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_12 + 8;
+            temp_t2->polyOpa.p = &temp_v1_12[1];
             temp_v1_12->words.w1 = 0x7000000;
             temp_v1_12->words.w0 = 0xF5500000;
             temp_v1_13 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_13 + 8;
+            temp_t2->polyOpa.p = &temp_v1_13[1];
             temp_v1_13->words.w1 = 0;
             temp_v1_13->words.w0 = 0xE6000000;
             temp_v1_14 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_14 + 8;
+            temp_t2->polyOpa.p = &temp_v1_14[1];
             temp_v1_14->words.w1 = 0x735F04C;
             temp_v1_14->words.w0 = 0xF3000000;
             temp_v1_15 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_15 + 8;
+            temp_t2->polyOpa.p = &temp_v1_15[1];
             temp_v1_15->words.w1 = 0;
             temp_v1_15->words.w0 = 0xE7000000;
             temp_v1_16 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_16 + 8;
+            temp_t2->polyOpa.p = &temp_v1_16[1];
             temp_v1_16->words.w1 = 0;
             temp_v1_16->words.w0 = 0xF5483600;
             temp_v1_17 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_17 + 8;
+            temp_t2->polyOpa.p = &temp_v1_17[1];
             temp_v1_17->words.w1 = 0x35C01C;
             temp_v1_17->words.w0 = 0xF2000000;
             temp_v1_18 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_18 + 8;
+            temp_t2->polyOpa.p = &temp_v1_18[1];
             temp_v1_18->words.w1 = 0xCC000 | (temp_a0 & 0xFFF);
             temp_v1_18->words.w0 = 0xE442C000 | ((temp_a0 + 0x20) & 0xFFF);
             temp_v1_19 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_19 + 8;
+            temp_t2->polyOpa.p = &temp_v1_19[1];
             temp_v1_19->words.w1 = 0;
             temp_v1_19->words.w0 = 0xE1000000;
             temp_v1_20 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_20 + 8;
+            temp_t2->polyOpa.p = &temp_v1_20[1];
             temp_v1_20->words.w1 = 0x4000400;
             temp_v1_20->words.w0 = 0xF1000000;
             phi_t0 = temp_t0;
@@ -4576,49 +4576,49 @@ void func_8081E7D8(GraphicsContext **arg0) {
         func_8012C8AC(arg0->unk_0);
     } else {
         temp_v1_21 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_21 + 8;
+        temp_t2->polyOpa.p = &temp_v1_21[1];
         temp_v1_21->words.w1 = 0;
         temp_v1_21->words.w0 = 0xE7000000;
         temp_v1_22 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_22 + 8;
+        temp_t2->polyOpa.p = &temp_v1_22[1];
         temp_v1_22->words.w1 = 0;
         temp_v1_22->words.w0 = 0xE3001201;
         temp_v1_23 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_23 + 8;
+        temp_t2->polyOpa.p = &temp_v1_23[1];
         temp_v1_23->words.w0 = 0xFD100000;
         temp_v1_23->words.w1 = (u32) &D_0C006C00;
         temp_v1_24 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_24 + 8;
+        temp_t2->polyOpa.p = &temp_v1_24[1];
         temp_v1_24->words.w1 = 0;
         temp_v1_24->words.w0 = 0xE8000000;
         temp_v1_25 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_25 + 8;
+        temp_t2->polyOpa.p = &temp_v1_25[1];
         temp_v1_25->words.w1 = 0x7000000;
         temp_v1_25->words.w0 = 0xF5000100;
         temp_v1_26 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_26 + 8;
+        temp_t2->polyOpa.p = &temp_v1_26[1];
         temp_v1_26->words.w1 = 0;
         temp_v1_26->words.w0 = 0xE6000000;
         temp_v1_27 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_27 + 8;
+        temp_t2->polyOpa.p = &temp_v1_27[1];
         temp_v1_27->words.w1 = 0x73FC000;
         temp_v1_27->words.w0 = 0xF0000000;
         temp_v1_28 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_28 + 8;
+        temp_t2->polyOpa.p = &temp_v1_28[1];
         temp_v1_28->words.w1 = 0;
         temp_v1_28->words.w0 = 0xE7000000;
         temp_v1_29 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_29 + 8;
+        temp_t2->polyOpa.p = &temp_v1_29[1];
         temp_v1_29->words.w1 = 0x8000;
         temp_v1_29->words.w0 = 0xE3001001;
         temp_v1_30 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_30 + 8;
+        temp_t2->polyOpa.p = &temp_v1_30[1];
         temp_v1_30->words.w0 = 0xFA000000;
         temp_v1_30->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
         temp_v1_31 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_31 + 8;
+        temp_t2->polyOpa.p = &temp_v1_31[1];
         temp_v1_31->words.w0 = 0x1020040;
-        temp_v1_31->words.w1 = temp_s0->unk_184 + 0xCC0;
+        temp_v1_31->words.w1 = temp_s0[1].zNear + 0xCC0;
         phi_t3 = 0;
         phi_t0_2 = 0;
         phi_a3 = 0;
@@ -4626,37 +4626,37 @@ void func_8081E7D8(GraphicsContext **arg0) {
         phi_a3_2 = 0;
         do {
             temp_v1_32 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_32 + 8;
+            temp_t2->polyOpa.p = &temp_v1_32[1];
             temp_v1_32->words.w1 = (u32) (&D_0C000000 + (phi_t3 * 0x798));
             temp_v1_32->words.w0 = 0xFD500000;
             temp_v1_33 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_33 + 8;
+            temp_t2->polyOpa.p = &temp_v1_33[1];
             temp_v1_33->words.w1 = 0x7000000;
             temp_v1_33->words.w0 = 0xF5500000;
             temp_v1_34 = temp_t2->polyOpa.p;
             temp_v0_2 = phi_t0_2 * 2;
-            temp_t2->polyOpa.p = temp_v1_34 + 8;
+            temp_t2->polyOpa.p = &temp_v1_34[1];
             temp_v1_34->words.w1 = 0;
             temp_v1_34->words.w0 = 0xE6000000;
             temp_v1_35 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_35 + 8;
+            temp_t2->polyOpa.p = &temp_v1_35[1];
             temp_v1_35->words.w1 = 0x73CB04C;
             temp_v1_35->words.w0 = 0xF3000000;
             temp_v1_36 = temp_t2->polyOpa.p;
             temp_a0_2 = (temp_v0_2 & 0xFF) << 0x10;
-            temp_t2->polyOpa.p = temp_v1_36 + 8;
+            temp_t2->polyOpa.p = &temp_v1_36[1];
             temp_v1_36->words.w1 = 0;
             temp_v1_36->words.w0 = 0xE7000000;
             temp_v1_37 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_37 + 8;
+            temp_t2->polyOpa.p = &temp_v1_37[1];
             temp_v1_37->words.w1 = 0;
             temp_v1_37->words.w0 = 0xF5483600;
             temp_v1_38 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_38 + 8;
+            temp_t2->polyOpa.p = &temp_v1_38[1];
             temp_v1_38->words.w1 = 0x35C020;
             temp_v1_38->words.w0 = 0xF2000000;
             temp_v1_39 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_39 + 8;
+            temp_t2->polyOpa.p = &temp_v1_39[1];
             temp_a1_2 = (temp_v0_2 + 6) & 0xFF;
             temp_v1_39->words.w0 = temp_a0_2 | (((temp_v0_2 + 4) & 0xFF) << 8) | temp_a1_2 | 0x7000000;
             temp_v1_39->words.w1 = temp_a0_2 | (temp_a1_2 << 8) | ((temp_v0_2 + 2) & 0xFF);
@@ -4668,42 +4668,42 @@ void func_8081E7D8(GraphicsContext **arg0) {
             phi_t3_2 = temp_t3;
         } while ((s32) temp_a3_2 < 8);
         temp_v1_40 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_40 + 8;
+        temp_t2->polyOpa.p = &temp_v1_40[1];
         temp_v1_40->words.w0 = 0x101C038;
-        temp_v1_40->words.w1 = temp_s0->unk_184 + 0xEC0;
+        temp_v1_40->words.w1 = temp_s0[1].zNear + 0xEC0;
         do {
             temp_v1_41 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_41 + 8;
+            temp_t2->polyOpa.p = &temp_v1_41[1];
             temp_v1_41->words.w1 = (u32) (&D_0C000000 + (phi_t3_2 * 0x798));
             temp_v1_41->words.w0 = 0xFD500000;
             temp_v1_42 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_42 + 8;
+            temp_t2->polyOpa.p = &temp_v1_42[1];
             temp_v1_42->words.w1 = 0x7000000;
             temp_v1_42->words.w0 = 0xF5500000;
             temp_v1_43 = temp_t2->polyOpa.p;
             temp_v0_3 = phi_t0_3 * 2;
-            temp_t2->polyOpa.p = temp_v1_43 + 8;
+            temp_t2->polyOpa.p = &temp_v1_43[1];
             temp_v1_43->words.w1 = 0;
             temp_v1_43->words.w0 = 0xE6000000;
             temp_v1_44 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_44 + 8;
+            temp_t2->polyOpa.p = &temp_v1_44[1];
             temp_v1_44->words.w1 = 0x73CB04C;
             temp_v1_44->words.w0 = 0xF3000000;
             temp_v1_45 = temp_t2->polyOpa.p;
             temp_a0_3 = (temp_v0_3 & 0xFF) << 0x10;
-            temp_t2->polyOpa.p = temp_v1_45 + 8;
+            temp_t2->polyOpa.p = &temp_v1_45[1];
             temp_v1_45->words.w1 = 0;
             temp_v1_45->words.w0 = 0xE7000000;
             temp_v1_46 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_46 + 8;
+            temp_t2->polyOpa.p = &temp_v1_46[1];
             temp_v1_46->words.w1 = 0;
             temp_v1_46->words.w0 = 0xF5483600;
             temp_v1_47 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_47 + 8;
+            temp_t2->polyOpa.p = &temp_v1_47[1];
             temp_v1_47->words.w1 = 0x35C020;
             temp_v1_47->words.w0 = 0xF2000000;
             temp_v1_48 = temp_t2->polyOpa.p;
-            temp_t2->polyOpa.p = temp_v1_48 + 8;
+            temp_t2->polyOpa.p = &temp_v1_48[1];
             temp_a1_3 = (temp_v0_3 + 6) & 0xFF;
             temp_v1_48->words.w0 = temp_a0_3 | (((temp_v0_3 + 4) & 0xFF) << 8) | temp_a1_3 | 0x7000000;
             temp_v1_48->words.w1 = temp_a0_3 | (temp_a1_3 << 8) | ((temp_v0_3 + 2) & 0xFF);
@@ -4715,36 +4715,36 @@ void func_8081E7D8(GraphicsContext **arg0) {
             phi_a3_2 = temp_a3_3;
         } while ((s32) temp_a3_3 < 6);
         temp_v1_49 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_49 + 8;
+        temp_t2->polyOpa.p = &temp_v1_49[1];
         temp_v1_49->words.w1 = (u32) (&D_0C000000 + (temp_t3_2 * 0x798));
         temp_v1_49->words.w0 = 0xFD500000;
         temp_v1_50 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_50 + 8;
+        temp_t2->polyOpa.p = &temp_v1_50[1];
         temp_v1_50->words.w1 = 0x7000000;
         temp_v1_50->words.w0 = 0xF5500000;
         temp_v1_51 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_51 + 8;
+        temp_t2->polyOpa.p = &temp_v1_51[1];
         temp_v1_51->words.w1 = 0;
         temp_v1_51->words.w0 = 0xE6000000;
         temp_v1_52 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_52 + 8;
+        temp_t2->polyOpa.p = &temp_v1_52[1];
         temp_v1_52->words.w1 = 0x70D704C;
         temp_v1_52->words.w0 = 0xF3000000;
         temp_v1_53 = temp_t2->polyOpa.p;
         temp_v0_4 = temp_t0_2 * 2;
-        temp_t2->polyOpa.p = temp_v1_53 + 8;
+        temp_t2->polyOpa.p = &temp_v1_53[1];
         temp_v1_53->words.w1 = 0;
         temp_v1_53->words.w0 = 0xE7000000;
         temp_v1_54 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_54 + 8;
+        temp_t2->polyOpa.p = &temp_v1_54[1];
         temp_v1_54->words.w1 = 0;
         temp_v1_54->words.w0 = 0xF5483600;
         temp_v1_55 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_55 + 8;
+        temp_t2->polyOpa.p = &temp_v1_55[1];
         temp_v1_55->words.w0 = 0xF2000000;
         temp_v1_55->words.w1 = 0x35C004;
         temp_v1_56 = temp_t2->polyOpa.p;
-        temp_t2->polyOpa.p = temp_v1_56 + 8;
+        temp_t2->polyOpa.p = &temp_v1_56[1];
         temp_a0_4 = (temp_v0_4 & 0xFF) << 0x10;
         temp_a1_4 = (temp_v0_4 + 6) & 0xFF;
         temp_v1_56->words.w0 = temp_a0_4 | (((temp_v0_4 + 4) & 0xFF) << 8) | temp_a1_4 | 0x7000000;
@@ -4754,23 +4754,23 @@ void func_8081E7D8(GraphicsContext **arg0) {
     sp38 = temp_t2;
     func_8012C8AC(arg0->unk_0);
     temp_v1_57 = temp_t2->polyOpa.p;
-    temp_t2->polyOpa.p = temp_v1_57 + 8;
+    temp_t2->polyOpa.p = &temp_v1_57[1];
     temp_v1_57->words.w1 = 0;
     temp_v1_57->words.w0 = 0xE7000000;
     temp_v1_58 = temp_t2->polyOpa.p;
-    temp_t2->polyOpa.p = temp_v1_58 + 8;
+    temp_t2->polyOpa.p = &temp_v1_58[1];
     temp_v1_58->words.w1 = 0x2000;
     temp_v1_58->words.w0 = 0xE3001201;
     temp_v1_59 = temp_t2->polyOpa.p;
-    temp_t2->polyOpa.p = temp_v1_59 + 8;
+    temp_t2->polyOpa.p = &temp_v1_59[1];
     temp_v1_59->words.w0 = 0xFC309661;
     temp_v1_59->words.w1 = 0x552EFF7F;
     temp_v1_60 = temp_t2->polyOpa.p;
-    temp_t2->polyOpa.p = temp_v1_60 + 8;
+    temp_t2->polyOpa.p = &temp_v1_60[1];
     temp_v1_60->words.w0 = 0xFA000000;
     temp_v1_60->words.w1 = (temp_s0->unk_224 & 0xFF) | 0xD7EBEB00;
     temp_v1_61 = temp_t2->polyOpa.p;
-    temp_t2->polyOpa.p = temp_v1_61 + 8;
+    temp_t2->polyOpa.p = &temp_v1_61[1];
     temp_v1_61->words.w0 = 0xFB000000;
     temp_v1_61->words.w1 = 0x283C6400;
     phi_t1 = 0;
@@ -4785,7 +4785,7 @@ void func_8081E7D8(GraphicsContext **arg0) {
             temp_v1_62 = phi_t2->polyOpa.p;
             phi_t2->polyOpa.p = temp_v1_62 + 8;
             temp_v1_62->words.w0 = phi_t4;
-            temp_v1_62->words.w1 = temp_s0->unk_184 + (phi_t1 << 6) + 0x3C0;
+            temp_v1_62->words.w1 = temp_s0[1].zNear + (phi_t1 << 6) + 0x3C0;
             sp46 = phi_t3_3;
             sp38 = phi_t2;
             sp4A = phi_t1;
@@ -4826,43 +4826,43 @@ void func_8081E7D8(GraphicsContext **arg0) {
     phi_t2_4 = phi_t2;
     if (((s32) temp_v0_7 < 0x15) || ((s32) temp_v0_7 >= 0x1A)) {
         temp_v1_81 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_81 + 8;
+        phi_t2->polyOpa.p = &temp_v1_81[1];
         temp_v1_81->words.w0 = 0xFD700000;
         temp_v1_81->words.w1 = (u32) &D_0C006E00;
         temp_v1_82 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_82 + 8;
+        phi_t2->polyOpa.p = &temp_v1_82[1];
         temp_v1_82->words.w1 = 0x7000000;
         temp_v1_82->words.w0 = 0xF5700000;
         temp_v1_83 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_83 + 8;
+        phi_t2->polyOpa.p = &temp_v1_83[1];
         temp_v1_83->words.w1 = 0;
         temp_v1_83->words.w0 = 0xE6000000;
         temp_v1_84 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_84 + 8;
+        phi_t2->polyOpa.p = &temp_v1_84[1];
         temp_v1_84->words.w1 = 0x701F800;
         temp_v1_84->words.w0 = 0xF3000000;
         temp_v1_85 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_85 + 8;
+        phi_t2->polyOpa.p = &temp_v1_85[1];
         temp_v1_85->words.w1 = 0;
         temp_v1_85->words.w0 = 0xE7000000;
         temp_v1_86 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_86 + 8;
+        phi_t2->polyOpa.p = &temp_v1_86[1];
         temp_v1_86->words.w1 = 0;
         temp_v1_86->words.w0 = 0xF5680200;
         temp_v1_87 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_87 + 8;
+        phi_t2->polyOpa.p = &temp_v1_87[1];
         temp_v1_87->words.w0 = 0xF2000000;
         temp_v1_87->words.w1 = 0x1C01C;
         temp_v1_88 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_88 + 8;
+        phi_t2->polyOpa.p = &temp_v1_88[1];
         temp_v1_88->words.w0 = 0xFC309661;
         temp_v1_88->words.w1 = 0x552EFF7F;
         temp_v1_89 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_89 + 8;
+        phi_t2->polyOpa.p = &temp_v1_89[1];
         temp_v1_89->words.w0 = 0xFA000000;
         temp_v1_89->words.w1 = ((D_8082B584.unk_4 & 0xFF) << 8) | (D_8082B584.unk_0 << 0x18) | ((D_8082B584.unk_2 & 0xFF) << 0x10) | (temp_s0->unk_224 & 0xFF);
         temp_v1_90 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_90 + 8;
+        phi_t2->polyOpa.p = &temp_v1_90[1];
         temp_v1_90->words.w0 = 0xFB000000;
         temp_v1_90->words.w1 = ((D_8082B590.unk_4 & 0xFF) << 8) | (D_8082B590.unk_0 << 0x18) | ((D_8082B590.unk_2 & 0xFF) << 0x10);
         temp_v1_91 = gGameInfo;
@@ -4870,28 +4870,28 @@ void func_8081E7D8(GraphicsContext **arg0) {
         if (temp_v1_91->data[1394] != 0) {
             gSaveContext.unk_F60 = gSaveContext.unk_F60 | 0x7FFF;
             temp_a0_9 = temp_v1_91->data[1396];
-            temp_s0->unk_184->unk_7A0 = temp_a0_9;
-            temp_s0->unk_184->unk_780 = temp_a0_9;
-            temp_v0_10 = temp_s0->unk_184;
+            temp_s0[1].zNear->unk_7A0 = temp_a0_9;
+            temp_s0[1].zNear->unk_780 = temp_a0_9;
+            temp_v0_10 = temp_s0[1].zNear;
             temp_a0_10 = temp_v0_10->unk_780 + 8;
             temp_v0_10->unk_7B0 = temp_a0_10;
-            temp_s0->unk_184->unk_790 = temp_a0_10;
+            temp_s0[1].zNear->unk_790 = temp_a0_10;
             temp_a0_11 = gGameInfo->data[1397];
-            temp_s0->unk_184->unk_792 = temp_a0_11;
-            temp_s0->unk_184->unk_782 = temp_a0_11;
-            temp_v0_11 = temp_s0->unk_184;
+            temp_s0[1].zNear->unk_792 = temp_a0_11;
+            temp_s0[1].zNear->unk_782 = temp_a0_11;
+            temp_v0_11 = temp_s0[1].zNear;
             temp_a0_12 = temp_v0_11->unk_782 - 8;
             temp_v0_11->unk_7B2 = temp_a0_12;
-            temp_s0->unk_184->unk_7A2 = temp_a0_12;
+            temp_s0[1].zNear->unk_7A2 = temp_a0_12;
         }
         do {
             if ((temp_s0 + phi_a3_4)->unk_2A2 != 0) {
                 temp_v1_92 = phi_t2->polyOpa.p;
-                phi_t2->polyOpa.p = temp_v1_92 + 8;
+                phi_t2->polyOpa.p = &temp_v1_92[1];
                 temp_v1_92->words.w0 = 0x1004008;
-                temp_v1_92->words.w1 = (u32) (temp_s0->unk_184 + (phi_a3_4 << 6) + 0x780);
+                temp_v1_92->words.w1 = (u32) (temp_s0[1].zNear + (phi_a3_4 << 6) + 0x780);
                 temp_v1_93 = phi_t2->polyOpa.p;
-                phi_t2->polyOpa.p = temp_v1_93 + 8;
+                phi_t2->polyOpa.p = &temp_v1_93[1];
                 temp_v1_93->words.w1 = 0x602;
                 temp_v1_93->words.w0 = 0x7000406;
             }
@@ -4900,43 +4900,43 @@ void func_8081E7D8(GraphicsContext **arg0) {
         } while ((s32) temp_a3_5 < 0xB);
     } else {
         temp_v1_68 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_68 + 8;
+        phi_t2->polyOpa.p = &temp_v1_68[1];
         temp_v1_68->words.w1 = 0;
         temp_v1_68->words.w0 = 0xE7000000;
         temp_v1_69 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_69 + 8;
+        phi_t2->polyOpa.p = &temp_v1_69[1];
         temp_v1_69->words.w1 = 0xFF2FFFFF;
         temp_v1_69->words.w0 = 0xFC119623;
         temp_v1_70 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_70 + 8;
+        phi_t2->polyOpa.p = &temp_v1_70[1];
         temp_v1_70->words.w0 = 0xFD180000;
         temp_v1_70->words.w1 = (u32) &D_0C014668;
         temp_v1_71 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_71 + 8;
+        phi_t2->polyOpa.p = &temp_v1_71[1];
         temp_v1_71->words.w1 = 0x7000000;
         temp_v1_71->words.w0 = 0xF5180000;
         temp_v1_72 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_72 + 8;
+        phi_t2->polyOpa.p = &temp_v1_72[1];
         temp_v1_72->words.w1 = 0;
         temp_v1_72->words.w0 = 0xE6000000;
         temp_v1_73 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_73 + 8;
+        phi_t2->polyOpa.p = &temp_v1_73[1];
         temp_v1_73->words.w1 = 0x711F0AB;
         temp_v1_73->words.w0 = 0xF3000000;
         temp_v1_74 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_74 + 8;
+        phi_t2->polyOpa.p = &temp_v1_74[1];
         temp_v1_74->words.w1 = 0;
         temp_v1_74->words.w0 = 0xE7000000;
         temp_v1_75 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_75 + 8;
+        phi_t2->polyOpa.p = &temp_v1_75[1];
         temp_v1_75->words.w1 = 0;
         temp_v1_75->words.w0 = 0xF5180C00;
         temp_v1_76 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_76 + 8;
+        phi_t2->polyOpa.p = &temp_v1_76[1];
         temp_v1_76->words.w0 = 0xF2000000;
         temp_v1_76->words.w1 = 0x5C02C;
         temp_v1_77 = phi_t2->polyOpa.p;
-        phi_t2->polyOpa.p = temp_v1_77 + 8;
+        phi_t2->polyOpa.p = &temp_v1_77[1];
         temp_v1_77->words.w0 = 0xFA000000;
         temp_v1_77->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
         temp_v1_78 = gGameInfo;
@@ -4944,28 +4944,28 @@ void func_8081E7D8(GraphicsContext **arg0) {
         if (temp_v1_78->data[1394] != 0) {
             gSaveContext.unk_F60 = gSaveContext.unk_F60 | 0x7FFF;
             temp_a0_5 = temp_v1_78->data[1396];
-            temp_s0->unk_184->unk_A60 = temp_a0_5;
-            temp_s0->unk_184->unk_A40 = temp_a0_5;
-            temp_v0_8 = temp_s0->unk_184;
+            temp_s0[1].zNear->unk_A60 = temp_a0_5;
+            temp_s0[1].zNear->unk_A40 = temp_a0_5;
+            temp_v0_8 = temp_s0[1].zNear;
             temp_a0_6 = temp_v0_8->unk_A40 + 0x18;
             temp_v0_8->unk_A70 = temp_a0_6;
-            temp_s0->unk_184->unk_A50 = temp_a0_6;
+            temp_s0[1].zNear->unk_A50 = temp_a0_6;
             temp_a0_7 = gGameInfo->data[1397];
-            temp_s0->unk_184->unk_A52 = temp_a0_7;
-            temp_s0->unk_184->unk_A42 = temp_a0_7;
-            temp_v0_9 = temp_s0->unk_184;
+            temp_s0[1].zNear->unk_A52 = temp_a0_7;
+            temp_s0[1].zNear->unk_A42 = temp_a0_7;
+            temp_v0_9 = temp_s0[1].zNear;
             temp_a0_8 = temp_v0_9->unk_A42 - 0xC;
             temp_v0_9->unk_A72 = temp_a0_8;
-            temp_s0->unk_184->unk_A62 = temp_a0_8;
+            temp_s0[1].zNear->unk_A62 = temp_a0_8;
         }
         do {
             if ((temp_s0 + phi_a3_3)->unk_2A2 != 0) {
                 temp_v1_79 = phi_t2->polyOpa.p;
-                phi_t2->polyOpa.p = temp_v1_79 + 8;
+                phi_t2->polyOpa.p = &temp_v1_79[1];
                 temp_v1_79->words.w0 = 0x1004008;
-                temp_v1_79->words.w1 = (u32) (temp_s0->unk_184 + (phi_a3_3 << 6) + 0xA40);
+                temp_v1_79->words.w1 = (u32) (temp_s0[1].zNear + (phi_a3_3 << 6) + 0xA40);
                 temp_v1_80 = phi_t2->polyOpa.p;
-                phi_t2->polyOpa.p = temp_v1_80 + 8;
+                phi_t2->polyOpa.p = &temp_v1_80[1];
                 temp_v1_80->words.w1 = 0x602;
                 temp_v1_80->words.w0 = 0x7000406;
             }
@@ -5052,10 +5052,10 @@ block_61:
             if (phi_t1_5 != phi_a3_6) {
                 sp38 = phi_t2_3;
                 sp4A = phi_t1_5;
-                func_808259D4(temp_s0, temp_s0->unk_1F4, temp_s0->unk_1F8, temp_s0->unk_1FC);
+                func_808259D4(temp_s0, temp_s0[1].projection.m[2][3], temp_s0[1].projection.m[3][0], temp_s0[1].projection.m[3][1]);
                 func_8012C628(arg0->unk_0);
                 temp_v1_96 = phi_t2_3->polyOpa.p;
-                phi_t2_3->polyOpa.p = temp_v1_96 + 8;
+                phi_t2_3->polyOpa.p = &temp_v1_96[1];
                 temp_v1_96->words.w0 = 0xFA000000;
                 temp_v1_96->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
                 temp_v0_14 = phi_t1_5 * 2;
@@ -5263,6 +5263,7 @@ void func_8081FF80(GraphicsContext **arg0) {
     Gfx *temp_v0_7;
     Gfx *temp_v0_8;
     GraphicsContext **temp_a3;
+    GraphicsContext *temp_a2;
     GraphicsContext *temp_s1;
     View *temp_s0;
     s16 temp_v0_11;
@@ -5277,7 +5278,6 @@ void func_8081FF80(GraphicsContext **arg0) {
     s32 temp_a0_2;
     s32 temp_a1;
     s32 temp_a1_2;
-    s32 temp_a2;
     s32 temp_s3;
     s32 temp_s3_2;
     s32 temp_v1;
@@ -5308,17 +5308,17 @@ void func_8081FF80(GraphicsContext **arg0) {
     temp_a3 = arg0;
     temp_s0 = temp_a3 + 0x16D30;
     temp_s1 = temp_a3->unk_0;
-    temp_a2 = temp_a3->unk_16ECC;
+    temp_a2 = temp_a3[23475];
     temp_a1 = (temp_a3->unk_16F9E * 4) & 0xFFFF;
     arg0 = temp_a3;
     func_8081B6BC(temp_s0, temp_a1, temp_a2, temp_a3);
     func_8012C8AC(arg0->unk_0);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xFC119623;
     temp_v0->words.w1 = 0xFF2FFFFF;
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xFA000000;
     temp_v0_2->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
     phi_a0 = 0;
@@ -5353,9 +5353,9 @@ void func_8081FF80(GraphicsContext **arg0) {
             }
             if ((phi_v0_2 & 0xFF) >= 0x18) {
                 temp_v0_5 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_5 + 8;
+                temp_s1->polyOpa.p = &temp_v0_5[1];
                 temp_v0_5->words.w0 = 0x1004008;
-                temp_v0_5->words.w1 = temp_s0->unk_19C + (phi_s4 * 0x10);
+                temp_v0_5->words.w1 = temp_s0[1].at.x + (phi_s4 * 0x10);
                 temp_s1->polyOpa.p = func_8010DC58(temp_s1->polyOpa.p, &D_02001360, 0x20, 0x20, 0);
             }
         }
@@ -5365,11 +5365,11 @@ void func_8081FF80(GraphicsContext **arg0) {
         phi_s3 = temp_s3;
     } while (temp_s3 < 3);
     temp_v0_6 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_6 + 8;
+    temp_s1->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = 0;
     temp_v0_6->words.w0 = 0xE7000000;
     temp_v0_7 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_7 + 8;
+    temp_s1->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w0 = 0xFC119623;
     temp_v0_7->words.w1 = 0xFF2FFFFF;
     phi_t1 = 3;
@@ -5377,7 +5377,7 @@ void func_8081FF80(GraphicsContext **arg0) {
     phi_t1 = 3;
     do {
         temp_v0_8 = temp_s1->polyOpa.p;
-        temp_s1->polyOpa.p = temp_v0_8 + 8;
+        temp_s1->polyOpa.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xFA000000;
         temp_v0_8->words.w1 = (temp_s0->unk_224 & 0xFF) | ~0xFF;
         if (gSaveContext.inventory.masks[phi_a0_2] != 0xFF) {
@@ -5386,51 +5386,51 @@ void func_8081FF80(GraphicsContext **arg0) {
                 if ((temp_s0->unk_200 == 0) && (phi_t1 == temp_s0->unk_204) && (temp_s0->unk_258 == 0) && (*(&D_8082B60C + ((gSaveContext.playerForm * 0x18) + phi_s3_2)) != 0)) {
                     if ((D_8082B600 == 2) && (phi_t1 == phi_a0_2)) {
                         temp_v0_10 = temp_s1->polyOpa.p;
-                        temp_s1->polyOpa.p = temp_v0_10 + 8;
+                        temp_s1->polyOpa.p = &temp_v0_10[1];
                         temp_v0_10->words.w0 = 0xFA000000;
                         temp_v1 = temp_s0->unk_272 * 2;
                         temp_v0_10->words.w1 = ((*(&D_8082B55A + temp_v1) & 0xFF) << 8) | (*(&D_8082B54A + temp_v1) << 0x18) | ((*(&D_8082B552 + temp_v1) & 0xFF) << 0x10) | (temp_s0->unk_224 & 0xFF);
                         temp_a0 = phi_s4_2 * 0x10;
-                        temp_v1_2 = temp_s0->unk_19C + temp_a0;
+                        temp_v1_2 = temp_s0[1].at.x + temp_a0;
                         temp_v0_11 = temp_v1_2->unk_0 - 2;
                         temp_v1_2->unk_20 = temp_v0_11;
-                        *(temp_s0->unk_19C + temp_a0) = temp_v0_11;
-                        temp_v1_3 = temp_s0->unk_19C + temp_a0;
+                        *(temp_s0[1].at.x + temp_a0) = temp_v0_11;
+                        temp_v1_3 = temp_s0[1].at.x + temp_a0;
                         temp_v0_12 = temp_v1_3->unk_0 + 0x20;
                         temp_v1_3->unk_30 = temp_v0_12;
-                        (temp_s0->unk_19C + temp_a0)->unk_10 = temp_v0_12;
-                        temp_v1_4 = temp_s0->unk_19C + temp_a0;
+                        (temp_s0[1].at.x + temp_a0)->unk_10 = temp_v0_12;
+                        temp_v1_4 = temp_s0[1].at.x + temp_a0;
                         temp_v0_13 = temp_v1_4->unk_2 + 2;
                         temp_v1_4->unk_12 = temp_v0_13;
-                        (temp_s0->unk_19C + temp_a0)->unk_2 = temp_v0_13;
-                        temp_v1_5 = temp_s0->unk_19C + temp_a0;
+                        (temp_s0[1].at.x + temp_a0)->unk_2 = temp_v0_13;
+                        temp_v1_5 = temp_s0[1].at.x + temp_a0;
                         temp_v0_14 = temp_v1_5->unk_2 - 0x20;
                         temp_v1_5->unk_32 = temp_v0_14;
-                        (temp_s0->unk_19C + temp_a0)->unk_22 = temp_v0_14;
+                        (temp_s0[1].at.x + temp_a0)->unk_22 = temp_v0_14;
                     } else if (phi_a0_2 == temp_s0->unk_26E) {
                         temp_a0_2 = phi_s4_2 * 0x10;
-                        temp_v1_6 = temp_s0->unk_19C + temp_a0_2;
+                        temp_v1_6 = temp_s0[1].at.x + temp_a0_2;
                         temp_v0_15 = temp_v1_6->unk_0 - 2;
                         temp_v1_6->unk_20 = temp_v0_15;
-                        *(temp_s0->unk_19C + temp_a0_2) = temp_v0_15;
-                        temp_v1_7 = temp_s0->unk_19C + temp_a0_2;
+                        *(temp_s0[1].at.x + temp_a0_2) = temp_v0_15;
+                        temp_v1_7 = temp_s0[1].at.x + temp_a0_2;
                         temp_v0_16 = temp_v1_7->unk_0 + 0x20;
                         temp_v1_7->unk_30 = temp_v0_16;
-                        (temp_s0->unk_19C + temp_a0_2)->unk_10 = temp_v0_16;
-                        temp_v1_8 = temp_s0->unk_19C + temp_a0_2;
+                        (temp_s0[1].at.x + temp_a0_2)->unk_10 = temp_v0_16;
+                        temp_v1_8 = temp_s0[1].at.x + temp_a0_2;
                         temp_v0_17 = temp_v1_8->unk_2 + 2;
                         temp_v1_8->unk_12 = temp_v0_17;
-                        (temp_s0->unk_19C + temp_a0_2)->unk_2 = temp_v0_17;
-                        temp_v1_9 = temp_s0->unk_19C + temp_a0_2;
+                        (temp_s0[1].at.x + temp_a0_2)->unk_2 = temp_v0_17;
+                        temp_v1_9 = temp_s0[1].at.x + temp_a0_2;
                         temp_v0_18 = temp_v1_9->unk_2 - 0x20;
                         temp_v1_9->unk_32 = temp_v0_18;
-                        (temp_s0->unk_19C + temp_a0_2)->unk_22 = temp_v0_18;
+                        (temp_s0[1].at.x + temp_a0_2)->unk_22 = temp_v0_18;
                     }
                 }
                 temp_v0_19 = temp_s1->polyOpa.p;
-                temp_s1->polyOpa.p = temp_v0_19 + 8;
+                temp_s1->polyOpa.p = &temp_v0_19[1];
                 temp_v0_19->words.w0 = 0x1004008;
-                temp_v0_19->words.w1 = temp_s0->unk_19C + (phi_s4_2 * 0x10);
+                temp_v0_19->words.w1 = temp_s0[1].at.x + (phi_s4_2 * 0x10);
                 func_80821AD4(arg0->unk_0, gItemIcons[gSaveContext.inventory.masks[phi_a0_2]], 0x20, 0x20U, 0);
             }
         }
@@ -5722,7 +5722,7 @@ block_66:
                 phi_v0_2 = (void *)0x3E7;
             }
             phi_v0_3 = phi_v0_2;
-            if ((phi_v0_2 != 0x3E7) && (arg0->unk_16818 == 0)) {
+            if ((phi_v0_2 != 0x3E7) && (arg0[23046] == 0)) {
                 if (gSaveContext.buttonStatus[4] == 0xFF) {
                     gSaveContext.buttonStatus[4] = 0;
                     gSaveContext.unk_3F22 = 0;
@@ -5787,7 +5787,7 @@ block_108:
                     play_sound(0x4808U);
                     goto block_129;
                 }
-                if ((temp_v1_4 == 0) && (temp_s0->unk_1EC == 6) && (temp_s0->unk_200 == 0) && (~(arg0->unk_20 | 0xFFFF7FFF) == 0) && (arg0->unk_16818 == 0)) {
+                if ((temp_v1_4 == 0) && (temp_s0->unk_1EC == 6) && (temp_s0->unk_200 == 0) && (~(arg0->unk_20 | 0xFFFF7FFF) == 0) && (arg0[23046] == 0)) {
                     temp_s0->unk_2B9 = 1U;
                     if ((s32) temp_s0->unk_252 < 2) {
                         func_801514B0(arg0, (temp_s0->unk_264 + 0x1700) & 0xFFFF, 3, arg0);
@@ -5808,7 +5808,7 @@ block_129:
         /* Duplicate return node #134. Try simplifying control flow for better match */
         return;
     }
-    temp_s0_2 = arg0 + 0x16D30;
+    temp_s0_2 = &arg0[23372];
     if ((temp_s0_2->unk_200 == 0xF) && (temp_s0_2->unk_204 == 3)) {
         temp_s0_2->unk_284 = 2;
     }
@@ -6696,15 +6696,15 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
         phi_v0_2 = phi_v0;
         if ((phi_v0 != 1) && (phi_v0 != 3)) {
             temp_v0_12 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_12 + 8;
+            arg1->polyOpa.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0;
             temp_v0_12->words.w0 = 0xE7000000;
             temp_v0_13 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_13 + 8;
+            arg1->polyOpa.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0xFF33FFFF;
             temp_v0_13->words.w0 = 0xFC119823;
             temp_v0_14 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_14 + 8;
+            arg1->polyOpa.p = &temp_v0_14[1];
             temp_v0_14->words.w0 = 0xFA000000;
             temp_v0_14->words.w1 = 0xB4B478FF;
             SysMatrix_InsertYRotation_f(-1.57f, 0);
@@ -6712,7 +6712,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_214 / 100.0f);
             temp_v0_15 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_15 + 8;
+            arg1->polyOpa.p = &temp_v0_15[1];
             temp_v0_15->words.w0 = 0xDA380003;
             spA4 = temp_v0_15;
             spA4->words.w1 = Matrix_NewMtx(arg1);
@@ -6721,7 +6721,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                 func_8081D6DC(arg0);
                 func_8012C8AC(arg1);
                 temp_v0_16 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_16 + 8;
+                arg1->polyOpa.p = &temp_v0_16[1];
                 temp_v0_16->words.w0 = 0xFC119623;
                 temp_v0_16->words.w1 = 0xFF2FFFFF;
                 func_801091F0(arg0);
@@ -6734,19 +6734,19 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
         phi_v0_3 = phi_v0_2;
         if ((phi_v0_2 != 2) && (phi_v0_2 != 0)) {
             temp_v0_17 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_17 + 8;
+            arg1->polyOpa.p = &temp_v0_17[1];
             temp_v0_17->words.w1 = 0;
             temp_v0_17->words.w0 = 0xE7000000;
             temp_v0_18 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_18 + 8;
+            arg1->polyOpa.p = &temp_v0_18[1];
             temp_v0_18->words.w1 = 0x2000;
             temp_v0_18->words.w0 = 0xE3001201;
             temp_v0_19 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_19 + 8;
+            arg1->polyOpa.p = &temp_v0_19[1];
             temp_v0_19->words.w0 = 0xFC119823;
             temp_v0_19->words.w1 = 0xFF33FFFF;
             temp_v0_20 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_20 + 8;
+            arg1->polyOpa.p = &temp_v0_20[1];
             temp_v0_20->words.w0 = 0xFA000000;
             temp_v0_20->words.w1 = 0xB4B478FF;
             SysMatrix_InsertYRotation_f(-3.14f, 0);
@@ -6754,7 +6754,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_218 / 100.0f);
             temp_v0_21 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_21 + 8;
+            arg1->polyOpa.p = &temp_v0_21[1];
             temp_v0_21->words.w0 = 0xDA380003;
             sp8C = temp_v0_21;
             sp8C->words.w1 = Matrix_NewMtx(arg1);
@@ -6765,19 +6765,19 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
         phi_v0_4 = phi_v0_3;
         if ((phi_v0_3 != 3) && (phi_v0_3 != 1)) {
             temp_v0_22 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_22 + 8;
+            arg1->polyOpa.p = &temp_v0_22[1];
             temp_v0_22->words.w1 = 0;
             temp_v0_22->words.w0 = 0xE7000000;
             temp_v0_23 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_23 + 8;
+            arg1->polyOpa.p = &temp_v0_23[1];
             temp_v0_23->words.w1 = 0x2000;
             temp_v0_23->words.w0 = 0xE3001201;
             temp_v0_24 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_24 + 8;
+            arg1->polyOpa.p = &temp_v0_24[1];
             temp_v0_24->words.w0 = 0xFC119823;
             temp_v0_24->words.w1 = 0xFF33FFFF;
             temp_v0_25 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_25 + 8;
+            arg1->polyOpa.p = &temp_v0_25[1];
             temp_v0_25->words.w0 = 0xFA000000;
             temp_v0_25->words.w1 = 0xB4B478FF;
             SysMatrix_InsertYRotation_f(1.57f, 0);
@@ -6785,7 +6785,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_21C / 100.0f);
             temp_v0_26 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_26 + 8;
+            arg1->polyOpa.p = &temp_v0_26[1];
             temp_v0_26->words.w0 = 0xDA380003;
             sp78 = temp_v0_26;
             sp78->words.w1 = Matrix_NewMtx(arg1);
@@ -6800,15 +6800,15 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                         return;
                     }
                     temp_v0_27 = arg1->polyOpa.p;
-                    arg1->polyOpa.p = temp_v0_27 + 8;
+                    arg1->polyOpa.p = &temp_v0_27[1];
                     temp_v0_27->words.w1 = 0;
                     temp_v0_27->words.w0 = 0xE7000000;
                     temp_v0_28 = arg1->polyOpa.p;
-                    arg1->polyOpa.p = temp_v0_28 + 8;
+                    arg1->polyOpa.p = &temp_v0_28[1];
                     temp_v0_28->words.w1 = 0xFF33FFFF;
                     temp_v0_28->words.w0 = 0xFC119823;
                     temp_v0_29 = arg1->polyOpa.p;
-                    arg1->polyOpa.p = temp_v0_29 + 8;
+                    arg1->polyOpa.p = &temp_v0_29[1];
                     temp_v0_29->words.w0 = 0xFA000000;
                     temp_v0_29->words.w1 = 0xB4B478FF;
                     SysMatrix_InsertYRotation_f(1.57f, 0);
@@ -6816,7 +6816,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                     Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
                     SysMatrix_RotateStateAroundXAxis(-sp24->unk_21C / 100.0f);
                     temp_v0_30 = arg1->polyOpa.p;
-                    arg1->polyOpa.p = temp_v0_30 + 8;
+                    arg1->polyOpa.p = &temp_v0_30[1];
                     temp_v0_30->words.w0 = 0xDA380003;
                     sp2C = temp_v0_30;
                     sp2C->words.w1 = Matrix_NewMtx(arg1);
@@ -6826,19 +6826,19 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                     return;
                 }
                 temp_v0_31 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_31 + 8;
+                arg1->polyOpa.p = &temp_v0_31[1];
                 temp_v0_31->words.w1 = 0;
                 temp_v0_31->words.w0 = 0xE7000000;
                 temp_v0_32 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_32 + 8;
+                arg1->polyOpa.p = &temp_v0_32[1];
                 temp_v0_32->words.w1 = 0xFF33FFFF;
                 temp_v0_32->words.w0 = 0xFC119823;
                 temp_v0_33 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_33 + 8;
+                arg1->polyOpa.p = &temp_v0_33[1];
                 temp_v0_33->words.w0 = 0xFA000000;
                 temp_v0_33->words.w1 = 0xB4B478FF;
                 temp_v0_34 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_34 + 8;
+                arg1->polyOpa.p = &temp_v0_34[1];
                 temp_v0_34->words.w1 = 0x2000;
                 temp_v0_34->words.w0 = 0xE3001201;
                 SysMatrix_InsertYRotation_f(-3.14f, 0);
@@ -6846,7 +6846,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                 Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
                 SysMatrix_RotateStateAroundXAxis(-sp24->unk_218 / 100.0f);
                 temp_v0_35 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_35 + 8;
+                arg1->polyOpa.p = &temp_v0_35[1];
                 temp_v0_35->words.w0 = 0xDA380003;
                 sp3C = temp_v0_35;
                 sp3C->words.w1 = Matrix_NewMtx(arg1);
@@ -6855,15 +6855,15 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                 return;
             }
             temp_v0_36 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_36 + 8;
+            arg1->polyOpa.p = &temp_v0_36[1];
             temp_v0_36->words.w1 = 0;
             temp_v0_36->words.w0 = 0xE7000000;
             temp_v0_37 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_37 + 8;
+            arg1->polyOpa.p = &temp_v0_37[1];
             temp_v0_37->words.w1 = 0xFF33FFFF;
             temp_v0_37->words.w0 = 0xFC119823;
             temp_v0_38 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_38 + 8;
+            arg1->polyOpa.p = &temp_v0_38[1];
             temp_v0_38->words.w0 = 0xFA000000;
             temp_v0_38->words.w1 = 0xB4B478FF;
             SysMatrix_InsertYRotation_f(-1.57f, 0);
@@ -6871,7 +6871,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_214 / 100.0f);
             temp_v0_39 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_39 + 8;
+            arg1->polyOpa.p = &temp_v0_39[1];
             temp_v0_39->words.w0 = 0xDA380003;
             sp58 = temp_v0_39;
             sp58->words.w1 = Matrix_NewMtx(arg1);
@@ -6880,7 +6880,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
                 func_8081D6DC(arg0);
                 func_8012C8AC(arg1);
                 temp_v0_40 = arg1->polyOpa.p;
-                arg1->polyOpa.p = temp_v0_40 + 8;
+                arg1->polyOpa.p = &temp_v0_40[1];
                 temp_v0_40->words.w0 = 0xFC119623;
                 temp_v0_40->words.w1 = 0xFF2FFFFF;
                 func_801091F0(arg0);
@@ -6898,7 +6898,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_214 / 100.0f);
             temp_v0_45 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_45 + 8;
+            arg1->polyOpa.p = &temp_v0_45[1];
             temp_v0_45->words.w0 = 0xDA380003;
             sp50 = temp_v0_45;
             sp50->words.w1 = Matrix_NewMtx(arg1);
@@ -6907,15 +6907,15 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
         }
         if ((s32) sp24->unk_200 < 0x10) {
             temp_v0_46 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_46 + 8;
+            arg1->polyOpa.p = &temp_v0_46[1];
             temp_v0_46->words.w1 = 0;
             temp_v0_46->words.w0 = 0xE7000000;
             temp_v0_47 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_47 + 8;
+            arg1->polyOpa.p = &temp_v0_47[1];
             temp_v0_47->words.w1 = 0xFF33FFFF;
             temp_v0_47->words.w0 = 0xFC119823;
             temp_v0_48 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_48 + 8;
+            arg1->polyOpa.p = &temp_v0_48[1];
             temp_v0_48->words.w0 = 0xFA000000;
             temp_v0_48->words.w1 = 0xB4B478FF;
             SysMatrix_InsertYRotation_f(0.0f, 0);
@@ -6923,7 +6923,7 @@ void func_808221DC(GraphicsContext **arg0, GraphicsContext *arg1) {
             Matrix_Scale(0.78f, 0.78f, 0.78f, 1);
             SysMatrix_RotateStateAroundXAxis(-sp24->unk_210 / 100.0f);
             temp_v0_49 = arg1->polyOpa.p;
-            arg1->polyOpa.p = temp_v0_49 + 8;
+            arg1->polyOpa.p = &temp_v0_49[1];
             temp_v0_49->words.w0 = 0xDA380003;
             sp68 = temp_v0_49;
             sp68->words.w1 = Matrix_NewMtx(arg1);
@@ -7351,35 +7351,35 @@ void func_80823350(GraphicsContext **arg0) {
     spB4 = temp_v0_23;
     spB4->words.w1 = Matrix_NewMtx(*arg0);
     temp_v0_24 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_24 + 8;
+    temp_ra->polyOpa.p = &temp_v0_24[1];
     temp_v0_24->words.w1 = 0x968C5AFF;
     temp_v0_24->words.w0 = 0xFA000000;
     temp_v0_25 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_25 + 8;
+    temp_ra->polyOpa.p = &temp_v0_25[1];
     temp_v0_25->words.w0 = 0x1010020;
     temp_v0_25->words.w1 = (u32) temp_t0->unk_1A4;
     temp_v0_26 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_26 + 8;
+    temp_ra->polyOpa.p = &temp_v0_26[1];
     temp_v0_26->words.w1 = (u32) &D_0B000000;
     temp_v0_26->words.w0 = 0xDE000000;
     if ((temp_t0->unk_258 == 0xA) && ((temp_v0_27 = temp_t0->unk_200, (temp_v0_27 == 0)) || (temp_v0_27 == 0x11))) {
         temp_v0_28 = temp_ra->polyOpa.p;
-        temp_ra->polyOpa.p = temp_v0_28 + 8;
+        temp_ra->polyOpa.p = &temp_v0_28[1];
         temp_v0_28->words.w0 = 0xFA000000;
         temp_v0_28->words.w1 = (D_8082DA56 & 0xFF) | 0x968C5A00;
     }
     temp_v0_29 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_29 + 8;
+    temp_ra->polyOpa.p = &temp_v0_29[1];
     temp_v0_29->words.w1 = (u32) &D_0B000090;
     temp_v0_29->words.w0 = 0xDE000000;
     if ((temp_t0->unk_258 == 0xB) && ((temp_v0_30 = temp_t0->unk_200, (temp_v0_30 == 0)) || (temp_v0_30 == 0x11))) {
         temp_v0_31 = temp_ra->polyOpa.p;
-        temp_ra->polyOpa.p = temp_v0_31 + 8;
+        temp_ra->polyOpa.p = &temp_v0_31[1];
         temp_v0_31->words.w1 = (D_8082DA56 & 0xFF) | 0x968C5A00;
         temp_v0_31->words.w0 = 0xFA000000;
     }
     temp_v0_32 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_32 + 8;
+    temp_ra->polyOpa.p = &temp_v0_32[1];
     temp_v0_32->words.w1 = (u32) &D_0B0000E0;
     temp_v0_32->words.w0 = 0xDE000000;
     temp_v1_25 = temp_t0->unk_258;
@@ -7400,15 +7400,15 @@ void func_80823350(GraphicsContext **arg0) {
     temp_v0_36 = temp_t0->unk_1A4;
     temp_v0_36->unk_12A = (s16) temp_v0_36->unk_13A;
     temp_v0_37 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_37 + 8;
+    temp_ra->polyOpa.p = &temp_v0_37[1];
     temp_v0_37->words.w1 = 0;
     temp_v0_37->words.w0 = 0xE7000000;
     temp_v0_38 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_38 + 8;
+    temp_ra->polyOpa.p = &temp_v0_38[1];
     temp_v0_38->words.w1 = 0x552EFF7F;
     temp_v0_38->words.w0 = 0xFC309661;
     temp_v0_39 = temp_ra->polyOpa.p;
-    temp_ra->polyOpa.p = temp_v0_39 + 8;
+    temp_ra->polyOpa.p = &temp_v0_39[1];
     temp_v0_39->words.w0 = 0xFB000000;
     temp_v0_39->words.w1 = 0x141E2800;
     if ((temp_t0->unk_2B9 != 0) || ((temp_t0->unk_1EC == 6) && (temp_t0->unk_25C != 0x3E7) && ((s32) temp_t0->unk_280 < 0x28) && ((temp_v0_40 = temp_t0->unk_200, (temp_v0_40 == 0)) || (temp_v0_40 == 2) || (temp_v0_40 == 0x11) || (((s32) temp_v0_40 >= 4) && ((s32) temp_v0_40 < 8)) || (temp_v0_40 == 8)) && (temp_t0->unk_258 == 0))) {
@@ -7425,17 +7425,17 @@ void func_80823350(GraphicsContext **arg0) {
             temp_v0_92 = temp_t0->unk_1A4;
             temp_v0_92->unk_118 = (s16) temp_v0_92->unk_138;
             temp_v0_93 = temp_ra->polyOpa.p;
-            temp_ra->polyOpa.p = temp_v0_93 + 8;
+            temp_ra->polyOpa.p = &temp_v0_93[1];
             temp_v0_93->words.w0 = 0x1004008;
             temp_v0_93->words.w1 = (u32) (temp_t0->unk_1A4 + 0x100);
             if (temp_t0->unk_282 == 1) {
                 temp_v0_94 = temp_ra->polyOpa.p;
-                temp_ra->polyOpa.p = temp_v0_94 + 8;
+                temp_ra->polyOpa.p = &temp_v0_94[1];
                 temp_v0_94->words.w1 = 0x464646FF;
                 temp_v0_94->words.w0 = 0xFA000000;
             } else {
                 temp_v0_95 = temp_ra->polyOpa.p;
-                temp_ra->polyOpa.p = temp_v0_95 + 8;
+                temp_ra->polyOpa.p = &temp_v0_95[1];
                 temp_v0_95->words.w1 = -1;
                 temp_v0_95->words.w0 = 0xFA000000;
             }
@@ -7457,7 +7457,7 @@ void func_80823350(GraphicsContext **arg0) {
             temp_v0_43 = temp_t0->unk_1A4;
             temp_v0_43->unk_16A = (s16) temp_v0_43->unk_17A;
             temp_v0_44 = temp_ra->polyOpa.p;
-            temp_ra->polyOpa.p = temp_v0_44 + 8;
+            temp_ra->polyOpa.p = &temp_v0_44[1];
             temp_v0_44->words.w0 = 0x1008010;
             temp_v0_44->words.w1 = (u32) (temp_t0->unk_1A4 + 0x100);
             temp_v0_45 = temp_t0->unk_1EC;
@@ -7484,15 +7484,15 @@ void func_80823350(GraphicsContext **arg0) {
                 temp_v0_51 = temp_t0->unk_1A4;
                 temp_v0_51->unk_158 = (s16) temp_v0_51->unk_178;
                 temp_v0_52 = temp_ra->polyOpa.p;
-                temp_ra->polyOpa.p = temp_v0_52 + 8;
+                temp_ra->polyOpa.p = &temp_v0_52[1];
                 temp_v0_52->words.w1 = (u32) &D_0B000188;
                 temp_v0_52->words.w0 = 0xDE000000;
                 temp_v0_53 = temp_ra->polyOpa.p;
-                temp_ra->polyOpa.p = temp_v0_53 + 8;
+                temp_ra->polyOpa.p = &temp_v0_53[1];
                 temp_v0_53->words.w1 = 0;
                 temp_v0_53->words.w0 = 0xE7000000;
                 temp_v0_54 = temp_ra->polyOpa.p;
-                temp_ra->polyOpa.p = temp_v0_54 + 8;
+                temp_ra->polyOpa.p = &temp_v0_54[1];
                 temp_v0_54->words.w1 = -1;
                 temp_v0_54->words.w0 = 0xFA000000;
                 spC0 = temp_ra;
@@ -7512,11 +7512,11 @@ void func_80823350(GraphicsContext **arg0) {
                     temp_v0_57 = temp_t0->unk_1A4;
                     temp_v0_57->unk_118 = (s16) temp_v0_57->unk_138;
                     temp_v0_58 = temp_ra->polyOpa.p;
-                    temp_ra->polyOpa.p = temp_v0_58 + 8;
+                    temp_ra->polyOpa.p = &temp_v0_58[1];
                     temp_v0_58->words.w1 = 0;
                     temp_v0_58->words.w0 = 0xE7000000;
                     temp_v0_59 = temp_ra->polyOpa.p;
-                    temp_ra->polyOpa.p = temp_v0_59 + 8;
+                    temp_ra->polyOpa.p = &temp_v0_59[1];
                     temp_v0_59->words.w1 = 0xFFC800FF;
                     temp_v0_59->words.w0 = 0xFA000000;
                     if (temp_t0->unk_258 == 0xA) {
@@ -7553,15 +7553,15 @@ void func_80823350(GraphicsContext **arg0) {
                     temp_v0_66 = temp_t0->unk_1A4;
                     temp_v0_66->unk_158 = (s16) temp_v0_66->unk_178;
                     temp_v0_67 = temp_ra->polyOpa.p;
-                    temp_ra->polyOpa.p = temp_v0_67 + 8;
+                    temp_ra->polyOpa.p = &temp_v0_67[1];
                     temp_v0_67->words.w1 = (u32) &D_0B000130;
                     temp_v0_67->words.w0 = 0xDE000000;
                     temp_v0_68 = temp_ra->polyOpa.p;
-                    temp_ra->polyOpa.p = temp_v0_68 + 8;
+                    temp_ra->polyOpa.p = &temp_v0_68[1];
                     temp_v0_68->words.w1 = 0;
                     temp_v0_68->words.w0 = 0xE7000000;
                     temp_v0_69 = temp_ra->polyOpa.p;
-                    temp_ra->polyOpa.p = temp_v0_69 + 8;
+                    temp_ra->polyOpa.p = &temp_v0_69[1];
                     temp_v0_69->words.w1 = -1;
                     temp_v0_69->words.w0 = 0xFA000000;
                     spC0 = temp_ra;
@@ -7593,15 +7593,15 @@ void func_80823350(GraphicsContext **arg0) {
                             temp_v0_75 = temp_t0->unk_1A4;
                             temp_v0_75->unk_158 = (s16) temp_v0_75->unk_178;
                             temp_v0_76 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_76 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_76[1];
                             temp_v0_76->words.w1 = (u32) &D_0B000188;
                             temp_v0_76->words.w0 = 0xDE000000;
                             temp_v0_77 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_77 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_77[1];
                             temp_v0_77->words.w1 = 0;
                             temp_v0_77->words.w0 = 0xE7000000;
                             temp_v0_78 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_78 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_78[1];
                             temp_v0_78->words.w1 = -1;
                             temp_v0_78->words.w0 = 0xFA000000;
                             spC0 = temp_ra;
@@ -7633,15 +7633,15 @@ void func_80823350(GraphicsContext **arg0) {
                             temp_v0_85 = temp_t0->unk_1A4;
                             temp_v0_85->unk_158 = (s16) temp_v0_85->unk_178;
                             temp_v0_86 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_86 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_86[1];
                             temp_v0_86->words.w1 = (u32) &D_0B000188;
                             temp_v0_86->words.w0 = 0xDE000000;
                             temp_v0_87 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_87 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_87[1];
                             temp_v0_87->words.w1 = 0;
                             temp_v0_87->words.w0 = 0xE7000000;
                             temp_v0_88 = temp_ra->polyOpa.p;
-                            temp_ra->polyOpa.p = temp_v0_88 + 8;
+                            temp_ra->polyOpa.p = &temp_v0_88[1];
                             temp_v0_88->words.w1 = -1;
                             temp_v0_88->words.w0 = 0xFA000000;
                             spC0 = temp_ra;
@@ -7756,7 +7756,7 @@ void func_808248D0(GraphicsContext **arg0) {
     Matrix_Scale(1.0f, 1.0f, 1.0f, 1);
     SysMatrix_RotateStateAroundXAxis(-sp24->unk_214 / 100.0f);
     temp_v0_10 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_10 + 8;
+    temp_s0->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w0 = 0xDA380003;
     sp28 = temp_v0_10;
     sp28->words.w1 = Matrix_NewMtx(*arg0);
@@ -8105,15 +8105,15 @@ void func_80824B90(GraphicsContext **arg0) {
     sp6C = temp_v0_23;
     sp6C->words.w1 = Matrix_NewMtx(*arg0);
     temp_v0_24 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_24 + 8;
+    temp_s0->polyOpa.p = &temp_v0_24[1];
     temp_v0_24->words.w1 = 0x968C5AFF;
     temp_v0_24->words.w0 = 0xFA000000;
     temp_v0_25 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_25 + 8;
+    temp_s0->polyOpa.p = &temp_v0_25[1];
     temp_v0_25->words.w0 = 0x1010020;
     temp_v0_25->words.w1 = (u32) temp_t0->unk_1A4;
     temp_v0_26 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_26 + 8;
+    temp_s0->polyOpa.p = &temp_v0_26[1];
     temp_v0_26->words.w1 = (u32) &D_0B000000;
     temp_v0_26->words.w0 = 0xDE000000;
     temp_v1_25 = temp_t0->unk_258;
@@ -8133,15 +8133,15 @@ void func_80824B90(GraphicsContext **arg0) {
     temp_v0_30 = temp_t0->unk_1A4;
     temp_v0_30->unk_12A = (s16) temp_v0_30->unk_13A;
     temp_v0_31 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_31 + 8;
+    temp_s0->polyOpa.p = &temp_v0_31[1];
     temp_v0_31->words.w1 = 0;
     temp_v0_31->words.w0 = 0xE7000000;
     temp_v0_32 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_32 + 8;
+    temp_s0->polyOpa.p = &temp_v0_32[1];
     temp_v0_32->words.w0 = 0xFC309661;
     temp_v0_32->words.w1 = 0x552EFF7F;
     temp_v0_33 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_33 + 8;
+    temp_s0->polyOpa.p = &temp_v0_33[1];
     temp_v0_33->words.w0 = 0xFB000000;
     temp_v0_33->words.w1 = 0x141E2800;
     if ((temp_t0->unk_1EC == 0x17) && (temp_t0->unk_25C != 0x3E7) && ((s32) temp_t0->unk_280 < 0x28)) {
@@ -8156,17 +8156,17 @@ void func_80824B90(GraphicsContext **arg0) {
         temp_v0_36 = temp_t0->unk_1A4;
         temp_v0_36->unk_118 = (s16) temp_v0_36->unk_138;
         temp_v0_37 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_37 + 8;
+        temp_s0->polyOpa.p = &temp_v0_37[1];
         temp_v0_37->words.w0 = 0x1004008;
         temp_v0_37->words.w1 = (u32) (temp_t0->unk_1A4 + 0x100);
         if (temp_t0->unk_282 == 1) {
             temp_v0_38 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_38 + 8;
+            temp_s0->polyOpa.p = &temp_v0_38[1];
             temp_v0_38->words.w1 = 0x464646FF;
             temp_v0_38->words.w0 = 0xFA000000;
         } else {
             temp_v0_39 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_39 + 8;
+            temp_s0->polyOpa.p = &temp_v0_39[1];
             temp_v0_39->words.w1 = -1;
             temp_v0_39->words.w0 = 0xFA000000;
         }
@@ -8247,10 +8247,10 @@ void func_8082585C(GlobalContext *arg0) {
     }
 }
 
-void func_808259D4(View *arg0, ?32 arg1, ?32 arg2, ?32 arg3) {
-    ?32 sp3C;
-    ?32 sp38;
-    ?32 sp34;
+void func_808259D4(View *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 sp3C;
+    s32 sp38;
+    s32 sp34;
     f32 sp30;
     f32 sp2C;
     f32 sp28;
@@ -9387,20 +9387,20 @@ void func_808274DC(GraphicsContext **arg0) {
     void *phi_s0;
     f32 phi_f0;
 
-    arg0->unk_16ED8->unk_20 = -8;
-    temp_v0 = arg0->unk_16ED8;
+    arg0[23478]->unk_20 = -8;
+    temp_v0 = arg0[23478];
     temp_v0->unk_0 = (s16) temp_v0->unk_20;
-    temp_v0_2 = arg0->unk_16ED8;
+    temp_v0_2 = arg0[23478];
     temp_a1 = temp_v0_2->unk_0 + 0x10;
     temp_v0_2->unk_30 = temp_a1;
-    arg0->unk_16ED8->unk_10 = temp_a1;
-    arg0->unk_16ED8->unk_12 = 8;
-    temp_v0_3 = arg0->unk_16ED8;
+    arg0[23478]->unk_10 = temp_a1;
+    arg0[23478]->unk_12 = 8;
+    temp_v0_3 = arg0[23478];
     temp_v0_3->unk_2 = (s16) temp_v0_3->unk_12;
-    temp_v0_4 = arg0->unk_16ED8;
+    temp_v0_4 = arg0[23478];
     temp_a1_2 = temp_v0_4->unk_2 - 0x10;
     temp_v0_4->unk_32 = temp_a1_2;
-    arg0->unk_16ED8->unk_22 = temp_a1_2;
+    arg0[23478]->unk_22 = temp_a1_2;
     if (arg0->unk_16F88 == 0) {
         temp_s0 = arg0 + 0x16D30;
         temp_a1_3 = temp_s0->unk_204;
@@ -9580,43 +9580,43 @@ void func_80827A8C(GraphicsContext **arg0) {
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(arg0->unk_0);
             temp_v0_7 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_7 + 8;
+            temp_s0->polyOpa.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = 0;
             temp_v0_7->words.w0 = 0xE7000000;
             temp_v0_8 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_8 + 8;
+            temp_s0->polyOpa.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xFD700000;
             temp_v0_8->words.w1 = (u32) sp34;
             temp_v0_9 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_9 + 8;
+            temp_s0->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w1 = 0x7000000;
             temp_v0_9->words.w0 = 0xF5700000;
             temp_v0_10 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_10 + 8;
+            temp_s0->polyOpa.p = &temp_v0_10[1];
             temp_v0_10->words.w1 = 0;
             temp_v0_10->words.w0 = 0xE6000000;
             temp_v0_11 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_11 + 8;
+            temp_s0->polyOpa.p = &temp_v0_11[1];
             temp_v0_11->words.w1 = 0x707F400;
             temp_v0_11->words.w0 = 0xF3000000;
             temp_v0_12 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_12 + 8;
+            temp_s0->polyOpa.p = &temp_v0_12[1];
             temp_v0_12->words.w1 = 0;
             temp_v0_12->words.w0 = 0xE7000000;
             temp_v0_13 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_13 + 8;
+            temp_s0->polyOpa.p = &temp_v0_13[1];
             temp_v0_13->words.w1 = 0;
             temp_v0_13->words.w0 = 0xF5680400;
             temp_v0_14 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_14 + 8;
+            temp_s0->polyOpa.p = &temp_v0_14[1];
             temp_v0_14->words.w1 = 0x3C03C;
             temp_v0_14->words.w0 = 0xF2000000;
             temp_v0_15 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_15 + 8;
+            temp_s0->polyOpa.p = &temp_v0_15[1];
             temp_v0_15->words.w0 = 0x1004008;
             temp_v0_15->words.w1 = temp_s4_2->unk_1A8;
             temp_v0_16 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_16 + 8;
+            temp_s0->polyOpa.p = &temp_v0_16[1];
             temp_v0_16->words.w1 = 0x602;
             temp_v0_16->words.w0 = 0x7000406;
             SysMatrix_StatePop();
@@ -9624,11 +9624,11 @@ void func_80827A8C(GraphicsContext **arg0) {
             phi_s2 = temp_s2;
         } while ((s32) temp_s2 < 4);
         temp_v0_17 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_17 + 8;
+        temp_s0->polyOpa.p = &temp_v0_17[1];
         temp_v0_17->words.w1 = 0;
         temp_v0_17->words.w0 = 0xE7000000;
         temp_v0_18 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_18 + 8;
+        temp_s0->polyOpa.p = &temp_v0_18[1];
         temp_v0_18->words.w1 = 0xFF;
         temp_v0_18->words.w0 = 0xFB000000;
     }
@@ -9687,178 +9687,178 @@ void func_80827E08(GraphicsContext **arg0) {
     sp1C = temp_a0;
     func_8012C628(temp_a0);
     temp_v0 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0 + 8;
+    temp_a0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w1 = 0x100000;
     temp_v0->words.w0 = 0xE3000A01;
     temp_v0_2 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_2 + 8;
+    temp_a0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xE200001C;
     temp_v0_2->words.w1 = 0xC184240;
     temp_v0_3 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_3 + 8;
+    temp_a0->polyOpa.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFC277E60;
     temp_v0_3->words.w1 = 0x150CF37F;
     temp_v0_4 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_4 + 8;
+    temp_a0->polyOpa.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xFA000050;
     temp_v0_4->words.w1 = (D_8082B880 << 0x18) | ((D_8082B884 & 0xFF) << 0x10) | ((D_8082B888 & 0xFF) << 8) | (D_8082B88C & 0xFF);
     temp_v0_5 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_5 + 8;
+    temp_a0->polyOpa.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xFB000000;
     temp_v0_5->words.w1 = (D_8082B8A8 << 0x18) | ((D_8082B8AC & 0xFF) << 0x10) | ((D_8082B8B0 & 0xFF) << 8) | 0xFF;
     temp_t4 = D_8082BE84 - 2;
     temp_v0_6 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_6 + 8;
+    temp_a0->polyOpa.p = &temp_v0_6[1];
     temp_v0_6->words.w1 = (u32) &D_0C000000;
     temp_v0_6->words.w0 = 0xFD700000;
     temp_v0_7 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_7 + 8;
+    temp_a0->polyOpa.p = &temp_v0_7[1];
     temp_v0_7->words.w1 = 0x7000000;
     temp_v0_7->words.w0 = 0xF5700000;
     temp_v0_8 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_8 + 8;
+    temp_a0->polyOpa.p = &temp_v0_8[1];
     temp_v0_8->words.w1 = 0;
     temp_v0_8->words.w0 = 0xE6000000;
     temp_v0_9 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_9 + 8;
+    temp_a0->polyOpa.p = &temp_v0_9[1];
     temp_v0_9->words.w1 = 0x73FF100;
     temp_v0_9->words.w0 = 0xF3000000;
     temp_v0_10 = temp_a0->polyOpa.p;
     temp_a1 = temp_t4 & 0x7F;
-    temp_a0->polyOpa.p = temp_v0_10 + 8;
+    temp_a0->polyOpa.p = &temp_v0_10[1];
     temp_v0_10->words.w1 = 0;
     temp_v0_10->words.w0 = 0xE7000000;
     temp_v0_11 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_11 + 8;
+    temp_a0->polyOpa.p = &temp_v0_11[1];
     temp_v0_11->words.w1 = 0;
     temp_v0_11->words.w0 = 0xF5681000;
     temp_v0_12 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_12 + 8;
+    temp_a0->polyOpa.p = &temp_v0_12[1];
     temp_v0_12->words.w1 = 0xFC07C;
     temp_v0_12->words.w0 = 0xF2000000;
     temp_v0_13 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_13 + 8;
+    temp_a0->polyOpa.p = &temp_v0_13[1];
     temp_v0_13->words.w1 = (u32) &D_0C001800;
     temp_v0_13->words.w0 = 0xFD700000;
     temp_v0_14 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_14 + 8;
+    temp_a0->polyOpa.p = &temp_v0_14[1];
     temp_v0_14->words.w0 = 0xF5700100;
     temp_v0_14->words.w1 = 0x7014000;
     temp_v0_15 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_15 + 8;
+    temp_a0->polyOpa.p = &temp_v0_15[1];
     temp_v0_15->words.w1 = 0;
     temp_v0_15->words.w0 = 0xE6000000;
     temp_v0_16 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_16 + 8;
+    temp_a0->polyOpa.p = &temp_v0_16[1];
     temp_v0_16->words.w1 = 0x73FF100;
     temp_v0_16->words.w0 = 0xF3000000;
     temp_v0_17 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_17 + 8;
+    temp_a0->polyOpa.p = &temp_v0_17[1];
     temp_v0_17->words.w1 = 0;
     temp_v0_17->words.w0 = 0xE7000000;
     temp_v0_18 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_18 + 8;
+    temp_a0->polyOpa.p = &temp_v0_18[1];
     temp_v0_18->words.w1 = 0x1014000;
     temp_v0_18->words.w0 = 0xF5681100;
     temp_v0_19 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_19 + 8;
+    temp_a0->polyOpa.p = &temp_v0_19[1];
     temp_v0_19->words.w1 = 0x10FC07C;
     temp_v0_19->words.w0 = 0xF2000000;
     temp_v0_20 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_20 + 8;
+    temp_a0->polyOpa.p = &temp_v0_20[1];
     temp_v0_20->words.w1 = ((temp_a1 + 0x7C) & 0xFFF) | 0x10FC000;
     temp_v0_20->words.w0 = (temp_a1 & 0xFFF) | 0xF2000000U;
     D_8082BE84 = temp_t4;
     temp_v0_21 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_21 + 8;
+    temp_a0->polyOpa.p = &temp_v0_21[1];
     temp_v0_21->words.w0 = (((D_8082B944 + 0x20) * 4) & 0xFFF) | 0xE4200000;
     temp_v0_21->words.w1 = ((D_8082B944 * 4) & 0xFFF) | 0x100000U;
     temp_v0_22 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_22 + 8;
+    temp_a0->polyOpa.p = &temp_v0_22[1];
     temp_v0_22->words.w1 = 0;
     temp_v0_22->words.w0 = 0xE1000000;
     temp_v0_23 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_23 + 8;
+    temp_a0->polyOpa.p = &temp_v0_23[1];
     temp_v0_23->words.w1 = 0x4000400;
     temp_v0_23->words.w0 = 0xF1000000;
     temp_v0_24 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_24 + 8;
+    temp_a0->polyOpa.p = &temp_v0_24[1];
     temp_v0_24->words.w1 = (u32) &D_0C000800;
     temp_v0_24->words.w0 = 0xFD700000;
     temp_v0_25 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_25 + 8;
+    temp_a0->polyOpa.p = &temp_v0_25[1];
     temp_v0_25->words.w0 = 0xF5700000;
     temp_v0_25->words.w1 = 0x7080200;
     temp_v0_26 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_26 + 8;
+    temp_a0->polyOpa.p = &temp_v0_26[1];
     temp_v0_26->words.w1 = 0;
     temp_v0_26->words.w0 = 0xE6000000;
     temp_v0_27 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_27 + 8;
+    temp_a0->polyOpa.p = &temp_v0_27[1];
     temp_v0_27->words.w1 = 0x73FF100;
     temp_v0_27->words.w0 = 0xF3000000;
     temp_v0_28 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_28 + 8;
+    temp_a0->polyOpa.p = &temp_v0_28[1];
     temp_v0_28->words.w1 = 0;
     temp_v0_28->words.w0 = 0xE7000000;
     temp_v0_29 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_29 + 8;
+    temp_a0->polyOpa.p = &temp_v0_29[1];
     temp_v0_29->words.w1 = 0x80200;
     temp_v0_29->words.w0 = 0xF5681000;
     temp_v0_30 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_30 + 8;
+    temp_a0->polyOpa.p = &temp_v0_30[1];
     temp_v0_30->words.w1 = 0xFC07C;
     temp_v0_30->words.w0 = 0xF2000000;
     temp_v0_31 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_31 + 8;
+    temp_a0->polyOpa.p = &temp_v0_31[1];
     temp_v0_31->words.w0 = (((D_8082B944 + 0x20) * 4) & 0xFFF) | 0xE4300000;
     temp_v0_31->words.w1 = ((D_8082B944 * 4) & 0xFFF) | 0x200000;
     temp_v0_32 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_32 + 8;
+    temp_a0->polyOpa.p = &temp_v0_32[1];
     temp_v0_32->words.w1 = 0;
     temp_v0_32->words.w0 = 0xE1000000;
     temp_v0_33 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_33 + 8;
+    temp_a0->polyOpa.p = &temp_v0_33[1];
     temp_v0_33->words.w1 = 0x4000400;
     temp_v0_33->words.w0 = 0xF1000000;
     temp_v0_34 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_34 + 8;
+    temp_a0->polyOpa.p = &temp_v0_34[1];
     temp_v0_34->words.w1 = (u32) &D_0C001000;
     temp_v0_34->words.w0 = 0xFD700000;
     temp_v0_35 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_35 + 8;
+    temp_a0->polyOpa.p = &temp_v0_35[1];
     temp_v0_35->words.w0 = 0xF5700000;
     temp_v0_35->words.w1 = 0x7080200;
     temp_v0_36 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_36 + 8;
+    temp_a0->polyOpa.p = &temp_v0_36[1];
     temp_v0_36->words.w1 = 0;
     temp_v0_36->words.w0 = 0xE6000000;
     temp_v0_37 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_37 + 8;
+    temp_a0->polyOpa.p = &temp_v0_37[1];
     temp_v0_37->words.w1 = 0x73FF100;
     temp_v0_37->words.w0 = 0xF3000000;
     temp_v0_38 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_38 + 8;
+    temp_a0->polyOpa.p = &temp_v0_38[1];
     temp_v0_38->words.w1 = 0;
     temp_v0_38->words.w0 = 0xE7000000;
     temp_v0_39 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_39 + 8;
+    temp_a0->polyOpa.p = &temp_v0_39[1];
     temp_v0_39->words.w1 = 0x80200;
     temp_v0_39->words.w0 = 0xF5681000;
     temp_v0_40 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_40 + 8;
+    temp_a0->polyOpa.p = &temp_v0_40[1];
     temp_v0_40->words.w1 = 0xFC07C;
     temp_v0_40->words.w0 = 0xF2000000;
     temp_v0_41 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_41 + 8;
+    temp_a0->polyOpa.p = &temp_v0_41[1];
     temp_v0_41->words.w0 = (((D_8082B944 + 0x20) * 4) & 0xFFF) | 0xE4400000;
     temp_v0_41->words.w1 = ((D_8082B944 * 4) & 0xFFF) | 0x300000;
     temp_v0_42 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_42 + 8;
+    temp_a0->polyOpa.p = &temp_v0_42[1];
     temp_v0_42->words.w1 = 0;
     temp_v0_42->words.w0 = 0xE1000000;
     temp_v0_43 = temp_a0->polyOpa.p;
-    temp_a0->polyOpa.p = temp_v0_43 + 8;
+    temp_a0->polyOpa.p = &temp_v0_43[1];
     temp_v0_43->words.w1 = 0x4000400;
     temp_v0_43->words.w0 = 0xF1000000;
 }
@@ -9884,35 +9884,35 @@ void func_808283D8(GraphicsContext **arg0) {
     temp_v0 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDB060008;
-    temp_v0->words.w1 = arg0->unk_16B58;
+    temp_v0->words.w1 = arg0[23254];
     temp_v0_2 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_2 + 8;
     temp_s1 = arg0 + 0x16D30;
     temp_v0_2->words.w0 = 0xDB060020;
-    temp_v0_2->words.w1 = temp_s1->unk_168;
+    temp_v0_2->words.w1 = temp_s1[1].magic;
     temp_v0_3 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDB060024;
-    temp_v0_3->words.w1 = temp_s1->unk_16C;
+    temp_v0_3->words.w1 = temp_s1[1].gfxCtx;
     temp_v0_4 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_4 + 8;
     temp_v0_4->words.w0 = 0xDB060028;
-    temp_v0_4->words.w1 = temp_s1->unk_178;
+    temp_v0_4->words.w1 = temp_s1[1].viewport.leftX;
     temp_v0_5 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_5 + 8;
     temp_v0_5->words.w0 = 0xDB060030;
-    temp_v0_5->words.w1 = temp_s1->unk_170;
+    temp_v0_5->words.w1 = temp_s1[1].viewport.topY;
     temp_v0_6 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_6 + 8;
     temp_v0_6->words.w0 = 0xDB060034;
-    temp_v0_6->words.w1 = temp_s1->unk_174;
+    temp_v0_6->words.w1 = temp_s1[1].viewport.bottomY;
     temp_v0_7 = temp_t0->polyOpa.p;
     temp_t0->polyOpa.p = temp_v0_7 + 8;
     temp_v0_7->words.w0 = 0xDB06002C;
-    temp_v0_7->words.w1 = temp_s1->unk_17C;
+    temp_v0_7->words.w1 = temp_s1[1].viewport.rightX;
     if (temp_s1->unk_1EE == 0) {
         sp20 = temp_t0;
-        func_808259D4(temp_s1, temp_s1->unk_1F4, temp_s1->unk_1F8, temp_s1->unk_1FC);
+        func_808259D4(temp_s1, temp_s1[1].projection.m[2][3], temp_s1[1].projection.m[3][0], temp_s1[1].projection.m[3][1]);
         func_8012C8AC(arg0->unk_0);
         temp_v0_8 = temp_s1->unk_1EC;
         if (((s32) temp_v0_8 < 0x15) || ((s32) temp_v0_8 >= 0x1A)) {
@@ -9921,7 +9921,7 @@ void func_808283D8(GraphicsContext **arg0) {
             func_808221DC(arg0, arg0->unk_0);
             func_8012C8AC(arg0->unk_0);
             temp_v0_10 = temp_t0->polyOpa.p;
-            temp_t0->polyOpa.p = temp_v0_10 + 8;
+            temp_t0->polyOpa.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0xFC309661;
             temp_v0_10->words.w1 = 0x552EFF7F;
             func_808259D4(temp_s1, 0, 0, 0x42800000);
@@ -9943,7 +9943,7 @@ void func_808283D8(GraphicsContext **arg0) {
             func_808248D0(arg0);
             func_8012C8AC(arg0->unk_0);
             temp_v0_9 = temp_t0->polyOpa.p;
-            temp_t0->polyOpa.p = temp_v0_9 + 8;
+            temp_t0->polyOpa.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xFC309661;
             temp_v0_9->words.w1 = 0x552EFF7F;
             func_808259D4(temp_s1, 0, 0, 0x42800000);
@@ -10201,7 +10201,7 @@ void func_8082895C(GlobalContext *arg0) {
         temp_a2 = &_icon_item_static_oldSegmentRomEnd - &_icon_item_static_oldSegmentRomStart;
         sp2C = temp_a2;
         func_80178E7C(_icon_item_static_testSegmentRomStart, temp_a1, temp_a2, &gSaveContext);
-        *(gSegments + 0x20) = temp_s0->unk_168 + 0x80000000;
+        gSegments[8] = temp_s0->unk_168 + 0x80000000;
         phi_v0 = 0;
         phi_a2 = 0U;
         do {
@@ -11013,7 +11013,7 @@ block_35:
         func_8010C1B0();
         func_80143324(arg0, &arg0->skyboxCtx, (s16) arg0->skyboxId);
         temp_v0_22 = &arg0->msgCtx.font.fontBuf[34328];
-        if ((temp_v0_22->unk_1F22 != 0) && (temp_v0_22->unk_1F04 == 0xFF)) {
+        if ((temp_v0_22[7970] != 0) && (temp_v0_22->unk_1F04 == 0xFF)) {
             func_80115844(arg0, 0x12);
             func_8011552C(arg0, 0x12);
             Interface_ChangeAlpha(0x10U);

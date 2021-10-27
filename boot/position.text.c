@@ -42,20 +42,20 @@ void guPositionF(f32 (*mf)[4], f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z) 
     mf[0][1] = sp34 * sp3C * s;
     mf[0][3] = 0.0f;
     mf[0][2] = -sp40 * s;
-    mf->unk_1C = 0.0f;
+    mf[1][3] = 0.0f;
     temp_f12_2 = temp_f20 * sp40;
-    mf->unk_10 = (f32) (((temp_f12_2 * temp_f0_2) - (temp_f22 * sp3C)) * s);
-    mf->unk_14 = (f32) (((temp_f12_2 * sp3C) + (temp_f22 * temp_f0_2)) * s);
-    mf->unk_18 = (f32) (temp_f20 * sp34 * s);
-    mf->unk_2C = 0.0f;
+    mf[1][0] = ((temp_f12_2 * temp_f0_2) - (temp_f22 * sp3C)) * s;
+    mf[1][1] = ((temp_f12_2 * sp3C) + (temp_f22 * temp_f0_2)) * s;
+    mf[1][2] = temp_f20 * sp34 * s;
+    mf[2][3] = 0.0f;
     temp_f12_3 = temp_f22 * sp40;
-    mf->unk_20 = (f32) (((temp_f12_3 * temp_f0_2) + (temp_f20 * sp3C)) * s);
-    mf->unk_24 = (f32) (((temp_f12_3 * sp3C) - (temp_f20 * temp_f0_2)) * s);
-    mf->unk_28 = (f32) (temp_f22 * sp34 * s);
-    mf->unk_30 = x;
-    mf->unk_34 = y;
-    mf->unk_3C = 1.0f;
-    mf->unk_38 = z;
+    mf[2][0] = ((temp_f12_3 * temp_f0_2) + (temp_f20 * sp3C)) * s;
+    mf[2][1] = ((temp_f12_3 * sp3C) - (temp_f20 * temp_f0_2)) * s;
+    mf[2][2] = temp_f22 * sp34 * s;
+    mf[3][0] = x;
+    mf[3][1] = y;
+    mf[3][3] = 1.0f;
+    mf[3][2] = z;
 }
 
 void guPosition(Mtx *m, f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z) {

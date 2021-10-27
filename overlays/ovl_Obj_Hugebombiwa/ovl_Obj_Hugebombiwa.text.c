@@ -646,12 +646,12 @@ void func_80A54E10(Actor *arg0) {
         phi_s0 += 0x28;
         phi_s2 = (s16) (phi_s2 + 0x4000);
         phi_s3 = temp_s1;
-        phi_s4 += 0x28;
+        phi_s4 = (Vec3f *) &phi_s4[3].y;
     } while (temp_s1 != 0x14);
     arg0->unk_4B0 = 0;
     arg0->unk_4B2 = 0x64;
     SysMatrix_StatePop();
-    arg0->unk_4B4 = func_80A55064;
+    arg0[3].shape.feetPos[1].z = func_80A55064;
 }
 
 void func_80A55064(Actor *arg0, GlobalContext *arg1) {
@@ -759,12 +759,12 @@ void func_80A55310(Actor *arg0) {
         phi_s0 += 0x28;
         phi_s2 = (s16) (phi_s2 + 0x4000);
         phi_s3 = temp_s1;
-        phi_s4 += 0x28;
+        phi_s4 = (Vec3f *) &phi_s4[3].y;
     } while (temp_s1 != 0x14);
     arg0->unk_4B0 = 0;
     arg0->unk_4B2 = 0x64;
     SysMatrix_StatePop();
-    arg0->unk_4B4 = func_80A55564;
+    arg0[3].shape.feetPos[1].z = func_80A55564;
 }
 
 void func_80A55564(Actor *arg0, GlobalContext *arg1) {
@@ -863,28 +863,28 @@ void ObjHugebombiwa_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if (temp_f0 <= 4300.0f) {
             func_8012C28C(temp_a2);
             temp_v0_2 = temp_a2->polyOpa.p;
-            temp_a2->polyOpa.p = temp_v0_2 + 8;
+            temp_a2->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060020;
             temp_v0_2->words.w1 = (u32) D_801AEFA0;
             temp_v0_3 = temp_a2->polyOpa.p;
-            temp_a2->polyOpa.p = temp_v0_3 + 8;
+            temp_a2->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDA380003;
             temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_4 = temp_a2->polyOpa.p;
-            temp_a2->polyOpa.p = temp_v0_4 + 8;
+            temp_a2->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = -1;
             temp_v0_4->words.w0 = 0xFA0000FF;
             temp_v0_5 = temp_a2->polyOpa.p;
-            temp_a2->polyOpa.p = temp_v0_5 + 8;
+            temp_a2->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDE000000;
             temp_v0_5->words.w1 = (u32) &D_06002F60;
             func_8012C2DC(globalCtx->state.gfxCtx);
             temp_v0_6 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_6 + 8;
+            temp_a2->polyXlu.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_7 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_7 + 8;
+            temp_a2->polyXlu.p = &temp_v0_7[1];
             temp_v0_7->words.w0 = 0xDE000000;
             temp_v0_7->words.w1 = (u32) &D_06003110;
             return;
@@ -893,19 +893,19 @@ void ObjHugebombiwa_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp38 = (4500.0f - temp_f0) * 1.275f;
             func_8012C2DC(temp_a2);
             temp_v0_8 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_8 + 8;
+            temp_a2->polyXlu.p = &temp_v0_8[1];
             temp_v0_8->words.w0 = 0xDB060020;
             temp_v0_8->words.w1 = (u32) D_801AEF88;
             temp_v0_9 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_9 + 8;
+            temp_a2->polyXlu.p = &temp_v0_9[1];
             temp_v0_9->words.w0 = 0xDA380003;
             temp_v0_9->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_10 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_10 + 8;
+            temp_a2->polyXlu.p = &temp_v0_10[1];
             temp_v0_10->words.w0 = 0xFA0000FF;
             temp_v0_10->words.w1 = ((s32) sp38 & 0xFF) | ~0xFF;
             temp_v0_11 = temp_a2->polyXlu.p;
-            temp_a2->polyXlu.p = temp_v0_11 + 8;
+            temp_a2->polyXlu.p = &temp_v0_11[1];
             temp_v0_11->words.w1 = (u32) &D_06002F60;
             temp_v0_11->words.w0 = 0xDE000000;
             return;
@@ -914,10 +914,10 @@ void ObjHugebombiwa_Draw(Actor *thisx, GlobalContext *globalCtx) {
         return;
     }
     temp_s1 = temp_a2->polyOpa.p;
-    temp_s1->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s1->words.w1 = (u32) &sSetupDL[150];
     temp_s1->words.w0 = 0xDE000000;
     phi_s2 = this;
-    phi_s1 = temp_s1 + 8;
+    phi_s1 = &temp_s1[1];
     phi_s3 = 0;
     do {
         temp_s0 = phi_s2 + 0x190;
@@ -945,8 +945,8 @@ void func_80A55B34(Actor *this, GlobalContext *globalCtx) {
     GraphicsContext *sp5C;
     Gfx *temp_s1;
     GraphicsContext *temp_t8;
+    f32 temp_v0;
     s32 temp_s3;
-    s32 temp_v0;
     void *temp_s0;
     void *temp_s1_2;
     Actor *phi_s2;
@@ -954,8 +954,8 @@ void func_80A55B34(Actor *this, GlobalContext *globalCtx) {
     s32 phi_s3;
     Gfx *phi_s1_2;
 
-    temp_v0 = this->unk_4B4;
-    if ((func_80A54C04 == temp_v0) || (func_80A54CEC == temp_v0)) {
+    temp_v0 = this[3].shape.feetPos[1].z;
+    if ((func_80A54C04 == (bitwise s32) temp_v0) || (func_80A54CEC == (bitwise s32) temp_v0)) {
         func_800BDFC0(globalCtx, &D_06001820);
         return;
     }
@@ -963,9 +963,9 @@ void func_80A55B34(Actor *this, GlobalContext *globalCtx) {
     sp5C = temp_t8;
     temp_s1 = temp_t8->polyOpa.p;
     temp_s1->words.w0 = 0xDE000000;
-    temp_s1->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_s1->words.w1 = (u32) &sSetupDL[150];
     phi_s2 = this;
-    phi_s1 = temp_s1 + 8;
+    phi_s1 = &temp_s1[1];
     phi_s3 = 0;
     do {
         temp_s0 = phi_s2 + 0x190;

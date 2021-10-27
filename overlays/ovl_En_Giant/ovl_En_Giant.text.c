@@ -150,7 +150,7 @@ s32 func_80B01A74(EnGiant *arg0) {
     case 4:
     case 8:
     case 12:
-        if ((*(gBitFlags + 4) & gSaveContext.inventory.questItems) == 0) {
+        if ((gBitFlags[1] & gSaveContext.inventory.questItems) == 0) {
             return 1;
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
@@ -159,7 +159,7 @@ s32 func_80B01A74(EnGiant *arg0) {
     case 7:
     case 11:
     case 15:
-        if ((*(gBitFlags + 8) & gSaveContext.inventory.questItems) == 0) {
+        if ((gBitFlags[2] & gSaveContext.inventory.questItems) == 0) {
             return 1;
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
@@ -168,7 +168,7 @@ s32 func_80B01A74(EnGiant *arg0) {
     case 5:
     case 9:
     case 13:
-        if ((*(gBitFlags + 0xC) & gSaveContext.inventory.questItems) == 0) {
+        if ((gBitFlags[3] & gSaveContext.inventory.questItems) == 0) {
             return 1;
         }
         /* Duplicate return node #9. Try simplifying control flow for better match */
@@ -438,7 +438,7 @@ void func_80B02234(Actor *arg0) {
         if ((arg0->unk_248 == 8) && ((sp24 = temp_a0, (func_801378B8(temp_a0, 40.0f) != 0)) || (func_801378B8(temp_a0, 100.0f) != 0))) {
             Audio_PlayActorSound2(arg0, 0x294EU);
         }
-        if ((arg0->unk_248 == 2) && (func_801378B8((SkelAnime *) (arg0 + 0x144), 40.0f) != 0)) {
+        if ((arg0->unk_248 == 2) && (func_801378B8((SkelAnime *) &arg0[1], 40.0f) != 0)) {
             Audio_PlayActorSound2(arg0, 0x294DU);
         }
         temp_a1 = arg0->unk_250;
@@ -571,12 +571,12 @@ void EnGiant_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if ((s32) temp_v0 >= 0xFF) {
             func_8012C28C(temp_a0);
             temp_v0_2 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_2 + 8;
+            temp_s0->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDB060020;
             sp3C = temp_v0_2;
             sp3C->words.w1 = Lib_SegmentedToVirtual(*(&D_80B0298C + (this->unk_294 * 4)));
             temp_v0_3 = temp_s0->polyOpa.p;
-            temp_s0->polyOpa.p = temp_v0_3 + 8;
+            temp_s0->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w1 = 0xFF;
             temp_v0_3->words.w0 = 0xFB000000;
             Scene_SetRenderModeXlu(globalCtx, 0, 1U);
@@ -586,32 +586,32 @@ void EnGiant_Draw(Actor *thisx, GlobalContext *globalCtx) {
         if ((s32) temp_v0 > 0) {
             if ((s32) temp_v0 >= 0x81) {
                 temp_a1 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_a1 + 8;
+                temp_s0->polyXlu.p = &temp_a1[1];
                 func_8012C2B4(temp_a1);
                 Scene_SetRenderModeXlu(globalCtx, 2, 2U);
             } else {
                 temp_a1_2 = temp_s0->polyXlu.p;
-                temp_s0->polyXlu.p = temp_a1_2 + 8;
+                temp_s0->polyXlu.p = &temp_a1_2[1];
                 func_8012C304(temp_a1_2);
                 Scene_SetRenderModeXlu(globalCtx, 1, 2U);
             }
             temp_a1_3 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_a1_3 + 8;
+            temp_s0->polyXlu.p = &temp_a1_3[1];
             temp_a1_3->words.w0 = 0xDB060020;
             sp34 = temp_a1_3;
             sp34->words.w1 = Lib_SegmentedToVirtual(*(&D_80B0298C + (this->unk_294 * 4)));
             temp_a1_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_a1_4 + 8;
+            temp_s0->polyXlu.p = &temp_a1_4[1];
             temp_a1_4->words.w0 = 0xFB000000;
             temp_a1_4->words.w1 = this->unk_24E & 0xFF;
             temp_s0->polyXlu.p = SkelAnime_DrawSV2(globalCtx, this->unk_144.skeleton, this->unk_144.limbDrawTbl, (s32) this->unk_144.dListCount, NULL, func_80B026C4, (Actor *) this, temp_s0->polyXlu.p);
             SysMatrix_InsertMatrix(&this->unk_254, 0);
             temp_s1 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_s1 + 8;
+            temp_s0->polyXlu.p = &temp_s1[1];
             temp_s1->words.w0 = 0xDA380003;
             temp_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_a1_5 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_a1_5 + 8;
+            temp_s0->polyXlu.p = &temp_a1_5[1];
             temp_a1_5->words.w0 = 0xDE000000;
             temp_a1_5->words.w1 = (u32) &D_06007610;
         }

@@ -73,22 +73,22 @@ void EffectSsIcePiece_Draw(GlobalContext *globalCtx, u32 index, EffectSs *this) 
     Matrix_RotateY(this->regs[1], 1U);
     SysMatrix_InsertXRotation_s(this->regs[2], 1);
     temp_v0_2 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_2 + 8;
+    temp_s1->polyXlu.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDA380003;
     sp40 = temp_v0_2;
     sp40->words.w1 = Matrix_NewMtx(temp_s1);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0_3 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_3 + 8;
+    temp_s1->polyXlu.p = &temp_v0_3[1];
     temp_v0_3->words.w0 = 0xFB000000;
     temp_v0_3->words.w1 = ((s32) sp4C & 0xFF) | 0x326400;
     func_800BCC68((Vec3f *) this, globalCtx);
     temp_v0_4 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_4 + 8;
+    temp_s1->polyXlu.p = &temp_v0_4[1];
     temp_v0_4->words.w0 = 0xDB060020;
     temp_v0_4->words.w1 = Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, sp50 & 0xFF, 0x20, 0x10, 1, 0U, (sp50 * 2) & 0xFF, 0x40, 0x20);
     temp_v0_5 = temp_s1->polyXlu.p;
-    temp_s1->polyXlu.p = temp_v0_5 + 8;
+    temp_s1->polyXlu.p = &temp_v0_5[1];
     temp_v0_5->words.w0 = 0xDE000000;
     temp_v0_5->words.w1 = (u32) &D_04050550;
 }

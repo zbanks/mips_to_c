@@ -29,7 +29,7 @@ f32 __sinf(f32 __x) {
         temp_f2_2 = (f64) __x;
         if (temp_t6 >= 0xE6) {
             temp_f12_2 = temp_f2_2 * temp_f2_2;
-            return (f32) ((temp_f2_2 * temp_f12_2 * (P->unk_8 + (((((P->unk_20 * temp_f12_2) + P->unk_18) * temp_f12_2) + P->unk_10) * temp_f12_2))) + temp_f2_2);
+            return (f32) ((temp_f2_2 * temp_f12_2 * (P[1].d + (((((P[4].d * temp_f12_2) + P[3].d) * temp_f12_2) + P[2].d) * temp_f12_2))) + temp_f2_2);
         }
         return __x;
     }
@@ -44,7 +44,7 @@ f32 __sinf(f32 __x) {
         temp_f0_2 = (f64) phi_v0;
         temp_f2 = (temp_f2_3 - (temp_f0_2 * pihi.d)) - (temp_f0_2 * pilo.d);
         temp_f12 = temp_f2 * temp_f2;
-        temp_f14 = P->unk_8 + (((((P->unk_20 * temp_f12) + P->unk_18) * temp_f12) + P->unk_10) * temp_f12);
+        temp_f14 = P[1].d + (((((P[4].d * temp_f12) + P[3].d) * temp_f12) + P[2].d) * temp_f12);
         if ((phi_v0 & 1) == 0) {
             return (f32) ((temp_f2 * temp_f12 * temp_f14) + temp_f2);
         }

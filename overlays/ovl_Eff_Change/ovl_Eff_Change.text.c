@@ -164,13 +164,13 @@ void func_80A4C7B0(Actor *this, GlobalContext *globalCtx) {
         Matrix_RotateY((s16) (func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 1U);
         temp_a0 = globalCtx->state.gfxCtx;
         temp_v1 = temp_a0->polyXlu.p;
-        temp_a0->polyXlu.p = temp_v1 + 8;
+        temp_a0->polyXlu.p = &temp_v1[1];
         temp_v1->words.w0 = 0xFA000080;
         temp_v1->words.w1 = this->unk_1C1 | (this->unk_1BE << 0x18) | (this->unk_1BF << 0x10) | (this->unk_1C0 << 8);
         temp_v1_2 = temp_a0->polyXlu.p;
-        temp_a0->polyXlu.p = temp_v1_2 + 8;
+        temp_a0->polyXlu.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xFB000000;
         temp_v1_2->words.w1 = (this->unk_1C4 << 8) | (this->unk_1C2 << 0x18) | (this->unk_1C3 << 0x10) | 0xFF;
-        func_8018450C(globalCtx, this + 0x144, temp_a2, 0, 0, this);
+        func_8018450C(globalCtx, &this[1], temp_a2, 0, 0, this);
     }
 }

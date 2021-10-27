@@ -460,15 +460,15 @@ void func_80B16FC0(Actor *arg0, GlobalContext *arg1) {
     s16 phi_s1;
     s32 phi_s2;
 
-    sp7C = (Rand_ZeroFloat(10.0f) * arg0->unk_294) + arg0->world.pos.y;
+    sp7C = (Rand_ZeroFloat(10.0f) * arg0[2].home.pos.y) + arg0->world.pos.y;
     temp_s3 = &sp78;
     phi_s1 = 0;
     phi_s2 = 0;
     do {
-        temp_f20 = (Rand_ZeroFloat(10.0f) + 20.0f) * arg0->unk_294;
+        temp_f20 = (Rand_ZeroFloat(10.0f) + 20.0f) * arg0[2].home.pos.y;
         sp78 = (Math_SinS(phi_s1) * temp_f20) + arg0->world.pos.x;
         sp80 = (Math_CosS(phi_s1) * temp_f20) + arg0->world.pos.z;
-        func_800B0DE0(arg1, (Vec3f *) temp_s3, &D_80B19A88, &D_801D15B0, &D_80B19A80, &D_80B19A84, (s16) (s32) (arg0->unk_294 * 400.0f), (s16) 0xA);
+        func_800B0DE0(arg1, (Vec3f *) temp_s3, &D_80B19A88, &D_801D15B0, &D_80B19A80, &D_80B19A84, (s16) (s32) (arg0[2].home.pos.y * 400.0f), (s16) 0xA);
         temp_s2 = phi_s2 + 1;
         phi_s1 = (s16) (phi_s1 + 0x1000);
         phi_s2 = temp_s2;
@@ -634,7 +634,7 @@ void func_80B177EC(Actor *arg0, GlobalContext *arg1) {
 
     SkelAnime_ChangeAnimDefaultStop(arg0 + 0x144, &D_0600554C);
     Audio_PlayActorSound2(arg0, 0x396BU);
-    temp_f0 = arg0->unk_294;
+    temp_f0 = arg0[2].home.pos.y;
     arg0->draw = EnSnowman_Draw;
     arg0->unk_36C = (s16) (s32) (temp_f0 * 40.0f);
     arg0->unk_36E = (s16) (s32) (temp_f0 * 25.0f);
@@ -643,7 +643,7 @@ void func_80B177EC(Actor *arg0, GlobalContext *arg1) {
     arg0->scale.y = arg0->scale.x * 0.4f;
     func_80B16FC0(arg0, arg1);
     arg0->unk_33D = (u8) (arg0->unk_33D & 0xFFFE);
-    arg0->unk_280 = func_80B178B8;
+    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) func_80B178B8;
 }
 
 void func_80B178B8(EnSnowman *this, GlobalContext *globalCtx) {
@@ -813,7 +813,7 @@ void func_80B17F4C(Actor *arg0, GlobalContext *arg1) {
     SkelAnime_ChangeAnim(arg0 + 0x144, &D_0600554C, -1.0f, (f32) SkelAnime_GetFrameCount((AnimationHeaderCommon *) &D_0600554C), 0.0f, (u8) 2, -3.0f);
     func_80B16FC0(arg0, arg1);
     Audio_PlayActorSound2(arg0, 0x396CU);
-    arg0->unk_280 = func_80B17FE0;
+    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) func_80B17FE0;
 }
 
 void func_80B17FE0(EnSnowman *this, GlobalContext *globalCtx) {
@@ -844,7 +844,7 @@ void func_80B180A4(Actor *arg0) {
     arg0->unk_33D = (u8) (arg0->unk_33D & 0xFFFE);
     arg0->unk_28C = 0x32;
     arg0->flags = temp_t3;
-    arg0->unk_280 = func_80B18124;
+    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) func_80B18124;
     arg0->speedXZ = 0.0f;
     arg0->scale.y = arg0->scale.x;
 }
@@ -916,11 +916,11 @@ void func_80B18124(EnSnowman *this, GlobalContext *globalCtx) {
 void func_80B18380(Actor *arg0) {
     void (*temp_v1)(EnSnowman *, GlobalContext *);
 
-    temp_v1 = arg0->unk_280;
+    temp_v1 = arg0[1].draw;
     if (func_80B183A4 != temp_v1) {
-        arg0->unk_284 = temp_v1;
+        arg0[1].overlayEntry = temp_v1;
     }
-    arg0->unk_280 = func_80B183A4;
+    arg0[1].draw = func_80B183A4;
 }
 
 void func_80B183A4(EnSnowman *this, GlobalContext *globalCtx) {
@@ -937,13 +937,13 @@ void func_80B183C4(Actor *arg0) {
     arg0->draw = EnSnowman_Draw;
     arg0->scale.y = arg0->scale.x;
     arg0->speedXZ = 10.0f;
-    func_800BE504(arg0, arg0 + 0x32C);
+    func_800BE504(arg0, (ColliderCylinder *) &arg0[2].colChkInfo.displacement);
     if (arg0->params == 1) {
         Audio_PlayActorSound2(arg0, 0x39FAU);
     } else {
         Audio_PlayActorSound2(arg0, 0x39F9U);
     }
-    arg0->unk_280 = func_80B1848C;
+    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) func_80B1848C;
 }
 
 void func_80B1848C(EnSnowman *this, GlobalContext *globalCtx) {
@@ -1062,15 +1062,15 @@ void func_80B18908(Actor *arg0) {
     }
     temp_a0 = arg0->parent;
     arg0->flags &= -0x12;
-    if ((temp_a0 != 0) && (func_80B189C4 == temp_a0->unk_280)) {
+    if ((temp_a0 != 0) && (func_80B189C4 == temp_a0[1].draw)) {
         temp_v1 = arg0->child;
-        if ((temp_v1 != 0) && (func_80B189C4 == temp_v1->unk_280)) {
+        if ((temp_v1 != 0) && (func_80B189C4 == temp_v1[1].draw)) {
             func_80B189D4(temp_a0);
             func_80B189D4(arg0->child);
             Actor_MarkForDeath(arg0);
         }
     }
-    arg0->unk_280 = func_80B189C4;
+    arg0[1].draw = (void (*)(Actor *, GlobalContext *)) func_80B189C4;
 }
 
 void func_80B189C4(EnSnowman *this, GlobalContext *globalCtx) {
@@ -1079,8 +1079,8 @@ void func_80B189C4(EnSnowman *this, GlobalContext *globalCtx) {
 
 void func_80B189D4(Actor *arg0) {
     arg0->unk_33D = (u8) (arg0->unk_33D & ~3);
-    arg0->unk_33E = (u8) (arg0->unk_33E & ~3);
-    arg0->unk_280 = func_80B18A04;
+    arg0[2].colChkInfo.mass &= -4;
+    arg0[1].draw = func_80B18A04;
 }
 
 void func_80B18A04(EnSnowman *this, GlobalContext *globalCtx) {
@@ -1095,7 +1095,7 @@ void func_80B18A28(Actor *arg0, PosRot *arg1, s32 arg2) {
     arg0->shape.rot.y = (s16) arg2;
     arg0->unk_289 = 0;
     arg0->colChkInfo.health = 2;
-    arg0->unk_294 = 1.0f;
+    arg0[2].home.pos.y = 1.0f;
     arg0->world.rot.y = arg0->shape.rot.y;
     sp24 = (s32) (s16) arg2;
     arg0->world.pos.x = (Math_SinS((s16) arg2) * 40.0f) + arg1->pos.x;
@@ -1104,7 +1104,7 @@ void func_80B18A28(Actor *arg0, PosRot *arg1, s32 arg2) {
     arg0->unk_290 = 0x258;
     arg0->params = 2;
     arg0->flags &= -0x401;
-    arg0->unk_33E = (u8) (arg0->unk_33E | 1);
+    arg0[2].colChkInfo.mass |= 1;
     arg0->unk_33D = (u8) (arg0->unk_33D & 0xFFFE);
     func_80B173D0((EnSnowman *) arg0);
 }
@@ -1120,7 +1120,7 @@ void func_80B18B30(EnSnowman *arg0, Actor *arg1) {
     arg0 = arg0;
     arg1 = arg1;
     Audio_PlayActorSound2(temp_a0, 0x396EU);
-    arg1->unk_298 = (f32) (arg1->unk_298 + 0.005f);
+    arg1[2].home.pos.z += 0.005f;
     arg0->unk_289 = 3;
     temp_t1 = arg0->unk_32C.base.ocFlags1 & 0xFFFD;
     temp_t3 = arg0->unk_32C.base.acFlags & 0xFFFD;
@@ -1205,7 +1205,7 @@ void func_80B18C7C(EnSnowman *this, GlobalContext *globalCtx) {
             func_80B18B30((EnSnowman *) sp30, (Actor *) this);
         }
     }
-    if ((this->unk_290 == 0) && (sp34->unk_298 > 0.0f) && (sp30->unk_298 > 0.0f) && (this->unk_298 < 0.011f) && (this->unk_289 != 3)) {
+    if ((this->unk_290 == 0) && (sp34[2].home.pos.z > 0.0f) && (sp30[2].home.pos.z > 0.0f) && (this->unk_298 < 0.011f) && (this->unk_289 != 3)) {
         this->unk_289 = 2;
         this->unk_298 = 0.0f;
     }
@@ -1232,9 +1232,9 @@ void func_80B18C7C(EnSnowman *this, GlobalContext *globalCtx) {
 }
 
 void func_80B18F50(Actor *arg0, GlobalContext *arg1) {
-    s32 temp_v1;
     u8 temp_v0;
     u8 temp_v0_2;
+    void (*temp_v1)(Actor *, GlobalContext *);
 
     temp_v0 = arg0->unk_33D;
     if (((temp_v0 & 2) != 0) && ((arg0->unk_33D = (u8) (temp_v0 & 0xFFFD), func_800BE258(arg0, arg0 + 0x344), temp_v0_2 = arg0->colChkInfo.damageEffect, (temp_v0_2 != 0xF)) || (arg0->params != 1))) {
@@ -1243,7 +1243,7 @@ void func_80B18F50(Actor *arg0, GlobalContext *arg1) {
             Actor_ApplyDamage(arg0);
             func_80B180A4(arg0);
         } else {
-            temp_v1 = arg0->unk_280;
+            temp_v1 = arg0[1].draw;
             if ((func_80B1746C == temp_v1) || (func_80B18C7C == temp_v1)) {
                 func_80B177EC((EnSnowman *) arg0, arg1);
             } else if (temp_v0_2 == 1) {
@@ -1252,7 +1252,7 @@ void func_80B18F50(Actor *arg0, GlobalContext *arg1) {
                 func_80B18380(arg0);
             } else if (temp_v0_2 == 5) {
                 func_800BCB70(arg0, 0, 0xFF, 0, (s16) 0x28);
-                arg0->unk_28B = 0x20;
+                arg0[2].room = 0x20;
                 arg0->unk_2A4 = 0.55f;
                 arg0->unk_2A0 = 2.0f;
                 Audio_PlayActorSound2(arg0, 0x389EU);
@@ -1272,7 +1272,7 @@ void func_80B18F50(Actor *arg0, GlobalContext *arg1) {
         }
         if (arg0->colChkInfo.damageEffect == 4) {
             arg0->unk_2A4 = 0.55f;
-            arg0->unk_28B = 0x14;
+            arg0[2].room = 0x14;
             arg0->unk_2A0 = 4.0f;
             Actor_Spawn(&arg1->actorCtx, arg1, 0xA2, (f32) arg0->unk_352, (f32) arg0->unk_354, (f32) arg0->unk_356, (s16) 0, (s16) 0, (s16) 0, (s16) 4);
         }
@@ -1354,11 +1354,11 @@ void EnSnowman_Update(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 void func_80B19474(Actor *this, GlobalContext *globalCtx) {
-    ColliderCylinder *temp_s0;
     CollisionCheckContext *temp_s1;
     Gfx **temp_s1_2;
     PosRot *temp_s3;
     PosRot *temp_s3_2;
+    Vec3f *temp_s0;
     s16 temp_v0;
     u16 temp_v0_2;
     s32 phi_s0;
@@ -1369,10 +1369,10 @@ void func_80B19474(Actor *this, GlobalContext *globalCtx) {
     if ((s32) temp_v0 > 0) {
         this->unk_28C = (s16) (temp_v0 - 1);
     } else {
-        this->unk_33E = (u8) (this->unk_33E | 1);
+        this[2].colChkInfo.mass |= 1;
     }
     temp_v0_2 = this->bgCheckFlags;
-    if (((temp_v0_2 & 8) != 0) || ((temp_v0_2 & 1) != 0) || ((temp_v0_2 & 0x10) != 0) || ((this->unk_33C & 2) != 0) || ((this->unk_33D & 2) != 0) || ((this->unk_33E & 2) != 0)) {
+    if (((temp_v0_2 & 8) != 0) || ((temp_v0_2 & 1) != 0) || ((temp_v0_2 & 0x10) != 0) || ((this->unk_33C & 2) != 0) || ((this->unk_33D & 2) != 0) || ((this[2].colChkInfo.mass & 2) != 0)) {
         temp_s3 = &this->world;
         phi_s3 = (Vec3f *) temp_s3;
         if (this->params == 3) {
@@ -1389,7 +1389,7 @@ void func_80B19474(Actor *this, GlobalContext *globalCtx) {
             func_800B0DE0(globalCtx, (Vec3f *) temp_s3_2, &D_801D15B0, &D_801D15B0, &D_80B19A80, &D_80B19A84, (s16) 0x1F4, (s16) 0x1E);
             Audio_PlaySoundAtPosition(globalCtx, (Vec3f *) temp_s3_2, 0x14, 0x28FDU);
         } else {
-            Math_Vec3f_Copy(this + 0x2B4, (Vec3f *) temp_s3);
+            Math_Vec3f_Copy((Vec3f *) &this[2].world.pos.z, (Vec3f *) temp_s3);
             func_80B17144((EnSnowman *) this, globalCtx);
             Audio_PlaySoundAtPosition(globalCtx, (Vec3f *) temp_s3, 0x14, 0x28F5U);
         }
@@ -1400,8 +1400,8 @@ void func_80B19474(Actor *this, GlobalContext *globalCtx) {
     this->shape.rot.x += 0xF00;
     Actor_SetVelocityAndMoveYRotationAndGravity(this);
     Actor_UpdateBgCheckInfo(globalCtx, this, 30.0f, (f32) this->unk_36C * 0.6f, (f32) (this->unk_36E - this->unk_370), 0x1FU);
-    temp_s0 = this + 0x32C;
-    Collider_UpdateCylinder(this, temp_s0);
+    temp_s0 = &this[2].colChkInfo.displacement;
+    Collider_UpdateCylinder(this, (ColliderCylinder *) temp_s0);
     temp_s1 = &globalCtx->colChkCtx;
     CollisionCheck_SetAT(globalCtx, temp_s1, (Collider *) temp_s0);
     CollisionCheck_SetAC(globalCtx, temp_s1, (Collider *) temp_s0);
@@ -1427,9 +1427,9 @@ void func_80B19718(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
             phi_s1 = arg4 + 0x2F0;
             do {
                 SysMatrix_MultiplyVector3fByState(phi_s0, phi_s1);
-                temp_s0 = phi_s0 + 0xC;
+                temp_s0 = &phi_s0[1];
                 phi_s0 = temp_s0;
-                phi_s1 += 0xC;
+                phi_s1 = &phi_s1[1];
             } while (temp_s0 != &D_80B19B18);
         } else {
             SysMatrix_GetStateTranslation(arg4 + (temp_v0 * 0xC) + 0x2C0);
@@ -1445,9 +1445,9 @@ void func_80B19718(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
             Matrix_Scale(0.3f, 0.3f, 0.3f, 1);
         }
         temp_s0_2->unk_0 = 0xDA380003;
-        temp_s0_2->unk_4 = Matrix_NewMtx(*arg0);
-        temp_s0_2->unk_8 = 0xDE000000;
-        temp_s0_2->unk_C = (s32) *(&D_80B19A94 + (arg4->params * 4));
+        temp_s0_2[1] = Matrix_NewMtx(*arg0);
+        temp_s0_2[2] = (Mtx *)0xDE000000;
+        temp_s0_2[3] = *(&D_80B19A94 + (arg4->params * 4));
         temp_s1->polyOpa.p = temp_s0_2 + 0x10;
         SysMatrix_GetStateTranslation(arg4 + 0x2B4);
     }
@@ -1462,7 +1462,7 @@ void EnSnowman_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 void func_80B19948(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, thisx->unk_18C, thisx->unk_1A8, (s32) thisx->unk_18A, NULL, NULL, thisx);
+    SkelAnime_DrawSV(globalCtx, thisx->unk_18C, (bitwise Vec3s *) thisx[1].velocity.x, (s32) thisx->unk_18A, NULL, NULL, thisx);
 }
 
 void func_80B19998(Actor *thisx, GlobalContext *globalCtx) {

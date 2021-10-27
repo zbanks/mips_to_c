@@ -309,8 +309,8 @@ void EnRaf_Init(Actor *thisx, GlobalContext *globalCtx) {
         Math_Vec3f_Copy(phi_s2, (Vec3f *) &sp60);
         Math_Vec3f_Copy(phi_s1, (Vec3f *) &sp60);
         temp_s0 = phi_s0 + 0xC;
-        phi_s2 += 0xC;
-        phi_s1 += 0xC;
+        phi_s2 = &phi_s2[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x90);
     this->actor.colChkInfo.damageTable = &D_80A1939C;
@@ -330,14 +330,14 @@ void EnRaf_Init(Actor *thisx, GlobalContext *globalCtx) {
     temp_a1 = this->unk_3C0;
     if ((((s32) temp_a1 >= 0) || (this->unk_3BE == 1) || ((gSaveContext.weekEventReg[12] & 1) != 0)) && ((phi_s0_2 = 0x18, (Flags_GetSwitch(globalCtx, (s32) temp_a1) != 0)) || (this->unk_3BE == 1))) {
         temp_v0_2 = &this->actor.home.rot.z;
-        phi_s2_2 = (Vec3f *) (temp_v0_2 + 0x234);
-        phi_s1_2 = (Vec3f *) (temp_v0_2 + 0x2C4);
+        phi_s2_2 = (Vec3f *) &temp_v0_2[282];
+        phi_s1_2 = (Vec3f *) &temp_v0_2[354];
         do {
             Math_Vec3f_Copy(phi_s2_2, &D_801D15B0);
             Math_Vec3f_Copy(phi_s1_2, &D_801D15B0);
             temp_s0_2 = phi_s0_2 + 0xC;
-            phi_s2_2 += 0xC;
-            phi_s1_2 += 0xC;
+            phi_s2_2 = &phi_s2_2[1];
+            phi_s1_2 = &phi_s1_2[1];
             phi_s0_2 = temp_s0_2;
         } while (temp_s0_2 != 0x84);
         func_80A18080(this);
@@ -398,7 +398,7 @@ void func_80A1712C(EnRaf *arg0) {
     do {
         Math_Vec3f_Copy(phi_s1, (Vec3f *) &sp3C);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x84);
     arg0->unk_3C2 = 3;
@@ -461,7 +461,7 @@ void func_80A17414(Actor *arg0) {
     arg0->unk_3C2 = 1;
     Audio_PlayActorSound2(arg0, 0x3992U);
     arg0->unk_3C6 = 1;
-    arg0->unk_230 = func_80A17464;
+    arg0[1].projectedPos.x = (bitwise f32) func_80A17464;
 }
 
 void func_80A17464(EnRaf *this, GlobalContext *globalCtx) {
@@ -624,11 +624,11 @@ void func_80A179C8(Actor *arg0, GlobalContext *arg1) {
     temp_s5 = &spA0;
     temp_s3->unk_0 = D_80A193F4.unk_0;
     temp_s1 = arg0 + 0x24;
-    temp_s3->unk_4 = (s32) D_80A193F4.unk_4;
-    temp_s3->unk_8 = (s32) D_80A193F4.unk_8;
+    temp_s3[1] = D_80A193F4.unk_4;
+    temp_s3[2] = D_80A193F4.unk_8;
     temp_s5->unk_0 = D_80A19400.unk_0;
-    temp_s5->unk_4 = (s32) D_80A19400.unk_4;
-    temp_s5->unk_8 = (s32) D_80A19400.unk_8;
+    temp_s5[1] = D_80A19400.unk_4;
+    temp_s5[2] = D_80A19400.unk_8;
     arg0->unk_3C6 = 4;
     Math_Vec3f_Copy((Vec3f *) &sp94, temp_s1);
     temp_f0 = sp98 + 10.0f;
@@ -658,12 +658,12 @@ void func_80A179C8(Actor *arg0, GlobalContext *arg1) {
             phi_s2 = temp_s2;
         } while (temp_s2 < (gGameInfo->data[2457] + 0x1E));
     }
-    phi_s1 = arg0 + 0x2DC;
+    phi_s1 = (Vec3f *) &arg0[2].targetArrowOffset;
     phi_s0 = 0x18;
     do {
         Math_Vec3f_Copy(phi_s1, &D_801D15B0);
         temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x84);
     arg0->unk_3B4 = 5;
@@ -671,7 +671,7 @@ void func_80A179C8(Actor *arg0, GlobalContext *arg1) {
         func_800BC154(arg1, sp80, arg0, 5U);
         arg0->flags |= 5;
     }
-    arg0->unk_230 = func_80A17C6C;
+    arg0[1].projectedPos.x = (bitwise f32) func_80A17C6C;
 }
 
 void func_80A17C6C(EnRaf *this, GlobalContext *globalCtx) {
@@ -781,16 +781,16 @@ void func_80A17E1C(EnRaf *this, GlobalContext *globalCtx) {
         }
     }
     temp_v0_7 = &this->actor.home.rot.z;
-    phi_s1 = (Vec3f *) (temp_v0_7 + 0x234);
+    phi_s1 = (Vec3f *) &temp_v0_7[282];
     phi_s0 = 0x18;
     if ((gGameInfo->data[2407] + 0xA0) < (s32) this->unk_3B6) {
-        phi_s2 = (Vec3f *) (temp_v0_7 + 0x2C4);
+        phi_s2 = (Vec3f *) &temp_v0_7[354];
         do {
             Math_Vec3f_Copy(phi_s1, &D_801D15B0);
             Math_Vec3f_Copy(phi_s2, &D_801D15B0);
             temp_s0 = phi_s0 + 0xC;
-            phi_s1 += 0xC;
-            phi_s2 += 0xC;
+            phi_s1 = &phi_s1[1];
+            phi_s2 = &phi_s2[1];
             phi_s0 = temp_s0;
         } while (temp_s0 != 0x84);
         func_80A18080(this);
@@ -831,7 +831,7 @@ void func_80A180B4(EnRaf *this, GlobalContext *globalCtx) {
             do {
                 Math_Vec3f_Copy(phi_s1, (Vec3f *) &sp3C);
                 temp_s0 = phi_s0 + 0xC;
-                phi_s1 += 0xC;
+                phi_s1 = &phi_s1[1];
                 phi_s0 = temp_s0;
             } while (temp_s0 != 0x84);
             this->unk_3BA = ((s32) this->actor.params >> 7) & 0x1F;
@@ -927,10 +927,10 @@ void EnRaf_Update(Actor *thisx, GlobalContext *globalCtx) {
             Math_ApproachF(phi_s1, phi_s0->unk_2C4.z, 1.0f, 1.0f);
         }
         temp_s5 = phi_s5 + 0xC;
-        phi_s3 += 0xC;
+        phi_s3 = &phi_s3[3];
         phi_s0 += 0xC;
-        phi_s2 += 0xC;
-        phi_s1 += 0xC;
+        phi_s2 = &phi_s2[3];
+        phi_s1 = &phi_s1[3];
         phi_s5 = temp_s5;
     } while (temp_s5 != 0x90);
     temp_s0 = &this->unk_3D0;
@@ -1071,11 +1071,11 @@ loop_1:
         phi_s0->unk_8 = (s32) arg1->y;
         phi_s0->unk_C = (s32) arg1->z;
         phi_s0->unk_10 = (s32) arg2->unk_0;
-        phi_s0->unk_14 = (s32) arg2->unk_4;
-        phi_s0->unk_18 = (s32) arg2->unk_8;
+        phi_s0->unk_14 = (s32) arg2[1];
+        phi_s0->unk_18 = (s32) arg2[2];
         phi_s0->unk_1C = (s32) arg3->unk_0;
-        phi_s0->unk_20 = (s32) arg3->unk_4;
-        phi_s0->unk_24 = (s32) arg3->unk_8;
+        phi_s0->unk_20 = (s32) arg3[1];
+        phi_s0->unk_24 = (s32) arg3[2];
         phi_s0->unk_30 = arg4;
         phi_s0->unk_34 = arg5;
         phi_s0->unk_28 = (s16) (s32) randPlusMinusPoint5Scaled(30000.0f);
@@ -1166,11 +1166,11 @@ void func_80A18DA0(EnRaf *arg0, GlobalContext *arg1) {
             Matrix_RotateY(phi_s0->unk_2A, 1U);
             SysMatrix_InsertZRotation_s(phi_s0->unk_2C, 1);
             temp_s1 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_s1 + 8;
+            temp_s2->polyOpa.p = &temp_s1[1];
             temp_s1->words.w0 = 0xDA380003;
             temp_s1->words.w1 = Matrix_NewMtx(temp_s2);
             temp_v1 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v1 + 8;
+            temp_s2->polyOpa.p = &temp_v1[1];
             temp_v1->words.w1 = (u32) &D_060024E0;
             temp_v1->words.w0 = 0xDE000000;
         }

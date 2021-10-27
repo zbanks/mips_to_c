@@ -281,7 +281,7 @@ void EnJs_Init(Actor *thisx, GlobalContext *globalCtx) {
         SkelAnime_ChangeAnimDefaultRepeat(sp40, &D_0601764C);
         func_8016566C(0x3C);
         if ((gSaveContext.weekEventReg[84] & 0x20) != 0) {
-            func_801149A0(0x35, gItemSlots[0x35]);
+            func_801149A0(0x35, gItemSlots[53]);
             gSaveContext.weekEventReg[84] &= 0xDF;
             return;
         }
@@ -568,83 +568,83 @@ s32 func_80968F48(void) {
     s32 phi_v1_20;
 
     phi_v1_20 = 0;
-    if (gSaveContext.inventory.items[gItemSlots->unk_36] == 0x36) {
+    if (gSaveContext.inventory.items[gItemSlots[54]] == 0x36) {
         phi_v1_20 = 1;
     }
     phi_v1_19 = phi_v1_20;
-    if (gSaveContext.inventory.items[gItemSlots->unk_37] == 0x37) {
+    if (gSaveContext.inventory.items[gItemSlots[55]] == 0x37) {
         phi_v1_19 = phi_v1_20 + 1;
     }
     phi_v1_18 = phi_v1_19;
-    if (gSaveContext.inventory.items[gItemSlots->unk_38] == 0x38) {
+    if (gSaveContext.inventory.items[gItemSlots[56]] == 0x38) {
         phi_v1_18 = phi_v1_19 + 1;
     }
     phi_v1_17 = phi_v1_18;
-    if (gSaveContext.inventory.items[gItemSlots->unk_39] == 0x39) {
+    if (gSaveContext.inventory.items[gItemSlots[57]] == 0x39) {
         phi_v1_17 = phi_v1_18 + 1;
     }
     phi_v1_16 = phi_v1_17;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3A] == 0x3A) {
+    if (gSaveContext.inventory.items[gItemSlots[58]] == 0x3A) {
         phi_v1_16 = phi_v1_17 + 1;
     }
     phi_v1_15 = phi_v1_16;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3B] == 0x3B) {
+    if (gSaveContext.inventory.items[gItemSlots[59]] == 0x3B) {
         phi_v1_15 = phi_v1_16 + 1;
     }
     phi_v1_14 = phi_v1_15;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3C] == 0x3C) {
+    if (gSaveContext.inventory.items[gItemSlots[60]] == 0x3C) {
         phi_v1_14 = phi_v1_15 + 1;
     }
     phi_v1_13 = phi_v1_14;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3D] == 0x3D) {
+    if (gSaveContext.inventory.items[gItemSlots[61]] == 0x3D) {
         phi_v1_13 = phi_v1_14 + 1;
     }
     phi_v1_12 = phi_v1_13;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3E] == 0x3E) {
+    if (gSaveContext.inventory.items[gItemSlots[62]] == 0x3E) {
         phi_v1_12 = phi_v1_13 + 1;
     }
     phi_v1_11 = phi_v1_12;
-    if (gSaveContext.inventory.items[gItemSlots->unk_3F] == 0x3F) {
+    if (gSaveContext.inventory.items[gItemSlots[63]] == 0x3F) {
         phi_v1_11 = phi_v1_12 + 1;
     }
     phi_v1_10 = phi_v1_11;
-    if (gSaveContext.inventory.items[gItemSlots->unk_40] == 0x40) {
+    if (gSaveContext.inventory.items[gItemSlots[64]] == 0x40) {
         phi_v1_10 = phi_v1_11 + 1;
     }
     phi_v1_9 = phi_v1_10;
-    if (gSaveContext.inventory.items[gItemSlots->unk_41] == 0x41) {
+    if (gSaveContext.inventory.items[gItemSlots[65]] == 0x41) {
         phi_v1_9 = phi_v1_10 + 1;
     }
     phi_v1_8 = phi_v1_9;
-    if (gSaveContext.inventory.items[gItemSlots->unk_42] == 0x42) {
+    if (gSaveContext.inventory.items[gItemSlots[66]] == 0x42) {
         phi_v1_8 = phi_v1_9 + 1;
     }
     phi_v1_7 = phi_v1_8;
-    if (gSaveContext.inventory.items[gItemSlots->unk_43] == 0x43) {
+    if (gSaveContext.inventory.items[gItemSlots[67]] == 0x43) {
         phi_v1_7 = phi_v1_8 + 1;
     }
     phi_v1_6 = phi_v1_7;
-    if (gSaveContext.inventory.items[gItemSlots->unk_44] == 0x44) {
+    if (gSaveContext.inventory.items[gItemSlots[68]] == 0x44) {
         phi_v1_6 = phi_v1_7 + 1;
     }
     phi_v1_5 = phi_v1_6;
-    if (gSaveContext.inventory.items[gItemSlots->unk_45] == 0x45) {
+    if (gSaveContext.inventory.items[gItemSlots[69]] == 0x45) {
         phi_v1_5 = phi_v1_6 + 1;
     }
     phi_v1_4 = phi_v1_5;
-    if (gSaveContext.inventory.items[gItemSlots->unk_46] == 0x46) {
+    if (gSaveContext.inventory.items[gItemSlots[70]] == 0x46) {
         phi_v1_4 = phi_v1_5 + 1;
     }
     phi_v1_3 = phi_v1_4;
-    if (gSaveContext.inventory.items[gItemSlots->unk_47] == 0x47) {
+    if (gSaveContext.inventory.items[gItemSlots[71]] == 0x47) {
         phi_v1_3 = phi_v1_4 + 1;
     }
     phi_v1_2 = phi_v1_3;
-    if (gSaveContext.inventory.items[gItemSlots->unk_48] == 0x48) {
+    if (gSaveContext.inventory.items[gItemSlots[72]] == 0x48) {
         phi_v1_2 = phi_v1_3 + 1;
     }
     phi_v1 = phi_v1_2;
-    if (gSaveContext.inventory.items[gItemSlots->unk_49] == 0x49) {
+    if (gSaveContext.inventory.items[gItemSlots[73]] == 0x49) {
         phi_v1 = phi_v1_2 + 1;
     }
     sp1C = phi_v1;
@@ -663,6 +663,8 @@ void func_809691B8(s32 arg0, s32 arg1) {
     u8 *temp_a2;
     u8 *temp_a2_2;
     u8 *temp_a2_3;
+    u8 *temp_a3;
+    u8 *temp_a3_2;
     u8 *temp_t0;
     u8 *temp_t0_2;
 
@@ -682,7 +684,8 @@ void func_809691B8(s32 arg0, s32 arg1) {
             temp_a2_2 = &temp_t0[temp_a1_2];
             temp_v1_2 = 1 << temp_a0_2;
             *temp_a2_2 |= temp_v1_2;
-            temp_t0[1] |= temp_v1_2;
+            temp_a3 = &temp_t0[1];
+            *temp_a3 |= temp_v1_2;
             return;
         }
         temp_a0_3 = temp_a0_2 - 8;
@@ -691,7 +694,8 @@ void func_809691B8(s32 arg0, s32 arg1) {
             temp_a2_3 = &temp_t0_2[temp_a1_2 + 1];
             temp_v1_3 = 1 << temp_a0_3;
             *temp_a2_3 |= temp_v1_3;
-            temp_t0_2[2] |= temp_v1_3;
+            temp_a3_2 = &temp_t0_2[2];
+            *temp_a3_2 |= temp_v1_3;
         }
         /* Duplicate return node #8. Try simplifying control flow for better match */
     }
@@ -794,12 +798,12 @@ void func_80969530(Actor *arg0, GlobalContext *arg1) {
 
     func_801477B4(arg1);
     arg0->flags &= -0x101;
-    arg0->unk_2C4 = func_8096A6F4;
-    if ((arg0->shape.rot.y == arg0->home.rot.y) && ((arg0->unk_2B8 & 0x10) != 0)) {
+    arg0[2].focus.pos.x = func_8096A6F4;
+    if ((arg0->shape.rot.y == arg0->home.rot.y) && ((arg0[2].world.rot.x & 0x10) != 0)) {
         SkelAnime_ChangeAnim(arg0 + 0x144, (AnimationHeader *) &D_06016F58, -1.0f, (f32) SkelAnime_GetFrameCount(&D_06016F58) - 1.0f, 0.0f, (u8) 2, -10.0f);
-        temp_t6 = arg0->unk_2B8 & 0xFFEF;
-        arg0->unk_2B8 = temp_t6;
-        arg0->unk_2B8 = (u16) (temp_t6 | 8);
+        temp_t6 = arg0[2].world.rot.x & 0xFFEF;
+        arg0[2].world.rot.x = temp_t6;
+        arg0[2].world.rot.x = temp_t6 | 8;
     }
 }
 
@@ -818,20 +822,20 @@ s32 func_809695FC(EnJs *arg0, GlobalContext *arg1) {
 void func_80969688(Actor *arg0) {
     s16 temp_a0;
 
-    if (arg0->unk_2C2 != -1) {
+    if (arg0[2].unk_3A != -1) {
         arg0 = arg0;
-        temp_a0 = (arg0 + (arg0->unk_2C2 * 2))->unk_2BE;
+        temp_a0 = (arg0 + (arg0[2].unk_3A * 2))->unk_2BE;
         if (ActorCutscene_GetCurrentIndex() == temp_a0) {
             arg0 = arg0;
             ActorCutscene_Stop(temp_a0);
         }
-        arg0->unk_2C2 = -1;
+        arg0[2].unk_3A = -1;
     }
 }
 
 void func_809696EC(Actor *arg0, s16 arg1) {
     func_80969688(arg0);
-    arg0->unk_2C2 = arg1;
+    arg0[2].unk_3A = arg1;
 }
 
 void func_8096971C(EnJs *arg0, GlobalContext *arg1) {
@@ -959,7 +963,7 @@ void func_80969AA0(Actor *arg0, GlobalContext *arg1) {
     } else {
         phi_a3 = 0x2215U;
         if (func_809692A8(arg0->params & 0xF) == 0) {
-            if ((arg0->unk_2B8 & 1) != 0) {
+            if ((arg0[2].world.rot.x & 1) != 0) {
                 if (func_8096933C(arg0->params & 0xF) == 0) {
                     phi_a3 = 0x220FU;
                 } else {
@@ -1159,7 +1163,7 @@ void func_8096A080(Actor *arg0, GlobalContext *arg1) {
     if (gSaveContext.playerForm != 4) {
         phi_a1 = 0x2218U;
     } else {
-        temp_v0 = temp_a2->unk_2B8;
+        temp_v0 = temp_a2[2].world.rot.x;
         phi_a1 = 0x221BU;
         if ((temp_v0 & 1) != 0) {
             temp_a0 = temp_a2->params;
@@ -1171,7 +1175,7 @@ void func_8096A080(Actor *arg0, GlobalContext *arg1) {
                 phi_a1 = 0x221CU;
             }
         } else {
-            temp_a2->unk_2B8 = (s16) (temp_v0 | 1);
+            temp_a2[2].world.rot.x = temp_v0 | 1;
         }
     }
     func_801518B0(arg1, phi_a1, phi_a2);
@@ -1214,7 +1218,7 @@ void func_8096A1E8(Actor *arg0, GlobalContext *arg1) {
     }
     if (func_800B84D0(arg0, arg1) != 0) {
         arg0->flags &= 0xFFFEFFFF;
-        arg0->unk_2C4 = func_8096A38C;
+        arg0[2].focus.pos.x = (bitwise f32) func_8096A38C;
         func_801518B0(arg1, 0x2208U, arg0);
         gSaveContext.weekEventReg[84] |= 0x20;
         func_809696EC(arg0, 0);
@@ -1235,7 +1239,7 @@ void func_8096A2C0(Actor *arg0, GlobalContext *arg1) {
     if (Actor_HasParent(arg0, arg1) != 0) {
         arg0->parent = NULL;
         arg0->flags |= 0x10000;
-        arg0->unk_2C4 = func_8096A1E8;
+        arg0[2].focus.pos.x = (bitwise f32) func_8096A1E8;
         func_800B8500(arg0, arg1, 1000.0f, 1000.0f, -1);
         return;
     }
@@ -1265,7 +1269,7 @@ void func_8096A38C(Actor *arg0, GlobalContext *arg1) {
     if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
         arg1 = arg1;
         SkelAnime_ChangeAnimTransitionRepeat(sp20, &D_06017E98, 0.0f);
-        arg0->unk_2B8 = (u16) (arg0->unk_2B8 | 2);
+        arg0[2].world.rot.x |= 2;
     }
     arg1 = arg1;
     temp_v0 = func_80152498(arg1 + 0x4908);
@@ -1293,14 +1297,14 @@ void func_8096A38C(Actor *arg0, GlobalContext *arg1) {
                 return;
             case 8711:
                 temp_a0_3 = arg1;
-                if (gSaveContext.inventory.items[gItemSlots[0x35]] == 0x35) {
+                if (gSaveContext.inventory.items[gItemSlots[53]] == 0x35) {
                     func_80151938(arg1, 0x2208U);
                     func_809696EC(arg0, 0);
                     return;
                 }
                 arg1 = arg1;
                 func_801477B4(temp_a0_3);
-                arg0->unk_2C4 = func_8096A2C0;
+                arg0[2].focus.pos.x = (bitwise f32) func_8096A2C0;
                 func_8096A2C0(arg0, arg1);
                 return;
             case 8705:
@@ -1356,7 +1360,7 @@ void func_8096A38C(Actor *arg0, GlobalContext *arg1) {
                     }
                     func_80151938(arg1, 0x2205U);
                     SkelAnime_ChangeAnimTransitionStop(sp20, (AnimationHeader *) &D_06016F58, -5.0f);
-                    arg0->unk_2B8 = (u16) (arg0->unk_2B8 | 0x10);
+                    arg0[2].world.rot.x = (u16) arg0[2].world.rot.x | 0x10;
                     return;
                 }
                 temp_v0_6 = (arg1 + 0x10000)->unk_6929;
@@ -1381,7 +1385,7 @@ void func_8096A38C(Actor *arg0, GlobalContext *arg1) {
             }
             func_80151938(arg1, 0x21FEU);
             SkelAnime_ChangeAnimTransitionStop(sp20, (AnimationHeader *) &D_06016F58, -5.0f);
-            arg0->unk_2B8 = (u16) (arg0->unk_2B8 | 0x10);
+            arg0[2].world.rot.x = (u16) arg0[2].world.rot.x | 0x10;
         }
     }
 }
@@ -1459,7 +1463,7 @@ void func_8096A9F4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
 
     if (arg1 == 0xA) {
         SysMatrix_MultiplyVector3fByState(&D_8096AC30, arg4 + 0x3C);
-        temp_v1 = arg4->unk_2BA;
+        temp_v1 = arg4[2].world.rot.y;
         if (((s32) temp_v1 >= 0) && ((s32) temp_v1 < 5)) {
             temp_s1 = *arg0;
             if (temp_v1 != 0) {
@@ -1467,7 +1471,7 @@ void func_8096A9F4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
                 Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
                 SysMatrix_InsertRotation(0, -0x4000, -0x36B0, 1);
             }
-            temp_v0 = arg4->unk_2BA * 4;
+            temp_v0 = arg4[2].world.rot.y * 4;
             SysMatrix_InsertTranslation(*(&D_8096ABF4 + temp_v0), *(&D_8096AC08 + temp_v0), *(&D_8096AC1C + temp_v0), 1);
             temp_v0_2 = temp_s1->polyOpa.p;
             temp_s1->polyOpa.p = temp_v0_2 + 8;
@@ -1475,9 +1479,9 @@ void func_8096A9F4(GraphicsContext **arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, Ac
             sp24 = temp_v0_2;
             sp24->words.w1 = Matrix_NewMtx(*arg0);
             temp_v0_3 = temp_s1->polyOpa.p;
-            temp_s1->polyOpa.p = temp_v0_3 + 8;
+            temp_s1->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDE000000;
-            temp_v0_3->words.w1 = *(&D_8096ABCC + (arg4->unk_2BA * 4));
+            temp_v0_3->words.w1 = *(&D_8096ABCC + (arg4[2].world.rot.y * 4));
         }
     }
 }

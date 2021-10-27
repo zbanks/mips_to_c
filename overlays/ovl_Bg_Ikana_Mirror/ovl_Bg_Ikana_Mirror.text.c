@@ -143,7 +143,7 @@ void func_80B7F730(BgIkanaMirror *arg0) {
     ? sp78;
     ? sp6C;
     ? sp60;
-    Vec3f *temp_s0;
+    f32 *temp_s0;
     Vec3f *phi_s1;
     Vec3f *phi_s0;
     Vec3f *phi_s4;
@@ -163,12 +163,12 @@ void func_80B7F730(BgIkanaMirror *arg0) {
         SysMatrix_MultiplyVector3fByState(phi_s4, (Vec3f *) &sp6C);
         SysMatrix_MultiplyVector3fByState(phi_s3, (Vec3f *) &sp60);
         Collider_SetQuadVertices(phi_s2, (Vec3f *) &sp84, (Vec3f *) &sp78, (Vec3f *) &sp6C, (Vec3f *) &sp60);
-        temp_s0 = phi_s0 + 0x50;
-        phi_s1 += 0x50;
-        phi_s0 = temp_s0;
-        phi_s4 += 0x50;
-        phi_s3 += 0x50;
-        phi_s2 += 0x80;
+        temp_s0 = &phi_s0[6].z;
+        phi_s1 = (Vec3f *) &phi_s1[6].z;
+        phi_s0 = (Vec3f *) temp_s0;
+        phi_s4 = (Vec3f *) &phi_s4[6].z;
+        phi_s3 = (Vec3f *) &phi_s3[6].z;
+        phi_s2 = &phi_s2[1];
     } while (temp_s0 != (&D_80B801A8 + 0xA0));
     SysMatrix_StatePop();
 }
@@ -206,8 +206,8 @@ void BgIkanaMirror_Init(Actor *thisx, GlobalContext *globalCtx) {
         phi_s0 = (Vec3f *) &sp60;
 loop_2:
         SysMatrix_MultiplyVector3fByState(phi_s1, phi_s0);
-        temp_s0 = phi_s0 + 0xC;
-        phi_s1 += 0xC;
+        temp_s0 = &phi_s0[1];
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
         if (temp_s0 != &sp84) {
             goto loop_2;
@@ -222,8 +222,8 @@ loop_2:
     do {
         Collider_InitQuad(globalCtx, phi_s1_2);
         Collider_SetQuad(globalCtx, phi_s1_2, (Actor *) this, phi_s0_2);
-        temp_s0_2 = phi_s0_2 + 0x50;
-        phi_s1_2 += 0x80;
+        temp_s0_2 = &phi_s0_2[1];
+        phi_s1_2 = &phi_s1_2[1];
         phi_s0_2 = temp_s0_2;
     } while (temp_s0_2 != D_80B8021C);
     func_80B7F730(this);
@@ -245,7 +245,7 @@ void BgIkanaMirror_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     do {
         Collider_DestroyQuad(globalCtx, phi_s1);
         temp_s0 = phi_s0 + 0x80;
-        phi_s1 += 0x80;
+        phi_s1 = &phi_s1[1];
         phi_s0 = temp_s0;
     } while (temp_s0 != 0x100);
 }
@@ -347,7 +347,7 @@ void func_80B7FBA4(BgIkanaMirror *arg0, GlobalContext *arg1) {
         do {
             CollisionCheck_SetAT(arg1, arg1 + 0x18884, phi_s1);
             temp_s0_2 = phi_s0_2 + 0x80;
-            phi_s1 += 0x80;
+            phi_s1 = (Collider *) &phi_s1[5].ac;
             phi_s0_2 = temp_s0_2;
         } while (temp_s0_2 != 0x100);
         return;
@@ -388,27 +388,27 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_v0 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0 + 8;
+    temp_s0->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp4C = temp_v0;
     sp4C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s0->polyOpa.p;
-    temp_s0->polyOpa.p = temp_v0_2 + 8;
+    temp_s0->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06001E18;
     temp_v0_2->words.w0 = 0xDE000000;
     if ((s32) this->unk_5C6 > 0) {
         AnimatedMat_Draw(globalCtx, (AnimatedMaterial *) this->unk_5BC);
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFA000080;
         temp_v0_3->words.w1 = this->unk_5C6 | ~0xFF;
         temp_v0_4 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_4 + 8;
+        temp_s0->polyXlu.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xDA380003;
         sp40 = temp_v0_4;
         sp40->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) &D_060014B0;
         temp_v0_5->words.w0 = 0xDE000000;
     }
@@ -423,20 +423,20 @@ void BgIkanaMirror_Draw(Actor *thisx, GlobalContext *globalCtx) {
         sp38 = temp_f0;
         AnimatedMat_Draw(globalCtx, this->unk_5C0);
         temp_v0_7 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_7 + 8;
+        temp_s0->polyXlu.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xFA000080;
         temp_v0_7->words.w1 = ((s32) (temp_f0 * 123.0f) & 0xFF) | ~0xFF;
         temp_v0_8 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_8 + 8;
+        temp_s0->polyXlu.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xFB000000;
         temp_v0_8->words.w1 = ((s32) (temp_f0 * 185.0f) & 0xFF) | 0xD7D7FF00;
         temp_v0_9 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_9 + 8;
+        temp_s0->polyXlu.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xDA380003;
         sp24 = temp_v0_9;
         sp24->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_10 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_10 + 8;
+        temp_s0->polyXlu.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = (u32) &D_06001880;
         temp_v0_10->words.w0 = 0xDE000000;
     }

@@ -313,7 +313,7 @@ void DoorSpiral_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp24 = temp_a0;
             func_8012C28C(temp_a0);
             temp_v0 = sp24->polyOpa.p;
-            sp24->polyOpa.p = temp_v0 + 8;
+            sp24->polyOpa.p = &temp_v0[1];
             temp_v0->words.w0 = 0xDA380003;
             sp2C = temp_a3;
             this = this;
@@ -321,7 +321,7 @@ void DoorSpiral_Draw(Actor *thisx, GlobalContext *globalCtx) {
             sp1C = temp_v0;
             sp1C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_2 = sp24->polyOpa.p;
-            sp24->polyOpa.p = temp_v0_2 + 8;
+            sp24->polyOpa.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xDE000000;
             temp_v0_2->words.w1 = *(temp_a3 + (this->orientation * 4));
         }

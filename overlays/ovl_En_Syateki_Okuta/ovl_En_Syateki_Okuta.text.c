@@ -274,7 +274,7 @@ void func_80A362F8(Actor *arg0) {
     SkelAnime_ChangeAnimPlaybackStop(arg0 + 0x144, &D_0600466C, 0.0f);
     arg0->draw = NULL;
     Actor_SetScale(arg0, 0.01f);
-    arg0->unk_188 = func_80A36350;
+    arg0[1].focus.pos.z = (bitwise f32) func_80A36350;
 }
 
 void func_80A36350(EnSyatekiOkuta *this, GlobalContext *globalCtx) {
@@ -286,10 +286,10 @@ void func_80A36360(Actor *arg0) {
 
     temp_a3 = arg0;
     temp_a3->draw = EnSyatekiOkuta_Draw;
-    temp_a3->unk_2AA = 0;
+    temp_a3[2].unk_22 = 0;
     arg0 = temp_a3;
     func_800BDC5C(temp_a3 + 0x144, (ActorAnimationEntry []) D_80A3759C, 4);
-    arg0->unk_188 = func_80A363B4;
+    arg0[1].focus.pos.z = func_80A363B4;
 }
 
 void func_80A363B4(EnSyatekiOkuta *this, GlobalContext *globalCtx) {
@@ -347,8 +347,8 @@ void func_80A36504(EnSyatekiOkuta *this, GlobalContext *globalCtx) {
 void func_80A3657C(Actor *arg0) {
     Actor *temp_a0;
 
-    arg0->unk_2A4 = 0;
-    arg0->unk_2AA = 0x12C;
+    arg0[2].params = 0;
+    arg0[2].unk_22 = 0x12C;
     if (arg0->unk_2A6 == 1) {
         temp_a0 = arg0;
         arg0 = arg0;
@@ -356,7 +356,7 @@ void func_80A3657C(Actor *arg0) {
     }
     arg0 = arg0;
     func_800BDC5C(arg0 + 0x144, (ActorAnimationEntry []) D_80A3759C, 1);
-    arg0->unk_188 = func_80A365EC;
+    arg0[1].focus.pos.z = (bitwise f32) func_80A365EC;
 }
 
 void func_80A365EC(EnSyatekiOkuta *this, GlobalContext *globalCtx) {
@@ -488,7 +488,7 @@ void func_80A36AF8(Actor *arg0, GlobalContext *arg1) {
     s32 temp_v1;
     void *temp_v0;
 
-    temp_v1 = arg0->unk_188;
+    temp_v1 = arg0[1].focus.pos.z;
     temp_v0 = arg0->parent;
     if ((func_80A36488 != temp_v1) && (func_80A363B4 != temp_v1) && (temp_v0->unk_26A == 1) && (temp_v0->unk_26C == 0)) {
         temp_v1_2 = ((s32) temp_v0->unk_190 >> ((arg0->params & 0xF) * 2)) & 3;
@@ -653,8 +653,8 @@ s32 func_80A370EC(Vec3s *arg0, f32 arg1, f32 *arg2) {
 
     temp_v0 = arg0->unk_188;
     if (func_80A363B4 == temp_v0) {
-        arg2->unk_4 = 1.0f;
-        arg2->unk_8 = 1.0f;
+        arg2[1] = 1.0f;
+        arg2[2] = 1.0f;
         arg2->unk_0 = (sin_rad(0.19634955f * arg1) * 0.4f) + 1.0f;
         goto block_12;
     }
@@ -663,20 +663,20 @@ s32 func_80A370EC(Vec3s *arg0, f32 arg1, f32 *arg2) {
             return 0;
         }
         if (arg1 < 27.0f) {
-            arg2->unk_8 = 1.0f;
+            arg2[2] = 1.0f;
             temp_f0 = ((arg1 - 24.0f) * 0.5f) + 1.0f;
-            arg2->unk_4 = temp_f0;
+            arg2[1] = temp_f0;
             arg2->unk_0 = temp_f0;
         } else if (arg1 < 30.0f) {
             temp_f0_2 = (arg1 - 26.0f) * 0.333f;
             temp_f2 = 2.0f - temp_f0_2;
-            arg2->unk_4 = temp_f2;
+            arg2[1] = temp_f2;
             arg2->unk_0 = temp_f2;
-            arg2->unk_8 = (f32) (temp_f0_2 + 1.0f);
+            arg2[2] = temp_f0_2 + 1.0f;
         } else {
             arg2->unk_0 = 1.0f;
-            arg2->unk_4 = 1.0f;
-            arg2->unk_8 = (f32) (2.0f - ((arg1 - 29.0f) * 0.2f));
+            arg2[1] = 1.0f;
+            arg2[2] = 2.0f - ((arg1 - 29.0f) * 0.2f);
         }
 block_12:
         return 1;
@@ -692,12 +692,12 @@ s32 func_80A37294(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s 
     temp_f0 = arg5->unk_15C;
     phi_f0 = temp_f0;
     if (func_80A365EC == arg5->unk_188) {
-        phi_f0 = temp_f0 + (f32) arg5->unk_2A4;
+        phi_f0 = temp_f0 + (f32) arg5[112].z;
     }
     if (arg1 == 0xE) {
         sp20.unk_0 = arg5->unk_1D8;
-        sp20.unk_4 = (s32) arg5->unk_1DC;
-        sp20.unk_8 = (s32) arg5->unk_1E0;
+        (&sp20)[1] = arg5->unk_1DC;
+        (&sp20)[2] = arg5->unk_1E0;
         Matrix_Scale(sp20, sp24, sp28, 1);
     } else if ((arg1 == 0xF) && (func_80A370EC(arg5, phi_f0, &sp20) != 0)) {
         Matrix_Scale(sp20, sp24, sp28, 1);
@@ -723,12 +723,12 @@ void EnSyatekiOkuta_Draw(Actor *thisx, GlobalContext *globalCtx) {
     func_8012C28C(temp_a0);
     if (this->unk_2A6 == 1) {
         temp_v1 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1 + 8;
+        temp_s0->polyOpa.p = &temp_v1[1];
         temp_v1->words.w0 = 0xDB060020;
         temp_v1->words.w1 = (u32) D_801AEFA0;
     } else {
         temp_v1_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v1_2 + 8;
+        temp_s0->polyOpa.p = &temp_v1_2[1];
         temp_v1_2->words.w0 = 0xDB060020;
         temp_v1_2->words.w1 = (u32) &D_80A37630;
     }
@@ -738,29 +738,29 @@ void EnSyatekiOkuta_Draw(Actor *thisx, GlobalContext *globalCtx) {
         SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f, 0);
         if ((s32) this->unk_2AA >= 0x100) {
             temp_v0 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0 + 8;
+            temp_s0->polyXlu.p = &temp_v0[1];
             temp_v0->words.w1 = 0xD24020FF;
             temp_v0->words.w0 = 0xFA000000;
         } else {
             temp_v0_2 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_2 + 8;
+            temp_s0->polyXlu.p = &temp_v0_2[1];
             temp_v0_2->words.w0 = 0xFA000000;
             temp_v0_2->words.w1 = (this->unk_2AA & 0xFF) | 0xD2402000;
         }
         temp_v0_3 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_3 + 8;
+        temp_s0->polyXlu.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xDA380003;
         sp28 = temp_v0_3;
         sp28->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         if (this->unk_2A6 == 2) {
             temp_v0_4 = temp_s0->polyXlu.p;
-            temp_s0->polyXlu.p = temp_v0_4 + 8;
+            temp_s0->polyXlu.p = &temp_v0_4[1];
             temp_v0_4->words.w1 = (u32) &D_80A37A88;
             temp_v0_4->words.w0 = 0xDE000000;
             return;
         }
         temp_v0_5 = temp_s0->polyXlu.p;
-        temp_s0->polyXlu.p = temp_v0_5 + 8;
+        temp_s0->polyXlu.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = (u32) &D_80A37B08;
         temp_v0_5->words.w0 = 0xDE000000;
         /* Duplicate return node #10. Try simplifying control flow for better match */

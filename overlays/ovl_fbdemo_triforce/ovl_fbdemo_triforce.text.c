@@ -172,31 +172,31 @@ void TransitionTriforce_Draw(void *thisx, Gfx **gfxP) {
     guTranslate(temp_a0_3, 0, 0, 0);
     temp_v1->words.w0 = 0xE7000000;
     temp_v1->words.w1 = 0;
-    temp_v1_2 = temp_v1 + 8;
+    temp_v1_2 = &temp_v1[1];
     temp_v1_2->words.w0 = 0xDE000000;
     temp_v1_2->words.w1 = (u32) &D_80AC5630;
-    temp_v1_3 = temp_v1_2 + 8;
+    temp_v1_3 = &temp_v1_2[1];
     temp_v1_3->words.w0 = 0xFA000000;
-    temp_v1_4 = temp_v1_3 + 8;
+    temp_v1_4 = &temp_v1_3[1];
     temp_v1_3->words.w1 = thisx->unk_0;
     temp_v1_4->words.w0 = 0xFCFFFFFF;
     temp_v1_4->words.w1 = 0xFFFDF6FB;
-    temp_v1_5 = temp_v1_4 + 8;
+    temp_v1_5 = &temp_v1_4[1];
     temp_v1_5->words.w1 = (u32) (thisx + 0x18);
     temp_v1_5->words.w0 = 0xDA380007;
-    temp_v1_6 = temp_v1_5 + 8;
+    temp_v1_6 = &temp_v1_5[1];
     temp_v1_6->words.w0 = 0xDA380003;
-    temp_v1_7 = temp_v1_6 + 8;
+    temp_v1_7 = &temp_v1_6[1];
     temp_v1_6->words.w1 = (u32) sp80;
     temp_v1_7->words.w0 = 0xDA380001;
-    temp_v1_8 = temp_v1_7 + 8;
+    temp_v1_8 = &temp_v1_7[1];
     temp_v1_7->words.w1 = (u32) sp24;
     temp_v1_8->words.w0 = 0xDA380001;
     temp_v1_8->words.w1 = (u32) temp_a0_3;
-    temp_v1_9 = temp_v1_8 + 8;
+    temp_v1_9 = &temp_v1_8[1];
     temp_v1_9->words.w0 = 0x100A014;
     temp_v1_9->words.w1 = (u32) &D_80AC5660;
-    temp_v1_10 = temp_v1_9 + 8;
+    temp_v1_10 = &temp_v1_9[1];
     sp84 = temp_v1_10;
     phi_v1 = temp_v1_10;
     if (TransitionTriforce_IsDone(thisx) == 0) {
@@ -207,31 +207,31 @@ void TransitionTriforce_Draw(void *thisx, Gfx **gfxP) {
             } else {
                 temp_v1_10->words.w1 = 0x40C;
                 temp_v1_10->words.w0 = 0x606080A;
-                temp_v1_11 = temp_v1_10 + 8;
+                temp_v1_11 = &temp_v1_10[1];
                 temp_v1_11->words.w0 = 0x6000C0E;
                 temp_v1_11->words.w1 = 0x2000E;
-                temp_v1_12 = temp_v1_11 + 8;
+                temp_v1_12 = &temp_v1_11[1];
                 temp_v1_12->words.w0 = 0x6020E10;
                 temp_v1_12->words.w1 = 0x21012;
-                temp_v1_13 = temp_v1_12 + 8;
+                temp_v1_13 = &temp_v1_12[1];
                 temp_v1_13->words.w0 = 0x6021204;
                 temp_v1_13->words.w1 = 0x4120C;
-                phi_v1 = temp_v1_13 + 8;
+                phi_v1 = &temp_v1_13[1];
             }
         } else {
             temp_v1_10->words.w0 = 0x600080A;
             temp_v1_10->words.w1 = 0x80206;
-            temp_v1_14 = temp_v1_10 + 8;
+            temp_v1_14 = &temp_v1_10[1];
             temp_v1_14->words.w0 = 0x50A0604;
             temp_v1_14->words.w1 = 0;
-            phi_v1 = temp_v1_14 + 8;
+            phi_v1 = &temp_v1_14[1];
         }
     } else {
         temp_v0_3 = thisx->unk_10;
         if ((temp_v0_3 != 1) && (temp_v0_3 == 2)) {
             temp_v1_10->words.w0 = 0x70C0E10;
             temp_v1_10->words.w1 = 0xC1012;
-            phi_v1 = temp_v1_10 + 8;
+            phi_v1 = &temp_v1_10[1];
         }
     }
     phi_v1->words.w0 = 0xE7000000;

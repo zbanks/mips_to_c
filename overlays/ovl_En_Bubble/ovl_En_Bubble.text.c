@@ -167,6 +167,9 @@ static CollisionCheckInfoInit2 D_808A0758 = {1, 2, 0x19, 0x19, 0xFF};
 static ? D_808A0764;                                /* unable to generate initializer */
 static Color_RGBA8 D_808A0770 = {0xFF, 0xFF, 0xFF, 0xFF};
 static Color_RGBA8 D_808A0774 = {0x96, 0x96, 0x96, 0};
+static void (*D_808A0780)(Actor *, Lights *, GlobalContext *) = (void (*)(Actor *, Lights *, GlobalContext *))0x3DA3D70A; /* const */
+static void (*D_808A0798)(Actor *, Lights *, GlobalContext *) = (void (*)(Actor *, Lights *, GlobalContext *))0x3EF5C28F; /* const */
+static void (*D_808A07A0)(Actor *, Lights *, GlobalContext *) = (void (*)(Actor *, Lights *, GlobalContext *))0x3EF5C28F; /* const */
 
 void func_8089F4E0(Actor *arg0, f32 arg1) {
     f32 sp24;
@@ -177,14 +180,14 @@ void func_8089F4E0(Actor *arg0, f32 arg1) {
     arg0->flags |= 1;
     Actor_SetScale(arg0, 1.0f);
     arg0->shape.yOffset = 16.0f;
-    arg0->unk_208 = 16.0f;
-    arg0->unk_218 = arg1;
-    arg0->unk_21C = arg1;
-    arg0->unk_20C = 0.08f;
+    arg0[1].shape.yOffset = 16.0f;
+    arg0[1].shape.feetPos[0].x = arg1;
+    arg0[1].shape.feetPos[0].y = arg1;
+    arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x3DA3D70A;
     sp24 = Rand_ZeroOne();
     sp20 = Rand_ZeroOne();
     temp_f0 = Rand_ZeroOne();
-    arg0->unk_210 = 1.0f;
+    arg0[1].shape.shadowScale = 1.0f;
     arg0->unk_214 = 1.0f;
     temp_f2 = (sp24 * sp24) + (sp20 * sp20) + (temp_f0 * temp_f0);
     arg0->unk_1FC = (f32) (temp_f0 / temp_f2);
@@ -337,17 +340,17 @@ void func_8089F9E4(f32 *arg0) {
     f32 temp_f2;
 
     temp_f2 = arg0->unk_0;
-    temp_f12 = arg0->unk_4;
-    temp_f14 = arg0->unk_8;
+    temp_f12 = arg0[1];
+    temp_f14 = arg0[2];
     temp_f0 = sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12) + (temp_f14 * temp_f14));
     if (temp_f0 != 0.0f) {
         arg0->unk_0 = temp_f2 / temp_f0;
-        arg0->unk_4 = (f32) (temp_f12 / temp_f0);
-        arg0->unk_8 = (f32) (temp_f14 / temp_f0);
+        arg0[1] = temp_f12 / temp_f0;
+        arg0[2] = temp_f14 / temp_f0;
         return;
     }
-    arg0->unk_8 = 0.0f;
-    arg0->unk_4 = 0.0f;
+    arg0[2] = 0.0f;
+    arg0[1] = 0.0f;
     arg0->unk_0 = 0.0f;
 }
 
@@ -382,25 +385,25 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
     f32 phi_f0_2;
 
     if ((arg0->unk_164->unk_56 & 2) != 0) {
-        temp_v0 = arg0->unk_150;
+        temp_v0 = arg0[1].home.pos.y;
         temp_a0 = arg0 + 0x23C;
         temp_a0->unk_0 = temp_v0->unk_64;
-        temp_a0->unk_4 = (s32) temp_v0->unk_68;
-        temp_a0->unk_8 = (s32) temp_v0->unk_6C;
+        temp_a0[1] = temp_v0->unk_68;
+        temp_a0[2] = temp_v0->unk_6C;
         func_8089F9E4(temp_a0);
-        arg0->unk_248 = (f32) (arg0->unk_248 + (arg0->unk_23C * 3.0f));
-        arg0->unk_24C = (f32) (arg0->unk_24C + (arg0->unk_240 * 3.0f));
-        arg0->unk_250 = (f32) (arg0->unk_250 + (arg0->unk_244 * 3.0f));
+        arg0[1].uncullZoneDownward += arg0[1].projectedW * 3.0f;
+        arg0[1].prevPos.x += arg0[1].uncullZoneForward * 3.0f;
+        arg0[1].prevPos.y += arg0[1].uncullZoneScale * 3.0f;
     }
     temp_f0 = arg0->minVelocityY;
-    arg0->unk_254 = (f32) (arg0->unk_254 - 0.1f);
-    if (arg0->unk_254 < temp_f0) {
-        arg0->unk_254 = temp_f0;
+    arg0[1].prevPos.z -= 0.1f;
+    if (arg0[1].prevPos.z < temp_f0) {
+        arg0[1].prevPos.z = temp_f0;
     }
     temp_a0_2 = &sp54;
-    sp54 = arg0->unk_230 + arg0->unk_248;
-    sp58 = arg0->unk_234 + arg0->unk_24C + arg0->unk_254;
-    sp5C = arg0->unk_238 + arg0->unk_250;
+    sp54 = arg0[1].projectedPos.x + arg0[1].uncullZoneDownward;
+    sp58 = arg0[1].projectedPos.y + arg0[1].prevPos.x + arg0[1].prevPos.z;
+    sp5C = arg0[1].projectedPos.z + arg0[1].prevPos.y;
     func_8089F9E4(temp_a0_2);
     temp_a1 = &sp78;
     temp_a2 = &sp6C;
@@ -408,8 +411,8 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
     sp7C = arg0->world.pos.y + arg0->shape.yOffset;
     sp80 = arg0->world.pos.z;
     temp_a2->unk_0 = temp_a1->unk_0;
-    temp_a2->unk_4 = (s32) temp_a1->unk_4;
-    temp_a2->unk_8 = (s32) temp_a1->unk_8;
+    temp_a2[1] = temp_a1[1];
+    temp_a2[2] = temp_a1[2];
     sp6C += sp54 * 24.0f;
     sp70 += sp58 * 24.0f;
     sp74 += sp5C * 24.0f;
@@ -419,11 +422,11 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
         sp64 = (f32) sp94->normal.y * 0.00003051851f;
         sp68 = (f32) sp94->normal.z * 0.00003051851f;
         func_8089F95C((Vec3f *) &sp54, (Vec3f *) temp_a1_2, (Vec3f *) &sp54);
-        arg0->unk_224 = (f32) sp54.unk_0;
+        arg0[1].shape.feetPos[1].x = sp54.unk_0;
         temp_v0_2 = arg0->unk_220 + 1;
-        arg0->unk_228 = (f32) sp54.unk_4;
+        arg0[1].shape.feetPos[1].y = (&sp54)[1];
         arg0->unk_220 = temp_v0_2;
-        arg0->unk_22C = (f32) sp54.unk_8;
+        arg0[1].shape.feetPos[1].z = (&sp54)[2];
         sp4B = temp_v0_2;
         if ((s32) (s16) (s32) (Rand_ZeroOne() * 10.0f) < (s32) temp_v0_2) {
             arg0->unk_220 = 0U;
@@ -433,16 +436,16 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
         } else {
             phi_f0 = 3.0f;
         }
-        arg0->unk_250 = 0.0f;
-        arg0->unk_230 = (f32) (arg0->unk_224 * phi_f0);
-        arg0->unk_24C = 0.0f;
-        arg0->unk_248 = 0.0f;
-        arg0->unk_234 = (f32) (arg0->unk_228 * phi_f0);
-        arg0->unk_254 = 0.0f;
-        arg0->unk_238 = (f32) (arg0->unk_22C * phi_f0);
+        arg0[1].prevPos.y = 0.0f;
+        arg0[1].projectedPos.x = arg0[1].shape.feetPos[1].x * phi_f0;
+        arg0[1].prevPos.x = 0.0f;
+        arg0[1].uncullZoneDownward = 0.0f;
+        arg0[1].projectedPos.y = arg0[1].shape.feetPos[1].y * phi_f0;
+        arg0[1].prevPos.z = 0.0f;
+        arg0[1].projectedPos.z = arg0[1].shape.feetPos[1].z * phi_f0;
         Audio_PlayActorSound2(arg0, 0x3948U);
-        arg0->unk_208 = 128.0f;
-        arg0->unk_20C = 0.48f;
+        arg0[1].shape.yOffset = 128.0f;
+        arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x3EF5C28F;
     } else if ((arg0->bgCheckFlags & 0x20) != 0) {
         temp_a1_3 = &sp60;
         if (sp58 < 0.0f) {
@@ -450,11 +453,11 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
             sp60 = 0.0f;
             sp64 = 1.0f;
             func_8089F95C((Vec3f *) &sp54, (Vec3f *) temp_a1_3, (Vec3f *) &sp54);
-            arg0->unk_224 = (f32) sp54.unk_0;
+            arg0[1].shape.feetPos[1].x = sp54.unk_0;
             temp_v0_3 = arg0->unk_220 + 1;
-            arg0->unk_228 = (f32) sp54.unk_4;
+            arg0[1].shape.feetPos[1].y = (&sp54)[1];
             arg0->unk_220 = temp_v0_3;
-            arg0->unk_22C = (f32) sp54.unk_8;
+            arg0[1].shape.feetPos[1].z = (&sp54)[2];
             sp4B = temp_v0_3;
             if ((s32) (s16) (s32) (Rand_ZeroOne() * 10.0f) < (s32) temp_v0_3) {
                 arg0->unk_220 = 0U;
@@ -464,24 +467,24 @@ void func_8089FA54(Actor *arg0, GlobalContext *arg1) {
             } else {
                 phi_f0_2 = 3.0f;
             }
-            arg0->unk_250 = 0.0f;
-            arg0->unk_24C = 0.0f;
-            arg0->unk_248 = 0.0f;
-            arg0->unk_254 = 0.0f;
-            arg0->unk_230 = (f32) (arg0->unk_224 * phi_f0_2);
-            arg0->unk_234 = (f32) (arg0->unk_228 * phi_f0_2);
-            arg0->unk_238 = (f32) (arg0->unk_22C * phi_f0_2);
+            arg0[1].prevPos.y = 0.0f;
+            arg0[1].prevPos.x = 0.0f;
+            arg0[1].uncullZoneDownward = 0.0f;
+            arg0[1].prevPos.z = 0.0f;
+            arg0[1].projectedPos.x = arg0[1].shape.feetPos[1].x * phi_f0_2;
+            arg0[1].projectedPos.y = arg0[1].shape.feetPos[1].y * phi_f0_2;
+            arg0[1].projectedPos.z = arg0[1].shape.feetPos[1].z * phi_f0_2;
             Audio_PlayActorSound2(arg0, 0x3948U);
-            arg0->unk_208 = 128.0f;
-            arg0->unk_20C = 0.48f;
+            arg0[1].shape.yOffset = 128.0f;
+            arg0[1].shape.shadowDraw = (void (*)(Actor *, Lights *, GlobalContext *))0x3EF5C28F;
         }
     }
-    arg0->velocity.x = arg0->unk_230 + arg0->unk_248;
-    arg0->velocity.y = arg0->unk_234 + arg0->unk_24C + arg0->unk_254;
-    arg0->velocity.z = arg0->unk_238 + arg0->unk_250;
-    Math_ApproachF(arg0 + 0x248, 0.0f, 0.3f, 0.1f);
-    Math_ApproachF(arg0 + 0x24C, 0.0f, 0.3f, 0.1f);
-    Math_ApproachF(arg0 + 0x250, 0.0f, 0.3f, 0.1f);
+    arg0->velocity.x = arg0[1].projectedPos.x + arg0[1].uncullZoneDownward;
+    arg0->velocity.y = arg0[1].projectedPos.y + arg0[1].prevPos.x + arg0[1].prevPos.z;
+    arg0->velocity.z = arg0[1].projectedPos.z + arg0[1].prevPos.y;
+    Math_ApproachF(&arg0[1].uncullZoneDownward, 0.0f, 0.3f, 0.1f);
+    Math_ApproachF((f32 *) &arg0[1].prevPos, 0.0f, 0.3f, 0.1f);
+    Math_ApproachF(&arg0[1].prevPos.y, 0.0f, 0.3f, 0.1f);
 }
 
 s32 func_8089FF30(void *arg0) {
@@ -560,7 +563,7 @@ void func_808A005C(EnBubble *arg0) {
     temp_t8->unk_6C = (s32) temp_v0_2->unk_4;
     temp_t8->unk_70 = (s32) temp_v0_2->unk_8;
     temp_t8->unk_74 = (s32) temp_v0_2->unk_C;
-    temp_t8->unk_78 = (s32) temp_v0_2->unk_10;
+    temp_t8[1].dim.scale = temp_v0_2->unk_10;
     temp_t8->unk_7C = (s32) temp_v0_2->unk_14;
 }
 
@@ -699,12 +702,12 @@ void EnBubble_Draw(Actor *thisx, GlobalContext *globalCtx) {
         }
         SysMatrix_InsertZRotation_f(-phi_f18_2 * 0.017453292f * this->unk_208, 1);
         temp_v0 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0 + 8;
+        temp_s2->polyXlu.p = &temp_v0[1];
         temp_v0->words.w0 = 0xDA380003;
         sp44 = temp_v0;
         sp44->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
         temp_v0_2 = temp_s2->polyXlu.p;
-        temp_s2->polyXlu.p = temp_v0_2 + 8;
+        temp_s2->polyXlu.p = &temp_v0_2[1];
         temp_v0_2->words.w1 = (u32) &D_06001000;
         temp_v0_2->words.w0 = 0xDE000000;
     }

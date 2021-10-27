@@ -725,12 +725,12 @@ void ObjComb_Draw(Actor *thisx, GlobalContext *globalCtx) {
     SysMatrix_InsertTranslation(0.0f, -(this->actor.scale.y * 118.0f), 0.0f, 1);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
     temp_v0 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0 + 8;
+    temp_s1->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     sp20 = temp_v0;
     sp20->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s1->polyOpa.p;
-    temp_s1->polyOpa.p = temp_v0_2 + 8;
+    temp_s1->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06000CB0;
     temp_v0_2->words.w0 = 0xDE000000;
     Collider_UpdateSpheres(0, &this->unk_148);

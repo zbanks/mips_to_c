@@ -154,12 +154,12 @@ void ObjDhouse_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 void func_80B12A50(void *arg0, ? *arg1, f32 *arg2) {
     arg2->unk_0 = arg0->unk_0 + arg1->unk_8;
-    arg2->unk_4 = (f32) (arg0->unk_4 + arg1->unk_C);
-    arg2->unk_8 = (f32) (arg0->unk_8 + arg1->unk_10);
+    arg2[1] = arg0->unk_4 + arg1->unk_C;
+    arg2[2] = arg0->unk_8 + arg1->unk_10;
 }
 
 void func_80B12A88(Actor *arg0) {
-    Vec3f *temp_s0;
+    f32 *temp_s0;
     s32 temp_s1;
     void *temp_s4;
     Vec3f *phi_s0;
@@ -172,13 +172,13 @@ void func_80B12A88(Actor *arg0) {
     phi_s1 = 0;
     do {
         Math_Vec3f_Copy(phi_s0, arg0 + 0x24);
-        Math_Vec3f_Copy(phi_s0 + 0xC, phi_s2 + 0x14);
+        Math_Vec3f_Copy(&phi_s0[1], phi_s2 + 0x14);
         temp_s1 = phi_s1 + 1;
         phi_s0->unk_18 = (unaligned s32) temp_s4->unk_0;
-        temp_s0 = phi_s0 + 0x20;
+        temp_s0 = &phi_s0[2].z;
         temp_s0->unk_-2 = 0;
         temp_s0->unk_-4 = (u16) temp_s4->unk_4;
-        phi_s0 = temp_s0;
+        phi_s0 = (Vec3f *) temp_s0;
         phi_s2 += 0x28;
         phi_s1 = temp_s1;
     } while (temp_s1 != 7);
@@ -505,11 +505,11 @@ void func_80B13724(Actor *arg0, GlobalContext *arg1) {
     phi_s1 = 0;
     do {
         if ((s32) phi_s0->unk_28 > 0) {
-            phi_s0->unk_10 = (f32) (phi_s0->unk_10 - 2.2f);
+            phi_s0[1].y -= 2.2f;
             Math_Vec3f_Scale(phi_s0 + 0xC, 0.95f);
-            phi_s0->y += phi_s0->unk_10;
-            phi_s0->x += phi_s0->unk_C;
-            phi_s0->z += phi_s0->unk_14;
+            phi_s0->y += phi_s0[1].y;
+            phi_s0->x += phi_s0[1].x;
+            phi_s0->z += phi_s0[1].z;
             if (phi_s0->y < temp_f20) {
                 phi_s0->unk_28 = 0;
             } else {
@@ -528,7 +528,7 @@ void func_80B13724(Actor *arg0, GlobalContext *arg1) {
             }
         }
         temp_s1 = phi_s1 + 1;
-        phi_s0 += 0x2C;
+        phi_s0 = (Vec3f *) &phi_s0[3].z;
         phi_s1 = temp_s1;
     } while (temp_s1 != 0x64);
 }
@@ -640,24 +640,24 @@ void func_80B13C08(Actor *this, GlobalContext *globalCtx) {
     f32 temp_f12;
     s32 temp_s4;
     s32 temp_s4_2;
-    void *phi_s1;
+    s16 *phi_s1;
     ? *phi_s0;
     s32 phi_s4;
-    void *phi_s0_2;
+    f32 *phi_s0_2;
     s32 phi_s4_2;
 
     temp_a0 = globalCtx->state.gfxCtx;
     temp_s3 = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0 + 8;
+    temp_s3->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDA380003;
     temp_v0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
     temp_v0_2 = temp_s3->polyOpa.p;
-    temp_s3->polyOpa.p = temp_v0_2 + 8;
+    temp_s3->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w1 = (u32) &D_06004928;
     temp_v0_2->words.w0 = 0xDE000000;
-    phi_s1 = this + 0x160;
+    phi_s1 = &this[1].params;
     phi_s0 = &D_80B13E90;
     phi_s4 = 0;
     phi_s4_2 = 0;
@@ -667,15 +667,15 @@ void func_80B13C08(Actor *this, GlobalContext *globalCtx) {
             SysMatrix_InsertTranslation(-phi_s0->unk_8, -phi_s0->unk_C, -phi_s0->unk_10, 1);
             Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
             temp_v0_3 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_3 + 8;
+            temp_s3->polyOpa.p = &temp_v0_3[1];
             temp_v0_3->words.w0 = 0xDA380003;
             temp_v0_3->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_4 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_4 + 8;
+            temp_s3->polyOpa.p = &temp_v0_4[1];
             temp_v0_4->words.w0 = 0xDE000000;
             temp_v0_4->words.w1 = phi_s0->unk_0;
             temp_v0_5 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_5 + 8;
+            temp_s3->polyOpa.p = &temp_v0_5[1];
             temp_v0_5->words.w0 = 0xDE000000;
             temp_v0_5->words.w1 = phi_s0->unk_4;
         }
@@ -684,18 +684,18 @@ void func_80B13C08(Actor *this, GlobalContext *globalCtx) {
         phi_s0 += 0x28;
         phi_s4 = temp_s4;
     } while (temp_s4 < 7);
-    phi_s0_2 = this + 0x240;
+    phi_s0_2 = &this[1].uncullZoneForward;
     do {
         if ((s32) phi_s0_2->unk_28 > 0) {
-            SysMatrix_SetStateRotationAndTranslation(phi_s0_2->unk_0, phi_s0_2->unk_4, phi_s0_2->unk_8, phi_s0_2 + 0x1C);
-            temp_f12 = phi_s0_2->unk_18;
+            SysMatrix_SetStateRotationAndTranslation(phi_s0_2->unk_0, phi_s0_2[1], phi_s0_2[2], phi_s0_2 + 0x1C);
+            temp_f12 = phi_s0_2[6];
             Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             temp_v0_6 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_6 + 8;
+            temp_s3->polyOpa.p = &temp_v0_6[1];
             temp_v0_6->words.w0 = 0xDA380003;
             temp_v0_6->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
             temp_v0_7 = temp_s3->polyOpa.p;
-            temp_s3->polyOpa.p = temp_v0_7 + 8;
+            temp_s3->polyOpa.p = &temp_v0_7[1];
             temp_v0_7->words.w1 = (u32) &D_060081D8;
             temp_v0_7->words.w0 = 0xDE000000;
         }

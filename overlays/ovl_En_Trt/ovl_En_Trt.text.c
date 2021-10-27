@@ -1,3 +1,73 @@
+typedef struct Actor {
+    /* 0x000 */ s16 id;
+    /* 0x002 */ u8 category;
+    /* 0x003 */ s8 room;
+    /* 0x004 */ u32 flags;
+    /* 0x008 */ PosRot home;
+    /* 0x01C */ s16 params;
+    /* 0x01E */ s8 objBankIndex;
+    /* 0x01F */ s8 targetMode;
+    /* 0x020 */ s16 unk20;
+    /* 0x022 */ char pad_22[0x2];
+    /* 0x024 */ PosRot world;
+    /* 0x038 */ s8 cutscene;
+    /* 0x039 */ s8 unk39;
+    /* 0x03A */ u16 unk_3A;                         /* inferred */
+    /* 0x03C */ PosRot focus;
+    /* 0x050 */ u16 sfx;
+    /* 0x052 */ char pad_52[0x2];
+    /* 0x054 */ f32 targetArrowOffset;
+    /* 0x058 */ Vec3f scale;
+    /* 0x064 */ Vec3f velocity;
+    /* 0x070 */ f32 speedXZ;
+    /* 0x074 */ f32 gravity;
+    /* 0x078 */ f32 minVelocityY;
+    /* 0x07C */ CollisionPoly *wallPoly;
+    /* 0x080 */ CollisionPoly *floorPoly;
+    /* 0x084 */ u8 wallBgId;
+    /* 0x085 */ u8 floorBgId;
+    /* 0x086 */ s16 wallYaw;
+    /* 0x088 */ f32 floorHeight;
+    /* 0x08C */ f32 yDistToWater;
+    /* 0x090 */ u16 bgCheckFlags;
+    /* 0x092 */ s16 yawTowardsPlayer;
+    /* 0x094 */ f32 xyzDistToPlayerSq;
+    /* 0x098 */ f32 xzDistToPlayer;
+    /* 0x09C */ f32 yDistToPlayer;
+    /* 0x0A0 */ CollisionCheckInfo colChkInfo;
+    /* 0x0BC */ ActorShape shape;
+    /* 0x0EC */ Vec3f projectedPos;
+    /* 0x0F8 */ f32 projectedW;
+    /* 0x0FC */ f32 uncullZoneForward;
+    /* 0x100 */ f32 uncullZoneScale;
+    /* 0x104 */ f32 uncullZoneDownward;
+    /* 0x108 */ Vec3f prevPos;
+    /* 0x114 */ u8 isTargeted;
+    /* 0x115 */ u8 targetPriority;
+    /* 0x116 */ u16 textId;
+    /* 0x118 */ u16 freezeTimer;
+    /* 0x11A */ u16 colorFilterParams;
+    /* 0x11C */ u8 colorFilterTimer;
+    /* 0x11D */ u8 isDrawn;
+    /* 0x11E */ u8 dropFlag;
+    /* 0x11F */ u8 hintId;
+    /* 0x120 */ Actor *parent;
+    /* 0x124 */ Actor *child;
+    /* 0x128 */ Actor *prev;
+    /* 0x12C */ Actor *next;
+    /* 0x130 */ void (*init)(Actor *, GlobalContext *);
+    /* 0x134 */ void (*destroy)(Actor *, GlobalContext *);
+    /* 0x138 */ void (*update)(Actor *, GlobalContext *);
+    /* 0x13C */ void (*draw)(Actor *, GlobalContext *);
+    /* 0x140 */ ActorOverlay *overlayEntry;
+} Actor;                                            /* size = 0x144 */
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x12 */ s16 unk_12;                          /* inferred */
+} PosRot;                                           /* size = 0x14 */
+
 struct _mips2c_stack_EnTrt_BeginInteraction {
     /* 0x00 */ char pad_0[0x26];
     /* 0x26 */ s16 sp26;                            /* inferred */
@@ -500,24 +570,24 @@ void EnTrt_SetupGetMushroomCutscene(Actor *arg0) {
     s16 temp_a0;
 
     if (arg0->unk_334 == 3) {
-        temp_a0 = arg0->unk_3E0;
-        if (arg0->unk_3E2 != temp_a0) {
+        temp_a0 = arg0[3].home.rot.x;
+        if (arg0[3].home.rot.y != temp_a0) {
             ActorCutscene_Stop(temp_a0);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
-            arg0->unk_3E0 = (s16) arg0->unk_3E2;
-            ActorCutscene_SetIntentToPlay(arg0->unk_3E0);
+            arg0[3].home.rot.x = arg0[3].home.rot.y;
+            ActorCutscene_SetIntentToPlay(arg0[3].home.rot.x);
             arg0->unk_334 = 1;
         }
     }
     if (arg0->unk_334 == 1) {
-        if (ActorCutscene_GetCanPlayNext(arg0->unk_3E0) != 0) {
-            ActorCutscene_StartAndSetFlag(arg0->unk_3E0, arg0);
+        if (ActorCutscene_GetCanPlayNext(arg0[3].home.rot.x) != 0) {
+            ActorCutscene_StartAndSetFlag(arg0[3].home.rot.x, arg0);
             arg0->unk_334 = 2;
             return;
         }
-        ActorCutscene_SetIntentToPlay(arg0->unk_3E0);
+        ActorCutscene_SetIntentToPlay(arg0[3].home.rot.x);
         /* Duplicate return node #9. Try simplifying control flow for better match */
     }
 }
@@ -537,7 +607,7 @@ u16 EnTrt_GetItemChoiceTextId(Actor *arg0) {
 
     temp_v1 = (arg0 + (arg0->unk_34C * 4))->unk_340;
     if ((temp_v1->unk_1C == 2) && ((gSaveContext.weekEventReg[53] & 0x10) == 0)) {
-        arg0->unk_406 = 0x881;
+        arg0[3].unk_3A = 0x881;
         return 0x881U;
     }
     return temp_v1->unk_198;
@@ -548,7 +618,7 @@ void EnTrt_EndInteraction(GlobalContext *arg0, Actor *arg1) {
 
     sp24 = arg0->actorCtx.actorList[2].first;
     if (arg1->unk_334 == 3) {
-        ActorCutscene_Stop(arg1->unk_3E0);
+        ActorCutscene_Stop(arg1[3].home.rot.x);
         arg1->unk_334 = 0;
     }
     func_800B84D0(arg1, arg0);
@@ -556,18 +626,18 @@ void EnTrt_EndInteraction(GlobalContext *arg0, Actor *arg1) {
     arg0->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(0x32U);
     arg1->unk_400 = 0;
-    arg1->unk_384 = 0;
-    arg1->unk_3BC = 0;
+    arg1[2].uncullZoneForward = 0.0f;
+    arg1[2].destroy = NULL;
     sp24->unk_A70 = (s32) (sp24->unk_A70 & 0xDFFFFFFF);
     arg0->interfaceCtx.unk_222 = 0;
     arg0->interfaceCtx.unk_224 = 0;
-    arg1->unk_406 = 0x834;
-    arg1->unk_402 = 0x50;
+    arg1[3].unk_3A = 0x834;
+    arg1[3].world.unk_12 = 0x50;
     arg1->unk_42C = (u16) (arg1->unk_42C | 1);
     arg1->unk_332 = 0xA;
     arg1->textId = 0;
     arg1->unk_144 = EnTrt_IdleSleeping;
-    arg1->unk_3DC = EnTrt_NodOff;
+    arg1[3].home.pos.z = (bitwise f32) EnTrt_NodOff;
 }
 
 s32 EnTrt_TestEndInteraction(Actor *arg0, GlobalContext *arg1, Input *arg2) {
@@ -706,7 +776,7 @@ void EnTrt_GetMushroom(Actor *arg0, GlobalContext *arg1) {
 
     temp_v0 = func_80152498(arg1 + 0x4908);
     temp_v1 = arg1->actorCtx.actorList[2].first;
-    arg0->unk_3E2 = (s16) arg0->unk_412;
+    arg0[3].home.rot.y = arg0->unk_412;
     if (arg0->unk_334 != 2) {
         sp20 = temp_v1;
         EnTrt_SetupGetMushroomCutscene(arg0);
@@ -718,7 +788,7 @@ void EnTrt_GetMushroom(Actor *arg0, GlobalContext *arg1) {
         return;
     }
     if ((temp_v0 == 5) && (func_80147624(arg1) != 0)) {
-        temp_v0_2 = arg0->unk_406;
+        temp_v0_2 = arg0[3].unk_3A;
         if (temp_v0_2 != 0x883) {
             if (temp_v0_2 != 0x888) {
                 if (temp_v0_2 != 0x889) {
@@ -728,7 +798,7 @@ void EnTrt_GetMushroom(Actor *arg0, GlobalContext *arg1) {
                     return;
                 }
                 if (arg0->unk_334 == 2) {
-                    ActorCutscene_Stop(arg0->unk_3E0);
+                    ActorCutscene_Stop(arg0[3].home.rot.x);
                     arg0->unk_334 = 0;
                 }
                 arg1->msgCtx.unk11F22 = 0x43;
@@ -736,11 +806,11 @@ void EnTrt_GetMushroom(Actor *arg0, GlobalContext *arg1) {
                 arg0->unk_144 = EnTrt_PayForMushroom;
                 return;
             }
-            arg0->unk_406 = 0x889U;
+            arg0[3].unk_3A = 0x889;
             func_801518B0(arg1, 0x889U & 0xFFFF, arg0);
             return;
         }
-        arg0->unk_406 = 0x884U;
+        arg0[3].unk_3A = 0x884;
         func_801518B0(arg1, 0x884U & 0xFFFF, arg0);
         gSaveContext.weekEventReg[53] |= 8;
         func_80123D50(arg1, (Player *) arg1->actorCtx.actorList[2].first, 0x12, 0x15);
@@ -762,7 +832,7 @@ void EnTrt_Goodbye(Actor *arg0, GlobalContext *arg1) {
 
     arg0 = arg0;
     if ((func_80152498(arg1 + 0x4908) == 5) && (arg0 = arg0, (func_80147624(arg1) != 0))) {
-        temp_v0 = arg0->unk_406;
+        temp_v0 = arg0[3].unk_3A;
         if (temp_v0 != 0x886) {
             if ((temp_v0 != 0x887) && (temp_v0 != 0x88B)) {
                 return;
@@ -771,7 +841,7 @@ void EnTrt_Goodbye(Actor *arg0, GlobalContext *arg1) {
             /* Duplicate return node #8. Try simplifying control flow for better match */
             return;
         }
-        arg0->unk_406 = 0x887U;
+        arg0[3].unk_3A = 0x887;
         func_80151938(arg1, 0x887U & 0xFFFF);
     }
 }
@@ -780,10 +850,10 @@ void EnTrt_SetupTryToGiveRedPotion(Actor *arg0, GlobalContext *arg1) {
     u16 temp_t2;
 
     if ((func_80152498(arg1 + 0x4908) == 5) && (func_80147624(arg1) != 0)) {
-        if (arg0->unk_406 == 0x88F) {
+        if (arg0[3].unk_3A == 0x88F) {
             if ((func_80114E90() != 0) || ((gSaveContext.weekEventReg[12] & 0x10) == 0)) {
                 if (arg0->unk_334 == 3) {
-                    ActorCutscene_Stop(arg0->unk_3E0);
+                    ActorCutscene_Stop(arg0[3].home.rot.x);
                     arg0->unk_334 = 0;
                 }
                 arg1->msgCtx.unk11F22 = 0x43;
@@ -791,21 +861,21 @@ void EnTrt_SetupTryToGiveRedPotion(Actor *arg0, GlobalContext *arg1) {
                 arg0->unk_144 = EnTrt_GiveRedPotionForKoume;
                 return;
             }
-            temp_t2 = arg0->unk_406;
-            arg0->unk_406 = 0x88EU;
+            temp_t2 = arg0[3].unk_3A;
+            arg0[3].unk_3A = 0x88E;
             arg0->unk_408 = temp_t2;
             gSaveContext.weekEventReg[85] |= 8;
-            func_801518B0(arg1, arg0->unk_406, arg0);
+            func_801518B0(arg1, arg0[3].unk_3A, arg0);
             arg0->unk_144 = EnTrt_EndConversation;
             return;
         }
         if ((gSaveContext.weekEventReg[12] & 8) != 0) {
-            arg0->unk_406 = 0x83DU;
+            arg0[3].unk_3A = 0x83D;
             EnTrt_SetupStartShopping(arg1, (EnTrt *) arg0, 0U);
             goto block_20;
         }
         if ((gSaveContext.weekEventReg[84] & 0x40) != 0) {
-            arg0->unk_406 = 0x83BU;
+            arg0[3].unk_3A = 0x83B;
             if (func_80114F2C(0x13) != 0) {
                 EnTrt_SetupStartShopping(arg1, (EnTrt *) arg0, 0U);
             } else {
@@ -814,18 +884,18 @@ void EnTrt_SetupTryToGiveRedPotion(Actor *arg0, GlobalContext *arg1) {
             goto block_20;
         }
         if ((gSaveContext.weekEventReg[16] & 0x10) != 0) {
-            arg0->unk_402 = 0x1E;
-            arg0->unk_406 = 0x838U;
+            arg0[3].world.unk_12 = 0x1E;
+            arg0[3].unk_3A = 0x838;
             arg0->unk_334 = 2;
             arg0->unk_144 = EnTrt_Surprised;
             return;
         }
         if ((gSaveContext.weekEventReg[17] & 1) != 0) {
-            arg0->unk_406 = 0x835U;
+            arg0[3].unk_3A = 0x835;
             EnTrt_SetupStartShopping(arg1, (EnTrt *) arg0, 0U);
 block_20:
         }
-        func_801518B0(arg1, arg0->unk_406, arg0);
+        func_801518B0(arg1, arg0[3].unk_3A, arg0);
         /* Duplicate return node #22. Try simplifying control flow for better match */
     }
 }
@@ -1024,13 +1094,13 @@ s32 EnTrt_HasPlayerSelectedItem(GlobalContext *arg0, Actor *arg1) {
     }
     if (EnTrt_TestItemSelected(arg0) != 0) {
         if ((sp24->unk_1C != 2) || ((arg1->unk_42C & 2) != 0)) {
-            arg1->unk_148 = arg1->unk_144;
+            arg1[1].flags = arg1->unk_144;
             func_80151938(arg0, EnTrt_GetItemChoiceTextId(arg1) & 0xFFFF);
             play_sound(0x4808U);
-            arg1->unk_384 = 0;
-            arg1->unk_3BC = 0;
+            arg1[2].uncullZoneForward = 0.0f;
+            arg1[2].destroy = NULL;
             arg1->unk_400 = 0;
-            arg1->unk_144 = EnTrt_SelectItem;
+            arg1->unk_144 = (u32) EnTrt_SelectItem;
             return 1;
         }
         play_sound(0x4806U);
@@ -1108,7 +1178,7 @@ void EnTrt_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
     switch (temp_v0) {
     case 0:
         if (arg1->unk_334 == 3) {
-            ActorCutscene_Stop(arg1->unk_3E0);
+            ActorCutscene_Stop(arg1[3].home.rot.x);
             arg1->unk_334 = 0;
         }
         func_8019F208();
@@ -1116,7 +1186,7 @@ void EnTrt_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
         temp_a1->unk_1BC(arg0, temp_a1);
         EnTrt_SetupBuyItemWithFanfare(arg0, arg1);
         arg1->unk_400 = 0;
-        arg1->unk_3C0 = 0.0f;
+        arg1[2].update = NULL;
         temp_s1->unk_1A4(arg0, temp_s1);
         return;
     case 1:
@@ -1124,7 +1194,7 @@ void EnTrt_HandleCanBuyItem(GlobalContext *arg0, Actor *arg1) {
         temp_s1->unk_1B8(arg0, temp_s1);
         EnTrt_SetupCanBuy(arg0, arg1, 0x848);
         arg1->unk_400 = 0;
-        arg1->unk_3C0 = 0.0f;
+        arg1[2].update = NULL;
         temp_s1->unk_1A4(arg0, temp_s1);
         return;
     case 2:
@@ -1640,7 +1710,7 @@ void EnTrt_ShopkeeperGone(Actor *arg0, GlobalContext *arg1) {
     temp_v1 = arg1->actorCtx.actorList[2].first;
     sp20 = temp_v1;
     if (func_800B84D0(arg0, arg1) != 0) {
-        func_801518B0(arg1, arg0->unk_406, arg0);
+        func_801518B0(arg1, arg0[3].unk_3A, arg0);
     } else {
         temp_f0 = temp_v1->world.pos.x;
         if ((temp_f0 >= -50.0f) && (temp_f0 <= 50.0f)) {
@@ -2257,48 +2327,48 @@ void EnTrt_DrawCursor(GraphicsContext **arg0, EnTrt *arg1, f32 arg2, f32 arg3, f
         sp18 = temp_a2;
         func_8012C654(temp_a2);
         temp_v0 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0 + 8;
+        sp18->overlay.p = &temp_v0[1];
         temp_v0->words.w0 = 0xFA000000;
         temp_v0->words.w1 = (arg1->cursorColor.r << 0x18) | ((arg1->cursorColor.g & 0xFF) << 0x10) | ((arg1->cursorColor.b & 0xFF) << 8) | (arg1->cursorColor.a & 0xFF);
         temp_v0_2 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_2 + 8;
+        sp18->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFD700000;
         temp_v0_2->words.w1 = (u32) &D_0401F740;
         temp_v0_3 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_3 + 8;
+        sp18->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xF5700000;
         temp_v0_3->words.w1 = 0x7050140;
         temp_v0_4 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_4 + 8;
+        sp18->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xE6000000;
         temp_v0_5 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_5 + 8;
+        sp18->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0x703F800;
         temp_v0_5->words.w0 = 0xF3000000;
         temp_v0_6 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_6 + 8;
+        sp18->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0;
         temp_v0_6->words.w0 = 0xE7000000;
         temp_v0_7 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_7 + 8;
+        sp18->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w0 = 0xF5600200;
         temp_v0_7->words.w1 = 0x50140;
         temp_v0_8 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_8 + 8;
+        sp18->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w0 = 0xF2000000;
         temp_v0_8->words.w1 = 0x3C03C;
         temp_v0_9 = sp18->overlay.p;
         temp_f0 = 16.0f * arg4;
-        sp18->overlay.p = temp_v0_9 + 8;
+        sp18->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = (((s32) ((arg2 + temp_f0) * 4.0f) & 0xFFF) << 0xC) | 0xE4000000 | ((s32) ((arg3 + temp_f0 + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_9->words.w1 = (((s32) ((arg2 - temp_f0) * 4.0f) & 0xFFF) << 0xC) | ((s32) (((arg3 - temp_f0) + -12.0f) * 4.0f) & 0xFFF);
         temp_v0_10 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_10 + 8;
+        sp18->overlay.p = &temp_v0_10[1];
         temp_v0_10->words.w1 = 0;
         temp_v0_10->words.w0 = 0xE1000000;
         temp_v0_11 = sp18->overlay.p;
-        sp18->overlay.p = temp_v0_11 + 8;
+        sp18->overlay.p = &temp_v0_11[1];
         temp_a1 = (s32) ((1.0f / arg4) * 1024.0f) & 0xFFFF;
         temp_v0_11->words.w1 = (temp_a1 << 0x10) | temp_a1;
         temp_v0_11->words.w0 = 0xF1000000;
@@ -2374,35 +2444,35 @@ void EnTrt_DrawStickDirectionPrompt(GraphicsContext **arg0, EnTrt *arg1) {
         sp4C = temp_t1;
         func_8012C654(temp_a2);
         temp_v0_2 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_2 + 8;
+        temp_a2->overlay.p = &temp_v0_2[1];
         temp_v0_2->words.w0 = 0xFC119623;
         temp_v0_2->words.w1 = 0xFF2FFFFF;
         temp_v0_3 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_3 + 8;
+        temp_a2->overlay.p = &temp_v0_3[1];
         temp_v0_3->words.w0 = 0xFD700000;
         temp_v0_3->words.w1 = (u32) &D_0401F8C0;
         temp_v0_4 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_4 + 8;
+        temp_a2->overlay.p = &temp_v0_4[1];
         temp_v0_4->words.w0 = 0xF5700000;
         temp_v0_4->words.w1 = 0x7000040;
         temp_v0_5 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_5 + 8;
+        temp_a2->overlay.p = &temp_v0_5[1];
         temp_v0_5->words.w1 = 0;
         temp_v0_5->words.w0 = 0xE6000000;
         temp_v0_6 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_6 + 8;
+        temp_a2->overlay.p = &temp_v0_6[1];
         temp_v0_6->words.w1 = 0x70BF400;
         temp_v0_6->words.w0 = 0xF3000000;
         temp_v0_7 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_7 + 8;
+        temp_a2->overlay.p = &temp_v0_7[1];
         temp_v0_7->words.w1 = 0;
         temp_v0_7->words.w0 = 0xE7000000;
         temp_v0_8 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_8 + 8;
+        temp_a2->overlay.p = &temp_v0_8[1];
         temp_v0_8->words.w1 = 0x40;
         temp_v0_8->words.w0 = 0xF5680400;
         temp_v0_9 = temp_a2->overlay.p;
-        temp_a2->overlay.p = temp_v0_9 + 8;
+        temp_a2->overlay.p = &temp_v0_9[1];
         temp_v0_9->words.w0 = 0xF2000000;
         temp_v0_9->words.w1 = 0x3C05C;
         if (temp_t1 != 0) {
@@ -2505,7 +2575,7 @@ void EnTrt_UpdateHeadYawAndPitch(EnTrt *this, GlobalContext *globalCtx) {
     sp40.unk_0 = (f32) temp_t0->world.pos.x;
     sp40.unk_4 = (f32) temp_t0->world.pos.y;
     sp40.unk_8 = (f32) temp_t0->world.pos.z;
-    sp44 = temp_t0->unk_C44 + 3.0f;
+    sp44 = temp_t0[9].shape.feetPos[1].x + 3.0f;
     sp34.unk_0 = (f32) this->actor.world.pos.x;
     sp34.unk_4 = (f32) this->actor.world.pos.y;
     sp34.unk_8 = (f32) this->actor.world.pos.z;
@@ -2544,13 +2614,13 @@ void EnTrt_UpdateHeadPosAndRot(s16 arg0, s16 arg1, void *arg2, s16 *arg3, s32 ar
         sp6A += arg1;
         sp68 = temp_a1;
         Math_SmoothStepToS(arg3, temp_a1, 4, 0x1FFE, (s16) 1);
-        Math_SmoothStepToS(arg3 + 2, sp6A, 4, 0x1FFE, (s16) 1);
-        Math_SmoothStepToS(arg3 + 4, sp6C, 4, 0x1FFE, (s16) 1);
+        Math_SmoothStepToS(&arg3[1], sp6A, 4, 0x1FFE, (s16) 1);
+        Math_SmoothStepToS(&arg3[2], sp6C, 4, 0x1FFE, (s16) 1);
         return;
     }
     arg3->unk_0 = sp68;
-    arg3->unk_2 = sp6A;
-    arg3->unk_4 = sp6C;
+    arg3[1] = sp6A;
+    arg3[2] = sp6C;
 }
 
 s32 EnTrt_OverrideLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3f *arg3, Vec3s *arg5) {
@@ -2603,21 +2673,21 @@ void EnTrt_PostLimbDraw(GlobalContext *arg0, s32 arg1, Gfx **arg2, Vec3s *arg3, 
     }
     if (arg1 == 0x15) {
         EnTrt_UpdateHeadPosAndRot(arg4->unk_428, arg4->unk_42A, arg4 + 0x41C, arg4 + 0x416, phi_v0);
-        SysMatrix_InsertTranslation(arg4->unk_41C, arg4->unk_420, arg4->unk_424, 0);
+        SysMatrix_InsertTranslation(arg4->unk_41C, arg4[3].targetArrowOffset, arg4[3].scale.x, 0);
         Matrix_Scale(arg4->scale.x, arg4->scale.y, arg4->scale.z, 1);
-        Matrix_RotateY(arg4->unk_418, 1U);
-        SysMatrix_InsertXRotation_s(arg4->unk_416, 1);
-        SysMatrix_InsertZRotation_s(arg4->unk_41A, 1);
+        Matrix_RotateY(arg4[3].focus.rot.z, 1U);
+        SysMatrix_InsertXRotation_s(arg4[3].focus.rot.y, 1);
+        SysMatrix_InsertZRotation_s(arg4[3].focus.unk_12, 1);
     }
 }
 
 void EnTrt_UnkActorDraw(GlobalContext *arg0, s32 arg1, Actor *arg2) {
     if (arg1 == 0x15) {
-        SysMatrix_InsertTranslation(arg2->unk_41C, arg2->unk_420, arg2->unk_424, 0);
+        SysMatrix_InsertTranslation(arg2->unk_41C, arg2[3].targetArrowOffset, arg2[3].scale.x, 0);
         Matrix_Scale(arg2->scale.x, arg2->scale.y, arg2->scale.z, 1);
-        Matrix_RotateY(arg2->unk_418, 1U);
-        SysMatrix_InsertXRotation_s(arg2->unk_416, 1);
-        SysMatrix_InsertZRotation_s(arg2->unk_41A, 1);
+        Matrix_RotateY(arg2[3].focus.rot.z, 1U);
+        SysMatrix_InsertXRotation_s(arg2[3].focus.rot.y, 1);
+        SysMatrix_InsertZRotation_s(arg2[3].focus.unk_12, 1);
     }
 }
 
@@ -2634,13 +2704,13 @@ void EnTrt_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp3C = temp_a0;
     func_8012C28C(temp_a0);
     temp_v0 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0 + 8;
+    sp3C->polyOpa.p = &temp_v0[1];
     temp_v0->words.w0 = 0xDB060020;
     sp3C = sp3C;
     sp34 = temp_v0;
     sp34->words.w1 = Lib_SegmentedToVirtual(*(&sEyeTextures + (this->eyeTextureIdx * 4)));
     temp_v0_2 = sp3C->polyOpa.p;
-    sp3C->polyOpa.p = temp_v0_2 + 8;
+    sp3C->polyOpa.p = &temp_v0_2[1];
     temp_v0_2->words.w0 = 0xDB060024;
     sp30 = temp_v0_2;
     sp30->words.w1 = Lib_SegmentedToVirtual(*(&sEyeTextures + (this->eyeTextureIdx * 4)));
