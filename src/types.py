@@ -101,7 +101,7 @@ class TypePool:
             self.structs, key=lambda s: s.tag_name or s.typedef_name or ""
         ):
             # Include stack structs & any struct with added fields
-            if struct.is_stack or any(not f.known for f in struct.fields):
+            if struct.is_stack or any(not f.known for f in struct.fields) or struct.tag_name == "GraphicsContext":
                 decls.append(struct.format(fmt) + "\n")
         return "\n".join(decls)
 

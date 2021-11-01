@@ -1722,6 +1722,7 @@ class RegInfo:
     stack_info: StackInfo = field(repr=False)
     contents: Dict[Register, RegData] = field(default_factory=dict)
     read_inherited: Set[Register] = field(default_factory=set)
+    subroutine_args: List[Tuple[Expression, SubroutineArg]] = field(default_factory=list)
 
     def __getitem__(self, key: Register) -> Expression:
         if key == Register("zero"):
@@ -3519,7 +3520,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
 
     to_write: List[Union[Statement]] = []
     local_var_writes: Dict[LocalVar, Tuple[Register, Expression]] = {}
-    subroutine_args: List[Tuple[Expression, SubroutineArg]] = []
+    #subroutine_args: List[Tuple[Expression, SubroutineArg]] = []
     branch_condition: Optional[Condition] = None
     switch_expr: Optional[Expression] = None
     has_custom_return: bool = False
@@ -3711,7 +3712,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 # About to call a subroutine with this argument. Skip arguments for the
                 # first four stack slots; they are also passed in registers.
                 if to_store.dest.value >= 0x10:
-                    subroutine_args.append((to_store.source, to_store.dest))
+                    regs.subroutine_args.append((to_store.source, to_store.dest))
             else:
                 if isinstance(to_store.dest, LocalVar):
                     stack_info.add_local_var(to_store.dest)
@@ -3861,8 +3862,8 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
 
             # Add the arguments after a3.
             # TODO: limit this and unify types based on abi.arg_slots
-            subroutine_args.sort(key=lambda a: a[1].value)
-            for arg in subroutine_args:
+            regs.subroutine_args.sort(key=lambda a: a[1].value)
+            for arg in regs.subroutine_args:
                 func_args.append(arg[0])
 
             if not fn_sig.params_known:
@@ -3872,7 +3873,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 func_args[i] = as_type(arg_expr, param.type, True)
 
             # Reset subroutine_args, for the next potential function call.
-            subroutine_args.clear()
+            regs.subroutine_args.clear()
 
             call: Expression = FuncCall(
                 fn_target, func_args, fn_sig.return_type.weaken_void_ptr()
@@ -4062,7 +4063,7 @@ def translate_graph_from_block(
     for child in node.immediately_dominates:
         if isinstance(child, TerminalNode):
             continue
-        new_regs = RegInfo(stack_info=stack_info)
+        new_regs = RegInfo(stack_info=stack_info, subroutine_args=regs.subroutine_args[:])
         for reg, data in regs.contents.items():
             new_regs.set_with_meta(reg, data.value, RegMeta(inherited=True))
 
