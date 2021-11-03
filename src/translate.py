@@ -1410,6 +1410,12 @@ class EvalOnceExpr(Expression):
         if self.trivial or (self.num_usages == 1 and not self.emit_exactly_once):
             self.wrapped_expr.use()
 
+    def force(self) -> None:
+        self.trivial = False
+        self.forced_emit = True
+        self.use()
+        self.use()
+
     def need_decl(self) -> bool:
         return self.num_usages > 1 and not self.trivial
 
@@ -1722,6 +1728,7 @@ class RegInfo:
     stack_info: StackInfo = field(repr=False)
     contents: Dict[Register, RegData] = field(default_factory=dict)
     read_inherited: Set[Register] = field(default_factory=set)
+    force_exprs: Set[EvalOnceExpr] = field(default_factory=set)
 
     def __getitem__(self, key: Register) -> Expression:
         if key == Register("zero"):
@@ -1741,6 +1748,9 @@ class RegInfo:
             self.stack_info.add_argument(arg)
             val.type.unify(ret.type)
             return val
+        if ret in self.force_exprs:
+            assert isinstance(ret, EvalOnceExpr)
+            ret.force()
         if isinstance(ret, ForceVarExpr):
             # Some of the logic in this file is unprepared to deal with
             # ForceVarExpr transparent wrappers... so for simplicity, we mark
@@ -3570,7 +3580,8 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                         trivial=False,
                         prefix=r.register_name,
                     )
-                regs.set_with_meta(r, ForceVarExpr(expr, type=expr.type), data.meta)
+                    regs.set_with_meta(r, expr, data.meta)
+                regs.force_exprs.add(expr)
 
     def prevent_later_value_uses(sub_expr: Expression) -> None:
         """Prevent later uses of registers that recursively contain a given
@@ -4062,7 +4073,7 @@ def translate_graph_from_block(
     for child in node.immediately_dominates:
         if isinstance(child, TerminalNode):
             continue
-        new_regs = RegInfo(stack_info=stack_info)
+        new_regs = RegInfo(stack_info=stack_info, force_exprs=regs.force_exprs)
         for reg, data in regs.contents.items():
             new_regs.set_with_meta(reg, data.value, RegMeta(inherited=True))
 
