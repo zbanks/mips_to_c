@@ -4073,7 +4073,7 @@ def translate_graph_from_block(
     for child in node.immediately_dominates:
         if isinstance(child, TerminalNode):
             continue
-        new_regs = RegInfo(stack_info=stack_info, force_exprs=regs.force_exprs)
+        new_regs = RegInfo(stack_info=stack_info, force_exprs=regs.force_exprs.copy())
         for reg, data in regs.contents.items():
             new_regs.set_with_meta(reg, data.value, RegMeta(inherited=True))
 
