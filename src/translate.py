@@ -1144,10 +1144,6 @@ class StructAccess(Expression):
     checked_late_field_path: bool = field(default=False, compare=False)
 
     def __post_init__(self) -> None:
-        # stack_info is used to resolve field_path late
-        assert (
-            self.stack_info is not None or self.field_path is not None
-        ), "Must provide at least one of (stack_info, field_path)"
         self.assert_valid_field_path(self.field_path)
 
     @staticmethod
@@ -1212,9 +1208,8 @@ class StructAccess(Expression):
     def late_has_known_type(self) -> bool:
         if self.late_field_path() is not None:
             return True
-        assert (
-            self.stack_info is not None
-        ), "StructAccess must have stack_info if field_path isn't set"
+        if self.stack_info is None:
+            return False
         if self.offset == 0:
             var = late_unwrap(self.struct_var)
             if (
@@ -4452,8 +4447,33 @@ class GlobalInfo:
         return self.asm_data.values.get(sym_name)
 
     def address_of_gsym(self, sym_name: str) -> AddressOf:
+        sym: Expression
         if sym_name in self.global_symbol_map:
             sym = self.global_symbol_map[sym_name]
+        elif "+" in sym_name:
+            # Turn "symbols" like `gSaveContext + 0x100` into a StructAccess
+            base_name, _, offset_str = sym_name.partition("+")
+            base_name = base_name.strip()
+            try:
+                offset = int(offset_str.strip(), 16)
+            except ValueError:
+                raise DecompFailure(
+                    "Unable to parse offset {offset!r} in symbol {sym_name!r}"
+                )
+
+            base = self.address_of_gsym(base_name)
+            field_path, field_type, _ = base.type.get_deref_field(
+                offset,
+                target_size=None,
+            )
+            sym = StructAccess(
+                struct_var=base,
+                offset=offset,
+                target_size=None,
+                field_path=field_path,
+                stack_info=None,
+                type=field_type,
+            )
         else:
             sym = self.global_symbol_map[sym_name] = GlobalSymbol(
                 symbol_name=sym_name,
@@ -4607,7 +4627,8 @@ class GlobalInfo:
             for name in sorted(names):
                 processed_names.add(name)
                 sym = self.address_of_gsym(name).expr
-                assert isinstance(sym, GlobalSymbol)
+                if not isinstance(sym, GlobalSymbol):
+                    continue
                 data_entry = sym.asm_data_entry
 
                 # Is the label defined in this unit (in the active AsmData file(s))
