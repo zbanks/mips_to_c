@@ -1592,6 +1592,19 @@ class PhiExpr(Expression):
             return self.replacement_expr.format(fmt)
         return self.get_var_name()
 
+    def check_for_replacement(self) -> Optional[Expression]:
+        equivalent_nodes: DefaultDict[Expression, List[Node]] = defaultdict(list)
+        for node in self.node.parents:
+            expr = get_block_info(node).final_register_states[self.reg]
+            expr.type.unify(self.type)
+            equivalent_nodes[expr].append(node)
+
+        exprs = list(equivalent_nodes.keys())
+        first_uw = early_unwrap(exprs[0])
+        if all(early_unwrap(e) == first_uw for e in exprs[1:]):
+            return exprs[0]
+        return None
+
 
 @dataclass
 class SwitchControl:
@@ -2467,6 +2480,26 @@ def handle_addi_real(
 
 
 def add_imm(source: Expression, imm: Expression, stack_info: StackInfo) -> Expression:
+    """
+    This is an incredibly simple (source + imm) that is used during translate_node_body
+    """
+    if imm == Literal(0):
+        # addiu $reg1, $reg2, 0 is a move
+        # (this happens when replacing %lo(...) by 0)
+        return source
+    elif isinstance(source, Literal) and isinstance(imm, Literal):
+        return Literal(source.value + imm.value)
+    else:
+        # Regular binary addition.
+        return BinaryOp.intptr(left=source, op="+", right=imm)
+
+
+def add_imm2(source: Expression, imm: Expression, stack_info: StackInfo) -> Expression:
+    """
+    This checks (source + imm) expressions and uses type information to try to
+    replace them with struct accesses, etc.
+    This runs at rewrite time.
+    """
     if imm == Literal(0):
         # addiu $reg1, $reg2, 0 is a move
         # (this happens when replacing %lo(...) by 0)
@@ -4417,6 +4450,63 @@ def translate_graph_from_block(
         )
 
 
+def do_rewrites(stack_info: StackInfo, flow_graph: FlowGraph) -> None:
+    def visit_eoe(expr: Expression) -> Expression:
+        # Try to replace `(a + b)` expressions now that there is more type info available
+        if isinstance(expr, BinaryOp) and expr.op == "+" and not expr.is_floating():
+            expr = as_type(
+                add_imm2(expr.left, expr.right, stack_info), expr.type, silent=True
+            )
+        return expr
+
+    def expr_iterate(expr: Expression) -> None:
+        for e in expr.dependencies():
+            expr_iterate(e)
+        if isinstance(expr, EvalOnceExpr):
+            nz = stack_info.has_nonzero_access(expr.wrapped_expr)
+            expr.wrapped_expr = visit_eoe(expr.wrapped_expr)
+            if nz:
+                stack_info.record_struct_access(expr.wrapped_expr, 1)
+        if isinstance(expr, PhiExpr):
+            ex = expr.check_for_replacement()
+            if ex is not None:
+                expr_iterate(ex)
+
+    def set_phis(expr: Expression) -> None:
+        for e in expr.dependencies():
+            set_phis(e)
+        if isinstance(expr, PhiExpr):
+            expr.check_for_replacement()
+
+    def expr_apply(fn: Callable[[Expression], None]) -> None:
+        for node in flow_graph.nodes:
+            if isinstance(node, TerminalNode):
+                continue
+
+            block_info = get_block_info(node)
+            for stmt in block_info.to_write:
+                if isinstance(stmt, (EvalOnceStmt, ExprStmt)):
+                    fn(stmt.expr)
+                elif isinstance(stmt, StoreStmt):
+                    fn(stmt.source)
+                    fn(stmt.dest)
+                elif isinstance(stmt, CommentStmt):
+                    pass
+                else:
+                    assert False, stmt.__class__
+
+            # Mark the misc. Expressions in the block as used
+            if block_info.branch_condition is not None:
+                fn(block_info.branch_condition)
+            if block_info.switch_control is not None:
+                fn(block_info.switch_control.control_expr)
+            if block_info.return_value is not None:
+                fn(block_info.return_value)
+
+    expr_apply(set_phis)
+    expr_apply(expr_iterate)
+
+
 def mark_usages(stack_info: StackInfo, flow_graph: FlowGraph) -> None:
     # Visit the nodes in the exact same order recursively traversed by translate_graph_from_block
     visited = set()
@@ -4872,6 +4962,7 @@ def translate_to_ast(
                 param.name = arg.format(Formatter())
 
     # TODO: Right here is where flow_graph/statement transformations could be added
+    do_rewrites(stack_info, flow_graph)
 
     mark_usages(stack_info, flow_graph)
     assign_phis(used_phis, stack_info)
