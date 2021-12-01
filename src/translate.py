@@ -4241,7 +4241,6 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             # and then this prevention should also be... but it's the best we
             # can do with the current code architecture.
             prevent_later_function_calls()
-            prevent_later_reads()
 
             # We may not know what this function's return registers are --
             # $f0, $v0 or ($v0,$v1) or $f0 -- but we don't really care,
@@ -4281,6 +4280,8 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                     ),
                 )
                 regs[Register("f1")] = SecondF64Half()
+
+            prevent_later_reads()
 
             has_function_call = True
 
