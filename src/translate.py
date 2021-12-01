@@ -2036,6 +2036,25 @@ class InstrArgs:
         return len(self.raw_args)
 
 
+def prevent_later_uses2(regs: RegInfo, expr_filter: Callable[[Expression], bool]) -> None:
+    """Prevent later uses of registers whose contents match a callback filter."""
+    for r in regs.contents.keys():
+        data = regs.contents.get(r)
+        assert data is not None
+        expr = data.value
+        if not data.meta.force and expr_filter(expr):
+            # Mark the register as "if used, emit the expression's once
+            # var". We usually always have a once var at this point,
+            # but if we don't, create one.
+            if not isinstance(expr, EvalOnceExpr):
+                # FIXME: This should do eval_once(expr, ...); needs refactor
+                continue
+            regs.set_with_meta(r, expr, replace(data.meta, force=True))
+
+def prevent_later_function_calls2(regs: RegInfo) -> None:
+    """Prevent later uses of registers that recursively contain a function call."""
+    prevent_later_uses2(regs, lambda e: uses_expr(e, lambda e2: isinstance(e2, FuncCall)))
+
 def deref(
     arg: Union[AddressMode, RawSymbolRef],
     regs: RegInfo,
@@ -2047,6 +2066,7 @@ def deref(
     offset = arg.offset
     if isinstance(arg, AddressMode):
         if stack_info.is_stack_reg(arg.rhs):
+            prevent_later_function_calls2(regs)
             return stack_info.get_stack_var(offset, store=store)
         var = regs[arg.rhs]
     else:
@@ -2067,6 +2087,16 @@ def deref(
                 offset += addend.value
                 var = base
                 break
+
+    # Prevent function calls, unless we're only reading $zero or a float constant
+    uw_var = early_unwrap(var)
+    if not isinstance(uw_var, Literal) and not (
+        isinstance(uw_var, AddressOf)
+        and isinstance(uw_var.expr, GlobalSymbol)
+        and uw_var.expr.asm_data_entry is not None
+        and uw_var.expr.asm_data_entry.is_readonly
+    ):
+        prevent_later_function_calls2(regs)
 
     var.type.unify(Type.ptr())
     stack_info.record_struct_access(var, offset)
@@ -4093,7 +4123,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 to_store.source.use()
                 to_store.dest.use()
                 prevent_later_value_uses(to_store.dest)
-                prevent_later_function_calls()
+                #prevent_later_function_calls()
                 to_write.append(to_store)
 
         elif mnemonic in CASES_SOURCE_FIRST:

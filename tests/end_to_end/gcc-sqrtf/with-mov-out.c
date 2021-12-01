@@ -1,3 +1,6 @@
 f32 test(f32 arg0) {
-    return sqrtf(arg0) * 0.5f;
+    f32 temp_f0;
+
+    temp_f0 = sqrtf(arg0) * 0.5f;
+    return temp_f0;
 }
