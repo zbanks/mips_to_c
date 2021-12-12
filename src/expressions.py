@@ -1,3 +1,8 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .translate import StackInfo
+
 import abc
 from collections import defaultdict
 from contextlib import contextmanager
@@ -50,7 +55,7 @@ from .types import (
     Type,
     TypePool,
 )
-from typing import Any
+
 
 ASSOCIATIVE_OPS: Set[str] = {"+", "&&", "||", "&", "|", "^", "*"}
 COMPOUND_ASSIGNMENT_OPS: Set[str] = {"+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>"}
@@ -131,7 +136,7 @@ def as_function_ptr(expr: "Expression") -> "Expression":
 
 @dataclass(eq=False)
 class Var:
-    stack_info: Any = field(repr=False)
+    stack_info: "StackInfo" = field(repr=False)
     prefix: str
     num_usages: int = 0
     name: Optional[str] = None
@@ -617,7 +622,7 @@ class RegisterVar(Expression):
 class PassedInArg(Expression):
     value: int
     copied: bool = field(compare=False)
-    stack_info: Any = field(compare=False, repr=False)
+    stack_info: "StackInfo" = field(compare=False, repr=False)
     type: Type = field(compare=False)
 
     def dependencies(self) -> List[Expression]:
@@ -652,7 +657,7 @@ class StructAccess(Expression):
     offset: int
     target_size: Optional[int]
     field_path: Optional[AccessPath] = field(compare=False)
-    stack_info: Optional[Any] = field(compare=False, repr=False)
+    stack_info: Optional["StackInfo"] = field(compare=False, repr=False)
     type: Type = field(compare=False)
     checked_late_field_path: bool = field(default=False, compare=False)
 
