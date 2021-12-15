@@ -22,6 +22,7 @@ from typing import (
     Union,
 )
 
+from .abi import Abi, AbiArgSlot, FunctionAbi, Register
 from .c_types import CType, TypeMap
 from .error import DecompFailure, static_assert_unreachable
 from .flow_graph import (
@@ -42,7 +43,6 @@ from .parse_instruction import (
     BinOp,
     Instruction,
     Macro,
-    Register,
 )
 from .types import (
     AccessPath,
@@ -63,16 +63,7 @@ PairInstrMap = Mapping[str, Callable[["InstrArgs"], Tuple["Expression", "Express
 
 
 class Arch(abc.ABC):
-    stack_pointer_reg: Register
-    frame_pointer_reg: Register
-    return_address_reg: Register
-
-    base_return_regs: List[Register]
-    all_return_regs: List[Register]
-    argument_regs: List[Register]
-    simple_temp_regs: List[Register]
-    temp_regs: List[Register]
-    saved_regs: List[Register]
+    abi: Abi
 
     instrs_ignore: InstrSet
     instrs_store: StoreInstrMap
@@ -85,16 +76,6 @@ class Arch(abc.ABC):
     instrs_hi_lo: PairInstrMap
     instrs_source_first: InstrMap
     instrs_destination_first: InstrMap
-
-    @abc.abstractmethod
-    def function_abi(
-        self,
-        fn_sig: FunctionSignature,
-        likely_regs: Dict[Register, bool],
-        *,
-        for_call: bool,
-    ) -> "Abi":
-        ...
 
     @abc.abstractmethod
     def function_return(
@@ -405,9 +386,9 @@ class StackInfo:
         self.used_reg_vars.add(var.reg)
 
     def is_stack_reg(self, reg: Register) -> bool:
-        if reg == self.global_info.arch.stack_pointer_reg:
+        if reg == self.global_info.arch.abi.stack_pointer_reg:
             return True
-        if reg == self.global_info.arch.frame_pointer_reg:
+        if reg == self.global_info.arch.abi.frame_pointer_reg:
             return self.uses_framepointer
         return False
 
@@ -458,14 +439,14 @@ def get_stack_info(
     for inst in flow_graph.entry_node().block.instructions:
         if inst.mnemonic == "jal":
             break
-        elif inst.mnemonic == "addiu" and inst.args[0] == arch.stack_pointer_reg:
+        elif inst.mnemonic == "addiu" and inst.args[0] == arch.abi.stack_pointer_reg:
             # Moving the stack pointer.
             assert isinstance(inst.args[2], AsmLiteral)
             info.allocated_stack_size = abs(inst.args[2].signed_value())
         elif (
             inst.mnemonic == "move"
-            and inst.args[0] == arch.frame_pointer_reg
-            and inst.args[1] == arch.stack_pointer_reg
+            and inst.args[0] == arch.abi.frame_pointer_reg
+            and inst.args[1] == arch.abi.stack_pointer_reg
         ):
             # "move fp, sp" very likely means the code is compiled with frame
             # pointers enabled; thus fp should be treated the same as sp.
@@ -473,13 +454,13 @@ def get_stack_info(
         elif (
             inst.mnemonic in ["sw", "swc1", "sdc1"]
             and isinstance(inst.args[0], Register)
-            and inst.args[0] in arch.saved_regs
+            and inst.args[0] in arch.abi.saved_regs
             and isinstance(inst.args[1], AsmAddressMode)
-            and inst.args[1].rhs == arch.stack_pointer_reg
+            and inst.args[1].rhs == arch.abi.stack_pointer_reg
             and inst.args[0] not in info.callee_save_reg_locations
         ):
             # Initial saving of callee-save register onto the stack.
-            if inst.args[0] == arch.return_address_reg:
+            if inst.args[0] == arch.abi.return_address_reg:
                 # Saving the return address on the stack.
                 info.is_leaf = False
             stack_offset = inst.args[1].lhs_as_literal()
@@ -497,7 +478,7 @@ def get_stack_info(
                 if (
                     inst.mnemonic in ["lw", "lwc1", "ldc1"]
                     and isinstance(inst.args[1], AsmAddressMode)
-                    and inst.args[1].rhs == arch.stack_pointer_reg
+                    and inst.args[1].rhs == arch.abi.stack_pointer_reg
                     and inst.args[1].lhs_as_literal() >= 16
                 ):
                     info.subroutine_arg_top = min(
@@ -505,8 +486,8 @@ def get_stack_info(
                     )
                 elif (
                     inst.mnemonic == "addiu"
-                    and inst.args[0] != arch.stack_pointer_reg
-                    and inst.args[1] == arch.stack_pointer_reg
+                    and inst.args[0] != arch.abi.stack_pointer_reg
+                    and inst.args[1] == arch.abi.stack_pointer_reg
                     and isinstance(inst.args[2], AsmLiteral)
                     and inst.args[2].value < info.allocated_stack_size
                 ):
@@ -3136,20 +3117,6 @@ def strip_macros(arg: Argument) -> Argument:
         return arg
 
 
-@dataclass
-class AbiArgSlot:
-    offset: int
-    reg: Optional[Register]
-    type: Type
-    name: Optional[str] = None
-
-
-@dataclass
-class Abi:
-    arg_slots: List[AbiArgSlot]
-    possible_slots: List[AbiArgSlot]
-
-
 def output_regs_for_instr(
     instr: Instruction, global_info: "GlobalInfo"
 ) -> List[Register]:
@@ -3177,7 +3144,7 @@ def output_regs_for_instr(
             if global_info.is_function_known_void(fn_target.symbol_name):
                 return []
     if mnemonic in arch.instrs_fn_call:
-        return arch.all_return_regs
+        return arch.abi.all_return_regs
     if mnemonic in arch.instrs_source_first:
         return reg_at(1)
     if mnemonic in arch.instrs_destination_first:
@@ -3208,7 +3175,7 @@ def regs_clobbered_until_dominator(
             with current_instr(instr):
                 clobbered.update(output_regs_for_instr(instr, global_info))
                 if instr.mnemonic in global_info.arch.instrs_fn_call:
-                    clobbered.update(global_info.arch.temp_regs)
+                    clobbered.update(global_info.arch.abi.temp_regs)
         stack.extend(n.parents)
     return clobbered
 
@@ -3232,7 +3199,7 @@ def reg_always_set(
             with current_instr(instr):
                 if (
                     instr.mnemonic in global_info.arch.instrs_fn_call
-                    and reg in global_info.arch.temp_regs
+                    and reg in global_info.arch.abi.temp_regs
                 ):
                     clobbered = True
                 if reg in output_regs_for_instr(instr, global_info):
@@ -3412,7 +3379,7 @@ def determine_return_register(
 
     best_reg: Optional[Register] = None
     best_prio = -1
-    for reg in arch.base_return_regs:
+    for reg in arch.abi.base_return_regs:
         prios = [priority(b, reg) for b in return_blocks]
         max_prio = max(prios)
         if max_prio == 3:
@@ -3564,7 +3531,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             set_reg_maybe_return(reg, expr)
 
     def clear_caller_save_regs() -> None:
-        for reg in arch.temp_regs:
+        for reg in arch.abi.temp_regs:
             if reg in regs:
                 del regs[reg]
 
@@ -3641,7 +3608,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
 
         elif mnemonic in arch.instrs_jumps:
             assert mnemonic == "jr"
-            if args.reg_ref(0) == arch.return_address_reg:
+            if args.reg_ref(0) == arch.abi.return_address_reg:
                 # Return from the function.
                 assert isinstance(node, ReturnNode)
             else:
@@ -3668,7 +3635,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 if args.count() == 1:
                     fn_target = args.reg(0)
                 elif args.count() == 2:
-                    if args.reg_ref(0) != arch.return_address_reg:
+                    if args.reg_ref(0) != arch.abi.return_address_reg:
                         raise DecompFailure(
                             "Two-argument form of jalr is not supported."
                         )
@@ -3686,7 +3653,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                     not isinstance(data.value, PassedInArg) or data.value.copied
                 )
 
-            abi = arch.function_abi(fn_sig, likely_regs, for_call=True)
+            abi = arch.abi.function_abi(fn_sig, likely_regs, for_call=True)
 
             func_args: List[Expression] = []
             for slot in abi.arg_slots:
@@ -3740,7 +3707,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             # fn_sig.return_type even though it may be more accurate.
             if not is_known_void:
                 for reg, val in arch.function_return(call):
-                    assert reg in arch.all_return_regs
+                    assert reg in arch.abi.all_return_regs
                     if not isinstance(val, SecondF64Half):
                         val = eval_once(
                             val,
@@ -4244,8 +4211,8 @@ def translate_to_ast(
     start_regs: RegInfo = RegInfo(stack_info=stack_info)
 
     arch = global_info.arch
-    start_regs[arch.stack_pointer_reg] = GlobalSymbol("sp", type=Type.ptr())
-    for reg in arch.saved_regs:
+    start_regs[arch.abi.stack_pointer_reg] = GlobalSymbol("sp", type=Type.ptr())
+    for reg in arch.abi.saved_regs:
         start_regs[reg] = stack_info.saved_reg_symbol(reg.register_name)
 
     fn_sym = global_info.address_of_gsym(function.name).expr
@@ -4262,9 +4229,9 @@ def translate_to_ast(
         assert offset % 4 == 0
         return PassedInArg(offset, copied=False, stack_info=stack_info, type=type)
 
-    abi = arch.function_abi(
+    abi = arch.abi.function_abi(
         fn_sig,
-        likely_regs={reg: True for reg in arch.argument_regs},
+        likely_regs={reg: True for reg in arch.abi.argument_regs},
         for_call=False,
     )
     for slot in abi.arg_slots:
@@ -4276,11 +4243,13 @@ def translate_to_ast(
             start_regs[slot.reg] = make_arg(slot.offset, slot.type)
 
     if options.reg_vars == ["saved"]:
-        reg_vars = arch.saved_regs
+        reg_vars = arch.abi.saved_regs
     elif options.reg_vars == ["most"]:
-        reg_vars = arch.saved_regs + arch.simple_temp_regs
+        reg_vars = arch.abi.saved_regs + arch.abi.simple_temp_regs
     elif options.reg_vars == ["all"]:
-        reg_vars = arch.saved_regs + arch.simple_temp_regs + arch.argument_regs
+        reg_vars = (
+            arch.abi.saved_regs + arch.abi.simple_temp_regs + arch.abi.argument_regs
+        )
     else:
         reg_vars = list(map(Register, options.reg_vars))
     for reg in reg_vars:
@@ -4301,7 +4270,7 @@ def translate_to_ast(
         options,
     )
 
-    for reg in arch.base_return_regs:
+    for reg in arch.abi.base_return_regs:
         propagate_register_meta(flow_graph.nodes, reg)
 
     return_reg: Optional[Register] = None

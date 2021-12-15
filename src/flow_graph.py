@@ -15,6 +15,7 @@ from typing import (
     Union,
 )
 
+from .abi import Abi, Register
 from .error import DecompFailure
 from .options import Formatter
 from .parse_file import AsmData, Function, Label
@@ -26,7 +27,6 @@ from .parse_instruction import (
     InstructionMeta,
     JumpTarget,
     Macro,
-    Register,
     parse_instruction,
 )
 
@@ -272,7 +272,7 @@ def prune_unreferenced_labels(function: Function, asm_data: AsmData) -> Function
     return new_function
 
 
-def simplify_standard_patterns(function: Function) -> Function:
+def simplify_standard_patterns(function: Function, abi: Abi) -> Function:
     """Detect and simplify various standard patterns emitted by IDO and GCC."""
     BodyPart = Union[Instruction, Label]
     PatternPart = Union[Instruction, Label, None]
@@ -288,7 +288,7 @@ def simplify_standard_patterns(function: Function) -> Function:
             elif part.endswith(":"):
                 ret.append((Label(""), optional))
             else:
-                ins = parse_instruction(part, InstructionMeta.missing())
+                ins = parse_instruction(part, InstructionMeta.missing(), abi)
                 ret.append((ins, optional))
         return ret
 
@@ -669,11 +669,11 @@ def simplify_standard_patterns(function: Function) -> Function:
     return new_function
 
 
-def build_blocks(function: Function, asm_data: AsmData) -> List[Block]:
+def build_blocks(function: Function, asm_data: AsmData, abi: Abi) -> List[Block]:
     verify_no_trailing_delay_slot(function)
     function = normalize_likely_branches(function)
     function = prune_unreferenced_labels(function, asm_data)
-    function = simplify_standard_patterns(function)
+    function = simplify_standard_patterns(function, abi)
     function = prune_unreferenced_labels(function, asm_data)
 
     block_builder = BlockBuilder()
@@ -1425,8 +1425,8 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def build_flowgraph(function: Function, asm_data: AsmData) -> FlowGraph:
-    blocks = build_blocks(function, asm_data)
+def build_flowgraph(function: Function, asm_data: AsmData, abi: Abi) -> FlowGraph:
+    blocks = build_blocks(function, asm_data, abi)
     nodes = build_nodes(function, blocks, asm_data)
     nodes = duplicate_premature_returns(nodes)
     compute_relations(nodes)

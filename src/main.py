@@ -18,7 +18,7 @@ from .translate import (
     translate_to_ast,
 )
 from .types import TypePool
-from .arch_mips import MipsArch
+from .arch_mips import MipsO32Arch
 
 
 def print_current_exception(sanitize: bool) -> None:
@@ -60,16 +60,16 @@ def print_exception_as_comment(
 
 
 def run(options: Options) -> int:
-    arch = MipsArch()
+    arch = MipsO32Arch()
     all_functions: Dict[str, Function] = {}
     asm_data = AsmData()
     try:
         for filename in options.filenames:
             if filename == "-":
-                mips_file = parse_file(sys.stdin, options)
+                mips_file = parse_file(sys.stdin, arch.abi, options)
             else:
                 with open(filename, "r", encoding="utf-8-sig") as f:
-                    mips_file = parse_file(f, options)
+                    mips_file = parse_file(f, arch.abi, options)
             all_functions.update((fn.name, fn) for fn in mips_file.functions)
             mips_file.asm_data.merge_into(asm_data)
 
@@ -115,7 +115,9 @@ def run(options: Options) -> int:
     flow_graphs: List[Union[FlowGraph, Exception]] = []
     for function in functions:
         try:
-            flow_graphs.append(build_flowgraph(function, global_info.asm_data))
+            flow_graphs.append(
+                build_flowgraph(function, global_info.asm_data, arch.abi)
+            )
         except Exception as e:
             # Store the exception for later, to preserve the order in the output
             flow_graphs.append(e)

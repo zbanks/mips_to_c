@@ -4,6 +4,7 @@ from dataclasses import dataclass, replace
 import string
 from typing import List, Optional, Set, Union
 
+from .abi import Abi, Register
 from .error import DecompFailure
 
 LENGTH_TWO: Set[str] = {
@@ -72,25 +73,6 @@ DIV_MULT_INSTRUCTIONS: Set[str] = {
     "dmult",
     "dmultu",
 }
-
-
-@dataclass(frozen=True)
-class Register:
-    register_name: str
-
-    def is_float(self) -> bool:
-        name = self.register_name
-        return bool(name) and name[0] == "f" and name != "fp"
-
-    def other_f64_reg(self) -> "Register":
-        assert (
-            self.is_float()
-        ), "tried to get complement reg of non-floating point register"
-        num = int(self.register_name[1:])
-        return Register(f"f{num ^ 1}")
-
-    def __str__(self) -> str:
-        return f"${self.register_name}"
 
 
 @dataclass(frozen=True)
@@ -413,7 +395,7 @@ class Instruction:
         return f"{self.mnemonic} {args}"
 
 
-def normalize_instruction(instr: Instruction) -> Instruction:
+def normalize_instruction(instr: Instruction, abi: Abi) -> Instruction:
     args = instr.args
     if len(args) == 3:
         if instr.mnemonic == "sll" and args[0] == args[1] == Register("zero"):
@@ -463,17 +445,17 @@ def normalize_instruction(instr: Instruction) -> Instruction:
             return Instruction("li", [args[0], lit], instr.meta)
         if instr.mnemonic in LENGTH_THREE:
             return normalize_instruction(
-                Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
+                Instruction(instr.mnemonic, [args[0]] + args, instr.meta), abi
             )
     if len(args) == 1:
         if instr.mnemonic in LENGTH_TWO:
             return normalize_instruction(
-                Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
+                Instruction(instr.mnemonic, [args[0]] + args, instr.meta), abi
             )
     return instr
 
 
-def parse_instruction(line: str, meta: InstructionMeta) -> Instruction:
+def parse_instruction(line: str, meta: InstructionMeta, abi: Abi) -> Instruction:
     try:
         # First token is instruction name, rest is args.
         line = line.strip()
@@ -485,6 +467,6 @@ def parse_instruction(line: str, meta: InstructionMeta) -> Instruction:
             )
         )
         instr = Instruction(mnemonic, args, meta)
-        return normalize_instruction(instr)
+        return normalize_instruction(instr, abi)
     except Exception as e:
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
