@@ -2206,6 +2206,22 @@ def uses_expr(expr: Expression, expr_filter: Callable[[Expression], bool]) -> bo
     return False
 
 
+def uses_expr_reference(
+    expr: Expression, expr_filter: Callable[[Expression], bool]
+) -> bool:
+    queue = [(expr, 0)]
+    while queue:
+        expr, depth = queue.pop()
+        if depth < 0 and expr_filter(expr):
+            return True
+        if isinstance(expr, (StructAccess, ArrayAccess)):
+            depth += 1
+        elif isinstance(expr, AddressOf):
+            depth -= 1
+        queue.extend([(e, depth) for e in expr.dependencies()])
+    return False
+
+
 def late_unwrap(expr: Expression) -> Expression:
     """
     Unwrap EvalOnceExpr's, stopping at variable boundaries.
@@ -3630,10 +3646,9 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
         # a reference to a stack var. (The called function may modify the stack,
         # replacing the value we have in `local_var_writes`.)
         for arg in func_args:
-            if uses_expr(
+            if uses_expr_reference(
                 arg,
-                lambda expr: isinstance(expr, AddressOf)
-                and isinstance(expr.expr, LocalVar),
+                lambda expr: isinstance(expr, LocalVar),
             ):
                 local_var_writes.clear()
                 return
