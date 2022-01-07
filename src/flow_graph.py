@@ -818,7 +818,7 @@ class BaseNode(_BaseNode, abc.ABC):
         ...
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: {self.block.index}>"
+        return f"<{self.__class__.__name__}: {self.name()}>"
 
 
 @dataclass(eq=False, repr=False)
@@ -838,7 +838,7 @@ class BasicNode(BaseNode):
         return "".join(
             [
                 f"{self.block}\n",
-                f"# {self.block.index} -> {self.successor.block.index}",
+                f"# {self.name()} -> {self.successor.name()}",
                 " (loop)" if self.loop else "",
                 " (goto)" if self.emit_goto else "",
             ]
@@ -859,11 +859,11 @@ class ConditionalNode(BaseNode):
         return "".join(
             [
                 f"{self.block}\n",
-                f"# {self.block.index} -> ",
-                f"cond: {self.conditional_edge.block.index}",
+                f"# {self.name()} -> ",
+                f"cond: {self.conditional_edge.name()}",
                 " (loop)" if self.loop else "",
                 ", ",
-                f"def: {self.fallthrough_edge.block.index}",
+                f"def: {self.fallthrough_edge.name()}",
                 " (goto)" if self.emit_goto else "",
             ]
         )
@@ -888,7 +888,7 @@ class ReturnNode(BaseNode):
         return "".join(
             [
                 f"{self.block}\n",
-                f"# {self.block.index} -> ret",
+                f"# {self.name()} -> return",
                 " (goto)" if self.emit_goto else "",
             ]
         )
@@ -910,7 +910,7 @@ class SwitchNode(BaseNode):
 
     def __str__(self) -> str:
         targets = ", ".join(str(c.block.index) for c in self.cases)
-        return f"{self.block}\n# {self.block.index} -> {targets}"
+        return f"{self.block}\n# {self.name()} -> {targets}"
 
 
 @dataclass(eq=False, repr=False)

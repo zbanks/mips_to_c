@@ -1365,7 +1365,7 @@ def build_body(context: Context, options: Options) -> Body:
         - context.emitted_nodes
         - {context.flow_graph.terminal_node()}
     )
-    for node in unemitted_nodes:
+    for node in sorted(unemitted_nodes, key=lambda n: n.name()):
         if isinstance(node, ReturnNode) and not node.is_real():
             continue
         body.add_comment(
