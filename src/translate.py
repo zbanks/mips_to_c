@@ -1610,8 +1610,9 @@ class SwitchControl:
         These are the appropriate bounds checks before using `jump_table`.
         """
         cmp_expr = simplify_condition(cond)
-        if not isinstance(cmp_expr, BinaryOp) or cmp_expr.op != ">=":
+        if not isinstance(cmp_expr, BinaryOp) or cmp_expr.op not in (">=", ">"):
             return False
+        cmp_exclusive = cmp_expr.op == ">"
 
         # The LHS may have been wrapped in a u32 cast
         left_expr = late_unwrap(cmp_expr.left)
@@ -1634,6 +1635,7 @@ class SwitchControl:
             self.jump_table is None
             or self.jump_table.asm_data_entry is None
             or not self.jump_table.asm_data_entry.is_jtbl
+            or not isinstance(right_expr, Literal)
         ):
             return False
 
@@ -1641,7 +1643,7 @@ class SwitchControl:
         jump_table_len = sum(
             isinstance(e, str) for e in self.jump_table.asm_data_entry.data
         )
-        return right_expr == Literal(jump_table_len)
+        return right_expr.value + int(cmp_exclusive) == jump_table_len
 
     @staticmethod
     def irregular_from_expr(control_expr: Expression) -> "SwitchControl":
@@ -2774,7 +2776,7 @@ def fold_gcc_divmod(original_expr: BinaryOp) -> BinaryOp:
     for a modern writeup of a similar algorithm.
     """
     mult_high_ops = ("MULT_HI", "MULTU_HI")
-    possible_match_ops = mult_high_ops + ("-", ">>")
+    possible_match_ops = mult_high_ops + ("-", "+", ">>")
 
     # Only operate on integer expressions of certain operations
     if original_expr.is_floating() or original_expr.op not in possible_match_ops:
@@ -2835,6 +2837,19 @@ def fold_gcc_divmod(original_expr: BinaryOp) -> BinaryOp:
             left_expr,
         )
 
+    # Remove outer error term: ((x / N) + ((x / N) >> 31)) --> x / N
+    if (
+        expr.op == "+"
+        and isinstance(left_expr, BinaryOp)
+        and left_expr.op == "/"
+        and isinstance(left_expr.right, Literal)
+        and isinstance(right_expr, BinaryOp)
+        and early_unwrap_ints(right_expr.left) == left_expr
+        and right_expr.op == ">>"
+        and early_unwrap_ints(right_expr.right) == Literal(31)
+    ):
+        return left_expr
+
     # Remove outer error term: ((x / N) - (x >> 31)) --> x / N
     if (
         expr.op == "-"
@@ -2879,6 +2894,10 @@ def fold_gcc_divmod(original_expr: BinaryOp) -> BinaryOp:
         expr = left_expr
         left_expr = early_unwrap_ints(expr.left)
         right_expr = early_unwrap_ints(expr.right)
+
+        # Normalize MULT_HI(N, x) to MULT_HI(x, N)
+        if isinstance(left_expr, Literal) and not isinstance(right_expr, Literal):
+            left_expr, right_expr = right_expr, left_expr
 
         # Remove inner addition: (MULT_HI(x, N) + x) >> M --> MULT_HI(x, N) >> M
         # MULT_HI performs signed multiplication, so the `+ x` acts as setting the 32nd bit
@@ -3138,6 +3157,8 @@ def handle_add(args: InstrArgs) -> Expression:
     folded_expr = fold_mul_chains(expr)
     if folded_expr is not expr:
         return folded_expr
+    if isinstance(folded_expr, BinaryOp):
+        folded_expr = fold_gcc_divmod(folded_expr)
     array_expr = array_access_from_add(expr, 0, stack_info, target_size=None, ptr=True)
     if array_expr is not None:
         return array_expr

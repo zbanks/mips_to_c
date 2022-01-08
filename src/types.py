@@ -229,7 +229,7 @@ class Type:
         if kind == TypeData.K_PTR:
             size_bits = 32
         if sign != TypeData.ANY_SIGN:
-            assert kind == TypeData.K_INT
+            assert kind & TypeData.K_INTPTR
         if x.ptr_to is not None and y.ptr_to is not None:
             if not x.ptr_to.unify(y.ptr_to, seen=seen):
                 return False
@@ -758,6 +758,14 @@ class Type:
     @staticmethod
     def intptr() -> "Type":
         return Type(TypeData(kind=TypeData.K_INTPTR))
+
+    @staticmethod
+    def uintptr() -> "Type":
+        return Type(TypeData(kind=TypeData.K_INTPTR, sign=TypeData.UNSIGNED))
+
+    @staticmethod
+    def sintptr() -> "Type":
+        return Type(TypeData(kind=TypeData.K_INTPTR, sign=TypeData.SIGNED))
 
     @staticmethod
     def ptr(type: Optional["Type"] = None) -> "Type":
