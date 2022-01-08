@@ -26,6 +26,7 @@ from .parse_instruction import (
     InstructionMeta,
     JumpTarget,
     Macro,
+    MipsInstruction,
     Register,
     parse_instruction,
 )
@@ -116,22 +117,6 @@ def verify_no_trailing_delay_slot(function: Function) -> None:
         raise DecompFailure(f"Last instruction is missing a delay slot:\n{last_ins}")
 
 
-def invert_branch_mnemonic(mnemonic: str) -> str:
-    inverses = {
-        "beq": "bne",
-        "bne": "beq",
-        "beqz": "bnez",
-        "bnez": "beqz",
-        "bgez": "bltz",
-        "bgtz": "blez",
-        "blez": "bgtz",
-        "bltz": "bgez",
-        "bc1t": "bc1f",
-        "bc1f": "bc1t",
-    }
-    return inverses[mnemonic]
-
-
 def normalize_likely_branches(function: Function) -> Function:
     """Branch-likely instructions only evaluate their delay slots when they are
     taken, making control flow more complex. However, on the IDO compiler they
@@ -184,7 +169,7 @@ def normalize_likely_branches(function: Function) -> Function:
     body_iter: Iterator[Union[Instruction, Label]] = iter(function.body)
     for item in body_iter:
         orig_item = item
-        if isinstance(item, Instruction) and (
+        if isinstance(item, MipsInstruction) and (
             item.is_branch_likely_instruction() or item.mnemonic == "b"
         ):
             old_label = item.get_branch_target().target
@@ -214,8 +199,7 @@ def normalize_likely_branches(function: Function) -> Function:
                 and before_target is next_item
                 and item.mnemonic != "b"
             ):
-                mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
-                item = Instruction.derived(mn_inverted, item.args, item)
+                item = item.invert_branch_mnemonic()
                 new_nop = Instruction.derived("nop", [], item)
                 new_body.append((orig_item, item))
                 new_body.append((new_nop, new_nop))
@@ -731,15 +715,12 @@ def build_blocks(function: Function, asm_data: AsmData) -> List[Block]:
                 f"Two delay slot instructions in a row is not supported:\n{item}\n{next_item}"
             )
 
-        if item.is_branch_likely_instruction():
+        if isinstance(item, MipsInstruction) and item.is_branch_likely_instruction():
             target = item.get_branch_target()
             branch_likely_counts[target.target] += 1
             index = branch_likely_counts[target.target]
-            mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
             temp_label = JumpTarget(f"{target.target}_branchlikelyskip_{index}")
-            branch_not = Instruction.derived(
-                mn_inverted, item.args[:-1] + [temp_label], item
-            )
+            branch_not = item.invert_branch_mnemonic(new_label=temp_label)
             nop = Instruction.derived("nop", [], item)
             block_builder.add_instruction(branch_not)
             block_builder.add_instruction(nop)
@@ -783,8 +764,8 @@ def build_blocks(function: Function, asm_data: AsmData) -> List[Block]:
         label = block_builder.curr_label.name
         print(f'Warning: missing "jr $ra" in last block (.{label}).\n')
         meta = InstructionMeta.missing()
-        block_builder.add_instruction(Instruction("jr", [Register("ra")], meta))
-        block_builder.add_instruction(Instruction("nop", [], meta))
+        block_builder.add_instruction(MipsInstruction.missing_return())
+        block_builder.add_instruction(MipsInstruction("nop", [], meta))
         block_builder.new_block()
 
     # Throw away whatever is past the last "jr $ra" and return what we have.

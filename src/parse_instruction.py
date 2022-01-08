@@ -1,5 +1,6 @@
 """Functions and classes useful for parsing an arbitrary MIPS instruction.
 """
+import abc
 from dataclasses import dataclass, replace
 import string
 from typing import List, Optional, Set, Union
@@ -173,8 +174,22 @@ Argument = Union[
     Register, AsmGlobalSymbol, AsmAddressMode, Macro, AsmLiteral, BinOp, JumpTarget
 ]
 
-valid_word = string.ascii_letters + string.digits + "_"
+valid_word = string.ascii_letters + string.digits + "_$"
 valid_number = "-xX" + string.hexdigits
+
+all_regs = [
+    *(f"a{i}" for i in range(0, 4)),
+    *(f"cr{i}" for i in range(0, 8)),
+    *(f"f{i}" for i in range(0, 32)),
+    *(f"r{i}" for i in range(0, 32)),
+    *(f"s{i}" for i in range(0, 8)),
+    *(f"t{i}" for i in range(0, 10)),
+    *(f"v{i}" for i in range(0, 2)),
+    "fp",
+    "gp",
+    "ra",
+    "sp",
+]
 
 
 def parse_word(elems: List[str], valid: str = valid_word) -> str:
@@ -218,6 +233,7 @@ def parse_arg_elems(arg_elems: List[str]) -> Optional[Argument]:
     value: Optional[Argument] = None
 
     def expect(n: str) -> str:
+        assert arg_elems, f"Expected one of {list(n)}, but reached end of string"
         g = arg_elems.pop(0)
         assert g in n, f"Expected one of {list(n)}, got {g} (rest: {arg_elems})"
         return g
@@ -230,13 +246,17 @@ def parse_arg_elems(arg_elems: List[str]) -> Optional[Argument]:
         elif tok == "$":
             # Register.
             assert value is None
-            arg_elems.pop(0)
-            reg = parse_word(arg_elems)
-            if reg == "s8":
-                reg = "fp"
-            if reg == "r0":
-                reg = "zero"
-            value = Register(reg)
+            word = parse_word(arg_elems)
+            reg = word[1:]
+            if "$" in reg:
+                # If there are at least two $'s in the word, it's a symbol
+                value = AsmGlobalSymbol(word)
+            else:
+                if reg == "s8":
+                    reg = "fp"
+                if reg == "r0":
+                    reg = "zero"
+                value = Register(reg)
         elif tok == ".":
             # Either a jump target (i.e. a label), or a section reference.
             assert value is None
@@ -285,7 +305,15 @@ def parse_arg_elems(arg_elems: List[str]) -> Optional[Argument]:
         elif tok in valid_word:
             # Global symbol.
             assert value is None
-            value = AsmGlobalSymbol(parse_word(arg_elems))
+            word = parse_word(arg_elems)
+            if word in all_regs:
+                value = Register(word)
+            else:
+                value = AsmGlobalSymbol(word)
+        elif tok == '"' and arg_elems[-1] == '"':
+            # Quoted global symbol
+            # TODO: properly match pairs of quotes, avoid splitting on internal spaces
+            return AsmGlobalSymbol("".join(arg_elems[1:-1]))
         elif tok in ">+-&*":
             # Binary operators, used e.g. to modify global symbols or constants.
             assert isinstance(value, (AsmLiteral, AsmGlobalSymbol))
@@ -296,6 +324,21 @@ def parse_arg_elems(arg_elems: List[str]) -> Optional[Argument]:
                 op = ">>"
             else:
                 op = expect("&+-*")
+
+            # Parse `sym-_SDA_BASE_(r13)` as a Macro, equivalently to `sym@sda21`
+            if tok == "-" and arg_elems[0] == "_":
+                reloc_name = parse_word(arg_elems)
+                if reloc_name not in ("_SDA_BASE_", "_SDA2_BASE_"):
+                    raise DecompFailure(
+                        f"Unexpected symbol {reloc_name} in subtraction expression"
+                    )
+                if arg_elems:
+                    expect("(")
+                    rhs = parse_arg_elems(arg_elems)
+                    assert rhs in [Register("r2"), Register("r13")]
+                    expect(")")
+                assert value
+                return Macro("sda21", value)
 
             rhs = parse_arg_elems(arg_elems)
             # These operators can only use constants as the right-hand-side.
@@ -311,6 +354,22 @@ def parse_arg_elems(arg_elems: List[str]) -> Optional[Argument]:
                     value.section_name, value.addend + rhs.value
                 )
             return BinOp(op, value, rhs)
+        elif tok == "@":
+            # A reloc (i.e. (...)@ha or (...)@l).
+            arg_elems.pop(0)
+            reloc_name = parse_word(arg_elems)
+            if reloc_name in ("sda2", "sda21") and arg_elems:
+                # The `(r2)` part of `@sda21` is optional
+                expect("(")
+                rhs = parse_arg_elems(arg_elems)
+                assert rhs in [Register("r2"), Register("r13")]
+                expect(")")
+                assert value
+                return Macro(reloc_name, value)
+            else:
+                assert reloc_name in ("ha", "l", "sda2", "sda21")
+                assert value
+                value = Macro(reloc_name, value)
         else:
             assert False, f"Unknown token {tok} in {arg_elems}"
 
@@ -340,8 +399,7 @@ class InstructionMeta:
         return f"{adj} {self.filename} line {self.lineno}"
 
 
-@dataclass(frozen=True)
-class Instruction:
+class Instruction(abc.ABC):
     mnemonic: str
     args: List[Argument]
     meta: InstructionMeta
@@ -350,7 +408,57 @@ class Instruction:
     def derived(
         mnemonic: str, args: List[Argument], old: "Instruction"
     ) -> "Instruction":
-        return Instruction(mnemonic, args, replace(old.meta, synthetic=True))
+        return replace(
+            old, mnemonic=mnemonic, args=args, meta=replace(old.meta, synthetic=True)
+        )
+
+    def get_branch_target(self) -> JumpTarget:
+        label = self.args[-1]
+        if isinstance(label, AsmGlobalSymbol):
+            return JumpTarget(label.symbol_name)
+        if not isinstance(label, JumpTarget):
+            raise DecompFailure(
+                f'Couldn\'t parse instruction "{self}": invalid branch target'
+            )
+        return label
+
+    def __str__(self) -> str:
+        args = ", ".join(str(arg) for arg in self.args)
+        return f"{self.mnemonic} {args}"
+
+    def is_delay_slot_instruction(self) -> bool:
+        return False
+
+    def is_conditional_return_instruction(self) -> bool:
+        return False
+
+    @abc.abstractmethod
+    def is_branch_instruction(self) -> bool:
+        ...
+
+    @abc.abstractmethod
+    def is_jump_instruction(self) -> bool:
+        ...
+
+    @abc.abstractmethod
+    def is_return_instruction(self) -> bool:
+        ...
+
+    @abc.abstractmethod
+    def is_jumptable_instruction(self) -> bool:
+        ...
+
+    @staticmethod
+    @abc.abstractmethod
+    def missing_return() -> "Instruction":
+        ...
+
+
+@dataclass(frozen=True)
+class MipsInstruction(Instruction):
+    mnemonic: str
+    args: List[Argument]
+    meta: InstructionMeta
 
     def is_branch_instruction(self) -> bool:
         return (
@@ -369,8 +477,7 @@ class Instruction:
                 "bc1t",
                 "bc1f",
             ]
-            or self.is_branch_likely_instruction()
-        )
+        ) or self.is_branch_likely_instruction()
 
     def is_branch_likely_instruction(self) -> bool:
         return self.mnemonic in [
@@ -386,90 +493,172 @@ class Instruction:
             "bc1fl",
         ]
 
-    def get_branch_target(self) -> JumpTarget:
-        label = self.args[-1]
-        if isinstance(label, AsmGlobalSymbol):
-            return JumpTarget(label.symbol_name)
-        if not isinstance(label, JumpTarget):
-            raise DecompFailure(
-                f'Couldn\'t parse instruction "{self}": invalid branch target'
-            )
-        return label
-
     def is_jump_instruction(self) -> bool:
         # (we don't treat jal/jalr as jumps, since control flow will return
         # after the call)
         return self.is_branch_instruction() or self.mnemonic == "jr"
 
     def is_delay_slot_instruction(self) -> bool:
-        return self.is_branch_instruction() or self.mnemonic in [
-            "jr",
-            "jal",
-            "jalr",
-        ]
+        return self.is_branch_instruction() or self.mnemonic in ["jr", "jal", "jalr"]
 
-    def __str__(self) -> str:
-        args = ", ".join(str(arg) for arg in self.args)
-        return f"{self.mnemonic} {args}"
+    def is_return_instruction(self) -> bool:
+        return self.mnemonic == "jr" and self.args[0] == Register("ra")
+
+    def is_jumptable_instruction(self) -> bool:
+        return self.mnemonic == "jr" and not self.is_return_instruction()
+
+    @staticmethod
+    def missing_return() -> "MipsInstruction":
+        return MipsInstruction("jr", [Register("ra")], InstructionMeta.missing())
+
+    def invert_branch_mnemonic(
+        self, *, new_label: Optional[JumpTarget] = None
+    ) -> "Instruction":
+        inverses = {
+            "beq": "bne",
+            "bne": "beq",
+            "beqz": "bnez",
+            "bnez": "beqz",
+            "bgez": "bltz",
+            "bgtz": "blez",
+            "blez": "bgtz",
+            "bltz": "bgez",
+            "bc1t": "bc1f",
+            "bc1f": "bc1t",
+        }
+        args = self.args
+        if new_label is not None:
+            args = args[:-1] + [new_label]
+        return Instruction.derived(inverses[self.mnemonic[:-1]], args, self)
+
+
+@dataclass(frozen=True)
+class PpcInstruction(Instruction):
+    mnemonic: str
+    args: List[Argument]
+    meta: InstructionMeta
+
+    def is_branch_instruction(self) -> bool:
+        return (
+            self.mnemonic
+            in [
+                "b",
+                "ble",
+                "blt",
+                "beq",
+                "bge",
+                "bgt",
+                "bne",
+                "bdnz",
+                "bdz",
+            ]
+            or self.is_conditional_return_instruction()
+        )
+
+    def is_jump_instruction(self) -> bool:
+        # (we don't treat jal/jalr as jumps, since control flow will return
+        # after the call)
+        if self.is_branch_instruction():
+            return True
+        return self.mnemonic in ("blr", "bctr")
+
+    def is_return_instruction(self) -> bool:
+        return self.mnemonic == "blr"
+
+    def is_conditional_return_instruction(self) -> bool:
+        return self.mnemonic in (
+            "beqlr",
+            "bgelr",
+            "bgtlr",
+            "blelr",
+            "bltlr",
+            "bnelr",
+            "bnglr",
+            "bnllr",
+            "bnslr",
+            "bsolr",
+        )
+
+    def is_jumptable_instruction(self) -> bool:
+        return self.mnemonic == "bctr"
+
+    @staticmethod
+    def missing_return() -> "PpcInstruction":
+        return PpcInstruction("blr", [], InstructionMeta.missing())
 
 
 def normalize_instruction(instr: Instruction) -> Instruction:
     args = instr.args
     if len(args) == 3:
         if instr.mnemonic == "sll" and args[0] == args[1] == Register("zero"):
-            return Instruction("nop", [], instr.meta)
+            return replace(instr, mnemonic="nop", args=[])
         if instr.mnemonic == "or" and args[2] == Register("zero"):
-            return Instruction("move", args[:2], instr.meta)
+            return replace(instr, mnemonic="move", args=args[:2])
         if instr.mnemonic == "addu" and args[2] == Register("zero"):
-            return Instruction("move", args[:2], instr.meta)
+            return replace(instr, mnemonic="move", args=args[:2])
         if instr.mnemonic == "daddu" and args[2] == Register("zero"):
-            return Instruction("move", args[:2], instr.meta)
+            return replace(instr, mnemonic="move", args=args[:2])
         if instr.mnemonic == "nor" and args[1] == Register("zero"):
-            return Instruction("not", [args[0], args[2]], instr.meta)
+            return replace(instr, mnemonic="not", args=[args[0], args[2]])
         if instr.mnemonic == "nor" and args[2] == Register("zero"):
-            return Instruction("not", [args[0], args[1]], instr.meta)
+            return replace(instr, mnemonic="not", args=[args[0], args[1]])
         if instr.mnemonic == "addiu" and args[2] == AsmLiteral(0):
-            return Instruction("move", args[:2], instr.meta)
+            return replace(instr, mnemonic="move", args=args[:2])
         if instr.mnemonic in DIV_MULT_INSTRUCTIONS:
             if args[0] != Register("zero"):
                 raise DecompFailure("first argument to div/mult must be $zero")
-            return Instruction(instr.mnemonic, args[1:], instr.meta)
+            return replace(instr, args=args[1:])
         if (
             instr.mnemonic == "ori"
             and args[1] == Register("zero")
             and isinstance(args[2], AsmLiteral)
         ):
             lit = AsmLiteral(args[2].value & 0xFFFF)
-            return Instruction("li", [args[0], lit], instr.meta)
+            return replace(instr, mnemonic="li", args=[args[0], lit])
         if (
             instr.mnemonic == "addiu"
             and args[1] == Register("zero")
             and isinstance(args[2], AsmLiteral)
         ):
             lit = AsmLiteral(((args[2].value + 0x8000) & 0xFFFF) - 0x8000)
-            return Instruction("li", [args[0], lit], instr.meta)
+            return replace(instr, mnemonic="li", args=[args[0], lit])
         if instr.mnemonic == "beq" and args[0] == args[1] == Register("zero"):
-            return Instruction("b", [args[2]], instr.meta)
+            return replace(instr, mnemonic="b", args=[args[2]])
         if instr.mnemonic in ["bne", "beq", "beql", "bnel"] and args[1] == Register(
             "zero"
         ):
             mn = instr.mnemonic[:3] + "z" + instr.mnemonic[3:]
-            return Instruction(mn, [args[0], args[2]], instr.meta)
+            return replace(instr, mnemonic=mn, args=[args[0], args[2]])
+        if (
+            instr.mnemonic == "addi"
+            and isinstance(args[2], Macro)
+            and args[1] in (Register("r2"), Register("r13"))
+            and args[2].macro_name in ("sda2", "sda21")
+        ):
+            return replace(instr, mnemonic="li", args=[args[0], args[2].argument])
     if len(args) == 2:
         if instr.mnemonic == "beqz" and args[0] == Register("zero"):
-            return Instruction("b", [args[1]], instr.meta)
-        if instr.mnemonic == "lui" and isinstance(args[1], AsmLiteral):
+            return replace(instr, mnemonic="b", args=[args[1]])
+        if instr.mnemonic in ("lui", "lis") and isinstance(args[1], AsmLiteral):
             lit = AsmLiteral((args[1].value & 0xFFFF) << 16)
-            return Instruction("li", [args[0], lit], instr.meta)
+            return replace(instr, mnemonic="li", args=[args[0], lit])
+        if (
+            instr.mnemonic == "lis"
+            and isinstance(args[1], Macro)
+            and args[1].macro_name == "ha"
+            and isinstance(args[1].argument, AsmLiteral)
+        ):
+            # The @ha macro compensates for the sign bit of the corresponding @l
+            value = args[1].argument.value
+            if value & 0x8000:
+                value += 0x10000
+            lit = AsmLiteral(value & 0xFFFF0000)
+            return replace(instr, mnemonic="li", args=[args[0], lit])
         if instr.mnemonic in LENGTH_THREE:
-            return normalize_instruction(
-                Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
-            )
+            return normalize_instruction(replace(instr, args=[args[0]] + args))
     if len(args) == 1:
         if instr.mnemonic in LENGTH_TWO:
-            return normalize_instruction(
-                Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
-            )
+            return normalize_instruction(replace(instr, args=[args[0]] + args))
     return instr
 
 
@@ -478,13 +667,18 @@ def parse_instruction(line: str, meta: InstructionMeta) -> Instruction:
         # First token is instruction name, rest is args.
         line = line.strip()
         mnemonic, _, args_str = line.partition(" ")
+        # Remove +/- suffix, which indicates branch-likely on PPC
+        if mnemonic.startswith("b") and (
+            mnemonic.endswith("+") or mnemonic.endswith("-")
+        ):
+            mnemonic = mnemonic[:-1]
         # Parse arguments.
         args: List[Argument] = list(
             filter(
                 None, [parse_arg(arg_str.strip()) for arg_str in args_str.split(",")]
             )
         )
-        instr = Instruction(mnemonic, args, meta)
+        instr = MipsInstruction(mnemonic, args, meta)
         return normalize_instruction(instr)
-    except Exception as e:
+    except Exception:
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
