@@ -1,13 +1,24 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import re
 import struct
 import typing
 from pathlib import Path
-from typing import Callable, Dict, List, Match, Optional, Set, Tuple, TypeVar, Union
+from typing import (
+    Callable,
+    Dict,
+    List,
+    Match,
+    Optional,
+    Set,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from .error import DecompFailure
 from .options import Options
-from .parse_instruction import Instruction, InstructionMeta, parse_instruction
+from .parse_instruction import Instruction, InstructionMeta
 
 
 @dataclass(frozen=True)
@@ -21,6 +32,7 @@ class Label:
 @dataclass
 class Function:
     name: str
+    instruction_class: Type[Instruction]
     body: List[Union[Instruction, Label]] = field(default_factory=list)
 
     def new_label(self, name: str) -> None:
@@ -31,10 +43,11 @@ class Function:
         self.body.append(label)
 
     def new_instruction(self, instruction: Instruction) -> None:
+        assert isinstance(instruction, self.instruction_class)
         self.body.append(instruction)
 
     def bodyless_copy(self) -> "Function":
-        return Function(name=self.name)
+        return replace(self, body=[])
 
     def __str__(self) -> str:
         body = "\n".join(str(item) for item in self.body)
@@ -91,16 +104,20 @@ class AsmData:
 @dataclass
 class MIPSFile:
     filename: str
+    instruction_class: Type[Instruction]
     functions: List[Function] = field(default_factory=list)
     asm_data: AsmData = field(default_factory=AsmData)
     current_function: Optional[Function] = field(default=None, repr=False)
     current_data: AsmDataEntry = field(default_factory=AsmDataEntry)
 
     def new_function(self, name: str) -> None:
-        self.current_function = Function(name=name)
+        self.current_function = Function(
+            name=name, instruction_class=self.instruction_class
+        )
         self.functions.append(self.current_function)
 
     def new_instruction(self, instruction: Instruction) -> None:
+        assert isinstance(instruction, self.instruction_class)
         if self.current_function is None:
             # Allow (and ignore) nop instructions in the .text
             # section before any function labels
@@ -253,9 +270,11 @@ def parse_incbin(
     return None
 
 
-def parse_file(f: typing.TextIO, options: Options) -> MIPSFile:
+def parse_file(
+    f: typing.TextIO, options: Options, instruction_class: Type[Instruction]
+) -> MIPSFile:
     filename = Path(f.name).name
-    mips_file: MIPSFile = MIPSFile(filename)
+    mips_file: MIPSFile = MIPSFile(filename, instruction_class=instruction_class)
     defines: Dict[str, int] = options.preproc_defines
     ifdef_level: int = 0
     ifdef_levels: List[int] = []
@@ -452,7 +471,7 @@ def parse_file(f: typing.TextIO, options: Options) -> MIPSFile:
                     lineno=lineno,
                     synthetic=False,
                 )
-                instr: Instruction = parse_instruction(line, meta)
+                instr = instruction_class.parse(line, meta)
                 mips_file.new_instruction(instr)
 
     if warnings:

@@ -11,6 +11,7 @@ from .flow_graph import FlowGraph, build_flowgraph, visualize_flowgraph
 from .if_statements import get_function_text
 from .options import CodingStyle, Options
 from .parse_file import AsmData, Function, parse_file
+from .parse_instruction import MipsInstruction
 from .translate import (
     FunctionInfo,
     GlobalInfo,
@@ -61,15 +62,16 @@ def print_exception_as_comment(
 
 def run(options: Options) -> int:
     arch = MipsArch()
+    instruction_class = MipsInstruction
     all_functions: Dict[str, Function] = {}
     asm_data = AsmData()
     try:
         for filename in options.filenames:
             if filename == "-":
-                mips_file = parse_file(sys.stdin, options)
+                mips_file = parse_file(sys.stdin, options, instruction_class)
             else:
                 with open(filename, "r", encoding="utf-8-sig") as f:
-                    mips_file = parse_file(f, options)
+                    mips_file = parse_file(f, options, instruction_class)
             all_functions.update((fn.name, fn) for fn in mips_file.functions)
             mips_file.asm_data.merge_into(asm_data)
 

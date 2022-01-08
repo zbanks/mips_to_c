@@ -28,7 +28,6 @@ from .parse_instruction import (
     Macro,
     MipsInstruction,
     Register,
-    parse_instruction,
 )
 
 
@@ -272,7 +271,7 @@ def simplify_standard_patterns(function: Function) -> Function:
             elif part.endswith(":"):
                 ret.append((Label(""), optional))
             else:
-                ins = parse_instruction(part, InstructionMeta.missing())
+                ins = function.instruction_class.parse(part, InstructionMeta.missing())
                 ret.append((ins, optional))
         return ret
 
@@ -763,9 +762,8 @@ def build_blocks(function: Function, asm_data: AsmData) -> List[Block]:
         # not we must be missing a "jr $ra").
         label = block_builder.curr_label.name
         print(f'Warning: missing "jr $ra" in last block (.{label}).\n')
-        meta = InstructionMeta.missing()
-        block_builder.add_instruction(MipsInstruction.missing_return())
-        block_builder.add_instruction(MipsInstruction("nop", [], meta))
+        block_builder.add_instruction(function.instruction_class.missing_return())
+        block_builder.add_instruction(function.instruction_class.missing_nop())
         block_builder.new_block()
 
     # Throw away whatever is past the last "jr $ra" and return what we have.
