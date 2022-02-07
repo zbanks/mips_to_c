@@ -40,6 +40,7 @@ from .translate import (
     ImplicitInstrMap,
     InstrMap,
     InstrSet,
+    Literal,
     PpcCmpInstrMap,
     PairInstrMap,
     SecondF64Half,
@@ -72,6 +73,7 @@ from .translate import (
     load_upper,
     make_store,
     make_storex,
+    ppc_extended,
     void_fn_op,
 )
 from .types import FunctionSignature, Type
@@ -210,6 +212,7 @@ class PpcArch(Arch):
                 "cr0_eq",
                 "cr0_so",
                 "ctr",
+                "xer_ca",  # Integer Carry Flag
             ]
         ]
     )
@@ -541,13 +544,37 @@ class PpcArch(Arch):
         "sync": lambda a: void_fn_op("MIPS2C_SYNC", []),
         "isync": lambda a: void_fn_op("MIPS2C_SYNC", []),
     }
+    instrs_set_carry: InstrSet = {
+        "addc",
+        "addic",
+        "subfc",
+        "sraw",
+        "srawi",
+    }
     instrs_destination_first: InstrMap = {
         # Integer arithmetic
         "addi": lambda a: handle_addi(a),
+        "addic": lambda a: handle_addi(a),
         "add": lambda a: handle_add(a),
+        "addc": lambda a: handle_add(a),
         "addis": lambda a: handle_addis(a),
+        "adde": lambda a: ppc_extended(a, handle_add(a)),
+        "addme": lambda a: ppc_extended(a, BinaryOp.int(a.reg(1), "+", Literal(-1))),
+        "addze": lambda a: ppc_extended(a, a.reg(1)),
         "subf": lambda a: fold_divmod(
             BinaryOp.intptr(left=a.reg(2), op="-", right=a.reg(1))
+        ),
+        "subfc": lambda a: fold_divmod(
+            BinaryOp.intptr(left=a.reg(2), op="-", right=a.reg(1))
+        ),
+        "subfe": lambda a: ppc_extended(
+            a, BinaryOp.int(left=a.reg(2), op="-", right=a.reg(1))
+        ),
+        "subfme": lambda a: ppc_extended(
+            a, BinaryOp.int(left=Literal(-1), op="-", right=a.reg(1))
+        ),
+        "subfze": lambda a: ppc_extended(
+            a, BinaryOp.int(left=Literal(0), op="-", right=a.reg(1))
         ),
         "neg": lambda a: fold_mul_chains(
             UnaryOp(op="-", expr=as_s32(a.reg(1)), type=Type.s32())

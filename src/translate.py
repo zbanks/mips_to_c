@@ -83,6 +83,7 @@ class Arch(ArchFlowGraph):
     instrs_no_dest: StmtInstrMap = {}
     instrs_hi_lo: PairInstrMap = {}
     instrs_source_first: InstrMap = {}
+    instrs_set_carry: InstrSet = set()
     instrs_destination_first: InstrMap = {}
     instrs_implicit_destination: ImplicitInstrMap = {}
 
@@ -778,6 +779,26 @@ class SecondF64Half(Expression):
 
     def format(self, fmt: Formatter) -> str:
         return "(second half of f64)"
+
+
+@dataclass(frozen=True, eq=False)
+class CarryFlag(Expression):
+    source_expr: Expression
+    type: Type
+
+    def dependencies(self) -> List[Expression]:
+        return [self.source_expr]
+
+    def format(self, fmt: Formatter) -> str:
+        source = self.source_expr.format(fmt)
+        return f"MIPS2C_CARRY({source})"
+
+    @staticmethod
+    def for_expr(expr: Expression) -> "CarryFlag":
+        return CarryFlag(
+            source_expr=expr,
+            type=expr.type,
+        )
 
 
 @dataclass(frozen=True, eq=False)
@@ -3394,6 +3415,12 @@ def handle_loadx(args: InstrArgs, type: Type) -> Expression:
     return as_type(expr, type, silent=True)
 
 
+def ppc_extended(args: InstrArgs, expr: Expression) -> Expression:
+    # PPC "extended" instructions add the carry bit to the result
+    carry_bit = args.regs[Register("xer_ca")]
+    return BinaryOp.int(left=expr, op="+", right=carry_bit)
+
+
 def strip_macros(arg: Argument) -> Argument:
     """Replace %lo(...) by 0, and assert that there are no %hi(...). We assume that
     %hi's only ever occur in lui, where we expand them to an entire value, and not
@@ -3487,19 +3514,23 @@ def output_regs_for_instr(
         reg = reg_at(0)
         mn_parts = arch_mnemonic.split(".")
         if arch_mnemonic.startswith("ppc:") and arch_mnemonic.endswith("."):
-            return [
-                Register("cr0_lt"),
-                Register("cr0_gt"),
-                Register("cr0_eq"),
-                Register("cr0_so"),
-            ] + reg
-        elif (
+            reg.extend(
+                [
+                    Register("cr0_lt"),
+                    Register("cr0_gt"),
+                    Register("cr0_eq"),
+                    Register("cr0_so"),
+                ]
+            )
+        if mnemonic.rstrip(".") in arch.instrs_set_carry:
+            reg.append(Register("xer_ca"))
+        if (
             len(mn_parts) >= 2
             and mn_parts[0].startswith("mips:")
             and mn_parts[1] == "d"
         ) or arch_mnemonic == "mips:ldc1":
             assert len(reg) == 1
-            return reg + [reg[0].other_f64_reg()]
+            reg.append(reg[0].other_f64_reg())
         return reg
     if mnemonic in arch.instrs_float_comp:
         return [Register("condition_bit")]
@@ -4229,7 +4260,10 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                     fn_op("MIPS2C_OVERFLOW", [target_reg], type=Type.s32()),
                 )
 
-            elif (
+            if mnemonic.rstrip(".") in arch.instrs_set_carry:
+                set_reg(Register("xer_ca"), CarryFlag.for_expr(val))
+
+            if (
                 len(mn_parts) >= 2
                 and mn_parts[0].startswith("mips:")
                 and mn_parts[1] == "d"

@@ -1,4 +1,7 @@
 f32 test(s32 *arg0, f32 arg8) {
-    *arg0 = MIPS2C_ERROR(unknown instruction: addze $r0, $r0);
+    s32 temp_r0;
+
+    temp_r0 = *arg0;
+    *arg0 = (temp_r0 >> 1) + MIPS2C_CARRY((temp_r0 >> 1));
     return arg8;
 }

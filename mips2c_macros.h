@@ -27,6 +27,9 @@ typedef s64 MIPS2C_UNK64;
 #define MIPS2C_FIRST3BYTES(expr) (expr)
 #define MIPS2C_UNALIGNED32(expr) (expr)
 
+/* Carry bit, usually indicative of unimplemented idioms */
+#define MIPS2C_CARRY(expr) (0)
+
 /* Unhandled instructions */
 #define MIPS2C_ERROR(desc) (0)
 #define MIPS2C_TRAP_IF(cond) (0)

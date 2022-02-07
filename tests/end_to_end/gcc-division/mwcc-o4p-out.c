@@ -9,41 +9,44 @@ void test(u32 a) {
 
 void test_s8(s8 c) {
     s8 sp8;
-    s32 temp_r0_2;
-    s32 temp_r0_4;
+    s32 temp_r0_3;
     s32 temp_r0_5;
-    s32 temp_r0_6;
+    s32 temp_r0_7;
+    s32 temp_r0_8;
     s8 temp_r0;
-    s8 temp_r0_3;
+    s8 temp_r0_2;
+    s8 temp_r0_4;
+    s8 temp_r0_6;
     s8 temp_r4;
     s8 temp_r4_2;
     s8 temp_r4_3;
 
     sp8 = c;
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    temp_r0 = (s8) (u8) sp8;
+    func_00400090(((s32) temp_r0 >> 1) + MIPS2C_CARRY(((s32) temp_r0 >> 1)));
     func_00400090(MULT_HI(0x55555556, (s8) (u8) sp8) + ((s8) (u8) sp8 / 6442450941));
     func_00400090((s8) (u8) sp8 / 5);
-    temp_r0 = (s8) (u8) sp8;
-    temp_r0_2 = (s32) (MULT_HI(0x92492493, temp_r0) + temp_r0) >> 2;
-    func_00400090(temp_r0_2 + ((u32) temp_r0_2 >> 0x1FU));
+    temp_r0_2 = (s8) (u8) sp8;
+    temp_r0_3 = (s32) (MULT_HI(0x92492493, temp_r0_2) + temp_r0_2) >> 2;
+    func_00400090(temp_r0_3 + ((u32) temp_r0_3 >> 0x1FU));
     func_00400090((s8) (u8) sp8 / 10);
     func_00400090((s8) (u8) sp8 / 100);
-    temp_r0_3 = (s8) (u8) sp8;
-    temp_r0_4 = (s32) (MULT_HI(0x80808081, temp_r0_3) + temp_r0_3) >> 7;
-    func_00400090(temp_r0_4 + ((u32) temp_r0_4 >> 0x1FU));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    temp_r0_4 = (s8) (u8) sp8;
+    temp_r0_5 = (s32) (MULT_HI(0x80808081, temp_r0_4) + temp_r0_4) >> 7;
+    func_00400090(temp_r0_5 + ((u32) temp_r0_5 >> 0x1FU));
+    temp_r0_6 = (s8) (u8) sp8;
+    func_00400090(temp_r0_6 - ((((s32) temp_r0_6 >> 1) + MIPS2C_CARRY(((s32) temp_r0_6 >> 1))) * 2));
     temp_r4 = (s8) (u8) sp8;
     func_00400090(temp_r4 - ((MULT_HI(0x55555556, temp_r4) + ((s8) (u8) sp8 / 6442450941)) * 3));
     func_00400090((s8) (u8) sp8 % 5);
     temp_r4_2 = (s8) (u8) sp8;
-    temp_r0_5 = (s32) (MULT_HI(0x92492493, temp_r4_2) + temp_r4_2) >> 2;
-    func_00400090(temp_r4_2 - ((temp_r0_5 + ((u32) temp_r0_5 >> 0x1FU)) * 7));
+    temp_r0_7 = (s32) (MULT_HI(0x92492493, temp_r4_2) + temp_r4_2) >> 2;
+    func_00400090(temp_r4_2 - ((temp_r0_7 + ((u32) temp_r0_7 >> 0x1FU)) * 7));
     func_00400090((s8) (u8) sp8 % 10);
     func_00400090((s8) (u8) sp8 % 100);
     temp_r4_3 = (s8) (u8) sp8;
-    temp_r0_6 = (s32) (MULT_HI(0x80808081, temp_r4_3) + temp_r4_3) >> 7;
-    func_00400090(temp_r4_3 - ((temp_r0_6 + ((u32) temp_r0_6 >> 0x1FU)) * 0xFF));
+    temp_r0_8 = (s32) (MULT_HI(0x80808081, temp_r4_3) + temp_r4_3) >> 7;
+    func_00400090(temp_r4_3 - ((temp_r0_8 + ((u32) temp_r0_8 >> 0x1FU)) * 0xFF));
 }
 
 void test_s16(s16 h) {
@@ -58,7 +61,7 @@ void test_s16(s16 h) {
     s32 temp_r3;
 
     sp8 = h;
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090(((s32) sp8 >> 1) + MIPS2C_CARRY(((s32) sp8 >> 1)));
     func_00400090(MULT_HI(0x55555556, sp8) + (sp8 / 6442450941));
     func_00400090(sp8 / 5);
     temp_r0 = (s32) (MULT_HI(0x92492493, sp8) + sp8) >> 2;
@@ -71,8 +74,7 @@ void test_s16(s16 h) {
     func_00400090(temp_r0_3 + ((u32) temp_r0_3 >> 0x1FU));
     temp_r0_4 = (s32) (MULT_HI(0x80010003, sp8) + sp8) >> 0xF;
     func_00400090(temp_r0_4 + ((u32) temp_r0_4 >> 0x1FU));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - ((((s32) sp8 >> 1) + MIPS2C_CARRY(((s32) sp8 >> 1))) * 2));
     func_00400090(sp8 - ((MULT_HI(0x55555556, sp8) + (sp8 / 6442450941)) * 3));
     func_00400090(sp8 % 5);
     temp_r0_5 = (s32) (MULT_HI(0x92492493, sp8) + sp8) >> 2;
@@ -110,14 +112,14 @@ void test_s32_div(s32 d) {
 
     sp8 = d;
     func_00400090((u32) d);
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 1) + MIPS2C_CARRY((sp8 >> 1)));
     func_00400090(MULT_HI(0x55555556, sp8) + (sp8 / 6442450941));
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 2) + MIPS2C_CARRY((sp8 >> 2)));
     func_00400090(sp8 / 5);
     func_00400090(MULT_HI(0x2AAAAAAB, sp8) + (sp8 / 12884901882));
     temp_r0 = (s32) (MULT_HI(0x92492493, sp8) + sp8) >> 2;
     func_00400090(temp_r0 + ((u32) temp_r0 >> 0x1FU));
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 3) + MIPS2C_CARRY((sp8 >> 3)));
     func_00400090(sp8 / 9);
     func_00400090(sp8 / 10);
     func_00400090(sp8 / 11);
@@ -127,7 +129,7 @@ void test_s32_div(s32 d) {
     func_00400090(temp_r0_2 + ((u32) temp_r0_2 >> 0x1FU));
     temp_r0_3 = (s32) (MULT_HI(0x88888889, sp8) + sp8) >> 3;
     func_00400090(temp_r0_3 + ((u32) temp_r0_3 >> 0x1FU));
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 4) + MIPS2C_CARRY((sp8 >> 4)));
     func_00400090(sp8 / 17);
     func_00400090(sp8 / 18);
     func_00400090(sp8 / 19);
@@ -148,7 +150,7 @@ void test_s32_div(s32 d) {
     func_00400090(temp_r0_7 + ((u32) temp_r0_7 >> 0x1FU));
     temp_r0_8 = (s32) (MULT_HI(0x84210843, sp8) + sp8) >> 4;
     func_00400090(temp_r0_8 + ((u32) temp_r0_8 >> 0x1FU));
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 5) + MIPS2C_CARRY((sp8 >> 5)));
     func_00400090(sp8 / 33);
     func_00400090(sp8 / 100);
     temp_r0_9 = (s32) (MULT_HI(0x80808081, sp8) + sp8) >> 7;
@@ -165,7 +167,7 @@ void test_s32_div(s32 d) {
     func_00400090(temp_r0_11 + ((u32) temp_r0_11 >> 0x1FU));
     temp_r0_12 = (s32) (MULT_HI(0x80000003, sp8) + sp8) >> 0x1D;
     func_00400090(temp_r0_12 + ((u32) temp_r0_12 >> 0x1FU));
-    func_00400090(MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((sp8 >> 0x1E) + MIPS2C_CARRY((sp8 >> 0x1E)));
     func_00400090(sp8 / 1073741824);
     func_00400090(sp8 / 2147483644);
     temp_r0_13 = (s32) (MULT_HI(0x80000003, sp8) + sp8) >> 0x1E;
@@ -181,10 +183,10 @@ void test_s32_div(s32 d) {
     func_00400090(temp_r0_16 + ((u32) temp_r0_16 >> 0x1FU));
     temp_r0_17 = (s32) MULT_HI(0x99999999, sp8) >> 1;
     func_00400090(temp_r0_17 + ((u32) temp_r0_17 >> 0x1FU));
-    func_00400090((u32) -(s32) MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((u32) -(s32) ((sp8 >> 2) + MIPS2C_CARRY((sp8 >> 2))));
     temp_r0_18 = (s32) (MULT_HI(0x55555555, sp8) - sp8) >> 1;
     func_00400090(temp_r0_18 + ((u32) temp_r0_18 >> 0x1FU));
-    func_00400090((u32) -(s32) MIPS2C_ERROR(unknown instruction: addze $r3, $r3));
+    func_00400090((u32) -(s32) ((sp8 >> 1) + MIPS2C_CARRY((sp8 >> 1))));
     func_00400090((u32) (d / -1));
 }
 
@@ -213,17 +215,14 @@ void test_s32_mod(s32 d) {
 
     sp8 = d;
     func_00400090(0U);
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 1) + MIPS2C_CARRY((sp8 >> 1))) * 2));
     func_00400090(sp8 - ((MULT_HI(0x55555556, sp8) + (sp8 / 6442450941)) * 3));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 2) + MIPS2C_CARRY((sp8 >> 2))) * 4));
     func_00400090(sp8 % 5);
     func_00400090(sp8 - ((MULT_HI(0x2AAAAAAB, sp8) + (sp8 / 12884901882)) * 6));
     temp_r0 = (s32) (MULT_HI(0x92492493, sp8) + sp8) >> 2;
     func_00400090(sp8 - ((temp_r0 + ((u32) temp_r0 >> 0x1FU)) * 7));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 3) + MIPS2C_CARRY((sp8 >> 3))) * 8));
     func_00400090(sp8 % 9);
     func_00400090(sp8 % 10);
     func_00400090(sp8 % 11);
@@ -233,8 +232,7 @@ void test_s32_mod(s32 d) {
     func_00400090(sp8 - ((temp_r0_2 + ((u32) temp_r0_2 >> 0x1FU)) * 0xE));
     temp_r0_3 = (s32) (MULT_HI(0x88888889, sp8) + sp8) >> 3;
     func_00400090(sp8 - ((temp_r0_3 + ((u32) temp_r0_3 >> 0x1FU)) * 0xF));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 4) + MIPS2C_CARRY((sp8 >> 4))) * 0x10));
     func_00400090(sp8 % 17);
     func_00400090(sp8 % 18);
     func_00400090(sp8 % 19);
@@ -255,8 +253,7 @@ void test_s32_mod(s32 d) {
     func_00400090(sp8 - ((temp_r0_7 + ((u32) temp_r0_7 >> 0x1FU)) * 0x1E));
     temp_r0_8 = (s32) (MULT_HI(0x84210843, sp8) + sp8) >> 4;
     func_00400090(sp8 - ((temp_r0_8 + ((u32) temp_r0_8 >> 0x1FU)) * 0x1F));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 5) + MIPS2C_CARRY((sp8 >> 5))) << 5));
     func_00400090(sp8 % 33);
     func_00400090(sp8 % 100);
     temp_r0_9 = (s32) (MULT_HI(0x80808081, sp8) + sp8) >> 7;
@@ -273,8 +270,7 @@ void test_s32_mod(s32 d) {
     func_00400090(sp8 - ((temp_r0_11 + ((u32) temp_r0_11 >> 0x1FU)) * 0x3FFFFFFE));
     temp_r3 = (s32) (MULT_HI(0x80000003, sp8) + sp8) >> 0x1D;
     func_00400090(sp8 - ((temp_r3 + ((u32) temp_r3 >> 0x1FU)) * 0x3FFFFFFF));
-    MIPS2C_ERROR(unknown instruction: addze $r3, $r3);
-    func_00400090(MIPS2C_ERROR(unknown instruction: subfc $r3, $r3, $r0));
+    func_00400090(sp8 - (((sp8 >> 0x1E) + MIPS2C_CARRY((sp8 >> 0x1E))) << 0x1E));
     func_00400090(sp8 - ((sp8 / 1073741824) * 0x40000001));
     func_00400090(sp8 - ((sp8 / 2147483644) * 0x7FFFFFFD));
     temp_r3_2 = (s32) (MULT_HI(0x80000003, sp8) + sp8) >> 0x1E;
