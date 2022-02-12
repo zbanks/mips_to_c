@@ -14,6 +14,7 @@ from .parse_instruction import (
     AsmGlobalSymbol,
     AsmLiteral,
     Instruction,
+    InstructionBase,
     InstructionMeta,
     JumpTarget,
     Macro,

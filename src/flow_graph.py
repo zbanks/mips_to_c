@@ -119,7 +119,7 @@ def verify_no_trailing_delay_slot(function: Function, arch: ArchFlowGraph) -> No
     for item in function.body:
         if isinstance(item, Instruction):
             last_ins = item
-    if last_ins and arch.is_delay_slot_instruction(last_ins):
+    if last_ins and last_ins.has_delay_slot:
         raise DecompFailure(f"Last instruction is missing a delay slot:\n{last_ins}")
 
 
@@ -192,9 +192,11 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
     for item in body_iter:
         orig_item = item
         if isinstance(item, Instruction) and (
-            arch.is_branch_likely_instruction(item) or item.mnemonic == "b"
+            (isinstance(item.jump_target, JumpTarget) and not item.has_delay_slot)
+            or item.mnemonic == "b"
         ):
-            old_label = arch.get_branch_target(item).target
+            assert isinstance(item.jump_target, JumpTarget)
+            old_label = item.jump_target.target
             if old_label not in label_prev_instr:
                 raise DecompFailure(
                     f"Unable to parse branch: label {old_label} does not exist in function {function.name}"
@@ -210,7 +212,7 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
             if (
                 item.mnemonic == "b"
                 and before_before_target is not None
-                and arch.is_delay_slot_instruction(before_before_target)
+                and before_before_target.has_delay_slot
             ):
                 # Don't treat 'b' instructions as branch likelies if doing so would
                 # introduce a label in a delay slot.
@@ -222,8 +224,8 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                 and item.mnemonic != "b"
             ):
                 mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
-                item = Instruction.derived(mn_inverted, item.args, item)
-                new_nop = Instruction.derived("nop", [], item)
+                item = arch.derived_instruction(mn_inverted, item.args, item)
+                new_nop = arch.derived_instruction("nop", [], item)
                 new_body.append((orig_item, item))
                 new_body.append((new_nop, new_nop))
                 new_body.append((orig_next_item, next_item))
@@ -240,10 +242,10 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                     insert_label_before[id(before_target)] = new_label
                 new_target = JumpTarget(label_before_instr[id(before_target)])
                 mn_unlikely = item.mnemonic[:-1] or "b"
-                item = Instruction.derived(
+                item = arch.derived_instruction(
                     mn_unlikely, item.args[:-1] + [new_target], item
                 )
-                next_item = Instruction.derived("nop", [], item)
+                next_item = arch.derived_instruction("nop", [], item)
                 new_body.append((orig_item, item))
                 new_body.append((orig_next_item, next_item))
             else:
@@ -270,8 +272,8 @@ def prune_unreferenced_labels(
         if isinstance(label, Label) and label.name in asm_data.mentioned_labels
     }
     for item in function.body:
-        if isinstance(item, Instruction) and arch.is_branch_instruction(item):
-            labels_used.add(arch.get_branch_target(item).target)
+        if isinstance(item, Instruction) and isinstance(item.jump_target, JumpTarget):
+            labels_used.add(item.jump_target.target)
 
     new_function = function.bodyless_copy()
     for item in function.body:
@@ -282,7 +284,7 @@ def prune_unreferenced_labels(
 
 
 def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Function:
-    new_body = simplify_patterns(function.body, arch.asm_patterns)
+    new_body = simplify_patterns(function.body, arch.asm_patterns, arch)
     new_function = function.bodyless_copy()
     new_function.body.extend(new_body)
     return new_function
@@ -312,10 +314,10 @@ def build_blocks(
             block_builder.set_label(item)
             return
 
-        if not arch.is_delay_slot_instruction(item):
+        if not item.has_delay_slot and not item.is_conditional:
             block_builder.add_instruction(item)
             # Split blocks at jumps, at the next instruction.
-            if arch.is_jump_instruction(item):
+            if item.is_jump():
                 block_builder.new_block()
             return
 
@@ -354,32 +356,33 @@ def build_blocks(
                     ]
                 raise DecompFailure("\n".join(msg))
 
-        if arch.is_delay_slot_instruction(next_item):
+        if next_item.has_delay_slot:
             raise DecompFailure(
                 f"Two delay slot instructions in a row is not supported:\n{item}\n{next_item}"
             )
 
-        if arch.is_branch_likely_instruction(item):
-            target = arch.get_branch_target(item)
+        if isinstance(item.jump_target, JumpTarget) and not item.has_delay_slot:
+            assert isinstance(item.jump_target, JumpTarget)
+            target = item.jump_target
             branch_likely_counts[target.target] += 1
             index = branch_likely_counts[target.target]
             mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
             temp_label = JumpTarget(f"{target.target}_branchlikelyskip_{index}")
-            branch_not = Instruction.derived(
+            branch_not = arch.derived_instruction(
                 mn_inverted, item.args[:-1] + [temp_label], item
             )
-            nop = Instruction.derived("nop", [], item)
+            nop = arch.derived_instruction("nop", [], item)
             block_builder.add_instruction(branch_not)
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.add_instruction(next_item)
-            block_builder.add_instruction(Instruction.derived("b", [target], item))
+            block_builder.add_instruction(arch.derived_instruction("b", [target], item))
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.set_label(Label(temp_label.target))
             block_builder.add_instruction(nop)
 
-        elif item.mnemonic in ["jal", "jalr"]:
+        elif item.function_target is not None:
             # Move the delay slot instruction to before the call so it
             # passes correct arguments.
             if next_item.args and next_item.args[0] == item.args[0]:
@@ -394,7 +397,7 @@ def build_blocks(
             block_builder.add_instruction(item)
             block_builder.add_instruction(next_item)
 
-        if arch.is_jump_instruction(item):
+        if item.is_jump():
             # Split blocks at jumps, after the next instruction.
             block_builder.new_block()
 
@@ -410,12 +413,12 @@ def build_blocks(
             block_builder.set_label(item)
             return
 
-        if arch.is_conditional_return_instruction(item):
+        if item.is_conditional and item.is_return:
             if cond_return_target is None:
                 cond_return_target = JumpTarget(f"_conditionalreturn_")
             # Strip the "lr" off of the instruction
             assert item.mnemonic[-2:] == "lr"
-            branch_instr = Instruction.derived(
+            branch_instr = arch.derived_instruction(
                 item.mnemonic[:-2], [cond_return_target], item
             )
             block_builder.add_instruction(branch_instr)
@@ -425,7 +428,7 @@ def build_blocks(
         block_builder.add_instruction(item)
 
         # Split blocks at jumps, at the next instruction.
-        if arch.is_jump_instruction(item):
+        if item.is_jump():
             block_builder.new_block()
 
     for item in body_iter:
@@ -647,9 +650,7 @@ def build_graph_from_block(
         return None
 
     # Extract branching instructions from this block.
-    jumps: List[Instruction] = [
-        inst for inst in block.instructions if arch.is_jump_instruction(inst)
-    ]
+    jumps: List[Instruction] = [inst for inst in block.instructions if inst.is_jump()]
     assert len(jumps) in [0, 1], "too many jump instructions in one block"
 
     if len(jumps) == 0:
@@ -670,12 +671,12 @@ def build_graph_from_block(
         # - a ConditionalNode.
         jump = jumps[0]
 
-        if arch.is_return_instruction(jump):
+        if jump.is_return:
             new_node = ReturnNode(block, False, index=0, terminal=terminal_node)
             nodes.append(new_node)
             return new_node
 
-        if arch.is_jumptable_instruction(jump):
+        if isinstance(jump.jump_target, Register):
             new_node = SwitchNode(block, False, [])
             nodes.append(new_node)
 
@@ -727,7 +728,7 @@ def build_graph_from_block(
                 new_node.cases.append(case_node)
             return new_node
 
-        assert arch.is_branch_instruction(jump)
+        assert jump.jump_target is not None
 
         # Get the block associated with the jump target.
         branch_label = arch.get_branch_target(jump)
@@ -737,7 +738,7 @@ def build_graph_from_block(
             raise DecompFailure(f"Cannot find branch target {target}")
 
         emit_goto = jump.meta.emit_goto
-        if arch.is_constant_branch_instruction(jump):
+        if not jump.is_conditional:
             # A constant branch becomes a basic edge to our branch target.
             new_node = BasicNode(block, emit_goto, dummy_node)
             nodes.append(new_node)

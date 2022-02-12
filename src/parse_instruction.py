@@ -4,7 +4,7 @@ import abc
 import csv
 from dataclasses import dataclass, replace
 import string
-from typing import Dict, List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 from .error import DecompFailure
 from .options import Target
@@ -111,6 +111,12 @@ Argument = Union[
 
 
 @dataclass(frozen=True)
+class InstructionBase:
+    mnemonic: str
+    args: List[Argument]
+
+
+@dataclass(frozen=True)
 class InstructionMeta:
     emit_goto: bool
     filename: str
@@ -129,16 +135,25 @@ class InstructionMeta:
 
 
 @dataclass(frozen=True)
-class Instruction:
+class Instruction(InstructionBase):
     mnemonic: str
     args: List[Argument]
     meta: InstructionMeta
 
-    @staticmethod
-    def derived(
-        mnemonic: str, args: List[Argument], old: "Instruction"
-    ) -> "Instruction":
-        return Instruction(mnemonic, args, replace(old.meta, synthetic=True))
+    inputs: List[Argument]
+    outputs: List[Argument]
+
+    # evaluator: Callable[["InstrArgs"], None]
+    evaluator: Any
+
+    jump_target: Optional[Union[JumpTarget, Register]] = None
+    function_target: Optional[Union[JumpTarget, Register]] = None
+    has_delay_slot: bool = False
+    is_conditional: bool = False
+    is_return: bool = False
+
+    def is_jump(self) -> bool:
+        return self.jump_target is not None or self.is_return
 
     def __str__(self) -> str:
         if not self.args:
@@ -156,10 +171,6 @@ class ArchAsmParsing(abc.ABC):
 
     all_regs: List[Register]
     aliased_regs: Dict[str, Register]
-
-    @abc.abstractmethod
-    def normalize_instruction(self, instr: Instruction) -> Instruction:
-        ...
 
 
 class ArchAsm(ArchAsmParsing):
@@ -184,44 +195,11 @@ class ArchAsm(ArchAsmParsing):
     uses_delay_slots: bool
 
     @abc.abstractmethod
-    def is_branch_instruction(self, instr: Instruction) -> bool:
-        """Instructions with a label as a jump target (may be conditional)"""
-        ...
-
-    @abc.abstractmethod
-    def is_branch_likely_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_constant_branch_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_conditional_return_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_jump_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_delay_slot_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_return_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
-    def is_jumptable_instruction(self, instr: Instruction) -> bool:
-        ...
-
-    @abc.abstractmethod
     def missing_return(self) -> List[Instruction]:
         ...
 
     @staticmethod
-    def get_branch_target(instr: Instruction) -> JumpTarget:
+    def get_branch_target(instr: InstructionBase) -> JumpTarget:
         label = instr.args[-1]
         if isinstance(label, AsmGlobalSymbol):
             return JumpTarget(label.symbol_name)
@@ -231,6 +209,22 @@ class ArchAsm(ArchAsmParsing):
             )
         return label
 
+    @abc.abstractmethod
+    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
+        ...
+
+    @abc.abstractmethod
+    def parse_instruction(
+        self, base: InstructionBase, meta: InstructionMeta
+    ) -> Instruction:
+        ...
+
+    def derived_instruction(
+        self, mnemonic: str, args: List[Argument], old: Instruction
+    ) -> Instruction:
+        base = InstructionBase(mnemonic, args)
+        return self.parse_instruction(base, replace(old.meta, synthetic=True))
+
 
 class NaiveParsingArch(ArchAsmParsing):
     """A fake arch that can parse asm in a naive fashion. Used by the pattern matching
@@ -238,9 +232,6 @@ class NaiveParsingArch(ArchAsmParsing):
 
     all_regs: List[Register] = []
     aliased_regs: Dict[str, Register] = {}
-
-    def normalize_instruction(self, instr: Instruction) -> Instruction:
-        return instr
 
 
 valid_word = string.ascii_letters + string.digits + "_$"
@@ -442,16 +433,20 @@ def split_arg_list(args: str) -> List[str]:
     )
 
 
-def parse_instruction(
-    line: str, meta: InstructionMeta, arch: ArchAsmParsing
-) -> Instruction:
+def parse_instruction_base(line: str, arch: ArchAsmParsing) -> InstructionBase:
+    # First token is instruction name, rest is args.
+    line = line.strip()
+    mnemonic, _, args_str = line.partition(" ")
+    # Parse arguments.
+    args = [parse_arg(arg_str, arch) for arg_str in split_arg_list(args_str)]
+    return InstructionBase(mnemonic, args)
+
+
+def parse_instruction(line: str, meta: InstructionMeta, arch: ArchAsm) -> Instruction:
     try:
-        # First token is instruction name, rest is args.
-        line = line.strip()
-        mnemonic, _, args_str = line.partition(" ")
-        # Parse arguments.
-        args = [parse_arg(arg_str, arch) for arg_str in split_arg_list(args_str)]
-        instr = Instruction(mnemonic, args, meta)
-        return arch.normalize_instruction(instr)
+        base = parse_instruction_base(line, arch)
+        base = arch.normalize_instruction(base)
+        return arch.parse_instruction(base, meta)
     except Exception:
+        raise
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")

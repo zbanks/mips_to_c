@@ -5,6 +5,7 @@ from typing import (
     Optional,
     Set,
     Tuple,
+    Union,
 )
 
 from .error import DecompFailure
@@ -14,6 +15,7 @@ from .parse_instruction import (
     AsmGlobalSymbol,
     AsmLiteral,
     Instruction,
+    InstructionBase,
     InstructionMeta,
     JumpTarget,
     Register,
@@ -198,8 +200,14 @@ class ModP2Pattern1(SimpleAsmPattern):
         val = (m.literals["N"] & 0xFFFF) + 1
         if val & (val - 1):
             return None  # not a power of two
-        mod = m.derived_instr(
-            "mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)]
+        # XXX: This is an alternate way of implementing `derived_instruction`, to avoid
+        # having to reference `ArchAsm` inside `asm_pattern.py`
+        # The downside is that if `ArchAsm.derived_instruction(...)` is not a staticmethod,
+        # then we need to create (or reference) an *instance* of `MipsArch` here.
+        # The `m.body[-2]` boilerplate could be replaced by a "get meta" method on `AsmMatch`
+        assert isinstance(m.body[-2], Instruction)
+        mod = MipsArch().derived_instruction(
+            "mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)], m.body[-2]
         )
         return Replacement([mod], len(m.body) - 1)
 
@@ -594,70 +602,158 @@ class MipsArch(Arch):
     def is_jumptable_instruction(instr: Instruction) -> bool:
         return instr.mnemonic == "jr" and instr.args[0] != Register("ra")
 
-    @staticmethod
-    def missing_return() -> List[Instruction]:
+    @classmethod
+    def missing_return(cls) -> List[Instruction]:
         meta = InstructionMeta.missing()
-        return [Instruction("jr", [Register("ra")], meta), Instruction("nop", [], meta)]
+        return [
+            cls.parse_instruction(b, meta)
+            for b in (
+                InstructionBase("jr", [Register("ra")]),
+                InstructionBase("nop", []),
+            )
+        ]
 
     @classmethod
-    def normalize_instruction(cls, instr: Instruction) -> Instruction:
+    def normalize_instruction(cls, instr: InstructionBase) -> InstructionBase:
         args = instr.args
         if len(args) == 3:
             if instr.mnemonic == "sll" and args[0] == args[1] == Register("zero"):
-                return Instruction("nop", [], instr.meta)
+                return InstructionBase("nop", [])
             if instr.mnemonic == "or" and args[2] == Register("zero"):
-                return Instruction("move", args[:2], instr.meta)
+                return InstructionBase("move", args[:2])
             if instr.mnemonic == "addu" and args[2] == Register("zero"):
-                return Instruction("move", args[:2], instr.meta)
+                return InstructionBase("move", args[:2])
             if instr.mnemonic == "daddu" and args[2] == Register("zero"):
-                return Instruction("move", args[:2], instr.meta)
+                return InstructionBase("move", args[:2])
             if instr.mnemonic == "nor" and args[1] == Register("zero"):
-                return Instruction("not", [args[0], args[2]], instr.meta)
+                return InstructionBase("not", [args[0], args[2]])
             if instr.mnemonic == "nor" and args[2] == Register("zero"):
-                return Instruction("not", [args[0], args[1]], instr.meta)
+                return InstructionBase("not", [args[0], args[1]])
             if instr.mnemonic == "addiu" and args[2] == AsmLiteral(0):
-                return Instruction("move", args[:2], instr.meta)
+                return InstructionBase("move", args[:2])
             if instr.mnemonic in DIV_MULT_INSTRUCTIONS:
                 if args[0] != Register("zero"):
                     raise DecompFailure("first argument to div/mult must be $zero")
-                return Instruction(instr.mnemonic, args[1:], instr.meta)
+                return InstructionBase(instr.mnemonic, args[1:])
             if (
                 instr.mnemonic == "ori"
                 and args[1] == Register("zero")
                 and isinstance(args[2], AsmLiteral)
             ):
                 lit = AsmLiteral(args[2].value & 0xFFFF)
-                return Instruction("li", [args[0], lit], instr.meta)
+                return InstructionBase("li", [args[0], lit])
             if (
                 instr.mnemonic == "addiu"
                 and args[1] == Register("zero")
                 and isinstance(args[2], AsmLiteral)
             ):
                 lit = AsmLiteral(((args[2].value + 0x8000) & 0xFFFF) - 0x8000)
-                return Instruction("li", [args[0], lit], instr.meta)
+                return InstructionBase("li", [args[0], lit])
             if instr.mnemonic == "beq" and args[0] == args[1] == Register("zero"):
-                return Instruction("b", [args[2]], instr.meta)
+                return InstructionBase("b", [args[2]])
             if instr.mnemonic in ["bne", "beq", "beql", "bnel"] and args[1] == Register(
                 "zero"
             ):
                 mn = instr.mnemonic[:3] + "z" + instr.mnemonic[3:]
-                return Instruction(mn, [args[0], args[2]], instr.meta)
+                return InstructionBase(mn, [args[0], args[2]])
         if len(args) == 2:
             if instr.mnemonic == "beqz" and args[0] == Register("zero"):
-                return Instruction("b", [args[1]], instr.meta)
+                return InstructionBase("b", [args[1]])
             if instr.mnemonic == "lui" and isinstance(args[1], AsmLiteral):
                 lit = AsmLiteral((args[1].value & 0xFFFF) << 16)
-                return Instruction("li", [args[0], lit], instr.meta)
+                return InstructionBase("li", [args[0], lit])
             if instr.mnemonic in LENGTH_THREE:
                 return cls.normalize_instruction(
-                    Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
+                    InstructionBase(instr.mnemonic, [args[0]] + args)
                 )
         if len(args) == 1:
             if instr.mnemonic in LENGTH_TWO:
                 return cls.normalize_instruction(
-                    Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
+                    InstructionBase(instr.mnemonic, [args[0]] + args)
                 )
         return instr
+
+    branch_mnemonics = {
+        "beq",
+        "bne",
+        "beqz",
+        "bnez",
+        "bgez",
+        "bgtz",
+        "blez",
+        "bltz",
+        "bc1t",
+        "bc1f",
+    }
+    branch_likely_mnemonics = {
+        "beql",
+        "bnel",
+        "beqzl",
+        "bnezl",
+        "bgezl",
+        "bgtzl",
+        "blezl",
+        "bltzl",
+        "bc1tl",
+        "bc1fl",
+    }
+
+    @classmethod
+    def parse_instruction(
+        cls, base: InstructionBase, meta: InstructionMeta
+    ) -> Instruction:
+        jump_target: Optional[Union[JumpTarget, Register]] = None
+        function_target: Optional[Union[JumpTarget, Register]] = None
+        has_delay_slot = False
+        is_conditional = False
+        is_return = False
+
+        if base.mnemonic == "jr" and base.args[0] == Register("ra"):
+            # Return
+            is_return = True
+            has_delay_slot = True
+        elif base.mnemonic == "jr":
+            # Jump table (switch)
+            assert isinstance(base.args[0], Register)
+            jump_target = base.args[0]
+            is_conditional = True
+            has_delay_slot = True
+        elif base.mnemonic == "jal":
+            # Function call to label
+            function_target = cls.get_branch_target(base)
+            has_delay_slot = True
+        elif base.mnemonic == "jalr":
+            # Function call to pointer
+            assert isinstance(base.args[0], Register)
+            function_target = base.args[0]
+            has_delay_slot = True
+        elif base.mnemonic in ("b", "j"):
+            # Unconditional jump
+            jump_target = cls.get_branch_target(base)
+            has_delay_slot = True
+        elif base.mnemonic in cls.branch_likely_mnemonics:
+            # Branch-likely (no delay slot)
+            jump_target = cls.get_branch_target(base)
+            is_conditional = True
+        elif base.mnemonic in cls.branch_mnemonics:
+            # Normal branch
+            jump_target = cls.get_branch_target(base)
+            has_delay_slot = True
+            is_conditional = True
+
+        return Instruction(
+            mnemonic=base.mnemonic,
+            args=base.args,
+            meta=meta,
+            inputs=[],
+            outputs=[],
+            evaluator=None,
+            jump_target=jump_target,
+            function_target=function_target,
+            has_delay_slot=has_delay_slot,
+            is_conditional=is_conditional,
+            is_return=is_return,
+        )
 
     asm_patterns = [
         DivPattern(),
