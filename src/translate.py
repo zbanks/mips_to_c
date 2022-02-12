@@ -503,7 +503,15 @@ def get_stack_info(
             info.uses_framepointer = True
         elif (
             arch_mnemonic
-            in ["mips:sw", "mips:swc1", "mips:sdc1", "ppc:stw", "ppc:stmw", "ppc:stfd"]
+            in [
+                "mips:sw",
+                "mips:swc1",
+                "mips:sdc1",
+                "ppc:stw",
+                "ppc:stmw",
+                "ppc:stfd",
+                "ppc:stfd_ps.fictive",
+            ]
             and isinstance(inst.args[0], Register)
             and inst.args[0] in arch.saved_regs
             and isinstance(inst.args[1], AsmAddressMode)
@@ -524,14 +532,14 @@ def get_stack_info(
                     callee_saved_offset_and_size.append((stack_offset, 4))
                     index += 1
                     stack_offset += 4
-            elif inst.args[0] not in info.callee_save_reg_locations:
+            else:
                 info.callee_save_reg_locations[inst.args[0]] = stack_offset
-                callee_saved_offset_and_size.append(
-                    (
-                        stack_offset,
-                        8 if arch_mnemonic in ("mips:sdc1", "ppc:stfd") else 4,
-                    )
-                )
+                size = {
+                    "mips:sdc1": 8,
+                    "ppc:stfd": 8,
+                    "ppc:stfd_ps.fictive": 16,
+                }.get(arch_mnemonic, 4)
+                callee_saved_offset_and_size.append((stack_offset, size))
         elif arch_mnemonic == "ppc:mflr" and inst.args[0] == Register("r0"):
             info.is_leaf = False
 

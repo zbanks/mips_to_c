@@ -134,8 +134,8 @@ class TryMatchState:
         if isinstance(e, AsmAddressMode):
             return (
                 isinstance(a, AsmAddressMode)
-                and a.lhs == e.lhs
-                and self.match_reg(a.rhs, e.rhs)
+                and self.match_arg(a.lhs, e.lhs)
+                and self.match_arg(a.rhs, e.rhs)
             )
         if isinstance(e, JumpTarget):
             return isinstance(a, JumpTarget) and self.match_var(

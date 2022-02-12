@@ -165,6 +165,38 @@ class BranchCtrPattern(AsmPattern):
         return None
 
 
+class PreservePSFloatRegPattern(SimpleAsmPattern):
+    """Save the contents of a floating-point register in the function prologue."""
+
+    pattern = make_pattern(
+        "stfd $f, N($r1)",
+        "psq_st $f, (N+8)($r1), 0, qr0",
+    )
+
+    def replace(self, m: AsmMatch) -> Optional[Replacement]:
+        assert isinstance(m.body[0], Instruction)
+        return Replacement(
+            [m.derived_instr("stfd_ps.fictive", m.body[0].args)],
+            len(m.body),
+        )
+
+
+class RestorePSFloatRegPattern(SimpleAsmPattern):
+    """Restore the contents of a floating-point register in the function epilogue."""
+
+    pattern = make_pattern(
+        "psq_l $f, N($r1), 0, qr0",
+        "lfd $f, (N-8)($r1)",
+    )
+
+    def replace(self, m: AsmMatch) -> Optional[Replacement]:
+        assert isinstance(m.body[1], Instruction)
+        return Replacement(
+            [m.derived_instr("lfd_ps.fictive", m.body[1].args)],
+            len(m.body),
+        )
+
+
 class PpcArch(Arch):
     arch = Target.ArchEnum.PPC
 
@@ -473,14 +505,18 @@ class PpcArch(Arch):
         TailCallPattern(),
         BoolCastPattern(),
         BranchCtrPattern(),
+        PreservePSFloatRegPattern(),
+        RestorePSFloatRegPattern(),
     ]
 
     instrs_ignore: InstrSet = {
         "nop",
         "b",
-        # Assume stmw/lmw are only used for saving/restoring saved regs
+        # Assume these are only used for saving/restoring saved regs
         "stmw",
         "lmw",
+        "lfd_ps.fictive",
+        "stfd_ps.fictive",
         # `{crclr,crset} 6` are used as part of the ABI for floats & varargs
         # For now, we can ignore them (and later use them to help in function_abi)
         "crclr",
