@@ -33,9 +33,34 @@ from .parse_instruction import (
 )
 from .asm_pattern import simplify_patterns, AsmPattern
 
+IrFunctionBody = List[Union["IrInstruction", Label]]
+
+
+@dataclass(frozen=True)
+class IrInstruction(Instruction):
+    inputs: List[Argument]
+    outputs: List[Argument]
+
+    # Access in translate.py
+    # evaluator: Callable[["InstrArgs"], None]
+    evaluator: object = None
+
+    jump_target: Optional[Union[JumpTarget, Register]] = None
+    function_target: Optional[Union[JumpTarget, Register]] = None
+    has_delay_slot: bool = False
+    is_conditional: bool = False
+    is_return: bool = False
+
+    def is_jump(self) -> bool:
+        return self.jump_target is not None or self.is_return
+
 
 class ArchFlowGraph(ArchAsm):
     asm_patterns: List[AsmPattern] = []
+
+    @abc.abstractmethod
+    def parse_ir(self, instr: Instruction) -> IrInstruction:
+        ...
 
 
 @dataclass(eq=False)
@@ -43,7 +68,7 @@ class Block:
     index: int
     label: Optional[Label]
     approx_label_name: str
-    instructions: List[Instruction]
+    instructions: List[IrInstruction]
 
     # block_info is actually an Optional[BlockInfo], set by translate.py for
     # non-TerminalNode's, but due to circular dependencies we cannot type it
@@ -69,7 +94,7 @@ class BlockBuilder:
     curr_label: Optional[Label] = None
     last_label_name: str = "initial"
     label_counter: int = 0
-    curr_instructions: List[Instruction] = field(default_factory=list)
+    curr_instructions: List[IrInstruction] = field(default_factory=list)
     blocks: List[Block] = field(default_factory=list)
 
     def new_block(self) -> Optional[Block]:
@@ -91,7 +116,7 @@ class BlockBuilder:
 
         return block
 
-    def add_instruction(self, instruction: Instruction) -> None:
+    def add_instruction(self, instruction: IrInstruction) -> None:
         self.curr_instructions.append(instruction)
 
     def set_label(self, label: Label) -> None:
@@ -114,9 +139,9 @@ class BlockBuilder:
         return self.blocks
 
 
-def verify_no_trailing_delay_slot(function: Function, arch: ArchFlowGraph) -> None:
+def verify_no_trailing_delay_slot(body: IrFunctionBody, arch: ArchFlowGraph) -> None:
     last_ins: Optional[Instruction] = None
-    for item in function.body:
+    for item in body:
         if isinstance(item, Instruction):
             last_ins = item
     if last_ins and arch.is_delay_slot_instruction(last_ins):
@@ -139,7 +164,9 @@ def invert_branch_mnemonic(mnemonic: str) -> str:
     return inverses[mnemonic]
 
 
-def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Function:
+def normalize_likely_branches(
+    body: IrFunctionBody, arch: ArchFlowGraph
+) -> IrFunctionBody:
     """Branch-likely instructions only evaluate their delay slots when they are
     taken, making control flow more complex. However, on the IDO compiler they
     only occur in a very specific pattern:
@@ -165,18 +192,18 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
     .label:
 
     which GCC emits."""
-    label_prev_instr: Dict[str, Optional[Instruction]] = {}
+    label_prev_instr: Dict[str, Optional[IrInstruction]] = {}
     label_before_instr: Dict[int, str] = {}
-    instr_before_instr: Dict[int, Instruction] = {}
-    prev_instr: Optional[Instruction] = None
+    instr_before_instr: Dict[int, IrInstruction] = {}
+    prev_instr: Optional[IrInstruction] = None
     prev_label: Optional[Label] = None
-    prev_item: Union[Instruction, Label, None] = None
-    for item in function.body:
-        if isinstance(item, Instruction):
+    prev_item: Union[IrInstruction, Label, None] = None
+    for item in body:
+        if isinstance(item, IrInstruction):
             if prev_label is not None:
                 label_before_instr[id(item)] = prev_label.name
                 prev_label = None
-            if isinstance(prev_item, Instruction):
+            if isinstance(prev_item, IrInstruction):
                 instr_before_instr[id(item)] = prev_item
             prev_instr = item
         elif isinstance(item, Label):
@@ -186,18 +213,18 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
         prev_item = item
 
     insert_label_before: Dict[int, str] = {}
-    new_body: List[Tuple[Union[Instruction, Label], Union[Instruction, Label]]] = []
+    new_body: List[Tuple[Union[IrInstruction, Label], Union[IrInstruction, Label]]] = []
 
-    body_iter: Iterator[Union[Instruction, Label]] = iter(function.body)
+    body_iter: Iterator[Union[IrInstruction, Label]] = iter(body)
     for item in body_iter:
         orig_item = item
-        if isinstance(item, Instruction) and (
+        if isinstance(item, IrInstruction) and (
             arch.is_branch_likely_instruction(item) or item.mnemonic == "b"
         ):
             old_label = arch.get_branch_target(item).target
             if old_label not in label_prev_instr:
                 raise DecompFailure(
-                    f"Unable to parse branch: label {old_label} does not exist in function {function.name}"
+                    f"Unable to parse branch: label {old_label} does not exist"
                 )
             before_target = label_prev_instr[old_label]
             before_before_target = (
@@ -217,13 +244,13 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                 new_body.append((item, item))
                 new_body.append((next_item, next_item))
             elif (
-                isinstance(next_item, Instruction)
+                isinstance(next_item, IrInstruction)
                 and before_target is next_item
                 and item.mnemonic != "b"
             ):
                 mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
-                item = Instruction.derived(mn_inverted, item.args, item)
-                new_nop = Instruction.derived("nop", [], item)
+                item = arch.parse_ir(Instruction.derived(mn_inverted, item.args, item))
+                new_nop = arch.parse_ir(Instruction.derived("nop", [], item))
                 new_body.append((orig_item, item))
                 new_body.append((new_nop, new_nop))
                 new_body.append((orig_next_item, next_item))
@@ -240,10 +267,12 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                     insert_label_before[id(before_target)] = new_label
                 new_target = JumpTarget(label_before_instr[id(before_target)])
                 mn_unlikely = item.mnemonic[:-1] or "b"
-                item = Instruction.derived(
-                    mn_unlikely, item.args[:-1] + [new_target], item
+                item = arch.parse_ir(
+                    Instruction.derived(
+                        mn_unlikely, item.args[:-1] + [new_target], item
+                    )
                 )
-                next_item = Instruction.derived("nop", [], item)
+                next_item = arch.parse_ir(Instruction.derived("nop", [], item))
                 new_body.append((orig_item, item))
                 new_body.append((orig_next_item, next_item))
             else:
@@ -252,33 +281,33 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
         else:
             new_body.append((orig_item, item))
 
-    new_function = function.bodyless_copy()
+    result_body: IrFunctionBody = []
     for (orig_item, new_item) in new_body:
         if id(orig_item) in insert_label_before:
-            new_function.new_label(insert_label_before[id(orig_item)])
-        new_function.body.append(new_item)
+            result_body.append(Label(insert_label_before[id(orig_item)]))
+        result_body.append(new_item)
 
-    return new_function
+    return result_body
 
 
 def prune_unreferenced_labels(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph
-) -> Function:
+    body: IrFunctionBody, asm_data: AsmData, arch: ArchFlowGraph
+) -> IrFunctionBody:
     labels_used: Set[str] = {
         label.name
-        for label in function.body
+        for label in body
         if isinstance(label, Label) and label.name in asm_data.mentioned_labels
     }
-    for item in function.body:
-        if isinstance(item, Instruction) and arch.is_branch_instruction(item):
+    for item in body:
+        if isinstance(item, IrInstruction) and arch.is_branch_instruction(item):
             labels_used.add(arch.get_branch_target(item).target)
 
-    new_function = function.bodyless_copy()
-    for item in function.body:
+    new_body: IrFunctionBody = []
+    for item in body:
         if not (isinstance(item, Label) and item.name not in labels_used):
-            new_function.body.append(item)
+            new_body.append(item)
 
-    return new_function
+    return new_body
 
 
 def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Function:
@@ -288,24 +317,35 @@ def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Funct
     return new_function
 
 
+def function_body_as_ir(
+    function: Function, arch: ArchFlowGraph
+) -> Iterator[Union[IrInstruction, Label]]:
+    for item in function.body:
+        if isinstance(item, Instruction):
+            yield arch.parse_ir(item)
+        else:
+            yield item
+
+
 def build_blocks(
     function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> List[Block]:
-    if arch.arch == Target.ArchEnum.MIPS:
-        verify_no_trailing_delay_slot(function, arch)
-        function = normalize_likely_branches(function, arch)
-
-    function = prune_unreferenced_labels(function, asm_data, arch)
     function = simplify_standard_patterns(function, arch)
-    function = prune_unreferenced_labels(function, asm_data, arch)
+
+    function_body = list(function_body_as_ir(function, arch))
+
+    if arch.arch == Target.ArchEnum.MIPS:
+        verify_no_trailing_delay_slot(function_body, arch)
+        function_body = normalize_likely_branches(function_body, arch)
+    function_body = prune_unreferenced_labels(function_body, asm_data, arch)
 
     block_builder = BlockBuilder()
 
-    body_iter: Iterator[Union[Instruction, Label]] = iter(function.body)
+    body_iter: Iterator[Union[IrInstruction, Label]] = iter(function_body)
     branch_likely_counts: Counter[str] = Counter()
     cond_return_target: Optional[JumpTarget] = None
 
-    def process_with_delay_slots(item: Union[Instruction, Label]) -> None:
+    def process_with_delay_slots(item: Union[IrInstruction, Label]) -> None:
         if isinstance(item, Label):
             # Split blocks at labels.
             block_builder.new_block()
@@ -319,7 +359,7 @@ def build_blocks(
                 block_builder.new_block()
             return
 
-        process_after: List[Union[Instruction, Label]] = []
+        process_after: List[Union[IrInstruction, Label]] = []
         next_item = next(body_iter)
 
         if isinstance(next_item, Label):
@@ -365,15 +405,17 @@ def build_blocks(
             index = branch_likely_counts[target.target]
             mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
             temp_label = JumpTarget(f"{target.target}_branchlikelyskip_{index}")
-            branch_not = Instruction.derived(
-                mn_inverted, item.args[:-1] + [temp_label], item
+            branch_not = arch.parse_ir(
+                Instruction.derived(mn_inverted, item.args[:-1] + [temp_label], item)
             )
-            nop = Instruction.derived("nop", [], item)
+            nop = arch.parse_ir(Instruction.derived("nop", [], item))
             block_builder.add_instruction(branch_not)
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.add_instruction(next_item)
-            block_builder.add_instruction(Instruction.derived("b", [target], item))
+            block_builder.add_instruction(
+                arch.parse_ir(Instruction.derived("b", [target], item))
+            )
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.set_label(Label(temp_label.target))
@@ -401,7 +443,7 @@ def build_blocks(
         for item in process_after:
             process_with_delay_slots(item)
 
-    def process_no_delay_slots(item: Union[Instruction, Label]) -> None:
+    def process_no_delay_slots(item: Union[IrInstruction, Label]) -> None:
         nonlocal cond_return_target
 
         if isinstance(item, Label):
@@ -415,8 +457,8 @@ def build_blocks(
                 cond_return_target = JumpTarget(f"_conditionalreturn_")
             # Strip the "lr" off of the instruction
             assert item.mnemonic[-2:] == "lr"
-            branch_instr = Instruction.derived(
-                item.mnemonic[:-2], [cond_return_target], item
+            branch_instr = arch.parse_ir(
+                Instruction.derived(item.mnemonic[:-2], [cond_return_target], item)
             )
             block_builder.add_instruction(branch_instr)
             block_builder.new_block()
@@ -442,14 +484,14 @@ def build_blocks(
         return_instrs = arch.missing_return()
         print(f'Warning: missing "{return_instrs[0]}" in last block (.{label}).\n')
         for instr in return_instrs:
-            block_builder.add_instruction(instr)
+            block_builder.add_instruction(arch.parse_ir(instr))
         block_builder.new_block()
 
     if cond_return_target is not None:
         # Add an empty return block at the end of the function
         block_builder.set_label(Label(cond_return_target.target))
         for instr in arch.missing_return():
-            block_builder.add_instruction(instr)
+            block_builder.add_instruction(arch.parse_ir(instr))
         block_builder.new_block()
 
     # Throw away whatever is past the last return instruction and return what we have.
@@ -647,7 +689,7 @@ def build_graph_from_block(
         return None
 
     # Extract branching instructions from this block.
-    jumps: List[Instruction] = [
+    jumps: List[IrInstruction] = [
         inst for inst in block.instructions if arch.is_jump_instruction(inst)
     ]
     assert len(jumps) in [0, 1], "too many jump instructions in one block"
@@ -790,14 +832,14 @@ def reachable_without(start: Node, end: Node, without: Node) -> bool:
 
 
 def build_nodes(
-    function: Function, blocks: List[Block], asm_data: AsmData, arch: ArchFlowGraph
+    function_name: str, blocks: List[Block], asm_data: AsmData, arch: ArchFlowGraph
 ) -> List[Node]:
     terminal_node = TerminalNode.terminal()
     graph: List[Node] = [terminal_node]
 
     if not blocks:
         raise DecompFailure(
-            f"Function {function.name} contains no instructions. Maybe it is rodata?"
+            f"Function {function_name} contains no instructions. Maybe it is rodata?"
         )
 
     # Traverse through the block tree.
@@ -1098,11 +1140,16 @@ class FlowGraph:
             node.block.block_info = None
 
 
+def simplify_ir_patterns(blocks: List[Block], arch: ArchFlowGraph) -> None:
+    # TODO: pattern matching
+    pass
+
 def build_flowgraph(
     function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> FlowGraph:
     blocks = build_blocks(function, asm_data, arch)
-    nodes = build_nodes(function, blocks, asm_data, arch)
+    simplify_ir_patterns(blocks, arch)
+    nodes = build_nodes(function.name, blocks, asm_data, arch)
     nodes = duplicate_premature_returns(nodes)
     compute_relations(nodes)
     terminate_infinite_loops(nodes)

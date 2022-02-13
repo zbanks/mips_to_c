@@ -5,6 +5,7 @@ from typing import (
     Optional,
     Set,
     Tuple,
+    Union,
 )
 
 from .error import DecompFailure
@@ -26,6 +27,7 @@ from .asm_pattern import (
     SimpleAsmPattern,
     make_pattern,
 )
+from .flow_graph import IrInstruction
 from .translate import (
     Abi,
     AbiArgSlot,
@@ -658,6 +660,89 @@ class MipsArch(Arch):
                     Instruction(instr.mnemonic, [args[0]] + args, instr.meta)
                 )
         return instr
+
+    branch_mnemonics = {
+        "beq",
+        "bne",
+        "beqz",
+        "bnez",
+        "bgez",
+        "bgtz",
+        "blez",
+        "bltz",
+        "bc1t",
+        "bc1f",
+    }
+    branch_likely_mnemonics = {
+        "beql",
+        "bnel",
+        "beqzl",
+        "bnezl",
+        "bgezl",
+        "bgtzl",
+        "blezl",
+        "bltzl",
+        "bc1tl",
+        "bc1fl",
+    }
+
+    @classmethod
+    def parse_ir(cls, base: Instruction) -> IrInstruction:
+        jump_target: Optional[Union[JumpTarget, Register]] = None
+        function_target: Optional[Union[JumpTarget, Register]] = None
+        has_delay_slot = False
+        is_conditional = False
+        is_return = False
+
+        mnemonic = base.mnemonic
+        args = base.args
+
+        if mnemonic == "jr" and args[0] == Register("ra"):
+            # Return
+            is_return = True
+            has_delay_slot = True
+        elif mnemonic == "jr":
+            # Jump table (switch)
+            assert isinstance(args[0], Register)
+            jump_target = args[0]
+            is_conditional = True
+            has_delay_slot = True
+        elif mnemonic == "jal":
+            # Function call to label
+            function_target = cls.get_branch_target(base)
+            has_delay_slot = True
+        elif mnemonic == "jalr":
+            # Function call to pointer
+            assert isinstance(args[0], Register)
+            function_target = args[0]
+            has_delay_slot = True
+        elif mnemonic in ("b", "j"):
+            # Unconditional jump
+            jump_target = cls.get_branch_target(base)
+            has_delay_slot = True
+        elif mnemonic in cls.branch_likely_mnemonics:
+            # Branch-likely (no delay slot)
+            jump_target = cls.get_branch_target(base)
+            is_conditional = True
+        elif mnemonic in cls.branch_mnemonics:
+            # Normal branch
+            jump_target = cls.get_branch_target(base)
+            has_delay_slot = True
+            is_conditional = True
+
+        return IrInstruction(
+            mnemonic=base.mnemonic,
+            args=base.args,
+            meta=base.meta,
+            inputs=[],
+            outputs=[],
+            evaluator=None,
+            jump_target=jump_target,
+            function_target=function_target,
+            has_delay_slot=has_delay_slot,
+            is_conditional=is_conditional,
+            is_return=is_return,
+        )
 
     asm_patterns = [
         DivPattern(),
