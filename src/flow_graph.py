@@ -114,7 +114,7 @@ class BlockBuilder:
         return self.blocks
 
 
-def verify_no_trailing_delay_slot(function: Function, arch: ArchFlowGraph) -> None:
+def verify_no_trailing_delay_slot(function: Function) -> None:
     last_ins: Optional[Instruction] = None
     for item in function.body:
         if isinstance(item, Instruction):
@@ -224,8 +224,8 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                 and item.mnemonic != "b"
             ):
                 mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
-                item = arch.derived_instruction(mn_inverted, item.args, item)
-                new_nop = arch.derived_instruction("nop", [], item)
+                item = arch.parse(mn_inverted, item.args, item.meta.derived())
+                new_nop = arch.parse("nop", [], item.meta.derived())
                 new_body.append((orig_item, item))
                 new_body.append((new_nop, new_nop))
                 new_body.append((orig_next_item, next_item))
@@ -242,10 +242,10 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
                     insert_label_before[id(before_target)] = new_label
                 new_target = JumpTarget(label_before_instr[id(before_target)])
                 mn_unlikely = item.mnemonic[:-1] or "b"
-                item = arch.derived_instruction(
-                    mn_unlikely, item.args[:-1] + [new_target], item
+                item = arch.parse(
+                    mn_unlikely, item.args[:-1] + [new_target], item.meta.derived()
                 )
-                next_item = arch.derived_instruction("nop", [], item)
+                next_item = arch.parse("nop", [], item.meta.derived())
                 new_body.append((orig_item, item))
                 new_body.append((orig_next_item, next_item))
             else:
@@ -263,9 +263,7 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
     return new_function
 
 
-def prune_unreferenced_labels(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph
-) -> Function:
+def prune_unreferenced_labels(function: Function, asm_data: AsmData) -> Function:
     labels_used: Set[str] = {
         label.name
         for label in function.body
@@ -284,7 +282,7 @@ def prune_unreferenced_labels(
 
 
 def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Function:
-    new_body = simplify_patterns(function.body, arch.asm_patterns, arch)
+    new_body = simplify_patterns(function.body, arch.asm_patterns)
     new_function = function.bodyless_copy()
     new_function.body.extend(new_body)
     return new_function
@@ -294,12 +292,12 @@ def build_blocks(
     function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> List[Block]:
     if arch.arch == Target.ArchEnum.MIPS:
-        verify_no_trailing_delay_slot(function, arch)
+        verify_no_trailing_delay_slot(function)
         function = normalize_likely_branches(function, arch)
 
-    function = prune_unreferenced_labels(function, asm_data, arch)
+    function = prune_unreferenced_labels(function, asm_data)
     function = simplify_standard_patterns(function, arch)
-    function = prune_unreferenced_labels(function, asm_data, arch)
+    function = prune_unreferenced_labels(function, asm_data)
 
     block_builder = BlockBuilder()
 
@@ -368,15 +366,17 @@ def build_blocks(
             index = branch_likely_counts[target.target]
             mn_inverted = invert_branch_mnemonic(item.mnemonic[:-1])
             temp_label = JumpTarget(f"{target.target}_branchlikelyskip_{index}")
-            branch_not = arch.derived_instruction(
-                mn_inverted, item.args[:-1] + [temp_label], item
+            branch_not = arch.parse(
+                mn_inverted, item.args[:-1] + [temp_label], item.meta.derived()
             )
-            nop = arch.derived_instruction("nop", [], item)
+            nop = arch.parse("nop", [], item.meta.derived())
             block_builder.add_instruction(branch_not)
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.add_instruction(next_item)
-            block_builder.add_instruction(arch.derived_instruction("b", [target], item))
+            block_builder.add_instruction(
+                arch.parse("b", [target], item.meta.derived())
+            )
             block_builder.add_instruction(nop)
             block_builder.new_block()
             block_builder.set_label(Label(temp_label.target))
@@ -418,8 +418,8 @@ def build_blocks(
                 cond_return_target = JumpTarget(f"_conditionalreturn_")
             # Strip the "lr" off of the instruction
             assert item.mnemonic[-2:] == "lr"
-            branch_instr = arch.derived_instruction(
-                item.mnemonic[:-2], [cond_return_target], item
+            branch_instr = arch.parse(
+                item.mnemonic[:-2], [cond_return_target], item.meta.derived()
             )
             block_builder.add_instruction(branch_instr)
             block_builder.new_block()
@@ -728,10 +728,10 @@ def build_graph_from_block(
                 new_node.cases.append(case_node)
             return new_node
 
-        assert jump.jump_target is not None
-
         # Get the block associated with the jump target.
-        branch_label = arch.get_branch_target(jump)
+        branch_label = jump.jump_target
+        assert isinstance(branch_label, JumpTarget)
+
         branch_block = find_block_by_label(branch_label.target)
         if branch_block is None:
             target = branch_label.target

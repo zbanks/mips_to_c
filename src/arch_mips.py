@@ -11,6 +11,7 @@ from typing import (
 from .error import DecompFailure
 from .options import Target
 from .parse_instruction import (
+    Argument,
     AsmAddressMode,
     AsmGlobalSymbol,
     AsmLiteral,
@@ -20,6 +21,7 @@ from .parse_instruction import (
     JumpTarget,
     Register,
 )
+from .parse_file import Label
 from .asm_pattern import (
     AsmMatch,
     AsmMatcher,
@@ -184,6 +186,12 @@ class DivuPattern(SimpleAsmPattern):
         return Replacement([], len(m.body) - 1)
 
 
+# XXX: Option 1: Verbose
+# Both of these options rely on `MipsArch.parse` being a static method, which
+# is a little odd. (It could be made a requirement?)
+#
+# A way around this could be to attach a reference to the ArchAsm into the pattern?
+# Maybe through a registration pattern, instead of declaring `asm_patterns`?
 class ModP2Pattern1(SimpleAsmPattern):
     """Modulo by power of two."""
 
@@ -200,16 +208,25 @@ class ModP2Pattern1(SimpleAsmPattern):
         val = (m.literals["N"] & 0xFFFF) + 1
         if val & (val - 1):
             return None  # not a power of two
-        # XXX: This is an alternate way of implementing `derived_instruction`, to avoid
-        # having to reference `ArchAsm` inside `asm_pattern.py`
-        # The downside is that if `ArchAsm.derived_instruction(...)` is not a staticmethod,
-        # then we need to create (or reference) an *instance* of `MipsArch` here.
-        # The `m.body[-2]` boilerplate could be replaced by a "get meta" method on `AsmMatch`
-        assert isinstance(m.body[-2], Instruction)
-        mod = MipsArch().derived_instruction(
-            "mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)], m.body[-2]
+        mod = MipsArch.parse(
+            "mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)], m.derived_meta()
         )
         return Replacement([mod], len(m.body) - 1)
+
+
+# XXX: Option 2: A local helper function
+# (ab)uses the fact that Instruction inherits InstructionBase to accept either
+def derived_instrs(
+    bases: List[Union[InstructionBase, Label]], m: AsmMatch
+) -> List[Union[Instruction, Label]]:
+    meta = m.derived_meta()
+    instrs: List[Union[Instruction, Label]] = []
+    for base in bases:
+        if isinstance(base, (Instruction, Label)):
+            instrs.append(base)
+        else:
+            instrs.append(MipsArch.parse(base.mnemonic, base.args, meta))
+    return instrs
 
 
 class ModP2Pattern2(SimpleAsmPattern):
@@ -232,10 +249,11 @@ class ModP2Pattern2(SimpleAsmPattern):
             val += ((m.literals["LO"] + 0x8000) & 0xFFFF) - 0x8000
         if not val or val & (val - 1):
             return None  # not a power of two
-        mod = m.derived_instr(
-            "mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)]
+        mod = InstructionBase(
+            "mod.fictive",
+            [m.regs["o"], m.regs["i"], AsmLiteral(val)],
         )
-        return Replacement([mod], len(m.body) - 1)
+        return Replacement(derived_instrs([mod], m), len(m.body) - 1)
 
 
 class DivP2Pattern1(SimpleAsmPattern):
@@ -251,8 +269,10 @@ class DivP2Pattern1(SimpleAsmPattern):
 
     def replace(self, m: AsmMatch) -> Replacement:
         shift = m.literals["N"] & 0x1F
-        div = m.derived_instr(
-            "div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2 ** shift)]
+        div = MipsArch.parse(
+            "div.fictive",
+            [m.regs["o"], m.regs["i"], AsmLiteral(2 ** shift)],
+            m.derived_meta(),
         )
         return Replacement([div], len(m.body) - 1)
 
@@ -270,8 +290,10 @@ class DivP2Pattern2(SimpleAsmPattern):
 
     def replace(self, m: AsmMatch) -> Replacement:
         shift = m.literals["N"] & 0x1F
-        div = m.derived_instr(
-            "div.fictive", [m.regs["x"], m.regs["x"], AsmLiteral(2 ** shift)]
+        div = MipsArch.parse(
+            "div.fictive",
+            [m.regs["x"], m.regs["x"], AsmLiteral(2 ** shift)],
+            m.derived_meta(),
         )
         return Replacement([div], len(m.body))
 
@@ -287,7 +309,9 @@ class Div2S16Pattern(SimpleAsmPattern):
 
     def replace(self, m: AsmMatch) -> Replacement:
         # Keep 32->16 conversion from $i to $o, just add a division
-        div = m.derived_instr("div.fictive", [m.regs["o"], m.regs["o"], AsmLiteral(2)])
+        div = MipsArch.parse(
+            "div.fictive", [m.regs["o"], m.regs["o"], AsmLiteral(2)], m.derived_meta()
+        )
         return Replacement(m.body[:2] + [div], len(m.body))
 
 
@@ -299,7 +323,9 @@ class Div2S32Pattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        div = m.derived_instr("div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2)])
+        div = MipsArch.parse(
+            "div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2)], m.derived_meta()
+        )
         return Replacement([div], len(m.body))
 
 
@@ -315,7 +341,9 @@ class UtfPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        new_instr = m.derived_instr("cvt.s.u.fictive", [m.regs["o"], m.regs["i"]])
+        new_instr = MipsArch.parse(
+            "cvt.s.u.fictive", [m.regs["o"], m.regs["i"]], m.derived_meta()
+        )
         return Replacement([new_instr], len(m.body) - 1)
 
 
@@ -364,9 +392,9 @@ class FtuPattern(SimpleAsmPattern):
         fmt = sub.mnemonic.split(".")[-1]
         args = [m.regs["o"], sub.args[1]]
         if fmt == "s":
-            new_instr = m.derived_instr("cvt.u.s.fictive", args)
+            new_instr = MipsArch.parse("cvt.u.s.fictive", args, m.derived_meta())
         else:
-            new_instr = m.derived_instr("cvt.u.d.fictive", args)
+            new_instr = MipsArch.parse("cvt.u.d.fictive", args, m.derived_meta())
         return Replacement([new_instr], len(m.body))
 
 
@@ -403,7 +431,7 @@ class Mips1DoubleLoadStorePattern(AsmPattern):
         # Store the even-numbered register (ra) into the low address (mb).
         new_args = [ra, mb]
         new_mn = "ldc1" if a.mnemonic == "lwc1" else "sdc1"
-        new_instr = m.derived_instr(new_mn, new_args)
+        new_instr = MipsArch.parse(new_mn, new_args, m.derived_meta())
         return Replacement([new_instr], len(m.body))
 
 
@@ -437,7 +465,7 @@ class TrapuvPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        new_instr = m.derived_instr("trapuv.fictive", [])
+        new_instr = MipsArch.parse("trapuv.fictive", [], m.derived_meta())
         return Replacement([m.body[2], new_instr], len(m.body))
 
 
@@ -537,80 +565,12 @@ class MipsArch(Arch):
 
     uses_delay_slots = True
 
-    @staticmethod
-    def is_branch_instruction(instr: Instruction) -> bool:
-        return (
-            instr.mnemonic
-            in [
-                "beq",
-                "bne",
-                "beqz",
-                "bnez",
-                "bgez",
-                "bgtz",
-                "blez",
-                "bltz",
-                "bc1t",
-                "bc1f",
-            ]
-            or MipsArch.is_branch_likely_instruction(instr)
-            or MipsArch.is_constant_branch_instruction(instr)
-        )
-
-    @staticmethod
-    def is_branch_likely_instruction(instr: Instruction) -> bool:
-        return instr.mnemonic in [
-            "beql",
-            "bnel",
-            "beqzl",
-            "bnezl",
-            "bgezl",
-            "bgtzl",
-            "blezl",
-            "bltzl",
-            "bc1tl",
-            "bc1fl",
-        ]
-
-    @staticmethod
-    def is_constant_branch_instruction(instr: Instruction) -> bool:
-        return instr.mnemonic in ("b", "j")
-
-    @staticmethod
-    def is_jump_instruction(instr: Instruction) -> bool:
-        # (we don't treat jal/jalr as jumps, since control flow will return
-        # after the call)
-        return MipsArch.is_branch_instruction(instr) or instr.mnemonic == "jr"
-
-    @staticmethod
-    def is_delay_slot_instruction(instr: Instruction) -> bool:
-        return MipsArch.is_branch_instruction(instr) or instr.mnemonic in [
-            "jr",
-            "jal",
-            "jalr",
-        ]
-
-    @staticmethod
-    def is_return_instruction(instr: Instruction) -> bool:
-        return instr.mnemonic == "jr" and instr.args[0] == Register("ra")
-
-    @staticmethod
-    def is_conditional_return_instruction(instr: Instruction) -> bool:
-        return False
-
-    @staticmethod
-    def is_jumptable_instruction(instr: Instruction) -> bool:
-        return instr.mnemonic == "jr" and instr.args[0] != Register("ra")
-
     @classmethod
     def missing_return(cls) -> List[Instruction]:
         meta = InstructionMeta.missing()
         return [
-            cls.parse_instruction(b, meta)
-            for b in (
-                InstructionBase("jr", [Register("ra")]),
-                InstructionBase("nop", []),
-            )
+            cls.parse("jr", [Register("ra")], meta),
+            cls.parse("nop", [], meta),
         ]
 
     @classmethod
@@ -699,8 +659,8 @@ class MipsArch(Arch):
     }
 
     @classmethod
-    def parse_instruction(
-        cls, base: InstructionBase, meta: InstructionMeta
+    def parse(
+        cls, mnemonic: str, args: List[Argument], meta: InstructionMeta
     ) -> Instruction:
         jump_target: Optional[Union[JumpTarget, Register]] = None
         function_target: Optional[Union[JumpTarget, Register]] = None
@@ -708,42 +668,42 @@ class MipsArch(Arch):
         is_conditional = False
         is_return = False
 
-        if base.mnemonic == "jr" and base.args[0] == Register("ra"):
+        if mnemonic == "jr" and args[0] == Register("ra"):
             # Return
             is_return = True
             has_delay_slot = True
-        elif base.mnemonic == "jr":
+        elif mnemonic == "jr":
             # Jump table (switch)
-            assert isinstance(base.args[0], Register)
-            jump_target = base.args[0]
+            assert isinstance(args[0], Register)
+            jump_target = args[0]
             is_conditional = True
             has_delay_slot = True
-        elif base.mnemonic == "jal":
+        elif mnemonic == "jal":
             # Function call to label
-            function_target = cls.get_branch_target(base)
+            function_target = cls.get_branch_target(args)
             has_delay_slot = True
-        elif base.mnemonic == "jalr":
+        elif mnemonic == "jalr":
             # Function call to pointer
-            assert isinstance(base.args[0], Register)
-            function_target = base.args[0]
+            assert isinstance(args[0], Register)
+            function_target = args[0]
             has_delay_slot = True
-        elif base.mnemonic in ("b", "j"):
+        elif mnemonic in ("b", "j"):
             # Unconditional jump
-            jump_target = cls.get_branch_target(base)
+            jump_target = cls.get_branch_target(args)
             has_delay_slot = True
-        elif base.mnemonic in cls.branch_likely_mnemonics:
+        elif mnemonic in cls.branch_likely_mnemonics:
             # Branch-likely (no delay slot)
-            jump_target = cls.get_branch_target(base)
+            jump_target = cls.get_branch_target(args)
             is_conditional = True
-        elif base.mnemonic in cls.branch_mnemonics:
+        elif mnemonic in cls.branch_mnemonics:
             # Normal branch
-            jump_target = cls.get_branch_target(base)
+            jump_target = cls.get_branch_target(args)
             has_delay_slot = True
             is_conditional = True
 
         return Instruction(
-            mnemonic=base.mnemonic,
-            args=base.args,
+            mnemonic=mnemonic,
+            args=args,
             meta=meta,
             inputs=[],
             outputs=[],

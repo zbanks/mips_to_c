@@ -5,13 +5,13 @@ from typing import Dict, List, Optional, Tuple, TypeVar, Union
 from .parse_file import Label
 from .parse_instruction import (
     Argument,
-    ArchAsm,
     AsmAddressMode,
     AsmGlobalSymbol,
     AsmLiteral,
     BinOp,
-    InstructionBase,
     Instruction,
+    InstructionBase,
+    InstructionMeta,
     JumpTarget,
     NaiveParsingArch,
     Register,
@@ -53,11 +53,10 @@ class AsmMatch:
     # TODO: This is extremely sloppy
     # `ArchAsm` shouldn't be referenced here, but we need some way of constructing
     # replacement `Instruction`s
-    arch: ArchAsm
 
-    def derived_instr(self, mnemonic: str, args: List[Argument]) -> Instruction:
+    def derived_meta(self) -> InstructionMeta:
         old_instr = next(part for part in self.body if isinstance(part, Instruction))
-        return self.arch.derived_instruction(mnemonic, args, old_instr)
+        return old_instr.meta.derived()
 
 
 class AsmPattern(abc.ABC):
@@ -173,7 +172,6 @@ class TryMatchState:
 
 @dataclass
 class AsmMatcher:
-    arch: ArchAsm
     input: List[BodyPart]
     output: List[BodyPart] = field(default_factory=list)
     index: int = 0
@@ -191,7 +189,6 @@ class AsmMatcher:
             self.input[start_index:index],
             state.symbolic_registers,
             state.symbolic_literals,
-            self.arch,
         )
 
     def apply(self, repl: Replacement) -> None:
@@ -200,12 +197,13 @@ class AsmMatcher:
 
 
 def simplify_patterns(
-    body: List[BodyPart], patterns: List[AsmPattern], arch: ArchAsm
+    body: List[BodyPart],
+    patterns: List[AsmPattern],
 ) -> List[BodyPart]:
     """Detect and simplify asm standard patterns emitted by known compilers. This is
     especially useful for patterns that involve branches, which are hard to deal with
     in the translate phase."""
-    matcher = AsmMatcher(arch, body)
+    matcher = AsmMatcher(body)
     while matcher.index < len(matcher.input):
         for pattern in patterns:
             m = pattern.match(matcher)

@@ -129,6 +129,9 @@ class InstructionMeta:
             emit_goto=False, filename="<unknown>", lineno=0, synthetic=True
         )
 
+    def derived(self) -> "InstructionMeta":
+        return replace(self, synthetic=True)
+
     def loc_str(self) -> str:
         adj = "near" if self.synthetic else "at"
         return f"{adj} {self.filename} line {self.lineno}"
@@ -172,6 +175,10 @@ class ArchAsmParsing(abc.ABC):
     all_regs: List[Register]
     aliased_regs: Dict[str, Register]
 
+    @abc.abstractmethod
+    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
+        ...
+
 
 class ArchAsm(ArchAsmParsing):
     """Arch-specific information that relates to the asm level. Extends the above."""
@@ -199,31 +206,19 @@ class ArchAsm(ArchAsmParsing):
         ...
 
     @staticmethod
-    def get_branch_target(instr: InstructionBase) -> JumpTarget:
-        label = instr.args[-1]
+    def get_branch_target(args: List[Argument]) -> JumpTarget:
+        label = args[-1]
         if isinstance(label, AsmGlobalSymbol):
             return JumpTarget(label.symbol_name)
         if not isinstance(label, JumpTarget):
-            raise DecompFailure(
-                f'Couldn\'t parse instruction "{instr}": invalid branch target'
-            )
+            raise DecompFailure(f"Couldn't parse instruction: invalid branch target")
         return label
 
     @abc.abstractmethod
-    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
-        ...
-
-    @abc.abstractmethod
-    def parse_instruction(
-        self, base: InstructionBase, meta: InstructionMeta
+    def parse(
+        self, mnemonic: str, args: List[Argument], meta: InstructionMeta
     ) -> Instruction:
         ...
-
-    def derived_instruction(
-        self, mnemonic: str, args: List[Argument], old: Instruction
-    ) -> Instruction:
-        base = InstructionBase(mnemonic, args)
-        return self.parse_instruction(base, replace(old.meta, synthetic=True))
 
 
 class NaiveParsingArch(ArchAsmParsing):
@@ -232,6 +227,9 @@ class NaiveParsingArch(ArchAsmParsing):
 
     all_regs: List[Register] = []
     aliased_regs: Dict[str, Register] = {}
+
+    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
+        return instr
 
 
 valid_word = string.ascii_letters + string.digits + "_$"
@@ -439,14 +437,13 @@ def parse_instruction_base(line: str, arch: ArchAsmParsing) -> InstructionBase:
     mnemonic, _, args_str = line.partition(" ")
     # Parse arguments.
     args = [parse_arg(arg_str, arch) for arg_str in split_arg_list(args_str)]
-    return InstructionBase(mnemonic, args)
+    instr = InstructionBase(mnemonic, args)
+    return arch.normalize_instruction(instr)
 
 
 def parse_instruction(line: str, meta: InstructionMeta, arch: ArchAsm) -> Instruction:
     try:
         base = parse_instruction_base(line, arch)
-        base = arch.normalize_instruction(base)
-        return arch.parse_instruction(base, meta)
+        return arch.parse(base.mnemonic, base.args, meta)
     except Exception:
-        raise
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
