@@ -62,6 +62,10 @@ class ArchFlowGraph(ArchAsm):
     def parse_ir(self, instr: Instruction) -> IrInstruction:
         ...
 
+    @abc.abstractmethod
+    def simplify_ir(self, nodes: List["Node"]) -> None:
+        ...
+
 
 @dataclass(eq=False)
 class Block:
@@ -1140,16 +1144,14 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def simplify_ir_patterns(blocks: List[Block], arch: ArchFlowGraph) -> None:
-    # TODO: pattern matching
-    pass
-
 def build_flowgraph(
     function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> FlowGraph:
     blocks = build_blocks(function, asm_data, arch)
-    simplify_ir_patterns(blocks, arch)
     nodes = build_nodes(function.name, blocks, asm_data, arch)
+    compute_relations(nodes)
+    arch.simplify_ir(nodes)
+
     nodes = duplicate_premature_returns(nodes)
     compute_relations(nodes)
     terminate_infinite_loops(nodes)

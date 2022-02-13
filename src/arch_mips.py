@@ -27,7 +27,8 @@ from .asm_pattern import (
     SimpleAsmPattern,
     make_pattern,
 )
-from .flow_graph import IrInstruction
+from .ir_pattern import IrPattern, simplify_ir_patterns
+from .flow_graph import Node, IrInstruction
 from .translate import (
     Abi,
     AbiArgSlot,
@@ -435,6 +436,13 @@ class TrapuvPattern(SimpleAsmPattern):
         return Replacement([m.body[2], new_instr], len(m.body))
 
 
+class TestIrPattern(IrPattern):
+    parts = [
+        "lwc1 $f, N($sp)",
+        "lwc1 $f, (N+4)($sp)",
+    ]
+
+
 class MipsArch(Arch):
     arch = Target.ArchEnum.MIPS
 
@@ -755,10 +763,17 @@ class MipsArch(Arch):
         ModP2Pattern2(),
         UtfPattern(),
         FtuPattern(),
-        Mips1DoubleLoadStorePattern(),
+        # Mips1DoubleLoadStorePattern(),
         GccSqrtPattern(),
         TrapuvPattern(),
     ]
+
+    ir_patterns: List[typing.Type[IrPattern]] = [
+        TestIrPattern,
+    ]
+
+    def simplify_ir(self, nodes: List[Node]) -> None:
+        simplify_ir_patterns(self, nodes, self.ir_patterns)
 
     instrs_ignore: InstrSet = {
         # Ignore FCSR sets; they are leftovers from float->unsigned conversions.
