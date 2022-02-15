@@ -936,7 +936,7 @@ class MipsArch(Arch):
     ]
 
     ir_patterns: List[typing.Type[IrPattern]] = [
-        # TestIrPattern,
+        TestIrPattern,
     ]
 
     def simplify_ir(self, flow_graph: FlowGraph) -> None:

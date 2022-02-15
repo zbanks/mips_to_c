@@ -109,6 +109,12 @@ class IrArgumentInfo:
 
         return info
 
+    def add(self, arg: Argument, addr: IrAddress):
+        if arg not in self.args:
+            self.args[arg] = IrAddressSet([addr])
+        elif addr not in self.args[arg].addrs:
+            self.args[arg].addrs.append(addr)
+
     def copy(self) -> "IrArgumentInfo":
         return IrArgumentInfo(args=self.args.copy())
 
@@ -123,6 +129,7 @@ class IrArgumentInfo:
 class IrArgumentFlow:
     inputs: IrArgumentInfo = field(default_factory=IrArgumentInfo)
     outputs: IrArgumentInfo = field(default_factory=IrArgumentInfo)
+    references: IrArgumentInfo = field(default_factory=IrArgumentInfo)
 
 
 @dataclass
@@ -238,9 +245,18 @@ def build_arg_flow(flow_graph: FlowGraph, arch: ArchFlowGraph) -> ArgFlow:
             flow.phis[child] = child_phis
             fill_node_outputs(child, new_info)
 
+    # Recursively populate inputs & outputs for each instruction
     entry_node = flow_graph.entry_node()
     flow.phis[entry_node] = IrArgumentInfo()
     fill_node_outputs(entry_node, IrArgumentInfo.initial_function_args(arch))
+
+    # Fill in references for each instruction
+    for addr, info in flow.ir_infos.items():
+        for arg, deps in info.inputs.args.items():
+            for dep in deps.addrs:
+                if dep.node:
+                    flow.ir_infos[dep].references.add(arg, addr)
+
     return flow
 
 
@@ -405,13 +421,20 @@ def simplify_ir_patterns(
             )
             new_ir = arch.parse_ir(new_instr)
             nop_ir = arch.parse_ir(Instruction("nop", [], InstructionMeta.missing()))
-            for instr in match:
-                # print(f">> {instr}: {instr.instruction()}")
-                instr.replace_ir(nop_ir)
+            for addr in match:
+                refs = []
+                for arg, argrefs in flow.ir_infos[addr].references.args.items():
+                    for ref in argrefs.addrs:
+                        refs.append(ref)
+                print(f">> {addr}: {addr.instruction()}; refs={refs}")
+                for o in addr.instruction().outputs:
+                    if o not in new_ir.args and o not in new_ir.clobbers:
+                        new_ir.clobbers.append(o)
+                addr.replace_ir(nop_ir)
             # TODO: Calculate clobbers
             replace.replace_ir(new_ir)
-            # print(f"<< {new_instr}")
-            # print()
+            print(f"<< {new_instr}; clobbers={new_ir.clobbers}")
+            print()
 
         # for loc in locs:
         #    node, i = loc
