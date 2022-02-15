@@ -40,6 +40,7 @@ IrFunctionBody = List[Union["IrInstruction", Label]]
 class IrInstruction(Instruction):
     inputs: List[Argument]
     outputs: List[Argument]
+    clobbers: List[Argument]
 
     # Access in translate.py
     # evaluator: Callable[["InstrArgs"], None]
@@ -63,7 +64,7 @@ class ArchFlowGraph(ArchAsm):
         ...
 
     @abc.abstractmethod
-    def simplify_ir(self, nodes: List["Node"]) -> None:
+    def simplify_ir(self, nodes: "FlowGraph") -> None:
         ...
 
 
@@ -332,7 +333,7 @@ def function_body_as_ir(
 
 
 def build_blocks(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph
+    function: Function, asm_data: AsmData, arch: ArchFlowGraph, fragment: bool
 ) -> List[Block]:
     function = simplify_standard_patterns(function, arch)
 
@@ -479,6 +480,12 @@ def build_blocks(
             process_with_delay_slots(item)
         else:
             process_no_delay_slots(item)
+
+    if fragment:
+        # If we're parsing an asm fragment instead of a full function,
+        # it does not need to end in a return or jump
+        block_builder.new_block()
+        return block_builder.get_blocks()
 
     if block_builder.curr_label:
         # As an easy-to-implement safeguard, check that the current block is
@@ -704,10 +711,13 @@ def build_graph_from_block(
         nodes.append(new_node)
 
         # Recursively analyze.
-        next_block = blocks[block.index + 1]
-        new_node.successor = build_graph_from_block(
-            next_block, blocks, nodes, asm_data, arch
-        )
+        if block.index >= len(blocks):
+            next_block = blocks[block.index + 1]
+            new_node.successor = build_graph_from_block(
+                next_block, blocks, nodes, asm_data, arch
+            )
+        else:
+            new_node.successor = terminal_node
     elif len(jumps) == 1:
         # There is a jump. This is either:
         # - a ReturnNode, if it's a return instruction ("jr $ra" in MIPS)
@@ -1144,15 +1154,22 @@ class FlowGraph:
             node.block.block_info = None
 
 
+def build_basic_flowgraph(
+    function: Function, asm_data: AsmData, arch: ArchFlowGraph, *, fragment: bool
+) -> FlowGraph:
+    blocks = build_blocks(function, asm_data, arch, fragment)
+    nodes = build_nodes(function.name, blocks, asm_data, arch)
+    compute_relations(nodes)
+    return FlowGraph(nodes)
+
+
 def build_flowgraph(
     function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> FlowGraph:
-    blocks = build_blocks(function, asm_data, arch)
-    nodes = build_nodes(function.name, blocks, asm_data, arch)
-    compute_relations(nodes)
-    arch.simplify_ir(nodes)
+    basic_graph = build_basic_flowgraph(function, asm_data, arch, fragment=False)
+    arch.simplify_ir(basic_graph)
 
-    nodes = duplicate_premature_returns(nodes)
+    nodes = duplicate_premature_returns(basic_graph.nodes)
     compute_relations(nodes)
     terminate_infinite_loops(nodes)
     return FlowGraph(nodes)
@@ -1177,7 +1194,9 @@ def visualize_flowgraph(flow_graph: FlowGraph) -> str:
         label = f"// Node {node.name()}\l"
         if block_info:
             label += "".join(
-                w.format(fmt) + "\l" for w in block_info.to_write if w.should_write()
+                # w.format(fmt) + "\l" for w in block_info.to_write if w.should_write()
+                str(i) + "\l"
+                for i in node.block.instructions
             )
         dot.node(node.name())
         if isinstance(node, BasicNode):

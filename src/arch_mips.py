@@ -3,6 +3,7 @@ from typing import (
     Dict,
     List,
     Optional,
+    Sequence,
     Set,
     Tuple,
     Union,
@@ -11,6 +12,7 @@ from typing import (
 from .error import DecompFailure
 from .options import Target
 from .parse_instruction import (
+    Argument,
     AsmAddressMode,
     AsmGlobalSymbol,
     AsmLiteral,
@@ -28,7 +30,7 @@ from .asm_pattern import (
     make_pattern,
 )
 from .ir_pattern import IrPattern, simplify_ir_patterns
-from .flow_graph import Node, IrInstruction
+from .flow_graph import FlowGraph, IrInstruction
 from .translate import (
     Abi,
     AbiArgSlot,
@@ -437,9 +439,34 @@ class TrapuvPattern(SimpleAsmPattern):
 
 
 class TestIrPattern(IrPattern):
+
+    """
+    /* 0001B4 004001B4 3C148080 */  lui   $s4, 0x8080
+    /* 0001D8 004001D8 36948081 */  ori   $s4, $s4, 0x8081
+    ...
+    /* 0001DC 004001DC 00021600 */  sll   $v0, $v0, 0x18
+    /* 0001E0 004001E0 00022603 */  sra   $a0, $v0, 0x18
+    /* 0001E4 004001E4 00940018 */  mult  $a0, $s4
+    /* 0001E8 004001E8 000217C3 */  sra   $v0, $v0, 0x1f
+    /* 0001EC 004001EC 00003010 */  mfhi  $a2
+    /* 0001F0 004001F0 00C42021 */  addu  $a0, $a2, $a0
+    /* 0001F4 004001F4 000421C3 */  sra   $a0, $a0, 7
+    ...
+    /* 0001FC 004001FC 00822023 */   subu  $a0, $a0, $v0
+    """
+
+    replacement = "div.fictive $x, $i, 555"
     parts = [
-        "lwc1 $f, N($sp)",
-        "lwc1 $f, (N+4)($sp)",
+        "lui $k, 0x8080",
+        "ori $k, $k, 0x8081",
+        "sll $i, $i, 0x18",
+        "sra $b, $i, 0x18",
+        "mult $b, $k",
+        "sra $i, $i, 31",
+        "mfhi $a",
+        "addu $x, $a, $b",
+        "sra $x, $x, 7",
+        "subu $x, $x, $i",
     ]
 
 
@@ -452,7 +479,9 @@ class MipsArch(Arch):
 
     base_return_regs = [Register(r) for r in ["v0", "f0"]]
     all_return_regs = [Register(r) for r in ["v0", "v1", "f0", "f1"]]
-    argument_regs = [Register(r) for r in ["a0", "a1", "a2", "a3", "f12", "f14"]]
+    argument_regs = [
+        Register(r) for r in ["a0", "a1", "a2", "a3", "f12", "f13", "f14", "f15"]
+    ]
     simple_temp_regs = [
         Register(r)
         for r in [
@@ -480,8 +509,6 @@ class MipsArch(Arch):
             "f9",
             "f10",
             "f11",
-            "f13",
-            "f15",
             "f16",
             "f17",
             "f18",
@@ -695,6 +722,137 @@ class MipsArch(Arch):
     }
 
     @classmethod
+    def output_regs_for_instr(arch, instr: Instruction) -> Sequence[Argument]:
+        # XXX This implementation was roughly copied over from translate.py and
+        # slightly modified; but the whole pattern-matching thing will be rewritten.
+        # This has a few errors.
+        def reg_at(index: int) -> List[Argument]:
+            reg = instr.args[index]
+            if isinstance(reg, AsmAddressMode):
+                # This is used for the store/load-update PPC instructions,
+                # where the register in an AsmAddressMode is updated.
+                if (
+                    instr.mnemonic in arch.instrs_store_update
+                    or instr.mnemonic in arch.instrs_load_update
+                ):
+                    return [reg, reg.rhs]
+                return [reg]
+            if not isinstance(reg, Register):
+                # We'll deal with this error later
+                return []
+            return [reg]
+
+        if instr.mnemonic == "inputs":
+            return instr.args
+        if instr.mnemonic == "outputs":
+            return []
+
+        mnemonic = instr.mnemonic
+        arch_mnemonic = instr.arch_mnemonic(arch())
+        if (
+            mnemonic in arch.instrs_jumps
+            # or mnemonic in arch.instrs_store
+            or mnemonic in arch.instrs_branches
+            or mnemonic in arch.instrs_float_branches
+            or mnemonic in arch.instrs_ignore
+            or mnemonic in arch.instrs_no_dest
+        ):
+            return []
+        if mnemonic in arch.instrs_store:
+            return reg_at(1)
+        if mnemonic in arch.instrs_store_update:
+            return reg_at(1)
+        if mnemonic in arch.instrs_load_update:
+            return reg_at(0) + reg_at(1)
+        if mnemonic in arch.instrs_fn_call:
+            if instr.args and isinstance(instr.args[0], AsmGlobalSymbol):
+                fn_target = instr.args[0]
+                # if global_info.is_function_known_void(fn_target.symbol_name):
+                #    return []
+            return arch.all_return_regs
+        if mnemonic in arch.instrs_source_first:
+            return reg_at(1)
+        if mnemonic.rstrip(".") in arch.instrs_destination_first:
+            reg = reg_at(0)
+            mn_parts = arch_mnemonic.split(".")
+            if arch_mnemonic.startswith("ppc:") and arch_mnemonic.endswith("."):
+                return reg + [
+                    Register("cr0_lt"),
+                    Register("cr0_gt"),
+                    Register("cr0_eq"),
+                    Register("cr0_so"),
+                ]
+            elif (
+                len(mn_parts) >= 2
+                and mn_parts[0].startswith("mips:")
+                and mn_parts[1] == "d"
+            ) or arch_mnemonic == "mips:ldc1":
+                assert len(reg) == 1
+                assert isinstance(reg[0], Register)
+                return reg + [reg[0].other_f64_reg()]
+            return reg
+        if mnemonic in arch.instrs_float_comp:
+            return [Register("condition_bit")]
+        if mnemonic in arch.instrs_hi_lo:
+            return [Register("hi"), Register("lo")]
+        if mnemonic in arch.instrs_implicit_destination:
+            return [arch.instrs_implicit_destination[mnemonic][0]]
+        if mnemonic in arch.instrs_ppc_compare:
+            return [
+                Register("cr0_lt"),
+                Register("cr0_gt"),
+                Register("cr0_eq"),
+                Register("cr0_so"),
+            ]
+        if instr.args and isinstance(instr.args[0], Register):
+            return reg_at(0)
+        if arch_mnemonic.startswith("ppc:") and arch_mnemonic.endswith("."):
+            # Unimplemented PPC instructions that modify CR0
+            return [
+                Register("cr0_lt"),
+                Register("cr0_gt"),
+                Register("cr0_eq"),
+                Register("cr0_so"),
+            ]
+        return []
+
+    @classmethod
+    def input_regs_for_instr(arch, instr: Instruction) -> Sequence[Argument]:
+        # XXX This is kind of a hacky heuristic to guess the inputs using the
+        # (also hacky & incorrect) output_regs_for_instr fn
+        if instr.mnemonic == "inputs":
+            return []
+        if instr.mnemonic == "outputs":
+            return instr.args
+        output_regs = arch.output_regs_for_instr(instr)
+        seen = set()
+        output = []
+        for a in instr.args:
+            if not isinstance(a, (Register, AsmAddressMode)):
+                continue
+            if a in output_regs and a in seen:
+                output.append(a)
+            elif a in seen:
+                continue
+            elif a in output_regs:
+                seen.add(a)
+            else:
+                seen.add(a)
+                output.append(a)
+        if instr.mnemonic in arch.instrs_float_branches:
+            output.append(Register("condition_bit"))
+        if instr.mnemonic == "mflo":
+            output.append(Register("lo"))
+        if instr.mnemonic == "mfhi":
+            output.append(Register("hi"))
+        mn_parts = instr.mnemonic.split(".")
+        if ("d" in instr.mnemonic.split(".")) or instr.mnemonic == "sdc1":
+            pairs = [r.other_f64_reg() for r in output if isinstance(r, Register)]
+            output.extend(pairs)
+
+        return output
+
+    @classmethod
     def parse_ir(cls, base: Instruction) -> IrInstruction:
         jump_target: Optional[Union[JumpTarget, Register]] = None
         function_target: Optional[Union[JumpTarget, Register]] = None
@@ -704,6 +862,10 @@ class MipsArch(Arch):
 
         mnemonic = base.mnemonic
         args = base.args
+
+        inputs: List[Argument] = [r for r in cls.input_regs_for_instr(base)]
+        outputs: List[Argument] = [r for r in cls.output_regs_for_instr(base)]
+        clobbers: List[Argument] = []
 
         if mnemonic == "jr" and args[0] == Register("ra"):
             # Return
@@ -717,10 +879,14 @@ class MipsArch(Arch):
             has_delay_slot = True
         elif mnemonic == "jal":
             # Function call to label
+            inputs = [r for r in cls.argument_regs]
+            clobbers = [r for r in cls.temp_regs]
             function_target = cls.get_branch_target(base)
             has_delay_slot = True
         elif mnemonic == "jalr":
             # Function call to pointer
+            inputs = [args[0]] + [r for r in cls.argument_regs]
+            clobbers = [r for r in cls.temp_regs]
             assert isinstance(args[0], Register)
             function_target = args[0]
             has_delay_slot = True
@@ -742,8 +908,9 @@ class MipsArch(Arch):
             mnemonic=base.mnemonic,
             args=base.args,
             meta=base.meta,
-            inputs=[],
-            outputs=[],
+            inputs=inputs,
+            outputs=outputs,
+            clobbers=clobbers,
             evaluator=None,
             jump_target=jump_target,
             function_target=function_target,
@@ -763,17 +930,17 @@ class MipsArch(Arch):
         ModP2Pattern2(),
         UtfPattern(),
         FtuPattern(),
-        # Mips1DoubleLoadStorePattern(),
+        Mips1DoubleLoadStorePattern(),
         GccSqrtPattern(),
         TrapuvPattern(),
     ]
 
     ir_patterns: List[typing.Type[IrPattern]] = [
-        TestIrPattern,
+        # TestIrPattern,
     ]
 
-    def simplify_ir(self, nodes: List[Node]) -> None:
-        simplify_ir_patterns(self, nodes, self.ir_patterns)
+    def simplify_ir(self, flow_graph: FlowGraph) -> None:
+        simplify_ir_patterns(self, flow_graph, self.ir_patterns)
 
     instrs_ignore: InstrSet = {
         # Ignore FCSR sets; they are leftovers from float->unsigned conversions.

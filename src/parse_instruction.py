@@ -1,10 +1,11 @@
 """Functions and classes useful for parsing an arbitrary MIPS instruction.
 """
 import abc
+from contextlib import contextmanager
 import csv
 from dataclasses import dataclass, replace
 import string
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, Iterator, List, Optional, Set, Union
 
 from .error import DecompFailure
 from .options import Target
@@ -455,3 +456,21 @@ def parse_instruction(
         return arch.normalize_instruction(instr)
     except Exception:
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
+
+
+@dataclass
+class InstrProcessingFailure(Exception):
+    instr: Instruction
+
+    def __str__(self) -> str:
+        return f"Error while processing instruction:\n{self.instr}"
+
+
+@contextmanager
+def current_instr(instr: Instruction) -> Iterator[None]:
+    """Mark an instruction as being the one currently processed, for the
+    purposes of error messages. Use like |with current_instr(instr): ...|"""
+    try:
+        yield
+    except Exception as e:
+        raise InstrProcessingFailure(instr) from e

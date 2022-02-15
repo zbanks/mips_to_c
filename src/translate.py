@@ -34,6 +34,7 @@ from .flow_graph import (
     SwitchNode,
     TerminalNode,
 )
+from .ir_pattern import ArgFlow, build_arg_flow
 from .options import CodingStyle, Formatter, Options, Target
 from .parse_file import AsmData, AsmDataEntry
 from .parse_instruction import (
@@ -46,6 +47,8 @@ from .parse_instruction import (
     Instruction,
     Macro,
     Register,
+    InstrProcessingFailure,
+    current_instr,
 )
 from .types import (
     AccessPath,
@@ -118,24 +121,6 @@ class Arch(ArchFlowGraph):
 ASSOCIATIVE_OPS: Set[str] = {"+", "&&", "||", "&", "|", "^", "*"}
 COMPOUND_ASSIGNMENT_OPS: Set[str] = {"+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>"}
 PSEUDO_FUNCTION_OPS: Set[str] = {"MULT_HI", "MULTU_HI", "DMULT_HI", "DMULTU_HI", "CLZ"}
-
-
-@dataclass
-class InstrProcessingFailure(Exception):
-    instr: Instruction
-
-    def __str__(self) -> str:
-        return f"Error while processing instruction:\n{self.instr}"
-
-
-@contextmanager
-def current_instr(instr: Instruction) -> Iterator[None]:
-    """Mark an instruction as being the one currently processed, for the
-    purposes of error messages. Use like |with current_instr(instr): ...|"""
-    try:
-        yield
-    except Exception as e:
-        raise InstrProcessingFailure(instr) from e
 
 
 def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
@@ -214,6 +199,7 @@ def as_function_ptr(expr: "Expression") -> "Expression":
 class StackInfo:
     function: Function
     global_info: "GlobalInfo"
+    arg_flow: ArgFlow
     allocated_stack_size: int = 0
     is_leaf: bool = True
     is_variadic: bool = False
@@ -465,8 +451,9 @@ def get_stack_info(
     global_info: "GlobalInfo",
     flow_graph: FlowGraph,
 ) -> StackInfo:
-    info = StackInfo(function, global_info)
     arch = global_info.arch
+    arg_flow = build_arg_flow(flow_graph, arch)
+    info = StackInfo(function, global_info, arg_flow)
 
     # The goal here is to pick out special instructions that provide information
     # about this function's stack setup.
@@ -3672,59 +3659,6 @@ def output_regs_for_instr(
     return []
 
 
-def regs_clobbered_until_dominator(
-    node: Node, global_info: "GlobalInfo"
-) -> Set[Register]:
-    if node.immediate_dominator is None:
-        return set()
-    seen = {node.immediate_dominator}
-    stack = node.parents[:]
-    clobbered = set()
-    while stack:
-        n = stack.pop()
-        if n in seen:
-            continue
-        seen.add(n)
-        for instr in n.block.instructions:
-            with current_instr(instr):
-                clobbered.update(output_regs_for_instr(instr, global_info))
-                if instr.mnemonic in global_info.arch.instrs_fn_call:
-                    clobbered.update(global_info.arch.temp_regs)
-        stack.extend(n.parents)
-    return clobbered
-
-
-def reg_always_set(
-    node: Node, reg: Register, global_info: "GlobalInfo", *, dom_set: bool
-) -> bool:
-    if node.immediate_dominator is None:
-        return False
-    seen = {node.immediate_dominator}
-    stack = node.parents[:]
-    while stack:
-        n = stack.pop()
-        if n == node.immediate_dominator and not dom_set:
-            return False
-        if n in seen:
-            continue
-        seen.add(n)
-        clobbered: Optional[bool] = None
-        for instr in n.block.instructions:
-            with current_instr(instr):
-                if (
-                    instr.mnemonic in global_info.arch.instrs_fn_call
-                    and reg in global_info.arch.temp_regs
-                ):
-                    clobbered = True
-                if reg in output_regs_for_instr(instr, global_info):
-                    clobbered = False
-        if clobbered == True:
-            return False
-        if clobbered is None:
-            stack.extend(n.parents)
-    return True
-
-
 def pick_phi_assignment_nodes(
     reg: Register, nodes: List[Node], expr: Expression
 ) -> List[Node]:
@@ -4518,19 +4452,21 @@ def translate_graph_from_block(
                 reg, data.value, RegMeta(inherited=True, force=data.meta.force)
             )
 
-        phi_regs = regs_clobbered_until_dominator(child, stack_info.global_info)
-        for reg in phi_regs:
-            if reg_always_set(
-                child, reg, stack_info.global_info, dom_set=(reg in regs)
-            ):
-                expr: Optional[Expression] = stack_info.maybe_get_register_var(reg)
+        for phi_arg, addrs in stack_info.arg_flow.phis[child].args.items():
+            if not isinstance(phi_arg, Register):
+                continue
+            if addrs.is_valid():
+                expr: Optional[Expression] = stack_info.maybe_get_register_var(phi_arg)
                 if expr is None:
                     expr = PhiExpr(
-                        reg=reg, node=child, used_phis=used_phis, type=Type.any_reg()
+                        reg=phi_arg,
+                        node=child,
+                        used_phis=used_phis,
+                        type=Type.any_reg(),
                     )
-                new_regs.set_with_meta(reg, expr, RegMeta(inherited=True))
-            elif reg in new_regs:
-                del new_regs[reg]
+                new_regs.set_with_meta(phi_arg, expr, RegMeta(inherited=True))
+            elif phi_arg in new_regs:
+                del new_regs[phi_arg]
         translate_graph_from_block(
             child, new_regs, stack_info, used_phis, return_blocks, options
         )
