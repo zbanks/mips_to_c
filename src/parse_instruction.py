@@ -4,7 +4,7 @@ import abc
 import csv
 from dataclasses import dataclass, replace
 import string
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Dict, List, Optional, Set, Union
 
 from .error import DecompFailure
 from .options import Target
@@ -143,12 +143,11 @@ class Instruction:
     args: List[Argument]
     meta: InstructionMeta
 
-    inputs: List[Argument]
-    outputs: List[Argument]
-    clobbers: List[Argument]
-
-    # evaluator: Callable[["InstrArgs"], None]
-    evaluator: Any
+    # TODO
+    # inputs: List[Argument]
+    # outputs: List[Argument]
+    # clobbers: List[Argument]
+    # evaluator: object
 
     jump_target: Optional[Union[JumpTarget, Register]] = None
     function_target: Optional[Union[JumpTarget, Register]] = None
