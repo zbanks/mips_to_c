@@ -43,93 +43,89 @@ from .parse_instruction import (
 
 @dataclass(frozen=True)
 class InstrRef:
-    node: Optional[Node]
+    node: Node
     index: int
-    name: Optional[str] = None
 
-    @staticmethod
-    def special(name: str) -> "InstrRef":
-        return InstrRef(node=None, index=0, name=name)
-
-    def instruction(self) -> Optional["Instruction"]:
-        if self.node is None:
-            return None
+    def instruction(self) -> "Instruction":
         return self.node.block.instructions[self.index]
 
-    def replace_ir(self, ir: Instruction) -> None:
-        if self.node is None:
-            return
-        self.node.block.instructions[self.index] = ir
+    def replace_instruction(self, instr: Instruction) -> None:
+        self.node.block.instructions[self.index] = instr
 
     def __str__(self) -> str:
-        if self.node is None:
-            assert self.name is not None
-            return self.name
         return f"{self.node.block.index}.{self.index}"
 
 
+Reference = Union[InstrRef, str]
+
+
 @dataclass
-class InstrRefList:
-    addrs: List[InstrRef]
+class RefList:
+    refs: List[Reference]
 
     @staticmethod
-    def invalid() -> "InstrRefList":
-        return InstrRefList(addrs=[])
+    def invalid() -> "RefList":
+        return RefList(refs=[])
 
     @staticmethod
-    def special(name: str) -> "InstrRefList":
-        return InstrRefList(addrs=[InstrRef(node=None, index=0, name=name)])
+    def special(name: str) -> "RefList":
+        """Represent non-instruction references, such as arguments or constant regs"""
+        return RefList(refs=[name])
 
     def is_valid(self) -> bool:
-        return bool(self.addrs)
+        return bool(self.refs)
 
     def is_unique(self) -> bool:
-        return len(self.addrs) == 1
+        return len(self.refs) == 1
 
-    def copy(self) -> "InstrRefList":
-        return InstrRefList(self.addrs[:])
+    def copy(self) -> "RefList":
+        return RefList(refs=self.refs[:])
 
     def __str__(self) -> str:
-        if not self.addrs:
+        if not self.refs:
             return "none"
-        return "[" + ", ".join(str(a) for a in self.addrs) + "]"
+        return "[" + ", ".join(str(a) for a in self.refs) + "]"
 
 
 @dataclass
-class IrArgumentInfo:
-    args: Dict[Argument, InstrRefList] = field(default_factory=dict)
+class ArgInfo:
+    args: Dict[Argument, RefList] = field(default_factory=dict)
 
     @staticmethod
-    def initial_function_args(arch: ArchFlowGraph) -> "IrArgumentInfo":
-        info = IrArgumentInfo()
-        for i, r in enumerate(arch.argument_regs):
-            info.args[r] = InstrRefList.special(f"arg_{i}")
-        info.args[Register("zero")] = InstrRefList.special(f"zero")
-        info.args[Register("ra")] = InstrRefList.special(f"return")
+    def initial_function_args(arch: ArchFlowGraph) -> "ArgInfo":
+        info = ArgInfo()
+        # Set all the registers that are valid to access at the start of a function
+        for r in arch.saved_regs:
+            info.args[r] = RefList.special(f"saved_{r.register_name}")
+        for r in arch.argument_regs:
+            info.args[r] = RefList.special(f"arg_{r.register_name}")
+        info.args[Register("zero")] = RefList.special(f"zero")
+        info.args[arch.return_address_reg] = RefList.special(f"return")
+        info.args[arch.stack_pointer_reg] = RefList.special(f"sp")
 
         return info
 
-    def add(self, arg: Argument, addr: InstrRef) -> None:
+    def add(self, arg: Argument, addr: Reference) -> None:
         if arg not in self.args:
-            self.args[arg] = InstrRefList([addr])
-        elif addr not in self.args[arg].addrs:
-            self.args[arg].addrs.append(addr)
+            self.args[arg] = RefList([addr])
+        elif addr not in self.args[arg].refs:
+            self.args[arg].refs.append(addr)
 
-    def copy(self) -> "IrArgumentInfo":
-        return IrArgumentInfo(args=self.args.copy())
+    def copy(self) -> "ArgInfo":
+        return ArgInfo(args=self.args.copy())
 
-    def get(self, arg: Argument) -> InstrRefList:
+    def get(self, arg: Argument) -> RefList:
         srcs = self.args.get(arg)
         if srcs is not None:
             return srcs
-        return InstrRefList.invalid()
+        return RefList.invalid()
 
 
 @dataclass
-class IrArgumentFlow:
-    inputs: IrArgumentInfo = field(default_factory=IrArgumentInfo)
-    outputs: IrArgumentInfo = field(default_factory=IrArgumentInfo)
-    references: IrArgumentInfo = field(default_factory=IrArgumentInfo)
+class InstrArgFlow:
+    inputs: ArgInfo = field(default_factory=ArgInfo)
+    outputs: ArgInfo = field(default_factory=ArgInfo)
+    references: ArgInfo = field(default_factory=ArgInfo)
 
 
 @dataclass
@@ -137,13 +133,13 @@ class ArgFlow:
     mnemonics: DefaultDict[str, List[InstrRef]] = field(
         default_factory=lambda: defaultdict(list)
     )
-    ir_infos: Dict[InstrRef, IrArgumentFlow] = field(default_factory=dict)
-    phis: Dict[Node, IrArgumentInfo] = field(default_factory=dict)
+    instr_flows: Dict[InstrRef, InstrArgFlow] = field(default_factory=dict)
+    phis: Dict[Node, ArgInfo] = field(default_factory=dict)
 
 
-def reg_always_set(node: Node, arg: Argument, *, dom_set: InstrRefList) -> InstrRefList:
+def reg_always_set(node: Node, arg: Argument, *, dom_set: RefList) -> RefList:
     if node.immediate_dominator is None:
-        return InstrRefList.invalid()
+        return RefList.invalid()
     seen = {node.immediate_dominator}
     stack = node.parents[:]
     sources = dom_set.copy()
@@ -151,7 +147,7 @@ def reg_always_set(node: Node, arg: Argument, *, dom_set: InstrRefList) -> Instr
     while stack:
         n = stack.pop()
         if n == node.immediate_dominator and not dom_set:
-            return InstrRefList.invalid()
+            return RefList.invalid()
         if n in seen:
             continue
         seen.add(n)
@@ -160,12 +156,12 @@ def reg_always_set(node: Node, arg: Argument, *, dom_set: InstrRefList) -> Instr
             with current_instr(instr):
                 if arg in instr.outputs:
                     if clobbered is None:
-                        sources.addrs.append(InstrRef(n, i))
+                        sources.refs.append(InstrRef(n, i))
                     clobbered = False
                 elif arg in instr.clobbers:
                     clobbered = True
         if clobbered == True:
-            return InstrRefList.invalid()
+            return RefList.invalid()
         if clobbered is None:
             stack.extend(n.parents)
     return sources
@@ -193,12 +189,12 @@ def regs_clobbered_until_dominator(node: Node) -> Set[Argument]:
 def build_arg_flow(flow_graph: FlowGraph, arch: ArchFlowGraph) -> ArgFlow:
     flow = ArgFlow()
 
-    def fill_node_outputs(node: Node, node_info: IrArgumentInfo) -> None:
+    def fill_node_outputs(node: Node, node_info: ArgInfo) -> None:
         # Calculate register usage for each instruction in this node
         for i, ir in enumerate(node.block.instructions):
             addr = InstrRef(node, i)
-            info = IrArgumentFlow()
-            flow.ir_infos[addr] = info
+            info = InstrArgFlow()
+            flow.instr_flows[addr] = info
             flow.mnemonics[ir.mnemonic].append(addr)
 
             for arg in ir.inputs:
@@ -211,10 +207,10 @@ def build_arg_flow(flow_graph: FlowGraph, arch: ArchFlowGraph) -> ArgFlow:
 
             for arg in ir.clobbers:
                 if arg in info.outputs.args:
-                    info.outputs.args[arg] = InstrRefList.invalid()
+                    info.outputs.args[arg] = RefList.invalid()
 
             for arg in ir.outputs:
-                info.outputs.args[arg] = InstrRefList([addr])
+                info.outputs.args[arg] = RefList([addr])
 
             node_info.args.update(info.outputs.args)
 
@@ -223,7 +219,7 @@ def build_arg_flow(flow_graph: FlowGraph, arch: ArchFlowGraph) -> ArgFlow:
         for child in node.immediately_dominates:
             new_info = node_info.copy()
 
-            child_phis = IrArgumentInfo()
+            child_phis = ArgInfo()
             phi_args = regs_clobbered_until_dominator(child)
 
             for arg in phi_args:
@@ -247,15 +243,15 @@ def build_arg_flow(flow_graph: FlowGraph, arch: ArchFlowGraph) -> ArgFlow:
 
     # Recursively populate inputs & outputs for each instruction
     entry_node = flow_graph.entry_node()
-    flow.phis[entry_node] = IrArgumentInfo()
-    fill_node_outputs(entry_node, IrArgumentInfo.initial_function_args(arch))
+    flow.phis[entry_node] = ArgInfo()
+    fill_node_outputs(entry_node, ArgInfo.initial_function_args(arch))
 
     # Fill in references for each instruction
-    for addr, info in flow.ir_infos.items():
+    for addr, info in flow.instr_flows.items():
         for arg, deps in info.inputs.args.items():
-            for dep in deps.addrs:
-                if dep.node:
-                    flow.ir_infos[dep].references.add(arg, addr)
+            for dep in deps.refs:
+                if isinstance(dep, InstrRef):
+                    flow.instr_flows[dep].references.add(arg, addr)
 
     return flow
 
@@ -300,7 +296,7 @@ class IrPattern(abc.ABC):
 
 
 def print_arg_flow(flow: ArgFlow) -> None:
-    for addr, info in flow.ir_infos.items():
+    for addr, info in flow.instr_flows.items():
         instr = addr.instruction()
         assert instr is not None
         print(
@@ -330,7 +326,7 @@ def simplify_ir_patterns(
         ] = [({}, {}, [])]
         for i, ir in enumerate(pattern_node.block.instructions):
             ir_addr = InstrRef(pattern_node, i)
-            a_info = pattern.arg_flow.ir_infos[ir_addr]
+            a_info = pattern.arg_flow.instr_flows[ir_addr]
             # print(f"> NEXT {ir_addr} :: {len(matches)}; {ir}")
             # for arg, aas in a_info.inputs.args.items():
             #    print(f"> expect {arg} ~ {aas}")
@@ -370,7 +366,7 @@ def simplify_ir_patterns(
                         mp[a] = b
                     if not ok:
                         continue
-                    b_info = flow.ir_infos[addr]
+                    b_info = flow.instr_flows[addr]
                     ap = addrmap.copy()
                     ap[ir_addr] = addr
                     for arg, aas in a_info.inputs.args.items():
@@ -386,9 +382,11 @@ def simplify_ir_patterns(
                             # print(f"phi for {bas} on {instr}")
                             ok = False
                             break
-                        bx = bas.addrs[0]
+                        bx = bas.refs[0]
                         assert aas.is_unique(), aas
-                        ax = aas.addrs[0]
+                        ax = aas.refs[0]
+                        assert isinstance(ax, InstrRef)
+                        assert isinstance(bx, InstrRef)
                         if ax in ap and ap[ax] != bx:
                             # print(f"expected {barg} ({arg}) to map to {ap[a]} not {b}")
                             ok = False
@@ -415,16 +413,16 @@ def simplify_ir_patterns(
             for arg in pattern.replacement_instr.args:
                 new_args.append(mapping.get(arg, arg))
             replace = match[-1]
-            replace_instr = replace.instruction()
-            assert replace_instr is not None
+            replace_instruction = replace.instruction()
+            assert replace_instruction is not None
             new_instr = arch.parse(
-                pattern.replacement_instr.mnemonic, new_args, replace_instr.meta
+                pattern.replacement_instr.mnemonic, new_args, replace_instruction.meta
             )
             nop_instr = arch.parse("nop", [], InstructionMeta.missing())
             for addr in match:
                 refs = []
-                for arg, argrefs in flow.ir_infos[addr].references.args.items():
-                    for ref in argrefs.addrs:
+                for arg, argrefs in flow.instr_flows[addr].references.args.items():
+                    for ref in argrefs.refs:
                         refs.append(ref)
                 print(f">> {addr}: {addr.instruction()}; refs={refs}")
                 addr_instr = addr.instruction()
@@ -432,9 +430,9 @@ def simplify_ir_patterns(
                 for o in addr_instr.outputs:
                     if o not in new_instr.args and o not in new_instr.clobbers:
                         new_instr.clobbers.append(o)
-                addr.replace_ir(nop_instr)
+                addr.replace_instruction(nop_instr)
             # TODO: Calculate clobbers
-            replace.replace_ir(new_instr)
+            replace.replace_instruction(new_instr)
             print(f"<< {new_instr}; clobbers={new_instr.clobbers}")
             print()
 
