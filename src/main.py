@@ -20,8 +20,7 @@ from .translate import (
 )
 from .types import TypePool
 from .arch_mips import MipsArch
-
-# from .arch_ppc import PpcArch
+from .arch_ppc import PpcArch
 
 
 def print_current_exception(sanitize: bool) -> None:
@@ -66,8 +65,8 @@ def run(options: Options) -> int:
     arch: Arch
     if options.target.arch == Target.ArchEnum.MIPS:
         arch = MipsArch()
-    # elif options.target.arch == Target.ArchEnum.PPC:
-    #    arch = PpcArch()
+    elif options.target.arch == Target.ArchEnum.PPC:
+        arch = PpcArch()
     else:
         raise ValueError(f"Invalid target arch: {options.target.arch}")
 

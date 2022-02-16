@@ -153,30 +153,6 @@ DIV_MULT_INSTRUCTIONS: Set[str] = {
     "dmult",
     "dmultu",
 }
-BRANCH_LIKELY_INSTRUCTIONS: Set[str] = {
-    "beql",
-    "bnel",
-    "beqzl",
-    "bnezl",
-    "bgezl",
-    "bgtzl",
-    "blezl",
-    "bltzl",
-    "bc1tl",
-    "bc1fl",
-}
-BRANCH_INSTRUCTIONS: Set[str] = {
-    "beq",
-    "bne",
-    "beqz",
-    "bnez",
-    "bgez",
-    "bgtz",
-    "blez",
-    "bltz",
-    "bc1t",
-    "bc1f",
-}
 
 
 class DivPattern(SimpleAsmPattern):
@@ -656,13 +632,35 @@ class MipsArch(Arch):
             # Unconditional jump
             jump_target = cls.get_branch_target(args)
             has_delay_slot = True
-        elif mnemonic in BRANCH_LIKELY_INSTRUCTIONS:
+        elif mnemonic in (
+            "beql",
+            "bnel",
+            "beqzl",
+            "bnezl",
+            "bgezl",
+            "bgtzl",
+            "blezl",
+            "bltzl",
+            "bc1tl",
+            "bc1fl",
+        ):
             # Branch-likely
             jump_target = cls.get_branch_target(args)
             has_delay_slot = True
             is_branch_likely = True
             is_conditional = True
-        elif mnemonic in BRANCH_INSTRUCTIONS:
+        elif mnemonic in (
+            "beq",
+            "bne",
+            "beqz",
+            "bnez",
+            "bgez",
+            "bgtz",
+            "blez",
+            "bltz",
+            "bc1t",
+            "bc1f",
+        ):
             # Normal branch
             jump_target = cls.get_branch_target(args)
             has_delay_slot = True
