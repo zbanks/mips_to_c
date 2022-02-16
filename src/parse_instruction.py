@@ -1,10 +1,11 @@
 """Functions and classes useful for parsing an arbitrary MIPS instruction.
 """
 import abc
+from contextlib import contextmanager
 import csv
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 import string
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, Iterator, List, Optional, Set, Union
 
 from .error import DecompFailure
 from .options import Target
@@ -144,9 +145,9 @@ class Instruction:
     meta: InstructionMeta
 
     # TODO: Need a way to indicate that an instruction can clobber arbitrary memory
-    inputs: List[Argument]
-    outputs: List[Argument]
-    clobbers: List[Argument]
+    inputs: List[Argument] = field(default_factory=list)
+    outputs: List[Argument] = field(default_factory=list)
+    clobbers: List[Argument] = field(default_factory=list)
 
     jump_target: Optional[Union[JumpTarget, Register]] = None
     function_target: Optional[Union[AsmGlobalSymbol, Register]] = None
@@ -465,5 +466,22 @@ def parse_instruction(line: str, meta: InstructionMeta, arch: ArchAsm) -> Instru
         base = parse_asm_instruction(line, arch)
         return arch.parse(base.mnemonic, base.args, meta)
     except Exception:
-        raise
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
+
+
+@dataclass
+class InstrProcessingFailure(Exception):
+    instr: Instruction
+
+    def __str__(self) -> str:
+        return f"Error while processing instruction:\n{self.instr}"
+
+
+@contextmanager
+def current_instr(instr: Instruction) -> Iterator[None]:
+    """Mark an instruction as being the one currently processed, for the
+    purposes of error messages. Use like |with current_instr(instr): ...|"""
+    try:
+        yield
+    except Exception as e:
+        raise InstrProcessingFailure(instr) from e

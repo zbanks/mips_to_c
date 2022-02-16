@@ -9,6 +9,8 @@ from typing import (
 )
 
 from .error import DecompFailure
+from .ir_pattern import IrPattern, simplify_ir_patterns
+from .flow_graph import FlowGraph
 from .options import Target
 from .parse_instruction import (
     Argument,
@@ -437,6 +439,38 @@ class TrapuvPattern(SimpleAsmPattern):
         return Replacement([m.body[2], new_instr], len(m.body))
 
 
+class TestIrPattern(IrPattern):
+
+    """
+    /* 0001B4 004001B4 3C148080 */  lui   $s4, 0x8080
+    /* 0001D8 004001D8 36948081 */  ori   $s4, $s4, 0x8081
+    ...
+    /* 0001DC 004001DC 00021600 */  sll   $v0, $v0, 0x18
+    /* 0001E0 004001E0 00022603 */  sra   $a0, $v0, 0x18
+    /* 0001E4 004001E4 00940018 */  mult  $a0, $s4
+    /* 0001E8 004001E8 000217C3 */  sra   $v0, $v0, 0x1f
+    /* 0001EC 004001EC 00003010 */  mfhi  $a2
+    /* 0001F0 004001F0 00C42021 */  addu  $a0, $a2, $a0
+    /* 0001F4 004001F4 000421C3 */  sra   $a0, $a0, 7
+    ...
+    /* 0001FC 004001FC 00822023 */   subu  $a0, $a0, $v0
+    """
+
+    replacement = "div.fictive $x, $i, 555"
+    parts = [
+        "lui $k, 0x8080",
+        "ori $k, $k, 0x8081",
+        "sll $i, $i, 0x18",
+        "sra $b, $i, 0x18",
+        "mult $b, $k",
+        "sra $i, $i, 31",
+        "mfhi $a",
+        "addu $x, $a, $b",
+        "sra $x, $x, 7",
+        "subu $x, $x, $i",
+    ]
+
+
 class MipsArch(Arch):
     arch = Target.ArchEnum.MIPS
 
@@ -777,6 +811,13 @@ class MipsArch(Arch):
             is_conditional=is_conditional,
             is_return=is_return,
         )
+
+    def simplify_ir(self, flow_graph: FlowGraph) -> None:
+        simplify_ir_patterns(self, flow_graph, self.ir_patterns)
+
+    ir_patterns: List[typing.Type[IrPattern]] = [
+        TestIrPattern,
+    ]
 
     asm_patterns = [
         DivPattern(),
