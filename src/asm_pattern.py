@@ -5,22 +5,24 @@ from typing import Dict, List, Optional, Tuple, TypeVar, Union
 from .parse_file import Label
 from .parse_instruction import (
     Argument,
+    ArchAsm,
     AsmAddressMode,
     AsmGlobalSymbol,
+    AsmInstruction,
     AsmLiteral,
     BinOp,
     Instruction,
-    InstructionBase,
     InstructionMeta,
     JumpTarget,
     NaiveParsingArch,
     Register,
-    parse_instruction_base,
+    parse_asm_instruction,
 )
 
 
 BodyPart = Union[Instruction, Label]
-PatternPart = Union[InstructionBase, Label, None]
+ReplacementPart = Union[AsmInstruction, Instruction, Label]
+PatternPart = Union[AsmInstruction, Label, None]
 Pattern = List[Tuple[PatternPart, bool]]
 
 
@@ -34,14 +36,14 @@ def make_pattern(*parts: str) -> Pattern:
         elif part.endswith(":"):
             ret.append((Label(part.strip(".:")), optional))
         else:
-            ins = parse_instruction_base(part, NaiveParsingArch())
+            ins = parse_asm_instruction(part, NaiveParsingArch())
             ret.append((ins, optional))
     return ret
 
 
 @dataclass
 class Replacement:
-    new_body: List[BodyPart]
+    new_body: List[ReplacementPart]
     num_consumed: int
 
 
@@ -50,13 +52,6 @@ class AsmMatch:
     body: List[BodyPart]
     regs: Dict[str, Register]
     literals: Dict[str, int]
-    # TODO: This is extremely sloppy
-    # `ArchAsm` shouldn't be referenced here, but we need some way of constructing
-    # replacement `Instruction`s
-
-    def derived_meta(self) -> InstructionMeta:
-        old_instr = next(part for part in self.body if isinstance(part, Instruction))
-        return old_instr.meta.derived()
 
 
 class AsmPattern(abc.ABC):
@@ -156,7 +151,7 @@ class TryMatchState:
             return isinstance(actual, Label) and self.match_var(
                 self.symbolic_labels, exp.name, actual.name
             )
-        if not isinstance(actual, InstructionBase):
+        if not isinstance(actual, Instruction):
             return False
         ins = actual
         if ins.mnemonic != exp.mnemonic:
@@ -191,14 +186,27 @@ class AsmMatcher:
             state.symbolic_literals,
         )
 
-    def apply(self, repl: Replacement) -> None:
-        self.output.extend(repl.new_body)
+    def derived_meta(self) -> InstructionMeta:
+        for part in self.input[self.index :]:
+            if isinstance(part, Instruction):
+                return part.meta.derived()
+        return InstructionMeta.missing()
+
+    def apply(self, repl: Replacement, arch: ArchAsm) -> None:
+        for part in repl.new_body:
+            if isinstance(part, AsmInstruction):
+                # Parse any AsmInstructions into Instructions before substituting
+                instr = arch.parse(part.mnemonic, part.args, self.derived_meta())
+                self.output.append(instr)
+            else:
+                self.output.append(part)
         self.index += repl.num_consumed
 
 
 def simplify_patterns(
     body: List[BodyPart],
     patterns: List[AsmPattern],
+    arch: ArchAsm,
 ) -> List[BodyPart]:
     """Detect and simplify asm standard patterns emitted by known compilers. This is
     especially useful for patterns that involve branches, which are hard to deal with
@@ -208,9 +216,9 @@ def simplify_patterns(
         for pattern in patterns:
             m = pattern.match(matcher)
             if m:
-                matcher.apply(m)
+                matcher.apply(m, arch)
                 break
         else:
-            matcher.apply(Replacement([matcher.input[matcher.index]], 1))
+            matcher.apply(Replacement([matcher.input[matcher.index]], 1), arch)
 
     return matcher.output

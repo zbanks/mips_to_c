@@ -192,8 +192,7 @@ def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Functi
     for item in body_iter:
         orig_item = item
         if isinstance(item, Instruction) and (
-            (isinstance(item.jump_target, JumpTarget) and not item.has_delay_slot)
-            or item.mnemonic == "b"
+            item.is_branch_likely or item.mnemonic == "b"
         ):
             assert isinstance(item.jump_target, JumpTarget)
             old_label = item.jump_target.target
@@ -282,7 +281,7 @@ def prune_unreferenced_labels(function: Function, asm_data: AsmData) -> Function
 
 
 def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Function:
-    new_body = simplify_patterns(function.body, arch.asm_patterns)
+    new_body = simplify_patterns(function.body, arch.asm_patterns, arch)
     new_function = function.bodyless_copy()
     new_function.body.extend(new_body)
     return new_function
@@ -312,7 +311,7 @@ def build_blocks(
             block_builder.set_label(item)
             return
 
-        if not item.has_delay_slot and not item.is_conditional:
+        if not item.has_delay_slot:
             block_builder.add_instruction(item)
             # Split blocks at jumps, at the next instruction.
             if item.is_jump():
@@ -359,7 +358,7 @@ def build_blocks(
                 f"Two delay slot instructions in a row is not supported:\n{item}\n{next_item}"
             )
 
-        if isinstance(item.jump_target, JumpTarget) and not item.has_delay_slot:
+        if item.is_branch_likely:
             assert isinstance(item.jump_target, JumpTarget)
             target = item.jump_target
             branch_likely_counts[target.target] += 1
@@ -432,7 +431,7 @@ def build_blocks(
             block_builder.new_block()
 
     for item in body_iter:
-        if arch.uses_delay_slots:
+        if arch.arch == Target.ArchEnum.MIPS:
             process_with_delay_slots(item)
         else:
             process_no_delay_slots(item)

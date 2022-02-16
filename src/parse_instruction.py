@@ -111,7 +111,7 @@ Argument = Union[
 
 
 @dataclass(frozen=True)
-class InstructionBase:
+class AsmInstruction:
     mnemonic: str
     args: List[Argument]
 
@@ -138,22 +138,28 @@ class InstructionMeta:
 
 
 @dataclass(frozen=True)
-class Instruction(InstructionBase):
+class Instruction:
     mnemonic: str
     args: List[Argument]
     meta: InstructionMeta
 
     inputs: List[Argument]
     outputs: List[Argument]
+    clobbers: List[Argument]
 
     # evaluator: Callable[["InstrArgs"], None]
     evaluator: Any
 
     jump_target: Optional[Union[JumpTarget, Register]] = None
     function_target: Optional[Union[JumpTarget, Register]] = None
-    has_delay_slot: bool = False
     is_conditional: bool = False
     is_return: bool = False
+
+    # These are for MIPS. `is_branch_likely` refers to branch instructions which
+    # execute their delay slot only if the branch *is* taken. (Maybe these two
+    # bools should be merged into a 3-valued enum?)
+    has_delay_slot: bool = False
+    is_branch_likely: bool = False
 
     def is_jump(self) -> bool:
         return self.jump_target is not None or self.is_return
@@ -176,7 +182,7 @@ class ArchAsmParsing(abc.ABC):
     aliased_regs: Dict[str, Register]
 
     @abc.abstractmethod
-    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
+    def normalize_instruction(self, instr: AsmInstruction) -> AsmInstruction:
         ...
 
 
@@ -228,7 +234,7 @@ class NaiveParsingArch(ArchAsmParsing):
     all_regs: List[Register] = []
     aliased_regs: Dict[str, Register] = {}
 
-    def normalize_instruction(self, instr: InstructionBase) -> InstructionBase:
+    def normalize_instruction(self, instr: AsmInstruction) -> AsmInstruction:
         return instr
 
 
@@ -431,19 +437,19 @@ def split_arg_list(args: str) -> List[str]:
     )
 
 
-def parse_instruction_base(line: str, arch: ArchAsmParsing) -> InstructionBase:
+def parse_asm_instruction(line: str, arch: ArchAsmParsing) -> AsmInstruction:
     # First token is instruction name, rest is args.
     line = line.strip()
     mnemonic, _, args_str = line.partition(" ")
     # Parse arguments.
     args = [parse_arg(arg_str, arch) for arg_str in split_arg_list(args_str)]
-    instr = InstructionBase(mnemonic, args)
+    instr = AsmInstruction(mnemonic, args)
     return arch.normalize_instruction(instr)
 
 
 def parse_instruction(line: str, meta: InstructionMeta, arch: ArchAsm) -> Instruction:
     try:
-        base = parse_instruction_base(line, arch)
+        base = parse_asm_instruction(line, arch)
         return arch.parse(base.mnemonic, base.args, meta)
     except Exception:
         raise DecompFailure(f"Failed to parse instruction {meta.loc_str()}: {line}")
