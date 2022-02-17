@@ -45,12 +45,9 @@ class Block:
     approx_label_name: str
     instructions: List[Instruction]
 
-    # block_info is actually an Optional[BlockInfo], set by translate.py for
-    # non-TerminalNode's, but due to circular dependencies we cannot type it
-    # correctly. To access it, use the get_block_info method from translate.py.
-    block_info: object = None
+    block_info: Optional["BlockInfo"] = None
 
-    def add_block_info(self, block_info: object) -> None:
+    def add_block_info(self, block_info: "BlockInfo") -> None:
         assert self.block_info is None
         self.block_info = block_info
 
@@ -1159,3 +1156,6 @@ def visualize_flowgraph(flow_graph: FlowGraph) -> str:
         dot.node(node.name(), label=label)
     svg_bytes: bytes = dot.pipe("svg")
     return svg_bytes.decode("utf-8", "replace")
+
+
+from .translate import BlockInfo
