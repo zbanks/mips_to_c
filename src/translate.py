@@ -33,7 +33,6 @@ from .flow_graph import (
     SwitchNode,
     TerminalNode,
 )
-from .ir_pattern import ArgFlow, build_arg_flow
 from .options import CodingStyle, Formatter, Options, Target
 from .parse_file import AsmData, AsmDataEntry
 from .parse_instruction import (
@@ -198,7 +197,7 @@ def as_function_ptr(expr: "Expression") -> "Expression":
 class StackInfo:
     function: Function
     global_info: "GlobalInfo"
-    arg_flow: ArgFlow
+    flow_graph: FlowGraph
     allocated_stack_size: int = 0
     is_leaf: bool = True
     is_variadic: bool = False
@@ -451,8 +450,7 @@ def get_stack_info(
     flow_graph: FlowGraph,
 ) -> StackInfo:
     arch = global_info.arch
-    arg_flow = build_arg_flow(flow_graph, arch)
-    info = StackInfo(function, global_info, arg_flow)
+    info = StackInfo(function, global_info, flow_graph)
 
     # The goal here is to pick out special instructions that provide information
     # about this function's stack setup.
@@ -4357,7 +4355,7 @@ def translate_graph_from_block(
                 reg, data.value, RegMeta(inherited=True, force=data.meta.force)
             )
 
-        for phi_arg, addrs in stack_info.arg_flow.phis[child].args.items():
+        for phi_arg, addrs in stack_info.flow_graph.node_phis[child].args.items():
             if not isinstance(phi_arg, Register):
                 continue
             if addrs.is_valid():
