@@ -7,6 +7,18 @@ from typing import (
     Tuple,
     Union,
 )
+from .arch import (
+    Arch,
+    InstrSet,
+    InstrMap,
+    StmtInstrMap,
+    CmpInstrMap,
+    StoreInstrMap,
+    MaybeInstrMap,
+    PairInstrMap,
+    ImplicitInstrMap,
+    PpcCmpInstrMap,
+)
 from .error import DecompFailure
 from .options import Target
 from .parse_instruction import (
@@ -37,19 +49,11 @@ from .translate import (
     BinaryOp,
     CarryBit,
     Cast,
-    CmpInstrMap,
     CommentStmt,
     ErrorExpr,
     Expression,
-    ImplicitInstrMap,
-    InstrMap,
-    InstrSet,
     Literal,
-    PpcCmpInstrMap,
-    PairInstrMap,
     SecondF64Half,
-    StmtInstrMap,
-    StoreInstrMap,
     TernaryOp,
     UnaryOp,
     as_f32,

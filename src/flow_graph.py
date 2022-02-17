@@ -19,7 +19,6 @@ from .error import DecompFailure
 from .options import Formatter, Target
 from .parse_file import AsmData, Function, Label
 from .parse_instruction import (
-    ArchAsm,
     Argument,
     AsmAddressMode,
     AsmGlobalSymbol,
@@ -32,10 +31,6 @@ from .parse_instruction import (
     Register,
 )
 from .asm_pattern import simplify_patterns, AsmPattern
-
-
-class ArchFlowGraph(ArchAsm):
-    asm_patterns: List[AsmPattern] = []
 
 
 @dataclass(eq=False)
@@ -136,7 +131,7 @@ def invert_branch_mnemonic(mnemonic: str) -> str:
     return inverses[mnemonic]
 
 
-def normalize_likely_branches(function: Function, arch: ArchFlowGraph) -> Function:
+def normalize_likely_branches(function: Function, arch: "Arch") -> Function:
     """Branch-likely instructions only evaluate their delay slots when they are
     taken, making control flow more complex. However, on the IDO compiler they
     only occur in a very specific pattern:
@@ -277,16 +272,14 @@ def prune_unreferenced_labels(function: Function, asm_data: AsmData) -> Function
     return new_function
 
 
-def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Function:
+def simplify_standard_patterns(function: Function, arch: "Arch") -> Function:
     new_body = simplify_patterns(function.body, arch.asm_patterns, arch)
     new_function = function.bodyless_copy()
     new_function.body.extend(new_body)
     return new_function
 
 
-def build_blocks(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph
-) -> List[Block]:
+def build_blocks(function: Function, asm_data: AsmData, arch: "Arch") -> List[Block]:
     if arch.arch == Target.ArchEnum.MIPS:
         verify_no_trailing_delay_slot(function)
         function = normalize_likely_branches(function, arch)
@@ -623,7 +616,7 @@ def build_graph_from_block(
     blocks: List[Block],
     nodes: List[Node],
     asm_data: AsmData,
-    arch: ArchFlowGraph,
+    arch: "Arch",
 ) -> Node:
     # Don't reanalyze blocks.
     for node in nodes:
@@ -785,7 +778,7 @@ def reachable_without(start: Node, end: Node, without: Node) -> bool:
 
 
 def build_nodes(
-    function: Function, blocks: List[Block], asm_data: AsmData, arch: ArchFlowGraph
+    function: Function, blocks: List[Block], asm_data: AsmData, arch: "Arch"
 ) -> List[Node]:
     terminal_node = TerminalNode.terminal()
     graph: List[Node] = [terminal_node]
@@ -1093,9 +1086,7 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def build_flowgraph(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph
-) -> FlowGraph:
+def build_flowgraph(function: Function, asm_data: AsmData, arch: "Arch") -> FlowGraph:
     blocks = build_blocks(function, asm_data, arch)
     nodes = build_nodes(function, blocks, asm_data, arch)
     nodes = duplicate_premature_returns(nodes)
@@ -1158,4 +1149,5 @@ def visualize_flowgraph(flow_graph: FlowGraph) -> str:
     return svg_bytes.decode("utf-8", "replace")
 
 
+from .arch import Arch
 from .translate import BlockInfo

@@ -8,6 +8,18 @@ from typing import (
     Union,
 )
 
+from .arch import (
+    Arch,
+    InstrSet,
+    InstrMap,
+    StmtInstrMap,
+    CmpInstrMap,
+    StoreInstrMap,
+    MaybeInstrMap,
+    PairInstrMap,
+    ImplicitInstrMap,
+    PpcCmpInstrMap,
+)
 from .error import DecompFailure
 from .options import Target
 from .parse_instruction import (
@@ -36,17 +48,11 @@ from .translate import (
     Arch,
     BinaryOp,
     Cast,
-    CmpInstrMap,
     CommentStmt,
     ErrorExpr,
     Expression,
-    InstrMap,
-    InstrSet,
     Literal,
-    PairInstrMap,
     SecondF64Half,
-    StmtInstrMap,
-    StoreInstrMap,
     UnaryOp,
     as_f32,
     as_f64,
