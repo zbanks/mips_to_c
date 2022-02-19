@@ -43,6 +43,7 @@ from .parse_instruction import (
     AsmLiteral,
     BinOp,
     Instruction,
+    InstrProcessingFailure,
     MemoryAccess,
     Macro,
     Register,
