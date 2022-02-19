@@ -10,6 +10,7 @@ from typing import (
 from .error import DecompFailure
 from .options import Target
 from .parse_instruction import (
+    Access,
     Argument,
     AsmAddressMode,
     AsmGlobalSymbol,
@@ -19,14 +20,17 @@ from .parse_instruction import (
     InstructionMeta,
     JumpTarget,
     Macro,
+    MemoryAccess,
     Register,
-    filter_ir_arguments,
+    StackAccess,
+    get_jump_target,
 )
 from .asm_pattern import (
     AsmMatch,
     AsmMatcher,
     AsmPattern,
     Replacement,
+    ReplacementPart,
     SimpleAsmPattern,
     make_pattern,
 )
@@ -145,10 +149,13 @@ class BoolCastPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
-        return Replacement(
-            [AsmInstruction("boolcast.fictive", [Register("r0"), m.regs["x"]])],
-            len(m.body),
-        )
+        body: List[ReplacementPart] = [
+            AsmInstruction("boolcast.fictive", [Register("r0"), m.regs["x"]])
+        ]
+        if m.regs["a"] != Register("r0"):
+            # Preserve `neg $a, $x` in case $a is accessed later, unless $a is $r0
+            body.append(m.body[0])
+        return Replacement(body, len(m.body))
 
 
 class BranchCtrPattern(AsmPattern):
@@ -409,20 +416,43 @@ class PpcArch(Arch):
     def parse(
         cls, mnemonic: str, args: List[Argument], meta: InstructionMeta
     ) -> Instruction:
-        inputs: List[Argument] = []
-        outputs: List[Argument] = []
-        clobbers: List[Argument] = []
+        inputs: List[Access] = []
+        outputs: List[Access] = []
+        clobbers: List[Access] = []
         jump_target: Optional[Union[JumpTarget, Register]] = None
         function_target: Optional[Union[AsmGlobalSymbol, Register]] = None
         is_conditional = False
         is_return = False
 
-        cr0_bits: List[Argument] = [
+        cr0_bits: List[Access] = [
             Register("cr0_lt"),
             Register("cr0_gt"),
             Register("cr0_eq"),
             Register("cr0_so"),
         ]
+        memory_sizes = {
+            "b": 1,
+            "h": 2,
+            "w": 4,
+            "mw": 4,
+            "fs": 4,
+            "fd": 8,
+        }
+        size = memory_sizes.get(mnemonic.lstrip("stl").rstrip("azux"))
+
+        def make_memory_access(arg: AsmAddressMode) -> Access:
+            assert isinstance(arg, AsmAddressMode)
+            assert size is not None
+            if arg.rhs == cls.stack_pointer_reg:
+                return StackAccess(
+                    offset=arg.lhs_as_literal(),
+                    size=size,
+                )
+            return MemoryAccess(
+                base_reg=arg.rhs,
+                offset=arg.lhs,
+                size=size,
+            )
 
         if mnemonic == "blr":
             # Return
@@ -451,28 +481,31 @@ class PpcArch(Arch):
             is_conditional = True
         elif mnemonic == "bl":
             # Function call to label
-            inputs = [r for r in cls.argument_regs]
-            outputs = [r for r in cls.all_return_regs]
-            clobbers = [r for r in cls.temp_regs]
+            inputs = list(cls.argument_regs)
+            outputs = list(cls.all_return_regs)
+            clobbers = list(cls.temp_regs)
+            clobbers.append(MemoryAccess.arbitrary())
             assert isinstance(args[0], AsmGlobalSymbol)
             function_target = args[0]
         elif mnemonic == "bctrl":
             # Function call to pointer in $ctr
-            inputs = [r for r in cls.argument_regs]
+            inputs = list(cls.argument_regs)
             inputs.append(Register("clr"))
-            outputs = [r for r in cls.all_return_regs]
-            clobbers = [r for r in cls.temp_regs]
+            outputs = list(cls.all_return_regs)
+            clobbers = list(cls.temp_regs)
+            clobbers.append(MemoryAccess.arbitrary())
             function_target = Register("ctr")
         elif mnemonic == "blrl":
             # Function call to pointer in $lr
-            inputs = [r for r in cls.argument_regs]
+            inputs = list(cls.argument_regs)
             inputs.append(Register("lr"))
-            outputs = [r for r in cls.all_return_regs]
-            clobbers = [r for r in cls.temp_regs]
+            outputs = list(cls.all_return_regs)
+            clobbers = list(cls.temp_regs)
+            clobbers.append(MemoryAccess.arbitrary())
             function_target = Register("lr")
         elif mnemonic == "b":
             # Unconditional jump
-            jump_target = cls.get_branch_target(args)
+            jump_target = get_jump_target(args[0])
         elif mnemonic in (
             "ble",
             "blt",
@@ -486,57 +519,130 @@ class PpcArch(Arch):
             "bdz.fictive",
         ):
             # Normal branch
-            inputs = cr0_bits[:]
-            jump_target = cls.get_branch_target(args)
+            inputs = list(cr0_bits)
+            jump_target = get_jump_target(args[-1])
             is_conditional = True
         elif mnemonic in cls.instrs_store:
-            inputs = [args[0]]
-            outputs = [args[1]]
-        elif mnemonic in cls.instrs_store_update:
-            inputs = args[:]
-            outputs = [args[1]]
-        elif mnemonic in cls.instrs_load_update:
-            inputs = args[1:]
-            if isinstance(args[1], AsmAddressMode):
-                outputs = [args[0], args[1].rhs]
+            assert isinstance(args[0], Register)
+            assert size is not None
+            if mnemonic.endswith("x"):
+                assert (
+                    len(args) == 3
+                    and isinstance(args[1], Register)
+                    and isinstance(args[2], Register)
+                )
+                inputs = [args[0], args[1], args[2]]
+                outputs = [MemoryAccess(args[1], args[2], size)]
             else:
+                assert len(args) == 2 and isinstance(args[1], AsmAddressMode)
+                inputs = [args[0], args[1].rhs]
+                outputs = [make_memory_access(args[1])]
+        elif mnemonic in cls.instrs_store_update:
+            assert isinstance(args[0], Register)
+            assert size is not None
+            if mnemonic.endswith("x"):
+                assert (
+                    len(args) == 3
+                    and isinstance(args[1], Register)
+                    and isinstance(args[2], Register)
+                )
+                inputs = [args[0], args[1], args[2]]
+                outputs = [MemoryAccess(args[1], args[2], size), args[1]]
+            else:
+                assert len(args) == 2 and isinstance(args[1], AsmAddressMode)
+                inputs = [args[0], args[1].rhs]
+                outputs = [make_memory_access(args[1]), args[1].rhs]
+        elif mnemonic in cls.instrs_load_update:
+            assert isinstance(args[0], Register)
+            assert size is not None
+            if mnemonic.endswith("x"):
+                assert (
+                    len(args) == 3
+                    and isinstance(args[1], Register)
+                    and isinstance(args[2], Register)
+                )
+                inputs = [MemoryAccess(args[1], args[2], size), args[1], args[2]]
                 outputs = [args[0], args[1]]
+            else:
+                assert len(args) == 2 and isinstance(args[1], AsmAddressMode)
+                inputs = [make_memory_access(args[1]), args[1].rhs]
+                outputs = [args[0], args[1].rhs]
+        elif mnemonic in ("stmw", "lmw"):
+            assert (
+                len(args) == 2
+                and isinstance(args[0], Register)
+                and isinstance(args[1], AsmAddressMode)
+            )
+            assert args[0].register_name[0] == "r"
+            index = int(args[0].register_name[1:])
+            offset = args[1].lhs_as_literal()
+            while index <= 31:
+                reg = Register(f"r{index}")
+                mem = make_memory_access(
+                    AsmAddressMode(rhs=args[1].rhs, lhs=AsmLiteral(offset))
+                )
+                if mnemonic == "stmw":
+                    inputs.append(reg)
+                    outputs.append(mem)
+                else:
+                    outputs.append(reg)
+                    inputs.append(mem)
+                index += 1
+                offset += 4
+            inputs.append(args[1].rhs)
         elif mnemonic in cls.instrs_no_dest:
-            inputs = args[:]
+            assert not any(isinstance(a, (Register, AsmAddressMode)) for a in args)
         elif mnemonic.rstrip(".") in cls.instrs_destination_first:
-            inputs = args[1:]
+            assert isinstance(args[0], Register)
             outputs = [args[0]]
+            if mnemonic.startswith("l") and size is not None:
+                if mnemonic.endswith("x"):
+                    assert (
+                        len(args) == 3
+                        and isinstance(args[1], Register)
+                        and isinstance(args[2], Register)
+                    )
+                    inputs = [args[1], args[2], MemoryAccess(args[1], args[2], size)]
+                else:
+                    assert len(args) == 2 and isinstance(args[1], AsmAddressMode)
+                    inputs = [args[1].rhs, make_memory_access(args[1])]
+            elif mnemonic == "li" and isinstance(args[1], AsmAddressMode):
+                # `li $rD, sym@sda21(r2)` is equivalent to `addi $rD, $r2, sym@sda21`
+                assert len(args) == 2
+                inputs = [args[1].rhs]
+            else:
+                assert not any(isinstance(a, AsmAddressMode) for a in args), (
+                    mnemonic,
+                    args,
+                )
+                inputs = [r for r in args[1:] if isinstance(r, Register)]
         elif mnemonic in cls.instrs_implicit_destination:
-            inputs = args[:]
+            assert len(args) == 1 and isinstance(args[0], Register)
+            inputs = [args[0]]
             outputs = [cls.instrs_implicit_destination[mnemonic][0]]
         elif mnemonic in cls.instrs_ppc_compare:
-            inputs = args[:]
-            outputs = cr0_bits[:]
+            assert len(args) == 3 and isinstance(args[1], Register)
+            inputs = [r for r in args[1:] if isinstance(r, Register)]
+            outputs = list(cr0_bits)
         elif mnemonic in cls.instrs_ignore:
             # TODO: There might be some instrs to handle here
-            # TODO: Implement stmw/lmw? (Only used in prologue/epilogue)
             pass
         elif args and isinstance(args[0], Register):
             # If the mnemonic is unsupported, guess
-            inputs = args[1:]
+            inputs = [r for r in args[1:] if isinstance(r, Register)]
             outputs = [args[0]]
 
         if mnemonic.endswith("."):
             # PPC instructions ending in `.` update the condition reg
             outputs.extend(cr0_bits)
 
-        # Any AsmAddressMode read or write will also depend on its RHS register
-        for arg in inputs[:] + outputs:
-            if isinstance(arg, AsmAddressMode) and arg.rhs not in inputs:
-                inputs.append(arg)
-
         return Instruction(
             mnemonic=mnemonic,
             args=args,
             meta=meta,
-            inputs=filter_ir_arguments(inputs),
-            outputs=filter_ir_arguments(outputs),
-            clobbers=filter_ir_arguments(clobbers),
+            inputs=inputs,
+            outputs=outputs,
+            clobbers=clobbers,
             jump_target=jump_target,
             function_target=function_target,
             is_conditional=is_conditional,
@@ -955,18 +1061,15 @@ class PpcArch(Arch):
         )
 
     @staticmethod
-    def function_return(expr: Expression) -> List[Tuple[Register, Expression]]:
-        return [
-            (
-                Register("f1"),
-                Cast(expr, reinterpret=True, silent=True, type=Type.floatish()),
+    def function_return(expr: Expression) -> Dict[Register, Expression]:
+        return {
+            Register("f1"): Cast(
+                expr, reinterpret=True, silent=True, type=Type.floatish()
             ),
-            (
-                Register("r3"),
-                Cast(expr, reinterpret=True, silent=True, type=Type.intptr()),
+            Register("r3"): Cast(
+                expr, reinterpret=True, silent=True, type=Type.intptr()
             ),
-            (
-                Register("r4"),
-                as_u32(Cast(expr, reinterpret=True, silent=False, type=Type.u64())),
+            Register("r4"): as_u32(
+                Cast(expr, reinterpret=True, silent=False, type=Type.u64())
             ),
-        ]
+        }

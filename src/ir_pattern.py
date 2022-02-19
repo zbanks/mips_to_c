@@ -80,8 +80,8 @@ def print_arg_flow(flow: FlowGraph) -> None:
         print(
             f">>> {addr} {str(instr):40} {[str(k) for k in instr.inputs]} --> {[str(k) for k in instr.outputs]}"
         )
-        print(f" i> {[(str(k), str(v)) for k, v in inputs.args.items()]}")
-        print(f" o> {[(str(k), str(v)) for k, v in outputs.args.items()]}")
+        print(f" i> {[(str(k), str(v)) for k, v in inputs.refs.items()]}")
+        print(f" o> {[(str(k), str(v)) for k, v in outputs.refs.items()]}")
 
 
 def simplify_ir_patterns(

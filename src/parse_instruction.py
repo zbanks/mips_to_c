@@ -106,8 +106,31 @@ class JumpTarget:
         return f".{self.target}"
 
 
+@dataclass(frozen=True)
+class StackAccess:
+    offset: int
+    size: int
+
+
+@dataclass(frozen=True)
+class MemoryAccess:
+    base_reg: Register
+    offset: "Argument"
+    size: int
+
+    @staticmethod
+    def arbitrary() -> "MemoryAccess":
+        """Placeholder value used to mark that some arbitrary memory may be clobbered"""
+        return MemoryAccess(Register("zero"), AsmLiteral(0), 0)
+
+
 Argument = Union[
     Register, AsmGlobalSymbol, AsmAddressMode, Macro, AsmLiteral, BinOp, JumpTarget
+]
+Access = Union[
+    Register,
+    StackAccess,
+    MemoryAccess,
 ]
 
 
@@ -144,10 +167,9 @@ class Instruction:
     args: List[Argument]
     meta: InstructionMeta
 
-    # TODO: Need a way to indicate that an instruction can clobber arbitrary memory
-    inputs: List[Argument] = field(default_factory=list)
-    outputs: List[Argument] = field(default_factory=list)
-    clobbers: List[Argument] = field(default_factory=list)
+    inputs: List[Access] = field(default_factory=list)
+    outputs: List[Access] = field(default_factory=list)
+    clobbers: List[Access] = field(default_factory=list)
 
     jump_target: Optional[Union[JumpTarget, Register]] = None
     function_target: Optional[Union[AsmGlobalSymbol, Register]] = None
@@ -159,9 +181,6 @@ class Instruction:
     # bools should be merged into a 3-valued enum?)
     has_delay_slot: bool = False
     is_branch_likely: bool = False
-
-    # TODO
-    # evaluator: object
 
     def is_jump(self) -> bool:
         return self.jump_target is not None or self.is_return
@@ -175,18 +194,6 @@ class Instruction:
     def arch_mnemonic(self, arch: "ArchAsm") -> str:
         """Combine architecture name with mnemonic for pattern matching"""
         return f"{arch.arch}:{self.mnemonic}"
-
-
-def filter_ir_arguments(args: List[Argument]) -> List[Argument]:
-    """
-    Filter a list of Arguments that may be used as Instruction inputs, outputs,
-    or clobbers. Removes duplicates and constant values (like AsmLiterals).
-    """
-    output: List[Argument] = []
-    for arg in args:
-        if isinstance(arg, (Register, AsmAddressMode)) and arg not in output:
-            output.append(arg)
-    return output
 
 
 class ArchAsmParsing(abc.ABC):
@@ -219,20 +226,9 @@ class ArchAsm(ArchAsmParsing):
 
     aliased_regs: Dict[str, Register]
 
-    uses_delay_slots: bool
-
     @abc.abstractmethod
     def missing_return(self) -> List[Instruction]:
         ...
-
-    @staticmethod
-    def get_branch_target(args: List[Argument]) -> JumpTarget:
-        label = args[-1]
-        if isinstance(label, AsmGlobalSymbol):
-            return JumpTarget(label.symbol_name)
-        if not isinstance(label, JumpTarget):
-            raise DecompFailure(f"Couldn't parse instruction: invalid branch target")
-        return label
 
     @abc.abstractmethod
     def parse(
@@ -290,6 +286,13 @@ def constant_fold(arg: Argument) -> Argument:
         if arg.op == "&":
             return AsmLiteral(lhs.value & rhs.value)
     return arg
+
+
+def get_jump_target(label: Argument) -> JumpTarget:
+    if isinstance(label, AsmGlobalSymbol):
+        return JumpTarget(label.symbol_name)
+    assert isinstance(label, JumpTarget), "invalid branch target"
+    return label
 
 
 # Main parser.

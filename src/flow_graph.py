@@ -19,8 +19,8 @@ from .error import DecompFailure
 from .options import Formatter, Target
 from .parse_file import AsmData, Function, Label
 from .parse_instruction import (
+    Access,
     ArchAsm,
-    Argument,
     AsmAddressMode,
     AsmGlobalSymbol,
     AsmLiteral,
@@ -308,7 +308,7 @@ def build_blocks(
     branch_likely_counts: Counter[str] = Counter()
     cond_return_target: Optional[JumpTarget] = None
 
-    def process_with_delay_slots(item: Union[Instruction, Label]) -> None:
+    def process_mips(item: Union[Instruction, Label]) -> None:
         if isinstance(item, Label):
             # Split blocks at labels.
             block_builder.new_block()
@@ -317,9 +317,7 @@ def build_blocks(
 
         if not item.has_delay_slot:
             block_builder.add_instruction(item)
-            # Split blocks at jumps, at the next instruction.
-            if item.is_jump():
-                block_builder.new_block()
+            assert not item.is_jump(), "all MIPS jumps have a delay slot"
             return
 
         process_after: List[Union[Instruction, Label]] = []
@@ -335,8 +333,8 @@ def build_blocks(
 
             assert isinstance(next_item, Instruction), "Cannot have two labels in a row"
 
-            # (Best-effort check for whether the instruction can be
-            # executed twice in a row.)
+            # Best-effort check for whether the instruction can be executed twice in a row.
+            # TODO: This may be able to be improved to use the other fields in Instruction?
             r = next_item.args[0] if next_item.args else None
             if all(a != r for a in next_item.args[1:]):
                 process_after.append(label)
@@ -405,7 +403,7 @@ def build_blocks(
             block_builder.new_block()
 
         for item in process_after:
-            process_with_delay_slots(item)
+            process_mips(item)
 
     def process_no_delay_slots(item: Union[Instruction, Label]) -> None:
         nonlocal cond_return_target
@@ -436,7 +434,7 @@ def build_blocks(
 
     for item in body_iter:
         if arch.arch == Target.ArchEnum.MIPS:
-            process_with_delay_slots(item)
+            process_mips(item)
         else:
             process_no_delay_slots(item)
 
@@ -1075,34 +1073,34 @@ class RefList:
 
 
 @dataclass
-class ArgRefs:
-    args: Dict[Argument, RefList] = field(default_factory=dict)
+class AccessRefs:
+    refs: Dict[Access, RefList] = field(default_factory=dict)
 
     @staticmethod
-    def initial_function_args(arch: ArchFlowGraph) -> "ArgRefs":
-        info = ArgRefs()
+    def initial_function_args(arch: ArchFlowGraph) -> "AccessRefs":
+        info = AccessRefs()
         # Set all the registers that are valid to access at the start of a function
         for r in arch.saved_regs:
-            info.args[r] = RefList.special(f"saved_{r.register_name}")
+            info.refs[r] = RefList.special(f"saved_{r.register_name}")
         for r in arch.argument_regs:
-            info.args[r] = RefList.special(f"arg_{r.register_name}")
-        info.args[Register("zero")] = RefList.special(f"zero")
-        info.args[arch.return_address_reg] = RefList.special(f"return")
-        info.args[arch.stack_pointer_reg] = RefList.special(f"sp")
+            info.refs[r] = RefList.special(f"arg_{r.register_name}")
+        info.refs[Register("zero")] = RefList.special(f"zero")
+        info.refs[arch.return_address_reg] = RefList.special(f"return")
+        info.refs[arch.stack_pointer_reg] = RefList.special(f"sp")
 
         return info
 
-    def add(self, arg: Argument, addr: Reference) -> None:
-        if arg not in self.args:
-            self.args[arg] = RefList([addr])
-        elif addr not in self.args[arg].refs:
-            self.args[arg].refs.append(addr)
+    def add(self, arg: Access, addr: Reference) -> None:
+        if arg not in self.refs:
+            self.refs[arg] = RefList([addr])
+        elif addr not in self.refs[arg].refs:
+            self.refs[arg].refs.append(addr)
 
-    def copy(self) -> "ArgRefs":
-        return ArgRefs(args=self.args.copy())
+    def copy(self) -> "AccessRefs":
+        return AccessRefs(refs=self.refs.copy())
 
-    def get(self, arg: Argument) -> RefList:
-        srcs = self.args.get(arg)
+    def get(self, arg: Access) -> RefList:
+        srcs = self.refs.get(arg)
         if srcs is not None:
             return srcs
         return RefList.invalid()
@@ -1111,10 +1109,10 @@ class ArgRefs:
 @dataclass(frozen=True)
 class FlowGraph:
     nodes: List[Node]
-    node_phis: Dict[Node, ArgRefs] = field(default_factory=dict)
-    instr_inputs: Dict[InstrRef, ArgRefs] = field(default_factory=dict)
-    instr_outputs: Dict[InstrRef, ArgRefs] = field(default_factory=dict)
-    instr_references: Dict[InstrRef, ArgRefs] = field(default_factory=dict)
+    node_phis: Dict[Node, AccessRefs] = field(default_factory=dict)
+    instr_inputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
+    instr_outputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
+    instr_references: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
 
     def entry_node(self) -> Node:
         return self.nodes[0]
@@ -1195,7 +1193,7 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def reg_always_set(node: Node, arg: Argument, *, dom_set: RefList) -> RefList:
+def reg_always_set(node: Node, arg: Access, *, dom_set: RefList) -> RefList:
     if node.immediate_dominator is None:
         return RefList.invalid()
     seen = {node.immediate_dominator}
@@ -1225,7 +1223,7 @@ def reg_always_set(node: Node, arg: Argument, *, dom_set: RefList) -> RefList:
     return sources
 
 
-def regs_clobbered_until_dominator(node: Node) -> Set[Argument]:
+def regs_clobbered_until_dominator(node: Node) -> Set[Access]:
     if node.immediate_dominator is None:
         return set()
     seen = {node.immediate_dominator}
@@ -1247,15 +1245,15 @@ def regs_clobbered_until_dominator(node: Node) -> Set[Argument]:
 def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
     flow_graph = FlowGraph(nodes)
 
-    def process_node(node: Node, node_info: ArgRefs) -> None:
+    def process_node(node: Node, node_info: AccessRefs) -> None:
         # Calculate register usage for each instruction in this node
         for i, ir in enumerate(node.block.instructions):
             ref = InstrRef(node, i)
-            inputs = ArgRefs()
+            inputs = AccessRefs()
             flow_graph.instr_inputs[ref] = inputs
-            outputs = ArgRefs()
+            outputs = AccessRefs()
             flow_graph.instr_outputs[ref] = outputs
-            flow_graph.instr_references[ref] = ArgRefs()
+            flow_graph.instr_references[ref] = AccessRefs()
 
             for arg in ir.inputs:
                 srcs = node_info.get(arg)
@@ -1263,21 +1261,21 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                     # XXX: this is potentially an error?
                     # print(f"missing reg at {ref}: {arg}")
                     pass
-                inputs.args[arg] = srcs
+                inputs.refs[arg] = srcs
 
             for arg in ir.clobbers:
-                if arg in node_info.args:
-                    outputs.args[arg] = RefList.invalid()
+                if arg in node_info.refs:
+                    outputs.refs[arg] = RefList.invalid()
             for arg in ir.outputs:
-                outputs.args[arg] = RefList([ref])
+                outputs.refs[arg] = RefList([ref])
 
-            node_info.args.update(outputs.args)
+            node_info.refs.update(outputs.refs)
 
         # Translate everything dominated by this node, now that we know our own
         # final register flow_graph. This will eventually reach every node.
         for child in node.immediately_dominates:
             new_info = node_info.copy()
-            child_phis = ArgRefs()
+            child_phis = AccessRefs()
             flow_graph.node_phis[child] = child_phis
 
             phi_args = regs_clobbered_until_dominator(child)
@@ -1287,20 +1285,20 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                 # not be used by the child node.
                 # Otherwise, it *is* set in every control flow path to the child node, so
                 # it can be used (but it will have a phi value)
-                new_info.args[arg] = set_locs
-                child_phis.args[arg] = set_locs
+                new_info.refs[arg] = set_locs
+                child_phis.refs[arg] = set_locs
 
             process_node(child, new_info)
 
     # Recursively traverse every node, starting with the entry node
     # This populates in instr_inputs, instr_outputs, and node_phis
     entry_node = flow_graph.entry_node()
-    flow_graph.node_phis[entry_node] = ArgRefs()
-    process_node(entry_node, ArgRefs.initial_function_args(arch))
+    flow_graph.node_phis[entry_node] = AccessRefs()
+    process_node(entry_node, AccessRefs.initial_function_args(arch))
 
     # Populate instr_references for each instruction
     for ref, inputs in flow_graph.instr_inputs.items():
-        for arg, deps in inputs.args.items():
+        for arg, deps in inputs.refs.items():
             for dep in deps.refs:
                 if isinstance(dep, InstrRef):
                     flow_graph.instr_references[dep].add(arg, ref)

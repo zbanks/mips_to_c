@@ -45,6 +45,7 @@ from .parse_instruction import (
     Instruction,
     InstrProcessingFailure,
     Macro,
+    StackAccess,
     Register,
     current_instr,
 )
@@ -103,13 +104,11 @@ class Arch(ArchFlowGraph):
         ...
 
     @abc.abstractmethod
-    def function_return(
-        self, expr: "Expression"
-    ) -> List[Tuple[Register, "Expression"]]:
+    def function_return(self, expr: "Expression") -> Dict[Register, "Expression"]:
         """
         Compute register location(s) & values that will hold the return value
         of the function call `expr`.
-        This must use all of the registers in `all_return_regs` in order to stay
+        This must have a value for each register in `all_return_regs` in order to stay
         consistent with `Instruction.outputs`. This is why we can't use the
         function's return type, even though it may be more accurate.
         """
@@ -498,24 +497,11 @@ def get_stack_info(
             if inst.args[0] in (arch.return_address_reg, Register("r0")):
                 # Saving the return address on the stack.
                 info.is_leaf = False
-            stack_offset = inst.args[1].lhs_as_literal()
-            if arch_mnemonic == "ppc:stmw":
-                assert inst.args[0].register_name[0] == "r"
-                index = int(inst.args[0].register_name[1:])
-                while index <= 31:
-                    reg = Register(f"r{index}")
-                    info.callee_save_reg_locations[reg] = stack_offset
-                    callee_saved_offset_and_size.append((stack_offset, 4))
-                    index += 1
-                    stack_offset += 4
-            elif inst.args[0] not in info.callee_save_reg_locations:
-                info.callee_save_reg_locations[inst.args[0]] = stack_offset
-                callee_saved_offset_and_size.append(
-                    (
-                        stack_offset,
-                        8 if arch_mnemonic in ("mips:sdc1", "ppc:stfd") else 4,
-                    )
-                )
+            # The registers & their stack accesses must be matched up in ArchAsm.parse
+            for reg, mem in zip(inst.inputs, inst.outputs):
+                if isinstance(reg, Register) and isinstance(mem, StackAccess):
+                    info.callee_save_reg_locations[reg] = mem.offset
+                    callee_saved_offset_and_size.append((mem.offset, mem.size))
         elif arch_mnemonic == "ppc:mflr" and inst.args[0] == Register("r0"):
             info.is_leaf = False
 
@@ -4033,16 +4019,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             elif arch_mnemonic == "ppc:bctrl":
                 fn_target = args.regs[Register("ctr")]
             elif arch_mnemonic == "mips:jalr":
-                if args.count() == 1:
-                    fn_target = args.reg(0)
-                elif args.count() == 2:
-                    if args.reg_ref(0) != arch.return_address_reg:
-                        raise DecompFailure(
-                            "Two-argument form of jalr is not supported."
-                        )
-                    fn_target = args.reg(1)
-                else:
-                    raise DecompFailure(f"jalr takes 2 arguments, {args.count()} given")
+                fn_target = args.reg(1)
             else:
                 assert False, f"Unhandled fn call mnemonic {arch_mnemonic}"
 
@@ -4136,17 +4113,18 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
             prevent_later_reads()
 
             return_reg_vals = arch.function_return(call)
-            for reg, val in return_reg_vals:
-                if reg not in instr.outputs:
+            for out in instr.outputs:
+                if not isinstance(out, Register):
                     continue
+                val = return_reg_vals[out]
                 if not isinstance(val, SecondF64Half):
                     val = eval_once(
                         val,
                         emit_exactly_once=False,
                         trivial=False,
-                        prefix=reg.register_name,
+                        prefix=out.register_name,
                     )
-                regs.set_with_meta(reg, val, RegMeta(function_return=True))
+                regs.set_with_meta(out, val, RegMeta(function_return=True))
 
             has_function_call = True
 
@@ -4355,7 +4333,7 @@ def translate_graph_from_block(
                 reg, data.value, RegMeta(inherited=True, force=data.meta.force)
             )
 
-        for phi_arg, addrs in stack_info.flow_graph.node_phis[child].args.items():
+        for phi_arg, addrs in stack_info.flow_graph.node_phis[child].refs.items():
             if not isinstance(phi_arg, Register):
                 continue
             if addrs.is_valid():
