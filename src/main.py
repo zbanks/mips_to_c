@@ -155,7 +155,7 @@ def run(options: Options) -> int:
 
         # This operation can change struct field paths, so it is only performed
         # after discarding all of the translated Expressions.
-        typepool.prune_structs()
+        typepool.optimize_structs()
 
     function_infos: List[Union[FunctionInfo, Exception]] = []
     for function, flow_graph in zip(functions, flow_graphs):

@@ -110,10 +110,11 @@ class TypePool:
                 decls.append(struct.format(fmt) + "\n")
         return "\n".join(decls)
 
-    def prune_structs(self) -> None:
-        """Remove overlapping fields from all known structs"""
+    def optimize_structs(self) -> None:
+        """Remove overlapping fields from all known structs & expand unsized arrays"""
         for struct in self.structs:
             struct.prune_overlapping_fields()
+            struct.expand_unsized_arrays()
 
 
 @dataclass(eq=False)
@@ -1257,6 +1258,29 @@ class StructDeclaration:
                     break
             fields_to_remove |= set(conflicting_fields)
         self.fields = [f for f in self.fields if f not in fields_to_remove]
+
+    def expand_unsized_arrays(self) -> None:
+        """Expand arrays of unknown size to fill the space available."""
+        # TODO: Support unions
+        if self.is_union:
+            return None
+
+        next_offsets = [f.offset for f in self.fields[1:]] + [self.size]
+        assert not self.fields or len(next_offsets) == len(self.fields)
+
+        for field, next_offset in zip(self.fields, next_offsets):
+            assert next_offset >= field.offset
+            if field.known:
+                continue
+            member_type, dimension = field.type.get_array()
+            if dimension is not None or member_type is None:
+                continue
+            member_size = member_type.get_size_bytes()
+            if member_size is None:
+                continue
+            new_dim = int((next_offset - field.offset) / member_size)
+            if new_dim > 0:
+                field.type.unify(Type.array(member_type, new_dim))
 
     def format(self, fmt: Formatter) -> str:
         """

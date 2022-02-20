@@ -140,6 +140,7 @@ def current_instr(instr: Instruction) -> Iterator[None]:
 
 def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
     type = type.weaken_void_ptr()
+    target_type_size = type.get_size_bytes()
     ptr_target_type = type.get_pointer_target()
     if expr.type.unify(type):
         if silent or isinstance(expr, Literal):
@@ -160,6 +161,20 @@ def as_type(expr: "Expression", type: Type, silent: bool) -> "Expression":
                     type=field_type,
                 ),
                 type=type,
+            )
+            if silent:
+                return expr
+    elif target_type_size is not None:
+        field_path, field_type, _ = expr.type.get_field(0, target_size=target_type_size)
+        if field_path is not None and field_type.unify(type):
+            field_path.insert(0, 0)
+            expr = StructAccess(
+                struct_var=AddressOf(expr, type=expr.type.reference()),
+                offset=0,
+                target_size=target_type_size,
+                field_path=field_path,
+                stack_info=None,
+                type=field_type,
             )
             if silent:
                 return expr
