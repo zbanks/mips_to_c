@@ -167,6 +167,9 @@ class TryMatchState:
             return AsmLiteral(self.eval_math(key))
         assert False, f"bad pattern part: {key}"
 
+    def map_ref(self, key: InstrRef) -> InstrRef:
+        return self.ref_map[key]
+
     def match_arg(self, a: Argument, e: Argument) -> bool:
         if isinstance(e, AsmLiteral):
             return isinstance(a, AsmLiteral) and a.value == e.value
@@ -338,24 +341,30 @@ def simplify_ir_patterns(
         for n, state in enumerate(partial_matches):
             if not pattern.check(state):
                 continue
-            print(f">>> Match #{n}")
+            print()
+            new_instr = AsmInstruction(pattern.replacement_instr.mnemonic, [state.map_arg(a) for a in pattern.replacement_instr.args])
+            print(f">>> Match #{n}  --> {new_instr}")
+            pat_in = InstrRef(pattern.flow_graph.nodes[0], 0)
+            pat_out = InstrRef(pattern.flow_graph.nodes[0], len(pattern.flow_graph.nodes[0].block.instructions) -1)
+            print(pat_out.instruction())
+            for k, v in pattern.flow_graph.instr_outputs[pat_in].refs.items():
+                print(f">>  in: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}")
+            for k, v in pattern.flow_graph.instr_inputs[pat_out].refs.items():
+                print(f">> out: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}")
             #for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
             for i, pat in enumerate(pattern_node.block.instructions):
                 if pat.mnemonic == "nop":
                     continue
                 pat_ref = InstrRef(pattern_node, i)
                 pat_instr = pat_ref.instruction()
-                ins_ref = state.ref_map[pat_ref]
+                ins_ref = state.map_ref(pat_ref)
                 refs = flow_graph.instr_references[ins_ref]
                 print(
                         f"> map {str(ins_ref):12} {str(pat_ref.instruction()):>20}  <>  {str(ins_ref.instruction()):24} refs: {refs}"
                 )
                 continue
-                if last:
-                    new_instr = AsmInstruction(pattern.replacement_instr.mnemonic, [state.map_arg(a) for a in pattern.replacement_instr.args])
-                else:
-                    new_instr = AsmInstruction("nop", [])
                 replace_instr(ins_ref, new_instr, last)
+                new_instr = AsmInstruction("nop", [])
                 last = False
 
 
