@@ -1038,7 +1038,8 @@ class InstrRef:
         self.node.block.instructions[self.index] = instr
 
     def __repr__(self) -> str:
-        return f"{self.node.block.index}.{self.index}"
+        line = self.instruction().meta.lineno
+        return f"{self.node.block.index}.{self.index} ({line})"
 
 
 Reference = Union[InstrRef, str]
@@ -1090,20 +1091,33 @@ class AccessRefs:
 
         return info
 
-    def add(self, arg: Access, addr: Reference) -> None:
+    def add(self, arg: Access, ref: Reference) -> None:
         if arg not in self.refs:
-            self.refs[arg] = RefList([addr])
-        elif addr not in self.refs[arg].refs:
-            self.refs[arg].refs.append(addr)
-
-    def copy(self) -> "AccessRefs":
-        return AccessRefs(refs=self.refs.copy())
+            self.refs[arg] = RefList([ref])
+        elif ref not in self.refs[arg].refs:
+            self.refs[arg].refs.append(ref)
 
     def get(self, arg: Access) -> RefList:
         srcs = self.refs.get(arg)
         if srcs is not None:
             return srcs
         return RefList.invalid()
+
+    def copy(self) -> "AccessRefs":
+        return AccessRefs(refs=self.refs.copy())
+
+    def remove_ref(self, ref: Reference) -> None:
+        to_remove = []
+        for access, reflist in self.refs.items():
+            if ref in reflist.refs:
+                reflist.refs.remove(ref)
+            if not reflist.refs:
+                to_remove.append(access)
+        for access in to_remove:
+            self.refs.pop(access)
+
+    def is_empty(self) -> bool:
+        return not self.refs
 
 
 @dataclass(frozen=True)
