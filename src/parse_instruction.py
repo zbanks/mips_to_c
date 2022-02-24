@@ -112,6 +112,29 @@ class MemoryAccess:
     offset: "Argument"
     size: int
 
+    def may_overlap(self, other: "Access") -> bool:
+        # TODO
+        if not isinstance(other, MemoryAccess):
+            return False
+        return True
+        #return self.must_overlap(other)
+
+    def must_overlap(self, other: "Access") -> bool:
+        if not isinstance(other, MemoryAccess):
+            return False
+        if not (
+            self.base_reg == other.base_reg
+            and isinstance(self.offset, AsmLiteral)
+            and isinstance(other.offset, AsmLiteral)
+        ):
+            return False
+        self_start = self.offset.value
+        other_start = other.offset.value
+        return (
+            self_start < other_start + other.size
+            and other_start < self_start + self.size
+        )
+
     @staticmethod
     def arbitrary() -> "MemoryAccess":
         """Placeholder value used to mark that some arbitrary memory may be clobbered"""
@@ -135,6 +158,12 @@ Access = Union[Register, MemoryAccess]
 class AsmInstruction:
     mnemonic: str
     args: List[Argument]
+
+    def __str__(self) -> str:
+        if not self.args:
+            return self.mnemonic
+        args = ", ".join(str(arg) for arg in self.args)
+        return f"{self.mnemonic} {args}"
 
 
 @dataclass(frozen=True)

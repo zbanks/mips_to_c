@@ -39,6 +39,7 @@ from .parse_instruction import (
     Instruction,
     InstructionMeta,
     JumpTarget,
+    Macro,
     MemoryAccess,
     Register,
     parse_instruction,
@@ -101,7 +102,9 @@ class TryMatchState:
     symbolic_registers: Dict[str, Register] = field(default_factory=dict)
     symbolic_labels: Dict[str, str] = field(default_factory=dict)
     symbolic_literals: Dict[str, int] = field(default_factory=dict)
-    ref_map: Dict[InstrRef, InstrRef] = field(default_factory=dict)
+    ref_map: Dict[Union[InstrRef, str], Union[InstrRef, str]] = field(
+        default_factory=dict
+    )
 
     T = TypeVar("T")
 
@@ -168,7 +171,9 @@ class TryMatchState:
         assert False, f"bad pattern part: {key}"
 
     def map_ref(self, key: InstrRef) -> InstrRef:
-        return self.ref_map[key]
+        value = self.ref_map[key]
+        assert isinstance(value, InstrRef)
+        return value
 
     def match_arg(self, a: Argument, e: Argument) -> bool:
         if isinstance(e, AsmLiteral):
@@ -177,9 +182,14 @@ class TryMatchState:
             return isinstance(a, Register) and self.match_reg(a, e)
         if isinstance(e, AsmGlobalSymbol):
             if e.symbol_name.isupper():
-                return isinstance(a, AsmLiteral) and self.match_var(
-                    self.symbolic_literals, e.symbol_name, a.value
-                )
+                if isinstance(a, AsmLiteral):
+                    return self.match_var(
+                        self.symbolic_literals, e.symbol_name, a.value
+                    )
+                elif isinstance(a, Macro):
+                    # TODO
+                    return self.match_var(self.symbolic_labels, e.symbol_name, str(a))
+                return False
             else:
                 return isinstance(a, AsmGlobalSymbol) and a.symbol_name == e.symbol_name
         if isinstance(e, AsmAddressMode):
@@ -228,8 +238,10 @@ class TryMatchState:
         # TODO: What about clobbers
         return True
 
-    def match_ref(self, key: InstrRef, value: InstrRef) -> bool:
+    def match_ref(self, key: Union[InstrRef, str], value: Union[InstrRef, str]) -> bool:
         # TODO: This is backwards
+        if isinstance(key, str) and isinstance(value, str):
+            return key == value
         existing_value = self.ref_map.get(key)
         if existing_value is not None:
             return existing_value == value
@@ -243,8 +255,6 @@ class TryMatchState:
             return False
         actual = key.refs[0]
         expected = value.refs[0]
-        if isinstance(actual, str) or isinstance(expected, str):
-            return actual == expected
         return self.match_ref(actual, expected)
 
     def match_accesses(self, exp: AccessRefs, act: AccessRefs) -> bool:
@@ -275,7 +285,7 @@ def simplify_ir_patterns(
 
     def replace_instr(ref: InstrRef, new_asm: AsmInstruction, final: bool) -> None:
         # Remove ref from all instr_references
-        # TODO: can this be made faster? 
+        # TODO: should there be a data structure for this?
         instr = ref.instruction()
         for rs in flow_graph.instr_inputs[ref].refs.values():
             for r in rs.refs:
@@ -283,9 +293,9 @@ def simplify_ir_patterns(
                     flow_graph.instr_references[r].remove_ref(ref)
 
         # Check if we are allowed to replace the instruction
-        xs = flow_graph.instr_references[ref]
-        if not (final or flow_graph.instr_references[ref].is_empty()):
-            return
+        # xs = flow_graph.instr_references[ref]
+        # if not (final or flow_graph.instr_references[ref].is_empty()):
+        #    return
 
         # Parse the asm & set the clobbers
         new_instr = arch.parse(new_asm.mnemonic, new_asm.args, instr.meta.derived())
@@ -335,169 +345,75 @@ def simplify_ir_patterns(
                     ):
                         continue
                     next_partial_matches.append(state)
+            #if partial_matches and not next_partial_matches:
+            #    print(
+            #        f"> failed to match pattern {pattern.__class__.__name__} at {pat_ref.instruction()}"
+            #    )
             partial_matches = next_partial_matches
-        print(f"> found {len(partial_matches)} matches for {pattern_class.__name__}")
         last = True
         for n, state in enumerate(partial_matches):
             if not pattern.check(state):
                 continue
-            print()
-            new_instr = AsmInstruction(pattern.replacement_instr.mnemonic, [state.map_arg(a) for a in pattern.replacement_instr.args])
+            new_instr = AsmInstruction(
+                pattern.replacement_instr.mnemonic,
+                [state.map_arg(a) for a in pattern.replacement_instr.args],
+            )
             print(f">>> Match #{n}  --> {new_instr}")
             pat_in = InstrRef(pattern.flow_graph.nodes[0], 0)
-            pat_out = InstrRef(pattern.flow_graph.nodes[0], len(pattern.flow_graph.nodes[0].block.instructions) -1)
-            print(pat_out.instruction())
-            for k, v in pattern.flow_graph.instr_outputs[pat_in].refs.items():
-                print(f">>  in: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}")
-            for k, v in pattern.flow_graph.instr_inputs[pat_out].refs.items():
-                print(f">> out: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}")
-            #for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
+            pat_out = InstrRef(
+                pattern.flow_graph.nodes[0],
+                len(pattern.flow_graph.nodes[0].block.instructions) - 1,
+            )
+            # for k, v in pattern.flow_graph.instr_outputs[pat_in].refs.items():
+            #    print(
+            #        f">>  in: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}"
+            #    )
+            # for k, v in pattern.flow_graph.instr_inputs[pat_out].refs.items():
+            #    print(
+            #        f">> out: {k} => {state.map_arg(k)}; {v} => {[state.map_ref(g) for g in v.refs]}"
+            #    )
+            refs_to_replace = []
+            last = True
+            invalid = False
+            pat_inputs = [state.map_arg(r) for r in pattern.replacement_instr.inputs]
+            for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
+                if pat.mnemonic == "nop":
+                    continue
+                pat_ref = InstrRef(pattern_node, i)
+                ins_ref = state.map_ref(pat_ref)
+                instr = ins_ref.instruction()
+                deps = flow_graph.instr_references[ins_ref]
+                is_unrefd = True
+                for refs in deps.refs.values():
+                    if not all( r in refs_to_replace for r in refs.refs):
+                        is_unrefd = False
+                        break
+                clobbers_inputs = any(r in pat_inputs for r in instr.clobbers)
+                clobbers_inputs |= any(r in pat_inputs for r in instr.outputs)
+                if last or is_unrefd:
+                    refs_to_replace.append(ins_ref)
+                elif clobbers_inputs:
+                    print(f"> need to skip match #{n} because {instr} clobbers input regs")
+                    #invalid = True
+                    #break
+                last = False
+            if invalid:
+                continue
+
+
+            # for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
             for i, pat in enumerate(pattern_node.block.instructions):
                 if pat.mnemonic == "nop":
                     continue
                 pat_ref = InstrRef(pattern_node, i)
                 pat_instr = pat_ref.instruction()
                 ins_ref = state.map_ref(pat_ref)
-                refs = flow_graph.instr_references[ins_ref]
-                print(
-                        f"> map {str(ins_ref):12} {str(pat_ref.instruction()):>20}  <>  {str(ins_ref.instruction()):24} refs: {refs}"
-                )
-                continue
-                replace_instr(ins_ref, new_instr, last)
-                new_instr = AsmInstruction("nop", [])
-                last = False
-
-
-"""
-    flow = build_arg_flow(flow_graph, arch)
-
-
-    for pattern in patterns:
-        # print(pattern.__class__.__name__)
-        # print_arg_flow(pattern.arg_flow)
-        assert (
-            len(pattern.flow_graph.nodes) == 2
-        ), "branching patterns not supported yet"
-        assert isinstance(pattern.flow_graph.nodes[0], BaseNode)
-        assert isinstance(pattern.flow_graph.nodes[1], TerminalNode)
-        pattern_node = pattern.flow_graph.nodes[0]
-        matches: List[
-            Tuple[Dict[Argument, Argument], Dict[InstrRef, InstrRef], List[InstrRef]]
-        ] = [({}, {}, [])]
-        for i, ir in enumerate(pattern_node.block.instructions):
-            ir_addr = InstrRef(pattern_node, i)
-            a_info = pattern.arg_flow.instr_flows[ir_addr]
-            # print(f"> NEXT {ir_addr} :: {len(matches)}; {ir}")
-            # for arg, aas in a_info.inputs.args.items():
-            #    print(f"> expect {arg} ~ {aas}")
-            next_matches = matches[:0]
-            for mapping, addrmap, match in matches:
-                if ir.mnemonic in ("inputs", "outputs"):
-                    mp = mapping.copy()
-                    ap = addrmap.copy()
-                    next_matches.append((mp, ap, match))
+                rfs = flow_graph.instr_references[ins_ref]
+                print( f"> map {str(ins_ref):12} {str(pat_ref.instruction()):>20}  <>  {str(ins_ref.instruction()):30} {' ' if ins_ref in refs_to_replace else '*'} refs: {rfs}")
+                if ins_ref not in refs_to_replace:
                     continue
-                if ir.mnemonic not in flow.mnemonics:
-                    break
-                candidates = flow.mnemonics[ir.mnemonic]
-                for addr in candidates:
-                    instr = addr.instruction()
-                    assert instr is not None
-                    if (
-                        len(ir.args) != len(instr.args)
-                        or len(ir.inputs) != len(instr.inputs)
-                        or len(ir.outputs) != len(instr.outputs)
-                    ):
-                        continue
-                    mp = mapping.copy()
-                    ok = True
-                    for a, b in zip(
-                        ir.args + ir.inputs + ir.outputs,
-                        instr.args + instr.inputs + instr.outputs,
-                    ):
-                        if a in mp and mp[a] != b:
-                            # print(f"    candidate: {addr}: {instr} ~ {ir}; {mp[a]} ({a}) != {b}")
-                            ok = False
-                            break
-                        if isinstance(a, AsmLiteral) and a != b:
-                            # print(f"    candidate: {addr}: {instr} ~ {ir}; {a} != {b}")
-                            ok = False
-                            break
-                        mp[a] = b
-                    if not ok:
-                        continue
-                    b_info = flow.instr_flows[addr]
-                    ap = addrmap.copy()
-                    ap[ir_addr] = addr
-                    for arg, aas in a_info.inputs.args.items():
-                        if not isinstance(arg, Register):
-                            continue
-                        barg = mp[arg]
-                        if barg not in b_info.inputs.args:
-                            # print(f"{barg} ({arg}) isn't in {instr}")
-                            ok = False
-                            break
-                        bas = b_info.inputs.args[barg]
-                        if not bas.is_unique():
-                            # print(f"phi for {bas} on {instr}")
-                            ok = False
-                            break
-                        bx = bas.refs[0]
-                        assert aas.is_unique(), aas
-                        ax = aas.refs[0]
-                        assert isinstance(ax, InstrRef)
-                        assert isinstance(bx, InstrRef)
-                        if ax in ap and ap[ax] != bx:
-                            # print(f"expected {barg} ({arg}) to map to {ap[a]} not {b}")
-                            ok = False
-                            break
-                        ap[ax] = bx
-                        # print(f">{a} = {b}; {arg} ~ {barg}")
-
-                    if not ok:
-                        continue
-
-                    next_matches.append((mp, ap, match + [addr]))
-                    if False:
-                        print(f"> candidate for {ir}: {instr} ({str(addr)});")
-                        if instr.mnemonic == "mfhi" or True:
-                            print("-- mp --")
-                            for k, v in mp.items():
-                                print(f"> {k} = {v}")
-                            print("-- ap --")
-                            for k, v in ap.items():
-                                print(f"> {k} = {v}")
-            matches = next_matches
-        for mapping, ap, match in matches:
-            new_args = []
-            for arg in pattern.replacement_instr.args:
-                new_args.append(mapping.get(arg, arg))
-            replace = match[-1]
-            replace_instruction = replace.instruction()
-            assert replace_instruction is not None
-            new_instr = arch.parse(
-                pattern.replacement_instr.mnemonic, new_args, replace_instruction.meta
-            )
-            nop_instr = arch.parse("nop", [], InstructionMeta.missing())
-            for addr in match:
-                refs = []
-                for arg, argrefs in flow.instr_flows[addr].references.args.items():
-                    for ref in argrefs.refs:
-                        refs.append(ref)
-                print(f">> {addr}: {addr.instruction()}; refs={refs}")
-                addr_instr = addr.instruction()
-                assert addr_instr is not None
-                for o in addr_instr.outputs:
-                    if o not in new_instr.args and o not in new_instr.clobbers:
-                        new_instr.clobbers.append(o)
-                addr.replace_instruction(nop_instr)
-            # TODO: Calculate clobbers
-            replace.replace_instruction(new_instr)
-            print(f"<< {new_instr}; clobbers={new_instr.clobbers}")
-            print()
-
-        # for loc in locs:
-        #    node, i = loc
-        #    assert node is not None
-        #    instr = node.block.instructions[i]
-"""
+                last = ins_ref == refs_to_replace[0]
+                nop_instr = AsmInstruction("nop", [])
+                repl_instr = new_instr if last else nop_instr
+                replace_instr(ins_ref, repl_instr, last)
+            #print()

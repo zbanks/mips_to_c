@@ -29,6 +29,7 @@ from .parse_instruction import (
     InstructionMeta,
     JumpTarget,
     Macro,
+    MemoryAccess,
     Register,
     current_instr,
 )
@@ -1271,17 +1272,32 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
 
             for arg in ir.inputs:
                 srcs = node_info.get(arg)
-                if not srcs.is_valid():
-                    # XXX: this is potentially an error?
-                    # print(f"missing reg at {ref}: {arg}")
-                    pass
+                if isinstance(arg, MemoryAccess):
+                    for inp, refs in node_info.refs.items():
+                        # TODO: maybe do something with may_overlap?
+                        if arg.must_overlap(inp):
+                            srcs.refs.extend(refs.refs)
+                # TODO: this is potentially an error?
+                # if not srcs.is_valid():
+                #     print(f"missing reg at {ref}: {arg}")
                 inputs.refs[arg] = srcs
 
             for arg in ir.clobbers:
                 if arg in node_info.refs:
                     outputs.refs[arg] = RefList.invalid()
+                if isinstance(arg, MemoryAccess):
+                    for out in outputs.refs:
+                        if arg.may_overlap(out):
+                            outputs.refs[arg] = RefList.invalid()
+
             for arg in ir.outputs:
                 outputs.refs[arg] = RefList([ref])
+
+            for arg in ir.outputs:
+                if isinstance(arg, MemoryAccess):
+                    for inp, refs in node_info.refs.items():
+                        if arg.must_overlap(inp) and inp not in outputs.refs:
+                            outputs.refs[inp] = RefList.invalid()
 
             node_info.refs.update(outputs.refs)
 
