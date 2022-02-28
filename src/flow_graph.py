@@ -1276,7 +1276,9 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                     for inp, refs in node_info.refs.items():
                         # TODO: maybe do something with may_overlap?
                         if arg.must_overlap(inp):
-                            srcs.refs.extend(refs.refs)
+                            for r in refs.refs:
+                                if r not in srcs.refs:
+                                    srcs.refs.append(r)
                 # TODO: this is potentially an error?
                 # if not srcs.is_valid():
                 #     print(f"missing reg at {ref}: {arg}")

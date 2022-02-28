@@ -60,10 +60,20 @@ class IrPattern(abc.ABC):
             cls.replacement, InstructionMeta.missing(), arch
         )
         prologue = Instruction(
-            "nop", [], meta=InstructionMeta.missing(), outputs=replacement_instr.inputs
+            "nop",
+            [],
+            meta=InstructionMeta.missing(),
+            inputs=[],
+            clobbers=[],
+            outputs=replacement_instr.inputs,
         )
         epilogue = Instruction(
-            "nop", [], meta=InstructionMeta.missing(), inputs=replacement_instr.outputs
+            "nop",
+            [],
+            meta=InstructionMeta.missing(),
+            inputs=replacement_instr.outputs,
+            clobbers=[],
+            outputs=[],
         )
 
         name = f"__{cls.__name__}"
@@ -345,7 +355,7 @@ def simplify_ir_patterns(
                     ):
                         continue
                     next_partial_matches.append(state)
-            #if partial_matches and not next_partial_matches:
+            # if partial_matches and not next_partial_matches:
             #    print(
             #        f"> failed to match pattern {pattern.__class__.__name__} at {pat_ref.instruction()}"
             #    )
@@ -385,7 +395,7 @@ def simplify_ir_patterns(
                 deps = flow_graph.instr_references[ins_ref]
                 is_unrefd = True
                 for refs in deps.refs.values():
-                    if not all( r in refs_to_replace for r in refs.refs):
+                    if not all(r in refs_to_replace for r in refs.refs):
                         is_unrefd = False
                         break
                 clobbers_inputs = any(r in pat_inputs for r in instr.clobbers)
@@ -393,13 +403,14 @@ def simplify_ir_patterns(
                 if last or is_unrefd:
                     refs_to_replace.append(ins_ref)
                 elif clobbers_inputs:
-                    print(f"> need to skip match #{n} because {instr} clobbers input regs")
-                    #invalid = True
-                    #break
+                    print(
+                        f"> need to skip match #{n} because {instr} clobbers input regs"
+                    )
+                    # invalid = True
+                    # break
                 last = False
             if invalid:
                 continue
-
 
             # for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
             for i, pat in enumerate(pattern_node.block.instructions):
@@ -409,11 +420,13 @@ def simplify_ir_patterns(
                 pat_instr = pat_ref.instruction()
                 ins_ref = state.map_ref(pat_ref)
                 rfs = flow_graph.instr_references[ins_ref]
-                print( f"> map {str(ins_ref):12} {str(pat_ref.instruction()):>20}  <>  {str(ins_ref.instruction()):30} {' ' if ins_ref in refs_to_replace else '*'} refs: {rfs}")
+                print(
+                    f"> map {str(ins_ref):12} {str(pat_ref.instruction()):>20}  <>  {str(ins_ref.instruction()):30} {' ' if ins_ref in refs_to_replace else '*'} refs: {rfs}"
+                )
                 if ins_ref not in refs_to_replace:
                     continue
                 last = ins_ref == refs_to_replace[0]
                 nop_instr = AsmInstruction("nop", [])
                 repl_instr = new_instr if last else nop_instr
                 replace_instr(ins_ref, repl_instr, last)
-            #print()
+            # print()

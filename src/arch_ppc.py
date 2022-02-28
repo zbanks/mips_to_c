@@ -151,13 +151,13 @@ class BoolCastPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
-        body: List[ReplacementPart] = [
-            AsmInstruction("boolcast.fictive", [Register("r0"), m.regs["x"]])
-        ]
-        if m.regs["a"] != Register("r0"):
-            # Preserve `neg $a, $x` in case $a is accessed later, unless $a is $r0
-            body.append(m.body[0])
-        return Replacement(body, len(m.body))
+        boolcast = AsmInstruction("boolcast.fictive", [Register("r0"), m.regs["x"]])
+        if m.regs["a"] == Register("r0"):
+            return None
+        elif m.regs["x"] == m.regs["a"]:
+            return Replacement([boolcast, m.body[0]], len(m.body))
+        else:
+            return Replacement([m.body[0], boolcast], len(m.body))
 
 
 class BranchCtrPattern(AsmPattern):
@@ -469,8 +469,8 @@ class PpcArch(Arch):
         cls, mnemonic: str, args: List[Argument], meta: InstructionMeta
     ) -> Instruction:
         inputs: List[Access] = []
-        outputs: List[Access] = []
         clobbers: List[Access] = []
+        outputs: List[Access] = []
         jump_target: Optional[Union[JumpTarget, Register]] = None
         function_target: Optional[Union[AsmGlobalSymbol, Register]] = None
         is_conditional = False
@@ -494,20 +494,18 @@ class PpcArch(Arch):
 
         def make_memory_access(arg: Argument) -> Access:
             assert size is not None
+            assert not isinstance(arg, Register)
             if isinstance(arg, AsmAddressMode):
                 return MemoryAccess(
                     base_reg=arg.rhs,
                     offset=arg.lhs,
                     size=size,
                 )
-            elif isinstance(arg, AsmGlobalSymbol):
-                return MemoryAccess(
-                    base_reg=Register("zero"),
-                    offset=arg,
-                    size=size,
-                )
-            else:
-                assert False
+            return MemoryAccess(
+                base_reg=Register("zero"),
+                offset=arg,
+                size=size,
+            )
 
         if mnemonic == "blr":
             # Return
@@ -572,7 +570,24 @@ class PpcArch(Arch):
             # Normal branch
             # TODO: Support crN argument
             assert 1 <= len(args) <= 2
-            inputs = list(cr0_bits)
+            inputs = [
+                Register(
+                    {
+                        "beq": "cr0_eq",
+                        "bge": "cr0_lt",
+                        "bgt": "cr0_gt",
+                        "ble": "cr0_gt",
+                        "blt": "cr0_lt",
+                        "bne": "cr0_eq",
+                        "bns": "cr0_so",
+                        "bso": "cr0_so",
+                        "bdnz": "ctr",
+                        "bdz": "ctr",
+                        "bdnz.fictive": "ctr",
+                        "bdz.fictive": "ctr",
+                    }[mnemonic]
+                )
+            ]
             jump_target = get_jump_target(args[-1])
             is_conditional = True
         elif mnemonic in cls.instrs_store:
@@ -656,10 +671,21 @@ class PpcArch(Arch):
                 else:
                     assert len(args) == 2 and isinstance(args[1], AsmAddressMode)
                     inputs = [args[1].rhs, make_memory_access(args[1])]
-            elif mnemonic == "li" and isinstance(args[1], AsmAddressMode):
-                # `li $rD, sym@sda21(r2)` is equivalent to `addi $rD, $r2, sym@sda21`
-                assert len(args) == 2
-                inputs = [args[1].rhs]
+            elif mnemonic == "mflr":
+                assert len(args) == 1
+                inputs = [Register("lr")]
+            elif mnemonic == "mfctr":
+                assert len(args) == 1
+                inputs = [Register("ctr")]
+            elif mnemonic.rstrip(".") == "rlwimi":
+                assert (
+                    len(args) == 5
+                    and isinstance(args[1], Register)
+                    and not isinstance(args[2], (Register, AsmAddressMode))
+                    and not isinstance(args[3], (Register, AsmAddressMode))
+                    and not isinstance(args[4], (Register, AsmAddressMode))
+                )
+                inputs = [args[0], args[1]]
             else:
                 assert not any(isinstance(a, AsmAddressMode) for a in args)
                 inputs = [r for r in args[1:] if isinstance(r, Register)]
@@ -687,8 +713,8 @@ class PpcArch(Arch):
             args=args,
             meta=meta,
             inputs=inputs,
-            outputs=outputs,
             clobbers=clobbers,
+            outputs=outputs,
             jump_target=jump_target,
             function_target=function_target,
             is_conditional=is_conditional,

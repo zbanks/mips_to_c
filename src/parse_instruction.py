@@ -117,7 +117,7 @@ class MemoryAccess:
         if not isinstance(other, MemoryAccess):
             return False
         return True
-        #return self.must_overlap(other)
+        # return self.must_overlap(other)
 
     def must_overlap(self, other: "Access") -> bool:
         if not isinstance(other, MemoryAccess):
@@ -139,13 +139,6 @@ class MemoryAccess:
     def arbitrary() -> "MemoryAccess":
         """Placeholder value used to mark that some arbitrary memory may be clobbered"""
         return MemoryAccess(Register("zero"), AsmLiteral(0), 0)
-
-    def get_stack_offset(self, arch: "ArchAsm") -> Optional[int]:
-        if self.base_reg == arch.stack_pointer_reg and isinstance(
-            self.offset, AsmLiteral
-        ):
-            return self.offset.value
-        return None
 
 
 Argument = Union[
@@ -193,9 +186,12 @@ class Instruction:
     args: List[Argument]
     meta: InstructionMeta
 
-    inputs: List[Access] = field(default_factory=list)
-    outputs: List[Access] = field(default_factory=list)
-    clobbers: List[Access] = field(default_factory=list)
+    # Track register and memory dependencies
+    # An Instruction evaluates by reading from `inputs`, invalidating `clobbers`,
+    # then writing to `outputs` (in that order)
+    inputs: List[Access]
+    clobbers: List[Access]
+    outputs: List[Access]
 
     jump_target: Optional[Union[JumpTarget, Register]] = None
     function_target: Optional[Union[AsmGlobalSymbol, Register]] = None
