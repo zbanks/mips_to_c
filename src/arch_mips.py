@@ -442,6 +442,8 @@ class TrapuvPattern(SimpleAsmPattern):
 
 
 class TestIrPattern(IrPattern):
+    # This is loosely based on a GCC 8bit-div-by-255 pattern, just to act as
+    # a complex pattern to match.
 
     """
     /* 0001B4 004001B4 3C148080 */  lui   $s4, 0x8080
@@ -458,7 +460,7 @@ class TestIrPattern(IrPattern):
     /* 0001FC 004001FC 00822023 */   subu  $a0, $a0, $v0
     """
 
-    replacement = "div.fictive $x, $i, 555"
+    replacement = "div.fictive $x, $i, 55555"
     parts = [
         "lui $k, 0x8080",
         "ori $k, $k, 0x8081",

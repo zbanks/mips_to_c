@@ -159,13 +159,16 @@ class TryMatchState:
         else:
             assert False, f"bad pattern part in math pattern: {e}"
 
+    def map_reg(self, key: Register) -> Register:
+        if len(key.register_name) <= 1:
+            return self.symbolic_registers[key.register_name]
+        return key
+
     def map_arg(self, key: Argument) -> Argument:
         if isinstance(key, AsmLiteral):
             return key
         if isinstance(key, Register):
-            if len(key.register_name) <= 1:
-                return self.symbolic_registers[key.register_name]
-            return key
+            return self.map_reg(key)
         if isinstance(key, AsmGlobalSymbol):
             if key.symbol_name.isupper():
                 return AsmLiteral(self.symbolic_literals[key.symbol_name])
@@ -179,6 +182,17 @@ class TryMatchState:
         if isinstance(key, BinOp):
             return AsmLiteral(self.eval_math(key))
         assert False, f"bad pattern part: {key}"
+
+    def map_access(self, key: Access) -> Access:
+        if isinstance(key, Register):
+            return self.map_reg(key)
+        elif isinstance(key, MemoryAccess):
+            return MemoryAccess(
+                base_reg=self.map_reg(key.base_reg),
+                offset=self.map_arg(key.offset),
+                size=key.size,
+            )
+        assert False, f"bad access: {key}"
 
     def map_ref(self, key: InstrRef) -> InstrRef:
         value = self.ref_map[key]
@@ -293,19 +307,14 @@ def simplify_ir_patterns(
             ref = InstrRef(node, i)
             refs_by_mnemonic[instr.mnemonic].append(ref)
 
-    def replace_instr(ref: InstrRef, new_asm: AsmInstruction, final: bool) -> None:
+    def replace_instr(ref: InstrRef, new_asm: AsmInstruction) -> None:
         # Remove ref from all instr_references
-        # TODO: should there be a data structure for this?
+        # TODO: should the data structures be changed to better accommodate this?
         instr = ref.instruction()
         for rs in flow_graph.instr_inputs[ref].refs.values():
             for r in rs.refs:
                 if isinstance(r, InstrRef):
                     flow_graph.instr_references[r].remove_ref(ref)
-
-        # Check if we are allowed to replace the instruction
-        # xs = flow_graph.instr_references[ref]
-        # if not (final or flow_graph.instr_references[ref].is_empty()):
-        #    return
 
         # Parse the asm & set the clobbers
         new_instr = arch.parse(new_asm.mnemonic, new_asm.args, instr.meta.derived())
@@ -355,10 +364,6 @@ def simplify_ir_patterns(
                     ):
                         continue
                     next_partial_matches.append(state)
-            # if partial_matches and not next_partial_matches:
-            #    print(
-            #        f"> failed to match pattern {pattern.__class__.__name__} at {pat_ref.instruction()}"
-            #    )
             partial_matches = next_partial_matches
         last = True
         for n, state in enumerate(partial_matches):
@@ -385,7 +390,9 @@ def simplify_ir_patterns(
             refs_to_replace = []
             last = True
             invalid = False
-            pat_inputs = [state.map_arg(r) for r in pattern.replacement_instr.inputs]
+            matched_inputs = [
+                state.map_access(p) for p in pattern.replacement_instr.inputs
+            ]
             for i, pat in reversed(list(enumerate(pattern_node.block.instructions))):
                 if pat.mnemonic == "nop":
                     continue
@@ -398,16 +405,13 @@ def simplify_ir_patterns(
                     if not all(r in refs_to_replace for r in refs.refs):
                         is_unrefd = False
                         break
-                clobbers_inputs = any(r in pat_inputs for r in instr.clobbers)
-                clobbers_inputs |= any(r in pat_inputs for r in instr.outputs)
+                clobbers_inputs = any(r in matched_inputs for r in instr.clobbers)
+                clobbers_inputs |= any(r in matched_inputs for r in instr.outputs)
                 if last or is_unrefd:
                     refs_to_replace.append(ins_ref)
                 elif clobbers_inputs:
-                    print(
-                        f"> need to skip match #{n} because {instr} clobbers input regs"
-                    )
-                    # invalid = True
-                    # break
+                    invalid = True
+                    break
                 last = False
             if invalid:
                 continue
@@ -425,8 +429,6 @@ def simplify_ir_patterns(
                 )
                 if ins_ref not in refs_to_replace:
                     continue
-                last = ins_ref == refs_to_replace[0]
                 nop_instr = AsmInstruction("nop", [])
                 repl_instr = new_instr if last else nop_instr
-                replace_instr(ins_ref, repl_instr, last)
-            # print()
+                replace_instr(ins_ref, repl_instr)
