@@ -484,7 +484,9 @@ class MipsArch(Arch):
 
     base_return_regs = [Register(r) for r in ["v0", "f0"]]
     all_return_regs = [Register(r) for r in ["v0", "v1", "f0", "f1"]]
-    argument_regs = [Register(r) for r in ["a0", "a1", "a2", "a3", "f12", "f14"]]
+    argument_regs = [
+        Register(r) for r in ["a0", "a1", "a2", "a3", "f12", "f13", "f14", "f15"]
+    ]
     simple_temp_regs = [
         Register(r)
         for r in [
@@ -512,8 +514,6 @@ class MipsArch(Arch):
             "f9",
             "f10",
             "f11",
-            "f13",
-            "f15",
             "f16",
             "f17",
             "f18",
@@ -564,6 +564,7 @@ class MipsArch(Arch):
     ]
     all_regs = saved_regs + temp_regs
 
+    constant_regs = [Register(r) for r in ["gp"]]
     aliased_regs = {
         "s8": Register("fp"),
         "r0": Register("zero"),
@@ -833,7 +834,10 @@ class MipsArch(Arch):
                 inputs = [make_memory_access(args[1])]
                 if isinstance(args[1], AsmAddressMode):
                     inputs.append(args[1].rhs)
-                if mnemonic in ("lwr", "lwl"):
+                # Technically lwl also modifies its output, so it *should* also take
+                # args[0] as an input here. In practice, it is always paired with a
+                # later lwr that overwrites the previous values.
+                if mnemonic == "lwr":
                     inputs.append(args[0])
                 elif mnemonic == "ldc1":
                     outputs.append(args[0].other_f64_reg())

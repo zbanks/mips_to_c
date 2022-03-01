@@ -7,7 +7,7 @@ from dataclasses import dataclass, field, replace
 import string
 from typing import Dict, Iterator, List, Optional, Set, Union
 
-from .error import DecompFailure
+from .error import DecompFailure, static_assert_unreachable
 from .options import Target
 
 
@@ -114,10 +114,10 @@ class MemoryAccess:
 
     def may_overlap(self, other: "Access") -> bool:
         # TODO
+        # This logic assumes that *any* two memory accesses can overlap
         if not isinstance(other, MemoryAccess):
             return False
         return True
-        # return self.must_overlap(other)
 
     def must_overlap(self, other: "Access") -> bool:
         if not isinstance(other, MemoryAccess):
@@ -244,6 +244,7 @@ class ArchAsm(ArchAsmParsing):
     simple_temp_regs: List[Register]
     temp_regs: List[Register]
     saved_regs: List[Register]
+    constant_regs: List[Register]
     all_regs: List[Register]
 
     aliased_regs: Dict[str, Register]

@@ -1086,6 +1086,9 @@ class AccessRefs:
             info.refs[r] = RefList.special(f"saved_{r.register_name}")
         for r in arch.argument_regs:
             info.refs[r] = RefList.special(f"arg_{r.register_name}")
+        for r in arch.constant_regs:
+            info.refs[r] = RefList.special(f"const_{r.register_name}")
+
         info.refs[Register("zero")] = RefList.special(f"zero")
         info.refs[arch.return_address_reg] = RefList.special(f"return")
         info.refs[arch.stack_pointer_reg] = RefList.special(f"sp")
@@ -1270,6 +1273,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
             flow_graph.instr_outputs[ref] = outputs
             flow_graph.instr_references[ref] = AccessRefs()
 
+            inputs_to_prune = []
             for arg in ir.inputs:
                 srcs = node_info.get(arg)
                 if isinstance(arg, MemoryAccess):
@@ -1280,9 +1284,16 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                                 if r not in srcs.refs:
                                     srcs.refs.append(r)
                 # TODO: this is potentially an error?
-                # if not srcs.is_valid():
-                #     print(f"missing reg at {ref}: {arg}")
+                elif not srcs.is_valid():
+                    if ir.function_target is not None:
+                        inputs_to_prune.append(arg)
+                    else:
+                        print(f"missing reg at {ref}: {arg} ({srcs})")
+                    continue
                 inputs.refs[arg] = srcs
+
+            for arg in inputs_to_prune:
+                ir.inputs.remove(arg)
 
             for arg in ir.clobbers:
                 if arg in node_info.refs:
@@ -1293,13 +1304,11 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                             outputs.refs[arg] = RefList.invalid()
 
             for arg in ir.outputs:
-                outputs.refs[arg] = RefList([ref])
-
-            for arg in ir.outputs:
                 if isinstance(arg, MemoryAccess):
                     for inp, refs in node_info.refs.items():
-                        if arg.must_overlap(inp) and inp not in outputs.refs:
+                        if arg.must_overlap(inp):
                             outputs.refs[inp] = RefList.invalid()
+                outputs.refs[arg] = RefList([ref])
 
             node_info.refs.update(outputs.refs)
 

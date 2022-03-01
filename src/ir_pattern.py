@@ -56,13 +56,12 @@ class IrPattern(abc.ABC):
 
     @classmethod
     def compile(cls, arch: ArchFlowGraph) -> "IrPattern":
-        replacement_instr = parse_instruction(
-            cls.replacement, InstructionMeta.missing(), arch
-        )
+        missing_meta = InstructionMeta.missing()
+        replacement_instr = parse_instruction(cls.replacement, missing_meta, arch)
         prologue = Instruction(
             "nop",
             [],
-            meta=InstructionMeta.missing(),
+            meta=missing_meta,
             inputs=[],
             clobbers=[],
             outputs=replacement_instr.inputs,
@@ -70,18 +69,17 @@ class IrPattern(abc.ABC):
         epilogue = Instruction(
             "nop",
             [],
-            meta=InstructionMeta.missing(),
+            meta=missing_meta,
             inputs=replacement_instr.outputs,
             clobbers=[],
             outputs=[],
         )
 
-        name = f"__{cls.__name__}"
+        name = f"__pattern_{cls.__name__}"
         func = Function(name=name)
         func.new_instruction(prologue)
         for part in cls.parts:
-            instr = parse_instruction(part, InstructionMeta.missing(), arch)
-            func.new_instruction(instr)
+            func.new_instruction(parse_instruction(part, missing_meta, arch))
         func.new_instruction(epilogue)
 
         asm_data = AsmData()
@@ -92,19 +90,8 @@ class IrPattern(abc.ABC):
         )
 
     def check(self, m: "TryMatchState") -> bool:
+        """Override to perform additional checks/calculations before replacement."""
         return True
-
-
-def print_arg_flow(flow: FlowGraph) -> None:
-    for addr, inputs in flow.instr_inputs.items():
-        outputs = flow.instr_outputs[addr]
-        instr = addr.instruction()
-        assert instr is not None
-        print(
-            f">>> {addr} {str(instr):40} {[str(k) for k in instr.inputs]} --> {[str(k) for k in instr.outputs]}"
-        )
-        print(f" i> {[(str(k), str(v)) for k, v in inputs.refs.items()]}")
-        print(f" o> {[(str(k), str(v)) for k, v in outputs.refs.items()]}")
 
 
 @dataclass
@@ -211,7 +198,7 @@ class TryMatchState:
                         self.symbolic_literals, e.symbol_name, a.value
                     )
                 elif isinstance(a, Macro):
-                    # TODO
+                    # TODO: This is a weird shortcut/hack (stringifying the Macro)
                     return self.match_var(self.symbolic_labels, e.symbol_name, str(a))
                 return False
             else:
@@ -219,7 +206,7 @@ class TryMatchState:
         if isinstance(e, AsmAddressMode):
             return (
                 isinstance(a, AsmAddressMode)
-                and self.match_arg(a.lhs, e.lhs)  # diff; vs ==
+                and self.match_arg(a.lhs, e.lhs)
                 and self.match_reg(a.rhs, e.rhs)
             )
         if isinstance(e, JumpTarget):
@@ -259,7 +246,7 @@ class TryMatchState:
         for (a_acc, e_acc) in zip(ins.outputs, exp.outputs):
             if not self.match_access(a_acc, e_acc):
                 return False
-        # TODO: What about clobbers
+        # TODO: What about clobbers?
         return True
 
     def match_ref(self, key: Union[InstrRef, str], value: Union[InstrRef, str]) -> bool:

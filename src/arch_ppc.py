@@ -347,6 +347,7 @@ class PpcArch(Arch):
         ]
     )
 
+    constant_regs = [Register(r) for r in ["r2", "r13"]]
     aliased_regs: Dict[str, Register] = {}
 
     @classmethod
