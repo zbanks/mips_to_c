@@ -834,10 +834,9 @@ class MipsArch(Arch):
                 inputs = [make_memory_access(args[1])]
                 if isinstance(args[1], AsmAddressMode):
                     inputs.append(args[1].rhs)
-                # Technically lwl also modifies its output, so it *should* also take
-                # args[0] as an input here. In practice, it is always paired with a
-                # later lwr that overwrites the previous values.
                 if mnemonic == "lwr":
+                    # lwl, lwr sometimes read from their destination registers,
+                    # though we treat lwl as not doing so -- see handle_lwl.
                     inputs.append(args[0])
                 elif mnemonic == "ldc1":
                     outputs.append(args[0].other_f64_reg())
@@ -1127,10 +1126,10 @@ class MipsArch(Arch):
             fold_mul_chains(fold_divmod(BinaryOp.intptr(a.reg(1), "-", a.reg(2))))
         ),
         "negu": lambda a: fold_mul_chains(
-            UnaryOp(op="-", expr=as_s32(a.reg(1)), type=Type.s32())
+            UnaryOp("-", as_s32(a.reg(1), silent=True), type=Type.s32())
         ),
         "neg": lambda a: fold_mul_chains(
-            UnaryOp(op="-", expr=as_s32(a.reg(1)), type=Type.s32())
+            UnaryOp("-", as_s32(a.reg(1), silent=True), type=Type.s32())
         ),
         "div.fictive": lambda a: BinaryOp.s32(a.reg(1), "/", a.full_imm(2)),
         "mod.fictive": lambda a: BinaryOp.s32(a.reg(1), "%", a.full_imm(2)),
