@@ -883,6 +883,13 @@ class MipsArch(Arch):
             )
             inputs = [args[0], args[1]]
             outputs = [Register("hi"), Register("lo")]
+        elif mnemonic == "mfc0":
+            assert len(args) == 2 and isinstance(args[0], Register)
+            outputs = [args[0]]
+        elif mnemonic == "mtc0":
+            assert len(args) == 2 and isinstance(args[0], Register)
+            inputs = [args[0]]
+            outputs = [args[0]]  # TODO: this isn't real
         elif mnemonic in cls.instrs_ignore:
             # TODO: There might be some instrs to handle here
             pass
@@ -911,7 +918,7 @@ class MipsArch(Arch):
         simplify_ir_patterns(self, flow_graph, self.ir_patterns)
 
     ir_patterns: List[typing.Type[IrPattern]] = [
-        TestIrPattern,
+        # TestIrPattern,
     ]
 
     asm_patterns = [

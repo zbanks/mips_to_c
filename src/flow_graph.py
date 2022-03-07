@@ -8,6 +8,7 @@ from typing import (
     Counter,
     Dict,
     Iterator,
+    ItemsView,
     List,
     Optional,
     Set,
@@ -1068,6 +1069,14 @@ class RefList:
     def copy(self) -> "RefList":
         return RefList(refs=self.refs[:])
 
+    def add(self, ref: Reference) -> None:
+        if ref not in self.refs:
+            self.refs.append(ref)
+
+    def extend(self, other: "RefList") -> None:
+        for ref in other.refs:
+            self.add(ref)
+
     def __repr__(self) -> str:
         if not self.refs:
             return "none"
@@ -1098,8 +1107,8 @@ class AccessRefs:
     def add(self, arg: Access, ref: Reference) -> None:
         if arg not in self.refs:
             self.refs[arg] = RefList([ref])
-        elif ref not in self.refs[arg].refs:
-            self.refs[arg].refs.append(ref)
+        else:
+            self.refs[arg].add(ref)
 
     def get(self, arg: Access) -> RefList:
         srcs = self.refs.get(arg)
@@ -1112,7 +1121,7 @@ class AccessRefs:
 
     def remove_ref(self, ref: Reference) -> None:
         to_remove = []
-        for access, reflist in self.refs.items():
+        for access, reflist in self.items():
             if ref in reflist.refs:
                 reflist.refs.remove(ref)
             if not reflist.refs:
@@ -1122,6 +1131,9 @@ class AccessRefs:
 
     def is_empty(self) -> bool:
         return not self.refs
+
+    def items(self) -> ItemsView[Access, RefList]:
+        return self.refs.items()
 
 
 @dataclass(frozen=True)
@@ -1220,23 +1232,27 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefList) -> RefList:
 
     while stack:
         n = stack.pop()
-        if n == node.immediate_dominator and not dom_set:
+        if n == node.immediate_dominator and not dom_set.is_valid():
             return RefList.invalid()
         if n in seen:
             continue
         seen.add(n)
         clobbered: Optional[bool] = None
+        final_write: Optional[InstrRef] = None
         for i, instr in enumerate(n.block.instructions):
             with current_instr(instr):
                 if arg in instr.outputs:
-                    if clobbered is None:
-                        sources.refs.append(InstrRef(n, i))
+                    final_write = InstrRef(n, i)
                     clobbered = False
                 elif arg in instr.clobbers:
                     clobbered = True
         if clobbered == True:
             return RefList.invalid()
-        if clobbered is None:
+        elif clobbered == False:
+            assert final_write is not None
+            sources.add(final_write)
+        elif clobbered is None:
+            assert final_write is None
             stack.extend(n.parents)
     return sources
 
@@ -1277,18 +1293,18 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
             for arg in ir.inputs:
                 srcs = node_info.get(arg)
                 if isinstance(arg, MemoryAccess):
-                    for inp, refs in node_info.refs.items():
+                    for inp, refs in node_info.items():
                         # TODO: maybe do something with may_overlap?
                         if arg.must_overlap(inp):
-                            for r in refs.refs:
-                                if r not in srcs.refs:
-                                    srcs.refs.append(r)
-                # TODO: this is potentially an error?
+                            srcs.extend(refs)
                 elif not srcs.is_valid():
                     if ir.function_target is not None:
                         inputs_to_prune.append(arg)
                     else:
-                        print(f"missing reg at {ref}: {arg} ({srcs})")
+                        # TODO: Maybe make this an error?
+                        print(
+                            f"missing reg at {ref}: {arg} ({srcs}) `{ref.instruction()}`"
+                        )
                     continue
                 inputs.refs[arg] = srcs
 
@@ -1305,7 +1321,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
 
             for arg in ir.outputs:
                 if isinstance(arg, MemoryAccess):
-                    for inp, refs in node_info.refs.items():
+                    for inp, refs in node_info.items():
                         if arg.must_overlap(inp):
                             outputs.refs[inp] = RefList.invalid()
                 outputs.refs[arg] = RefList([ref])
@@ -1339,7 +1355,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
 
     # Populate instr_references for each instruction
     for ref, inputs in flow_graph.instr_inputs.items():
-        for arg, deps in inputs.refs.items():
+        for arg, deps in inputs.items():
             for dep in deps.refs:
                 if isinstance(dep, InstrRef):
                     flow_graph.instr_references[dep].add(arg, ref)

@@ -1,3 +1,7 @@
+missing reg at 0.15 (24): $t0 (none)
+missing reg at 0.16 (25): $t1 (none)
+missing reg at 0.17 (26): $t2 (none)
+missing reg at 0.20 (29): $v1 (none)
 ? test(s32 arg0) {
     s32 temp_t1;
 
