@@ -1047,93 +1047,74 @@ class InstrRef:
 Reference = Union[InstrRef, str]
 
 
-@dataclass
-class RefList:
-    refs: List[Reference]
-
+class RefList(List[Reference]):
     @staticmethod
     def invalid() -> "RefList":
-        return RefList(refs=[])
+        return RefList([])
 
     @staticmethod
     def special(name: str) -> "RefList":
         """Represent non-instruction references, such as arguments or constant regs"""
-        return RefList(refs=[name])
+        return RefList([name])
 
     def is_valid(self) -> bool:
-        return bool(self.refs)
+        return bool(self)
 
     def is_unique(self) -> bool:
-        return len(self.refs) == 1
-
-    def copy(self) -> "RefList":
-        return RefList(refs=self.refs[:])
+        return len(self) == 1
 
     def add(self, ref: Reference) -> None:
-        if ref not in self.refs:
-            self.refs.append(ref)
+        if ref not in self:
+            self.append(ref)
 
-    def extend(self, other: "RefList") -> None:
-        for ref in other.refs:
-            self.add(ref)
+    def copy(self) -> "RefList":
+        return RefList(super().copy())
 
     def __repr__(self) -> str:
-        if not self.refs:
+        if not self:
             return "none"
-        return repr(self.refs)
+        return repr(self)
 
 
-@dataclass
-class AccessRefs:
-    refs: Dict[Access, RefList] = field(default_factory=dict)
-
+class AccessRefs(Dict[Access, RefList]):
     @staticmethod
     def initial_function_args(arch: ArchFlowGraph) -> "AccessRefs":
         info = AccessRefs()
         # Set all the registers that are valid to access at the start of a function
         for r in arch.saved_regs:
-            info.refs[r] = RefList.special(f"saved_{r.register_name}")
+            info[r] = RefList.special(f"saved_{r.register_name}")
         for r in arch.argument_regs:
-            info.refs[r] = RefList.special(f"arg_{r.register_name}")
+            info[r] = RefList.special(f"arg_{r.register_name}")
         for r in arch.constant_regs:
-            info.refs[r] = RefList.special(f"const_{r.register_name}")
+            info[r] = RefList.special(f"const_{r.register_name}")
 
-        info.refs[Register("zero")] = RefList.special(f"zero")
-        info.refs[arch.return_address_reg] = RefList.special(f"return")
-        info.refs[arch.stack_pointer_reg] = RefList.special(f"sp")
+        info[Register("zero")] = RefList.special(f"zero")
+        info[arch.return_address_reg] = RefList.special(f"return")
+        info[arch.stack_pointer_reg] = RefList.special(f"sp")
 
         return info
 
     def add(self, arg: Access, ref: Reference) -> None:
-        if arg not in self.refs:
-            self.refs[arg] = RefList([ref])
+        if arg not in self:
+            self[arg] = RefList([ref])
         else:
-            self.refs[arg].add(ref)
-
-    def get(self, arg: Access) -> RefList:
-        srcs = self.refs.get(arg)
-        if srcs is not None:
-            return srcs
-        return RefList.invalid()
-
-    def copy(self) -> "AccessRefs":
-        return AccessRefs(refs=self.refs.copy())
+            self[arg].add(ref)
 
     def remove_ref(self, ref: Reference) -> None:
         to_remove = []
         for access, reflist in self.items():
-            if ref in reflist.refs:
-                reflist.refs.remove(ref)
-            if not reflist.refs:
+            if ref in reflist:
+                reflist.remove(ref)
+            if not reflist:
                 to_remove.append(access)
         for access in to_remove:
-            self.refs.pop(access)
+            self.pop(access)
 
     def is_empty(self) -> bool:
-        return not self.refs
+        return not self
 
-    def items(self) -> ItemsView[Access, RefList]:
-        return self.refs.items()
+    def copy(self) -> "AccessRefs":
+        return AccessRefs(super().copy())
 
 
 @dataclass(frozen=True)
@@ -1291,7 +1272,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
 
             inputs_to_prune = []
             for arg in ir.inputs:
-                srcs = node_info.get(arg)
+                srcs = node_info.get(arg, RefList.invalid())
                 if isinstance(arg, MemoryAccess):
                     for inp, refs in node_info.items():
                         # TODO: maybe do something with may_overlap?
@@ -1306,27 +1287,27 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                             f"missing reg at {ref}: {arg} ({srcs}) `{ref.instruction()}`"
                         )
                     continue
-                inputs.refs[arg] = srcs
+                inputs[arg] = srcs
 
             for arg in inputs_to_prune:
                 ir.inputs.remove(arg)
 
             for arg in ir.clobbers:
-                if arg in node_info.refs:
-                    outputs.refs[arg] = RefList.invalid()
+                if arg in node_info:
+                    outputs[arg] = RefList.invalid()
                 if isinstance(arg, MemoryAccess):
-                    for out in outputs.refs:
+                    for out in outputs:
                         if arg.may_overlap(out):
-                            outputs.refs[arg] = RefList.invalid()
+                            outputs[arg] = RefList.invalid()
 
             for arg in ir.outputs:
                 if isinstance(arg, MemoryAccess):
                     for inp, refs in node_info.items():
                         if arg.must_overlap(inp):
-                            outputs.refs[inp] = RefList.invalid()
-                outputs.refs[arg] = RefList([ref])
+                            outputs[inp] = RefList.invalid()
+                outputs[arg] = RefList([ref])
 
-            node_info.refs.update(outputs.refs)
+            node_info.update(outputs)
 
         # Translate everything dominated by this node, now that we know our own
         # final register flow_graph. This will eventually reach every node.
@@ -1337,13 +1318,15 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
 
             phi_args = regs_clobbered_until_dominator(child)
             for arg in phi_args:
-                set_locs = reg_always_set(child, arg, dom_set=node_info.get(arg))
+                set_locs = reg_always_set(
+                    child, arg, dom_set=node_info.get(arg, RefList.invalid())
+                )
                 # If set_locs is invalid, then the arg is inconsistently set, so it should
                 # not be used by the child node.
                 # Otherwise, it *is* set in every control flow path to the child node, so
                 # it can be used (but it will have a phi value)
-                new_info.refs[arg] = set_locs
-                child_phis.refs[arg] = set_locs
+                new_info[arg] = set_locs
+                child_phis[arg] = set_locs
 
             process_node(child, new_info)
 
@@ -1356,7 +1339,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
     # Populate instr_references for each instruction
     for ref, inputs in flow_graph.instr_inputs.items():
         for arg, deps in inputs.items():
-            for dep in deps.refs:
+            for dep in deps:
                 if isinstance(dep, InstrRef):
                     flow_graph.instr_references[dep].add(arg, ref)
 

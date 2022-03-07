@@ -4389,7 +4389,7 @@ def translate_graph_from_block(
                 reg, data.value, RegMeta(inherited=True, force=data.meta.force)
             )
 
-        for phi_arg, addrs in stack_info.flow_graph.node_phis[child].refs.items():
+        for phi_arg, addrs in stack_info.flow_graph.node_phis[child].items():
             if not isinstance(phi_arg, Register):
                 continue
             if addrs.is_valid():

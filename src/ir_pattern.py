@@ -264,13 +264,13 @@ class TryMatchState:
         # TODO: Do full Cartesian product if they are not unique?
         if not (key.is_unique() and value.is_unique()):
             return False
-        actual = key.refs[0]
-        expected = value.refs[0]
+        actual = key[0]
+        expected = value[0]
         return self.match_ref(actual, expected)
 
     def match_accesses(self, exp: AccessRefs, act: AccessRefs) -> bool:
         # TODO: This is backwards
-        for exp_reg, exp_refs in exp.refs.items():
+        for exp_reg, exp_refs in exp.items():
             if not isinstance(exp_reg, Register):
                 continue
             assert (
@@ -278,7 +278,7 @@ class TryMatchState:
             ), f"pattern {exp_reg} does not have a unique source ref ({exp_refs})"
             mapped_reg = self.map_arg(exp_reg)
             assert isinstance(mapped_reg, Register)
-            act_refs = act.get(mapped_reg)
+            act_refs = act.get(mapped_reg, RefList.invalid())
             if not self.match_refs(exp_refs, act_refs):
                 return False
         return True
@@ -298,8 +298,8 @@ def simplify_ir_patterns(
         # Remove ref from all instr_references
         # TODO: should the data structures be changed to better accommodate this?
         instr = ref.instruction()
-        for rs in flow_graph.instr_inputs[ref].refs.values():
-            for r in rs.refs:
+        for rs in flow_graph.instr_inputs[ref].values():
+            for r in rs:
                 if isinstance(r, InstrRef):
                     flow_graph.instr_references[r].remove_ref(ref)
 
@@ -388,8 +388,8 @@ def simplify_ir_patterns(
                 instr = ins_ref.instruction()
                 deps = flow_graph.instr_references[ins_ref]
                 is_unrefd = True
-                for refs in deps.refs.values():
-                    if not all(r in refs_to_replace for r in refs.refs):
+                for refs in deps.values():
+                    if not all(r in refs_to_replace for r in refs):
                         is_unrefd = False
                         break
                 clobbers_inputs = any(r in matched_inputs for r in instr.clobbers)
