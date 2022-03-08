@@ -112,29 +112,6 @@ class MemoryAccess:
     offset: "Argument"
     size: int
 
-    def may_overlap(self, other: "Access") -> bool:
-        # TODO
-        # This logic assumes that *any* two memory accesses can overlap
-        if not isinstance(other, MemoryAccess):
-            return False
-        return True
-
-    def must_overlap(self, other: "Access") -> bool:
-        if not isinstance(other, MemoryAccess):
-            return False
-        if not (
-            self.base_reg == other.base_reg
-            and isinstance(self.offset, AsmLiteral)
-            and isinstance(other.offset, AsmLiteral)
-        ):
-            return False
-        self_start = self.offset.value
-        other_start = other.offset.value
-        return (
-            self_start < other_start + other.size
-            and other_start < self_start + self.size
-        )
-
     @staticmethod
     def arbitrary() -> "MemoryAccess":
         """Placeholder value used to mark that some arbitrary memory may be clobbered"""
@@ -145,6 +122,58 @@ Argument = Union[
     Register, AsmGlobalSymbol, AsmAddressMode, Macro, AsmLiteral, BinOp, JumpTarget
 ]
 Access = Union[Register, MemoryAccess]
+
+
+def access_depends_on(base: Access, dep: Access) -> bool:
+    if isinstance(base, Register):
+        return False
+    elif isinstance(base, MemoryAccess):
+        if isinstance(dep, MemoryAccess):
+            return False
+        if base.base_reg == dep:
+            return True
+        if isinstance(base.offset, AsmAddressMode) and base.offset.rhs == dep:
+            return True
+        if isinstance(base.offset, Macro) and base.offset.argument == dep:
+            return True
+        if isinstance(base.offset, BinOp) and (
+            base.offset.lhs == dep or base.offset.rhs == dep
+        ):
+            return True
+        return False
+    else:
+        static_assert_unreachable(base)
+
+
+def access_may_overlap(left: Access, right: Access) -> bool:
+    if isinstance(left, Register):
+        return left == right
+    elif isinstance(left, MemoryAccess):
+        # TODO: For now, this assumes that *any* two memory accesses can overlap
+        return isinstance(right, MemoryAccess)
+    else:
+        static_assert_unreachable(left)
+
+
+def access_must_overlap(left: Access, right: Access) -> bool:
+    if isinstance(left, Register):
+        return left == right
+    elif isinstance(left, MemoryAccess):
+        if not (
+            isinstance(right, MemoryAccess)
+            and left.base_reg == right.base_reg
+            and isinstance(left.offset, AsmLiteral)
+            and isinstance(right.offset, AsmLiteral)
+        ):
+            return False
+        left_start = left.offset.value
+        right_start = right.offset.value
+        return (
+            left_start < right_start + right.size
+            and right_start < left_start + left.size
+        )
+    else:
+        static_assert_unreachable(left)
 
 
 @dataclass(frozen=True)

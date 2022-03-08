@@ -14,6 +14,7 @@ from typing import (
     Set,
     Tuple,
     Union,
+    ValuesView,
 )
 
 from .error import DecompFailure
@@ -32,6 +33,9 @@ from .parse_instruction import (
     Macro,
     MemoryAccess,
     Register,
+    access_depends_on,
+    access_may_overlap,
+    access_must_overlap,
     current_instr,
 )
 from .asm_pattern import simplify_patterns, AsmPattern
@@ -39,9 +43,6 @@ from .asm_pattern import simplify_patterns, AsmPattern
 
 class ArchFlowGraph(ArchAsm):
     asm_patterns: List[AsmPattern] = []
-
-    def simplify_ir(self, flow_graph: "FlowGraph") -> None:
-        ...
 
 
 @dataclass(eq=False)
@@ -294,7 +295,7 @@ def simplify_standard_patterns(function: Function, arch: ArchFlowGraph) -> Funct
 
 
 def build_blocks(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph, *, fragment: bool
+    function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> List[Block]:
     if arch.arch == Target.ArchEnum.MIPS:
         verify_no_trailing_delay_slot(function)
@@ -439,12 +440,6 @@ def build_blocks(
             process_mips(item)
         else:
             process_no_delay_slots(item)
-
-    if fragment:
-        # If we're parsing an asm fragment instead of a full function,
-        # then it does not need to end in a return or jump
-        block_builder.new_block()
-        return block_builder.get_blocks()
 
     if block_builder.curr_label:
         # As an easy-to-implement safeguard, check that the current block is
@@ -668,13 +663,10 @@ def build_graph_from_block(
         nodes.append(new_node)
 
         # Recursively analyze.
-        if block.index + 1 < len(blocks):
-            next_block = blocks[block.index + 1]
-            new_node.successor = build_graph_from_block(
-                next_block, blocks, nodes, asm_data, arch
-            )
-        else:
-            new_node.successor = terminal_node
+        next_block = blocks[block.index + 1]
+        new_node.successor = build_graph_from_block(
+            next_block, blocks, nodes, asm_data, arch
+        )
     elif len(jumps) == 1:
         # There is a jump. This is either:
         # - a ReturnNode, if it's a return instruction ("jr $ra" in MIPS)
@@ -1047,79 +1039,133 @@ class InstrRef:
 Reference = Union[InstrRef, str]
 
 
-class RefList(List[Reference]):
-    @staticmethod
-    def invalid() -> "RefList":
-        return RefList([])
+@dataclass
+class RefSet:
+    """
+    An ordered set of References, with an empty set representing an invalid/missing state.
+    """
+
+    refs: List[Reference] = field(default_factory=list)
 
     @staticmethod
-    def special(name: str) -> "RefList":
+    def invalid() -> "RefSet":
+        """Represent a missing reference, such as an unset register"""
+        return RefSet(refs=[])
+
+    @staticmethod
+    def special(name: str) -> "RefSet":
         """Represent non-instruction references, such as arguments or constant regs"""
-        return RefList([name])
+        return RefSet(refs=[name])
 
     def is_valid(self) -> bool:
-        return bool(self)
+        return bool(self.refs)
 
     def is_unique(self) -> bool:
-        return len(self) == 1
+        return len(self.refs) == 1
+
+    def get_unique(self) -> Optional[Reference]:
+        if len(self.refs) == 1:
+            return self.refs[0]
+        return None
 
     def add(self, ref: Reference) -> None:
-        if ref not in self:
-            self.append(ref)
+        if ref not in self.refs:
+            self.refs.append(ref)
 
-    def copy(self) -> "RefList":
-        return RefList(super().copy())
+    def update(self, other: "RefSet") -> None:
+        for ref in other.refs:
+            self.add(ref)
+
+    def remove(self, ref: Reference) -> None:
+        self.refs.remove(ref)
+
+    def copy(self) -> "RefSet":
+        return RefSet(refs=self.refs.copy())
 
     def __repr__(self) -> str:
-        if not self:
-            return "none"
-        return repr(self)
+        if not self.refs:
+            return "invalid"
+        return repr(self.refs)
+
+    def __contains__(self, ref: Reference) -> bool:
+        return ref in self.refs
+
+    def __iter__(self) -> Iterator[Reference]:
+        return iter(self.refs)
 
 
-class AccessRefs(Dict[Access, RefList]):
+@dataclass
+class AccessRefs:
+    refs: Dict[Access, RefSet] = field(default_factory=dict)
+
     @staticmethod
     def initial_function_args(arch: ArchFlowGraph) -> "AccessRefs":
         info = AccessRefs()
         # Set all the registers that are valid to access at the start of a function
         for r in arch.saved_regs:
-            info[r] = RefList.special(f"saved_{r.register_name}")
+            info.refs[r] = RefSet.special(f"saved_{r.register_name}")
         for r in arch.argument_regs:
-            info[r] = RefList.special(f"arg_{r.register_name}")
+            info.refs[r] = RefSet.special(f"arg_{r.register_name}")
         for r in arch.constant_regs:
-            info[r] = RefList.special(f"const_{r.register_name}")
+            info.refs[r] = RefSet.special(f"const_{r.register_name}")
 
-        info[Register("zero")] = RefList.special(f"zero")
-        info[arch.return_address_reg] = RefList.special(f"return")
-        info[arch.stack_pointer_reg] = RefList.special(f"sp")
+        info.refs[arch.return_address_reg] = RefSet.special(f"return")
+        info.refs[arch.stack_pointer_reg] = RefSet.special(f"sp")
 
         return info
 
+    def get(self, arg: Access) -> RefSet:
+        return self.refs.get(arg, RefSet.invalid())
+
     def add(self, arg: Access, ref: Reference) -> None:
         if arg not in self:
-            self[arg] = RefList([ref])
+            self.refs[arg] = RefSet([ref])
         else:
-            self[arg].add(ref)
+            self.refs[arg].add(ref)
+
+    def remove(self, arg: Access) -> None:
+        self.refs.pop(arg)
 
     def remove_ref(self, ref: Reference) -> None:
         to_remove = []
-        for access, reflist in self.items():
+        for access, reflist in self.refs.items():
             if ref in reflist:
                 reflist.remove(ref)
             if not reflist:
                 to_remove.append(access)
         for access in to_remove:
-            self.pop(access)
+            self.refs.pop(access)
 
     def is_empty(self) -> bool:
-        return not self
+        return not self.refs
 
     def copy(self) -> "AccessRefs":
-        return AccessRefs(super().copy())
+        return AccessRefs(refs=self.refs.copy())
+
+    def update(self, other: "AccessRefs") -> None:
+        self.refs.update(other.refs)
+
+    def values(self) -> ValuesView[RefSet]:
+        return self.refs.values()
+
+    def items(self) -> ItemsView[Access, RefSet]:
+        return self.refs.items()
+
+    def __contains__(self, key: Access) -> bool:
+        return key in self.refs
+
+    def __iter__(self) -> Iterator[Access]:
+        return iter(self.refs)
+
+    def __setitem__(self, key: Access, value: RefSet) -> None:
+        self.refs[key] = value
 
 
 @dataclass(frozen=True)
 class FlowGraph:
     nodes: List[Node]
+
+    # The set of all phi accesses needed for each Node
     node_phis: Dict[Node, AccessRefs] = field(default_factory=dict)
     instr_inputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
     instr_outputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
@@ -1204,9 +1250,9 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def reg_always_set(node: Node, arg: Access, *, dom_set: RefList) -> RefList:
+def reg_always_set(node: Node, arg: Access, *, dom_set: RefSet) -> RefSet:
     if node.immediate_dominator is None:
-        return RefList.invalid()
+        return RefSet.invalid()
     seen = {node.immediate_dominator}
     stack = node.parents[:]
     sources = dom_set.copy()
@@ -1214,7 +1260,7 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefList) -> RefList:
     while stack:
         n = stack.pop()
         if n == node.immediate_dominator and not dom_set.is_valid():
-            return RefList.invalid()
+            return RefSet.invalid()
         if n in seen:
             continue
         seen.add(n)
@@ -1228,7 +1274,7 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefList) -> RefList:
                 elif arg in instr.clobbers:
                     clobbered = True
         if clobbered == True:
-            return RefList.invalid()
+            return RefSet.invalid()
         elif clobbered == False:
             assert final_write is not None
             sources.add(final_write)
@@ -1259,82 +1305,81 @@ def regs_clobbered_until_dominator(node: Node) -> Set[Access]:
 
 def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
     flow_graph = FlowGraph(nodes)
+    missing_regs = []
 
-    def process_node(node: Node, node_info: AccessRefs) -> None:
+    def process_node(node: Node, arg_srcs: AccessRefs) -> None:
         # Calculate register usage for each instruction in this node
         for i, ir in enumerate(node.block.instructions):
             ref = InstrRef(node, i)
             inputs = AccessRefs()
-            flow_graph.instr_inputs[ref] = inputs
             outputs = AccessRefs()
+            flow_graph.instr_inputs[ref] = inputs
             flow_graph.instr_outputs[ref] = outputs
             flow_graph.instr_references[ref] = AccessRefs()
 
-            inputs_to_prune = []
+            # Calculate the source of each access
             for arg in ir.inputs:
-                srcs = node_info.get(arg, RefList.invalid())
-                if isinstance(arg, MemoryAccess):
-                    for inp, refs in node_info.items():
-                        # TODO: maybe do something with may_overlap?
-                        if arg.must_overlap(inp):
-                            srcs.extend(refs)
-                elif not srcs.is_valid():
-                    if ir.function_target is not None:
-                        inputs_to_prune.append(arg)
+                sources = RefSet()
+                for inp, srcs in arg_srcs.items():
+                    if access_must_overlap(arg, inp):
+                        sources.update(srcs)
+                if isinstance(arg, Register) and not sources.is_valid():
+                    # Registers must be written to before being read.
+                    # If the instruction is a function call and we don't have a source
+                    # for the argument, we can prune the argument from the input list.
+                    # Otherwise, this is likely undefined behavior in the original asm
+                    if ir.function_target is not None and arg in arch.argument_regs:
+                        ir.inputs.remove(arg)
                     else:
-                        # TODO: Maybe make this an error?
-                        print(
-                            f"missing reg at {ref}: {arg} ({srcs}) `{ref.instruction()}`"
-                        )
-                    continue
-                inputs[arg] = srcs
+                        missing_regs.append((arg, ref))
+                inputs[arg] = sources
 
-            for arg in inputs_to_prune:
-                ir.inputs.remove(arg)
+            # Mark clobbered accesses
+            for inp in arg_srcs:
+                for arg in ir.clobbers + ir.outputs:
+                    if access_may_overlap(arg, inp):
+                        outputs[arg] = RefSet.invalid()
+                        break
 
-            for arg in ir.clobbers:
-                if arg in node_info:
-                    outputs[arg] = RefList.invalid()
-                if isinstance(arg, MemoryAccess):
-                    for out in outputs:
-                        if arg.may_overlap(out):
-                            outputs[arg] = RefList.invalid()
+            # Remove any MemoryAccesses that depend on clobbered Registers
+            # Ex: If `$v0` is clobbered, remove `4($v0)`
+            for arg in ir.clobbers + ir.outputs:
+                for inp in arg_srcs:
+                    if access_depends_on(inp, arg):
+                        arg_srcs.remove(inp)
+                        break
 
+            # Mark outputs as coming from this instruction
             for arg in ir.outputs:
-                if isinstance(arg, MemoryAccess):
-                    for inp, refs in node_info.items():
-                        if arg.must_overlap(inp):
-                            outputs[inp] = RefList.invalid()
-                outputs[arg] = RefList([ref])
+                outputs[arg] = RefSet([ref])
 
-            node_info.update(outputs)
+            arg_srcs.update(outputs)
 
         # Translate everything dominated by this node, now that we know our own
         # final register flow_graph. This will eventually reach every node.
         for child in node.immediately_dominates:
-            new_info = node_info.copy()
+            child_arg_srcs = arg_srcs.copy()
             child_phis = AccessRefs()
             flow_graph.node_phis[child] = child_phis
 
             phi_args = regs_clobbered_until_dominator(child)
             for arg in phi_args:
-                set_locs = reg_always_set(
-                    child, arg, dom_set=node_info.get(arg, RefList.invalid())
-                )
+                set_locs = reg_always_set(child, arg, dom_set=arg_srcs.get(arg))
                 # If set_locs is invalid, then the arg is inconsistently set, so it should
                 # not be used by the child node.
                 # Otherwise, it *is* set in every control flow path to the child node, so
                 # it can be used (but it will have a phi value)
-                new_info[arg] = set_locs
+                child_arg_srcs[arg] = set_locs
                 child_phis[arg] = set_locs
 
-            process_node(child, new_info)
+            process_node(child, child_arg_srcs)
 
     # Recursively traverse every node, starting with the entry node
     # This populates in instr_inputs, instr_outputs, and node_phis
     entry_node = flow_graph.entry_node()
+    entry_arg_srcs = AccessRefs.initial_function_args(arch)
     flow_graph.node_phis[entry_node] = AccessRefs()
-    process_node(entry_node, AccessRefs.initial_function_args(arch))
+    process_node(entry_node, entry_arg_srcs)
 
     # Populate instr_references for each instruction
     for ref, inputs in flow_graph.instr_inputs.items():
@@ -1343,26 +1388,25 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                 if isinstance(dep, InstrRef):
                     flow_graph.instr_references[dep].add(arg, ref)
 
+    for arg, ref in missing_regs:
+        print(f"> missing reg at {ref}: {arg}, `{ref.instruction()}`")
+
     return flow_graph
 
 
 def build_flowgraph(
-    function: Function, asm_data: AsmData, arch: ArchFlowGraph, *, fragment: bool
+    function: Function,
+    asm_data: AsmData,
+    arch: ArchFlowGraph,
 ) -> FlowGraph:
-    blocks = build_blocks(function, asm_data, arch, fragment=fragment)
+    blocks = build_blocks(function, asm_data, arch)
     nodes = build_nodes(function, blocks, asm_data, arch)
-    if not fragment:
-        nodes = duplicate_premature_returns(nodes)
+    nodes = duplicate_premature_returns(nodes)
 
     compute_relations(nodes)
-    if not fragment:
-        terminate_infinite_loops(nodes)
+    terminate_infinite_loops(nodes)
 
-    flow_graph = nodes_to_flowgraph(nodes, arch)
-    if not fragment:
-        arch.simplify_ir(flow_graph)
-
-    return flow_graph
+    return nodes_to_flowgraph(nodes, arch)
 
 
 def visualize_flowgraph(flow_graph: FlowGraph) -> str:

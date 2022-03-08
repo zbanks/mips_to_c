@@ -1,7 +1,7 @@
-missing reg at 0.15 (24): $t0 (none)
-missing reg at 0.16 (25): $t1 (none)
-missing reg at 0.17 (26): $t2 (none)
-missing reg at 0.20 (29): $v1 (none)
+missing reg at 0.15 (24): $t0 (invalid) `badinstr $t0, $t0`
+missing reg at 0.16 (25): $t1 (invalid) `badinstr2 $t1, $t1`
+missing reg at 0.17 (26): $t2 (invalid) `badinstr3 $v0, $t2`
+missing reg at 0.20 (29): $v1 (invalid) `addiu $v1, $v1, 0x2`
 ? test(s32 arg0) {
     s32 temp_t1;
 
