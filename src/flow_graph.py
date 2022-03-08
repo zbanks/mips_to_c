@@ -1033,7 +1033,8 @@ class InstrRef:
 
     def __repr__(self) -> str:
         line = self.instruction().meta.lineno
-        return f"{self.node.block.index}.{self.index} ({line})"
+        base = f"{self.node.block.index}.{self.index}"
+        return f"{base} (line {line})" if line else base
 
 
 Reference = Union[InstrRef, str]
@@ -1165,10 +1166,12 @@ class AccessRefs:
 class FlowGraph:
     nodes: List[Node]
 
-    # The set of all phi accesses needed for each Node
+    # The set of all phi Accesses needed for each Node
     node_phis: Dict[Node, AccessRefs] = field(default_factory=dict)
+    # The set of source References for each input Access to each Instruction
     instr_inputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
-    instr_outputs: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
+    # The set of all downstream Instructions whose inputs depend on outputs from a given
+    # Instruction. This is the same information as `instr_inputs`, but reversed.
     instr_references: Dict[InstrRef, AccessRefs] = field(default_factory=dict)
 
     def entry_node(self) -> Node:
@@ -1312,48 +1315,37 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
         for i, ir in enumerate(node.block.instructions):
             ref = InstrRef(node, i)
             inputs = AccessRefs()
-            outputs = AccessRefs()
             flow_graph.instr_inputs[ref] = inputs
-            flow_graph.instr_outputs[ref] = outputs
             flow_graph.instr_references[ref] = AccessRefs()
 
             # Calculate the source of each access
-            for arg in ir.inputs:
+            for inp in ir.inputs:
                 sources = RefSet()
-                for inp, srcs in arg_srcs.items():
+                for arg, srcs in arg_srcs.items():
                     if access_must_overlap(arg, inp):
                         sources.update(srcs)
-                if isinstance(arg, Register) and not sources.is_valid():
+                if isinstance(inp, Register) and not sources.is_valid():
                     # Registers must be written to before being read.
                     # If the instruction is a function call and we don't have a source
                     # for the argument, we can prune the argument from the input list.
                     # Otherwise, this is likely undefined behavior in the original asm
-                    if ir.function_target is not None and arg in arch.argument_regs:
-                        ir.inputs.remove(arg)
+                    if ir.function_target is not None and inp in arch.argument_regs:
+                        ir.inputs.remove(inp)
                     else:
-                        missing_regs.append((arg, ref))
-                inputs[arg] = sources
+                        missing_regs.append((inp, ref))
+                inputs[inp] = sources
 
-            # Mark clobbered accesses
-            for inp in arg_srcs:
-                for arg in ir.clobbers + ir.outputs:
-                    if access_may_overlap(arg, inp):
-                        outputs[arg] = RefSet.invalid()
-                        break
-
-            # Remove any MemoryAccesses that depend on clobbered Registers
-            # Ex: If `$v0` is clobbered, remove `4($v0)`
-            for arg in ir.clobbers + ir.outputs:
-                for inp in arg_srcs:
-                    if access_depends_on(inp, arg):
-                        arg_srcs.remove(inp)
+            # Remove any clobbered accesses, or any MemoryAccesses that depend on
+            # clobbered Registers. Ex: If `$v0` is clobbered, remove `$v0` and `4($v0)`
+            for clob in ir.clobbers + ir.outputs:
+                for arg in arg_srcs:
+                    if access_depends_on(arg, clob) or access_may_overlap(arg, clob):
+                        arg_srcs.remove(arg)
                         break
 
             # Mark outputs as coming from this instruction
-            for arg in ir.outputs:
-                outputs[arg] = RefSet([ref])
-
-            arg_srcs.update(outputs)
+            for out in ir.outputs:
+                arg_srcs[out] = RefSet([ref])
 
         # Translate everything dominated by this node, now that we know our own
         # final register flow_graph. This will eventually reach every node.
@@ -1375,7 +1367,7 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
             process_node(child, child_arg_srcs)
 
     # Recursively traverse every node, starting with the entry node
-    # This populates in instr_inputs, instr_outputs, and node_phis
+    # This populates in node_phis and instr_inputs
     entry_node = flow_graph.entry_node()
     entry_arg_srcs = AccessRefs.initial_function_args(arch)
     flow_graph.node_phis[entry_node] = AccessRefs()
@@ -1388,16 +1380,19 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
                 if isinstance(dep, InstrRef):
                     flow_graph.instr_references[dep].add(arg, ref)
 
-    for arg, ref in missing_regs:
-        print(f"> missing reg at {ref}: {arg}, `{ref.instruction()}`")
+    if missing_regs:
+        print(
+            f"/* Warning: {len(missing_regs)} register(s) were read before being written to:"
+        )
+        for arg, ref in missing_regs:
+            print(f"   {arg} at {ref}: {ref.instruction()}")
+        print(f"*/")
 
     return flow_graph
 
 
 def build_flowgraph(
-    function: Function,
-    asm_data: AsmData,
-    arch: ArchFlowGraph,
+    function: Function, asm_data: AsmData, arch: ArchFlowGraph
 ) -> FlowGraph:
     blocks = build_blocks(function, asm_data, arch)
     nodes = build_nodes(function, blocks, asm_data, arch)

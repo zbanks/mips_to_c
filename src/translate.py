@@ -1950,6 +1950,7 @@ class RegInfo:
 
     def __getitem__(self, key: Register) -> Expression:
         if self._active_instr is not None and key not in self._active_instr.inputs:
+            return ErrorExpr(f"Read from unset register {key}")
             raise DecompFailure(f"Undeclared read from {key} in {self._active_instr}")
         if key == Register("zero"):
             return Literal(0)

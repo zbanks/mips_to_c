@@ -1,7 +1,9 @@
-missing reg at 0.15 (24): $t0 (invalid) `badinstr $t0, $t0`
-missing reg at 0.16 (25): $t1 (invalid) `badinstr2 $t1, $t1`
-missing reg at 0.17 (26): $t2 (invalid) `badinstr3 $v0, $t2`
-missing reg at 0.20 (29): $v1 (invalid) `addiu $v1, $v1, 0x2`
+/* Warning: 4 registers were read before being written to:
+   $t0 at 0.15 (line 24): badinstr $t0, $t0
+   $t1 at 0.16 (line 25): badinstr2 $t1, $t1
+   $t2 at 0.17 (line 26): badinstr3 $v0, $t2
+   $v1 at 0.20 (line 29): addiu $v1, $v1, 0x2
+*/
 ? test(s32 arg0) {
     s32 temp_t1;
 
