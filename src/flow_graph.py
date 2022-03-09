@@ -1258,7 +1258,7 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefSet) -> RefSet:
         return RefSet.invalid()
     seen = {node.immediate_dominator}
     stack = node.parents[:]
-    sources = dom_set.copy()
+    sources = RefSet()
 
     while stack:
         n = stack.pop()
@@ -1267,23 +1267,19 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefSet) -> RefSet:
         if n in seen:
             continue
         seen.add(n)
-        clobbered: Optional[bool] = None
-        final_write: Optional[InstrRef] = None
-        for i, instr in enumerate(n.block.instructions):
+
+        for i, instr in list(enumerate(n.block.instructions))[::-1]:
             with current_instr(instr):
                 if arg in instr.outputs:
-                    final_write = InstrRef(n, i)
-                    clobbered = False
-                elif arg in instr.clobbers:
-                    clobbered = True
-        if clobbered == True:
-            return RefSet.invalid()
-        elif clobbered == False:
-            assert final_write is not None
-            sources.add(final_write)
-        elif clobbered is None:
-            assert final_write is None
+                    sources.add(InstrRef(n, i))
+                    break
+                if arg in instr.clobbers:
+                    return RefSet.invalid()
+        else:
             stack.extend(n.parents)
+
+    if not sources.is_valid():
+        return dom_set
     return sources
 
 
