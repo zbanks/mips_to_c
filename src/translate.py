@@ -3608,7 +3608,6 @@ class Abi:
     possible_slots: List[AbiArgSlot]
 
 
-
 def pick_phi_assignment_nodes(
     reg: Register, nodes: List[Node], expr: Expression
 ) -> List[Node]:
@@ -4758,15 +4757,29 @@ class GlobalInfo:
         return "".join(line for _, line in lines)
 
 
-def narrow_func_call_outputs(
+def narrow_ir_with_context(
     function: Function,
     global_info: GlobalInfo,
 ) -> None:
     """
-    Modify the `outputs` list of function call Instructions using the context file.
-    For now, this only handles known-void functions, but in the future it could
-    be extended to select a specific register subset based on type.
+    Modify the `outputs` list of function call Instructions and the function's
+    `arguments` list using the context file.
     """
+    fn_ref = global_info.address_of_gsym(function.name)
+    fn_sig = fn_ref.type.get_function_pointer_signature()
+    if fn_sig is not None:
+        abi = global_info.arch.function_abi(
+            fn_sig,
+            likely_regs={reg: True for reg in global_info.arch.argument_regs},
+            for_call=False,
+        )
+
+        possible_regs = {slot.reg for slot in abi.arg_slots + abi.possible_slots}
+        function.arguments = [arg for arg in function.arguments if arg in possible_regs]
+
+    # For now, this only handles known-void functions, but in the future it could
+    # be extended to select a specific register subset based on type or use the
+    # inferred signature above.
     for instr in function.body:
         if (
             isinstance(instr, Instruction)

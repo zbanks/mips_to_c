@@ -1100,32 +1100,32 @@ class AccessRefs:
     refs: Dict[Access, RefSet] = field(default_factory=dict)
 
     @staticmethod
-    def initial_function_args(arch: ArchFlowGraph) -> "AccessRefs":
+    def initial_function_regs(args: List[Access], arch: ArchFlowGraph) -> "AccessRefs":
         info = AccessRefs()
         # Set all the registers that are valid to access at the start of a function
         for r in arch.saved_regs:
-            info.refs[r] = RefSet.special(f"saved_{r.register_name}")
-        for r in arch.argument_regs:
-            info.refs[r] = RefSet.special(f"arg_{r.register_name}")
+            info.refs[r] = RefSet.special(f"saved_{r}")
         for r in arch.constant_regs:
-            info.refs[r] = RefSet.special(f"const_{r.register_name}")
+            info.refs[r] = RefSet.special(f"const_{r}")
+        for a in args:
+            info.refs[a] = RefSet.special(f"arg_{a}")
 
         info.refs[arch.return_address_reg] = RefSet.special(f"return")
         info.refs[arch.stack_pointer_reg] = RefSet.special(f"sp")
 
         return info
 
-    def get(self, arg: Access) -> RefSet:
-        return self.refs.get(arg, RefSet.invalid())
+    def get(self, reg: Access) -> RefSet:
+        return self.refs.get(reg, RefSet.invalid())
 
-    def add(self, arg: Access, ref: Reference) -> None:
-        if arg not in self:
-            self.refs[arg] = RefSet([ref])
+    def add(self, reg: Access, ref: Reference) -> None:
+        if reg not in self:
+            self.refs[reg] = RefSet([ref])
         else:
-            self.refs[arg].add(ref)
+            self.refs[reg].add(ref)
 
-    def remove(self, arg: Access) -> None:
-        self.refs.pop(arg)
+    def remove(self, reg: Access) -> None:
+        self.refs.pop(reg)
 
     def remove_ref(self, ref: Reference) -> None:
         to_remove = []
@@ -1253,16 +1253,21 @@ class FlowGraph:
             node.block.block_info = None
 
 
-def reg_always_set(node: Node, arg: Access, *, dom_set: RefSet) -> RefSet:
+def phi_reg_sources(node: Node, reg: Access, imdom_srcs: RefSet) -> RefSet:
+    """
+    Return the RefSet of all of the places `reg` is assigned to, if it is a valid phi.
+    Otherwise, return RefSet.invalid().
+    """
     if node.immediate_dominator is None:
         return RefSet.invalid()
+
     seen = {node.immediate_dominator}
     stack = node.parents[:]
     sources = RefSet()
 
     while stack:
         n = stack.pop()
-        if n == node.immediate_dominator and not dom_set.is_valid():
+        if n == node.immediate_dominator and not imdom_srcs.is_valid():
             return RefSet.invalid()
         if n in seen:
             continue
@@ -1270,16 +1275,16 @@ def reg_always_set(node: Node, arg: Access, *, dom_set: RefSet) -> RefSet:
 
         for i, instr in list(enumerate(n.block.instructions))[::-1]:
             with current_instr(instr):
-                if arg in instr.outputs:
+                if reg in instr.outputs:
                     sources.add(InstrRef(n, i))
                     break
-                if arg in instr.clobbers:
+                if reg in instr.clobbers:
                     return RefSet.invalid()
         else:
             stack.extend(n.parents)
 
     if not sources.is_valid():
-        return dom_set
+        return imdom_srcs
     return sources
 
 
@@ -1302,11 +1307,13 @@ def regs_clobbered_until_dominator(node: Node) -> Set[Access]:
     return clobbered
 
 
-def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
+def nodes_to_flowgraph(
+    nodes: List[Node], function: Function, arch: ArchFlowGraph
+) -> FlowGraph:
     flow_graph = FlowGraph(nodes)
     missing_regs = []
 
-    def process_node(node: Node, arg_srcs: AccessRefs) -> None:
+    def process_node(node: Node, reg_srcs: AccessRefs) -> None:
         # Calculate register usage for each instruction in this node
         for i, ir in enumerate(node.block.instructions):
             ref = InstrRef(node, i)
@@ -1317,8 +1324,8 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
             # Calculate the source of each access
             for inp in ir.inputs:
                 sources = RefSet()
-                for arg, srcs in arg_srcs.items():
-                    if access_must_overlap(arg, inp):
+                for reg, srcs in reg_srcs.items():
+                    if access_must_overlap(reg, inp):
                         sources.update(srcs)
                 if isinstance(inp, Register) and not sources.is_valid():
                     # Registers must be written to before being read.
@@ -1334,54 +1341,54 @@ def nodes_to_flowgraph(nodes: List[Node], arch: ArchFlowGraph) -> FlowGraph:
             # Remove any clobbered accesses, or any MemoryAccesses that depend on
             # clobbered Registers. Ex: If `$v0` is clobbered, remove `$v0` and `4($v0)`
             for clob in ir.clobbers + ir.outputs:
-                for arg in arg_srcs:
-                    if access_depends_on(arg, clob) or access_may_overlap(arg, clob):
-                        arg_srcs.remove(arg)
+                for reg in reg_srcs:
+                    if access_depends_on(reg, clob) or access_may_overlap(reg, clob):
+                        reg_srcs.remove(reg)
                         break
 
             # Mark outputs as coming from this instruction
             for out in ir.outputs:
-                arg_srcs[out] = RefSet([ref])
+                reg_srcs[out] = RefSet([ref])
 
         # Translate everything dominated by this node, now that we know our own
         # final register flow_graph. This will eventually reach every node.
         for child in node.immediately_dominates:
-            child_arg_srcs = arg_srcs.copy()
+            child_reg_srcs = reg_srcs.copy()
             child_phis = AccessRefs()
             flow_graph.node_phis[child] = child_phis
 
-            phi_args = regs_clobbered_until_dominator(child)
-            for arg in phi_args:
-                set_locs = reg_always_set(child, arg, dom_set=arg_srcs.get(arg))
-                # If set_locs is invalid, then the arg is inconsistently set, so it should
+            phi_regs = regs_clobbered_until_dominator(child)
+            for reg in phi_regs:
+                phi_reg_srcs = phi_reg_sources(child, reg, reg_srcs.get(reg))
+                # If phi_reg_srcs is invalid, then the reg is inconsistently set, so it should
                 # not be used by the child node.
                 # Otherwise, it *is* set in every control flow path to the child node, so
                 # it can be used (but it will have a phi value)
-                child_arg_srcs[arg] = set_locs
-                child_phis[arg] = set_locs
+                child_reg_srcs[reg] = phi_reg_srcs
+                child_phis[reg] = phi_reg_srcs
 
-            process_node(child, child_arg_srcs)
+            process_node(child, child_reg_srcs)
 
     # Recursively traverse every node, starting with the entry node
     # This populates in node_phis and instr_inputs
     entry_node = flow_graph.entry_node()
-    entry_arg_srcs = AccessRefs.initial_function_args(arch)
+    entry_reg_srcs = AccessRefs.initial_function_regs(function.arguments, arch)
     flow_graph.node_phis[entry_node] = AccessRefs()
-    process_node(entry_node, entry_arg_srcs)
+    process_node(entry_node, entry_reg_srcs)
 
     # Populate instr_references for each instruction
     for ref, inputs in flow_graph.instr_inputs.items():
-        for arg, deps in inputs.items():
+        for reg, deps in inputs.items():
             for dep in deps:
                 if isinstance(dep, InstrRef):
-                    flow_graph.instr_references[dep].add(arg, ref)
+                    flow_graph.instr_references[dep].add(reg, ref)
 
     if missing_regs:
         print(
-            f"/* Warning: {len(missing_regs)} register(s) were read before being written to:"
+            f"/* Warning: in function {function.name}, {len(missing_regs)} register(s) were read before being written to:"
         )
-        for arg, ref in missing_regs:
-            print(f"   {arg} at {ref}: {ref.instruction()}")
+        for reg, ref in missing_regs:
+            print(f"   {reg} at {ref}: {ref.instruction()}")
         print(f"*/")
 
     return flow_graph
@@ -1397,7 +1404,7 @@ def build_flowgraph(
     compute_relations(nodes)
     terminate_infinite_loops(nodes)
 
-    return nodes_to_flowgraph(nodes, arch)
+    return nodes_to_flowgraph(nodes, function, arch)
 
 
 def visualize_flowgraph(flow_graph: FlowGraph) -> str:

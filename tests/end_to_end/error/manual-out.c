@@ -1,4 +1,4 @@
-/* Warning: 4 registers were read before being written to:
+/* Warning: in function test, 4 register(s) were read before being written to:
    $t0 at 0.15 (line 24): badinstr $t0, $t0
    $t1 at 0.16 (line 25): badinstr2 $t1, $t1
    $t2 at 0.17 (line 26): badinstr3 $v0, $t2

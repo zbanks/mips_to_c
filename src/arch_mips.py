@@ -1367,7 +1367,7 @@ class MipsArch(Arch):
 
             valid_extra_regs.add(slot.reg)
 
-            if slot.reg == Register("f13"):
+            if slot.reg == Register("f13") and for_call:
                 # We don't pass in f13 or f15 because they will often only
                 # contain SecondF64Half(), and otherwise would need to be
                 # merged with f12/f14 which we don't have logic for right
