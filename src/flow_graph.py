@@ -7,8 +7,8 @@ from typing import (
     Callable,
     Counter,
     Dict,
-    Iterator,
     ItemsView,
+    Iterator,
     List,
     Optional,
     Set,
@@ -1384,9 +1384,8 @@ def nodes_to_flowgraph(
                     flow_graph.instr_references[dep].add(reg, ref)
 
     if missing_regs:
-        print(
-            f"/* Warning: in function {function.name}, {len(missing_regs)} register(s) were read before being written to:"
-        )
+        print("/*")
+        print(f"Warning: in {function.name}, regs were read before being written to:")
         for reg, ref in missing_regs:
             print(f"   {reg} at {ref}: {ref.instruction()}")
         print(f"*/")

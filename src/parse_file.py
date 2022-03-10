@@ -42,7 +42,7 @@ class Function:
         self.body.append(instruction)
 
     def bodyless_copy(self) -> "Function":
-        return Function(name=self.name, arguments=self.arguments)
+        return Function(name=self.name, arguments=self.arguments[:])
 
     def __str__(self) -> str:
         body = "\n".join(str(item) for item in self.body)
