@@ -955,6 +955,9 @@ class Type:
             assert len(sym_name.qualified_name) >= 1
             final_name = str(sym_name.qualified_name[-1]).split("@")[-1]
 
+        if final_name in ("__vt", "__RTTI"):
+            return Type.any()
+
         type = Type.any()
         for term in sym_type.terms[::-1]:
             if term.kind == CxxTerm.Kind.CONST:
@@ -1039,9 +1042,6 @@ class Type:
                 assert False, term.kind
             else:
                 assert False, term.kind
-        # TODO: Support vtables
-        # if final_name == "__vt":
-        #    return Type.array(Type.function())
         return type
 
 

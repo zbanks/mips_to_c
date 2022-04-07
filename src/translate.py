@@ -4524,6 +4524,7 @@ class GlobalInfo:
         return self.asm_data.values.get(sym_name)
 
     def address_of_gsym(self, sym_name: str) -> AddressOf:
+        sym_name = sym_name.strip('"')
         if sym_name in self.global_symbol_map:
             sym = self.global_symbol_map[sym_name]
         else:
@@ -4543,6 +4544,51 @@ class GlobalInfo:
                 asm_data_entry=self.asm_data_value(sym_name),
                 demangled_str=demangled_str,
             )
+
+            if (
+                self.target.language == Target.LanguageEnum.CXX
+                and sym_name.startswith("__vt__")
+                and sym.asm_data_entry is not None
+            ):
+                vt_size = sum(
+                    4 if isinstance(d, str) else len(d) for d in sym.asm_data_entry.data
+                )
+                vt_struct = StructDeclaration.unknown_of_size(
+                    self.typepool, size=vt_size, align=4, tag_name=sym_name
+                )
+                offset = 0
+                for entry in sym.asm_data_entry.data:
+                    if isinstance(entry, bytes):
+                        assert len(entry) % 4 == 0
+                        for i in range(len(entry) // 4):
+                            field_name = f"{vt_struct.new_field_prefix}{offset:X}"
+                            vt_struct.try_add_field(
+                                Type.ptr(), offset, field_name, size=4
+                            )
+                            offset += 4
+                    else:
+                        try:
+                            demangled_field_sym = demangle_codewarrior_parse(entry)
+                            qualified_name = demangled_field_sym.name.qualified_name
+                            assert qualified_name is not None
+                            subsym = self.address_of_gsym(entry)
+                            field = vt_struct.try_add_field(
+                                subsym.type,
+                                offset,
+                                name=str(qualified_name[-1]),
+                                size=4,
+                            )
+                        except ValueError:
+                            field = vt_struct.try_add_field(
+                                Type.ptr(),
+                                offset,
+                                name=entry,
+                                size=4,
+                            )
+                        assert field is not None
+                        field.known = True
+                        offset += 4
+                sym.type.unify(Type.struct(vt_struct))
 
             fn = self.typemap.functions.get(sym_name)
             ctype: Optional[CType]
