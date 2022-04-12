@@ -37,7 +37,6 @@ from .asm_pattern import (
     make_pattern,
 )
 from .translate import (
-    Abi,
     AbiArgSlot,
     Arch,
     BinaryOp,
@@ -47,6 +46,7 @@ from .translate import (
     CommentStmt,
     ErrorExpr,
     Expression,
+    FunctionAbi,
     ImplicitInstrMap,
     InstrMap,
     InstrSet,
@@ -1118,7 +1118,7 @@ class PpcArch(Arch):
         likely_regs: Dict[Register, bool],
         *,
         for_call: bool,
-    ) -> Abi:
+    ) -> FunctionAbi:
         known_slots: List[AbiArgSlot] = []
         candidate_slots: List[AbiArgSlot] = []
 
@@ -1207,7 +1207,7 @@ class PpcArch(Arch):
 
             possible_slots.append(slot)
 
-        return Abi(
+        return FunctionAbi(
             arg_slots=known_slots,
             possible_slots=possible_slots,
         )

@@ -182,6 +182,12 @@ def locations_alias(left: Location, right: Location) -> bool:
         static_assert_unreachable(left)
 
 
+class FunctionAbiBase(abc.ABC):
+    @abc.abstractmethod
+    def get_arguments(self) -> List[Location]:
+        ...
+
+
 @dataclass(frozen=True)
 class AsmInstruction:
     mnemonic: str

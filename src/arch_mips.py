@@ -33,7 +33,6 @@ from .asm_pattern import (
     make_pattern,
 )
 from .translate import (
-    Abi,
     AbiArgSlot,
     Arch,
     BinaryOp,
@@ -42,6 +41,7 @@ from .translate import (
     CommentStmt,
     ErrorExpr,
     Expression,
+    FunctionAbi,
     InstrMap,
     InstrSet,
     Literal,
@@ -1281,7 +1281,7 @@ class MipsArch(Arch):
         likely_regs: Dict[Register, bool],
         *,
         for_call: bool,
-    ) -> Abi:
+    ) -> FunctionAbi:
         """Compute stack positions/registers used by a function according to the o32 ABI,
         based on C type information. Additionally computes a list of registers that might
         contain arguments, if the function is a varargs function. (Additional varargs
@@ -1436,7 +1436,7 @@ class MipsArch(Arch):
 
             possible_slots.append(slot)
 
-        return Abi(
+        return FunctionAbi(
             arg_slots=known_slots,
             possible_slots=possible_slots,
         )

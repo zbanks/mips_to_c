@@ -43,8 +43,10 @@ from .parse_instruction import (
     AsmGlobalSymbol,
     AsmLiteral,
     BinOp,
+    FunctionAbiBase,
     Instruction,
     InstrProcessingFailure,
+    Location,
     Macro,
     Register,
     StackLocation,
@@ -96,7 +98,7 @@ class Arch(ArchFlowGraph):
         likely_regs: Dict[Register, bool],
         *,
         for_call: bool,
-    ) -> "Abi":
+    ) -> "FunctionAbi":
         """
         Compute stack positions/registers used by a function based on its type
         information. Also computes a list of registers that may contain arguments,
@@ -3605,11 +3607,23 @@ class AbiArgSlot:
     name: Optional[str] = None
     comment: Optional[str] = None
 
+    def as_location(self) -> Location:
+        if self.reg is not None:
+            return self.reg
+        return StackLocation(
+            offset=self.offset,
+            symbolic_offset=None,
+            size=self.type.get_size_bytes() or 4,
+        )
+
 
 @dataclass
-class Abi:
+class FunctionAbi(FunctionAbiBase):
     arg_slots: List[AbiArgSlot]
     possible_slots: List[AbiArgSlot]
+
+    def get_arguments(self) -> List[Location]:
+        return [slot.as_location() for slot in self.arg_slots + self.possible_slots]
 
 
 def pick_phi_assignment_nodes(
@@ -4777,16 +4791,14 @@ def narrow_ir_with_context(
     `arguments` list using the context file.
     """
     fn_ref = global_info.address_of_gsym(function.name)
+    fn_ref.type.unify(Type.ptr(Type.function()))
     fn_sig = fn_ref.type.get_function_pointer_signature()
-    if fn_sig is not None:
-        abi = global_info.arch.function_abi(
-            fn_sig,
-            likely_regs={reg: True for reg in global_info.arch.argument_regs},
-            for_call=False,
-        )
-
-        possible_regs = {slot.reg for slot in abi.arg_slots + abi.possible_slots}
-        function.arguments = [arg for arg in function.arguments if arg in possible_regs]
+    assert fn_sig is not None, "fn_type is known to be a function"
+    function.abi = global_info.arch.function_abi(
+        fn_sig,
+        likely_regs={reg: True for reg in global_info.arch.argument_regs},
+        for_call=False,
+    )
 
     # For now, this only handles known-void functions, but in the future it could
     # be extended to select a specific register subset based on type or use the
@@ -4829,23 +4841,19 @@ def translate_to_ast(
     assert fn_sig is not None, "fn_type is known to be a function"
     return_type = fn_sig.return_type
     stack_info.is_variadic = fn_sig.is_variadic
+    assert isinstance(function.abi, FunctionAbi)
 
     def make_arg(offset: int, type: Type) -> PassedInArg:
         assert offset % 4 == 0
         return PassedInArg(offset, copied=False, stack_info=stack_info, type=type)
 
-    abi = arch.function_abi(
-        fn_sig,
-        likely_regs={reg: True for reg in arch.argument_regs},
-        for_call=False,
-    )
-    for slot in abi.arg_slots:
+    for slot in function.abi.arg_slots:
         stack_info.add_known_param(slot.offset, slot.name, slot.type)
         if slot.reg is not None:
             start_regs.set_with_meta(
                 slot.reg, make_arg(slot.offset, slot.type), RegMeta(uninteresting=True)
             )
-    for slot in abi.possible_slots:
+    for slot in function.abi.possible_slots:
         if slot.reg is not None:
             start_regs.set_with_meta(
                 slot.reg, make_arg(slot.offset, slot.type), RegMeta(uninteresting=True)

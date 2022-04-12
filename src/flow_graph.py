@@ -1401,8 +1401,9 @@ def nodes_to_flowgraph(
         entry_reg_srcs.refs[r] = RefSet.special(f"saved_{r}")
     for r in arch.constant_regs:
         entry_reg_srcs.refs[r] = RefSet.special(f"const_{r}")
-    for a in function.arguments:
-        entry_reg_srcs.refs[a] = RefSet.special(f"arg_{a}")
+    if function.abi is not None:
+        for a in function.abi.get_arguments():
+            entry_reg_srcs.refs[a] = RefSet.special(f"arg_{a}")
     entry_reg_srcs.refs[arch.return_address_reg] = RefSet.special(f"return")
     entry_reg_srcs.refs[arch.stack_pointer_reg] = RefSet.special(f"sp")
 
