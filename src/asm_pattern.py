@@ -61,21 +61,21 @@ class Match:
     symbolic_labels: Dict[str, str] = field(default_factory=dict)
     symbolic_args: Dict[str, Argument] = field(default_factory=dict)
 
-    def eval_math(self, pat: Argument) -> int:
+    def _eval_math(self, pat: Argument) -> int:
         # This function can only evaluate math in *patterns*, not candidate
         # instructions. It does not need to support arbitrary math, only
-        # math used by IR patterns.
+        # math used by patterns.
         if isinstance(pat, AsmLiteral):
             return pat.value
         if isinstance(pat, BinOp):
             if pat.op == "+":
-                return self.eval_math(pat.lhs) + self.eval_math(pat.rhs)
+                return self._eval_math(pat.lhs) + self._eval_math(pat.rhs)
             if pat.op == "-":
-                return self.eval_math(pat.lhs) - self.eval_math(pat.rhs)
+                return self._eval_math(pat.lhs) - self._eval_math(pat.rhs)
             if pat.op == "<<":
-                return self.eval_math(pat.lhs) << self.eval_math(pat.rhs)
+                return self._eval_math(pat.lhs) << self._eval_math(pat.rhs)
             if pat.op == "&":
-                return self.eval_math(pat.lhs) & self.eval_math(pat.rhs)
+                return self._eval_math(pat.lhs) & self._eval_math(pat.rhs)
             assert False, f"bad pattern binop: {pat}"
         elif isinstance(pat, AsmGlobalSymbol):
             assert (
@@ -108,7 +108,7 @@ class Match:
         if isinstance(key, JumpTarget):
             return JumpTarget(self.symbolic_labels[key.target])
         if isinstance(key, BinOp):
-            return AsmLiteral(self.eval_math(key))
+            return AsmLiteral(self._eval_math(key))
         assert False, f"bad pattern part: {key}"
 
     def map(self, raw_arg: str) -> Argument:
@@ -157,7 +157,7 @@ class TryMatch(Match):
                 self.symbolic_labels, pat.target, cand.target
             )
         if isinstance(pat, BinOp):
-            return isinstance(cand, AsmLiteral) and self.eval_math(pat) == cand.value
+            return isinstance(cand, AsmLiteral) and self._eval_math(pat) == cand.value
         assert False, f"bad pattern arg: {pat}"
 
 

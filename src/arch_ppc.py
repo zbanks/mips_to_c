@@ -105,11 +105,11 @@ class FcmpoCrorPattern(SimpleAsmPattern):
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
         fcmpo = m.body[0]
         assert isinstance(fcmpo, Instruction)
-        if m.map("N") == 0:
+        if m.map("N") == AsmLiteral(0):
             return Replacement(
                 [AsmInstruction("fcmpo.lte.fictive", fcmpo.args)], len(m.body)
             )
-        elif m.map("N") == 1:
+        elif m.map("N") == AsmLiteral(1):
             return Replacement(
                 [AsmInstruction("fcmpo.gte.fictive", fcmpo.args)], len(m.body)
             )
