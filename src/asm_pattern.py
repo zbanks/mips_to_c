@@ -18,6 +18,7 @@ from .parse_instruction import (
     Register,
     RegFormatter,
     parse_asm_instruction,
+    parse_args,
 )
 
 
@@ -49,10 +50,151 @@ class Replacement:
 
 
 @dataclass
-class AsmMatch:
-    body: List[BodyPart]
-    regs: Dict[str, Register]
-    literals: Dict[str, int]
+class Match:
+    """
+    IrMatch represents the matched state of an IrPattern.
+    This object is considered read-only; none of its methods modify its state.
+    Its `map_*` methods take a pattern part and return the matched instruction part.
+    """
+
+    symbolic_registers: Dict[str, Register] = field(default_factory=dict)
+    symbolic_labels: Dict[str, str] = field(default_factory=dict)
+    symbolic_args: Dict[str, Argument] = field(default_factory=dict)
+
+    def eval_math(self, pat: Argument) -> int:
+        # This function can only evaluate math in *patterns*, not candidate
+        # instructions. It does not need to support arbitrary math, only
+        # math used by IR patterns.
+        if isinstance(pat, AsmLiteral):
+            return pat.value
+        if isinstance(pat, BinOp):
+            if pat.op == "+":
+                return self.eval_math(pat.lhs) + self.eval_math(pat.rhs)
+            if pat.op == "-":
+                return self.eval_math(pat.lhs) - self.eval_math(pat.rhs)
+            if pat.op == "<<":
+                return self.eval_math(pat.lhs) << self.eval_math(pat.rhs)
+            if pat.op == "&":
+                return self.eval_math(pat.lhs) & self.eval_math(pat.rhs)
+            assert False, f"bad pattern binop: {pat}"
+        elif isinstance(pat, AsmGlobalSymbol):
+            assert (
+                pat.symbol_name in self.symbolic_args
+            ), f"undefined variable in math pattern: {pat.symbol_name}"
+            lit = self.symbolic_args[pat.symbol_name]
+            assert isinstance(lit, AsmLiteral)
+            return lit.value
+        else:
+            assert False, f"bad pattern expr: {pat}"
+
+    def map_reg(self, key: Register) -> Register:
+        if len(key.register_name) <= 1:
+            return self.symbolic_registers[key.register_name]
+        return key
+
+    def map_arg(self, key: Argument) -> Argument:
+        if isinstance(key, AsmLiteral):
+            return key
+        if isinstance(key, Register):
+            return self.map_reg(key)
+        if isinstance(key, AsmGlobalSymbol):
+            if key.symbol_name.isupper():
+                return self.symbolic_args[key.symbol_name]
+            return key
+        if isinstance(key, AsmAddressMode):
+            rhs = self.map_arg(key.rhs)
+            assert isinstance(rhs, Register)
+            return AsmAddressMode(lhs=self.map_arg(key.lhs), rhs=rhs)
+        if isinstance(key, JumpTarget):
+            return JumpTarget(self.symbolic_labels[key.target])
+        if isinstance(key, BinOp):
+            return AsmLiteral(self.eval_math(key))
+        assert False, f"bad pattern part: {key}"
+
+    def map(self, raw_arg: str) -> Argument:
+        args = parse_args(raw_arg, NaiveParsingArch(), RegFormatter())
+        assert len(args) == 1
+        return self.map_arg(args[0])
+
+
+@dataclass
+class TryMatch(Match):
+    K = TypeVar("K")
+    V = TypeVar("V")
+
+    def _match_var(self, var_map: Dict[K, V], key: K, value: V) -> bool:
+        if key in var_map:
+            if var_map[key] != value:
+                return False
+        else:
+            var_map[key] = value
+        return True
+
+    def match_arg(self, pat: Argument, cand: Argument) -> bool:
+        if isinstance(pat, AsmLiteral):
+            return pat == cand
+        if isinstance(pat, Register):
+            # Single-letter registers are symbolic
+            if len(pat.register_name) > 1:
+                return pat == cand
+            if not isinstance(cand, Register):
+                return False
+            return self._match_var(self.symbolic_registers, pat.register_name, cand)
+        if isinstance(pat, AsmGlobalSymbol):
+            # Uppercase AsmGlobalSymbols are symbolic
+            if pat.symbol_name.isupper():
+                return self._match_var(self.symbolic_args, pat.symbol_name, cand)
+            else:
+                return pat == cand
+        if isinstance(pat, AsmAddressMode):
+            return (
+                isinstance(cand, AsmAddressMode)
+                and self.match_arg(pat.lhs, cand.lhs)
+                and self.match_arg(pat.rhs, cand.rhs)
+            )
+        if isinstance(pat, JumpTarget):
+            return isinstance(cand, JumpTarget) and self._match_var(
+                self.symbolic_labels, pat.target, cand.target
+            )
+        if isinstance(pat, BinOp):
+            return isinstance(cand, AsmLiteral) and self.eval_math(pat) == cand.value
+        assert False, f"bad pattern arg: {pat}"
+
+
+@dataclass
+class AsmMatch(Match):
+    body: List[BodyPart] = field(default_factory=list)
+
+    @property
+    def literals(self) -> Dict[str, int]:
+        # TODO: This is a placeholder to avoid larger changes to arch_mips.py
+        out = {}
+        for key, value in self.symbolic_args.items():
+            if isinstance(value, AsmLiteral):
+                out[key] = value.value
+        return out
+
+
+@dataclass
+class TryAsmMatch(AsmMatch, TryMatch):
+    def match_one(self, pat: PatternPart, cand: BodyPart) -> bool:
+        if pat is None:
+            return True
+        if isinstance(pat, Label):
+            return isinstance(cand, Label) and self._match_var(
+                self.symbolic_labels, pat.name, cand.name
+            )
+        if not isinstance(cand, Instruction):
+            return False
+        if cand.mnemonic != pat.mnemonic:
+            return False
+        if pat.args:
+            if len(pat.args) != len(cand.args):
+                return False
+            for (p, c) in zip(pat.args, cand.args):
+                if not self.match_arg(p, c):
+                    return False
+        return True
 
 
 class AsmPattern(abc.ABC):
@@ -79,113 +221,22 @@ class SimpleAsmPattern(AsmPattern):
 
 
 @dataclass
-class TryMatchState:
-    symbolic_registers: Dict[str, Register] = field(default_factory=dict)
-    symbolic_labels: Dict[str, str] = field(default_factory=dict)
-    symbolic_literals: Dict[str, int] = field(default_factory=dict)
-
-    T = TypeVar("T")
-
-    def match_var(self, var_map: Dict[str, T], key: str, value: T) -> bool:
-        if key in var_map:
-            if var_map[key] != value:
-                return False
-        else:
-            var_map[key] = value
-        return True
-
-    def match_reg(self, actual: Register, exp: Register) -> bool:
-        if len(exp.register_name) <= 1:
-            return self.match_var(self.symbolic_registers, exp.register_name, actual)
-        else:
-            return exp.register_name == actual.register_name
-
-    def eval_math(self, e: Argument) -> int:
-        if isinstance(e, AsmLiteral):
-            return e.value
-        if isinstance(e, BinOp):
-            if e.op == "+":
-                return self.eval_math(e.lhs) + self.eval_math(e.rhs)
-            if e.op == "-":
-                return self.eval_math(e.lhs) - self.eval_math(e.rhs)
-            if e.op == "<<":
-                return self.eval_math(e.lhs) << self.eval_math(e.rhs)
-            assert False, f"bad binop in math pattern: {e}"
-        elif isinstance(e, AsmGlobalSymbol):
-            assert (
-                e.symbol_name in self.symbolic_literals
-            ), f"undefined variable in math pattern: {e.symbol_name}"
-            return self.symbolic_literals[e.symbol_name]
-        else:
-            assert False, f"bad pattern part in math pattern: {e}"
-
-    def match_arg(self, a: Argument, e: Argument) -> bool:
-        if isinstance(e, AsmLiteral):
-            return isinstance(a, AsmLiteral) and a.value == e.value
-        if isinstance(e, Register):
-            return isinstance(a, Register) and self.match_reg(a, e)
-        if isinstance(e, AsmGlobalSymbol):
-            if e.symbol_name.isupper():
-                return isinstance(a, AsmLiteral) and self.match_var(
-                    self.symbolic_literals, e.symbol_name, a.value
-                )
-            else:
-                return isinstance(a, AsmGlobalSymbol) and a.symbol_name == e.symbol_name
-        if isinstance(e, AsmAddressMode):
-            return (
-                isinstance(a, AsmAddressMode)
-                and a.lhs == e.lhs
-                and self.match_reg(a.rhs, e.rhs)
-            )
-        if isinstance(e, JumpTarget):
-            return isinstance(a, JumpTarget) and self.match_var(
-                self.symbolic_labels, e.target, a.target
-            )
-        if isinstance(e, BinOp):
-            return isinstance(a, AsmLiteral) and a.value == self.eval_math(e)
-        assert False, f"bad pattern part: {e}"
-
-    def match_one(self, actual: BodyPart, exp: PatternPart) -> bool:
-        if exp is None:
-            return True
-        if isinstance(exp, Label):
-            return isinstance(actual, Label) and self.match_var(
-                self.symbolic_labels, exp.name, actual.name
-            )
-        if not isinstance(actual, Instruction):
-            return False
-        ins = actual
-        if ins.mnemonic != exp.mnemonic:
-            return False
-        if exp.args:
-            if len(ins.args) != len(exp.args):
-                return False
-            for (a, e) in zip(ins.args, exp.args):
-                if not self.match_arg(a, e):
-                    return False
-        return True
-
-
-@dataclass
 class AsmMatcher:
     input: List[BodyPart]
     output: List[BodyPart] = field(default_factory=list)
     index: int = 0
 
     def try_match(self, pattern: Pattern) -> Optional[AsmMatch]:
-        state = TryMatchState()
+        state = TryAsmMatch()
 
-        start_index = index = self.index
+        index = self.index
         for (pat, optional) in pattern:
-            if index < len(self.input) and state.match_one(self.input[index], pat):
+            if index < len(self.input) and state.match_one(pat, self.input[index]):
+                state.body.append(self.input[index])
                 index += 1
             elif not optional:
                 return None
-        return AsmMatch(
-            self.input[start_index:index],
-            state.symbolic_registers,
-            state.symbolic_literals,
-        )
+        return state
 
     def derived_meta(self) -> InstructionMeta:
         for part in self.input[self.index :]:

@@ -205,7 +205,7 @@ class ModP2Pattern1(SimpleAsmPattern):
         val = (m.literals["N"] & 0xFFFF) + 1
         if val & (val - 1):
             return None  # not a power of two
-        mod = AsmInstruction("mod.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(val)])
+        mod = AsmInstruction("mod.fictive", [m.map("$o"), m.map("$i"), AsmLiteral(val)])
         return Replacement([mod], len(m.body) - 1)
 
 
@@ -231,7 +231,7 @@ class ModP2Pattern2(SimpleAsmPattern):
             return None  # not a power of two
         mod = AsmInstruction(
             "mod.fictive",
-            [m.regs["o"], m.regs["i"], AsmLiteral(val)],
+            [m.map("$o"), m.map("$i"), AsmLiteral(val)],
         )
         return Replacement([mod], len(m.body) - 1)
 
@@ -248,9 +248,8 @@ class DivP2Pattern1(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        shift = m.literals["N"] & 0x1F
         div = AsmInstruction(
-            "div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2 ** shift)]
+            "div.fictive", [m.map("$o"), m.map("$i"), m.map("1 << (N & 31)")]
         )
         return Replacement([div], len(m.body) - 1)
 
@@ -267,9 +266,8 @@ class DivP2Pattern2(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        shift = m.literals["N"] & 0x1F
         div = AsmInstruction(
-            "div.fictive", [m.regs["x"], m.regs["x"], AsmLiteral(2 ** shift)]
+            "div.fictive", [m.map("$x"), m.map("$x"), m.map("1 << (N & 31)")]
         )
         return Replacement([div], len(m.body))
 
@@ -285,7 +283,7 @@ class Div2S16Pattern(SimpleAsmPattern):
 
     def replace(self, m: AsmMatch) -> Replacement:
         # Keep 32->16 conversion from $i to $o, just add a division
-        div = AsmInstruction("div.fictive", [m.regs["o"], m.regs["o"], AsmLiteral(2)])
+        div = AsmInstruction("div.fictive", [m.map("$o"), m.map("$o"), AsmLiteral(2)])
         return Replacement([m.body[0], m.body[1], div], len(m.body))
 
 
@@ -297,9 +295,9 @@ class Div2S32Pattern1(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
-        if m.regs["t"] == m.regs["i"]:
+        if m.map("$t") == m.map("$i"):
             return None
-        div = AsmInstruction("div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2)])
+        div = AsmInstruction("div.fictive", [m.map("$o"), m.map("$i"), AsmLiteral(2)])
         # While it would be more correct, we don't include m.body[:2] in the
         # result, because the srl incorrectly type inferences $i to u32.
         return Replacement([div], len(m.body))
@@ -313,9 +311,9 @@ class Div2S32Pattern2(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
-        if m.regs["t"] == m.regs["i"]:
+        if m.map("$t") == m.map("$i"):
             return None
-        div = AsmInstruction("div.fictive", [m.regs["o"], m.regs["i"], AsmLiteral(2)])
+        div = AsmInstruction("div.fictive", [m.map("$o"), m.map("$i"), AsmLiteral(2)])
         return Replacement([div], len(m.body))
 
 
@@ -331,7 +329,7 @@ class UtfPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Replacement:
-        new_instr = AsmInstruction("cvt.s.u.fictive", [m.regs["o"], m.regs["i"]])
+        new_instr = AsmInstruction("cvt.s.u.fictive", [m.map("$o"), m.map("$i")])
         return Replacement([new_instr], len(m.body) - 1)
 
 
@@ -378,7 +376,7 @@ class FtuPattern(SimpleAsmPattern):
             if isinstance(x, Instruction) and x.mnemonic.startswith("sub")
         )
         fmt = sub.mnemonic.split(".")[-1]
-        args = [m.regs["o"], sub.args[1]]
+        args = [m.map("$o"), sub.args[1]]
         if fmt == "s":
             new_instr = AsmInstruction("cvt.u.s.fictive", args)
         else:

@@ -105,11 +105,11 @@ class FcmpoCrorPattern(SimpleAsmPattern):
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
         fcmpo = m.body[0]
         assert isinstance(fcmpo, Instruction)
-        if m.literals["N"] == 0:
+        if m.map("N") == 0:
             return Replacement(
                 [AsmInstruction("fcmpo.lte.fictive", fcmpo.args)], len(m.body)
             )
-        elif m.literals["N"] == 1:
+        elif m.map("N") == 1:
             return Replacement(
                 [AsmInstruction("fcmpo.gte.fictive", fcmpo.args)], len(m.body)
             )
@@ -151,10 +151,10 @@ class BoolCastPattern(SimpleAsmPattern):
     )
 
     def replace(self, m: AsmMatch) -> Optional[Replacement]:
-        boolcast = AsmInstruction("boolcast.fictive", [Register("r0"), m.regs["x"]])
-        if m.regs["a"] == Register("r0"):
+        boolcast = AsmInstruction("boolcast.fictive", [Register("r0"), m.map("$x")])
+        if m.map("$a") == Register("r0"):
             return None
-        elif m.regs["x"] == m.regs["a"]:
+        elif m.map("$x") == m.map("$a"):
             return Replacement([boolcast, m.body[0]], len(m.body))
         else:
             return Replacement([m.body[0], boolcast], len(m.body))
@@ -202,7 +202,7 @@ class FloatishToSintIrPattern(IrPattern):
 class CheckConstantMixin:
     def check(self, m: IrMatch) -> bool:
         # TODO: Also validate that `K($k)` is the expected constant in rodata
-        return m.symbolic_registers["k"] in (Register("r2"), Register("r13"))
+        return m.map("$k") in (Register("r2"), Register("r13"))
 
 
 class SintToDoubleIrPattern(IrPattern, CheckConstantMixin):

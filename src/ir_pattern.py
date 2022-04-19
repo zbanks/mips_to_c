@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from itertools import permutations
 from typing import ClassVar, Dict, List, Optional, TypeVar
 
+from .asm_pattern import Match, TryMatch
 from .error import static_assert_unreachable
 from .flow_graph import (
     ArchFlowGraph,
@@ -106,65 +107,14 @@ class CompiledIrPattern:
 
 
 @dataclass
-class IrMatch:
+class IrMatch(Match):
     """
     IrMatch represents the matched state of an IrPattern.
     This object is considered read-only; none of its methods modify its state.
     Its `map_*` methods take a pattern part and return the matched instruction part.
     """
 
-    symbolic_registers: Dict[str, Register] = field(default_factory=dict)
-    symbolic_labels: Dict[str, str] = field(default_factory=dict)
-    symbolic_args: Dict[str, Argument] = field(default_factory=dict)
     ref_map: Dict[Reference, Reference] = field(default_factory=dict)
-
-    def eval_math(self, pat: Argument) -> int:
-        # This function can only evaluate math in *patterns*, not candidate
-        # instructions. It does not need to support arbitrary math, only
-        # math used by IR patterns.
-        if isinstance(pat, AsmLiteral):
-            return pat.value
-        if isinstance(pat, BinOp):
-            if pat.op == "+":
-                return self.eval_math(pat.lhs) + self.eval_math(pat.rhs)
-            if pat.op == "-":
-                return self.eval_math(pat.lhs) - self.eval_math(pat.rhs)
-            if pat.op == "<<":
-                return self.eval_math(pat.lhs) << self.eval_math(pat.rhs)
-            assert False, f"bad pattern binop: {pat}"
-        elif isinstance(pat, AsmGlobalSymbol):
-            assert (
-                pat.symbol_name in self.symbolic_args
-            ), f"undefined variable in math pattern: {pat.symbol_name}"
-            lit = self.symbolic_args[pat.symbol_name]
-            assert isinstance(lit, AsmLiteral)
-            return lit.value
-        else:
-            assert False, f"bad pattern expr: {pat}"
-
-    def map_reg(self, key: Register) -> Register:
-        if len(key.register_name) <= 1:
-            return self.symbolic_registers[key.register_name]
-        return key
-
-    def map_arg(self, key: Argument) -> Argument:
-        if isinstance(key, AsmLiteral):
-            return key
-        if isinstance(key, Register):
-            return self.map_reg(key)
-        if isinstance(key, AsmGlobalSymbol):
-            if key.symbol_name.isupper():
-                return self.symbolic_args[key.symbol_name]
-            return key
-        if isinstance(key, AsmAddressMode):
-            rhs = self.map_arg(key.rhs)
-            assert isinstance(rhs, Register)
-            return AsmAddressMode(lhs=self.map_arg(key.lhs), rhs=rhs)
-        if isinstance(key, JumpTarget):
-            return JumpTarget(self.symbolic_labels[key.target])
-        if isinstance(key, BinOp):
-            return AsmLiteral(self.eval_math(key))
-        assert False, f"bad pattern part: {key}"
 
     def map_ref(self, key: Reference) -> InstrRef:
         value = self.ref_map[key]
@@ -184,15 +134,12 @@ class IrMatch:
         static_assert_unreachable(key)
 
 
-class TryIrMatch(IrMatch):
+class TryIrMatch(IrMatch, TryMatch):
     """
     TryIrMatch represents the partial (in-progress) match state of an IrPattern.
     Unlike IrMatch, all of its `match_*` methods may modify its internal state.
     These all take a pair of arguments: pattern part, and candidate part.
     """
-
-    K = TypeVar("K")
-    V = TypeVar("V")
 
     def copy(self) -> "TryIrMatch":
         return TryIrMatch(
@@ -201,44 +148,6 @@ class TryIrMatch(IrMatch):
             symbolic_args=self.symbolic_args.copy(),
             ref_map=self.ref_map.copy(),
         )
-
-    def _match_var(self, var_map: Dict[K, V], key: K, value: V) -> bool:
-        if key in var_map:
-            if var_map[key] != value:
-                return False
-        else:
-            var_map[key] = value
-        return True
-
-    def match_arg(self, pat: Argument, cand: Argument) -> bool:
-        if isinstance(pat, AsmLiteral):
-            return pat == cand
-        if isinstance(pat, Register):
-            # Single-letter registers are symbolic
-            if len(pat.register_name) > 1:
-                return pat == cand
-            if not isinstance(cand, Register):
-                return False
-            return self._match_var(self.symbolic_registers, pat.register_name, cand)
-        if isinstance(pat, AsmGlobalSymbol):
-            # Uppercase AsmGlobalSymbols are symbolic
-            if pat.symbol_name.isupper():
-                return self._match_var(self.symbolic_args, pat.symbol_name, cand)
-            else:
-                return pat == cand
-        if isinstance(pat, AsmAddressMode):
-            return (
-                isinstance(cand, AsmAddressMode)
-                and self.match_arg(pat.lhs, cand.lhs)
-                and self.match_arg(pat.rhs, cand.rhs)
-            )
-        if isinstance(pat, JumpTarget):
-            return isinstance(cand, JumpTarget) and self._match_var(
-                self.symbolic_labels, pat.target, cand.target
-            )
-        if isinstance(pat, BinOp):
-            return isinstance(cand, AsmLiteral) and self.eval_math(pat) == cand.value
-        assert False, f"bad pattern arg: {pat}"
 
     def match_instr(self, pat: Instruction, cand: Instruction) -> bool:
         if pat.mnemonic != cand.mnemonic or len(pat.args) != len(cand.args):
