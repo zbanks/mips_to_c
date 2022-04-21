@@ -1964,6 +1964,8 @@ class RegMeta:
     # True if the regdata must be replaced by variable if it is ever read
     force: bool = False
 
+    ir_preserved: bool = False
+
 
 @dataclass
 class RegData:
@@ -3782,14 +3784,18 @@ def propagate_register_meta(nodes: List[Node], reg: Register) -> None:
     # Set `uninteresting` and propagate it and `function_return` forwards. Start by
     # assuming inherited values are all set; they will get unset iteratively, but for
     # cyclic dependency purposes we want to assume them set.
+    # TODO: update comment about ir_preserved
     for n in non_terminal:
         meta = get_block_info(n).final_register_states.get_meta(reg)
         if meta:
             if meta.inherited:
                 meta.uninteresting = True
                 meta.function_return = True
+                meta.ir_preserved = True
             else:
-                meta.uninteresting |= meta.is_read or meta.function_return
+                meta.uninteresting |= (
+                    meta.is_read or meta.function_return or meta.ir_preserved
+                )
 
     todo = non_terminal[:]
     while todo:
@@ -3801,16 +3807,21 @@ def propagate_register_meta(nodes: List[Node], reg: Register) -> None:
             continue
         all_uninteresting = True
         all_function_return = True
+        all_ir_preserved = True
         for p in n.parents:
             par_meta = get_block_info(p).final_register_states.get_meta(reg)
             if par_meta:
                 all_uninteresting &= par_meta.uninteresting
                 all_function_return &= par_meta.function_return
+                all_ir_preserved &= par_meta.ir_preserved
         if meta.uninteresting and not all_uninteresting and not meta.is_read:
             meta.uninteresting = False
             todo.extend(n.children())
         if meta.function_return and not all_function_return:
             meta.function_return = False
+            todo.extend(n.children())
+        if meta.ir_preserved and not all_ir_preserved:
+            meta.ir_preserved = False
             todo.extend(n.children())
 
 
@@ -3823,12 +3834,14 @@ def determine_return_register(
     def priority(block_info: BlockInfo, reg: Register) -> int:
         meta = block_info.final_register_states.get_meta(reg)
         if not meta:
-            return 3
+            return 4
         if meta.uninteresting:
+            return 2
+        if meta.ir_preserved:
             return 1
         if meta.function_return:
             return 0
-        return 2
+        return 3
 
     if not return_blocks:
         return None
@@ -3838,10 +3851,10 @@ def determine_return_register(
     for reg in arch.base_return_regs:
         prios = [priority(b, reg) for b in return_blocks]
         max_prio = max(prios)
-        if max_prio == 3:
+        if max_prio == 4:
             # Register is not always set, skip it
             continue
-        if max_prio <= 1 and not fn_decl_provided:
+        if max_prio <= 2 and not fn_decl_provided:
             # Register is always read after being written, or comes from a
             # function call; seems unlikely to be an intentional return.
             # Skip it, unless we have a known non-void return type.
@@ -3866,6 +3879,8 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
     has_custom_return: bool = False
     has_function_call: bool = False
     arch = stack_info.global_info.arch
+    # TODO: figure out a better way to plumb instr.ir_preserved into set_reg
+    ir_preserved: bool = False
 
     def eval_once(
         expr: Expression,
@@ -3946,7 +3961,7 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
         prevent_later_uses(lambda e: uses_expr(e, contains_read))
 
     def set_reg_maybe_return(reg: Register, expr: Expression) -> None:
-        regs[reg] = expr
+        regs.set_with_meta(reg, expr, RegMeta(ir_preserved=ir_preserved))
 
     def set_reg(reg: Register, expr: Optional[Expression]) -> Optional[Expression]:
         if expr is None:
@@ -4015,8 +4030,9 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 return
 
     def process_instr(instr: Instruction) -> None:
-        nonlocal branch_condition, switch_expr, has_function_call
+        nonlocal branch_condition, switch_expr, has_function_call, ir_preserved
 
+        ir_preserved = instr.ir_preserved
         mnemonic = instr.mnemonic
         arch_mnemonic = instr.arch_mnemonic(arch)
         args = InstrArgs(instr.args, regs, stack_info)
@@ -4160,7 +4176,9 @@ def translate_node_body(node: Node, regs: RegInfo, stack_info: StackInfo) -> Blo
                 #   basic block because we have not called `propagate_register_meta` yet.
                 #   Within this block, it will be True for registers that were return values.
                 if arch.arch == Target.ArchEnum.PPC and (
-                    data.meta.inherited or data.meta.function_return
+                    data.meta.inherited
+                    or data.meta.function_return
+                    or data.meta.ir_preserved
                 ):
                     likely_regs[reg] = False
                 elif isinstance(data.value, PassedInArg) and not data.value.copied:

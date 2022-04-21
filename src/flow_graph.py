@@ -1431,7 +1431,7 @@ def nodes_to_flowgraph(
 
             process_node(child, child_loc_srcs)
 
-        if isinstance(node, TerminalNode) and False:
+        if isinstance(node, TerminalNode):
             assert not node.block.instruction_refs
             for inp in arch.all_return_regs:
                 sources = RefSet()

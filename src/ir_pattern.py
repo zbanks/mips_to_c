@@ -394,6 +394,8 @@ def simplify_ir_patterns(
                     for refs in flow_graph.instr_uses[cand_ref].values()
                 ):
                     refs_to_replace.append(cand_ref)
+                else:
+                    cand_ref.instruction.ir_preserved = True
 
             # Create temporary registers for the inputs to the replacement_instr
             temp_reg_refs = {}

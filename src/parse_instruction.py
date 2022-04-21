@@ -219,7 +219,9 @@ class InstructionMeta:
         return f"{adj} {self.filename} line {self.lineno}"
 
 
-@dataclass(frozen=True)
+# TODO
+# @dataclass(frozen=True)
+@dataclass(eq=False)
 class Instruction:
     mnemonic: str
     args: List[Argument]
@@ -244,6 +246,9 @@ class Instruction:
     # bools should be merged into a 3-valued enum?)
     has_delay_slot: bool = False
     is_branch_likely: bool = False
+
+    # TODO
+    ir_preserved: bool = False
 
     def is_jump(self) -> bool:
         return self.jump_target is not None or self.is_return
