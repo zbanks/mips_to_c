@@ -395,6 +395,34 @@ class FtuPattern(SimpleAsmPattern):
         return Replacement([new_instr], len(m.body))
 
 
+class DwordFuncPattern(AsmPattern):
+    pattern = make_pattern(
+        "jal",
+        "*",
+    )
+
+    def match(self, matcher: AsmMatcher) -> Optional[Replacement]:
+        m = matcher.try_match(self.pattern)
+        if not m:
+            return None
+        jal, delay_slot = m.body
+        if not (isinstance(jal, Instruction) and isinstance(delay_slot, Instruction)):
+            return None
+        label = get_jump_target(jal.args[0])
+        new_mnemonic = {
+            "__ll_lshift": "dsllv",
+            "__ll_rshift": "dsrav",
+            "__ll_mul": "dmul.fictive",
+            "__ll_div": "ddiv.fictive",
+        }.get(label.target)
+        if new_mnemonic is None:
+            return None
+        new_instr = AsmInstruction(
+            new_mnemonic, [Register("v1"), Register("a1"), Register("a3")]
+        )
+        return Replacement([delay_slot, new_instr], len(m.body))
+
+
 class Mips1DoubleLoadStorePattern(AsmPattern):
     lwc_pattern = make_pattern("lwc1", "lwc1")
     swc_pattern = make_pattern("swc1", "swc1")
@@ -1014,6 +1042,7 @@ class MipsArch(Arch):
         ModP2Pattern2(),
         UtfPattern(),
         FtuPattern(),
+        DwordFuncPattern(),
         Mips1DoubleLoadStorePattern(),
         GccSqrtPattern(),
         TrapuvPattern(),
@@ -1314,6 +1343,12 @@ class MipsArch(Arch):
         ),
         "dsrav": lambda a: BinaryOp(
             left=as_s64(a.reg(1)), op=">>", right=as_intish(a.reg(2)), type=Type.s64()
+        ),
+        "dmul.fictive": lambda a: fold_mul_chains(
+            BinaryOp.int64(left=a.reg(1), op="*", right=a.reg(2))
+        ),
+        "ddiv.fictive": lambda a: fold_divmod(
+            BinaryOp.int64(left=a.reg(1), op="/", right=a.reg(2))
         ),
         # Move pseudoinstruction
         "move": lambda a: a.reg(1),
