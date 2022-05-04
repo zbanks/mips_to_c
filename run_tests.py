@@ -196,7 +196,7 @@ def find_tests_mm(asm_dir: Path) -> Iterator[List[Path]]:
 
 
 def find_tests_splat(asm_dir: Path) -> Iterator[List[Path]]:
-    # This has only been tested with Paper Mario, but should work with other splat projects
+    # This has only been tested with Paper Mario and SSSV, but should work with other splat projects
     for asm_file in (asm_dir / "nonmatchings").rglob("*.s"):
         path_list = [asm_file]
 
@@ -231,6 +231,13 @@ def create_project_tests(
             "--stack-structs",
             "--unk-underscore",
             "--pointer-style=left",
+        ]
+    elif "sssv" in base_dir.parts:
+        file_iter = find_tests_splat(asm_dir)
+        base_flags = [
+            "--target=mips-ido-c",
+            "--stack-structs",
+            "--unk-underscore",
         ]
     else:
         file_iter = find_tests_basic(asm_dir)
