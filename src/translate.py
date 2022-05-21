@@ -340,7 +340,7 @@ class StackInfo:
             return True
         return False
 
-    def get_stack_var(self, location: int, *, store: bool) -> "Expression":
+    def get_stack_var(self, location: int, *, store: bool, size: Optional[int] = None) -> "Expression":
         # See `get_stack_info` for explanation
         if self.in_callee_save_reg_region(location):
             # Some annoying bookkeeping instruction. To avoid
@@ -357,7 +357,7 @@ class StackInfo:
             # Local variable
             assert self.stack_pointer_type is not None
             field_path, field_type, _ = self.stack_pointer_type.get_deref_field(
-                location, target_size=None
+                location, target_size=size
             )
 
             # Some variables on the stack are compiler-managed, and aren't declared
@@ -2254,7 +2254,7 @@ def deref(
     elif isinstance(arg, AddressMode):
         offset = arg.offset
         if stack_info.is_stack_reg(arg.rhs):
-            return stack_info.get_stack_var(offset, store=store)
+            return stack_info.get_stack_var(offset, store=store, size=size)
         var = regs[arg.rhs]
     else:
         offset = arg.offset
