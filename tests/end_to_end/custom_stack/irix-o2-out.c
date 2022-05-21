@@ -14,8 +14,8 @@ s32 test(struct Vec *v) {
     s8 a;
     s16 b;
     s32 c;
-    struct Vec *d;                                  /* compiler-managed */
-    struct Vec e;                                   /* compiler-managed */
+    struct Vec *d;
+    struct Vec e;
     s32 temp_t4;
 
     func_00400090(&a);
@@ -35,5 +35,5 @@ s32 test(struct Vec *v) {
     } else {
         d = &e;
     }
-    return a + b + c + *d + e.y;
+    return a + b + c + d->x + e.y;
 }

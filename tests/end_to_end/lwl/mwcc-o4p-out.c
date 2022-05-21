@@ -1,5 +1,5 @@
 ? strcpy(? *, ? *, s32);                            /* extern */
-? foo(s32 *, u16);                                  /* static */
+? foo(? *, u16);                                    /* static */
 extern ? $$24;
 extern ? a1;
 extern ? a2;
@@ -10,12 +10,12 @@ static s32 $$22 = 0x61626364;                       /* const */
 void test(void) {
     u8 spE;
     u16 spC;
-    s32 sp8;
+    ? sp8;
     s32 temp_r5;
     u16 temp_r4;
 
     temp_r4 = (u16) $$22;
-    sp8 = $$22;
+    unksp8 = $$22;
     spC = temp_r4;
     spE = (u8) $$22;
     foo(&sp8, temp_r4);

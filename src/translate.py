@@ -340,7 +340,9 @@ class StackInfo:
             return True
         return False
 
-    def get_stack_var(self, location: int, *, store: bool, size: Optional[int] = None) -> "Expression":
+    def get_stack_var(
+        self, location: int, *, store: bool, size: Optional[int] = None
+    ) -> "Expression":
         # See `get_stack_info` for explanation
         if self.in_callee_save_reg_region(location):
             # Some annoying bookkeeping instruction. To avoid
@@ -359,6 +361,14 @@ class StackInfo:
             field_path, field_type, _ = self.stack_pointer_type.get_deref_field(
                 location, target_size=size
             )
+            if size is not None:
+                (
+                    outer_field_path,
+                    outer_field_type,
+                    _,
+                ) = self.stack_pointer_type.get_deref_field(location, target_size=None)
+            else:
+                outer_field_type = field_type
 
             # Some variables on the stack are compiler-managed, and aren't declared
             # in the original source. These variables can have different types inside
@@ -372,24 +382,32 @@ class StackInfo:
             # TODO: Maybe only do this for certain configurable regions?
 
             # Get the previous type stored in `location`
-            previous_stored_type = self.weak_stack_var_types.get(location)
-            if previous_stored_type is not None:
+            previous_outer_type = self.weak_stack_var_types.get(location)
+            if previous_outer_type is not None:
                 # Check if the `field_type` is compatible with the type of the last store
-                if not previous_stored_type.unify(field_type):
+                if not previous_outer_type.unify(outer_field_type):
                     # The types weren't compatible: mark this `location` as "weak"
                     # This marker is only used to annotate the output
                     self.weak_stack_var_locations.add(location)
 
                 if store:
                     # If there's already been a store to `location`, then return a fresh type
-                    field_type = Type.any_field()
+                    outer_field_type = field_type = Type.any_field()
                 else:
                     # Use the type of the last store instead of the one from `get_deref_field()`
-                    field_type = previous_stored_type
+                    field_type = previous_outer_type
+                    if size is not None:
+                        sub_path, sub_type, _ = previous_outer_type.get_field(
+                            0, target_size=size
+                        )
+                        if sub_path is not None:
+                            assert outer_field_path is not None
+                            field_type = sub_type
+                            field_path = outer_field_path + sub_path
 
             # Track the type last stored at `location`
             if store:
-                self.weak_stack_var_types[location] = field_type
+                self.weak_stack_var_types[location] = outer_field_type
 
             return LocalVar(location, type=field_type, path=field_path)
 
